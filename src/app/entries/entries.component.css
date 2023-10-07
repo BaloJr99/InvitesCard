@@ -1,0 +1,193 @@
+.info .container .header h2 {
+  font-size: 200px;
+  font-family: 'Outfit';
+}
+
+.info .container .header h2 span {
+  font-size: 64px;
+  color: #635959;
+  font-family: 'Allura';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 160px;
+}
+
+.info .container .header h3 {
+  font-family: 'Allura';
+  font-size: 96px;
+  padding: 100px 0px;
+}
+
+.info .container .datetime .date h4 {
+  font-size: 20px;
+  padding: 0px 10px;
+  margin: 0;
+  letter-spacing: 2px;
+  color: #635959;
+  font-weight: 300;
+
+}
+
+.info .container .datetime .date {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.info .container .datetime .date hr{
+  width: 10%;
+  border: none;
+  height: 3px;
+  color: #E57488;  
+  background-color: #E57488;
+}
+
+.entries {
+padding: 20px 0px;
+}
+
+.speech {
+  margin-top: 20px;
+  background-color: rgb(229, 116, 136, 0.1);
+  padding: 100px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.speech p {
+  color: #635959;
+  font-size: 20px;
+}
+
+.speech .entries p {
+  color: #000000;
+}
+
+.speech .entries p:first-of-type {
+  font-family: 'Allura';
+  font-size: 40px;
+}
+
+.divider {
+display: flex;
+}
+
+.divider:nth-of-type(2) {
+justify-content: end;
+}
+
+.speech .entries hr {
+  width: 30%;
+  border: none;
+  height: 3px;
+  color: #E57488;  
+  background-color: #E57488;
+}
+
+.pinkLetter {
+  color: #E57488 !important;
+}
+
+.ceremony {
+  padding: 100px 0px;
+}
+
+.ceremony .container > p.pinkLetter {
+  font-family: 'Raleway';
+  font-size: 24px;
+}
+
+.ceremony .container p:first-of-type {
+  color: #635959;
+  font-size: 20px;
+}
+
+.ceremony .container .col-md-6 p:not(p:first-of-type),
+.ceremony .container .col-sm-12 p:not(p:first-of-type)
+{
+  font-family: 'Allura';
+  font-size: 34px;
+}
+
+.ceremony .row:not(.row:first-of-type){
+  padding: 50px;
+}
+
+.ceremony .row:not(.row:first-of-type),
+.reception .row {
+  justify-content: center;
+  align-items: center;
+}
+
+.reception {
+  background-color: rgb(229, 116, 136, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 0px;
+}
+
+.reception h2, .reception p {
+  color: #635959;
+}
+
+.reception h2 {
+  font-size: 25px;
+}
+
+.reception p,
+.reception span {
+  font-size: 20px;
+}
+
+.dressCode {
+  padding: 100px;
+}
+
+.dressCode .col-md-6 p,
+.dressCode .col-sm-12 p,
+.dressCode .col-md-6 h5,
+.dressCode .col-sm-12 h5 {
+  font-size: 20px;
+}
+
+.dressCode .col-md-6:first-of-type {
+  padding-left: 100px;
+}
+
+.dressCode .col-md-6:nth-of-type(2) {
+  padding-right: 100px;
+}
+
+.dressCode p {
+  color: #635959;
+}
+
+.dressCode .container > p {
+  font-size: 22px;
+}
+
+.dressCode img {
+  margin-bottom: 20px;
+  height: 200px;
+}
+
+@media (max-width: 575px) {
+
+  .info .container .header h3 {
+      font-size: 96px;
+  }
+  
+  .ceremony .row:not(.row:first-of-type){
+      padding: 0px;
+  }
+  .reception .row {
+      flex-direction: column-reverse;
+  }
+
+  .reception .col-sm-12:first-of-type {
+      padding-top: 20px;
+  }
+}

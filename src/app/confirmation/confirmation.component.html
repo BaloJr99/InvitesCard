@@ -1,41 +1,44 @@
 <div class="entriesConfirmation">
-    <div class="container">
-        <div class="row">
-        <div class="col-sm-12 col-md-6">
-            <h1>Confirmación</h1>
-            <p>Es muy importante para nosotros contar con tu confirmación lo antes posible</p>
+  <form [formGroup]="confirmationForm" class="container" novalidate (ngSubmit)="saveInformation()">
+    <div class="row">
+    <div class="col-sm-12 col-md-6">
+      <h1>Confirmación</h1>
+      <p>Es muy importante para nosotros contar con tu confirmación lo antes posible</p>
+    </div>
+    <div class="col-sm-12 col-md-6">
+      <div class="form">
+      <div class="question">
+        <h2>¿ASISTIRÁS A MI FIESTA?</h2>
+      </div>
+      <p>
+        Selecciona una opción
+      </p>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="confirmation" value="yes" formControlName="asist" checked>
+        <label class="form-check-label">Asistiré</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="confirmation" value="no" formControlName="asist">
+        <label class="form-check-label">No asistiré</label>
+      </div>
+      <div class="form-group">
+        <p>Personas confirmadas</p>
+        <select id="my-select" class="form-control" name="" formControlName="entrieNumber" [ngClass]="{'is-invalid': displayMessage['entrieNumber']}">
+        <option value="">Selecciona el numero de pases</option>
+        </select>
+        <span class="invalid-feedback">
+          {{ displayMessage['entrieNumber'] }}
+        </span>
+      </div>
+      <p>¡Envía una felicitación!</p>
+        <div class="form-group">
+          <textarea id="my-textarea" class="form-control" name="" rows="3" formControlName="message"></textarea>
         </div>
-        <div class="col-sm-12 col-md-6">
-            <div class="form">
-            <div class="question">
-                <h2>¿ASISTIRÁS A MI FIESTA?</h2>
-            </div>
-            <p>
-                Selecciona una opción
-            </p>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="confirmation" id="confirmation" value="{3:option1}" checked>
-                <label class="form-check-label" for="">Asistiré</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="confirmation" id="confirmation" value="option2">
-                <label class="form-check-label" for="">No asistiré</label>
-            </div>
-            <div class="form-group">
-                <p>Personas confirmadas</p>
-                <select id="my-select" class="form-control" name="">
-                <option>Selecciona el numero de pases</option>
-                </select>
-            </div>
-            <p>¡Envía una felicitación!</p>
-            <div class="form-group">
-                <textarea id="my-textarea" class="form-control" name="" rows="3"></textarea>
-            </div>
-            <div class="button">
-                <button class="btn" type="button">ENVIAR</button>
-            </div>
-            </div>
+        <div class="button">
+          <button class="btn" type="submit">ENVIAR</button>
         </div>
         </div>
     </div>
+    </div>
+  </form>
 </div>

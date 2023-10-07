@@ -1,18 +1,19 @@
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms'
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { CountdownComponent } from './countdown/countdown.component';
-import { ConfirmationComponent } from './confirmation/confirmation.component';
+import { CoreModule } from 'src/core/core.module';
+import { AppRoutingModule } from './app-routing-module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    CountdownComponent,
-    ConfirmationComponent
+    AppComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    AppRoutingModule,
+    CoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
