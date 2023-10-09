@@ -1,3 +1,22 @@
+.audioButton {
+  border-radius: 2px;
+  background-color: #E57488;
+  border: 1px solid #e43454;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 35px;
+  width: 35px;
+  position: fixed;
+  bottom: 50px;
+  right: 20px;
+}
+
+.audioButton i {
+  color: #ffffff;
+  font-size: 1.5rem;
+}
+
 .info .container .header h2 {
   font-size: 200px;
   font-family: 'Outfit';
@@ -192,10 +211,10 @@ justify-content: end;
   }
 
   .dressCode .col-md-6:first-of-type {
-    padding-left: 0px;
+    padding: 0px;
   }
   
   .dressCode .col-md-6:nth-of-type(2) {
-    padding-right: 0px;
+    padding: 0px;
   }
 }
