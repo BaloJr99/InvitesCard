@@ -21,8 +21,8 @@
       <div class="divider">
         <hr>
       </div>
-      <p>Nombre</p>
-      <p class="pinkLetter"># PASES</p>
+      <p>{{ entryResolved.entry?.[0]?.family }}</p>
+      <p class="pinkLetter">Pases: {{ entryResolved.entry?.[0]?.entriesNumber }}</p>
       <div class="divider">
         <hr>
       </div>
@@ -90,4 +90,4 @@
     <p>Está reservado para la festejada</p>
   </div>
 </div>
-<app-confirmation></app-confirmation>
+<app-confirmation [entry]="entryResolved.entry"></app-confirmation>

@@ -190,4 +190,12 @@ justify-content: end;
   .reception .col-sm-12:first-of-type {
       padding-top: 20px;
   }
+
+  .dressCode .col-md-6:first-of-type {
+    padding-left: 0px;
+  }
+  
+  .dressCode .col-md-6:nth-of-type(2) {
+    padding-right: 0px;
+  }
 }
