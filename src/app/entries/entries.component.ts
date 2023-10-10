@@ -13,8 +13,6 @@ export class EntriesComponent implements OnInit {
 
   audio = new Audio()
   counter: number = 0;
-
-  background = "url('assets/photoshoot/Img1.jpg')";
   
   entryResolved!: IEntryResolved;
   entryResolvedEmiter$ = new Subject<IEntryResolved>();
@@ -51,8 +49,20 @@ export class EntriesComponent implements OnInit {
   updateBackground(){
     this.counter++;
     if (this.counter > 14) {
-      this.counter = 0;
+      this.counter = 1;
     }
-    this.background = `url('assets/photoshoot/Img${this.counter}.jpg')`;
+
+    var actualBackgroundImage:HTMLElement = document.querySelector(`.backgroundImage${this.counter}`) as HTMLElement;
+    var oldBackgroundImage:HTMLElement;
+
+    if (this.counter == 1) {
+      
+      oldBackgroundImage = document.querySelector(`.backgroundImage14`) as HTMLElement
+    } else {
+      oldBackgroundImage = document.querySelector(`.backgroundImage${this.counter - 1}`) as HTMLElement
+    }
+
+    actualBackgroundImage.style.visibility = "visible";
+    oldBackgroundImage.style.visibility = "hidden";
   }
 }

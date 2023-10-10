@@ -18,12 +18,25 @@
   font-size: 1.5rem;
 }
 
-.info {
+[class*="backgroundImage"] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
   background-repeat: no-repeat;
-  background-size: auto;
-  background-position: center;
+  background-size: 100%;
+  background-position: 20% 30%;
   padding-bottom: 20px;
-  animation: shrink 5s infinite alternate;
+  animation: shrink ease 5s infinite;
+  transition: 0.5 ease backgound-size;
+  z-index: -1;
+  opacity: 0.9;
+}
+
+.info {
+  position: relative;
+  padding-bottom: 20px;
 }
 
 .info .container .header h2 {
@@ -36,8 +49,9 @@
   color: #ffffff;
   font-family: 'Allura';
   position: absolute;
+  left: 0;
   right: 0;
-  top: 160px;
+  top: 110px;
 }
 
 .info .container .header h3 {
@@ -200,6 +214,18 @@ justify-content: end;
   height: 200px;
 }
 
+@keyframes shrink {
+  0% {
+    background-size: 110%;
+  }
+  50% {
+    background-size: 100%;
+  }
+  100% {
+    background-size: 110%;
+  }
+}
+
 @media (max-width: 575px) {
 
   .info .container .header h3 {
@@ -238,12 +264,21 @@ justify-content: end;
     top: 105px !important;
   }
 
-  @keyframes shrink {
+  [class*="backgroundImage"] {
+    background-size: cover;
+    background-position: center !important;
+    animation: shrinkSmall ease 5s infinite;
+  }
+
+  @keyframes shrinkSmall {
     0% {
-      background-size: 110% 110%;
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
     }
     100% {
-      background-size: 100% 100%;
+      transform: scale(1);
     }
   }
 }
