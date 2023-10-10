@@ -2,19 +2,18 @@
 @import "~bootstrap/dist/css/bootstrap.min.css";
 
 body {
-    font-family: 'Raleway';
-    color: #E57488;
-    text-align: center;
-    padding-top: 50px;
+  font-family: 'Raleway';
+  color: #E57488;
+  text-align: center;
 }
 
 iframe {
-    width: 100%;
-    border-radius: 10px;
+  width: 100%;
+  border-radius: 10px;
 }
 
 .container h1 {
-    color: #E57488;
-    font-family: 'Allura';
-    font-size: 50px;
+  color: #E57488;
+  font-family: 'Allura';
+  font-size: 50px;
 }

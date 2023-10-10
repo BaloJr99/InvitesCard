@@ -1,6 +1,6 @@
 .audioButton {
   border-radius: 2px;
-  background-color: #E57488;
+  background-color: #ff002f;
   border: 1px solid #e43454;
   display: flex;
   align-items: center;
@@ -10,11 +10,20 @@
   position: fixed;
   bottom: 50px;
   right: 20px;
+  z-index: 1;
 }
 
 .audioButton i {
   color: #ffffff;
   font-size: 1.5rem;
+}
+
+.info {
+  background-repeat: no-repeat;
+  background-size: auto;
+  background-position: center;
+  padding-bottom: 20px;
+  animation: shrink 5s infinite alternate;
 }
 
 .info .container .header h2 {
@@ -24,10 +33,9 @@
 
 .info .container .header h2 span {
   font-size: 64px;
-  color: #635959;
+  color: #ffffff;
   font-family: 'Allura';
   position: absolute;
-  left: 0;
   right: 0;
   top: 160px;
 }
@@ -36,6 +44,7 @@
   font-family: 'Allura';
   font-size: 96px;
   padding: 100px 0px;
+  color: #ffffff;
 }
 
 .info .container .datetime .date h4 {
@@ -43,9 +52,8 @@
   padding: 0px 10px;
   margin: 0;
   letter-spacing: 2px;
-  color: #635959;
-  font-weight: 300;
-
+  color: #ffffff;
+  font-weight: bold;
 }
 
 .info .container .datetime .date {
@@ -58,8 +66,8 @@
   width: 10%;
   border: none;
   height: 3px;
-  color: #E57488;  
-  background-color: #E57488;
+  color: #ffffff;  
+  background-color: #ffffff;
 }
 
 .entries {
@@ -67,7 +75,6 @@ padding: 20px 0px;
 }
 
 .speech {
-  margin-top: 20px;
   background-color: rgb(229, 116, 136, 0.1);
   padding: 100px 0px;
   display: flex;
@@ -196,14 +203,14 @@ justify-content: end;
 @media (max-width: 575px) {
 
   .info .container .header h3 {
-      font-size: 96px;
+    font-size: 96px;
   }
   
   .ceremony .row:not(.row:first-of-type){
-      padding: 0px;
+    padding: 0px;
   }
   .reception .row {
-      flex-direction: column-reverse;
+    flex-direction: column-reverse;
   }
 
   .reception .col-sm-12:first-of-type {
@@ -216,5 +223,27 @@ justify-content: end;
   
   .dressCode .col-md-6:nth-of-type(2) {
     padding: 0px;
+  }
+
+  .info {
+    background-size: cover;
+  }
+
+  .info .header h2 {
+    text-align: end;
+  }
+
+  .info .header h2 span {
+    right: 50px !important;
+    top: 105px !important;
+  }
+
+  @keyframes shrink {
+    0% {
+      background-size: 110% 110%;
+    }
+    100% {
+      background-size: 100% 100%;
+    }
   }
 }

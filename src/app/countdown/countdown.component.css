@@ -7,12 +7,12 @@
 .card {
     width: 160px;
     margin: 0px 5px;
-    background-color: rgb(229, 116, 136, 0.1) ;
+    background-color: rgb(229, 116, 136, 0.9) ;
     border: rgb(229, 116, 136);
 }
 
 .card-title, .card-text {
-    color: #E57488; 
+    color: #ffffff; 
 }
 
 .card-title {

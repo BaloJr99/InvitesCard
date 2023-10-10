@@ -12,6 +12,9 @@ export class EntriesComponent implements OnInit {
   title = 'invites';
 
   audio = new Audio()
+  counter: number = 0;
+
+  background = "url('assets/photoshoot/Img1.jpg')";
   
   entryResolved!: IEntryResolved;
   entryResolvedEmiter$ = new Subject<IEntryResolved>();
@@ -19,6 +22,9 @@ export class EntriesComponent implements OnInit {
   constructor(private route: ActivatedRoute) { 
     this.audio.src = '../../assets/soundtrack.mp3'
     this.audio.load()
+    setInterval(() => {
+      this.updateBackground();
+    }, 5000);
   }
   
   ngOnInit(): void {
@@ -26,8 +32,6 @@ export class EntriesComponent implements OnInit {
       this.entryResolved = this.route.snapshot.data['entry'];
       this.entryResolvedEmiter$.next(this.entryResolved)
     })
-
-    const audioButton = (document.querySelector('.audioButton') as HTMLButtonElement).click()
   }
 
   playAudio() {
@@ -42,5 +46,13 @@ export class EntriesComponent implements OnInit {
       playButton.style.display = 'inline-block'
       pauseButton.style.display = 'none'
     }
+  }
+
+  updateBackground(){
+    this.counter++;
+    if (this.counter > 14) {
+      this.counter = 0;
+    }
+    this.background = `url('assets/photoshoot/Img${this.counter}.jpg')`;
   }
 }
