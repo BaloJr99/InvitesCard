@@ -1,5 +1,5 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { IEntryResolved } from 'src/shared/interfaces';
 
@@ -17,7 +17,7 @@ export class EntriesComponent implements OnInit {
   entryResolved!: IEntryResolved;
   entryResolvedEmiter$ = new Subject<IEntryResolved>();
 
-  constructor(private route: ActivatedRoute) { 
+  constructor(private route: ActivatedRoute, private router: Router) { 
     this.audio.src = '../../assets/soundtrack.mp3'
     this.audio.load()
     setInterval(() => {
@@ -47,7 +47,11 @@ export class EntriesComponent implements OnInit {
   }
 
   goToForm(): void {
-    
+    document.getElementById("scrollToForm")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest"
+    })
   }
 
   updateBackground(){

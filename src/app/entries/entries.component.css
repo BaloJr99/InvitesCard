@@ -26,7 +26,9 @@
   top: 85vh;
   bottom: 0;
   z-index: 1;
-  left: 10px;
+  left: 5vh;
+  animation: floatingAnimation ease-in-out 2s infinite;
+  text-decoration: none;
 }
 
 .scrollFormButton i {
@@ -245,6 +247,20 @@ justify-content: end;
   }
   100% {
     background-size: 110%;
+  }
+}
+
+@keyframes floatingAnimation {
+  0% {
+    top: 85vh;
+  }
+
+  50% {
+    top: 90vh;
+  }
+
+  100% {
+    top: 85vh;
   }
 }
 
