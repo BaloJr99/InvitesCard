@@ -13,6 +13,27 @@
   z-index: 1;
 }
 
+.scrollFormButton {
+  border-radius: 5px;
+  background-color: #515050;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  width: 40px;
+  position: absolute;
+  top: 85vh;
+  bottom: 0;
+  z-index: 1;
+  left: 10px;
+}
+
+.scrollFormButton i {
+  color: #ffffff;
+  font-size: 1.5rem;
+}
+
 .audioButton i {
   color: #ffffff;
   font-size: 1.5rem;
@@ -37,6 +58,7 @@
 .info {
   position: relative;
   padding-bottom: 20px;
+  overflow-x: clip;
 }
 
 .info .container .header h2 {

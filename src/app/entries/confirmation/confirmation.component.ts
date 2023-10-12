@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChildren, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, Subject, debounceTime, fromEvent, merge } from 'rxjs';
-import { GenericValidator } from '../shared/generic-validator';
+import { GenericValidator } from '../../shared/generic-validator';
 import { IEntry } from 'src/shared/interfaces';
 
 @Component({

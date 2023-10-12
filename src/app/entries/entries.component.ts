@@ -32,7 +32,7 @@ export class EntriesComponent implements OnInit {
     })
   }
 
-  playAudio() {
+  playAudio(): void {
     const playButton = (document.querySelector('.audioButton i.fa-play') as HTMLElement)
     const pauseButton = (document.querySelector('.audioButton i.fa-pause') as HTMLElement)
     if (this.audio.paused) {
@@ -44,6 +44,10 @@ export class EntriesComponent implements OnInit {
       playButton.style.display = 'inline-block'
       pauseButton.style.display = 'none'
     }
+  }
+
+  goToForm(): void {
+    
   }
 
   updateBackground(){
