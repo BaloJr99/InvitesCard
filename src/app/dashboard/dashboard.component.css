@@ -1,0 +1,36 @@
+.dashboard {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.dashboard > .container-fluid {
+  height: calc(100% - 56px);
+  padding: 0;
+}
+
+.breadcrumb {
+  margin-bottom: 0;
+}
+
+.breadcrumb-item {
+  font-size: 15px;
+}
+
+.breadcrumb-item:first-of-type a {
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.card-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 700px) {
+  .card-container {
+    flex-direction: column;
+  }
+}

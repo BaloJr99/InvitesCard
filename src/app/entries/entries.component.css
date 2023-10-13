@@ -1,3 +1,17 @@
+.container {
+  color: #E57488;
+}
+.container h1 {
+  color: #E57488;
+  font-family: 'Allura';
+  font-size: 50px;
+}
+
+iframe {
+  width: 100%;
+  border-radius: 10px;
+}
+
 .audioButton {
   border-radius: 2px;
   background-color: #ff002f;
@@ -23,8 +37,6 @@
   height: 50px;
   width: 40px;
   position: absolute;
-  top: 85vh;
-  bottom: 0;
   z-index: 1;
   left: 5vh;
   animation: floatingAnimation ease-in-out 2s infinite;
@@ -252,15 +264,15 @@ justify-content: end;
 
 @keyframes floatingAnimation {
   0% {
-    top: 85vh;
+    top: 80vh;
   }
 
   50% {
-    top: 90vh;
+    top: 85vh;
   }
 
   100% {
-    top: 85vh;
+    top: 80vh;
   }
 }
 

@@ -39,7 +39,7 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["entry"]) {
       var length = changes["entry"].currentValue[0]["entriesNumber"];
-      this.numberOfEntries.next(Array.from({ length }, (k, j) => j + 1))
+      this.numberOfEntries.next(Array.from({ length }, (k, j) => j + 1).sort((a, b) => b - a))
     }
   }
 
