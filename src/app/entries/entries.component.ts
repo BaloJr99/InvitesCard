@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { IEntryResolved } from 'src/shared/interfaces';
+import { InvitesService } from 'src/core/services/invites.service';
+import { IEntry, IEntryResolved } from 'src/shared/interfaces';
 
 @Component({
   selector: 'app-entries',
@@ -12,12 +14,12 @@ export class EntriesComponent implements OnInit {
   title = 'invites';
 
   audio = new Audio()
-  counter: number = 0;
+  counter = 0;
   
   entryResolved!: IEntryResolved;
   entryResolvedEmiter$ = new Subject<IEntryResolved>();
 
-  constructor(private route: ActivatedRoute, private router: Router) { 
+  constructor(private route: ActivatedRoute, private invitesService: InvitesService) { 
     this.audio.src = '../../assets/soundtrack.mp3'
     this.audio.load()
     setInterval(() => {
@@ -60,8 +62,8 @@ export class EntriesComponent implements OnInit {
       this.counter = 1;
     }
 
-    var actualBackgroundImage:HTMLElement = document.querySelector(`.backgroundImage${this.counter}`) as HTMLElement;
-    var oldBackgroundImage:HTMLElement;
+    const actualBackgroundImage:HTMLElement = document.querySelector(`.backgroundImage${this.counter}`) as HTMLElement;
+    let oldBackgroundImage:HTMLElement;
 
     if (this.counter == 1) {
       
@@ -72,5 +74,10 @@ export class EntriesComponent implements OnInit {
 
     actualBackgroundImage.style.visibility = "visible";
     oldBackgroundImage.style.visibility = "hidden";
+  }
+
+  addNewEntry(newEntry: FormGroup) {
+    if(this.entryResolved.entry?.at(0)?.id)
+      this.invitesService.sendConfirmation(newEntry.value as IEntry, this.entryResolved.entry?.[0].id).subscribe();
   }
 }

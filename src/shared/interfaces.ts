@@ -2,8 +2,10 @@ export interface IEntry {
   id: string,
   family: string,
   entriesNumber: number,
+  entriesConfirmed: number,
   message?: string,
-  confirmation: boolean
+  confirmation: boolean,
+  phoneNumber: string
 }
 
 export interface IEntryResolved {

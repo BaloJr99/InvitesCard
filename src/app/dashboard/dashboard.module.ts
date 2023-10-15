@@ -1,15 +1,15 @@
 import { NgModule } from "@angular/core";
 import { DashboardRoutingModule } from "./dashboard.routing.module";
 import { SharedModule } from "../shared/shared.module";
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { CardComponent } from './card/card.component';
+import { DataTablesModule } from "angular-datatables";
 
 @NgModule({
   imports: [
     DashboardRoutingModule,
-    SharedModule
+    SharedModule,
+    DataTablesModule
   ],
-  declarations: [DashboardRoutingModule.components, SidebarComponent, CardComponent]
+  declarations: [DashboardRoutingModule.components]
 })
 
 export class DashboardModule { }

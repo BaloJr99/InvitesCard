@@ -22,7 +22,8 @@ export class InvitesService {
     return this.http.get<IEntry[]>(`${this.invitesBaseUrl}/${id}`)
   }
 
-  // addEntry(entry: IEntry): Observable<IEntry[]> { 
-  //   return this.http.put<IEntry[]>(`${this.invitesBaseUrl}/${id}`)
-  // }
+  sendConfirmation(entry: IEntry, id: string): Observable<IEntry[]> { 
+    
+    return this.http.patch<IEntry[]>(`${this.invitesBaseUrl}/${id}`, entry)
+  }
 }

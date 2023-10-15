@@ -1,5 +1,5 @@
 <div class="entriesConfirmation" id="scrollToForm">
-  <form [formGroup]="confirmationForm" class="container" novalidate (ngSubmit)="saveInformation()">
+  <form [formGroup]="confirmationForm" class="container" novalidate (ngSubmit)="saveInformation()" *ngIf="entry?.[0]?.confirmation === null && entry?.[0]">
     <div class="row">
     <div class="col-sm-12 col-md-6">
       <h1>Confirmación</h1>
@@ -14,16 +14,16 @@
         Selecciona una opción
       </p>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" id="confirmation" value="yes" formControlName="asist" checked>
-        <label class="form-check-label">Asistiré</label>
+        <input class="form-check-input" type="radio" id="confirmation" value="true" formControlName="confirmation" checked>
+        <label class="form-check-label" for="confirmation" >Asistiré</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" id="confirmation" value="no" formControlName="asist">
-        <label class="form-check-label">No asistiré</label>
+        <input class="form-check-input" type="radio" id="confirmation" value="false" formControlName="confirmation">
+        <label class="form-check-label" for="confirmation">No asistiré</label>
       </div>
       <div class="form-group">
         <p>Personas confirmadas</p>
-        <select id="my-select" class="form-control" name="" formControlName="entrieNumber" [ngClass]="{'is-invalid': displayMessage['entrieNumber']}">
+        <select id="my-select" class="form-control" formControlName="entriesConfirmed" [ngClass]="{'is-invalid': displayMessage['entriesConfirmed']}">
           <option value="">Selecciona el numero de pases</option>
           <option *ngFor="let number of numberOfEntries$ | async" [value]="number">{{ number }}</option>
         </select>
@@ -42,4 +42,22 @@
     </div>
     </div>
   </form>
+  <div class="confirmedModal" *ngIf="entry?.[0]?.confirmation !== null && entry?.[0]">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="card-title">{{ entry?.at(0)?.family }}</h1>
+        <div class="confirmed" *ngIf="entry?.at(0)?.confirmation">
+          <i class="fa-solid fa-circle-check"></i>
+          <h3>Su asistencia ha sido confirmada</h3>
+          <p class="card-text">Puede cerrar la página</p>
+        </div>
+        <div class="notConfirmed" *ngIf="!entry?.at(0)?.confirmation">
+          <i class="fa-solid fa-circle-xmark"></i>
+          <h3>Su asistencia ha sido cancelada.</h3>
+          <p class="card-text">Muchas gracias por su tiempo.</p>
+          <p class="card-text">Puede cerrar la página.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

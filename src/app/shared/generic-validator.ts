@@ -24,10 +24,10 @@ export class GenericValidator {
   // Structure
   // controlName1: 'Validation Message.',
   // controlName2: 'Validation Message.'
-  processMessages(container: FormGroup, savingForm: boolean = false): { [key: string]: string } {
+  processMessages(container: FormGroup, savingForm = false): { [key: string]: string } {
     const messages: any = {};
     for (const controlKey in container.controls) {
-      if (container.controls.hasOwnProperty(controlKey)) {
+      if (Object.prototype.hasOwnProperty.call(container.controls, controlKey)) {
         const c = container.controls[controlKey];
         // If it is a FormGroup, process its child controls.
         if (c instanceof FormGroup) {

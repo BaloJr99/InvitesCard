@@ -1,6 +1,6 @@
-import { Component, OnInit, AfterViewInit, ViewChildren, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChildren, ElementRef, Input, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
-import { BehaviorSubject, Observable, Subject, debounceTime, fromEvent, merge } from 'rxjs';
+import { BehaviorSubject, Observable, debounceTime, fromEvent, merge } from 'rxjs';
 import { GenericValidator } from '../../shared/generic-validator';
 import { IEntry } from 'src/shared/interfaces';
 
@@ -12,6 +12,7 @@ import { IEntry } from 'src/shared/interfaces';
 export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
   @Input() entry!: IEntry[] | null;
+  @Output() newEntry = new EventEmitter<FormGroup>();
 
   private numberOfEntries = new BehaviorSubject<number[]>([])
   numberOfEntries$ = this.numberOfEntries.asObservable();
@@ -28,8 +29,8 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
     // Defines all of the validation messages for the form.
     // These could instead be retrieved from a file or database.
     this.validationMessages = {
-      entrieNumber: {
-        required: 'Product name is required.'
+      entriesConfirmed: {
+        required: 'Favor de seleccionar'
       }
     };
 
@@ -38,22 +39,30 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["entry"]) {
-      var length = changes["entry"].currentValue[0]["entriesNumber"];
+      const length = changes["entry"].currentValue[0]["entriesNumber"];
       this.numberOfEntries.next(Array.from({ length }, (k, j) => j + 1).sort((a, b) => b - a))
     }
   }
 
   ngOnInit(): void {
     this.confirmationForm = this.fb.group({
-      asist: ['yes'],
-      entrieNumber: ['', Validators.required],
+      confirmation: 'true',
+      entriesConfirmed: ['', Validators.required],
       message: ['']
     })
   }
 
   saveInformation(): void {
     if (this.confirmationForm.valid) {
-      
+      if(this.confirmationForm.dirty) {
+        const assist = this.confirmationForm.controls['confirmation'].value === 'true'
+        const entriesConfirmed = parseInt(this.confirmationForm.controls['entriesConfirmed'].value)
+        this.confirmationForm.get('confirmation')?.setValue(assist)
+        this.confirmationForm.get('entriesConfirmed')?.setValue(entriesConfirmed)
+        this.newEntry.emit(this.confirmationForm)
+      } else {
+        this.onSaveComplete();
+      }
     } else {
       this.displayMessage = this.genericValidator.processMessages(this.confirmationForm, true);
     }
@@ -69,8 +78,13 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
     // so we only need to subscribe once.
     merge(this.confirmationForm.valueChanges, ...controlBlurs).pipe(
       debounceTime(800)
-    ).subscribe(value => {
-      this.displayMessage = this.genericValidator.processMessages(this.confirmationForm);
+    ).subscribe(() => {
+      this.displayMessage = this.genericValidator.processMessages(this.confirmationForm)
     });
+  }
+
+  onSaveComplete(): void {
+    // Reset the form to clear the flags
+    this.confirmationForm.reset();
   }
 }

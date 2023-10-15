@@ -1,12 +1,11 @@
 import { inject } from "@angular/core";
-import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from "@angular/router";
-import { Observable, catchError, map, of, tap } from "rxjs";
+import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
+import { Observable, catchError, map, of } from "rxjs";
 import { InvitesService } from "src/core/services/invites.service";
 import { IEntryResolved } from "src/shared/interfaces";
 
 export const entriesResolver: ResolveFn<IEntryResolved> = (
-  route: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot): Observable<IEntryResolved> => {
+  route: ActivatedRouteSnapshot): Observable<IEntryResolved> => {
   
   const invitesService = inject(InvitesService);
 

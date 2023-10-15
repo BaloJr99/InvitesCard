@@ -1,27 +1,27 @@
 .time {
-    display: flex;
-    justify-content: center;
-    padding-top: 10px;
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
 }
 
 .card {
-    width: 160px;
-    margin: 0px 5px;
-    background-color: rgb(229, 116, 136, 0.9) ;
-    border: rgb(229, 116, 136);
+  width: 160px;
+  margin: 0px 5px;
+  background-color: rgb(229, 116, 136, 0.9) ;
+  border: rgb(229, 116, 136);
 }
 
 .card-title, .card-text {
-    color: #ffffff; 
+  color: #ffffff; 
 }
 
 .card-title {
-    font-size: 36px;
-    margin: 0;
+  font-size: 36px;
+  margin: 0;
 }
 
 .card-text {
-    font-size: 18px;
+  font-size: 18px;
 }
 
 @media (max-width: 575px) {

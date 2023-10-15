@@ -6,10 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./countdown.component.css']
 })
 export class CountdownComponent implements OnInit {
-  days: number = 0;
-  hours: number = 0;
-  minutes: number = 0;
-  seconds: number = 0;
+  days = 0;
+  hours = 0;
+  minutes = 0;
+  seconds = 0;
 
   diffTime = Math.abs(new Date().valueOf() - new Date('2023-11-18:19:00:00').valueOf());
   
