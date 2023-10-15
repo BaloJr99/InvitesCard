@@ -3,14 +3,16 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { InvitesService } from './services/invites.service';
 import { EnsureModuleLoadedOnceGuard } from './ensure-module-loaded-once.guard';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { LoadingInterceptor } from './interceptors/loading.interceptor';
 
 @NgModule({
   imports: [CommonModule, RouterModule, HttpClientModule],
   exports: [RouterModule, HttpClientModule],
   providers: [
     InvitesService,
-    { provide: 'Window', useFactory: () => window }
+    { provide: 'Window', useFactory: () => window },
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }
   ] // these should be singleton
 })
 export class CoreModule extends EnsureModuleLoadedOnceGuard {    // Ensure that CoreModule is only loaded into AppModule
@@ -21,6 +23,3 @@ export class CoreModule extends EnsureModuleLoadedOnceGuard {    // Ensure that 
   }
 
 }
-
-
-

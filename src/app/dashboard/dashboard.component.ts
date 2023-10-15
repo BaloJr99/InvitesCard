@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { InvitesService } from 'src/core/services/invites.service';
+import { ModalComponent } from './modal/modal.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent {
-
+  constructor(private invitesService: InvitesService) {}
 }
