@@ -3,15 +3,52 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Invitaciones Personalizadas</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        ...
+        <form [formGroup]="createEntrieForm">
+          <div class="mb-3">
+            <label for="family" class="form-label">Familia</label>
+            <input type="text" class="form-control" formControlName="family" [ngClass]="{'is-invalid': displayMessage['family']}">
+            <span class="invalid-feedback">
+              {{ displayMessage['family'] }}
+            </span>
+          </div>
+          <div class="mb-3">
+            <label for="groupSelected" class="form-label">Grupo</label>
+            <select id="my-select" class="form-control" formControlName="groupSelected" [ngClass]="{'is-invalid': displayMessage['groupSelected']}">
+              <option value="">Selecciona el grupo</option>
+              <option value="dadFamily">Familia Papi</option>
+              <option value="momFamily">Familia Mami</option>
+              <option value="dadFriends">Amigos Papi</option>
+              <option value="momFriends">Amigos Mami</option>
+              <option value="fofyFriends">Amigos Fofy</option>
+              <option value="community">Comunidad</option>
+            </select>
+            <span class="invalid-feedback">
+              {{ displayMessage['groupSelected'] }}
+            </span>
+          </div>
+          <div class="mb-3">
+            <label for="entriesNumber" class="form-label">Numero de invitaciones</label>
+            <input type="number" min="1"  class="form-control" formControlName="entriesNumber" [ngClass]="{'is-invalid': displayMessage['entriesNumber']}">
+            <span class="invalid-feedback">
+              {{ displayMessage['entriesNumber'] }}
+            </span>
+          </div>
+          <div class="mb-3">
+            <label for="phoneNumber" class="form-label">Telefono de contacto</label>
+            <input type="tel" class="form-control" formControlName="phoneNumber" [ngClass]="{'is-invalid': displayMessage['phoneNumber']}">
+            <span class="invalid-feedback">
+              {{ displayMessage['phoneNumber'] }}
+            </span>
+          </div>
+        </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" id="closeModal" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" (click)="saveEntry()">Guardar</button>
       </div>
     </div>
   </div>

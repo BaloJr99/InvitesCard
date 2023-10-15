@@ -1,7 +1,11 @@
-:host {
-  margin: 0px 20px;
-}
-
 th {
   text-align: center !important;
+}
+
+.accordion {
+  margin: 10px 0px;
+}
+
+.accordion-item {
+  margin: 10px 0px;
 }

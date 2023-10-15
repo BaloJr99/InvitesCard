@@ -19,16 +19,15 @@
         </div>
         <div class="row mx-1">
           <div class="col-12 card-container">
-            <app-card></app-card>
-            <app-card></app-card>
-            <app-card></app-card>
-            <app-card></app-card>
+            <app-card displayText="Invitaciones Confirmadas" [number]="confirmedEntries" backgroundColor="#43cd63"></app-card>
+            <app-card displayText="Invitaciones Pendientes" [number]="pendingEntries" backgroundColor="#facf4f"></app-card>
+            <app-card displayText="Invitaciones Canceladas" [number]="canceledEntries" backgroundColor="#ff5d6d"></app-card>
+            <app-card displayText="Total de Invitaciones" [number]="totalEntries" backgroundColor="#54a6ff"></app-card>
           </div>
         </div>
         <div class="row mx-1">
           <div class="col-12">
-            <app-table></app-table>
-            <app-table></app-table>
+            <app-table [entries]="entries"></app-table>
           </div>
         </div>
       </div>

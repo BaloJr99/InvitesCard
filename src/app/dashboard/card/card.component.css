@@ -7,6 +7,13 @@
 
 .card {
   width: 100%;
+  color: #ffffff;
+}
+
+.card-title,
+.card-body {
+  font-weight: bold;
+  color: black;
 }
 
 @media screen and (max-width: 700px) {

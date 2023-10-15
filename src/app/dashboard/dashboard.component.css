@@ -21,6 +21,12 @@
   margin-bottom: 0;
 }
 
+.header button.btn-primary {
+  background-color: #ffb7e0;
+  color: #000000;
+  border: none;
+}
+
 .breadcrumb-item {
   font-size: 15px;
 }

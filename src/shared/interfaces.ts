@@ -5,7 +5,8 @@ export interface IEntry {
   entriesConfirmed: number,
   message?: string,
   confirmation: boolean,
-  phoneNumber: string
+  phoneNumber: string,
+  groupSelected: string
 }
 
 export interface IEntryResolved {

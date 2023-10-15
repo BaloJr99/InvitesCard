@@ -60,11 +60,18 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
         this.confirmationForm.get('confirmation')?.setValue(assist)
         this.confirmationForm.get('entriesConfirmed')?.setValue(entriesConfirmed)
         this.newEntry.emit(this.confirmationForm)
+        this.showDiv();
       } else {
         this.onSaveComplete();
       }
     } else {
       this.displayMessage = this.genericValidator.processMessages(this.confirmationForm, true);
+    }
+  }
+
+  showDiv(): void {
+    if (this.entry && this.entry.at(0)) {
+      this.entry[0] = this.confirmationForm.value
     }
   }
 
