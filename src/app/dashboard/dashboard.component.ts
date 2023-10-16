@@ -22,11 +22,7 @@ export class DashboardComponent implements OnInit {
   }
 
   updateDashboard(): void {
-    this.invitesService.getAllEntries().pipe(
-      tap((entries) => {
-        console.log(entries)
-      })
-    ).subscribe({
+    this.invitesService.getAllEntries().subscribe({
       next: (entry) => {
         const groupedEntries: { [key: string]: IEntry[] } = {};
         entry.forEach((value) => {

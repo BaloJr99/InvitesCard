@@ -16,6 +16,14 @@
   color: black;
 }
 
+.card-body h5{
+  font-size: 18px;
+}
+
+.card-body p {
+  font-size: 16px;
+}
+
 @media screen and (max-width: 700px) {
   :host {
     width: 100%;
@@ -23,5 +31,19 @@
 
   .card {
     margin: 10px 0px;
+    height: auto !important;
+  }
+}
+
+@media screen and (max-width: 1298px) {
+  .card {
+    height: 114px;
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 }

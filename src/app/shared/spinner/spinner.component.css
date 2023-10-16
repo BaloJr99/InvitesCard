@@ -29,6 +29,16 @@
   -moz-animation: cssload-spin 500ms infinite linear;
 }
 
+@media screen and (max-width: 575px) {
+  .cssload-speeding-wheel {
+    left: 40%;
+    right: 50%;
+    top: 45%;
+    width: 20%;
+    height: 10%;
+  }
+}
+
 @keyframes cssload-spin {
   100% {
     transform: rotate(360deg);
