@@ -86,6 +86,22 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
     merge(this.confirmationForm.valueChanges, ...controlBlurs).pipe(
       debounceTime(800)
     ).subscribe(() => {
+      if (this.confirmationForm.controls['confirmation'].value === 'true') {
+        const select = document.getElementById('my-select')
+        select?.removeAttribute('disabled');
+        if (this.confirmationForm.get('entriesConfirmed')?.value === '') {
+          this.confirmationForm.patchValue({
+            entriesConfirmed: [''],
+          })
+        }
+        this.confirmationForm.get('entriesConfirmed')?.addValidators(Validators.required)
+      } else if (this.confirmationForm.controls['confirmation'].value === 'false') {
+        const select = document.getElementById('my-select')
+        select?.setAttribute('disabled', '');
+        this.confirmationForm.patchValue({
+          entriesConfirmed: [''],
+        })
+      }
       this.displayMessage = this.genericValidator.processMessages(this.confirmationForm)
     });
   }

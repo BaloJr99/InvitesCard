@@ -18,6 +18,10 @@ export class DashboardComponent implements OnInit {
   entries: { [key: string]: IEntry[] } = {};
   
   ngOnInit(): void {
+    this.updateDashboard();
+  }
+
+  updateDashboard(): void {
     this.invitesService.getAllEntries().pipe(
       tap((entries) => {
         console.log(entries)
