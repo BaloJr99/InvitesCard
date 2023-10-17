@@ -1,4 +1,4 @@
-<div class="time">
+<div class="time" *ngIf="time$ | async as time">
     <div class="card">
         <div class="card-body">
         <h5 class="card-title">{{ time.days }}</h5>
