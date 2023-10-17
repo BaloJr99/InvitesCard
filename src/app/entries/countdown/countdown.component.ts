@@ -1,24 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 
 @Component({
   selector: 'app-countdown',
   templateUrl: './countdown.component.html',
   styleUrls: ['./countdown.component.css']
 })
-export class CountdownComponent implements OnInit {
+export class CountdownComponent implements AfterViewInit {
   days = 0;
   hours = 0;
   minutes = 0;
   seconds = 0;
 
   diffTime = Math.abs(new Date().valueOf() - new Date('2023-11-18:19:00:00').valueOf());
-  
-  ngOnInit(): void {
+
+  ngAfterViewInit(): void {
     setInterval(() => {
       this.updateDate();
     }, 1000);
   }
-
   updateDate(): void {
     this.days = this.diffTime / (24 * 60 * 60 * 1000);
     this.hours = (this.days % 1) * 24;
