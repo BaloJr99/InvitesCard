@@ -13,3 +13,10 @@ export interface IEntryResolved {
   entry: IEntry[] | null;
   error?: string;
 }
+
+export interface ITimer {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
