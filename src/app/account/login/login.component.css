@@ -1,0 +1,88 @@
+.container-fluid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(255, 168, 168);
+  font-family: 'Raleway';
+}
+
+.card h1 {
+  font-family: 'Merriweather';
+  color: #804028;
+}
+
+.card {
+  border: 3px solid rgb(255, 82, 82);
+  border-radius: 10px;
+  padding: 40px;
+  width: 700px;
+}
+
+  .card span a {
+    color: black;
+  }
+
+  .card span,
+  .card span a {
+    font-size: 16px;
+  }
+
+  .card .inputField {
+    display: flex;
+    border-bottom: 1px solid gray;
+    align-items: center;
+    padding: 0px 10px;
+  }
+
+  .card .form-group {
+    text-align: left;
+    margin: 20px 0px;
+  }
+
+    .card .form-group span {
+      display: block;
+      text-align: end;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .card .form-group span a {
+      font-size: 15px;
+    }
+  
+  .card-body {
+    margin: auto;
+    width: 90%;
+  }
+
+  .card label {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .card input {
+    border: none;
+    margin: 10px 0px;
+  }
+
+    .card input:focus::placeholder {
+      color: transparent;
+    }
+
+    .card input:focus {
+      box-shadow: none;
+    }
+
+  .card .btn {
+    margin-top: 40px;
+    width: 50%;
+    background-color: #ffc0c0;
+    border: 2px solid #ff9696;
+    margin: 20px;
+  }
+
+@media (max-width: 575px) {
+  .card {
+    padding: 40px 0px;
+  }
+}

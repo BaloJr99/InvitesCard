@@ -5,11 +5,16 @@ import { NavbarComponent } from "./navbar/navbar.component";
 import { CardComponent } from "./card/card.component";
 import { SidebarComponent } from "./sidebar/sidebar.component";
 import { TableComponent } from "./table/table.component";
+import { PageNotFoundComponent } from "../page-not-found.component";
 
 const routes: Routes = [
   { 
     path: '',
     component: DashboardComponent
+  },
+  {
+    path: '**',
+    component: PageNotFoundComponent
   }
 ]
 

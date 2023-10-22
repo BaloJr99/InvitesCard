@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { tap } from 'rxjs';
 import { InvitesService } from 'src/core/services/invites.service';
 import { IEntry } from 'src/shared/interfaces';
 
