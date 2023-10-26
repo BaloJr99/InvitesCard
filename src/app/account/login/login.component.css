@@ -41,9 +41,13 @@
 
     .card .form-group span {
       display: block;
-      text-align: end;
+      text-align: start;
       font-weight: bold;
       margin-top: 10px;
+    }
+
+    .card .form-group span.forgotPassword {
+      text-align: end;
     }
 
     .card .form-group span a {
@@ -79,6 +83,14 @@
     background-color: #ffc0c0;
     border: 2px solid #ff9696;
     margin: 20px;
+  }
+
+  input:-webkit-autofill {
+    -webkit-box-shadow:0 0 0 50px white inset;
+  }
+
+  span.invalid-feedback {
+    font-size: 14px;
   }
 
 @media (max-width: 575px) {

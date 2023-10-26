@@ -5,12 +5,10 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable()
-export class InvitesService {
+export class EntriesService {
   
   baseUrl = environment.apiUrl;
   invitesBaseUrl = this.baseUrl + '/entries'
-
-  entries: IEntry[] = []
 
   constructor(private http: HttpClient) {  }
 

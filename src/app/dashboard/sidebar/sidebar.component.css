@@ -6,3 +6,17 @@
   height: 100%;
   width: 100%;
 }
+
+h2 {
+  font-family: 'Merriweather';
+  font-size: 20px;
+  padding: 20px 10px 0px;
+  color: #ff3dab;
+  font-weight: bold;
+  text-align: left;
+}
+
+.sidebar .card {
+  margin: 10px;
+  padding: 5px;
+}

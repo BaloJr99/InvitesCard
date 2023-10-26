@@ -9,6 +9,16 @@ export interface IEntry {
   groupSelected: string
 }
 
+export interface IUser {
+  username: string,
+  password: string,
+  email: string
+}
+
+export interface IToken {
+  token: string;
+}
+
 export interface IEntryResolved {
   entry: IEntry[] | null;
   error?: string;

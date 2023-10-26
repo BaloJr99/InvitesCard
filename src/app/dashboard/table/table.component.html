@@ -16,7 +16,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let entrie of entries['fofyFriends']">
+            <tr *ngFor="let entrie of entriesGrouped['fofyFriends']">
               <td>{{ entrie.family }}</td>
               <td>{{ entrie.entriesConfirmed === null ? 0 : entrie.entriesConfirmed }} / {{ entrie.entriesNumber }}</td>
               <td><button class="btn btn-success" (click)="copyToClipBoard(this.entrie.id)"><i class="fa-solid fa-copy"></i></button></td>
@@ -43,7 +43,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let entrie of entries['dadFamily']">
+            <tr *ngFor="let entrie of entriesGrouped['dadFamily']">
               <td>{{ entrie.family }}</td>
               <td>{{ entrie.entriesConfirmed === null ? 0 : entrie.entriesConfirmed }} / {{ entrie.entriesNumber }}</td>
               <td><button class="btn" [ngClass]="entrie.confirmation === null ? 'btn-success' : 'btn-warning'" (click)="copyToClipBoard(this.entrie.id)" [disabled]="entrie.confirmation !== null"><i class="fa-solid fa-copy"></i></button></td>
@@ -70,7 +70,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let entrie of entries['momFamily']">
+            <tr *ngFor="let entrie of entriesGrouped['momFamily']">
               <td>{{ entrie.family }}</td>
               <td>{{ entrie.entriesConfirmed === null ? 0 : entrie.entriesConfirmed }} / {{ entrie.entriesNumber }}</td>
               <td><button class="btn btn-success" (click)="copyToClipBoard(this.entrie.id)"><i class="fa-solid fa-copy"></i></button></td>
@@ -97,7 +97,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let entrie of entries['dadFriends']">
+            <tr *ngFor="let entrie of entriesGrouped['dadFriends']">
               <td>{{ entrie.family }}</td>
               <td>{{ entrie.entriesConfirmed === null ? 0 : entrie.entriesConfirmed }} / {{ entrie.entriesNumber }}</td>
               <td><button class="btn btn-success" (click)="copyToClipBoard(this.entrie.id)"><i class="fa-solid fa-copy"></i></button></td>
@@ -124,7 +124,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let entrie of entries['momFriends']">
+            <tr *ngFor="let entrie of entriesGrouped['momFriends']">
               <td>{{ entrie.family }}</td>
               <td>{{ entrie.entriesConfirmed === null ? 0 : entrie.entriesConfirmed }} / {{ entrie.entriesNumber }}</td>
               <td><button class="btn btn-success" (click)="copyToClipBoard(this.entrie.id)"><i class="fa-solid fa-copy"></i></button></td>
@@ -151,7 +151,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let entrie of entries['community']">
+            <tr *ngFor="let entrie of entriesGrouped['community']">
               <td>{{ entrie.family }}</td>
               <td>{{ entrie.entriesConfirmed === null ? 0 : entrie.entriesConfirmed }} / {{ entrie.entriesNumber }}</td>
               <td><button class="btn btn-success" (click)="copyToClipBoard(this.entrie.id)"><i class="fa-solid fa-copy"></i></button></td>

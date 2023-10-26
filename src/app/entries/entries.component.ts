@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
-import { InvitesService } from 'src/core/services/invites.service';
+import { EntriesService } from 'src/core/services/entries.service';
 import { IEntry, IEntryResolved } from 'src/shared/interfaces';
 
 @Component({
@@ -19,7 +19,7 @@ export class EntriesComponent implements OnInit {
   entryResolved!: IEntryResolved;
   entryResolvedEmiter$ = new Subject<IEntryResolved>();
 
-  constructor(private route: ActivatedRoute, private invitesService: InvitesService) { 
+  constructor(private route: ActivatedRoute, private entriesService: EntriesService) { 
     this.audio.src = '../../assets/soundtrack.mp3'
     this.audio.load()
     setInterval(() => {
@@ -78,6 +78,6 @@ export class EntriesComponent implements OnInit {
 
   addNewEntry(newEntry: FormGroup) {
     if(this.entryResolved.entry?.at(0)?.id)
-      this.invitesService.sendConfirmation(newEntry.value as IEntry, this.entryResolved.entry?.[0].id).subscribe();
+      this.entriesService.sendConfirmation(newEntry.value as IEntry, this.entryResolved.entry?.[0].id).subscribe();
   }
 }

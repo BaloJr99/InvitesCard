@@ -19,6 +19,26 @@
         <input class="form-control me-2" type="search" placeholder="Introduce Familia" aria-label="Search">
         <button class="btn btn-outline-light" type="submit">Buscar</button>
       </form>
+      <button class="btn account" (click)="toggleMenu()"><i class="fa-solid fa-user"></i></button>
+      <div class="menu">
+        <h3>Someone Famous<br /><span>Website Designer</span></h3>
+        <ul>
+          <li>
+            <i class="fa-solid fa-user"></i><a href="#">My profile</a>
+          </li>
+          <li>
+            <i class="fa-solid fa-envelope"></i><a href="#">Inbox</a>
+          </li>
+          <li>
+            <i class="fa-solid fa-gear"></i><a href="#">Setting</a>
+          </li>
+          <li>
+            <i class="fa-solid fa-circle-info"></i><a href="#">Help</a></li>
+          <li>
+            <i class="fa-solid fa-power-off"></i><a href="#" (click)="logout()">Logout</a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </nav>

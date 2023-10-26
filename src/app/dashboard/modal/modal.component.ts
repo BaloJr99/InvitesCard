@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { GenericValidator } from 'src/app/shared/generic-validator';
-import { InvitesService } from 'src/core/services/invites.service';
+import { EntriesService } from 'src/core/services/entries.service';
 import { IEntry } from 'src/shared/interfaces';
 
 @Component({
@@ -18,7 +18,7 @@ export class ModalComponent implements OnInit {
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;
 
-  constructor(private invitesService: InvitesService, private fb: FormBuilder) { 
+  constructor(private entriesService: EntriesService, private fb: FormBuilder) { 
     this.validationMessages = {
       family: {
         required: 'Ingresar familia'
@@ -63,7 +63,7 @@ export class ModalComponent implements OnInit {
   createEntry() {
     const modal = document.getElementById("closeModal")
     if (modal) {
-      this.invitesService.createEntry(this.createEntrieForm.value as IEntry).subscribe({
+      this.entriesService.createEntry(this.createEntrieForm.value as IEntry).subscribe({
         next: () => {
           modal.click()
           this.onSaveComplete();

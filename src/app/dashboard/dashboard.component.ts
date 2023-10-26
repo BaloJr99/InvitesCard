@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { InvitesService } from 'src/core/services/invites.service';
+import { EntriesService } from 'src/core/services/entries.service';
 import { IEntry } from 'src/shared/interfaces';
 
 @Component({
@@ -8,30 +8,24 @@ import { IEntry } from 'src/shared/interfaces';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  constructor(private invitesService: InvitesService) {}
+  constructor(private entriesService: EntriesService) {}
   confirmedEntries = 0;
   canceledEntries = 0;
   pendingEntries = 0;
   totalEntries = 0;
 
-  entries: { [key: string]: IEntry[] } = {};
+  entries: IEntry[] = [];
   
   ngOnInit(): void {
     this.updateDashboard();
   }
 
   updateDashboard(): void {
-    this.invitesService.getAllEntries().subscribe({
+    this.entriesService.getAllEntries().subscribe({
       next: (entry) => {
-        const groupedEntries: { [key: string]: IEntry[] } = {};
+        this.entries = entry;
+
         entry.forEach((value) => {
-          if (groupedEntries[value.groupSelected]) {
-            groupedEntries[value.groupSelected].push(value)
-          } else {
-            groupedEntries[value.groupSelected] = []
-            groupedEntries[value.groupSelected].push(value)
-          }
-          
           if (value.confirmation) {
             if (value.confirmation === true || value.confirmation === 1) {
               this.confirmedEntries += (value.entriesConfirmed)
@@ -44,7 +38,6 @@ export class DashboardComponent implements OnInit {
           }
           this.totalEntries += value.entriesNumber
         })
-        this.entries = groupedEntries;
       }
     })
   }
