@@ -3,7 +3,7 @@
   <div class="container-fluid">
     <div class="row g-0 h-100">
       <div class="col-md-2 d-none d-lg-block">
-        <app-sidebar [entries]="entries"></app-sidebar>
+        <app-sidebar [messages]="messages"></app-sidebar>
       </div>
       <div class="col-md-12 col-lg-10">
         <div class="row mx-1 my-3">
@@ -33,5 +33,16 @@
       </div>
     </div>
   </div>
+  <div class="messages-chat">
+    <div class="messages-header">
+      <h2>Mensajes</h2>
+      <button class="btn" (click)="toggleMessages()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div class="card" *ngFor="let message of messages">
+      {{ message }}
+    </div>
+  </div>
+  <button class="btn messages" (click)="toggleMessages()"><i class="fa-regular fa-comment"></i></button>
 </div>
 <app-modal></app-modal>

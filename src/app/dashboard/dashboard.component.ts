@@ -13,6 +13,7 @@ export class DashboardComponent implements OnInit {
   canceledEntries = 0;
   pendingEntries = 0;
   totalEntries = 0;
+  messages: string[] = ["No hay mensajes"];
 
   entries: IEntry[] = [];
   
@@ -24,6 +25,10 @@ export class DashboardComponent implements OnInit {
     this.entriesService.getAllEntries().subscribe({
       next: (entry) => {
         this.entries = entry;
+
+        if(this.entries.some((entry) => entry.message)) {
+          this.messages = []
+        }
 
         entry.forEach((value) => {
           if (value.confirmation) {
@@ -37,8 +42,19 @@ export class DashboardComponent implements OnInit {
             this.pendingEntries += value.entriesNumber
           }
           this.totalEntries += value.entriesNumber
+
+          if (value.message) {
+            this.messages.push(value.message);
+          }
         })
       }
     })
+  }
+
+  toggleMessages(): void {
+    const toggleMessages = document.querySelector(".messages-chat");
+    if (toggleMessages) {
+      toggleMessages.classList.toggle("active");
+    }
   }
 }
