@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { Observable, debounceTime, fromEvent, merge } from 'rxjs';
 import { GenericValidator } from 'src/app/shared/generic-validator';
@@ -12,6 +12,7 @@ import { IEntry } from 'src/shared/interfaces';
 })
 export class ModalComponent implements OnInit, AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
+  @Output() updateDashboard: EventEmitter<any> = new EventEmitter();
   createEntrieForm!: FormGroup;
   errorMessage = '';
     
@@ -84,6 +85,7 @@ export class ModalComponent implements OnInit, AfterViewInit {
       kidsAllowed: true
     });
     this.displayMessage = {};
+    this.updateDashboard.emit();
   }
 
   ngAfterViewInit(): void {

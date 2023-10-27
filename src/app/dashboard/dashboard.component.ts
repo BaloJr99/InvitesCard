@@ -24,6 +24,10 @@ export class DashboardComponent implements OnInit {
   updateDashboard(): void {
     this.entriesService.getAllEntries().subscribe({
       next: (entry) => {
+        this.confirmedEntries = 0;
+        this.canceledEntries = 0;
+        this.pendingEntries = 0;
+        this.totalEntries = 0;
         this.entries = entry;
 
         if(this.entries.some((entry) => entry.message)) {
