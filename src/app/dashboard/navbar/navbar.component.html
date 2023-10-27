@@ -15,11 +15,11 @@
           </ul>
         </li>
       </ul>
-      <form class="d-flex" role="search">
+      <form class="d-flex" role="search" (submit)="search($event)">
         <input class="form-control me-2" type="search" placeholder="Introduce Familia" aria-label="Search">
         <button class="btn btn-outline-light" type="submit">Buscar</button>
+        <button class="btn account" (click)="toggleMenu()"><i class="fa-solid fa-user"></i></button>  
       </form>
-      <button class="btn account" (click)="toggleMenu()"><i class="fa-solid fa-user"></i></button>
       <div class="menu">
         <h3>Someone Famous<br /><span>Website Designer</span></h3>
         <ul>

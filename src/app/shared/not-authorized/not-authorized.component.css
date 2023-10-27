@@ -1,0 +1,29 @@
+.notAuth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: 'Outfit';
+}
+
+.modal-dialog i {
+  font-size: 100px;
+  color: red;
+}
+
+.modal-dialog h1 {
+  font-size: 30 px;
+  font-weight: bold;
+  margin-top: 20px;
+  font-family: 'Merriweather';
+}
+
+.modal-dialog p {
+  font-size: 20px;
+  color: gray;
+  margin: 20px 0px;
+}
+
+.notAuth .btn {
+  font-size: 20px;
+}

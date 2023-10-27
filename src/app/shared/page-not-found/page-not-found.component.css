@@ -1,0 +1,54 @@
+.pageNotFound {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: 'Outfit';
+}
+
+.pageNotFound img {
+  max-width: 400px;
+  margin-bottom: 20px;
+}
+
+.pageNotFound h1 {
+  font-size: 70px;
+  font-weight: bold;
+  font-family: 'Merriweather';
+}
+
+.pageNotFound h2 {
+  font-size: 30px;
+  font-family: 'Merriweather';
+}
+
+.pageNotFound p {
+  color: gray;
+}
+
+.pageNotFound p,
+.pageNotFound .btn {
+  font-size: 20px;
+}
+
+.pageNotFound .btn {
+  font-weight: bold;
+}
+
+@media (max-width: 575px) {
+  .pageNotFound h1 {
+    font-size: 60px;
+  }
+  
+  .pageNotFound h2 {
+    font-size: 25px;
+  }
+  
+  .pageNotFound p,
+  .pageNotFound .btn {
+    font-size: 18px;
+  }
+  .pageNotFound img {
+    max-width: 200px;
+  }
+}

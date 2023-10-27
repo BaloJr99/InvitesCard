@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { EntriesService } from 'src/core/services/entries.service';
 import { IEntry, IEntryResolved } from 'src/shared/interfaces';
@@ -19,7 +19,9 @@ export class EntriesComponent implements OnInit {
   entryResolved!: IEntryResolved;
   entryResolvedEmiter$ = new Subject<IEntryResolved>();
 
-  constructor(private route: ActivatedRoute, private entriesService: EntriesService) { 
+  constructor(private route: ActivatedRoute, 
+      private entriesService: EntriesService,
+      private router: Router) { 
     this.audio.src = '../../assets/soundtrack.mp3'
     this.audio.load()
     setInterval(() => {
@@ -28,8 +30,11 @@ export class EntriesComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    this.route.data.subscribe(data => {
+    this.route.data.subscribe(() => {
       this.entryResolved = this.route.snapshot.data['entry'];
+      if (!this.entryResolved.entry) {
+        this.router.navigate(['/error/page-not-found'])
+      }
       this.entryResolvedEmiter$.next(this.entryResolved)
     })
   }

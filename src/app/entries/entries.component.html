@@ -39,6 +39,7 @@
       </div>
       <p>{{ entryResolved.entry?.[0]?.family }}</p>
       <p class="pinkLetter">Pases: {{ entryResolved.entry?.[0]?.entriesNumber }}</p>
+      <p class="noKids" *ngIf="entryResolved.entry?.[0]?.kidsAllowed">* No niños *</p>
       <div class="divider">
         <hr>
       </div>

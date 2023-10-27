@@ -1,5 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
+import { Observable, debounceTime, fromEvent, merge } from 'rxjs';
 import { GenericValidator } from 'src/app/shared/generic-validator';
 import { EntriesService } from 'src/core/services/entries.service';
 import { IEntry } from 'src/shared/interfaces';
@@ -9,7 +10,7 @@ import { IEntry } from 'src/shared/interfaces';
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css']
 })
-export class ModalComponent implements OnInit {
+export class ModalComponent implements OnInit, AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
   createEntrieForm!: FormGroup;
   errorMessage = '';
@@ -42,7 +43,8 @@ export class ModalComponent implements OnInit {
       family: ['Familia', Validators.required],
       entriesNumber: [1, Validators.required],
       phoneNumber: ['878', Validators.required],
-      groupSelected: ['', Validators.required]
+      groupSelected: ['', Validators.required],
+      kidsAllowed: [true, Validators.required]
     })
   }
 
@@ -78,8 +80,24 @@ export class ModalComponent implements OnInit {
       family: 'Familia',
       entriesNumber: 1,
       phoneNumber: '878',
-      groupSelected: ''
+      groupSelected: '',
+      kidsAllowed: true
     });
     this.displayMessage = {};
+  }
+
+  ngAfterViewInit(): void {
+    // Watch for the blur event from any input element on the form.
+    // This is required because the valueChanges does not provide notification on blur
+    const controlBlurs: Observable<unknown>[] = this.formInputElements
+      .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
+
+    // Merge the blur event observable with the valueChanges observable
+    // so we only need to subscribe once.
+    merge(this.createEntrieForm.valueChanges, ...controlBlurs).pipe(
+      debounceTime(800)
+    ).subscribe(() => {
+      this.displayMessage = this.genericValidator.processMessages(this.createEntrieForm)
+    });
   }
 }

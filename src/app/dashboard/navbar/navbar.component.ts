@@ -21,4 +21,9 @@ export class NavbarComponent {
     this.tokenService.signOut();
     this.router.navigate(['/account/login']);
   }
+
+  search(event: Event): void {
+    event.preventDefault()
+    console.log("Pending")
+  }
 }

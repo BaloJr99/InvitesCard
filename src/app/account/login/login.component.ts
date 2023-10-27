@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     // Watch for the blur event from any input element on the form.
     // This is required because the valueChanges does not provide notification on blur
-    const controlBlurs: Observable<any>[] = this.formInputElements
+    const controlBlurs: Observable<unknown>[] = this.formInputElements
       .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
 
     // Merge the blur event observable with the valueChanges observable

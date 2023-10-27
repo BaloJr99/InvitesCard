@@ -86,3 +86,11 @@
 .menu ul li:hover a {
   color: #ff5d94;
 }
+
+@media (max-width: 575px) {
+  .menu.active {
+    top: 110px;
+    visibility: visible;
+    opacity: 1;
+  }
+}

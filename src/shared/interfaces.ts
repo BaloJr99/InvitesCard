@@ -6,7 +6,8 @@ export interface IEntry {
   message?: string,
   confirmation: boolean,
   phoneNumber: string,
-  groupSelected: string
+  groupSelected: string,
+  kidsAllowed: boolean
 }
 
 export interface IUser {

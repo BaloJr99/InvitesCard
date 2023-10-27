@@ -137,7 +137,11 @@ padding: 20px 0px;
   font-size: 20px;
 }
 
-.speech .entries p {
+.speech .entries .noKids {
+  font-weight: bold;
+}
+
+.speech .entries p:first-child {
   color: #000000;
 }
 

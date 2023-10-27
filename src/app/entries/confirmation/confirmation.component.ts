@@ -78,7 +78,7 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
   ngAfterViewInit(): void {
     // Watch for the blur event from any input element on the form.
     // This is required because the valueChanges does not provide notification on blur
-    const controlBlurs: Observable<any>[] = this.formInputElements
+    const controlBlurs: Observable<unknown>[] = this.formInputElements
       .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
 
     // Merge the blur event observable with the valueChanges observable
@@ -90,17 +90,15 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
         const select = document.getElementById('my-select')
         select?.removeAttribute('disabled');
         if (this.confirmationForm.get('entriesConfirmed')?.value === '') {
-          this.confirmationForm.patchValue({
-            entriesConfirmed: [''],
-          })
+          this.confirmationForm.get('entriesConfirmed')?.setValue('')
         }
-        this.confirmationForm.get('entriesConfirmed')?.addValidators(Validators.required)
+        this.confirmationForm.get('entriesConfirmed')?.setValidators(Validators.required)
+        this.confirmationForm.get('entriesConfirmed')?.updateValueAndValidity()
       } else if (this.confirmationForm.controls['confirmation'].value === 'false') {
         const select = document.getElementById('my-select')
         select?.setAttribute('disabled', '');
-        this.confirmationForm.patchValue({
-          entriesConfirmed: [''],
-        })
+        this.confirmationForm.get('entriesConfirmed')?.clearValidators();
+        this.confirmationForm.get('entriesConfirmed')?.updateValueAndValidity();
       }
       this.displayMessage = this.genericValidator.processMessages(this.confirmationForm)
     });
