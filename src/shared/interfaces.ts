@@ -1,3 +1,5 @@
+import { HttpErrorResponse } from "@angular/common/http";
+
 export interface IEntry {
   id: string,
   family: string,
@@ -30,4 +32,9 @@ export interface ITimer {
   hours: number;
   minutes: number;
   seconds: number;
+}
+
+export interface IError {
+  hasError: boolean,
+  error: HttpErrorResponse | null
 }

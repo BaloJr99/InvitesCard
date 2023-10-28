@@ -1,0 +1,27 @@
+.modal-body i {
+  font-size: 50px;
+  color: red;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-footer {
+  border-top: none;
+}
+
+.modal-footer .btn-danger {
+  width: 100%;
+}
+
+.modal-body p {
+  color: gray;
+  font-size: 20px;
+  margin: 0;
+}
+
+.modal-body h1 {
+  font-size: 35px;
+  margin: 10px 0px;
+}

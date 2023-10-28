@@ -12,7 +12,7 @@ import { IEntry } from 'src/shared/interfaces';
 })
 export class ModalComponent implements OnInit, AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
-  @Output() updateDashboard: EventEmitter<any> = new EventEmitter();
+  @Output() updateDashboard: EventEmitter<unknown> = new EventEmitter();
   createEntrieForm!: FormGroup;
   errorMessage = '';
     

@@ -13,6 +13,7 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   @Input() entryGroup!: KeyValue<string, IEntry[]>;
   dtOptions: DataTables.Settings = {};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dtTrigger: Subject<any> = new Subject<any>();
 
   tableNames: { [key: string]: string } = {

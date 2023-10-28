@@ -5,11 +5,13 @@ import { AppComponent } from './app.component';
 import { CoreModule } from 'src/core/core.module';
 import { AppRoutingModule } from './app-routing-module';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
+import { ErrorModalComponent } from './shared/error-modal/error-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    ErrorModalComponent
   ],
   imports: [
     BrowserModule,
