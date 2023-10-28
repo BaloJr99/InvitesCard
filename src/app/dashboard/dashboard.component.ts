@@ -14,6 +14,7 @@ export class DashboardComponent implements OnInit {
   pendingEntries = 0;
   totalEntries = 0;
   messages: string[] = ["No hay mensajes"];
+  entriesGrouped: { [key: string]: IEntry[] } = {};
 
   entries: IEntry[] = [];
   
@@ -24,6 +25,7 @@ export class DashboardComponent implements OnInit {
   updateDashboard(): void {
     this.entriesService.getAllEntries().subscribe({
       next: (entry) => {
+        this.entriesGrouped = {};
         this.confirmedEntries = 0;
         this.canceledEntries = 0;
         this.pendingEntries = 0;
@@ -49,6 +51,13 @@ export class DashboardComponent implements OnInit {
 
           if (value.message) {
             this.messages.push(value.message);
+          }
+
+          if (this.entriesGrouped[value.groupSelected]) {
+            this.entriesGrouped[value.groupSelected].push(value)
+          } else {
+            this.entriesGrouped[value.groupSelected] = []
+            this.entriesGrouped[value.groupSelected].push(value)
           }
         })
       }

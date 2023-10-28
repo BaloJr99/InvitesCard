@@ -14,7 +14,7 @@
                 <li class="breadcrumb-item active" aria-current="page">HOME</li>
               </ol>
             </nav>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Nueva Invitación</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationModal">Nueva Invitación</button>
           </div>
         </div>
         <div class="row mx-1">
@@ -27,7 +27,9 @@
         </div>
         <div class="row mx-1">
           <div class="col-12">
-            <app-table [entries]="entries"></app-table>
+            <div class="accordion" id="entryAccordion" *ngFor="let entryGroup of entriesGrouped | keyvalue">
+              <app-table [entryGroup]="entryGroup"></app-table>
+            </div>
           </div>
         </div>
       </div>

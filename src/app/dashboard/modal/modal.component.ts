@@ -29,7 +29,8 @@ export class ModalComponent implements OnInit, AfterViewInit {
         required: 'Ingresar numero de invitaciones'
       },
       phoneNumber: {
-        required: 'Ingresar numero de telefono'
+        required: 'Ingresar numero de telefono',
+        pattern: 'Numero de telefono invalido'
       },
       groupSelected: {
         required: 'Seleccionar grupo'
@@ -43,9 +44,13 @@ export class ModalComponent implements OnInit, AfterViewInit {
     this.createEntrieForm = this.fb.group({
       family: ['Familia', Validators.required],
       entriesNumber: [1, Validators.required],
-      phoneNumber: ['878', Validators.required],
+      phoneNumber: ['878', [Validators.required, Validators.pattern("[0-9]{10}")]],
       groupSelected: ['', Validators.required],
       kidsAllowed: [true, Validators.required]
+    })
+    
+    $('#confirmationModal').on('hidden.bs.modal', () => {
+      this.onSaveComplete();
     })
   }
 

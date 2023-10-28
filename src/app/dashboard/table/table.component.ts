@@ -1,4 +1,6 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { KeyValue } from '@angular/common';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { IEntry } from 'src/shared/interfaces';
 
@@ -7,19 +9,32 @@ import { IEntry } from 'src/shared/interfaces';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
-export class TableComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() entries: IEntry[] = [];
-  entriesGrouped: { [key: string]: IEntry[] } = {};
+export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
+  @Input() entryGroup!: KeyValue<string, IEntry[]>;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
+
+  tableNames: { [key: string]: string } = {
+    dadFamily: "Familia Papi",
+    momFamily: "Familia Mami",
+    fofyFriends: "Amigos Sofy",
+    momFriends: "Amigos Mami",
+    dadFriends: "Amigos Papi",
+    community: "Comunidad"
+  }
+
+  tableName = "";
   
   ngOnInit(): void {
     this.dtOptions = {
       searching: false,
-      "destroy": true
+      destroy: true
     }
-
-    $('#fofyFriends, #dadFriends, #momFriends, #momFamily, #dadFamily, #community').DataTable()
+  }
+  
+  ngAfterViewInit(): void {
+    this.dtTrigger.next(true)
   }
 
   ngOnDestroy(): void {
@@ -32,19 +47,10 @@ export class TableComponent implements OnInit, OnDestroy, OnChanges {
     navigator.clipboard.writeText(url)
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if(Object.keys(changes["entries"].currentValue).length > 0) {
-      const entriesChanged: IEntry[] = changes["entries"].currentValue;
-      const groupedEntries: { [key: string]: IEntry[] } = {};
-      entriesChanged.forEach((value) => {
-        if (groupedEntries[value.groupSelected]) {
-          groupedEntries[value.groupSelected].push(value)
-        } else {
-          groupedEntries[value.groupSelected] = []
-          groupedEntries[value.groupSelected].push(value)
-        }
-      })
-      this.entriesGrouped = groupedEntries;
-    }
+  rerender(): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.destroy()
+    });
+    this.dtTrigger.next(true);
   }
 }
