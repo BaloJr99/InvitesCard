@@ -40,11 +40,12 @@
       <h2>Mensajes</h2>
       <button class="btn" (click)="toggleMessages()"><i class="fa-solid fa-xmark"></i></button>
     </div>
-
-    <div class="card" *ngFor="let message of messages">
-      {{ message }}
+    <div class="messages-container">
+      <div class="card" *ngFor="let message of messages">
+        {{ message }}
+      </div>
     </div>
   </div>
   <button class="btn messages" (click)="toggleMessages()"><i class="fa-regular fa-comment"></i></button>
 </div>
-<app-modal (updateDashboard)="updateDashboard()"></app-modal>
+<app-modal (updateDashboard)="updateDashboard()" (getEntryToModifiy)="getEntryToModifiy()" [entryToModify]="entryToModify"></app-modal>

@@ -27,4 +27,8 @@ export class EntriesService {
   createEntry(entry: IEntry): Observable<IEntry> { 
     return this.http.post<IEntry>(`${this.invitesBaseUrl}`, entry)
   }
+
+  updateEntry(entry: IEntry, id: string): Observable<IEntry> { 
+    return this.http.put<IEntry>(`${this.invitesBaseUrl}/${id}`, entry)
+  }
 }

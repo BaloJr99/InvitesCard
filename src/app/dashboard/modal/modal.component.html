@@ -8,6 +8,7 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="createEntrieForm">
+          <input type="text" id="entryId" hidden>
           <div class="mb-3">
             <label for="family" class="form-label">Familia</label>
             <input type="text" class="form-control" formControlName="family" [ngClass]="{'is-invalid': displayMessage['family']}">
@@ -17,7 +18,7 @@
           </div>
           <div class="mb-3">
             <label for="groupSelected" class="form-label">Grupo</label>
-            <select id="my-select" class="form-control" formControlName="groupSelected" [ngClass]="{'is-invalid': displayMessage['groupSelected']}">
+            <select class="form-control" formControlName="groupSelected" [ngClass]="{'is-invalid': displayMessage['groupSelected']}">
               <option value="">Selecciona el grupo</option>
               <option value="dadFamily">Familia Papi</option>
               <option value="momFamily">Familia Mami</option>

@@ -14,6 +14,7 @@ export class DashboardComponent implements OnInit {
   pendingEntries = 0;
   totalEntries = 0;
   messages: string[] = ["No hay mensajes"];
+  entryToModify: IEntry | null = null;
   entriesGrouped: { [key: string]: IEntry[] } = {};
 
   entries: IEntry[] = [];
@@ -62,6 +63,13 @@ export class DashboardComponent implements OnInit {
         })
       }
     })
+  }
+
+  getEntryToModifiy(): void {
+    const entryFound = this.entries.find((entry) => entry.id === $("#entryId").val())
+    if (entryFound) {
+      this.entryToModify = entryFound;
+    }
   }
 
   toggleMessages(): void {

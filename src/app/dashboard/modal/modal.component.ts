@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { Observable, debounceTime, fromEvent, merge } from 'rxjs';
 import { GenericValidator } from 'src/app/shared/generic-validator';
@@ -10,9 +10,11 @@ import { IEntry } from 'src/shared/interfaces';
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css']
 })
-export class ModalComponent implements OnInit, AfterViewInit {
+export class ModalComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
   @Output() updateDashboard: EventEmitter<unknown> = new EventEmitter();
+  @Output() getEntryToModifiy: EventEmitter<unknown> = new EventEmitter();
+  @Input() entryToModify: IEntry | null = null;
   createEntrieForm!: FormGroup;
   errorMessage = '';
     
@@ -40,6 +42,19 @@ export class ModalComponent implements OnInit, AfterViewInit {
     this.genericValidator = new GenericValidator(this.validationMessages);
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["entryToModify"].currentValue) {
+      const { entriesNumber, family, groupSelected, kidsAllowed, phoneNumber } = changes["entryToModify"].currentValue;
+      this.createEntrieForm.patchValue({ 
+        entriesNumber,
+        family,
+        groupSelected,
+        kidsAllowed,
+        phoneNumber
+      })
+    }
+  }
+
   ngOnInit(): void {
     this.createEntrieForm = this.fb.group({
       family: ['Familia', Validators.required],
@@ -50,16 +65,27 @@ export class ModalComponent implements OnInit, AfterViewInit {
     })
     
     $('#confirmationModal').on('hidden.bs.modal', () => {
-      this.onSaveComplete();
+      this.clearInputs();
+    })
+    
+    $('#confirmationModal').on('show.bs.modal', () => {
+      this.getEntryToModifiy.emit()
     })
   }
+
+  
 
   saveEntry() {
     if (this.createEntrieForm.valid) {
       if (this.createEntrieForm.dirty) {
         const entriesNumber = parseInt(this.createEntrieForm.controls['entriesNumber'].value)
         this.createEntrieForm.get('entriesNumber')?.setValue(entriesNumber)
-        this.createEntry();
+        const id = $("#entryId").val();
+        if (id && typeof(id) === "string") {
+          this.updateEntry(id);
+        } else {
+          this.createEntry();
+        }
       } else {
         this.onSaveComplete();
       }
@@ -73,15 +99,30 @@ export class ModalComponent implements OnInit, AfterViewInit {
     if (modal) {
       this.entriesService.createEntry(this.createEntrieForm.value as IEntry).subscribe({
         next: () => {
-          modal.click()
+          modal.click();
           this.onSaveComplete();
         }
       });
     }
   }
 
+  updateEntry(id: string) {
+    this.entriesService.updateEntry(this.createEntrieForm.value as IEntry, id).subscribe({
+      next: () => {
+        $("#confirmationModal").modal('hide');
+        this.onSaveComplete();
+      }
+    });
+  }
+
   onSaveComplete(): void {
     // Reset the form to clear the flags
+    this.clearInputs();
+    this.displayMessage = {};
+    this.updateDashboard.emit();
+  }
+
+  clearInputs(): void {
     this.createEntrieForm.reset({
       family: 'Familia',
       entriesNumber: 1,
@@ -89,8 +130,8 @@ export class ModalComponent implements OnInit, AfterViewInit {
       groupSelected: '',
       kidsAllowed: true
     });
-    this.displayMessage = {};
-    this.updateDashboard.emit();
+    
+    $("#entryId").val("")
   }
 
   ngAfterViewInit(): void {

@@ -3,6 +3,7 @@ import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { IEntry } from 'src/shared/interfaces';
+import { } from 'bootstrap';
 
 @Component({
   selector: 'app-table',
@@ -46,6 +47,14 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
     const url = `${window.location.origin}/entries/${id}`
 
     navigator.clipboard.writeText(url)
+  }
+
+  openEditModal(id: string): void {
+    const entry = this.entryGroup.value.find((entry) => entry.id === id)
+    if (entry) {
+      $("#entryId").val(entry.id)
+      $("#confirmationModal").modal("show");
+    }
   }
 
   rerender(): void {

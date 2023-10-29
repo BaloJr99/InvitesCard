@@ -11,14 +11,17 @@
           <tr>
             <th>Familia</th>
             <th>Numero de entradas</th>
-            <th>Accion</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let entrie of entryGroup.value">
             <td>{{ entrie.family }}</td>
             <td>{{ entrie.entriesConfirmed === null ? 0 : entrie.entriesConfirmed }} / {{ entrie.entriesNumber }}</td>
-            <td><button class="btn" [ngClass]="entrie.confirmation === null ? 'btn-success' : 'btn-warning'" (click)="copyToClipBoard(this.entrie.id)" [disabled]="entrie.confirmation !== null"><i class="fa-solid fa-copy"></i></button></td>
+            <td>
+              <button class="btn btn-copy" [ngClass]="entrie.confirmation === null ? 'btn-success' : 'btn-warning'" (click)="copyToClipBoard(this.entrie.id)" [disabled]="entrie.confirmation !== null"><i class="fa-solid fa-copy"></i></button>
+              <button class="btn" [ngClass]="entrie.confirmation === null ? 'btn-success' : 'btn-warning'" (click)="openEditModal(this.entrie.id)" [disabled]="entrie.confirmation !== null"><i class="fa-solid fa-pen-to-square"></i></button>
+            </td>
           </tr>
         </tbody>
       </table>
