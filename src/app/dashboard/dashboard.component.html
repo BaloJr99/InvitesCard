@@ -1,12 +1,14 @@
 <div class="dashboard">
-  <app-navbar></app-navbar>
+  <header>
+    <app-navbar></app-navbar>
+  </header>
   <div class="container-fluid">
     <div class="row g-0 h-100">
-      <div class="col-md-2 d-none d-lg-block">
+      <aside class="col-md-2 d-none d-lg-block">
         <app-sidebar [messages]="messages"></app-sidebar>
-      </div>
-      <div class="col-md-12 col-lg-10">
-        <div class="row mx-1 my-3">
+      </aside>
+      <main class="col-md-12 col-lg-10">
+        <div class="row mx-1 my-3 breadcrumb-header">
           <div class="col-12 header">
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb">
@@ -17,22 +19,22 @@
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationModal">Nueva Invitación</button>
           </div>
         </div>
-        <div class="row mx-1">
+        <section class="row mx-1 card-section">
           <div class="col-12 card-container">
             <app-card displayText="Invitaciones Confirmadas" [number]="confirmedEntries" backgroundColor="#43cd63"></app-card>
             <app-card displayText="Invitaciones Pendientes" [number]="pendingEntries" backgroundColor="#facf4f"></app-card>
             <app-card displayText="Invitaciones Canceladas" [number]="canceledEntries" backgroundColor="#ff5d6d"></app-card>
             <app-card displayText="Total de Invitaciones" [number]="totalEntries" backgroundColor="#54a6ff"></app-card>
           </div>
-        </div>
-        <div class="row mx-1">
+        </section>
+        <section class="row mx-1 table-accordion">
           <div class="col-12">
             <div class="accordion" id="entryAccordion" *ngFor="let entryGroup of entriesGrouped | keyvalue">
               <app-table [entryGroup]="entryGroup"></app-table>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   </div>
   <div class="messages-chat">

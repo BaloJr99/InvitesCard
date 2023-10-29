@@ -11,6 +11,11 @@
   padding: 0;
 }
 
+main { 
+  display: flex;
+  flex-direction: column;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -27,6 +32,14 @@
   border: none;
 }
 
+.breadcrumb-header {
+  flex: 0 1 auto;
+}
+
+.breadcrumb-header {
+  flex: 0 1 auto;
+}
+
 .breadcrumb-item {
   font-size: 15px;
 }
@@ -36,9 +49,18 @@
   text-decoration: none;
 }
 
+.card-section {
+  flex: 0 1 auto;
+}
+
 .card-container {
   display: flex;
   justify-content: space-between;
+}
+
+.table-accordion {
+  flex: 1 1 0;
+  overflow-y: auto;
 }
 
 .messages {
@@ -112,6 +134,10 @@
     height: 450px;
     padding: 10px 0px;
   }
+
+  .table-accordion {
+    flex: none;
+  }
 }
 
 @media screen and (max-width: 700px) {
@@ -133,5 +159,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .table-accordion {
+    flex: none;
   }
 }
