@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;
+  authErrorMessage = "";
 
   constructor(private fb: FormBuilder, 
     private authService: AuthService, 
@@ -65,9 +67,15 @@ export class LoginComponent implements OnInit, AfterViewInit {
         delete user.confirmPassword;
         this.authService.loginAccount(user as IUser).subscribe({
           next: (authInfo) => {
+            this.authErrorMessage = "";
             if (authInfo) {
               this.tokenService.saveToken(authInfo.token);
               this.router.navigate(['/dashboard']);
+            }
+          },
+          error: (error: HttpErrorResponse) => {
+            if (error.status === 401) {
+              this.authErrorMessage = "Credenciales Incorrectas";
             }
           }
         })

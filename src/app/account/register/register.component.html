@@ -3,6 +3,9 @@
     <div class="card-body">
       <h1 class="card-title">Crea tu cuenta</h1>
       <form action="" [formGroup]="registrationForm" novalidate (ngSubmit)="saveAccount()">
+        <span class="bg-danger d-block text-light rounded py-2" [style.visibility]="registrationErrorMessage ? 'visible' : 'hidden'">
+          {{ registrationErrorMessage }}
+        </span>
         <div class="form-group">
           <label for="username">Usuario</label>
           <div class="inputField">

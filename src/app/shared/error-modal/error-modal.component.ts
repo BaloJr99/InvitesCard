@@ -15,7 +15,11 @@ export class ErrorModalComponent implements OnInit {
   ngOnInit(): void {
     this.errorService.errorResponse.subscribe({
       next: (information) => {
-        if (information.error?.status !== undefined && information.error.status !== 401 && information.error.status !== 404) {
+        if (
+          information.error?.status !== undefined && 
+          information.error.status !== 401 && 
+          information.error.status !== 404 &&
+          information.error.status !== 409) {
           this.errorTriggered = information.hasError;
           $("#errorModal").modal("show");
         }

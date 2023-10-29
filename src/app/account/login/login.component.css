@@ -4,6 +4,7 @@
   align-items: center;
   background-color: rgb(255, 168, 168);
   font-family: 'Raleway';
+  overflow-x: auto;
 }
 
 .card h1 {
@@ -15,6 +16,7 @@
   border: 3px solid rgb(255, 82, 82);
   border-radius: 10px;
   padding: 40px;
+  margin: 40px;
   width: 700px;
 }
 

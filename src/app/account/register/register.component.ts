@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,6 +15,7 @@ import { IUser } from 'src/shared/interfaces';
 export class RegisterComponent implements OnInit, AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
   registrationForm!: FormGroup;
+  registrationErrorMessage = "";
 
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -71,6 +73,11 @@ export class RegisterComponent implements OnInit, AfterViewInit {
           next: (token) => {
             if (token) {
               this.router.navigate(['/account/login']);
+            }
+          },
+          error: (error: HttpErrorResponse) => {
+            if (error.status === 409) {
+              this.registrationErrorMessage = error.error.message;
             }
           }
         })

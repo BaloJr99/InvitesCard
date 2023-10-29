@@ -3,6 +3,9 @@
     <div class="card-body">
       <h1 class="card-title">Login</h1>
       <form action="" [formGroup]="loginForm" novalidate (ngSubmit)="loginAccount()">
+        <span class="bg-danger d-block text-light rounded py-2" [style.visibility]="authErrorMessage ? 'visible' : 'hidden'">
+          {{ authErrorMessage }}
+        </span>
         <div class="form-group">
           <label for="username">Usuario</label>
           <div class="inputField">

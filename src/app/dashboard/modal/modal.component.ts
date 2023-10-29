@@ -95,15 +95,12 @@ export class ModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   createEntry() {
-    const modal = document.getElementById("closeModal")
-    if (modal) {
-      this.entriesService.createEntry(this.createEntrieForm.value as IEntry).subscribe({
-        next: () => {
-          modal.click();
-          this.onSaveComplete();
-        }
-      });
-    }
+    this.entriesService.createEntry(this.createEntrieForm.value as IEntry).subscribe({
+      next: () => {
+        $("#confirmationModal").modal('hide');
+        this.onSaveComplete();
+      }
+    });
   }
 
   updateEntry(id: string) {
