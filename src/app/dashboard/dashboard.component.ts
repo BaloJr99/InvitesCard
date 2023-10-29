@@ -68,6 +68,7 @@ export class DashboardComponent implements OnInit {
   getEntryToModifiy(): void {
     const entryFound = this.entries.find((entry) => entry.id === $("#entryId").val())
     if (entryFound) {
+      entryFound.kidsAllowed = Boolean(entryFound.kidsAllowed)
       this.entryToModify = entryFound;
     }
   }
