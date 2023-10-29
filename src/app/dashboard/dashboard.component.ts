@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EntriesService } from 'src/core/services/entries.service';
-import { IEntry } from 'src/shared/interfaces';
+import { IEntry, IMessage } from 'src/shared/interfaces';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +13,7 @@ export class DashboardComponent implements OnInit {
   canceledEntries = 0;
   pendingEntries = 0;
   totalEntries = 0;
-  messages: string[] = ["No hay mensajes"];
+  messages: Map<number, IMessage> = new Map<number, IMessage>();
   entryToModify: IEntry | null = null;
   entriesGrouped: { [key: string]: IEntry[] } = {};
 
@@ -26,6 +26,7 @@ export class DashboardComponent implements OnInit {
   updateDashboard(): void {
     this.entriesService.getAllEntries().subscribe({
       next: (entry) => {
+        let counter = 0;
         this.entriesGrouped = {};
         this.confirmedEntries = 0;
         this.canceledEntries = 0;
@@ -33,9 +34,7 @@ export class DashboardComponent implements OnInit {
         this.totalEntries = 0;
         this.entries = entry;
 
-        if(this.entries.some((entry) => entry.message)) {
-          this.messages = []
-        }
+        this.messages.clear();
 
         entry.forEach((value) => {
           if (value.confirmation) {
@@ -51,7 +50,8 @@ export class DashboardComponent implements OnInit {
           this.totalEntries += value.entriesNumber
 
           if (value.message) {
-            this.messages.push(value.message);
+            this.messages.set(counter, { family: value.family, message: value.message });
+            counter++;
           }
 
           if (this.entriesGrouped[value.groupSelected]) {

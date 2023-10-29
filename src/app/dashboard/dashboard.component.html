@@ -43,8 +43,14 @@
       <button class="btn" (click)="toggleMessages()"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="messages-container">
-      <div class="card" *ngFor="let message of messages">
-        {{ message }}
+      <div class="card" *ngIf="!messages">
+        No hay mensajes
+      </div>
+      <div class="message" *ngFor="let message of messages | keyvalue">
+        <div class="card text-start ps-2">
+          <p class="text-start mb-0">{{ message.value.family }}: </p>
+          {{ message.value.message }}
+        </div>
       </div>
     </div>
   </div>

@@ -1,8 +1,11 @@
 <div class="sidebar">
   <h2>Mensajes</h2>
   <div class="sidebar-message-container">
-    <div class="card" *ngFor="let message of messages">
-      {{ message }}
+    <div class="sidebar-message" *ngFor="let message of messages | keyvalue">
+      <p>{{ message.value.family }}: </p>
+      <div class="card">
+        {{ message.value.message }}
+      </div>
     </div>
   </div>
 </div>

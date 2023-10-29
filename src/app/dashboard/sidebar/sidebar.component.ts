@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { IMessage } from 'src/shared/interfaces';
 
 @Component({
   selector: 'app-sidebar',
@@ -6,5 +7,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent {
-  @Input() messages: string[] = [];
+  @Input() messages: Map<number, IMessage> = new Map<number, IMessage>();
 }

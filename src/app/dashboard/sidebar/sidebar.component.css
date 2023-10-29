@@ -13,12 +13,22 @@ h2 {
   padding: 20px 10px 0px;
   color: #ff3dab;
   font-weight: bold;
-  text-align: left;
+  text-align: center;
 }
 
 .sidebar .card {
   margin: 10px;
   padding: 5px;
+}
+
+.sidebar-message p {
+  font-weight: bold;
+  margin-bottom: 0;
+  padding-left: 10px;
+  text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .sidebar-message-container {

@@ -12,6 +12,11 @@ export interface IEntry {
   kidsAllowed: boolean
 }
 
+export interface IMessage {
+  family: string,
+  message: string
+}
+
 export interface IUser {
   username: string,
   password: string,
