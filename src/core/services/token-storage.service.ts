@@ -1,9 +1,13 @@
 import { Injectable } from "@angular/core";
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { IUser } from "src/shared/interfaces";
 
 const TOKEN_KEY = 'x-access-token';
 
 @Injectable() 
 export class TokenStorageService {
+
+  constructor(private jwtService: JwtHelperService) { }
 
   signOut(): void {
     window.sessionStorage.clear();
@@ -16,5 +20,14 @@ export class TokenStorageService {
 
   public getToken(): string | null {
     return window.sessionStorage.getItem(TOKEN_KEY);
+  }
+
+  public getTokenValues(): IUser | null {
+    const token = window.sessionStorage.getItem(TOKEN_KEY);
+    if (token) {
+      const userInformation = this.jwtService.decodeToken(token);
+      return userInformation as IUser;
+    }
+    return null;
   }
 }

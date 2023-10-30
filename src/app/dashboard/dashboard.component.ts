@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EntriesService } from 'src/core/services/entries.service';
+import { TokenStorageService } from 'src/core/services/token-storage.service';
 import { IEntry, IMessage } from 'src/shared/interfaces';
 
 @Component({
@@ -8,7 +9,9 @@ import { IEntry, IMessage } from 'src/shared/interfaces';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  constructor(private entriesService: EntriesService) {}
+  constructor(
+    private entriesService: EntriesService,
+    private tokenService: TokenStorageService) {}
   confirmedEntries = 0;
   canceledEntries = 0;
   pendingEntries = 0;
@@ -16,11 +19,19 @@ export class DashboardComponent implements OnInit {
   messages: Map<number, IMessage> = new Map<number, IMessage>();
   entryToModify: IEntry | null = null;
   entriesGrouped: { [key: string]: IEntry[] } = {};
+  username = "";
+  email = "";
+
 
   entries: IEntry[] = [];
   
   ngOnInit(): void {
     this.updateDashboard();
+    const userInformation = this.tokenService.getTokenValues();
+    if (userInformation) {
+      this.username = userInformation.username;
+      this.email = userInformation.email;
+    }
   }
 
   updateDashboard(): void {

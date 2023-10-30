@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenStorageService } from 'src/core/services/token-storage.service';
 
@@ -8,6 +8,9 @@ import { TokenStorageService } from 'src/core/services/token-storage.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+
+  @Input() email = "";
+  @Input() username = "";
 
   constructor(private router: Router, private tokenService: TokenStorageService) { }
   toggleMenu(): void {
