@@ -99,7 +99,11 @@ export class DashboardComponent implements OnInit {
   }
 
   filterEntries(family: string): void {
-    const filteredEntries = this.entries.filter((entry) => entry.family.toLocaleLowerCase().includes(family.toLocaleLowerCase()))
-    this.groupEntries(filteredEntries);
+    if (family) {
+      const filteredEntries = this.entries.filter((entry) => entry.family.toLocaleLowerCase().includes(family.toLocaleLowerCase()))
+      this.groupEntries(filteredEntries);
+    } else {
+      this.groupEntries(this.entries)
+    }
   }
 }
