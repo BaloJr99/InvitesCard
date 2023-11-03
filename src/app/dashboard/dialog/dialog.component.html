@@ -1,0 +1,18 @@
+<!-- Modal -->
+<div class="modal fade" id="warningDialog" tabindex="-1" aria-labelledby="warningDialogLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="warningDialogLabel">Eliminando Invitación</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Esta seguro de que desea eliminar la invitación de {{ entry?.family }}?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="closeModal" class="btn btn-success" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" (click)="deleteEntry()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>

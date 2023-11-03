@@ -48,14 +48,14 @@ export class DashboardComponent implements OnInit {
 
         entries.forEach((value) => {
           if (value.confirmation) {
-            if (value.confirmation === true || value.confirmation === 1) {
-              this.confirmedEntries += (value.entriesConfirmed)
-              this.canceledEntries += (value.entriesNumber - value.entriesConfirmed)
+            this.confirmedEntries += (value.entriesConfirmed)
+            this.canceledEntries += (value.entriesNumber - value.entriesConfirmed)
+          } else {
+            if (value.confirmation === null) {
+              this.pendingEntries += value.entriesNumber
             } else {
               this.canceledEntries += value.entriesNumber;
             }
-          } else {
-            this.pendingEntries += value.entriesNumber
           }
           this.totalEntries += value.entriesNumber
 

@@ -10,6 +10,17 @@ th {
   margin: 10px 0px;
 }
 
-.btn-copy {
+.btn:nth-child(2) {
   margin: 0px 5px;
+}
+
+@media (max-width: 575px) {
+  .btn:nth-child(2) {
+    margin: 5px 0px;
+  }
+
+  tr > td:nth-child(3) {
+    display: flex;
+    flex-direction: column;
+  }
 }

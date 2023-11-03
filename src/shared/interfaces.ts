@@ -43,3 +43,7 @@ export interface IError {
   hasError: boolean,
   error: HttpErrorResponse | null
 }
+
+export interface IMessageResponse {
+  message: string
+}

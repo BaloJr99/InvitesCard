@@ -5,6 +5,8 @@ import { NavbarComponent } from "./navbar/navbar.component";
 import { CardComponent } from "./card/card.component";
 import { SidebarComponent } from "./sidebar/sidebar.component";
 import { TableComponent } from "./table/table.component";
+import { ModalComponent } from "./modal/modal.component";
+import { DialogComponent } from "./dialog/dialog.component";
 
 const routes: Routes = [
   { 
@@ -23,5 +25,13 @@ const routes: Routes = [
 })
 
 export class DashboardRoutingModule {
-  static components = [DashboardComponent, NavbarComponent, SidebarComponent, CardComponent, TableComponent]
+  static components = [
+    DashboardComponent, 
+    NavbarComponent,
+    SidebarComponent, 
+    CardComponent, 
+    TableComponent,
+    ModalComponent,
+    DialogComponent
+  ]
 }

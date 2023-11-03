@@ -2,7 +2,6 @@ import { NgModule } from "@angular/core";
 import { DashboardRoutingModule } from "./dashboard.routing.module";
 import { SharedModule } from "../shared/shared.module";
 import { DataTablesModule } from "angular-datatables";
-import { ModalComponent } from './modal/modal.component';
 
 @NgModule({
   imports: [
@@ -10,7 +9,7 @@ import { ModalComponent } from './modal/modal.component';
     SharedModule,
     DataTablesModule
   ],
-  declarations: [DashboardRoutingModule.components, ModalComponent]
+  declarations: [DashboardRoutingModule.components]
 })
 
 export class DashboardModule { }

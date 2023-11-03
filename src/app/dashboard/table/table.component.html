@@ -19,8 +19,9 @@
             <td>{{ entrie.family }}</td>
             <td>{{ entrie.entriesConfirmed === null ? 0 : entrie.entriesConfirmed }} / {{ entrie.entriesNumber }}</td>
             <td>
-              <button class="btn btn-copy" [ngClass]="entrie.confirmation === null ? 'btn-success' : 'btn-warning'" (click)="copyToClipBoard(this.entrie.id)" [disabled]="entrie.confirmation !== null"><i class="fa-solid fa-copy"></i></button>
-              <button class="btn" [ngClass]="entrie.confirmation === null ? 'btn-success' : 'btn-warning'" (click)="openEditModal(this.entrie.id)" [disabled]="entrie.confirmation !== null"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button class="btn" [ngClass]="entrie.confirmation === null ? 'btn-warning' : 'btn-secondary'" (click)="openEditModal(this.entrie.id)" [disabled]="entrie.confirmation !== null"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button class="btn btn-delete" [ngClass]="entrie.confirmation === null ? 'btn-danger' : 'btn-secondary'" (click)="showModal(this.entrie.id)" [disabled]="entrie.confirmation !== null"><i class="fa-solid fa-trash"></i></button>
+              <button class="btn" [ngClass]="entrie.confirmation === null ? 'btn-success' : 'btn-secondary'" (click)="copyToClipBoard(this.entrie.id)" [disabled]="entrie.confirmation !== null"><i class="fa-solid fa-copy"></i></button>
             </td>
           </tr>
         </tbody>
@@ -28,3 +29,4 @@
     </div>
   </div>
 </div>
+<app-dialog [entry]="entryToDelete"></app-dialog>

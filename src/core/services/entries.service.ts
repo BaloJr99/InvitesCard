@@ -1,4 +1,4 @@
-import { IEntry } from '../../shared/interfaces'
+import { IEntry, IMessageResponse } from '../../shared/interfaces'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -30,5 +30,9 @@ export class EntriesService {
 
   updateEntry(entry: IEntry, id: string): Observable<IEntry> { 
     return this.http.put<IEntry>(`${this.invitesBaseUrl}/${id}`, entry)
+  }
+
+  deleteEntry(id: string): Observable<IMessageResponse> { 
+    return this.http.delete<IMessageResponse>(`${this.invitesBaseUrl}/${id}`)
   }
 }
