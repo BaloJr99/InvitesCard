@@ -5,21 +5,13 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item dropdown">
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
-      </ul>
-      <form class="d-flex" role="search" (submit)="search($event)">
-        <input class="form-control me-2" type="search" placeholder="Introduce Familia" aria-label="Search">
-        <button class="btn btn-outline-light" type="submit">Buscar</button>
+      <div class="navbarWithSearchAndForm">
+        <form class="d-flex" role="search" (submit)="search()" [formGroup]="searchForm">
+          <input class="form-control me-2" formControlName="searchInput" placeholder="Introduce Familia" aria-label="Search">
+          <button class="btn btn-outline-light" type="submit">Buscar</button>
+        </form>
         <button class="btn account" (click)="toggleMenu()"><i class="fa-solid fa-user"></i></button>  
-      </form>
+      </div>
       <div class="menu">
         <h3>{{ username }}<br /><span>{{ email }}</span></h3>
         <ul>

@@ -91,9 +91,36 @@
   color: #ff5d94;
 }
 
+.navbarWithSearchAndForm {
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+}
+
 @media (max-width: 575px) {
   .menu.active {
     top: 110px;
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 991px) {
+
+  .navbarWithSearchAndForm {
+    display: flex;
+  }
+
+  form {
+    flex-grow: 1;
+  }
+
+  .navbar .account {
+    margin-right: 5px;
+  }
+
+  .menu.active {
+    top: 100px;
     visibility: visible;
     opacity: 1;
   }

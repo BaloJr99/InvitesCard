@@ -36,18 +36,17 @@ export class DashboardComponent implements OnInit {
 
   updateDashboard(): void {
     this.entriesService.getAllEntries().subscribe({
-      next: (entry) => {
+      next: (entries) => {
         let counter = 0;
-        this.entriesGrouped = {};
         this.confirmedEntries = 0;
         this.canceledEntries = 0;
         this.pendingEntries = 0;
         this.totalEntries = 0;
-        this.entries = entry;
+        this.entries = entries;
 
         this.messages.clear();
 
-        entry.forEach((value) => {
+        entries.forEach((value) => {
           if (value.confirmation) {
             if (value.confirmation === true || value.confirmation === 1) {
               this.confirmedEntries += (value.entriesConfirmed)
@@ -64,14 +63,22 @@ export class DashboardComponent implements OnInit {
             this.messages.set(counter, { family: value.family, message: value.message });
             counter++;
           }
-
-          if (this.entriesGrouped[value.groupSelected]) {
-            this.entriesGrouped[value.groupSelected].push(value)
-          } else {
-            this.entriesGrouped[value.groupSelected] = []
-            this.entriesGrouped[value.groupSelected].push(value)
-          }
         })
+
+        this.groupEntries(entries);
+      }
+    })
+  }
+
+  groupEntries(entries: IEntry[]): void {
+    this.entriesGrouped = {};
+
+    entries.forEach((entry) => {
+      if (this.entriesGrouped[entry.groupSelected]) {
+        this.entriesGrouped[entry.groupSelected].push(entry)
+      } else {
+        this.entriesGrouped[entry.groupSelected] = []
+        this.entriesGrouped[entry.groupSelected].push(entry)
       }
     })
   }
@@ -89,5 +96,10 @@ export class DashboardComponent implements OnInit {
     if (toggleMessages) {
       toggleMessages.classList.toggle("active");
     }
+  }
+
+  filterEntries(family: string): void {
+    const filteredEntries = this.entries.filter((entry) => entry.family.toLocaleLowerCase().includes(family.toLocaleLowerCase()))
+    this.groupEntries(filteredEntries);
   }
 }

@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TokenStorageService } from 'src/core/services/token-storage.service';
 
@@ -7,12 +8,25 @@ import { TokenStorageService } from 'src/core/services/token-storage.service';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
 
   @Input() email = "";
   @Input() username = "";
+  @Output() searchEntries = new EventEmitter<string>();
 
-  constructor(private router: Router, private tokenService: TokenStorageService) { }
+  searchForm!: FormGroup;
+
+  constructor(
+    private router: Router, 
+    private tokenService: TokenStorageService, 
+    private fb: FormBuilder) { }
+
+  ngOnInit(): void {
+    this.searchForm = this.fb.group({
+      searchInput: ""
+    })
+  }
+  
   toggleMenu(): void {
     const toggleMenu = document.querySelector(".menu");
     if (toggleMenu) {
@@ -25,8 +39,8 @@ export class NavbarComponent {
     this.router.navigate(['/account/login']);
   }
 
-  search(event: Event): void {
-    event.preventDefault()
-    console.log("Pending")
+  search(): void {
+    this.searchEntries.emit(this.searchForm.get("searchInput")?.value)
+    this.searchForm.reset();
   }
 }
