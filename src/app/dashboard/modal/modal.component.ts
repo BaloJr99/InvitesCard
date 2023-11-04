@@ -5,6 +5,7 @@ import { GenericValidator } from 'src/app/shared/generic-validator';
 import { EntriesService } from 'src/core/services/entries.service';
 import { IEntry } from 'src/shared/interfaces';
 import { UpdateEntryService } from '../update-entry.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-modal',
@@ -25,7 +26,8 @@ export class ModalComponent implements OnInit, AfterViewInit, OnChanges {
   constructor(
     private entriesService: EntriesService, 
     private fb: FormBuilder,
-    private updateService: UpdateEntryService) { 
+    private updateService: UpdateEntryService,
+    private toastr: ToastrService) { 
     this.validationMessages = {
       family: {
         required: 'Ingresar familia'
@@ -76,8 +78,6 @@ export class ModalComponent implements OnInit, AfterViewInit, OnChanges {
     })
   }
 
-  
-
   saveEntry() {
     if (this.createEntrieForm.valid) {
       if (this.createEntrieForm.dirty) {
@@ -102,6 +102,7 @@ export class ModalComponent implements OnInit, AfterViewInit, OnChanges {
       next: () => {
         $("#confirmationModal").modal('hide');
         this.onSaveComplete();
+        this.toastr.success("Se ha guardado la invitación");
       }
     });
   }
@@ -111,6 +112,7 @@ export class ModalComponent implements OnInit, AfterViewInit, OnChanges {
       next: () => {
         $("#confirmationModal").modal('hide');
         this.onSaveComplete();
+        this.toastr.success("Se ha actualizado la invitación");
       }
     });
   }

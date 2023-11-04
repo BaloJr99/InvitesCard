@@ -6,6 +6,8 @@ import { CoreModule } from 'src/core/core.module';
 import { AppRoutingModule } from './app-routing-module';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { ErrorModalComponent } from './shared/error-modal/error-modal.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,11 @@ import { ErrorModalComponent } from './shared/error-modal/error-modal.component'
   imports: [
     BrowserModule,
     AppRoutingModule,
-    CoreModule
+    CoreModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
