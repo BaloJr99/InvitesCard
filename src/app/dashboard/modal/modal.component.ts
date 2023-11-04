@@ -4,6 +4,7 @@ import { Observable, debounceTime, fromEvent, merge } from 'rxjs';
 import { GenericValidator } from 'src/app/shared/generic-validator';
 import { EntriesService } from 'src/core/services/entries.service';
 import { IEntry } from 'src/shared/interfaces';
+import { UpdateEntryService } from '../update-entry.service';
 
 @Component({
   selector: 'app-modal',
@@ -12,7 +13,6 @@ import { IEntry } from 'src/shared/interfaces';
 })
 export class ModalComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
-  @Output() updateDashboard: EventEmitter<unknown> = new EventEmitter();
   @Output() getEntryToModifiy: EventEmitter<unknown> = new EventEmitter();
   @Input() entryToModify: IEntry | null = null;
   createEntrieForm!: FormGroup;
@@ -22,7 +22,10 @@ export class ModalComponent implements OnInit, AfterViewInit, OnChanges {
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;
 
-  constructor(private entriesService: EntriesService, private fb: FormBuilder) { 
+  constructor(
+    private entriesService: EntriesService, 
+    private fb: FormBuilder,
+    private updateService: UpdateEntryService) { 
     this.validationMessages = {
       family: {
         required: 'Ingresar familia'
@@ -116,7 +119,7 @@ export class ModalComponent implements OnInit, AfterViewInit, OnChanges {
     // Reset the form to clear the flags
     this.clearInputs();
     this.displayMessage = {};
-    this.updateDashboard.emit();
+    this.updateService.updateEntries();
   }
 
   clearInputs(): void {

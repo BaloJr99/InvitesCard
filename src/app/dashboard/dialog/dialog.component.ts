@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { EntriesService } from 'src/core/services/entries.service';
 import { IEntry } from 'src/shared/interfaces';
+import { UpdateEntryService } from '../update-entry.service';
 
 @Component({
   selector: 'app-dialog',
@@ -10,7 +11,9 @@ import { IEntry } from 'src/shared/interfaces';
 export class DialogComponent implements OnChanges {
   @Input() entry: IEntry | null = null;
 
-  constructor(private entriesService: EntriesService) { }
+  constructor(
+    private entriesService: EntriesService,
+    private updateEntriesService: UpdateEntryService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["entry"].currentValue) {
@@ -29,8 +32,9 @@ export class DialogComponent implements OnChanges {
   deleteEntry(): void {
     if (this.entry) {
       this.entriesService.deleteEntry(this.entry.id).subscribe({
-        next: (response) => {
+        next: () => {
           this.hideModal();
+          this.updateEntriesService.updateEntries();
         }
       });
     }

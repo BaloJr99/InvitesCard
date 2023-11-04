@@ -30,7 +30,7 @@
         <section class="row mx-1 table-accordion">
           <div class="col-12">
             <div class="accordion" id="entryAccordion" *ngFor="let entryGroup of entriesGrouped | keyvalue">
-              <app-table [entryGroup]="entryGroup"></app-table>
+              <app-table [entryGroup]="entryGroup" (entryToDelete)="showModal($event)"></app-table>
             </div>
           </div>
         </section>
@@ -57,3 +57,4 @@
   <button class="btn messages" (click)="toggleMessages()"><i class="fa-regular fa-comment"></i></button>
 </div>
 <app-modal (updateDashboard)="updateDashboard()" (getEntryToModifiy)="getEntryToModifiy()" [entryToModify]="entryToModify"></app-modal>
+<app-dialog [entry]="entryToDelete"></app-dialog>

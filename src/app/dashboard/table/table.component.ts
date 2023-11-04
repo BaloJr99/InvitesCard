@@ -1,5 +1,5 @@
 import { KeyValue } from '@angular/common';
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { IEntry } from 'src/shared/interfaces';
@@ -13,10 +13,10 @@ import { } from 'bootstrap';
 export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   @Input() entryGroup!: KeyValue<string, IEntry[]>;
+  @Output() entryToDelete = new EventEmitter<IEntry | null>();
   dtOptions: DataTables.Settings = {};
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dtTrigger: Subject<any> = new Subject<any>();
-  entryToDelete: IEntry | null = null;
 
   tableNames: { [key: string]: string } = {
     dadFamily: "Familia Papi",
@@ -59,7 +59,7 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   showModal(id: string): void {
-    this.entryToDelete = this.entryGroup.value.find((entry) => entry.id === id) ?? null
+    this.entryToDelete.emit(this.entryGroup.value.find((entry) => entry.id === id) ?? null)
   }
 
   rerender(): void {

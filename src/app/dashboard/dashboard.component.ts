@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { EntriesService } from 'src/core/services/entries.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TokenStorageService } from 'src/core/services/token-storage.service';
 import { IEntry, IMessage } from 'src/shared/interfaces';
+import { UpdateEntryService } from './update-entry.service';
+import { DialogComponent } from './dialog/dialog.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,19 +10,24 @@ import { IEntry, IMessage } from 'src/shared/interfaces';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  @ViewChild(DialogComponent) dialogComponent!: DialogComponent;
   constructor(
-    private entriesService: EntriesService,
-    private tokenService: TokenStorageService) {}
+    private tokenService: TokenStorageService,
+    private updateEntryService: UpdateEntryService) {}
+
   confirmedEntries = 0;
   canceledEntries = 0;
   pendingEntries = 0;
   totalEntries = 0;
+
   messages: Map<number, IMessage> = new Map<number, IMessage>();
+  
   entryToModify: IEntry | null = null;
+  entryToDelete: IEntry | null = null;
+  
   entriesGrouped: { [key: string]: IEntry[] } = {};
   username = "";
   email = "";
-
 
   entries: IEntry[] = [];
   
@@ -35,7 +41,7 @@ export class DashboardComponent implements OnInit {
   }
 
   updateDashboard(): void {
-    this.entriesService.getAllEntries().subscribe({
+    this.updateEntryService.entries$.subscribe({
       next: (entries) => {
         let counter = 0;
         this.confirmedEntries = 0;
@@ -68,6 +74,7 @@ export class DashboardComponent implements OnInit {
         this.groupEntries(entries);
       }
     })
+    this.updateEntryService.updateEntries();
   }
 
   groupEntries(entries: IEntry[]): void {
@@ -103,7 +110,11 @@ export class DashboardComponent implements OnInit {
       const filteredEntries = this.entries.filter((entry) => entry.family.toLocaleLowerCase().includes(family.toLocaleLowerCase()))
       this.groupEntries(filteredEntries);
     } else {
-      this.groupEntries(this.entries)
+      this.groupEntries(this.entries);
     }
+  }
+
+  showModal(entry: IEntry | null): void {
+    this.entryToDelete = entry;
   }
 }
