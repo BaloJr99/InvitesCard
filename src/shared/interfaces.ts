@@ -28,7 +28,7 @@ export interface IToken {
 }
 
 export interface IEntryResolved {
-  entry: IEntry[] | null;
+  entry: IEntry | null;
   error?: string;
 }
 

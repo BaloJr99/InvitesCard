@@ -31,7 +31,6 @@ export class DialogComponent implements OnChanges {
       this.entriesService.deleteEntry(this.entry.id).subscribe({
         next: (response) => {
           this.hideModal();
-          console.log(response.message);
         }
       });
     }

@@ -82,7 +82,7 @@ export class EntriesComponent implements OnInit {
   }
 
   addNewEntry(newEntry: FormGroup) {
-    if(this.entryResolved.entry?.at(0)?.id)
-      this.entriesService.sendConfirmation(newEntry.value as IEntry, this.entryResolved.entry?.[0].id).subscribe();
+    if(this.entryResolved.entry?.id)
+      this.entriesService.sendConfirmation(newEntry.value as IEntry, this.entryResolved.entry?.id).subscribe();
   }
 }

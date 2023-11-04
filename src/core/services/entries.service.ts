@@ -16,12 +16,12 @@ export class EntriesService {
     return this.http.get<IEntry[]>(this.invitesBaseUrl)
   }
 
-  getEntrieById(id:string): Observable<IEntry[]> {
-    return this.http.get<IEntry[]>(`${this.invitesBaseUrl}/${id}`)
+  getEntrieById(id:string): Observable<IEntry> {
+    return this.http.get<IEntry>(`${this.invitesBaseUrl}/${id}`)
   }
 
-  sendConfirmation(entry: IEntry, id: string): Observable<IEntry[]> { 
-    return this.http.patch<IEntry[]>(`${this.invitesBaseUrl}/${id}`, entry)
+  sendConfirmation(entry: IEntry, id: string): Observable<IEntry> { 
+    return this.http.patch<IEntry>(`${this.invitesBaseUrl}/${id}`, entry)
   }
 
   createEntry(entry: IEntry): Observable<IEntry> { 

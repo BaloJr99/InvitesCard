@@ -1,5 +1,5 @@
 <div class="entriesConfirmation" id="scrollToForm">
-  <form [formGroup]="confirmationForm" class="container" novalidate (ngSubmit)="saveInformation()" *ngIf="entry?.[0]?.confirmation === null && entry?.[0]">
+  <form [formGroup]="confirmationForm" class="container" novalidate (ngSubmit)="saveInformation()" *ngIf="entry?.confirmation === null && entry">
     <div class="row">
     <div class="col-sm-12 col-md-6">
       <h1>Confirmación</h1>
@@ -42,16 +42,16 @@
     </div>
     </div>
   </form>
-  <div class="confirmedModal" *ngIf="entry?.[0]?.confirmation !== null && entry?.[0]">
+  <div class="confirmedModal" *ngIf="entry?.confirmation !== null && entry">
     <div class="card">
       <div class="card-body">
-        <h1 class="card-title">{{ entry?.at(0)?.family }}</h1>
-        <div class="confirmed" *ngIf="entry?.at(0)?.confirmation">
+        <h1 class="card-title">{{ entry.family }}</h1>
+        <div class="confirmed" *ngIf="entry.confirmation">
           <i class="fa-solid fa-circle-check"></i>
           <h3>Su asistencia ha sido confirmada</h3>
           <p class="card-text">Puede cerrar la página</p>
         </div>
-        <div class="notConfirmed" *ngIf="!entry?.at(0)?.confirmation">
+        <div class="notConfirmed" *ngIf="!entry.confirmation">
           <i class="fa-solid fa-circle-xmark"></i>
           <h3>Su asistencia ha sido cancelada.</h3>
           <p class="card-text">Muchas gracias por su tiempo.</p>

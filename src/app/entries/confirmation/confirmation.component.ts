@@ -11,7 +11,7 @@ import { IEntry } from 'src/shared/interfaces';
 })
 export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
-  @Input() entry!: IEntry[] | null;
+  @Input() entry!: IEntry | null;
   @Output() newEntry = new EventEmitter<FormGroup>();
 
   private numberOfEntries = new BehaviorSubject<number[]>([])
@@ -39,7 +39,6 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["entry"]) {
-      const length = changes["entry"].currentValue[0]["entriesNumber"];
       this.numberOfEntries.next(Array.from({ length }, (k, j) => j + 1).sort((a, b) => b - a))
     }
   }
@@ -70,8 +69,8 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   showDiv(): void {
-    if (this.entry && this.entry.at(0)) {
-      this.entry[0] = this.confirmationForm.value
+    if (this.entry) {
+      this.entry = this.confirmationForm.value
     }
   }
 
