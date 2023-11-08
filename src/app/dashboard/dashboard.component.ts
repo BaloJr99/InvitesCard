@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit {
             counter++;
           }
 
-          if (value.dateOfConfirmation) {
+          if (value.confirmation !== null) {
             newNotifications.push({
               id: value.id,
               confirmation: value.confirmation,
