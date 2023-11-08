@@ -37,8 +37,8 @@
       <div class="divider">
         <hr>
       </div>
-      <p>{{ entryResolved.entry?.family }}</p>
-      <p class="pinkLetter">Pases: {{ entryResolved.entry?.entriesNumber }}</p>
+      <p>{{ entryResolved.entry.family }}</p>
+      <p class="pinkLetter">Pases: {{ entryResolved.entry.entriesNumber }}</p>
       <p class="noKids" *ngIf="!entryResolved.entry?.kidsAllowed">* No niños *</p>
       <div class="divider">
         <hr>
@@ -107,4 +107,4 @@
     <p>Está reservado para la festejada</p>
   </div>
 </div>
-<app-confirmation [entry]="entryResolved.entry" (newEntry)="addNewEntry($event)"></app-confirmation>
+<app-confirmation [entry]="entryResolved.entry"></app-confirmation>

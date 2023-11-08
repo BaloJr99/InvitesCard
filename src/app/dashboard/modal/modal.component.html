@@ -40,7 +40,7 @@
           </div>
           <div class="mb-3">
             <label for="phoneNumber" class="form-label">Telefono de contacto</label>
-            <input type="tel" class="form-control" formControlName="phoneNumber" [ngClass]="{'is-invalid': displayMessage['phoneNumber']}">
+            <input type="tel" class="form-control" formControlName="phoneNumber" [ngClass]="{'is-invalid': displayMessage['phoneNumber']}" maxlength="10">
             <span class="invalid-feedback">
               {{ displayMessage['phoneNumber'] }}
             </span>

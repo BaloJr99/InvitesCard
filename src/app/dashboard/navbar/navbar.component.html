@@ -10,9 +10,10 @@
           <input class="form-control me-2" formControlName="searchInput" placeholder="Introduce Familia" aria-label="Search">
           <button class="btn btn-outline-light" type="submit">Buscar</button>
         </form>
+        <button class="btn notifications" (click)="toggleNotifications()"><i class="fa-solid fa-bell"></i><span [style.visibility]="numberOfNotifications > 0 ? 'visible' : 'hidden'">{{ numberOfNotifications }}</span></button> 
         <button class="btn account" (click)="toggleMenu()"><i class="fa-solid fa-user"></i></button>  
       </div>
-      <div class="menu">
+      <div class="base-menu menu">
         <h3>{{ username }}<br /><span>{{ email }}</span></h3>
         <ul>
           <li>
@@ -30,6 +31,15 @@
             <i class="fa-solid fa-power-off"></i><a href="#" (click)="logout()">Logout</a>
           </li>
         </ul>
+      </div>
+      <div class="base-menu notificationMessages">
+        <button *ngFor="let notification of notifications" [ngClass]="{'isMessageNotRead': !notification.isMessageRead}" (click)="maskAsRead(notification.id)">
+          {{ notification.family }} ha:
+          <br>
+          <span>{{ notification.confirmation ? 'Confirmado' : 'Cancelado' }}</span>
+          <br>
+          <small *ngIf="notification.dateOfConfirmation !== '1000-01-01T06:36:36.000Z'">{{ getTime(notification.dateOfConfirmation) }}</small>
+        </button>
       </div>
     </div>
   </div>

@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { EntriesService } from 'src/core/services/entries.service';
-import { IEntry, IEntryResolved } from 'src/shared/interfaces';
+import { IEntryResolved } from 'src/shared/interfaces';
 
 @Component({
   selector: 'app-entries',
@@ -20,7 +18,6 @@ export class EntriesComponent implements OnInit {
   entryResolvedEmiter$ = new Subject<IEntryResolved>();
 
   constructor(private route: ActivatedRoute, 
-      private entriesService: EntriesService,
       private router: Router) { 
     this.audio.src = '../../assets/soundtrack.mp3'
     this.audio.load()
@@ -79,10 +76,5 @@ export class EntriesComponent implements OnInit {
 
     actualBackgroundImage.style.visibility = "visible";
     oldBackgroundImage.style.visibility = "hidden";
-  }
-
-  addNewEntry(newEntry: FormGroup) {
-    if(this.entryResolved.entry?.id)
-      this.entriesService.sendConfirmation(newEntry.value as IEntry, this.entryResolved.entry?.id).subscribe();
   }
 }

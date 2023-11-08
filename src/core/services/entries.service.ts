@@ -1,4 +1,4 @@
-import { IEntry, IMessageResponse } from '../../shared/interfaces'
+import { IEntry, IMessage, IMessageResponse } from '../../shared/interfaces'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -20,19 +20,23 @@ export class EntriesService {
     return this.http.get<IEntry>(`${this.invitesBaseUrl}/${id}`)
   }
 
-  sendConfirmation(entry: IEntry, id: string): Observable<IEntry> { 
-    return this.http.patch<IEntry>(`${this.invitesBaseUrl}/${id}`, entry)
+  sendConfirmation(entry: IEntry, id: string): Observable<IMessageResponse> { 
+    return this.http.patch<IMessageResponse>(`${this.invitesBaseUrl}/${id}`, entry)
   }
 
-  createEntry(entry: IEntry): Observable<IEntry> { 
-    return this.http.post<IEntry>(`${this.invitesBaseUrl}`, entry)
+  createEntry(entry: IEntry): Observable<IMessageResponse> { 
+    return this.http.post<IMessageResponse>(`${this.invitesBaseUrl}`, entry)
   }
 
-  updateEntry(entry: IEntry, id: string): Observable<IEntry> { 
-    return this.http.put<IEntry>(`${this.invitesBaseUrl}/${id}`, entry)
+  updateEntry(entry: IEntry, id: string): Observable<IMessageResponse> { 
+    return this.http.put<IMessageResponse>(`${this.invitesBaseUrl}/${id}`, entry)
   }
 
   deleteEntry(id: string): Observable<IMessageResponse> { 
     return this.http.delete<IMessageResponse>(`${this.invitesBaseUrl}/${id}`)
+  }
+
+  readMessage(id: string): Observable<IMessageResponse> { 
+    return this.http.patch<IMessageResponse>(`${this.invitesBaseUrl}/messages/${id}`, null)
   }
 }

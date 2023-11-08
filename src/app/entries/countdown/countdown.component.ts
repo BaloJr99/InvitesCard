@@ -23,7 +23,6 @@ export class CountdownComponent implements OnInit {
   }
 
   updateTime() {
-    
     const now = new Date();
     const diff = this.finishDate.getTime() - now.getTime();
 

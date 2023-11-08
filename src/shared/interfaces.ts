@@ -9,7 +9,9 @@ export interface IEntry {
   confirmation: boolean,
   phoneNumber: string,
   groupSelected: string,
-  kidsAllowed: boolean
+  kidsAllowed: boolean,
+  dateOfConfirmation: string,
+  isMessageRead: boolean
 }
 
 export interface IMessage {
@@ -28,7 +30,7 @@ export interface IToken {
 }
 
 export interface IEntryResolved {
-  entry: IEntry | null;
+  entry: IEntry;
   error?: string;
 }
 
@@ -46,4 +48,12 @@ export interface IError {
 
 export interface IMessageResponse {
   message: string
+}
+
+export interface INotifications {
+  id: string,
+  family: string,
+  confirmation: boolean,
+  dateOfConfirmation: string,
+  isMessageRead: boolean
 }

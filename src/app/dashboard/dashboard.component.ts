@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TokenStorageService } from 'src/core/services/token-storage.service';
-import { IEntry, IMessage } from 'src/shared/interfaces';
+import { IEntry, IMessage, INotifications } from 'src/shared/interfaces';
 import { UpdateEntryService } from './update-entry.service';
 import { DialogComponent } from './dialog/dialog.component';
 
@@ -30,6 +30,7 @@ export class DashboardComponent implements OnInit {
   email = "";
 
   entries: IEntry[] = [];
+  notifications: INotifications[] = [];
   
   ngOnInit(): void {
     this.updateDashboard();
@@ -49,6 +50,7 @@ export class DashboardComponent implements OnInit {
         this.pendingEntries = 0;
         this.totalEntries = 0;
         this.entries = entries;
+        const newNotifications: INotifications[] = [];
 
         this.messages.clear();
 
@@ -69,8 +71,18 @@ export class DashboardComponent implements OnInit {
             this.messages.set(counter, { family: value.family, message: value.message });
             counter++;
           }
-        })
 
+          if (value.dateOfConfirmation) {
+            newNotifications.push({
+              id: value.id,
+              confirmation: value.confirmation,
+              dateOfConfirmation: value.dateOfConfirmation,
+              family: value.family,
+              isMessageRead: value.isMessageRead
+            })
+          }
+        })
+        this.notifications = newNotifications;
         this.groupEntries(entries);
       }
     })

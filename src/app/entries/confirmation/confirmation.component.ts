@@ -1,8 +1,10 @@
 import { Component, OnInit, AfterViewInit, ViewChildren, ElementRef, Input, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
-import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, debounceTime, fromEvent, merge } from 'rxjs';
 import { GenericValidator } from '../../shared/generic-validator';
 import { IEntry } from 'src/shared/interfaces';
+import { EntriesService } from 'src/core/services/entries.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-confirmation',
@@ -11,7 +13,7 @@ import { IEntry } from 'src/shared/interfaces';
 })
 export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
-  @Input() entry!: IEntry | null;
+  @Input() entry!: IEntry;
   @Output() newEntry = new EventEmitter<FormGroup>();
 
   private numberOfEntries = new BehaviorSubject<number[]>([])
@@ -24,7 +26,8 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+    private entriesService: EntriesService) {
 
     // Defines all of the validation messages for the form.
     // These could instead be retrieved from a file or database.
@@ -58,8 +61,8 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
         const entriesConfirmed = parseInt(this.confirmationForm.controls['entriesConfirmed'].value)
         this.confirmationForm.get('confirmation')?.setValue(assist)
         this.confirmationForm.get('entriesConfirmed')?.setValue(entriesConfirmed)
-        this.newEntry.emit(this.confirmationForm)
-        this.showDiv();
+        this.confirmationForm.addControl('dateOfConfirmation', new FormControl(moment().format("YYYY-MM-DD[T]HH:mm:ss[Z]")))
+        this.addNewEntry();
       } else {
         this.onSaveComplete();
       }
@@ -68,10 +71,19 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  showDiv(): void {
-    if (this.entry) {
-      this.entry = this.confirmationForm.value
+  addNewEntry() {
+    if(this.entry.id) {
+      this.entriesService.sendConfirmation(this.confirmationForm.value as IEntry, this.entry.id)
+        .subscribe({
+          next: (() => {
+            this.showDiv();
+          })
+        });
     }
+  }
+
+  showDiv(): void {
+    this.entry.confirmation = this.confirmationForm.get('confirmation')?.value
   }
 
   ngAfterViewInit(): void {
