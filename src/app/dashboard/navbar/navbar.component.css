@@ -118,12 +118,23 @@
   right: 75px;
   width: 350px;
   max-height: 300px;
-  overflow-y: auto;
+overflow-y: auto;
   overflow-x: hidden;
   padding: 10px;
 }
   .notificationMessages::-webkit-scrollbar {
-    display: none;
+    width: 20px;
+  }
+  
+  .notificationMessages::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  .notificationMessages::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
   }
 
   .notificationMessages button {
