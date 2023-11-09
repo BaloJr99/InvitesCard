@@ -86,7 +86,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     const now = new Date();
     const dateOfNotification = new Date(dateTime.replace('Z', '').replace('T', ' '))
 
-    const diff = dateOfNotification.getTime() - now.getTime();
+    const diff = now.getTime() - dateOfNotification.getTime();
 
     // Cálculos para sacar lo que resta hasta ese tiempo objetivo / final
     const years = now.getFullYear() - dateOfNotification.getFullYear();

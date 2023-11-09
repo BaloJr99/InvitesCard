@@ -118,7 +118,7 @@
   right: 75px;
   width: 350px;
   max-height: 300px;
-overflow-y: auto;
+  overflow-y: auto;
   overflow-x: hidden;
   padding: 10px;
 }
@@ -144,6 +144,10 @@ overflow-y: auto;
     width: 100%;
     background-color: #ffffff;
     border: none;
+  }
+
+  .notificationMessages button:not(:last-of-type) {
+    margin-bottom: 10px;
   }
 
   .notificationMessages button.isMessageNotRead {
