@@ -39,6 +39,27 @@ export class DashboardComponent implements OnInit {
       this.username = userInformation.username;
       this.email = userInformation.email;
     }
+
+    window.addEventListener('click', ({ target }) => {
+      const toggleMenu = document.querySelector(".menu");
+      const toggleNotifications = document.querySelector(".notificationMessages");
+
+      const clickedElement = target as HTMLElement;
+      if (!clickedElement.classList.contains("notifications")
+        && !clickedElement.classList.contains("fa-bell")
+        && !clickedElement.classList.contains("account")
+        && !clickedElement.classList.contains("fa-user")){
+        if(!toggleMenu?.contains(clickedElement) && (!toggleNotifications?.contains(clickedElement))) {
+          if (toggleNotifications && toggleNotifications.classList.contains("active")) {
+            toggleNotifications.classList.toggle("active");
+          }
+
+          if (toggleMenu && toggleMenu.classList.contains("active")) {
+            toggleMenu.classList.toggle("active");
+          }
+        }
+      }
+    });
   }
 
   updateDashboard(): void {
