@@ -1,6 +1,6 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn, Router } from "@angular/router";
-import { EMPTY, Observable, catchError, map, of } from "rxjs";
+import { EMPTY, Observable, catchError, map } from "rxjs";
 import { EntriesService } from "src/core/services/entries.service";
 import { IEntryResolved } from "src/shared/interfaces";
 

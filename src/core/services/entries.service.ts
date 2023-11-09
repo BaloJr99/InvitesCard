@@ -1,4 +1,4 @@
-import { IEntry, IMessage, IMessageResponse } from '../../shared/interfaces'
+import { IEntry, IMessageResponse } from '../../shared/interfaces'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';

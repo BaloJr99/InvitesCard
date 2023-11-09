@@ -78,6 +78,8 @@ export class NavbarComponent implements OnInit, OnChanges {
       next: () => {
         this.notifications = this.notifications.map((notification) => 
         notification.id === id ? { ...notification, isMessageRead: true } : notification)
+
+        this.numberOfNotifications = this.notifications.reduce(( sum, { isMessageRead } ) => sum + ( isMessageRead ? 0 : 1) , 0)
       }
     });
   }
