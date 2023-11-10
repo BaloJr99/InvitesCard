@@ -5,6 +5,7 @@ import { GenericValidator } from '../../shared/generic-validator';
 import { IEntry } from 'src/shared/interfaces';
 import { EntriesService } from 'src/core/services/entries.service';
 import * as moment from 'moment';
+import { SocketService } from 'src/core/services/socket.service';
 
 @Component({
   selector: 'app-confirmation',
@@ -27,7 +28,8 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
   private genericValidator: GenericValidator;
 
   constructor(private fb: FormBuilder,
-    private entriesService: EntriesService) {
+    private entriesService: EntriesService,
+    private socket: SocketService) {
 
     // Defines all of the validation messages for the form.
     // These could instead be retrieved from a file or database.
@@ -78,6 +80,7 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
         .subscribe({
           next: (() => {
             this.showDiv();
+            this.socket.sendNotification(this.entry.id)
           })
         });
     }

@@ -3,6 +3,7 @@ import { DashboardRoutingModule } from "./dashboard.routing.module";
 import { SharedModule } from "../shared/shared.module";
 import { DataTablesModule } from "angular-datatables";
 import { UpdateEntryService } from "./update-entry.service";
+import { SocketService } from "src/core/services/socket.service";
 
 @NgModule({
   imports: [
@@ -11,7 +12,8 @@ import { UpdateEntryService } from "./update-entry.service";
     DataTablesModule
   ],
   providers: [
-    UpdateEntryService
+    UpdateEntryService,
+    SocketService
   ],
   declarations: [DashboardRoutingModule.components]
 })

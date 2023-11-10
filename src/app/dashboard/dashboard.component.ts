@@ -3,6 +3,7 @@ import { TokenStorageService } from 'src/core/services/token-storage.service';
 import { IEntry, IMessage, INotifications } from 'src/shared/interfaces';
 import { UpdateEntryService } from './update-entry.service';
 import { DialogComponent } from './dialog/dialog.component';
+import { SocketService } from 'src/core/services/socket.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +14,10 @@ export class DashboardComponent implements OnInit {
   @ViewChild(DialogComponent) dialogComponent!: DialogComponent;
   constructor(
     private tokenService: TokenStorageService,
-    private updateEntryService: UpdateEntryService) {}
+    private updateEntryService: UpdateEntryService,
+    private socket: SocketService) {
+
+  }
 
   confirmedEntries = 0;
   canceledEntries = 0;
@@ -38,6 +42,7 @@ export class DashboardComponent implements OnInit {
     if (userInformation) {
       this.username = userInformation.username;
       this.email = userInformation.email;
+      this.socket.joinRoom(this.username);
     }
 
     window.addEventListener('click', ({ target }) => {
@@ -60,6 +65,10 @@ export class DashboardComponent implements OnInit {
         }
       }
     });
+
+    this.socket.io.on("newNotification", () => {
+      this.updateEntryService.updateEntries()
+    })
   }
 
   updateDashboard(): void {
