@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { EnsureModuleLoadedOnceGuard } from './guards/ensure-module-loaded-once.guard';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { EntriesService } from './services/entries.service';
 import { AuthService } from './services/auth.service';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
@@ -19,7 +18,6 @@ import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
     AuthService,
     TokenStorageService,
     { provide: 'Window', useFactory: () => window },
-    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },

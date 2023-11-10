@@ -4,6 +4,7 @@ import { IEntry, IMessage, INotifications } from 'src/shared/interfaces';
 import { UpdateEntryService } from './update-entry.service';
 import { DialogComponent } from './dialog/dialog.component';
 import { SocketService } from 'src/core/services/socket.service';
+import { LoaderService } from 'src/core/services/loader.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,7 +16,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private tokenService: TokenStorageService,
     private updateEntryService: UpdateEntryService,
-    private socket: SocketService) {
+    private socket: SocketService,
+    private loaderService: LoaderService) {
 
   }
 
@@ -37,6 +39,7 @@ export class DashboardComponent implements OnInit {
   notifications: INotifications[] = [];
   
   ngOnInit(): void {
+    this.loaderService.setLoading(true);
     this.updateDashboard();
     const userInformation = this.tokenService.getTokenValues();
     if (userInformation) {

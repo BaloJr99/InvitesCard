@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Observable, debounceTime, fromEvent, merge } from 'rxjs';
 import { GenericValidator } from 'src/app/shared/generic-validator';
 import { AuthService } from 'src/core/services/auth.service';
+import { LoaderService } from 'src/core/services/loader.service';
 import { TokenStorageService } from 'src/core/services/token-storage.service';
 import { IUser } from 'src/shared/interfaces';
 
@@ -25,7 +26,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
   constructor(private fb: FormBuilder, 
     private authService: AuthService, 
     private router: Router,
-    private tokenService: TokenStorageService) {
+    private tokenService: TokenStorageService,
+    private loaderService: LoaderService) {
     this.validationMessages = {
       username: {
         required: 'Ingresar email o usuario'
@@ -65,6 +67,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       if(this.loginForm.dirty) {
         const user = this.loginForm.value;
         delete user.confirmPassword;
+        this.loaderService.setLoading(true);
         this.authService.loginAccount(user as IUser).subscribe({
           next: (authInfo) => {
             this.authErrorMessage = "";
@@ -78,6 +81,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
               this.authErrorMessage = "Credenciales Incorrectas";
             }
           }
+        }).add(() => {
+          this.loaderService.setLoading(false);
         })
       } else {
         this.onSaveComplete();

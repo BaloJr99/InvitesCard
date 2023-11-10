@@ -6,6 +6,7 @@ import { IEntry } from 'src/shared/interfaces';
 import { EntriesService } from 'src/core/services/entries.service';
 import * as moment from 'moment';
 import { SocketService } from 'src/core/services/socket.service';
+import { LoaderService } from 'src/core/services/loader.service';
 
 @Component({
   selector: 'app-confirmation',
@@ -29,7 +30,8 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
 
   constructor(private fb: FormBuilder,
     private entriesService: EntriesService,
-    private socket: SocketService) {
+    private socket: SocketService,
+    private loaderService: LoaderService) {
 
     // Defines all of the validation messages for the form.
     // These could instead be retrieved from a file or database.
@@ -76,12 +78,15 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
 
   addNewEntry() {
     if(this.entry.id) {
+      this.loaderService.setLoading(true);
       this.entriesService.sendConfirmation(this.confirmationForm.value as IEntry, this.entry.id)
         .subscribe({
           next: (() => {
             this.showDiv();
             this.socket.sendNotification(this.entry.id)
           })
+        }).add(() => {
+          this.loaderService.setLoading(false);
         });
     }
   }

@@ -6,6 +6,7 @@ import { EntriesService } from 'src/core/services/entries.service';
 import { IEntry } from 'src/shared/interfaces';
 import { UpdateEntryService } from '../update-entry.service';
 import { ToastrService } from 'ngx-toastr';
+import { LoaderService } from 'src/core/services/loader.service';
 
 @Component({
   selector: 'app-modal',
@@ -27,7 +28,8 @@ export class ModalComponent implements OnInit, AfterViewInit, OnChanges {
     private entriesService: EntriesService, 
     private fb: FormBuilder,
     private updateService: UpdateEntryService,
-    private toastr: ToastrService) { 
+    private toastr: ToastrService,
+    private loadingService: LoaderService) { 
     this.validationMessages = {
       family: {
         required: 'Ingresar familia'
@@ -98,22 +100,28 @@ export class ModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   createEntry() {
+    this.loadingService.setLoading(true);
     this.entriesService.createEntry(this.createEntrieForm.value as IEntry).subscribe({
       next: () => {
         $("#confirmationModal").modal('hide');
         this.onSaveComplete();
         this.toastr.success("Se ha guardado la invitación");
       }
+    }).add(() => {
+      this.loadingService.setLoading(false);
     });
   }
 
   updateEntry(id: string) {
+    this.loadingService.setLoading(true);
     this.entriesService.updateEntry(this.createEntrieForm.value as IEntry, id).subscribe({
       next: () => {
         $("#confirmationModal").modal('hide');
         this.onSaveComplete();
         this.toastr.success("Se ha actualizado la invitación");
       }
+    }).add(() => {
+      this.loadingService.setLoading(false);
     });
   }
 

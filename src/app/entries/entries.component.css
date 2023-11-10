@@ -280,6 +280,25 @@ justify-content: end;
   }
 }
 
+@media (max-width: 768px) {
+
+  .dressCode .col-md-6:first-of-type {
+    padding: 0px;
+  }
+  
+  .dressCode .col-md-6:nth-of-type(2) {
+    padding: 0px;
+  }
+
+  .reception .row {
+    flex-direction: column-reverse;
+  }
+
+  .reception .col-sm-12:first-of-type {
+    padding-top: 20px;
+  }
+}
+
 @media (max-width: 575px) {
 
   .info .container .header h3 {
@@ -289,12 +308,13 @@ justify-content: end;
   .ceremony .row:not(.row:first-of-type){
     padding: 0px;
   }
+
   .reception .row {
     flex-direction: column-reverse;
   }
 
   .reception .col-sm-12:first-of-type {
-      padding-top: 20px;
+    padding-top: 20px;
   }
 
   .dressCode .col-md-6:first-of-type {

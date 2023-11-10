@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Observable, debounceTime, fromEvent, merge } from 'rxjs';
 import { GenericValidator } from 'src/app/shared/generic-validator';
 import { AuthService } from 'src/core/services/auth.service';
+import { LoaderService } from 'src/core/services/loader.service';
 import { IUser } from 'src/shared/interfaces';
 
 @Component({
@@ -21,7 +22,11 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(
+    private fb: FormBuilder, 
+    private authService: AuthService, 
+    private router: Router,
+    private loaderService: LoaderService) {
     this.validationMessages = {
       username: {
         required: 'Ingresar nombre de usuario'
@@ -69,6 +74,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
       if(this.registrationForm.dirty) {
         const user = this.registrationForm.value;
         delete user.confirmPassword;
+        this.loaderService.setLoading(true);
         this.authService.createNewAccount(user as IUser).subscribe({
           next: (token) => {
             if (token) {
@@ -80,6 +86,8 @@ export class RegisterComponent implements OnInit, AfterViewInit {
               this.registrationErrorMessage = error.error.message;
             }
           }
+        }).add(() => {
+          this.loaderService.setLoading(false);
         })
       } else {
         this.onSaveComplete();

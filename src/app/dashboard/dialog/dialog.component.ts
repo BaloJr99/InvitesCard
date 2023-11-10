@@ -3,6 +3,7 @@ import { EntriesService } from 'src/core/services/entries.service';
 import { IEntry } from 'src/shared/interfaces';
 import { UpdateEntryService } from '../update-entry.service';
 import { ToastrService } from 'ngx-toastr';
+import { LoaderService } from 'src/core/services/loader.service';
 
 @Component({
   selector: 'app-dialog',
@@ -15,7 +16,8 @@ export class DialogComponent implements OnChanges {
   constructor(
     private entriesService: EntriesService,
     private updateEntriesService: UpdateEntryService,
-    private toastr: ToastrService) { }
+    private toastr: ToastrService,
+    private loaderService: LoaderService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["entry"].currentValue) {
@@ -33,12 +35,15 @@ export class DialogComponent implements OnChanges {
 
   deleteEntry(): void {
     if (this.entry) {
+      this.loaderService.setLoading(true);
       this.entriesService.deleteEntry(this.entry.id).subscribe({
         next: () => {
           this.hideModal();
           this.updateEntriesService.updateEntries();
           this.toastr.success("Se ha eliminado la invitación");
         }
+      }).add(() => {
+        this.loaderService.setLoading(false);
       });
     }
   }
