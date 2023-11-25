@@ -4,13 +4,13 @@ export interface IEntry {
   id: string,
   family: string,
   entriesNumber: number,
-  entriesConfirmed: number,
-  message?: string,
-  confirmation: boolean,
+  entriesConfirmed: number | null,
+  message?: string | null,
+  confirmation: boolean | null,
   phoneNumber: string,
   groupSelected: string,
   kidsAllowed: boolean,
-  dateOfConfirmation: string,
+  dateOfConfirmation: string | null,
   isMessageRead: boolean
 }
 
