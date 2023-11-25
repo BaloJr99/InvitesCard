@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
-import { Observable, debounceTime, fromEvent, merge } from 'rxjs';
+import { Observable, fromEvent, merge } from 'rxjs';
 import { GenericValidator } from 'src/app/shared/generic-validator';
 import { EntriesService } from 'src/core/services/entries.service';
 import { IEntry } from 'src/shared/interfaces';
@@ -152,9 +152,7 @@ export class ModalComponent implements OnInit, AfterViewInit, OnChanges {
 
     // Merge the blur event observable with the valueChanges observable
     // so we only need to subscribe once.
-    merge(this.createEntrieForm.valueChanges, ...controlBlurs).pipe(
-      debounceTime(800)
-    ).subscribe(() => {
+    merge(this.createEntrieForm.valueChanges, ...controlBlurs).subscribe(() => {
       this.displayMessage = this.genericValidator.processMessages(this.createEntrieForm)
     });
   }

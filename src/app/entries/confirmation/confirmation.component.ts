@@ -1,6 +1,6 @@
-import { Component, OnInit, AfterViewInit, ViewChildren, ElementRef, Input, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
+import { Component, AfterViewInit, ViewChildren, ElementRef, Input, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
-import { BehaviorSubject, Observable, debounceTime, fromEvent, merge } from 'rxjs';
+import { BehaviorSubject, Observable, fromEvent, merge } from 'rxjs';
 import { GenericValidator } from '../../shared/generic-validator';
 import { IEntry } from 'src/shared/interfaces';
 import { EntriesService } from 'src/core/services/entries.service';
@@ -13,7 +13,7 @@ import { LoaderService } from 'src/core/services/loader.service';
   templateUrl: './confirmation.component.html',
   styleUrls: ['./confirmation.component.css']
 })
-export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
+export class ConfirmationComponent implements AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
   @Input() entry!: IEntry;
   @Output() newEntry = new EventEmitter<FormGroup>();
@@ -21,8 +21,7 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
   private numberOfEntries = new BehaviorSubject<number[]>([])
   numberOfEntries$ = this.numberOfEntries.asObservable();
 
-  confirmationForm!: FormGroup;
-  errorMessage = '';
+  confirmationForm: FormGroup;
   
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -42,21 +41,19 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
     };
 
     this.genericValidator = new GenericValidator(this.validationMessages);
+
+    this.confirmationForm = this.fb.group({
+      confirmation: ['true', Validators.required],
+      entriesConfirmed: ['', Validators.required],
+      message: ['']
+    })
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["entry"]) {
-      const { entriesNumber } = changes["entry"].currentValue as IEntry
+      const { entriesNumber } = changes["entry"].currentValue as IEntry;
       this.numberOfEntries.next(Array.from({ length: entriesNumber}, (k, j) => j + 1).sort((a, b) => b - a))
     }
-  }
-
-  ngOnInit(): void {
-    this.confirmationForm = this.fb.group({
-      confirmation: 'true',
-      entriesConfirmed: ['', Validators.required],
-      message: ['']
-    })
   }
 
   saveInformation(): void {
@@ -103,9 +100,7 @@ export class ConfirmationComponent implements OnInit, AfterViewInit, OnChanges {
 
     // Merge the blur event observable with the valueChanges observable
     // so we only need to subscribe once.
-    merge(this.confirmationForm.valueChanges, ...controlBlurs).pipe(
-      debounceTime(800)
-    ).subscribe(() => {
+    merge(this.confirmationForm.valueChanges, ...controlBlurs).subscribe(() => {
       if (this.confirmationForm.controls['confirmation'].value === 'true') {
         const select = document.getElementById('my-select')
         select?.removeAttribute('disabled');

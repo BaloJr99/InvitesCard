@@ -89,8 +89,8 @@ export class DashboardComponent implements OnInit {
 
         entries.forEach((value) => {
           if (value.confirmation) {
-            this.confirmedEntries += (value.entriesConfirmed)
-            this.canceledEntries += (value.entriesNumber - value.entriesConfirmed)
+            this.confirmedEntries += (value.entriesConfirmed ?? 0)
+            this.canceledEntries += (value.entriesNumber - (value.entriesConfirmed ?? 0))
           } else {
             if (value.confirmation === null) {
               this.pendingEntries += value.entriesNumber
@@ -109,7 +109,7 @@ export class DashboardComponent implements OnInit {
             newNotifications.push({
               id: value.id,
               confirmation: value.confirmation,
-              dateOfConfirmation: value.dateOfConfirmation,
+              dateOfConfirmation: value.dateOfConfirmation ?? '',
               family: value.family,
               isMessageRead: value.isMessageRead
             })

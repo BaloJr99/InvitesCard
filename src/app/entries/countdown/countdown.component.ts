@@ -10,13 +10,11 @@ import { ITimer } from 'src/shared/interfaces';
 export class CountdownComponent implements OnInit {
   time$ = new BehaviorSubject<ITimer>({ days: 0, hours: 0, minutes: 0, seconds: 0 })
 
-  finishDate: Date = new Date();
+  finishDate: Date = new Date('2023-11-18:19:00:00');
 
   subscription!: Subscription;
 
   ngOnInit(): void {
-    this.finishDate = new Date('2023-11-18:19:00:00')
-    
     this.subscription = interval(1000).subscribe(() => {
       this.updateTime();
     })

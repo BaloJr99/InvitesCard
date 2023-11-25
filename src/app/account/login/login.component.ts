@@ -1,8 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, debounceTime, fromEvent, merge } from 'rxjs';
+import { Observable, fromEvent, merge } from 'rxjs';
 import { GenericValidator } from 'src/app/shared/generic-validator';
 import { AuthService } from 'src/core/services/auth.service';
 import { LoaderService } from 'src/core/services/loader.service';
@@ -14,9 +14,9 @@ import { IUser } from 'src/shared/interfaces';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit, AfterViewInit {
+export class LoginComponent implements AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef}) formInputElements!: ElementRef[];
-  loginForm!: FormGroup;
+  loginForm: FormGroup;
 
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -38,9 +38,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     };
 
     this.genericValidator = new GenericValidator(this.validationMessages);
-  }
 
-  ngOnInit(): void {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
@@ -55,9 +53,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
     // Merge the blur event observable with the valueChanges observable
     // so we only need to subscribe once.
-    merge(this.loginForm.valueChanges, ...controlBlurs).pipe(
-      debounceTime(800)
-    ).subscribe(() => {
+    merge(this.loginForm.valueChanges, ...controlBlurs).subscribe(() => {
       this.displayMessage = this.genericValidator.processMessages(this.loginForm)
     });
   }
