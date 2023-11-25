@@ -3,7 +3,7 @@
     <div class="card-body">
       <h1 class="card-title">Crea tu cuenta</h1>
       <form action="" [formGroup]="registrationForm" novalidate (ngSubmit)="saveAccount()">
-        <span class="bg-danger d-block text-light rounded py-2" [style.visibility]="registrationErrorMessage ? 'visible' : 'hidden'">
+        <span id="registrationErrorMessage" class="bg-danger d-block text-light rounded py-2" [style.visibility]="registrationErrorMessage ? 'visible' : 'hidden'">
           {{ registrationErrorMessage }}
         </span>
         <div class="form-group">
@@ -60,15 +60,15 @@
               type="password" 
               placeholder="Repita su contraseña"
               formControlName="confirmPassword" 
-              [ngClass]="{'is-invalid': displayMessage['confirmPassword']}">
+              [ngClass]="{'is-invalid': displayMessage['confirmPassword'] || displayMessage['passwordMatch']}">
           </div>
           <span class="invalid-feedback d-block">
-            {{ displayMessage['confirmPassword'] }}
+            {{ displayMessage['confirmPassword'] }} {{ displayMessage['passwordMatch'] }}
           </span>
         </div>
-        <button class="btn">Crear Cuenta</button>
+        <button class="btn" id="registerButton">Crear Cuenta</button>
       </form>
-      <span class="already-have-account">¿Ya tiene una cuenta?  <b><a routerLink="/account/login">Iniciar Sesión</a></b></span>
+      <span class="already-have-account" id="alreadyHaveAccount">¿Ya tiene una cuenta?  <b><a routerLink="/account/login">Iniciar Sesión</a></b></span>
     </div>
   </div>
 </div>

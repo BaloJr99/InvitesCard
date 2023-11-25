@@ -1,21 +1,22 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, debounceTime, fromEvent, merge } from 'rxjs';
+import { Observable, fromEvent, merge } from 'rxjs';
 import { GenericValidator } from 'src/app/shared/generic-validator';
 import { AuthService } from 'src/core/services/auth.service';
 import { LoaderService } from 'src/core/services/loader.service';
 import { IUser } from 'src/shared/interfaces';
+import { matchPassword } from './matchPassword.validator';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit, AfterViewInit {
+export class RegisterComponent implements AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
-  registrationForm!: FormGroup;
+  registrationForm: FormGroup;
   registrationErrorMessage = "";
 
   displayMessage: { [key: string]: string } = {};
@@ -39,18 +40,21 @@ export class RegisterComponent implements OnInit, AfterViewInit {
       },
       confirmPassword: {
         required: 'Confirmar contraseña'
+      },
+      passwordMatch: {
+        matchError: 'Las contraseñas no coinciden'
       }
     };
 
     this.genericValidator = new GenericValidator(this.validationMessages);
-  }
 
-  ngOnInit(): void {
     this.registrationForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
       email: ['', Validators.required],
       confirmPassword: ['', Validators.required]
+    }, {
+      validators: matchPassword
     })
   }
 
@@ -62,9 +66,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
 
     // Merge the blur event observable with the valueChanges observable
     // so we only need to subscribe once.
-    merge(this.registrationForm.valueChanges, ...controlBlurs).pipe(
-      debounceTime(800)
-    ).subscribe(() => {
+    merge(this.registrationForm.valueChanges, ...controlBlurs).subscribe(() => {
       this.displayMessage = this.genericValidator.processMessages(this.registrationForm)
     });
   }
