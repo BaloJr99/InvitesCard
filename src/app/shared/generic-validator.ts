@@ -48,6 +48,11 @@ export class GenericValidator {
         }
       }
     }
+
+    if (container.errors && container.errors["passwordMatchError"]) {
+      messages['passwordMatch'] = '';
+      messages['passwordMatch'] += this.validationMessages['passwordMatch']['matchError'];
+    }
     return messages;
   }
 
