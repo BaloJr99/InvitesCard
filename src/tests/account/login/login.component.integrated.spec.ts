@@ -84,10 +84,11 @@ describe('Login Component: Integrated Test', () => {
       .toHaveBeenCalledWith(['/dashboard']);
   });
 
-  it('should show credentials error if no user or username matches', () => {
+  it('should show credentials error if no user or username matches', async () => {
     authServiceSpy.loginAccount.and.callFake(() => {
       return throwError(() => new HttpErrorResponse({ status: 401 }));
     });
+
     updateFormUsingEvent(validUser.username, validUser.password) ;
     fixture.detectChanges();
     
@@ -95,8 +96,7 @@ describe('Login Component: Integrated Test', () => {
     button.nativeElement.click();
     
     fixture.detectChanges();
-
-    const authErrorMessageSpan: HTMLSpanElement = fixture.debugElement.query(By.css('#authErrorMessage')).nativeElement;
+    const authErrorMessageSpan: HTMLSpanElement = fixture.debugElement.query(By.css('[data-testid="authErrorMessage"]')).nativeElement;
     expect(authErrorMessageSpan.innerHTML)
       .withContext("Should display wrong credentials")
       .toContain('Credenciales Incorrectas');

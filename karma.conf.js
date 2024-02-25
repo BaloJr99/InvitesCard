@@ -14,6 +14,7 @@ module.exports = function (config) {
     ],
     client: {
       jasmine: {
+        random: true
         // you can add configuration options for Jasmine here
         // the possible options are listed at https://jasmine.github.io/api/edge/Configuration.html
         // for example, you can disable the random execution with `random: false`
@@ -38,6 +39,7 @@ module.exports = function (config) {
     captureTimeout: 60000, 
     browserDisconnectTimeout : 10000,
     browserDisconnectTolerance : 1,
-    browserNoActivityTimeout : 60000
+    browserNoActivityTimeout : 60000,
+    singleRun: false
   });
 };

@@ -25,10 +25,15 @@ export class CountdownComponent implements OnInit {
     const diff = this.finishDate.getTime() - now.getTime();
 
     // Cálculos para sacar lo que resta hasta ese tiempo objetivo / final
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const mins = Math.floor(diff / (1000 * 60));
-    const secs = Math.floor(diff / 1000);
+    let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    let hours = Math.floor(diff / (1000 * 60 * 60));
+    let mins = Math.floor(diff / (1000 * 60));
+    let secs = Math.floor(diff / 1000);
+
+    days = (days > 0 ? days : 0);
+    hours = (hours > 0 ? hours : 0);
+    mins = (mins > 0 ? mins : 0);
+    secs = (secs > 0 ? secs : 0);
 
     // La diferencia que se asignará para mostrarlo en la pantalla
     const time = {

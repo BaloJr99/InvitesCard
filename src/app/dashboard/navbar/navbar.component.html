@@ -34,7 +34,7 @@
       </div>
       <div class="base-menu notificationMessages">
         <button *ngFor="let notification of notifications" [ngClass]="{'isMessageNotRead': !notification.isMessageRead}" (click)="maskAsRead(notification.id)">
-          {{ notification.family }} ha:
+          {{ notification.family }} ha: <i class="fa-solid fa-circle" [ngClass]="{'hideActiveNotification': notification.isMessageRead}"></i>
           <br>
           <span>{{ notification.confirmation ? 'Confirmado' : 'Cancelado' }}</span>
           <br>

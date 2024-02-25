@@ -1,4 +1,4 @@
-import { IEntry } from "src/shared/interfaces";
+import { IEntry, IMessageResponse } from "src/shared/interfaces";
 
 export const validUser = {
   username: '00132126',
@@ -77,4 +77,8 @@ export const emptyConfirmationEntry: IEntry = {
   kidsAllowed: true,
   dateOfConfirmation: null,
   isMessageRead: false
+}
+
+export const messageResponse: IMessageResponse = {
+  message: 'Sent successfully'
 }

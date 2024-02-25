@@ -163,6 +163,17 @@
       font-weight: bold;
     }
 
+    .notificationMessages button i {
+      font-size: 6px;
+      position: relative;
+      top: -5px;
+      color: #0000FF;
+    }
+
+    .notificationMessages button i.hideActiveNotification {
+      display: none;
+    }
+
 .navbarWithSearchAndForm {
   display: flex;
   justify-content: flex-end;
