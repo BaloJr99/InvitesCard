@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TokenStorageService } from 'src/core/services/token-storage.service';
-import { IEntry, IMessage, INotifications } from 'src/shared/interfaces';
+import { IEntry, IEvent, IMessage, INotifications } from 'src/shared/interfaces';
 import { UpdateEntryService } from './update-entry.service';
 import { DialogComponent } from './dialog/dialog.component';
 import { SocketService } from 'src/core/services/socket.service';
 import { LoaderService } from 'src/core/services/loader.service';
+import { EventsService } from 'src/core/services/events.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,6 +16,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild(DialogComponent) dialogComponent!: DialogComponent;
   constructor(
     private tokenService: TokenStorageService,
+    private eventsService: EventsService,
     private updateEntryService: UpdateEntryService,
     private socket: SocketService,
     private loaderService: LoaderService) {
@@ -27,10 +29,15 @@ export class DashboardComponent implements OnInit {
   totalEntries = 0;
 
   messages: Map<number, IMessage> = new Map<number, IMessage>();
+  events: IEvent[] = [];
+  eventSelected: IEvent | null = null;
   
   entryToModify: IEntry | null = null;
   entryToDelete: IEntry | null = null;
   
+  eventToModify: IEvent | null = null;
+  eventToDelete: IEvent | null = null;
+
   entriesGrouped: { [key: string]: IEntry[] } = {};
   username = "";
   email = "";
@@ -75,51 +82,60 @@ export class DashboardComponent implements OnInit {
   }
 
   updateDashboard(): void {
+    this.eventsService.getAllEvents().subscribe({
+      next: (events) => {
+        this.events = events;
+      }
+    });
+    this.updateEntryService.updateEntries();
     this.updateEntryService.entries$.subscribe({
       next: (entries) => {
-        let counter = 0;
-        this.confirmedEntries = 0;
-        this.canceledEntries = 0;
-        this.pendingEntries = 0;
-        this.totalEntries = 0;
-        this.entries = entries;
-        const newNotifications: INotifications[] = [];
-
-        this.messages.clear();
-
-        entries.forEach((value) => {
-          if (value.confirmation) {
-            this.confirmedEntries += (value.entriesConfirmed ?? 0)
-            this.canceledEntries += (value.entriesNumber - (value.entriesConfirmed ?? 0))
-          } else {
-            if (value.confirmation === null) {
-              this.pendingEntries += value.entriesNumber
-            } else {
-              this.canceledEntries += value.entriesNumber;
-            }
-          }
-          this.totalEntries += value.entriesNumber
-
-          if (value.message) {
-            this.messages.set(counter, { family: value.family, message: value.message });
-            counter++;
-          }
-
-          if (value.confirmation !== null) {
-            newNotifications.push({
-              id: value.id,
-              confirmation: value.confirmation,
-              dateOfConfirmation: value.dateOfConfirmation ?? '',
-              family: value.family,
-              isMessageRead: value.isMessageRead
-            })
-          }
-        })
-        this.notifications = newNotifications;
-        this.groupEntries(entries);
+        this.buildEntriesDashboard(entries);
       }
     })
-    this.updateEntryService.updateEntries();
+  }
+
+  buildEntriesDashboard(entries: IEntry[]) {
+    let counter = 0;
+    this.confirmedEntries = 0;
+    this.canceledEntries = 0;
+    this.pendingEntries = 0;
+    this.totalEntries = 0;
+    this.entries = entries;
+    const newNotifications: INotifications[] = [];
+
+    this.messages.clear();
+
+    entries.forEach((value) => {
+      if (value.confirmation) {
+        this.confirmedEntries += (value.entriesConfirmed ?? 0)
+        this.canceledEntries += (value.entriesNumber - (value.entriesConfirmed ?? 0))
+      } else {
+        if (value.confirmation === null) {
+          this.pendingEntries += value.entriesNumber
+        } else {
+          this.canceledEntries += value.entriesNumber;
+        }
+      }
+      this.totalEntries += value.entriesNumber
+
+      if (value.message) {
+        this.messages.set(counter, { family: value.family, message: value.message });
+        counter++;
+      }
+
+      if (value.confirmation !== null) {
+        newNotifications.push({
+          id: value.id,
+          confirmation: value.confirmation,
+          dateOfConfirmation: value.dateOfConfirmation ?? '',
+          family: value.family,
+          isMessageRead: value.isMessageRead
+        })
+      }
+    })
+    this.notifications = newNotifications;
+    this.groupEntries(entries);
   }
 
   groupEntries(entries: IEntry[]): void {
@@ -143,6 +159,13 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  getEventToModifiy(): void {
+    const eventFound = this.events.find((event) => event.id === $("#eventId").val())
+    if (eventFound) {
+      this.eventToModify = eventFound;
+    }
+  }
+
   toggleMessages(): void {
     const toggleMessages = document.querySelector(".messages-chat");
     if (toggleMessages) {
@@ -161,5 +184,14 @@ export class DashboardComponent implements OnInit {
 
   showModal(entry: IEntry | null): void {
     this.entryToDelete = entry;
+  }
+
+  getEventEntries(id: string): void {
+    this.eventSelected = this.events.find(event => event.id === id) ?? null;
+    this.eventsService.getEventEntries(id).subscribe({
+      next: (entries) => {
+        this.buildEntriesDashboard(entries);
+      }
+    })
   }
 }

@@ -14,6 +14,24 @@ export interface IEntry {
   isMessageRead: boolean
 }
 
+export interface IInvite {
+  id: string,
+  family: string,
+  entriesNumber: number,
+  confirmation: boolean | null,
+  kidsAllowed: boolean,
+  dateOfEvent: string,
+  maxDateOfConfirmation: string
+}
+
+export interface IEvent {
+  id: string,
+  nameOfEvent: string, 
+  dateOfEvent: string, 
+  maxDateOfConfirmation: string,
+  selected: boolean
+}
+
 export interface IMessage {
   family: string,
   message: string
@@ -30,7 +48,7 @@ export interface IToken {
 }
 
 export interface IEntryResolved {
-  entry: IEntry;
+  entry: IInvite;
   error?: string;
 }
 

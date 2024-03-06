@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { IMessage } from 'src/shared/interfaces';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { IEvent } from 'src/shared/interfaces';
 
 @Component({
   selector: 'app-sidebar',
@@ -7,5 +7,19 @@ import { IMessage } from 'src/shared/interfaces';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent {
-  @Input() messages: Map<number, IMessage> = new Map<number, IMessage>();
+  @Input() events: IEvent[] = [];
+
+  @Output() getEventInformation: EventEmitter<string> = new EventEmitter();
+
+  getEventEntries(id: string) {
+    this.events.map((event) => {
+      if (event.id === id) {
+        event.selected = true;
+      } else {
+        event.selected = false;
+      }
+    });
+
+    this.getEventInformation.emit(id);
+  }
 }

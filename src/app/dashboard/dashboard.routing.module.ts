@@ -5,8 +5,9 @@ import { NavbarComponent } from "./navbar/navbar.component";
 import { CardComponent } from "./card/card.component";
 import { SidebarComponent } from "./sidebar/sidebar.component";
 import { TableComponent } from "./table/table.component";
-import { ModalComponent } from "./modal/modal.component";
+import { EntryModalComponent } from "./entryModal/modal.component";
 import { DialogComponent } from "./dialog/dialog.component";
+import { EventModalComponent } from "./eventModal/modal.component";
 
 const routes: Routes = [
   { 
@@ -31,7 +32,8 @@ export class DashboardRoutingModule {
     SidebarComponent, 
     CardComponent, 
     TableComponent,
-    ModalComponent,
+    EntryModalComponent,
+    EventModalComponent,
     DialogComponent
   ]
 }

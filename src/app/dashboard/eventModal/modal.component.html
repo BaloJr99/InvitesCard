@@ -1,0 +1,41 @@
+<!-- Modal -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="confirmationModalLabel">Invitaciones Personalizadas</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="createEventForm">
+          <input type="text" id="eventId" hidden>
+          <div class="mb-3">
+            <label for="nameOfEvent" class="form-label">Nombre del Evento</label>
+            <input type="text" class="form-control" formControlName="nameOfEvent" [ngClass]="{'is-invalid': displayMessage['nameOfEvent']}">
+            <span class="invalid-feedback">
+              {{ displayMessage['nameOfEvent'] }}
+            </span>
+          </div>
+          <div class="mb-3">
+            <label for="dateOfEvent" class="form-label">Fecha del Evento</label>
+            <input type="datetime-local" class="form-control" formControlName="dateOfEvent" [ngClass]="{'is-invalid': displayMessage['dateOfEvent']}">
+            <span class="invalid-feedback">
+              {{ displayMessage['dateOfEvent'] }}
+            </span>
+          </div>
+          <div class="mb-3">
+            <label for="maxDateOfConfirmation" class="form-label">Fecha límite de confirmación de invitaciones</label>
+            <input type="datetime-local" class="form-control" formControlName="maxDateOfConfirmation" [ngClass]="{'is-invalid': displayMessage['maxDateOfConfirmation']}">
+            <span class="invalid-feedback">
+              {{ displayMessage['maxDateOfConfirmation'] }}
+            </span>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="closeModal" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" (click)="saveEvent()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -14,6 +14,11 @@ export class EntriesComponent implements OnInit {
 
   audio = new Audio()
   counter = 0;
+    
+  dayOfTheWeek = "";
+  shortDate = "";
+  longDate = "";
+  time = "";
   
   entryResolved!: IEntryResolved;
   entryResolvedEmiter$ = new Subject<IEntryResolved>();
@@ -35,6 +40,12 @@ export class EntriesComponent implements OnInit {
       if (!this.entryResolved.entry) {
         this.router.navigate(['/error/page-not-found'])
       }
+
+      this.dayOfTheWeek = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString('es-mx', {  weekday: 'long' })
+      this.shortDate = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString('es-mx', { day: 'numeric', month: 'long' })
+      this.longDate = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString('es-mx', {  day: 'numeric', month: 'long', year: 'numeric' })
+      this.time = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString('es-mx', {  hour: 'numeric', minute: 'numeric' })
+
       this.entryResolvedEmiter$.next(this.entryResolved)
       this.loaderService.setLoading(false);
     }).add(() => {

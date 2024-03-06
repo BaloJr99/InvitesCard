@@ -9,12 +9,14 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { TokenStorageService } from './services/token-storage.service';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
+import { EventsService } from './services/events.service';
 
 @NgModule({
   imports: [CommonModule, RouterModule, HttpClientModule],
   exports: [RouterModule, HttpClientModule],
   providers: [
     EntriesService,
+    EventsService,
     AuthService,
     TokenStorageService,
     { provide: 'Window', useFactory: () => window },

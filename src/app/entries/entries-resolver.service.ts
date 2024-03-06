@@ -12,7 +12,7 @@ export const entriesResolver: ResolveFn<IEntryResolved> = (
 
   const id = route.paramMap.get('id') ?? "";
 
-  const entryFound = entriesService.getEntrieById(id).pipe(
+  const entryFound = entriesService.getInvite(id).pipe(
     map(entry => ({ entry: entry})),
     catchError(() => {
       router.navigate(['/error/page-not-found'])

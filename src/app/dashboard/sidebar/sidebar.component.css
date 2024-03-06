@@ -10,10 +10,10 @@
 h2 {
   font-family: 'Merriweather';
   font-size: 20px;
-  padding: 20px 10px 0px;
   color: #ff3dab;
   font-weight: bold;
   text-align: center;
+  margin-bottom: 0px;
 }
 
 .sidebar .card {
@@ -21,14 +21,22 @@ h2 {
   padding: 5px;
 }
 
-.sidebar-message p {
-  font-weight: bold;
-  margin-bottom: 0;
-  padding-left: 10px;
-  text-align: left;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+.sidebar .events-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 10px;
+  gap: 10px;
+}
+
+.sidebar .events-header button {
+  align-self: center;
+  font-size: 14px;
+}
+
+.sidebar .list-group li {
+  cursor: pointer;
 }
 
 .sidebar-message-container {

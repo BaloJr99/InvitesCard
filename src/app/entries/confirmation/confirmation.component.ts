@@ -2,7 +2,7 @@ import { Component, AfterViewInit, ViewChildren, ElementRef, Input, OnChanges, S
 import { FormBuilder, FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, fromEvent, merge } from 'rxjs';
 import { GenericValidator } from '../../shared/generic-validator';
-import { IEntry } from 'src/shared/interfaces';
+import { IEntry, IInvite } from 'src/shared/interfaces';
 import { EntriesService } from 'src/core/services/entries.service';
 import * as moment from 'moment';
 import { SocketService } from 'src/core/services/socket.service';
@@ -15,7 +15,7 @@ import { LoaderService } from 'src/core/services/loader.service';
 })
 export class ConfirmationComponent implements AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
-  @Input() entry!: IEntry;
+  @Input() entry!: IInvite;
   @Output() newEntry = new EventEmitter<FormGroup>();
 
   private numberOfEntries = new BehaviorSubject<number[]>([])

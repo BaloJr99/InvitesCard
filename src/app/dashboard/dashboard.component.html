@@ -5,7 +5,7 @@
   <div class="container-fluid">
     <div class="row g-0 h-100">
       <aside class="col-md-2 d-none d-lg-block">
-        <app-sidebar [messages]="messages"></app-sidebar>
+        <app-sidebar [events]="events" (getEventInformation)="getEventEntries($event)"></app-sidebar>
       </aside>
       <main class="col-md-12 col-lg-10">
         <div class="row mx-1 my-3 breadcrumb-header">
@@ -16,10 +16,12 @@
                 <li class="breadcrumb-item active" aria-current="page">HOME</li>
               </ol>
             </nav>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationModal">Nueva Invitación</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal">Nuevo evento</button>
+            <button *ngIf="eventSelected" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal">Editar evento</button>
+            <button *ngIf="eventSelected" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationModal">Nueva Invitación</button>
           </div>
         </div>
-        <section class="row mx-1 card-section">
+        <section class="row mx-1 card-section" *ngIf="eventSelected">
           <div class="col-12 card-container">
             <app-card displayText="Invitaciones Confirmadas" [number]="confirmedEntries" backgroundColor="#43cd63"></app-card>
             <app-card displayText="Invitaciones Pendientes" [number]="pendingEntries" backgroundColor="#facf4f"></app-card>
@@ -27,7 +29,7 @@
             <app-card displayText="Total de Invitaciones" [number]="totalEntries" backgroundColor="#54a6ff"></app-card>
           </div>
         </section>
-        <section class="row mx-1 table-accordion">
+        <section class="row mx-1 table-accordion" *ngIf="eventSelected">
           <div class="col-12">
             <div class="accordion" id="entryAccordion" *ngFor="let entryGroup of entriesGrouped | keyvalue">
               <app-table [entryGroup]="entryGroup" (entryToDelete)="showModal($event)"></app-table>
@@ -56,5 +58,6 @@
   </div>
   <button class="btn messages" (click)="toggleMessages()"><i class="fa-regular fa-comment"></i></button>
 </div>
-<app-modal (updateDashboard)="updateDashboard()" (getEntryToModifiy)="getEntryToModifiy()" [entryToModify]="entryToModify"></app-modal>
+<app-event-modal (updateDashboard)="updateDashboard()" (getEventToModifiy)="getEventToModifiy()" [eventToModify]="eventToModify"></app-event-modal>
+<app-entry-modal (updateDashboard)="updateDashboard()" (getEntryToModifiy)="getEntryToModifiy()" [entryToModify]="entryToModify"></app-entry-modal>
 <app-dialog [entry]="entryToDelete"></app-dialog>

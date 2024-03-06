@@ -1,14 +1,18 @@
 <div class="sidebar">
-  <h2>Mensajes</h2>
+  <div class="events-header">
+    <h2>Mis Eventos</h2> 
+    <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#eventModal"><i class="fa-solid fa-plus"></i></button>
+  </div>
   <div class="sidebar-message-container">
-    <div class="card" [style.display]="messages.size === 0 ? 'block' : 'none'">
-      No hay mensajes
+    <div class="card" [style.display]="events.length === 0 ? 'block' : 'none'">
+      No hay eventos
     </div>
-    <div class="sidebar-message" *ngFor="let message of messages | keyvalue">
-      <p>{{ message.value.family }}: </p>
-      <div class="card">
-        {{ message.value.message }}
-      </div>
-    </div>
+    <ul class="list-group px-2">
+      <ng-container *ngFor="let event of events;">
+        <button class="list-group-item list-group-item-action" (click)="getEventEntries(event.id)" [ngClass]="{'active': event.selected }">
+          {{ event.nameOfEvent}}
+        </button>
+      </ng-container>
+    </ul>
   </div>
 </div>

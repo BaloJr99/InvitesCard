@@ -23,10 +23,10 @@
     <div class="datetime">
       <div class="date">
         <hr>
-        <h4>SÁBADO, 18 DE NOVIEMBRE</h4>
+        <h4>{{ dayOfTheWeek.toLocaleUpperCase() }}, {{ shortDate.toLocaleUpperCase() }}</h4>
         <hr>
       </div>
-      <app-countdown></app-countdown>
+      <app-countdown [dateOfEvent]="entryResolved.entry.dateOfEvent"></app-countdown>
     </div>
   </div>
 </div>
@@ -64,7 +64,7 @@
     </div>
     <p class="pt-5">Tenemos el gusto de invitarlos a celebrar la Misa de Acción de Gracias con motivo de <br><br>¡Mis XV Años! </p>
     <br>
-    <p class="pinkLetter">Sábado <br> 18 de Noviembre, 2023 <br> <i class="fa-regular fa-clock" style="color: #e57488;"></i> 18:00 horas</p>
+    <p class="pinkLetter">{{ dayOfTheWeek.substring(0, 1).toUpperCase() + dayOfTheWeek.slice(1) }} <br> {{ longDate }} <br> <i class="fa-regular fa-clock" style="color: #e57488;"></i> {{ time }} horas</p>
     <div class="row">
       <div class="col-sm-12 col-md-6">
         <p>Capilla del Seminario Diocesano Cam. Real a Maravillas Km 6, Villa de Fuente, 26090 Piedras Negras, Coah.</p>
@@ -108,7 +108,3 @@
   </div>
 </div>
 <app-confirmation [entry]="entryResolved.entry"></app-confirmation>
-<div class="fireworks">
-  <img src="../../assets/fireworks.gif" alt="">
-  <h2>Hoy es el dia</h2>
-</div>

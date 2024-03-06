@@ -1,4 +1,4 @@
-import { IEntry, IMessageResponse } from '../../shared/interfaces'
+import { IEntry, IInvite, IMessageResponse } from '../../shared/interfaces'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -16,8 +16,12 @@ export class EntriesService {
     return this.http.get<IEntry[]>(this.invitesBaseUrl)
   }
 
-  getEntrieById(id:string): Observable<IEntry> {
+  getEntryById(id:string): Observable<IEntry> {
     return this.http.get<IEntry>(`${this.invitesBaseUrl}/${id}`)
+  }
+
+  getInvite(id:string): Observable<IInvite> {
+    return this.http.get<IInvite>(`${this.invitesBaseUrl}/invite/${id}`)
   }
 
   sendConfirmation(entry: IEntry, id: string): Observable<IMessageResponse> { 

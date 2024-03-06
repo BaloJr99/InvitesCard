@@ -9,11 +9,11 @@ import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from 'src/core/services/loader.service';
 
 @Component({
-  selector: 'app-modal',
+  selector: 'app-entry-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css']
 })
-export class ModalComponent implements OnInit, AfterViewInit, OnChanges {
+export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
   @Output() getEntryToModifiy: EventEmitter<unknown> = new EventEmitter();
   @Input() entryToModify: IEntry | null = null;
