@@ -61,5 +61,11 @@
   <button class="btn messages" (click)="toggleMessages()"><i class="fa-regular fa-comment"></i></button>
 </div>
 <app-event-modal [eventAction]="eventAction" (updateEvents)="updateEvents($event)"></app-event-modal>
-<app-entry-modal [entryAction]="entryAction" (updateEntries)="updateEntries($event)" [eventSelected]="eventSelected" ></app-entry-modal>
+<app-entry-modal 
+  [familyGroups]="familyGroups" 
+  [entryAction]="entryAction"  
+  [eventSelected]="eventSelected"
+  (updateEntries)="updateEntries($event)"
+  (updateFamilyGroups)="updateFamilyGroups($event)">
+</app-entry-modal>
 <app-dialog *ngIf="entryAction" [entryAction]="entryAction" (updateEntries)="updateEntries($event)"></app-dialog>

@@ -33,14 +33,16 @@
         </ul>
       </div>
       <div class="base-menu notificationMessages">
-        <button ngIf="notifications.length > 0" *ngFor="let notification of notifications" [ngClass]="{'isMessageNotRead': !notification.isMessageRead}" (click)="maskAsRead(notification.id)">
-          {{ notification.family }} ha: <i class="fa-solid fa-circle" [ngClass]="{'hideActiveNotification': notification.isMessageRead}"></i>
-          <br>
-          <span>{{ notification.confirmation ? 'Confirmado' : 'Cancelado' }}</span>
-          <br>
-          <small *ngIf="notification.dateOfConfirmation !== '1000-01-01T00:00:00.000Z'">{{ getTime(notification.dateOfConfirmation) }}</small>
-        </button>
-        <p>Sin notificationes por el momento</p>
+        <ng-container *ngIf="notifications.length > 0">
+          <button *ngFor="let notification of notifications" [ngClass]="{'isMessageNotRead': !notification.isMessageRead}" (click)="maskAsRead(notification.id)">
+            <strong>{{ notification.family }} ha</strong>: <i class="fa-solid fa-circle" [ngClass]="{'hideActiveNotification': notification.isMessageRead}"></i>
+            <br>
+            <span>{{ notification.confirmation ? 'Confirmado' : 'Cancelado' }}</span>
+            <br>
+            <small *ngIf="notification.dateOfConfirmation !== '1000-01-01T00:00:00.000Z'">{{ getTime(notification.dateOfConfirmation) }}</small>
+          </button>
+        </ng-container>
+        <p *ngIf="notifications.length <= 0">Sin notificationes por el momento</p>
       </div>
     </div>
   </div>

@@ -59,26 +59,29 @@ export const entryConfirmed: IEntry = {
   message: '',
   confirmation: true,
   phoneNumber: '',
-  groupSelected: 'dadFamily',
   kidsAllowed: true,
   dateOfConfirmation: '',
-  isMessageRead: false
+  isMessageRead: false,
+  eventId: '',
+  familyGroupId: 'dadFamily'
 }
 
 export const emptyConfirmationEntry: IEntry = {
   id: '1',
   family: 'Familia Rojas',
   entriesNumber: 5,
-  entriesConfirmed: null,
+  entriesConfirmed: 0,
   message: null,
-  confirmation: null,
+  confirmation: false,
   phoneNumber: '',
-  groupSelected: 'dadFamily',
   kidsAllowed: true,
   dateOfConfirmation: null,
-  isMessageRead: false
+  isMessageRead: false,
+  eventId: '',
+  familyGroupId: ''
 }
 
 export const messageResponse: IMessageResponse = {
+  id: '',
   message: 'Sent successfully'
 }

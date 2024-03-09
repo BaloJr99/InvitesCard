@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TokenStorageService } from 'src/core/services/token-storage.service';
-import { IEntry, IEntryAction, IEvent, IEventAction, IMessage, INotifications, IStatistics } from 'src/shared/interfaces';
+import { IEntry, IEntryAction, IEvent, IEventAction, IFamilyGroup, IFamilyGroupAction, IMessage, INotifications, IStatistics } from 'src/shared/interfaces';
 import { DialogComponent } from './dialog/dialog.component';
 import { SocketService } from 'src/core/services/socket.service';
 import { LoaderService } from 'src/core/services/loader.service';
 import { EventsService } from 'src/core/services/events.service';
+import { forkJoin } from 'rxjs';
+import { FamilyGroupsService } from 'src/core/services/familyGroups.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,6 +19,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private tokenService: TokenStorageService,
     private eventsService: EventsService,
+    private familyGroupsService: FamilyGroupsService,
     private socket: SocketService,
     private loaderService: LoaderService) {
       
@@ -42,6 +45,7 @@ export class DashboardComponent implements OnInit {
 
   entries: IEntry[] = [];
   notifications: INotifications[] = [];
+  familyGroups: IFamilyGroup[] = [];
   
   ngOnInit(): void {
     this.loaderService.setLoading(true);
@@ -52,14 +56,19 @@ export class DashboardComponent implements OnInit {
       this.socket.joinRoom(this.username);
     }
 
-    this.eventsService.getAllEvents().subscribe({
-      next: (events) => {
+    forkJoin([
+      this.eventsService.getAllEvents(),
+      this.familyGroupsService.getAllFamilyGroups()
+    ]).subscribe({
+      next: ([events, familyGroups]) => {
         this.events = events;
         if (events && events.length > 0) {
           this.getEventEntries(events[0]);
         }
+
+        this.familyGroups = familyGroups;
       }
-    }).add(() => this.loaderService.setLoading(false));
+    }).add(() => this.loaderService.setLoading(false))
 
     window.addEventListener('click', ({ target }) => {
       const toggleMenu = document.querySelector(".menu");
@@ -127,13 +136,8 @@ export class DashboardComponent implements OnInit {
   groupEntries(entries: IEntry[]): void {
     this.entriesGrouped = {};
 
-    entries.forEach((entry) => {
-      if (this.entriesGrouped[entry.groupSelected]) {
-        this.entriesGrouped[entry.groupSelected].push(entry)
-      } else {
-        this.entriesGrouped[entry.groupSelected] = []
-        this.entriesGrouped[entry.groupSelected].push(entry)
-      }
+    this.familyGroups.forEach((familyGroup) => {
+      this.entriesGrouped[familyGroup.familyGroup] = entries.filter(entry => entry.familyGroupId === familyGroup.id);
     })
   }
 
@@ -192,6 +196,7 @@ export class DashboardComponent implements OnInit {
       this.clearValues();
     } else {
       this.events = this.events.map(originalEvent => originalEvent.id === eventAction.event.id ? eventAction.event : originalEvent);
+      this.events.sort((a, b) => a.nameOfEvent.toLowerCase().localeCompare(b.nameOfEvent.toLowerCase()));
     }
   }
 
@@ -204,6 +209,17 @@ export class DashboardComponent implements OnInit {
       } else {
         this.buildEntriesDashboard(this.entries.map(originalEntry => originalEntry.id === entryAction.entry.id ? entryAction.entry : originalEntry));
       }
+    }
+  }
+
+  updateFamilyGroups(familyGroupsAction: IFamilyGroupAction) {
+    if (familyGroupsAction.isNew) {
+      this.familyGroups.push(familyGroupsAction.familyGroup);
+      this.familyGroups.sort((a, b) => a.familyGroup.toLowerCase().localeCompare(b.familyGroup.toLowerCase()));
+    } else {
+      this.familyGroups = this.familyGroups.map(originalFamilyGroup => 
+        originalFamilyGroup.id === familyGroupsAction.familyGroup.id ? familyGroupsAction.familyGroup : originalFamilyGroup);
+        this.familyGroups.sort((a, b) => a.familyGroup.toLowerCase().localeCompare(b.familyGroup.toLowerCase()));
     }
   }
 

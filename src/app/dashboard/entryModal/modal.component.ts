@@ -3,9 +3,10 @@ import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/fo
 import { Observable, fromEvent, merge } from 'rxjs';
 import { GenericValidator } from 'src/app/shared/generic-validator';
 import { EntriesService } from 'src/core/services/entries.service';
-import { IEntry, IEntryAction, IEvent, IMessageResponse } from 'src/shared/interfaces';
+import { IEntry, IEntryAction, IEvent, IFamilyGroup, IFamilyGroupAction, IMessageResponse } from 'src/shared/interfaces';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from 'src/core/services/loader.service';
+import { FamilyGroupsService } from 'src/core/services/familyGroups.service';
 
 @Component({
   selector: 'app-entry-modal',
@@ -17,10 +18,14 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Input() entryAction!: IEntryAction;
   @Input() eventSelected!: IEvent;
+  @Input() familyGroups!: IFamilyGroup[];
   @Output() updateEntries: EventEmitter<IEntryAction> = new EventEmitter();
+  @Output() updateFamilyGroups: EventEmitter<IFamilyGroupAction> = new EventEmitter();
 
-  createEntrieForm!: FormGroup;
+  createEntryForm!: FormGroup;
+  createFamilyGroupForm!: FormGroup;
   errorMessage = '';
+  isCreatingNewFormGroup = false;
     
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -28,6 +33,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   constructor(
     private entriesService: EntriesService, 
+    private familyGroupsService: FamilyGroupsService,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private loadingService: LoaderService) { 
@@ -42,7 +48,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
         required: 'Ingresar numero de telefono',
         pattern: 'Numero de telefono invalido'
       },
-      groupSelected: {
+      familyGroupId: {
         required: 'Seleccionar grupo'
       }
     };
@@ -51,12 +57,12 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.createEntrieForm = this.fb.group({
+    this.createEntryForm = this.fb.group({
       id: [''],
       family: ['Familia', Validators.required],
       entriesNumber: [1, Validators.required],
       phoneNumber: ['878', [Validators.required, Validators.pattern("[0-9]{10}")]],
-      groupSelected: ['', Validators.required],
+      familyGroupId: ['', Validators.required],
       kidsAllowed: [true, Validators.required],
       eventId: ['']
     })
@@ -70,7 +76,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
     if (changes["entryAction"] && changes["entryAction"].currentValue) {
       if (!changes["entryAction"].currentValue.delete) {
         const entry: IEntry = changes["entryAction"].currentValue.entry;
-        this.createEntrieForm.patchValue({ 
+        this.createEntryForm.patchValue({ 
           ...entry
         })
       }
@@ -78,9 +84,9 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   saveEntry() {
-    if (this.createEntrieForm.valid) {
-      if (this.createEntrieForm.dirty) {
-        if (this.createEntrieForm.controls["id"].value !== "" && this.createEntrieForm.controls["id"].value !== null) {
+    if (this.createEntryForm.valid) {
+      if (this.createEntryForm.dirty) {
+        if (this.createEntryForm.controls["id"].value !== "" && this.createEntryForm.controls["id"].value !== null) {
           this.updateEntry();
         } else {
           this.createEntry();
@@ -89,7 +95,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
         $("#confirmationModal").modal('hide');
       }
     } else {
-      this.displayMessage = this.genericValidator.processMessages(this.createEntrieForm, true);
+      this.displayMessage = this.genericValidator.processMessages(this.createEntryForm, true);
     }
   }
 
@@ -115,7 +121,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   updateEntry() {
     this.loadingService.setLoading(true);
-    this.entriesService.updateEntry(this.formatEntry(), this.createEntrieForm.controls["id"].value).subscribe({
+    this.entriesService.updateEntry(this.formatEntry(), this.createEntryForm.controls["id"].value).subscribe({
       next: () => {
         $("#confirmationModal").modal('hide');
         this.updateEntries.emit({
@@ -131,23 +137,25 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   clearInputs(): void {
-    this.createEntrieForm.reset({
+    this.createEntryForm.reset({
       family: 'Familia',
       entriesNumber: 1,
       phoneNumber: '878',
-      groupSelected: '',
+      familyGroupId: '',
       kidsAllowed: true
     });
     
     $("#entryId").val("");
 
     this.displayMessage = {};
+
+    this.isCreatingNewFormGroup = false;
   }
 
   formatEntry(): IEntry {
     return {
-      ...this.createEntrieForm.value,
-      entriesNumber: parseInt(this.createEntrieForm.controls['entriesNumber'].value),
+      ...this.createEntryForm.value,
+      entriesNumber: parseInt(this.createEntryForm.controls['entriesNumber'].value),
       eventId: this.eventSelected.id,
     } as IEntry
   }
@@ -160,8 +168,74 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
 
     // Merge the blur event observable with the valueChanges observable
     // so we only need to subscribe once.
-    merge(this.createEntrieForm.valueChanges, ...controlBlurs).subscribe(() => {
-      this.displayMessage = this.genericValidator.processMessages(this.createEntrieForm)
+    merge(this.createEntryForm.valueChanges, ...controlBlurs).subscribe(() => {
+      this.displayMessage = this.genericValidator.processMessages(this.createEntryForm)
+    });
+  }
+
+  toggleIsCreatingNewFormGroup(): void {
+    if (!this.isCreatingNewFormGroup) {
+      this.createFamilyGroupForm = this.fb.group({
+        id: [''],
+        familyGroup: ['Familia', Validators.required],
+      })
+    }
+    this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;
+  }
+
+  saveFamilyGroup(): void {
+    if (this.createFamilyGroupForm.valid) {
+      if (this.createFamilyGroupForm.dirty) {
+        if (this.createFamilyGroupForm.controls["id"].value !== "" && this.createFamilyGroupForm.controls["id"].value !== null) {
+          this.updateFamilyGroup();
+        } else {
+          this.createFamilyGroup();
+        }
+      } else {
+        this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;
+      }
+    } else {
+      this.displayMessage = this.genericValidator.processMessages(this.createFamilyGroupForm, true);
+    }
+  }
+
+  createFamilyGroup () {
+    this.loadingService.setLoading(true);
+    this.familyGroupsService.createFamilyGroup(this.createFamilyGroupForm.value as IFamilyGroup).subscribe({
+      next: (response: IMessageResponse) => {
+        this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;
+        this.updateFamilyGroups.emit({
+          familyGroup: {
+            ...this.createFamilyGroupForm.value as IFamilyGroup,
+            id: response.id
+          },
+          isNew: true
+        });
+        this.createEntryForm.patchValue({ 
+          familyGroupId: response.id,
+        })
+        this.toastr.success("Grupo creado");
+      }
+    }).add(() => {
+      this.loadingService.setLoading(false);
+    });
+  }
+
+  updateFamilyGroup() {
+    this.loadingService.setLoading(true);
+    this.familyGroupsService.updateFamilyGroup(this.createFamilyGroupForm.value as IFamilyGroup, this.createFamilyGroupForm.controls["id"].value).subscribe({
+      next: () => {
+        this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;
+        this.updateFamilyGroups.emit({
+          familyGroup: {
+            ...this.createFamilyGroupForm.value as IFamilyGroup,
+          },
+          isNew: false
+        });
+        this.toastr.success("Grupo actualizado");
+      }
+    }).add(() => {
+      this.loadingService.setLoading(false);
     });
   }
 }

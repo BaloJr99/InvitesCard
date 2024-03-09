@@ -20,15 +20,6 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dtTrigger: Subject<any> = new Subject<any>();
 
-  tableNames: { [key: string]: string } = {
-    dadFamily: "Familia Papi",
-    momFamily: "Familia Mami",
-    fofyFriends: "Amigos Sofy",
-    momFriends: "Amigos Mami",
-    dadFriends: "Amigos Papi",
-    community: "Comunidad"
-  }
-
   tableName = "";
   
   ngOnInit(): void {

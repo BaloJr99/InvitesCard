@@ -7,3 +7,8 @@
   color: #000000;
   border: none;
 }
+
+.familyGroupActions {
+  display: flex;
+  gap: 10px;
+}

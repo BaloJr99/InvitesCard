@@ -8,11 +8,11 @@ export interface IEntry {
   message?: string | null,
   confirmation: boolean,
   phoneNumber: string,
-  groupSelected: string,
   kidsAllowed: boolean,
   dateOfConfirmation: string | null,
   isMessageRead: boolean,
-  eventId: string
+  eventId: string,
+  familyGroupId: string
 }
 
 export interface IInvite {
@@ -41,6 +41,16 @@ export interface IEntryAction {
   entry: IEntry,
   isNew: boolean,
   delete: boolean
+}
+
+export interface IFamilyGroupAction {
+  familyGroup: IFamilyGroup,
+  isNew: boolean,
+}
+
+export interface IFamilyGroup {
+  id: string,
+  familyGroup: string, 
 }
 
 export interface IMessage {

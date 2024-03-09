@@ -1,10 +1,10 @@
 <div class="accordion-item" *ngIf="entryGroup">
   <h2 class="accordion-header">
-    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#' + entryGroup.key" aria-expanded="true" aria-controls="collapseOne">
-      {{ tableNames[entryGroup.key] }}
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#' + entryGroup.key.replaceAll(' ', '')" aria-expanded="true" aria-controls="collapseOne">
+      {{ entryGroup.key }}
     </button>
   </h2>
-  <div id="{{entryGroup.key}}" class="accordion-collapse collapse" data-bs-parent="#entryAccordion">
+  <div *ngIf="entryGroup.value.length > 0" [id]="entryGroup.key.replaceAll(' ', '')" class="accordion-collapse collapse" data-bs-parent="#entryAccordion">
     <div class="accordion-body">
       <table datatable class="row-border hover" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead>
