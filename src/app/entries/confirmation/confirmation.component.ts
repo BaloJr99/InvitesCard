@@ -100,7 +100,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
 
     // Merge the blur event observable with the valueChanges observable
     // so we only need to subscribe once.
-    merge(this.confirmationForm.valueChanges, ...controlBlurs).subscribe(() => {
+    merge(this.confirmationForm.get("confirmation")?.valueChanges, ...controlBlurs).subscribe(() => {
       if (this.confirmationForm.controls['confirmation'].value === 'true') {
         const select = document.getElementById('my-select')
         select?.removeAttribute('disabled');
@@ -112,6 +112,9 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
       } else if (this.confirmationForm.controls['confirmation'].value === 'false') {
         const select = document.getElementById('my-select')
         select?.setAttribute('disabled', '');
+        this.confirmationForm.patchValue({
+          entriesConfirmed: ''
+        })
         this.confirmationForm.get('entriesConfirmed')?.clearValidators();
         this.confirmationForm.get('entriesConfirmed')?.updateValueAndValidity();
       }
