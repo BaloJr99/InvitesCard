@@ -79,6 +79,16 @@ main {
   z-index: 3;
 }
 
+.messages-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.messages-header h2 {
+  margin-bottom: 0;
+}
+
 .messages-chat {
   position: fixed;
   background-color: white;
@@ -119,19 +129,48 @@ main {
   opacity: 1;
 }
 
-@media screen and (max-width: 370px) {
+@media (min-width: 576px) and (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .header .buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .header .buttons button {
+    margin: 0px;
+    width: 30%;
+  }
+}
+
+@media screen and (max-width: 575px) {
+
   .header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 10px;
+  }
+
+  .header .buttons {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
     gap: 10px;
   }
   
   .header button.btn-primary {
     width: 100%;
   }
-}
 
-@media screen and (max-width: 575px) {
+  .header button.btn-primary {
+    margin: 0px;
+  }
+
   .messages-chat {
     width: 75%;
     right: 70px;

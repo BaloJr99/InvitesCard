@@ -36,6 +36,8 @@ export class NavbarComponent implements OnInit, OnChanges {
     if (changes["notifications"].currentValue.length > 0) {
       const notifications:INotifications[] = changes["notifications"].currentValue
       this.numberOfNotifications = notifications.reduce(( sum, { isMessageRead } ) => sum + ( isMessageRead ? 0 : 1) , 0)
+    } else {
+      this.numberOfNotifications = 0;
     }
   }
   

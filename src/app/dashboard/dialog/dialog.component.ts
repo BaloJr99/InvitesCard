@@ -1,7 +1,6 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { EntriesService } from 'src/core/services/entries.service';
-import { IEntry } from 'src/shared/interfaces';
-import { UpdateEntryService } from '../update-entry.service';
+import { IEntryAction } from 'src/shared/interfaces';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from 'src/core/services/loader.service';
 
@@ -11,17 +10,20 @@ import { LoaderService } from 'src/core/services/loader.service';
   styleUrls: ['./dialog.component.css']
 })
 export class DialogComponent implements OnChanges {
-  @Input() entry: IEntry | null = null;
+  @Input() entryAction!: IEntryAction;
+  @Output() updateEntries: EventEmitter<IEntryAction> = new EventEmitter();
 
   constructor(
     private entriesService: EntriesService,
-    private updateEntriesService: UpdateEntryService,
     private toastr: ToastrService,
     private loaderService: LoaderService) { }
 
+
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes["entry"].currentValue) {
-      this.showModal();
+    if (changes["entryAction"] && changes["entryAction"].currentValue) {
+      if (changes["entryAction"].currentValue.delete) {
+        this.showModal();
+      }
     }
   }
 
@@ -34,17 +36,15 @@ export class DialogComponent implements OnChanges {
   }
 
   deleteEntry(): void {
-    if (this.entry) {
-      this.loaderService.setLoading(true);
-      this.entriesService.deleteEntry(this.entry.id).subscribe({
-        next: () => {
-          this.hideModal();
-          this.updateEntriesService.updateEntries();
-          this.toastr.success("Se ha eliminado la invitación");
-        }
-      }).add(() => {
-        this.loaderService.setLoading(false);
-      });
-    }
+    this.loaderService.setLoading(true);
+    this.entriesService.deleteEntry(this.entryAction.entry.id).subscribe({
+      next: () => {
+        this.hideModal();
+        this.updateEntries.emit(this.entryAction);
+        this.toastr.success("Se ha eliminado la invitación");
+      }
+    }).add(() => {
+      this.loaderService.setLoading(false);
+    });
   }
 }

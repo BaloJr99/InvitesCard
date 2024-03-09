@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TokenStorageService } from 'src/core/services/token-storage.service';
-import { IEntry, IEvent, IMessage, INotifications } from 'src/shared/interfaces';
-import { UpdateEntryService } from './update-entry.service';
+import { IEntry, IEntryAction, IEvent, IEventAction, IMessage, INotifications, IStatistics } from 'src/shared/interfaces';
 import { DialogComponent } from './dialog/dialog.component';
 import { SocketService } from 'src/core/services/socket.service';
 import { LoaderService } from 'src/core/services/loader.service';
@@ -14,29 +13,28 @@ import { EventsService } from 'src/core/services/events.service';
 })
 export class DashboardComponent implements OnInit {
   @ViewChild(DialogComponent) dialogComponent!: DialogComponent;
+
   constructor(
     private tokenService: TokenStorageService,
     private eventsService: EventsService,
-    private updateEntryService: UpdateEntryService,
     private socket: SocketService,
     private loaderService: LoaderService) {
+      
+    }
 
-  }
-
-  confirmedEntries = 0;
-  canceledEntries = 0;
-  pendingEntries = 0;
-  totalEntries = 0;
-
+  stadistics: IStatistics = {
+    confirmedEntries: 0,
+    canceledEntries: 0,
+    pendingEntries: 0,
+    totalEntries: 0,
+  };
+  
   messages: Map<number, IMessage> = new Map<number, IMessage>();
   events: IEvent[] = [];
-  eventSelected: IEvent | null = null;
+  eventSelected!: IEvent;
+  eventAction!: IEventAction;
   
-  entryToModify: IEntry | null = null;
-  entryToDelete: IEntry | null = null;
-  
-  eventToModify: IEvent | null = null;
-  eventToDelete: IEvent | null = null;
+  entryAction!: IEntryAction;
 
   entriesGrouped: { [key: string]: IEntry[] } = {};
   username = "";
@@ -47,13 +45,21 @@ export class DashboardComponent implements OnInit {
   
   ngOnInit(): void {
     this.loaderService.setLoading(true);
-    this.updateDashboard();
     const userInformation = this.tokenService.getTokenValues();
     if (userInformation) {
       this.username = userInformation.username;
       this.email = userInformation.email;
       this.socket.joinRoom(this.username);
     }
+
+    this.eventsService.getAllEvents().subscribe({
+      next: (events) => {
+        this.events = events;
+        if (events && events.length > 0) {
+          this.getEventEntries(events[0]);
+        }
+      }
+    }).add(() => this.loaderService.setLoading(false));
 
     window.addEventListener('click', ({ target }) => {
       const toggleMenu = document.querySelector(".menu");
@@ -77,54 +83,34 @@ export class DashboardComponent implements OnInit {
     });
 
     this.socket.io.on("newNotification", () => {
-      this.updateEntryService.updateEntries()
-    })
-  }
-
-  updateDashboard(): void {
-    this.eventsService.getAllEvents().subscribe({
-      next: (events) => {
-        this.events = events;
-      }
-    });
-    this.updateEntryService.updateEntries();
-    this.updateEntryService.entries$.subscribe({
-      next: (entries) => {
-        this.buildEntriesDashboard(entries);
-      }
+      // this.updateEntryService.updateEntries()
     })
   }
 
   buildEntriesDashboard(entries: IEntry[]) {
     let counter = 0;
-    this.confirmedEntries = 0;
-    this.canceledEntries = 0;
-    this.pendingEntries = 0;
-    this.totalEntries = 0;
+
     this.entries = entries;
     const newNotifications: INotifications[] = [];
 
-    this.messages.clear();
-
     entries.forEach((value) => {
       if (value.confirmation) {
-        this.confirmedEntries += (value.entriesConfirmed ?? 0)
-        this.canceledEntries += (value.entriesNumber - (value.entriesConfirmed ?? 0))
+        this.stadistics.confirmedEntries += (value.entriesConfirmed ?? 0)
+        this.stadistics.canceledEntries += (value.entriesNumber - (value.entriesConfirmed ?? 0))
       } else {
-        if (value.confirmation === null) {
-          this.pendingEntries += value.entriesNumber
+        if (value.confirmation === null || value.confirmation === undefined) {
+          this.stadistics.pendingEntries += value.entriesNumber
         } else {
-          this.canceledEntries += value.entriesNumber;
+          this.stadistics.canceledEntries += value.entriesNumber;
         }
       }
-      this.totalEntries += value.entriesNumber
-
+      this.stadistics.totalEntries += value.entriesNumber
       if (value.message) {
         this.messages.set(counter, { family: value.family, message: value.message });
         counter++;
       }
 
-      if (value.confirmation !== null) {
+      if (value.confirmation !== null && value.confirmation !== undefined) {
         newNotifications.push({
           id: value.id,
           confirmation: value.confirmation,
@@ -151,18 +137,13 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  getEntryToModifiy(): void {
-    const entryFound = this.entries.find((entry) => entry.id === $("#entryId").val())
-    if (entryFound) {
-      entryFound.kidsAllowed = Boolean(entryFound.kidsAllowed)
-      this.entryToModify = entryFound;
-    }
-  }
-
-  getEventToModifiy(): void {
-    const eventFound = this.events.find((event) => event.id === $("#eventId").val())
-    if (eventFound) {
-      this.eventToModify = eventFound;
+  fillEntryAction(entryAction: IEntryAction): void {
+    this.entryAction = {
+      ...entryAction,
+      entry: {
+        ...entryAction.entry,
+        kidsAllowed: Boolean(entryAction.entry.kidsAllowed)
+      }
     }
   }
 
@@ -182,16 +163,60 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  showModal(entry: IEntry | null): void {
-    this.entryToDelete = entry;
-  }
-
-  getEventEntries(id: string): void {
-    this.eventSelected = this.events.find(event => event.id === id) ?? null;
-    this.eventsService.getEventEntries(id).subscribe({
+  getEventEntries(event: IEvent): void {
+    this.eventSelected = event;
+    this.eventsService.getEventEntries(event.id).subscribe({
       next: (entries) => {
+        this.clearValues();
         this.buildEntriesDashboard(entries);
       }
+    }).add(() => {
+      if (this.loaderService.getLoading()) {
+        this.loaderService.setLoading(false);
+      }
     })
+  }
+
+  fillEventAction(): void {
+    this.eventAction = {
+      event: this.eventSelected,
+      isNew: false
+    }
+  }
+
+  updateEvents(eventAction: IEventAction) {
+    if (eventAction.isNew) {
+      this.eventSelected = eventAction.event;
+      this.events.push(eventAction.event);
+      this.events.sort((a, b) => a.nameOfEvent.toLowerCase().localeCompare(b.nameOfEvent.toLowerCase()));
+      this.clearValues();
+    } else {
+      this.events = this.events.map(originalEvent => originalEvent.id === eventAction.event.id ? eventAction.event : originalEvent);
+    }
+  }
+
+  updateEntries(entryAction: IEntryAction) {
+    if (entryAction.isNew) {
+      this.buildEntriesDashboard(this.entries.concat(entryAction.entry));
+    } else {
+      if (entryAction.delete) {
+        this.buildEntriesDashboard(this.entries.filter(entry => entry.id !== entryAction.entry.id));
+      } else {
+        this.buildEntriesDashboard(this.entries.map(originalEntry => originalEntry.id === entryAction.entry.id ? entryAction.entry : originalEntry));
+      }
+    }
+  }
+
+  clearValues(): void {
+    this.stadistics = {
+      confirmedEntries: 0,
+      canceledEntries: 0,
+      pendingEntries: 0,
+      totalEntries: 0,
+    };
+
+    this.messages.clear();
+    this.entriesGrouped = {};
+    this.notifications = [];
   }
 }

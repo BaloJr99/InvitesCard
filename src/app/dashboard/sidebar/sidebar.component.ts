@@ -8,18 +8,15 @@ import { IEvent } from 'src/shared/interfaces';
 })
 export class SidebarComponent {
   @Input() events: IEvent[] = [];
+  @Input() eventSelected!: IEvent;
 
-  @Output() getEventInformation: EventEmitter<string> = new EventEmitter();
+  @Output() getEventInformation: EventEmitter<IEvent> = new EventEmitter();
 
-  getEventEntries(id: string) {
-    this.events.map((event) => {
-      if (event.id === id) {
-        event.selected = true;
-      } else {
-        event.selected = false;
-      }
-    });
-
-    this.getEventInformation.emit(id);
+  getEventEntries(id: string | undefined) {
+    if (id) {
+      this.getEventInformation.emit(this.events.find(event => event.id === id));
+    } else {
+      this.getEventInformation.emit(this.events.find(event => event.id === $("#selectEventInput").val()));
+    }
   }
 }

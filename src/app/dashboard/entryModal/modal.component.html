@@ -8,7 +8,7 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="createEntrieForm">
-          <input type="text" id="entryId" hidden>
+          <input type="text" formControlName="id" hidden>
           <div class="mb-3">
             <label for="family" class="form-label">Familia</label>
             <input type="text" class="form-control" formControlName="family" [ngClass]="{'is-invalid': displayMessage['family']}">

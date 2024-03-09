@@ -3,8 +3,7 @@ import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/fo
 import { Observable, fromEvent, merge } from 'rxjs';
 import { GenericValidator } from 'src/app/shared/generic-validator';
 import { EntriesService } from 'src/core/services/entries.service';
-import { IEntry } from 'src/shared/interfaces';
-import { UpdateEntryService } from '../update-entry.service';
+import { IEntry, IEntryAction, IEvent, IMessageResponse } from 'src/shared/interfaces';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from 'src/core/services/loader.service';
 
@@ -15,8 +14,11 @@ import { LoaderService } from 'src/core/services/loader.service';
 })
 export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
-  @Output() getEntryToModifiy: EventEmitter<unknown> = new EventEmitter();
-  @Input() entryToModify: IEntry | null = null;
+
+  @Input() entryAction!: IEntryAction;
+  @Input() eventSelected!: IEvent;
+  @Output() updateEntries: EventEmitter<IEntryAction> = new EventEmitter();
+
   createEntrieForm!: FormGroup;
   errorMessage = '';
     
@@ -27,7 +29,6 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
   constructor(
     private entriesService: EntriesService, 
     private fb: FormBuilder,
-    private updateService: UpdateEntryService,
     private toastr: ToastrService,
     private loadingService: LoaderService) { 
     this.validationMessages = {
@@ -49,50 +50,43 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
     this.genericValidator = new GenericValidator(this.validationMessages);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["entryToModify"].currentValue) {
-      const { entriesNumber, family, groupSelected, kidsAllowed, phoneNumber } = changes["entryToModify"].currentValue;
-      this.createEntrieForm.patchValue({ 
-        entriesNumber,
-        family,
-        groupSelected,
-        kidsAllowed,
-        phoneNumber
-      })
-    }
-  }
-
   ngOnInit(): void {
     this.createEntrieForm = this.fb.group({
+      id: [''],
       family: ['Familia', Validators.required],
       entriesNumber: [1, Validators.required],
       phoneNumber: ['878', [Validators.required, Validators.pattern("[0-9]{10}")]],
       groupSelected: ['', Validators.required],
-      kidsAllowed: [true, Validators.required]
+      kidsAllowed: [true, Validators.required],
+      eventId: ['']
     })
     
     $('#confirmationModal').on('hidden.bs.modal', () => {
       this.clearInputs();
     })
-    
-    $('#confirmationModal').on('show.bs.modal', () => {
-      this.getEntryToModifiy.emit()
-    })
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["entryAction"] && changes["entryAction"].currentValue) {
+      if (!changes["entryAction"].currentValue.delete) {
+        const entry: IEntry = changes["entryAction"].currentValue.entry;
+        this.createEntrieForm.patchValue({ 
+          ...entry
+        })
+      }
+    }
   }
 
   saveEntry() {
     if (this.createEntrieForm.valid) {
       if (this.createEntrieForm.dirty) {
-        const entriesNumber = parseInt(this.createEntrieForm.controls['entriesNumber'].value)
-        this.createEntrieForm.get('entriesNumber')?.setValue(entriesNumber)
-        const id = $("#entryId").val();
-        if (id && typeof(id) === "string") {
-          this.updateEntry(id);
+        if (this.createEntrieForm.controls["id"].value !== "" && this.createEntrieForm.controls["id"].value !== null) {
+          this.updateEntry();
         } else {
           this.createEntry();
         }
       } else {
-        this.onSaveComplete();
+        $("#confirmationModal").modal('hide');
       }
     } else {
       this.displayMessage = this.genericValidator.processMessages(this.createEntrieForm, true);
@@ -101,10 +95,17 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   createEntry() {
     this.loadingService.setLoading(true);
-    this.entriesService.createEntry(this.createEntrieForm.value as IEntry).subscribe({
-      next: () => {
+    this.entriesService.createEntry(this.formatEntry()).subscribe({
+      next: (response: IMessageResponse) => {
         $("#confirmationModal").modal('hide');
-        this.onSaveComplete();
+        this.updateEntries.emit({
+          ...this.entryAction,
+          entry: {
+            ...this.formatEntry(),
+            id: response.id
+          },
+          isNew: true
+        });
         this.toastr.success("Se ha guardado la invitación");
       }
     }).add(() => {
@@ -112,24 +113,21 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
     });
   }
 
-  updateEntry(id: string) {
+  updateEntry() {
     this.loadingService.setLoading(true);
-    this.entriesService.updateEntry(this.createEntrieForm.value as IEntry, id).subscribe({
+    this.entriesService.updateEntry(this.formatEntry(), this.createEntrieForm.controls["id"].value).subscribe({
       next: () => {
         $("#confirmationModal").modal('hide');
-        this.onSaveComplete();
+        this.updateEntries.emit({
+          ...this.entryAction,
+          entry: this.formatEntry(),
+          isNew: false
+        });
         this.toastr.success("Se ha actualizado la invitación");
       }
     }).add(() => {
       this.loadingService.setLoading(false);
     });
-  }
-
-  onSaveComplete(): void {
-    // Reset the form to clear the flags
-    this.clearInputs();
-    this.displayMessage = {};
-    this.updateService.updateEntries();
   }
 
   clearInputs(): void {
@@ -141,7 +139,17 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
       kidsAllowed: true
     });
     
-    $("#entryId").val("")
+    $("#entryId").val("");
+
+    this.displayMessage = {};
+  }
+
+  formatEntry(): IEntry {
+    return {
+      ...this.createEntrieForm.value,
+      entriesNumber: parseInt(this.createEntrieForm.controls['entriesNumber'].value),
+      eventId: this.eventSelected.id,
+    } as IEntry
   }
 
   ngAfterViewInit(): void {

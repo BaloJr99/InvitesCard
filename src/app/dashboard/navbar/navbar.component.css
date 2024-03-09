@@ -137,6 +137,10 @@
     background-clip: content-box;
   }
 
+  .notificationMessages p {
+    margin-bottom: 0px;
+  }
+
   .notificationMessages button {
     text-align: left;
     padding: 10px;

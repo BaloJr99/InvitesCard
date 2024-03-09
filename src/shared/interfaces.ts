@@ -4,14 +4,15 @@ export interface IEntry {
   id: string,
   family: string,
   entriesNumber: number,
-  entriesConfirmed: number | null,
+  entriesConfirmed: number,
   message?: string | null,
-  confirmation: boolean | null,
+  confirmation: boolean,
   phoneNumber: string,
   groupSelected: string,
   kidsAllowed: boolean,
   dateOfConfirmation: string | null,
-  isMessageRead: boolean
+  isMessageRead: boolean,
+  eventId: string
 }
 
 export interface IInvite {
@@ -28,8 +29,18 @@ export interface IEvent {
   id: string,
   nameOfEvent: string, 
   dateOfEvent: string, 
-  maxDateOfConfirmation: string,
-  selected: boolean
+  maxDateOfConfirmation: string
+}
+
+export interface IEventAction {
+  event: IEvent,
+  isNew: boolean
+}
+
+export interface IEntryAction {
+  entry: IEntry,
+  isNew: boolean,
+  delete: boolean
 }
 
 export interface IMessage {
@@ -65,6 +76,7 @@ export interface IError {
 }
 
 export interface IMessageResponse {
+  id: string,
   message: string
 }
 
@@ -74,4 +86,11 @@ export interface INotifications {
   confirmation: boolean,
   dateOfConfirmation: string,
   isMessageRead: boolean
+}
+
+export interface IStatistics {
+  confirmedEntries: number,
+  canceledEntries: number,
+  pendingEntries: number,
+  totalEntries: number
 }

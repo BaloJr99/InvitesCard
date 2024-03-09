@@ -17,11 +17,11 @@
         <tbody>
           <tr *ngFor="let entrie of entryGroup.value">
             <td>{{ entrie.family }}</td>
-            <td>{{ entrie.entriesConfirmed === null ? 0 : entrie.entriesConfirmed }} / {{ entrie.entriesNumber }}</td>
+            <td>{{ entrie.entriesConfirmed === null || entrie.entriesConfirmed === undefined ? 0 : entrie.entriesConfirmed }} / {{ entrie.entriesNumber }}</td>
             <td>
-              <button class="btn" [ngClass]="entrie.confirmation === null ? 'btn-warning' : 'btn-secondary'" (click)="openEditModal(this.entrie.id)" [disabled]="entrie.confirmation !== null"><i class="fa-solid fa-pen-to-square"></i></button>
-              <button class="btn btn-delete" [ngClass]="entrie.confirmation === null ? 'btn-danger' : 'btn-secondary'" (click)="showModal(this.entrie.id)" [disabled]="entrie.confirmation !== null"><i class="fa-solid fa-trash"></i></button>
-              <button class="btn" [ngClass]="entrie.confirmation === null ? 'btn-success' : 'btn-secondary'" (click)="copyToClipBoard(this.entrie.id)" [disabled]="entrie.confirmation !== null"><i class="fa-solid fa-copy"></i></button>
+              <button class="btn" [ngClass]="entrie.confirmation === null || entrie.confirmation === undefined ? 'btn-warning' : 'btn-secondary'" (click)="openEditModal(this.entrie.id)" [disabled]="entrie.confirmation !== null && entrie.confirmation !== undefined"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button class="btn btn-delete" [ngClass]="entrie.confirmation === null || entrie.confirmation === undefined ? 'btn-danger' : 'btn-secondary'" (click)="showModal(this.entrie)" [disabled]="entrie.confirmation !== null && entrie.confirmation !== undefined"><i class="fa-solid fa-trash"></i></button>
+              <button class="btn" [ngClass]="entrie.confirmation === null || entrie.confirmation === undefined ? 'btn-success' : 'btn-secondary'" (click)="copyToClipBoard(this.entrie.id)" [disabled]="entrie.confirmation !== null && entrie.confirmation !== undefined"><i class="fa-solid fa-copy"></i></button>
             </td>
           </tr>
         </tbody>

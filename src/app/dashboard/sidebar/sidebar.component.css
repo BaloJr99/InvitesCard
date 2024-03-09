@@ -54,3 +54,19 @@ h2 {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+@media (max-width: 991px) {
+  .sidebar-message-container {
+    height: unset;
+    overflow-y: auto;
+  }
+
+  .sidebar-message-container select {
+    margin-bottom: 20px;
+  }
+
+  .sidebar-message-container select option:not(:checked) { 
+    background-color: white; 
+      color:#000;
+  }
+}

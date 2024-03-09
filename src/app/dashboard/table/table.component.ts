@@ -2,7 +2,7 @@ import { KeyValue } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-import { IEntry } from 'src/shared/interfaces';
+import { IEntry, IEntryAction } from 'src/shared/interfaces';
 import { } from 'bootstrap';
 
 @Component({
@@ -12,8 +12,10 @@ import { } from 'bootstrap';
 })
 export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
+
   @Input() entryGroup!: KeyValue<string, IEntry[]>;
-  @Output() entryToDelete = new EventEmitter<IEntry | null>();
+  @Output() setEntryAction = new EventEmitter<IEntryAction>();
+
   dtOptions: DataTables.Settings = {};
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dtTrigger: Subject<any> = new Subject<any>();
@@ -51,15 +53,24 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openEditModal(id: string): void {
-    const entry = this.entryGroup.value.find((entry) => entry.id === id)
-    if (entry) {
-      $("#entryId").val(entry.id)
+    const entryToEdit = this.entryGroup.value.find((entry) => entry.id === id);
+    if (entryToEdit) {
+      this.setEntryAction.emit({
+        entry: entryToEdit,
+        isNew: false,
+        delete: false
+      });
+
       $("#confirmationModal").modal("show");
     }
   }
 
-  showModal(id: string): void {
-    this.entryToDelete.emit(this.entryGroup.value.find((entry) => entry.id === id) ?? null)
+  showModal(entry: IEntry): void {
+    this.setEntryAction.emit({
+      entry: entry,
+      isNew: false,
+      delete: true
+    })
   }
 
   rerender(): void {
