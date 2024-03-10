@@ -137,7 +137,9 @@ export class DashboardComponent implements OnInit {
     this.entriesGrouped = {};
 
     this.familyGroups.forEach((familyGroup) => {
-      this.entriesGrouped[familyGroup.familyGroup] = entries.filter(entry => entry.familyGroupId === familyGroup.id);
+      if (entries.some(entry => entry.familyGroupId === familyGroup.id)) {
+        this.entriesGrouped[familyGroup.familyGroup] = entries.filter(entry => entry.familyGroupId === familyGroup.id);
+      }
     })
   }
 

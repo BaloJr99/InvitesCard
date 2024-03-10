@@ -4,7 +4,7 @@
       {{ entryGroup.key }}
     </button>
   </h2>
-  <div *ngIf="entryGroup.value.length > 0" [id]="entryGroup.key.replaceAll(' ', '')" class="accordion-collapse collapse" data-bs-parent="#entryAccordion">
+  <div *ngIf="entryGroup.value.length > 0" [id]="entryGroup.key.replaceAll(' ', '')" class="accordion-collapse collapse">
     <div class="accordion-body">
       <table datatable class="row-border hover" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead>
