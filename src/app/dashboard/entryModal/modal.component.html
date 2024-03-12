@@ -24,7 +24,8 @@
                   <option value="">Selecciona el grupo</option>
                   <option *ngFor="let familyGroup of familyGroups" [value]="familyGroup.id">{{ familyGroup.familyGroup }}</option>
                 </select>
-                <button class="btn btn-dark" (click)="toggleIsCreatingNewFormGroup()"  ><i class="fa-solid fa-plus"></i></button>
+                <button class="btn btn-dark" (click)="toggleIsEditingFormGroup()" *ngIf="createEntryForm.get('familyGroupId')?.value"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button class="btn btn-dark" (click)="toggleIsCreatingNewFormGroup()"><i class="fa-solid fa-plus"></i></button>
               </div>
               <span class="invalid-feedback">
                 {{ displayMessage['familyGroupId'] }}

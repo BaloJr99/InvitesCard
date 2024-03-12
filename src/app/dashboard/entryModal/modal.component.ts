@@ -144,8 +144,6 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
       familyGroupId: '',
       kidsAllowed: true
     });
-    
-    $("#entryId").val("");
 
     this.displayMessage = {};
 
@@ -178,6 +176,18 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
       this.createFamilyGroupForm = this.fb.group({
         id: [''],
         familyGroup: ['Familia', Validators.required],
+      })
+    }
+    this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;
+  }
+
+  toggleIsEditingFormGroup(): void {
+    if (!this.isCreatingNewFormGroup) {
+      const selectedFamilyGroup = this.familyGroups.find(famGroup => 
+        famGroup.id === this.createEntryForm.controls["familyGroupId"].value);
+      this.createFamilyGroupForm = this.fb.group({
+        id: [selectedFamilyGroup?.id],
+        familyGroup: [selectedFamilyGroup?.familyGroup, Validators.required],
       })
     }
     this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;
