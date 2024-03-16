@@ -1,5 +1,14 @@
 @import '~node_modules/ngx-toastr/toastr.css';
 
+:root {
+  --primary-blue: #222831;
+  --secondary-blue: #31363F;
+  --light-blue: #e7efff;
+  --teal-blue: #004F52;
+  --grey: #EEEEEE;
+  --primary-orange: #FFA500;
+}
+
 html, body {
   height: 100%;
   padding: 0;

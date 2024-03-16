@@ -73,6 +73,11 @@ export interface IEntryResolved {
   error?: string;
 }
 
+export interface IEventResolved {
+  entries: IEntry[];
+  eventId: string;
+}
+
 export interface ITimer {
   days: number;
   hours: number;

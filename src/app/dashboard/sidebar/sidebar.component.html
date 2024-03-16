@@ -1,23 +1,16 @@
 <div class="sidebar">
-  <div class="events-header">
-    <h2>Mis Eventos</h2> 
-    <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#eventModal"><i class="fa-solid fa-plus"></i></button>
-  </div>
-  <div class="sidebar-message-container px-2">
-    <div class="card" [style.display]="events.length === 0 ? 'block' : 'none'">
-      No hay eventos
-    </div>
-    <ul class="list-group d-none d-lg-block">
-      <ng-container *ngFor="let event of events; index as i">
-        <button class="list-group-item list-group-item-action" (click)="getEventEntries(event.id)" [ngClass]="{'active': event.id === eventSelected.id}">
-          {{ event.nameOfEvent}}
-        </button>
-      </ng-container>
-    </ul>
-    <select class="form-select d-lg-none d-block " aria-label="Event selector" id="selectEventInput" (change)="getEventEntries(undefined)">
-      <ng-container *ngFor="let event of events; index as i">
-        <option [value]="event.id" [selected]="event.id === eventSelected.id">{{ event.nameOfEvent }}</option>
-      </ng-container>
-    </select>
+  <div class="list-group">
+    <a routerLink="/dashboard/home" routerLinkActive="active">
+      <i class="fa-solid fa-house"></i> DASHBOARD
+    </a>
+    <a routerLink="/dashboard/events" routerLinkActive="active">
+      <i class="fa-solid fa-file-lines"></i> EVENTS
+    </a>
+    <a routerLink="/dashboard/files" routerLinkActive="active">
+      <i class="fa-solid fa-file-lines"></i> FILES
+    </a>
+    <a routerLink="/dashboard/settings" routerLinkActive="active">
+      <i class="fa-solid fa-gear"></i> SETTINGS
+    </a>
   </div>
 </div>

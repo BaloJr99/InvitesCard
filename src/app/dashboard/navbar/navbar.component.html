@@ -6,11 +6,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <div class="navbarWithSearchAndForm">
-        <form class="d-flex" role="search" (submit)="search()" [formGroup]="searchForm">
-          <input class="form-control me-2" formControlName="searchInput" placeholder="Introduce Familia" aria-label="Search">
-          <button class="btn btn-outline-light" type="submit">Buscar</button>
-        </form>
-        <button class="btn notifications" (click)="toggleNotifications()"><i class="fa-solid fa-bell"></i><span [style.visibility]="numberOfNotifications > 0 ? 'visible' : 'hidden'">{{ numberOfNotifications }}</span></button> 
+        <button *ngIf="route.includes('/dashboard/events/')" class="btn notifications" (click)="toggleNotifications()"><i class="fa-solid fa-bell"></i><span [style.visibility]="numberOfNotifications > 0 ? 'visible' : 'hidden'">{{ numberOfNotifications }}</span></button> 
         <button class="btn account" (click)="toggleMenu()"><i class="fa-solid fa-user"></i></button>  
       </div>
       <div class="base-menu menu">
@@ -34,7 +30,7 @@
       </div>
       <div class="base-menu notificationMessages">
         <ng-container *ngIf="notifications.length > 0">
-          <button *ngFor="let notification of notifications" [ngClass]="{'isMessageNotRead': !notification.isMessageRead}" (click)="maskAsRead(notification.id)">
+          <button *ngFor="let notification of notifications" [ngClass]="{'isMessageNotRead': !notification.isMessageRead}">
             <strong>{{ notification.family }} ha</strong>: <i class="fa-solid fa-circle" [ngClass]="{'hideActiveNotification': notification.isMessageRead}"></i>
             <br>
             <span>{{ notification.confirmation ? 'Confirmado' : 'Cancelado' }}</span>

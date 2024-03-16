@@ -1,7 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
-import { EntriesService } from 'src/core/services/entries.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { NavigationStart, Router, Scroll } from '@angular/router';
 import { TokenStorageService } from 'src/core/services/token-storage.service';
 import { INotifications } from 'src/shared/interfaces';
 
@@ -10,37 +8,31 @@ import { INotifications } from 'src/shared/interfaces';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit, OnChanges {
+export class NavbarComponent implements OnInit {
 
   @Input() email = "";
   @Input() username = "";
-  @Output() searchEntries = new EventEmitter<string>();
   @Input() notifications: INotifications[] = [];
-  numberOfNotifications = 0;
 
-  searchForm!: FormGroup;
+  numberOfNotifications = 0;
+  route = "";
 
   constructor(
     private router: Router, 
-    private tokenService: TokenStorageService, 
-    private fb: FormBuilder,
-    private entriesService: EntriesService) { }
+    private tokenService: TokenStorageService) { }
 
   ngOnInit(): void {
-    this.searchForm = this.fb.group({
-      searchInput: ""
+    this.router.events.subscribe((events) => {
+      if (events instanceof Scroll) {
+        this.route = events.routerEvent.url;
+      }
+      
+      if (events instanceof NavigationStart) {
+        this.route = events.url;
+      }
     })
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["notifications"].currentValue.length > 0) {
-      const notifications:INotifications[] = changes["notifications"].currentValue
-      this.numberOfNotifications = notifications.reduce(( sum, { isMessageRead } ) => sum + ( isMessageRead ? 0 : 1) , 0)
-    } else {
-      this.numberOfNotifications = 0;
-    }
-  }
-  
   toggleMenu(): void {
     const toggleNotifications = document.querySelector(".notificationMessages");
     if (toggleNotifications && toggleNotifications.classList.contains("active")) {
@@ -68,22 +60,6 @@ export class NavbarComponent implements OnInit, OnChanges {
   logout(): void {
     this.tokenService.signOut();
     this.router.navigate(['/account/login']);
-  }
-
-  search(): void {
-    this.searchEntries.emit(this.searchForm.get("searchInput")?.value)
-    this.searchForm.reset();
-  }
-
-  maskAsRead(id: string): void {
-    this.entriesService.readMessage(id).subscribe({
-      next: () => {
-        this.notifications = this.notifications.map((notification) => 
-        notification.id === id ? { ...notification, isMessageRead: true } : notification)
-
-        this.numberOfNotifications = this.notifications.reduce(( sum, { isMessageRead } ) => sum + ( isMessageRead ? 0 : 1) , 0)
-      }
-    });
   }
 
   getTime(dateTime: string): string {

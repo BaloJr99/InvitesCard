@@ -1,0 +1,37 @@
+<div class="row mx-1 my-3 breadcrumb-header">
+  <div class="col-12 header">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
+        <li class="breadcrumb-item"><a routerLink="/dashboard/events" routerLinkActive="active">EVENTS</a></li>
+        <li class="breadcrumb-item">ENTRIES</li>
+      </ol>
+    </nav>
+    <div class="buttons">
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationModal">Nueva Invitación</button>
+    </div>
+  </div>
+</div>
+<section class="row mx-1 card-section">
+  <div class="col-12 card-container">
+    <app-card displayText="Invitaciones Confirmadas" [number]="stadistics.confirmedEntries" backgroundColor="#43cd63"></app-card>
+    <app-card displayText="Invitaciones Pendientes" [number]="stadistics.pendingEntries" backgroundColor="#facf4f"></app-card>
+    <app-card displayText="Invitaciones Canceladas" [number]="stadistics.canceledEntries" backgroundColor="#ff5d6d"></app-card>
+    <app-card displayText="Total de Invitaciones" [number]="stadistics.totalEntries" backgroundColor="#54a6ff"></app-card>
+  </div>
+</section>
+<section class="row mx-1 table-accordion">
+  <div class="col-12">
+    <div class="accordion" id="entryAccordion" *ngFor="let entryGroup of entriesGrouped | keyvalue">
+      <app-table [entryGroup]="entryGroup" (setEntryAction)="fillEntryAction($event)"></app-table>
+    </div>
+  </div>
+</section>
+<app-entry-modal 
+  [familyGroups]="familyGroups" 
+  [entryAction]="entryAction"  
+  [eventId]="eventId"
+  (updateEntries)="updateEntries($event)"
+  (updateFamilyGroups)="updateFamilyGroups($event)">
+</app-entry-modal>
+<app-dialog *ngIf="entryAction" [entryAction]="entryAction" (updateEntries)="updateEntries($event)"></app-dialog>

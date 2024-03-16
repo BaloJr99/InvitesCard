@@ -3,7 +3,7 @@ import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/fo
 import { Observable, fromEvent, merge } from 'rxjs';
 import { GenericValidator } from 'src/app/shared/generic-validator';
 import { EntriesService } from 'src/core/services/entries.service';
-import { IEntry, IEntryAction, IEvent, IFamilyGroup, IFamilyGroupAction, IMessageResponse } from 'src/shared/interfaces';
+import { IEntry, IEntryAction, IFamilyGroup, IFamilyGroupAction, IMessageResponse } from 'src/shared/interfaces';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from 'src/core/services/loader.service';
 import { FamilyGroupsService } from 'src/core/services/familyGroups.service';
@@ -17,7 +17,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
 
   @Input() entryAction!: IEntryAction;
-  @Input() eventSelected!: IEvent;
+  @Input() eventId!: string;
   @Input() familyGroups!: IFamilyGroup[];
   @Output() updateEntries: EventEmitter<IEntryAction> = new EventEmitter();
   @Output() updateFamilyGroups: EventEmitter<IFamilyGroupAction> = new EventEmitter();
@@ -154,7 +154,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
     return {
       ...this.createEntryForm.value,
       entriesNumber: parseInt(this.createEntryForm.controls['entriesNumber'].value),
-      eventId: this.eventSelected.id,
+      eventId: this.eventId,
     } as IEntry
   }
 

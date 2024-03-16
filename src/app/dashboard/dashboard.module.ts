@@ -1,23 +1,19 @@
 import { NgModule } from "@angular/core";
 import { DashboardRoutingModule } from "./dashboard.routing.module";
 import { SharedModule } from "../shared/shared.module";
-import { DataTablesModule } from "angular-datatables";
 import { SocketService } from "src/core/services/socket.service";
-import { EventsService } from "src/core/services/events.service";
-import { FamilyGroupsService } from "src/core/services/familyGroups.service";
+import { CommonEntriesService } from "src/core/services/commonEntries.service";
 
 @NgModule({
   imports: [
     DashboardRoutingModule,
-    SharedModule,
-    DataTablesModule
+    SharedModule
   ],
   providers: [
     SocketService,
-    EventsService,
-    FamilyGroupsService
+    CommonEntriesService
   ],
-  declarations: [DashboardRoutingModule.components]
+  declarations: [DashboardRoutingModule.components ]
 })
 
 export class DashboardModule { }

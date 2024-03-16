@@ -1,42 +1,14 @@
 <div class="dashboard">
   <header>
-    <app-navbar [email]="email" [username]="username" (searchEntries)="filterEntries($event)" [notifications]="notifications"></app-navbar>
+    <app-navbar [email]="email" [username]="username" [notifications]="notifications"></app-navbar>
   </header>
   <div class="container-fluid">
     <div class="row g-0 h-100">
       <aside class="col-lg-2 col-md-12">
-        <app-sidebar [events]="events" [eventSelected]="eventSelected" (getEventInformation)="getEventEntries($event)"></app-sidebar>
+        <app-sidebar></app-sidebar>
       </aside>
       <main class="col-md-12 col-lg-10">
-        <div class="row mx-1 my-3 breadcrumb-header">
-          <div class="col-12 header">
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a routerLink="/dashboard">DASHBOARD</a></li>
-                <li class="breadcrumb-item active" aria-current="page">HOME</li>
-              </ol>
-            </nav>
-            <div class="buttons">
-              <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal" (click)="fillEventAction()">Editar evento</button>
-              <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationModal">Nueva Invitación</button>
-            </div>
-          </div>
-        </div>
-        <section class="row mx-1 card-section">
-          <div class="col-12 card-container">
-            <app-card displayText="Invitaciones Confirmadas" [number]="stadistics.confirmedEntries" backgroundColor="#43cd63"></app-card>
-            <app-card displayText="Invitaciones Pendientes" [number]="stadistics.pendingEntries" backgroundColor="#facf4f"></app-card>
-            <app-card displayText="Invitaciones Canceladas" [number]="stadistics.canceledEntries" backgroundColor="#ff5d6d"></app-card>
-            <app-card displayText="Total de Invitaciones" [number]="stadistics.totalEntries" backgroundColor="#54a6ff"></app-card>
-          </div>
-        </section>
-        <section class="row mx-1 table-accordion">
-          <div class="col-12">
-            <div class="accordion" id="entryAccordion" *ngFor="let entryGroup of entriesGrouped | keyvalue">
-              <app-table [entryGroup]="entryGroup" (setEntryAction)="fillEntryAction($event)"></app-table>
-            </div>
-          </div>
-        </section>
+        <router-outlet></router-outlet>
       </main>
     </div>
   </div>
@@ -57,14 +29,5 @@
       </div>
     </div>
   </div>
-  <button class="btn messages" (click)="toggleMessages()"><i class="fa-regular fa-comment"></i></button>
+  <button *ngIf="route.includes('/dashboard/events/')" class="btn messages" (click)="toggleMessages()"><i class="fa-regular fa-comment"></i></button>
 </div>
-<app-event-modal [eventAction]="eventAction" (updateEvents)="updateEvents($event)"></app-event-modal>
-<app-entry-modal 
-  [familyGroups]="familyGroups" 
-  [entryAction]="entryAction"  
-  [eventSelected]="eventSelected"
-  (updateEntries)="updateEntries($event)"
-  (updateFamilyGroups)="updateFamilyGroups($event)">
-</app-entry-modal>
-<app-dialog *ngIf="entryAction" [entryAction]="entryAction" (updateEntries)="updateEntries($event)"></app-dialog>

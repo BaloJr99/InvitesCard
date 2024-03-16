@@ -1,12 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TokenStorageService } from 'src/core/services/token-storage.service';
-import { IEntry, IEntryAction, IEvent, IEventAction, IFamilyGroup, IFamilyGroupAction, IMessage, INotifications, IStatistics } from 'src/shared/interfaces';
-import { DialogComponent } from './dialog/dialog.component';
+import { IMessage, INotifications } from 'src/shared/interfaces';
 import { SocketService } from 'src/core/services/socket.service';
 import { LoaderService } from 'src/core/services/loader.service';
-import { EventsService } from 'src/core/services/events.service';
-import { forkJoin } from 'rxjs';
-import { FamilyGroupsService } from 'src/core/services/familyGroups.service';
+import { CommonEntriesService } from 'src/core/services/commonEntries.service';
+import { NavigationStart, Router, Scroll } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,38 +12,20 @@ import { FamilyGroupsService } from 'src/core/services/familyGroups.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  @ViewChild(DialogComponent) dialogComponent!: DialogComponent;
-
   constructor(
     private tokenService: TokenStorageService,
-    private eventsService: EventsService,
-    private familyGroupsService: FamilyGroupsService,
     private socket: SocketService,
-    private loaderService: LoaderService) {
-      
+    private loaderService: LoaderService,
+    private commonEntriesService: CommonEntriesService,
+    private router: Router) {    
     }
-
-  stadistics: IStatistics = {
-    confirmedEntries: 0,
-    canceledEntries: 0,
-    pendingEntries: 0,
-    totalEntries: 0,
-  };
   
   messages: Map<number, IMessage> = new Map<number, IMessage>();
-  events: IEvent[] = [];
-  eventSelected!: IEvent;
-  eventAction!: IEventAction;
-  
-  entryAction!: IEntryAction;
+  notifications: INotifications[] = [];
 
-  entriesGrouped: { [key: string]: IEntry[] } = {};
   username = "";
   email = "";
-
-  entries: IEntry[] = [];
-  notifications: INotifications[] = [];
-  familyGroups: IFamilyGroup[] = [];
+  route = "";
   
   ngOnInit(): void {
     this.loaderService.setLoading(true);
@@ -55,20 +35,6 @@ export class DashboardComponent implements OnInit {
       this.email = userInformation.email;
       this.socket.joinRoom(this.username);
     }
-
-    forkJoin([
-      this.eventsService.getAllEvents(),
-      this.familyGroupsService.getAllFamilyGroups()
-    ]).subscribe({
-      next: ([events, familyGroups]) => {
-        this.events = events;
-        if (events && events.length > 0) {
-          this.getEventEntries(events[0]);
-        }
-
-        this.familyGroups = familyGroups;
-      }
-    }).add(() => this.loaderService.setLoading(false))
 
     window.addEventListener('click', ({ target }) => {
       const toggleMenu = document.querySelector(".menu");
@@ -94,63 +60,30 @@ export class DashboardComponent implements OnInit {
     this.socket.io.on("newNotification", () => {
       // this.updateEntryService.updateEntries()
     })
-  }
 
-  buildEntriesDashboard(entries: IEntry[]) {
-    let counter = 0;
+    this.loaderService.setLoading(false);
 
-    this.entries = entries;
-    const newNotifications: INotifications[] = [];
-
-    entries.forEach((value) => {
-      if (value.confirmation) {
-        this.stadistics.confirmedEntries += (value.entriesConfirmed ?? 0)
-        this.stadistics.canceledEntries += (value.entriesNumber - (value.entriesConfirmed ?? 0))
-      } else {
-        if (value.confirmation === null || value.confirmation === undefined) {
-          this.stadistics.pendingEntries += value.entriesNumber
-        } else {
-          this.stadistics.canceledEntries += value.entriesNumber;
-        }
+    this.commonEntriesService.messages$.subscribe({
+      next: (messages) => {
+        this.messages = messages;
       }
-      this.stadistics.totalEntries += value.entriesNumber
-      if (value.message) {
-        this.messages.set(counter, { family: value.family, message: value.message });
-        counter++;
-      }
+    });
 
-      if (value.confirmation !== null && value.confirmation !== undefined) {
-        newNotifications.push({
-          id: value.id,
-          confirmation: value.confirmation,
-          dateOfConfirmation: value.dateOfConfirmation ?? '',
-          family: value.family,
-          isMessageRead: value.isMessageRead
-        })
+    this.commonEntriesService.notifications$.subscribe({
+      next: (notifications) => {
+        this.notifications = notifications;
       }
-    })
-    this.notifications = newNotifications;
-    this.groupEntries(entries);
-  }
+    });
 
-  groupEntries(entries: IEntry[]): void {
-    this.entriesGrouped = {};
-
-    this.familyGroups.forEach((familyGroup) => {
-      if (entries.some(entry => entry.familyGroupId === familyGroup.id)) {
-        this.entriesGrouped[familyGroup.familyGroup] = entries.filter(entry => entry.familyGroupId === familyGroup.id);
+    this.router.events.subscribe((events) => {
+      if (events instanceof Scroll) {
+        this.route = events.routerEvent.url;
       }
-    })
-  }
-
-  fillEntryAction(entryAction: IEntryAction): void {
-    this.entryAction = {
-      ...entryAction,
-      entry: {
-        ...entryAction.entry,
-        kidsAllowed: Boolean(entryAction.entry.kidsAllowed)
+      
+      if (events instanceof NavigationStart) {
+        this.route = events.url;
       }
-    }
+    });
   }
 
   toggleMessages(): void {
@@ -158,83 +91,5 @@ export class DashboardComponent implements OnInit {
     if (toggleMessages) {
       toggleMessages.classList.toggle("active");
     }
-  }
-
-  filterEntries(family: string): void {
-    if (family) {
-      const filteredEntries = this.entries.filter((entry) => entry.family.toLocaleLowerCase().includes(family.toLocaleLowerCase()))
-      this.groupEntries(filteredEntries);
-    } else {
-      this.groupEntries(this.entries);
-    }
-  }
-
-  getEventEntries(event: IEvent): void {
-    this.eventSelected = event;
-    this.eventsService.getEventEntries(event.id).subscribe({
-      next: (entries) => {
-        this.clearValues();
-        this.buildEntriesDashboard(entries);
-      }
-    }).add(() => {
-      if (this.loaderService.getLoading()) {
-        this.loaderService.setLoading(false);
-      }
-    })
-  }
-
-  fillEventAction(): void {
-    this.eventAction = {
-      event: this.eventSelected,
-      isNew: false
-    }
-  }
-
-  updateEvents(eventAction: IEventAction) {
-    if (eventAction.isNew) {
-      this.eventSelected = eventAction.event;
-      this.events.push(eventAction.event);
-      this.events.sort((a, b) => a.nameOfEvent.toLowerCase().localeCompare(b.nameOfEvent.toLowerCase()));
-      this.clearValues();
-    } else {
-      this.events = this.events.map(originalEvent => originalEvent.id === eventAction.event.id ? eventAction.event : originalEvent);
-      this.events.sort((a, b) => a.nameOfEvent.toLowerCase().localeCompare(b.nameOfEvent.toLowerCase()));
-    }
-  }
-
-  updateEntries(entryAction: IEntryAction) {
-    if (entryAction.isNew) {
-      this.buildEntriesDashboard(this.entries.concat(entryAction.entry));
-    } else {
-      if (entryAction.delete) {
-        this.buildEntriesDashboard(this.entries.filter(entry => entry.id !== entryAction.entry.id));
-      } else {
-        this.buildEntriesDashboard(this.entries.map(originalEntry => originalEntry.id === entryAction.entry.id ? entryAction.entry : originalEntry));
-      }
-    }
-  }
-
-  updateFamilyGroups(familyGroupsAction: IFamilyGroupAction) {
-    if (familyGroupsAction.isNew) {
-      this.familyGroups.push(familyGroupsAction.familyGroup);
-      this.familyGroups.sort((a, b) => a.familyGroup.toLowerCase().localeCompare(b.familyGroup.toLowerCase()));
-    } else {
-      this.familyGroups = this.familyGroups.map(originalFamilyGroup => 
-        originalFamilyGroup.id === familyGroupsAction.familyGroup.id ? familyGroupsAction.familyGroup : originalFamilyGroup);
-        this.familyGroups.sort((a, b) => a.familyGroup.toLowerCase().localeCompare(b.familyGroup.toLowerCase()));
-    }
-  }
-
-  clearValues(): void {
-    this.stadistics = {
-      confirmedEntries: 0,
-      canceledEntries: 0,
-      pendingEntries: 0,
-      totalEntries: 0,
-    };
-
-    this.messages.clear();
-    this.entriesGrouped = {};
-    this.notifications = [];
   }
 }

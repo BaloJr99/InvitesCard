@@ -1,10 +1,14 @@
 .navbar-brand {
-  color: #ffffff;
+  color: var(--primary-orange);
 }
 
 .navbar {
-  background-color: #ff5b7a !important;
+  background-color: var(--primary-blue) !important;
 }
+
+  .navbar .container-fluid {
+    padding-left: 20px;
+  }
 
   .navbar .account,
   .navbar .notifications {

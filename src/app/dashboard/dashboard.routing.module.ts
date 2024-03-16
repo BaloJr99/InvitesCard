@@ -2,21 +2,26 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { DashboardComponent } from "./dashboard.component";
 import { NavbarComponent } from "./navbar/navbar.component";
-import { CardComponent } from "./card/card.component";
 import { SidebarComponent } from "./sidebar/sidebar.component";
-import { TableComponent } from "./table/table.component";
-import { EntryModalComponent } from "./entryModal/modal.component";
-import { DialogComponent } from "./dialog/dialog.component";
-import { EventModalComponent } from "./eventModal/modal.component";
 
 const routes: Routes = [
   { 
     path: '',
-    component: DashboardComponent
-  },
-  {
-    path: '**',
-    redirectTo: '/error/page-not-found'
+    component: DashboardComponent,
+    children: [
+      {
+        path: 'home',
+        loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
+      },
+      {
+        path: 'events',
+        loadChildren: () => import('./events/events.module').then(m => m.EventsModule)
+      },
+      {
+        path: '**',
+        redirectTo: 'home'
+      }
+    ] 
   }
 ]
 
@@ -29,11 +34,6 @@ export class DashboardRoutingModule {
   static components = [
     DashboardComponent, 
     NavbarComponent,
-    SidebarComponent, 
-    CardComponent, 
-    TableComponent,
-    EntryModalComponent,
-    EventModalComponent,
-    DialogComponent
+    SidebarComponent
   ]
 }

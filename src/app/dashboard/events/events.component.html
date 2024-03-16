@@ -1,0 +1,26 @@
+<section class="row mx-1 my-3 breadcrumb-header">
+  <div class="col-12 header">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
+        <li class="breadcrumb-item">EVENTS</li>
+      </ol>
+    </nav>
+    <div class="buttons">
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal">Nuevo Evento</button>
+    </div>
+  </div>
+</section>
+<section class="events-container">
+  <div class="row">
+    <div class="col-4" *ngFor="let event of events">
+      <a routerLink="/dashboard/events/{{event.id}}" routerLinkActive="router-link-active"  class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ event.nameOfEvent }}</h5>
+          <p class="card-text">Fecha del Evento: <br> {{ event.dateOfEvent | dateFormat }}</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+<app-event-modal [eventAction]="eventAction" (updateEvents)="updateEvents($event)"></app-event-modal>
