@@ -2,6 +2,10 @@ th {
   text-align: center !important;
 }
 
+table {
+  width: 100% !important;
+}
+
 .accordion {
   margin: 10px 0px;
 }

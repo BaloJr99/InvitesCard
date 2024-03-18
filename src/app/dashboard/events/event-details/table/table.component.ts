@@ -4,6 +4,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { IEntry, IEntryAction } from 'src/shared/interfaces';
 import { } from 'bootstrap';
+import { ADTSettings } from 'angular-datatables/src/models/settings';
 
 @Component({
   selector: 'app-table',
@@ -16,21 +17,22 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() entryGroup!: KeyValue<string, IEntry[]>;
   @Output() setEntryAction = new EventEmitter<IEntryAction>();
 
-  dtOptions: DataTables.Settings = {};
+  dtOptions: ADTSettings = {};
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dtTrigger: Subject<any> = new Subject<any>();
 
-  tableName = "";
-  
   ngOnInit(): void {
     this.dtOptions = {
       searching: false,
-      destroy: true
+      destroy: true,
+      language: {
+        lengthMenu: '_MENU_'
+      }
     }
   }
   
   ngAfterViewInit(): void {
-    this.dtTrigger.next(true)
+    this.dtTrigger.next(false)
   }
 
   ngOnDestroy(): void {
@@ -66,8 +68,8 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   rerender(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.destroy()
+      dtInstance.destroy();
     });
-    this.dtTrigger.next(true);
+    this.dtTrigger.next(false);
   }
 }
