@@ -8,14 +8,71 @@
     </nav>
   </div>
 </section>
-<section class="row">
-  <div class="col-8">
-    
+<section class="history">
+  <div class="full-history row">
+    <div class="invites-history col-md-12 col-lg-8">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">History of all invites</h5>
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <canvas id="historyChart"></canvas>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="history-information">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td><i class="fa-solid fa-circle" style="color: #43cd63;"></i> Confirmed Entries</td>
+                      <td>{{ statistics.confirmedEntries }}</td>
+                    </tr>
+                    <tr>
+                      <td><i class="fa-solid fa-circle" style="color: #facf4f;"></i> Pending Entries</td>
+                      <td>{{ statistics.pendingEntries }}</td>
+                    </tr>
+                    <tr>
+                      <td><i class="fa-solid fa-circle" style="color: #ff5d6d;"></i> Canceled Entries</td>
+                      <td>{{ statistics.canceledEntries }}</td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td><i class="fa-solid fa-circle" style="color: transparent;"></i> Total Entries</td>
+                      <td>{{ statistics.totalEntries }}</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="percentage-history col-md-12 col-lg-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Percentaje of <br> confirmation</h5>
+          <span style="color: #43cd63;">{{ percentajeOfConfirmation }}%</span>
+          <p>Based on all the events</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Percentaje of <br> pending responses</h5>
+          <span style="color: #ff5d6d;">{{ percentajeOfPendingResponse }}%</span>
+          <p>Based on all the events</p>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="col-4">
-
-  </div>
-  <div class="col-12">
-
+  <div class="last-history row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">History of the last 31 days</h5>
+          <canvas id="lastInvitesData"></canvas>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
