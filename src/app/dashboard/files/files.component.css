@@ -183,7 +183,6 @@
   }
 
     .files .form-group select {
-      width: 0;
       flex-grow: 1;
     }
 
@@ -212,5 +211,13 @@
 @media screen and (max-width: 575px) {
   .show-image {
     width: 100%;
+  }
+
+  .footer {
+    display: flex;
+  }
+
+  .footer button {
+    flex: 1 1 0px;
   }
 }
