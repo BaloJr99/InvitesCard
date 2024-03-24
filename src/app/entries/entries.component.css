@@ -12,21 +12,6 @@ iframe {
   border-radius: 10px;
 }
 
-.audioButton {
-  border-radius: 2px;
-  background-color: #ff002f;
-  border: 1px solid #e43454;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 35px;
-  width: 35px;
-  position: fixed;
-  bottom: 50px;
-  right: 20px;
-  z-index: 1;
-}
-
 .scrollFormButton {
   border-radius: 5px;
   background-color: #515050;
@@ -44,11 +29,6 @@ iframe {
 }
 
 .scrollFormButton i {
-  color: #ffffff;
-  font-size: 1.5rem;
-}
-
-.audioButton i {
   color: #ffffff;
   font-size: 1.5rem;
 }

@@ -1,0 +1,74 @@
+<section class="row mx-1 mt-3 breadcrumb-header">
+  <div class="col-12 header">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
+        <li class="breadcrumb-item">FILES</li>
+      </ol>
+    </nav>
+  </div>
+</section>
+<section class="files">
+  <div class="row g-0 main-controls">
+    <div class="col-12 col-md-4 gx-4">
+      <div class="form-group">
+        <label for="event-select">Select an event</label>
+        <select id="event-select" class="form-control" (change)="searchImages()">
+          <option value="">Select...</option>
+          <option *ngFor="let event of events" value="{{ event.id }}">{{ event.nameOfEvent }}</option>
+        </select>
+      </div>
+    </div>
+    <form class="upload-form col-12 col-md-8" [formGroup]="saveFilesForm" *ngIf="eventSelected">
+      <div class="row g-0">
+        <div class="col-12 col-md-8 gx-4">
+          <label for="">Select photos</label>
+          <input class="form-control" formControlName="photoFiles" type="file" (change)="onPhotosChange($event)" multiple accept=".png, .jpg, .jpeg">
+        </div>
+        <div class="col-12 col-md-4 form-footer gx-4" >
+          <button class="btn btn-primary" (click)="saveFiles()">Upload Files</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="row image-container g-0" *ngIf="images.length > 0">
+    <div class="col-12 col-sm-6 col-md-4 gx-4" *ngFor="let image of images; index as i">
+      <div class="card">
+        <div class="card-body">
+          <div class="image-controls">
+            <img src="{{ image.imageUrl }}" alt="">
+            <button class="btn btn-light" (click)="scaleImageUrl = image.imageUrl"><i class="fa-solid fa-expand"></i></button>
+          </div>
+          <div class="controls">
+            <div class="form-group">
+              <label for="my-select-{{i}}">Select Usage</label>
+              <select id="my-select-{{i}}" class="form-control" (change)="insertUpdatedImage($event)">
+                <option value="">Select an option</option>
+                <option value="C" [selected]="image.imageUsage === 'C'">Images Carrousel</option>
+                <option value="G" [selected]="image.imageUsage === 'G'">Gallery</option>
+              </select>
+              <button class="btn btn-danger" (click)="showDeleteDialog(image.id)"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer" *ngIf="images.length > 0">
+      <button id="cancel-changes" class="btn btn-primary" (click)="cancelChanges()" [disabled]="imageUpdateForm.controls.length === 0">Cancel Changes</button>
+      <button id="save-changes" class="btn btn-primary" (click)="saveChanges()" [disabled]="imageUpdateForm.controls.length === 0">Save Changes</button>
+    </div>  
+  </div>
+</section>
+<section class="files-empty" *ngIf="!eventSelected">
+  <p>Please select an event</p>
+</section>
+<section class="show-image" *ngIf="scaleImageUrl"> 
+  <div class="card">
+    <div class="card-body">
+      <img [src]="scaleImageUrl" alt="" lazyload>
+      <button class="btn btn-danger" (click)="scaleImageUrl = ''">Close</button>
+    </div>
+  </div>
+</section>
+<app-dialog [imageAction]="imageAction" (updateImages)="updateImages($event)"></app-dialog>

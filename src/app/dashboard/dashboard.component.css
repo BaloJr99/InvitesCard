@@ -191,10 +191,6 @@ main {
 }
 
 @media screen and (max-width: 991px) {
-  .col-lg-10 {
-    padding-bottom: 60px;
-  }
-
   .messages {
     display: block;
   }

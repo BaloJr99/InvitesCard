@@ -18,6 +18,10 @@ const routes: Routes = [
         loadChildren: () => import('./events/events.module').then(m => m.EventsModule)
       },
       {
+        path: 'files',
+        loadChildren: () => import('./files/files.module').then(m => m.FilesModule)
+      },
+      {
         path: '**',
         redirectTo: 'home'
       }

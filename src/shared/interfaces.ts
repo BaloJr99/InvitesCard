@@ -1,4 +1,5 @@
 import { HttpErrorResponse } from "@angular/common/http";
+import { FormControl } from "@angular/forms";
 
 export interface IEntry {
   id: string,
@@ -62,6 +63,33 @@ export interface IUser {
   username: string,
   password: string,
   email: string
+}
+
+export interface IUploadImages {
+  image: string
+  eventId: string
+}
+
+export interface IDownloadImages {
+  id: string,
+  imageUrl: string,
+  publicId: string,
+  imageUsage: string
+}
+
+export interface IDeleteImage {
+  id: string,
+  publicId: string
+}
+
+export interface IUpdateImage {
+  id: string,
+  imageUsage: string
+}
+
+export interface IUpdateImageArray {
+  id: FormControl<string>,
+  imageUsage: FormControl<string>
 }
 
 export interface IToken {

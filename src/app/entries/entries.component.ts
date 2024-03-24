@@ -23,11 +23,10 @@ export class EntriesComponent implements OnInit {
   entryResolved!: IEntryResolved;
   entryResolvedEmiter$ = new Subject<IEntryResolved>();
 
-  constructor(private route: ActivatedRoute, 
-      private router: Router,
-      private loaderService: LoaderService) { 
-    this.audio.src = '../../assets/soundtrack.mp3'
-    this.audio.load()
+  constructor(
+    private route: ActivatedRoute, 
+    private router: Router,
+    private loaderService: LoaderService) { 
     setInterval(() => {
       this.updateBackground();
     }, 5000);
@@ -51,20 +50,6 @@ export class EntriesComponent implements OnInit {
     }).add(() => {
       this.loaderService.setLoading(false);
     })
-  }
-
-  playAudio(): void {
-    const playButton = (document.querySelector('.audioButton i.fa-play') as HTMLElement)
-    const pauseButton = (document.querySelector('.audioButton i.fa-pause') as HTMLElement)
-    if (this.audio.paused) {
-      this.audio.play()
-      playButton.style.display = 'none'
-      pauseButton.style.display = 'inline-block'
-    } else {
-      this.audio.pause()
-      playButton.style.display = 'inline-block'
-      pauseButton.style.display = 'none'
-    }
   }
 
   goToForm(): void {
