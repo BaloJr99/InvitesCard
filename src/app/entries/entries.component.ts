@@ -43,6 +43,10 @@ export class EntriesComponent implements OnInit {
           content: 'Testing Meta'
         },
         {
+          name: 'og:description',
+          content: 'Testing description'
+        },
+        {
           property: 'og:image',
           itemprop: 'image',
           content: 'https://img.freepik.com/vector-gratis/panda-lindo-bambu_138676-3053.jpg?size=338&ext=jpg&ga=GA1.1.1319243779.1711238400&semt=ais'
