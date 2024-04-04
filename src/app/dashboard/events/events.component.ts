@@ -25,7 +25,7 @@ export class EventsComponent implements OnInit {
       next: (events) => {
         this.events = events;
       }
-    }).add(() => this.loaderService.setLoading(false))
+    }).add(() => this.loaderService.setLoading(false));
   }
 
   updateEvents(eventAction: IEventAction) {
@@ -36,5 +36,9 @@ export class EventsComponent implements OnInit {
       this.events = this.events.map(originalEvent => originalEvent.id === eventAction.event.id ? eventAction.event : originalEvent);
       this.events.sort((a, b) => a.nameOfEvent.toLowerCase().localeCompare(b.nameOfEvent.toLowerCase()));
     }
+  }
+
+  editEvent(event: IEvent): void {
+    
   }
 }

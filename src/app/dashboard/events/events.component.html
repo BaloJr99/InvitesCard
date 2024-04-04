@@ -14,12 +14,18 @@
 <section class="events-container">
   <div class="row">
     <div class="col-12 col-sm-6 col-md-4" *ngFor="let event of events">
-      <a routerLink="/dashboard/events/{{event.id}}" routerLinkActive="router-link-active"  class="card">
+      <div class="card">
         <div class="card-body">
+          <button (click)="editEvent(event)" class="edit-event btn btn-primary">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </button>
           <h5 class="card-title">{{ event.nameOfEvent }}</h5>
           <p class="card-text">Fecha del Evento: <br> {{ event.dateOfEvent | dateFormat }}</p>
+          <button routerLink="/dashboard/events/{{event.id}}" routerLinkActive="router-link-active" class="view-event btn btn-primary">
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
         </div>
-      </a>
+      </div>
     </div>
   </div>
 </section>

@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { FamilyGroupsService } from 'src/core/services/familyGroups.service';
 import { CommonEntriesService } from 'src/core/services/commonEntries.service';
+import { SocketService } from 'src/core/services/socket.service';
 
 @Component({
   selector: 'app-event-details',
@@ -19,7 +20,8 @@ export class EventDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private loaderService: LoaderService,
     private familyGroupsService: FamilyGroupsService,
-    private commonEntriesService: CommonEntriesService) {
+    private commonEntriesService: CommonEntriesService,
+    private socket: SocketService) {
   }
 
   stadistics: IStatistics = {
@@ -53,6 +55,10 @@ export class EventDetailsComponent implements OnInit {
         this.eventId = data["eventResolved"]["eventId"];
       }
     }).add(() => this.loaderService.setLoading(false));
+
+    this.socket.io.on("newNotification", () => {
+      // this.updateEntryService.updateEntries()
+    })
   }
 
   buildEntriesDashboard(entries: IEntry[]) {

@@ -22,7 +22,7 @@ const routes: Routes = [
 
 @NgModule({
   providers: [
-    EventsService,
+    EventsService
   ],
   imports: [
     SharedModule,

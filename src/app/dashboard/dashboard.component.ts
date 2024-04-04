@@ -57,10 +57,6 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    this.socket.io.on("newNotification", () => {
-      // this.updateEntryService.updateEntries()
-    })
-
     this.loaderService.setLoading(false);
 
     this.commonEntriesService.messages$.subscribe({

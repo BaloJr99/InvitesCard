@@ -52,7 +52,7 @@
     text-decoration: none;
   }
 
-    .events-container .card:hover {
+    .events-container .card a:hover {
       background-color: var(--gray);
       box-shadow: 1px 1px 6px var(--secondary-blue);
       transition: all 100ms ease-in-out;
@@ -63,7 +63,28 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      padding-right: 50px;
     }
+
+    .events-container .card .card-body {
+      display: flex;
+      flex-direction: column;
+    }
+
+      .events-container .card .card-body .view-event {
+        background-color: var(--secondary-blue);
+        color: var(--grey);
+        border: none;
+      }
+
+      .events-container .card .card-body .edit-event {
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        background-color: var(--secondary-blue);
+        color: var(--grey);
+        border: none;
+      }
 
 @media screen and (max-width: 575px) {
 
