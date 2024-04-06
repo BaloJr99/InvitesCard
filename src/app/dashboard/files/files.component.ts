@@ -191,6 +191,12 @@ export class FilesComponent implements OnInit {
     const imageUpdated = this.images[parseInt(elementId)];
 
     if (element.value !== (imageUpdated.imageUsage ?? '')) {
+      const findControlIfAlreadyExists = this.imageUpdateForm.controls.findIndex(formGroup => formGroup.value.id === imageUpdated.id);
+      
+      if (findControlIfAlreadyExists !== -1) {
+        this.imageUpdateForm.removeAt(findControlIfAlreadyExists);
+      }
+
       this.imageUpdateForm.push(
         this.fb.group({
           id: new FormControl(imageUpdated.id),

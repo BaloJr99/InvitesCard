@@ -16,7 +16,7 @@
     <div class="col-12 col-sm-6 col-md-4" *ngFor="let event of events">
       <div class="card">
         <div class="card-body">
-          <button (click)="editEvent(event)" class="edit-event btn btn-primary">
+          <button (click)="editEvent(event)" class="edit-event btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal">
             <i class="fa-solid fa-pen-to-square"></i>
           </button>
           <h5 class="card-title">{{ event.nameOfEvent }}</h5>

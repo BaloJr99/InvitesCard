@@ -39,6 +39,9 @@ export class EventsComponent implements OnInit {
   }
 
   editEvent(event: IEvent): void {
-    
+    this.eventAction = {
+      event,
+      isNew: false
+    }
   }
 }
