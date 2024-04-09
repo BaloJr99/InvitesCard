@@ -7,7 +7,7 @@ import { GenericValidator } from 'src/app/shared/generic-validator';
 import { AuthService } from 'src/core/services/auth.service';
 import { LoaderService } from 'src/core/services/loader.service';
 import { TokenStorageService } from 'src/core/services/token-storage.service';
-import { IUser } from 'src/shared/interfaces';
+import { IAuthUser } from 'src/shared/interfaces';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +29,7 @@ export class LoginComponent implements AfterViewInit {
     private tokenService: TokenStorageService,
     private loaderService: LoaderService) {
     this.validationMessages = {
-      username: {
+      usernameOrEmail: {
         required: 'Ingresar email o usuario'
       },
       password: {
@@ -40,7 +40,7 @@ export class LoginComponent implements AfterViewInit {
     this.genericValidator = new GenericValidator(this.validationMessages);
 
     this.loginForm = this.fb.group({
-      username: ['', Validators.required],
+      usernameOrEmail: ['', Validators.required],
       password: ['', Validators.required],
     })
   }
@@ -64,7 +64,7 @@ export class LoginComponent implements AfterViewInit {
         const user = this.loginForm.value;
         delete user.confirmPassword;
         this.loaderService.setLoading(true);
-        this.authService.loginAccount(user as IUser).subscribe({
+        this.authService.loginAccount(user as IAuthUser).subscribe({
           next: (authInfo) => {
             this.authErrorMessage = "";
             if (authInfo) {

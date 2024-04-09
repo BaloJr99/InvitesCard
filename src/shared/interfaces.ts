@@ -65,6 +65,11 @@ export interface IUser {
   email: string
 }
 
+export interface IAuthUser {
+  usernameOrEmail: string,
+  email: string
+}
+
 export interface IUploadImages {
   image: string
   eventId: string

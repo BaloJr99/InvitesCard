@@ -44,7 +44,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
 
     this.confirmationForm = this.fb.group({
       confirmation: ['true', Validators.required],
-      entriesConfirmed: ['', Validators.required],
+      entriesConfirmed: ['0', Validators.required],
       message: ['']
     })
   }
@@ -59,8 +59,8 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
   saveInformation(): void {
     if (this.confirmationForm.valid) {
       if(this.confirmationForm.dirty) {
-        const assist = this.confirmationForm.controls['confirmation'].value === 'true'
-        const entriesConfirmed = parseInt(this.confirmationForm.controls['entriesConfirmed'].value)
+        const assist = this.confirmationForm.controls['confirmation'].value === 'true';
+        const entriesConfirmed = parseInt(this.confirmationForm.controls['entriesConfirmed'].value);
         this.confirmationForm.get('confirmation')?.setValue(assist)
         this.confirmationForm.get('entriesConfirmed')?.setValue(entriesConfirmed)
         this.confirmationForm.addControl('dateOfConfirmation', new FormControl(moment().format("YYYY-MM-DD[T]HH:mm:ss[Z]")))
@@ -105,7 +105,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
         const select = document.getElementById('my-select')
         select?.removeAttribute('disabled');
         if (this.confirmationForm.get('entriesConfirmed')?.value === '') {
-          this.confirmationForm.get('entriesConfirmed')?.setValue('')
+          this.confirmationForm.get('entriesConfirmed')?.setValue('0')
         }
         this.confirmationForm.get('entriesConfirmed')?.setValidators(Validators.required)
         this.confirmationForm.get('entriesConfirmed')?.updateValueAndValidity()
@@ -113,7 +113,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
         const select = document.getElementById('my-select')
         select?.setAttribute('disabled', '');
         this.confirmationForm.patchValue({
-          entriesConfirmed: ''
+          entriesConfirmed: '0'
         })
         this.confirmationForm.get('entriesConfirmed')?.clearValidators();
         this.confirmationForm.get('entriesConfirmed')?.updateValueAndValidity();

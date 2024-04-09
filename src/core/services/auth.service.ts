@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
-import { IToken, IUser } from "src/shared/interfaces";
+import { IAuthUser, IToken, IUser } from "src/shared/interfaces";
 
 @Injectable()
 export class AuthService {
@@ -15,7 +15,7 @@ export class AuthService {
     return this.http.post<string>(`${this.invitesBaseUrl}/signup`, user)
   }
 
-  loginAccount(user: IUser): Observable<IToken> { 
+  loginAccount(user: IAuthUser): Observable<IToken> { 
     return this.http.post<IToken>(`${this.invitesBaseUrl}/signin`, user)
   }
 }

@@ -10,12 +10,12 @@
           <label for="username">Usuario</label>
           <div class="inputField">
             <i class="fa-solid fa-user"></i>
-            <input id="username" 
+            <input id="usernameOrEmail" 
               class="form-control" 
               type="text" 
               placeholder="Escriba su usuario" 
-              formControlName="username" 
-              [ngClass]="{'is-invalid': displayMessage['username']}">
+              formControlName="usernameOrEmail" 
+              [ngClass]="{'is-invalid': displayMessage['usernameOrEmail']}">
           </div>
               <span class="invalid-feedback d-block">
                 {{ displayMessage['username'] }}
