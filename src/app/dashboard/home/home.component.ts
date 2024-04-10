@@ -100,7 +100,7 @@ export class HomeComponent implements OnInit {
           y: {
             title: {
               display: true,
-              text: '# of invites responded',
+              text: '# de invitaciones respondidas',
               font: {
                 size: 20
               }
@@ -111,7 +111,7 @@ export class HomeComponent implements OnInit {
           x: {
             title: {
               display: true,
-              text: 'Dates of user invites already responded',
+              text: 'Fecha',
               font: {
                 size: 20
               }
@@ -124,7 +124,7 @@ export class HomeComponent implements OnInit {
     new Chart("historyChart", {
       type: 'pie',
       data: {
-        labels: ['Confirmed', 'Pending', 'Canceled'],
+        labels: ['Confirmadas', 'Pendientes', 'Canceladas'],
         datasets: [
           {
             label: '# of Entries',

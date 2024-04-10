@@ -42,11 +42,11 @@
           </div>
           <div class="controls">
             <div class="form-group">
-              <label for="my-select-{{i}}">Select Usage</label>
+              <label for="my-select-{{i}}">Uso de la imagen</label>
               <select id="my-select-{{i}}" class="form-control" (change)="insertUpdatedImage($event)">
-                <option value="">Select an option</option>
-                <option value="C" [selected]="image.imageUsage === 'C'">Images Carrousel</option>
-                <option value="G" [selected]="image.imageUsage === 'G'">Gallery</option>
+                <option value="">Seleccione una opción</option>
+                <option value="C" [selected]="image.imageUsage === 'C'">Carrusel de Imágenes</option>
+                <option value="G" [selected]="image.imageUsage === 'G'">Galería de Fotos</option>
               </select>
               <button class="btn btn-danger" (click)="showDeleteDialog(image.id)"><i class="fa-solid fa-trash"></i></button>
             </div>
@@ -55,19 +55,19 @@
       </div>
     </div>
     <div class="footer" *ngIf="images.length > 0">
-      <button id="cancel-changes" class="btn btn-primary" (click)="cancelChanges()" [disabled]="imageUpdateForm.controls.length === 0">Cancel Changes</button>
-      <button id="save-changes" class="btn btn-primary" (click)="saveChanges()" [disabled]="imageUpdateForm.controls.length === 0">Save Changes</button>
+      <button id="cancel-changes" class="btn btn-primary" (click)="cancelChanges()" [disabled]="imageUpdateForm.controls.length === 0">Cancelar Cambios</button>
+      <button id="save-changes" class="btn btn-primary" (click)="saveChanges()" [disabled]="imageUpdateForm.controls.length === 0">Guardar Cambios</button>
     </div>  
   </div>
 </section>
 <section class="files-empty" *ngIf="!eventSelected">
-  <p>Please select an event</p>
+  <p>Porfavor, seleccione un evento</p>
 </section>
 <section class="show-image" *ngIf="scaleImageUrl"> 
   <div class="card">
     <div class="card-body">
       <img [src]="scaleImageUrl" alt="" lazyload>
-      <button class="btn btn-danger" (click)="scaleImageUrl = ''">Close</button>
+      <button class="btn btn-danger" (click)="scaleImageUrl = ''">Cerrar</button>
     </div>
   </div>
 </section>
