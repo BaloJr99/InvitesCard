@@ -11,16 +11,16 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav d-lg-none d-block">
         <li class="nav-item">
-          <a routerLink="/dashboard/home" routerLinkActive="active">INICIO</a>
+          <a routerLink="/dashboard/home" routerLinkActive="active" i18n>INICIO</a>
         </li>
         <li class="nav-item">
-          <a routerLink="/dashboard/events" routerLinkActive="active">EVENTOS</a>
+          <a routerLink="/dashboard/events" routerLinkActive="active" i18n>EVENTOS</a>
         </li>
         <li class="nav-item">
-          <a routerLink="/dashboard/files" routerLinkActive="active">ARCHIVOS</a>
+          <a routerLink="/dashboard/files" routerLinkActive="active" i18n>ARCHIVOS</a>
         </li>
         <li class="nav-item">
-          <a routerLink="/dashboard/settings" routerLinkActive="active">CONFIGURACIÓN</a>
+          <a routerLink="/dashboard/settings" routerLinkActive="active" i18n>CONFIGURACIÓN</a>
         </li>
       </ul>
     </div>
@@ -28,18 +28,18 @@
       <h3>{{ username }}<br /><span>{{ email }}</span></h3>
       <ul>
         <li>
-          <i class="fa-solid fa-user"></i><a href="#">My profile</a>
+          <i class="fa-solid fa-user"></i><a href="#" i18n>Mi perfil</a>
         </li>
         <li>
-          <i class="fa-solid fa-envelope"></i><a href="#">Inbox</a>
+          <i class="fa-solid fa-envelope"></i><a href="#" i18n>Mensajes</a>
         </li>
         <li>
-          <i class="fa-solid fa-gear"></i><a href="#">Setting</a>
+          <i class="fa-solid fa-gear"></i><a href="#" i18n>Configuración</a>
         </li>
         <li>
-          <i class="fa-solid fa-circle-info"></i><a href="#">Help</a></li>
+          <i class="fa-solid fa-circle-info"></i><a href="#" i18n>Ayuda</a></li>
         <li>
-          <i class="fa-solid fa-power-off"></i><a href="#" (click)="logout()">Logout</a>
+          <i class="fa-solid fa-power-off"></i><a href="#" (click)="logout()" i18n>Cerrar sesión</a>
         </li>
       </ul>
     </div>
@@ -53,7 +53,7 @@
           <small *ngIf="notification.dateOfConfirmation !== '1000-01-01T00:00:00.000Z'">{{ getTime(notification.dateOfConfirmation) }}</small>
         </button>
       </ng-container>
-      <p *ngIf="notifications.length <= 0">Sin notificationes por el momento</p>
+      <p *ngIf="notifications.length <= 0" i18n>Sin notificationes por el momento</p>
     </div>
   </div>
 </nav>

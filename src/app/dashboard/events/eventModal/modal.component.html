@@ -3,28 +3,28 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="confirmationModalLabel">Invitaciones Personalizadas</h1>
+        <h1 class="modal-title fs-5" id="confirmationModalLabel" i18n>Invitaciones personalizadas</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form [formGroup]="createEventForm">
           <input type="text" formControlName="id" hidden>
           <div class="mb-3">
-            <label for="nameOfEvent" class="form-label">Nombre del Evento</label>
+            <label for="nameOfEvent" class="form-label" i18n>Nombre del evento</label>
             <input type="text" class="form-control" formControlName="nameOfEvent" [ngClass]="{'is-invalid': displayMessage['nameOfEvent']}">
             <span class="invalid-feedback">
               {{ displayMessage['nameOfEvent'] }}
             </span>
           </div>
           <div class="mb-3">
-            <label for="dateOfEvent" class="form-label">Fecha del Evento</label>
+            <label for="dateOfEvent" class="form-label" i18n>Fecha del evento</label>
             <input type="datetime-local" class="form-control" formControlName="dateOfEvent" [ngClass]="{'is-invalid': displayMessage['dateOfEvent']}">
             <span class="invalid-feedback">
               {{ displayMessage['dateOfEvent'] }}
             </span>
           </div>
           <div class="mb-3">
-            <label for="maxDateOfConfirmation" class="form-label">Fecha límite de confirmación de invitaciones</label>
+            <label for="maxDateOfConfirmation" class="form-label" i18n>Fecha límite de confirmación de invitaciones</label>
             <input type="datetime-local" class="form-control" formControlName="maxDateOfConfirmation" [ngClass]="{'is-invalid': displayMessage['maxDateOfConfirmation']}">
             <span class="invalid-feedback">
               {{ displayMessage['maxDateOfConfirmation'] }}
@@ -33,8 +33,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" id="closeModal" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary" (click)="saveEvent()">Guardar</button>
+        <button type="button" id="closeModal" class="btn btn-secondary" data-bs-dismiss="modal" i18n>Cerrar</button>
+        <button type="button" class="btn btn-primary" (click)="saveEvent()" i18n>Guardar</button>
       </div>
     </div>
   </div>

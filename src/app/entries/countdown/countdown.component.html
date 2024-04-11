@@ -2,29 +2,29 @@
     <div class="card">
         <div class="card-body">
         <h5 class="card-title">{{ time.days }}</h5>
-        <p class="card-text">Días</p>
+        <p class="card-text" i18n>Días</p>
         </div>
     </div>
     <div class="card">
         <div class="card-body">
         <h5 class="card-title">{{ time.hours }}</h5>
-        <p class="card-text">Horas</p>
+        <p class="card-text" i18n>Horas</p>
         </div>
     </div>
     <div class="card">
         <div class="card-body">
         <h5 class="card-title">{{ time.minutes }}</h5>
-        <p class="card-text">Minutos</p>
+        <p class="card-text" i18n>Minutos</p>
         </div>
     </div>
     <div class="card">
         <div class="card-body">
         <h5 class="card-title">{{ time.seconds }}</h5>
-        <p class="card-text">Segundos</p>
+        <p class="card-text" i18n>Segundos</p>
         </div>
     </div>
 </div>
 <div class="fireworks" *ngIf="eventWasMet">
-  <img src="../../assets/fireworks.gif" alt="">
-  <h2>Hoy es el dia</h2>
+  <img src="../../assets/fireworks.gif" alt="Fuegos artificiales" i18n-alt>
+  <h2 i18n>Hoy es el dia</h2>
 </div>

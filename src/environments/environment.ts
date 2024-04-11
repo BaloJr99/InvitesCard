@@ -1,5 +1,5 @@
 export const environment = {
-  production: '',
-  apiUrl: '',
-  secret: '',
+  production: true,
+  apiUrl: 'https://invitesbackend-dev.4.us-1.fl0.io',
+  secret: 'ck6yxsuD35mTaTP',
 };

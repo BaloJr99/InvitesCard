@@ -4,6 +4,15 @@
   "newProjectRoot": "projects",
   "projects": {
     "invites": {
+      "i18n": {
+        "sourceLocale":"es-MX",
+        "locales": {
+          "en-US": {
+            "baseHref": "en-US/",
+            "translation": "src/locale/messages.en.json"
+          }
+        }
+      },
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,6 +22,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "localize": true,
             "allowedCommonJsDependencies": [
               "moment"
             ],
@@ -43,8 +53,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "900kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "1mb",
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -55,6 +65,7 @@
               "outputHashing": "all"
             },
             "development": {
+              "localize": false,
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
@@ -67,6 +78,9 @@
                   "with": "src/environments/environment.development.ts"
                 }
               ]
+            },
+            "en-US": {
+              "localize": ["en-US"]
             }
           },
           "defaultConfiguration": "production"
@@ -79,6 +93,9 @@
             },
             "development": {
               "buildTarget": "invites:build:development"
+            },
+            "en-US": {
+              "buildTarget": "invites:build:development,en-US"
             }
           },
           "defaultConfiguration": "development"
@@ -86,7 +103,8 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "invites:build"
+            "buildTarget": "invites:build",
+            "outputPath": "src/locale"
           }
         },
         "test": {

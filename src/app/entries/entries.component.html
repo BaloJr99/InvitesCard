@@ -37,8 +37,8 @@
         <hr>
       </div>
       <p>{{ entryResolved.entry.family }}</p>
-      <p class="pinkLetter">Pases: {{ entryResolved.entry.entriesNumber }}</p>
-      <p class="noKids" *ngIf="!entryResolved.entry?.kidsAllowed">* No niños *</p>
+      <p class="pinkLetter" i18n>Pases: {{ entryResolved.entry.entriesNumber }}</p>
+      <p class="noKids" *ngIf="!entryResolved.entry?.kidsAllowed" i18n>* No niños *</p>
       <div class="divider">
         <hr>
       </div>
@@ -48,15 +48,15 @@
 </div>
 <div class="ceremony">
   <div class="container">
-    <h1>Ceremonia</h1>
+    <h1 i18n>Ceremonia</h1>
     <div class="row">
       <div class="col-sm-12 col-md-6">
-        <p>En compañía de mis papás</p>
+        <p i18n>En compañía de mis papás</p>
         <p>Juan Rojas</p>
         <p>Edith Calzada</p>
       </div>
       <div class="col-sm-12 col-md-6">
-        <p>Y mis padrinos</p>
+        <p i18n>Y mis padrinos</p>
         <p>Gerardo Ramírez</p>
         <p>Sonia Franco</p>
       </div>
@@ -81,7 +81,7 @@
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13998.777845541774!2d-100.53811115738448!3d28.698785051207338!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x865f8b8f2714f729%3A0x5c48c5d026fed242!2sCasa%20Grande%20Restaurant!5e0!3m2!1ses-419!2smx!4v1695089749463!5m2!1ses-419!2smx" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
       <div class="col-sm-12 col-md-6">
-        <h1>Recepción</h1>
+        <h1 i18n>Recepción</h1>
         <h2>Casa Grande Restaurant</h2>
         <p>C. Román Cepeda 311, Buena Vista Nte, 26040 Piedras Negras, Coah.</p>
         <span><i class="fa-regular fa-clock" style="color: #e57488;"></i> 20:00 horas</span>
@@ -91,15 +91,15 @@
 </div>
 <div class="dressCode">
   <div class="container">
-    <h1>Dress Code <br> Formal</h1>
+    <h1 i18n>Código de vestimenta: <br> Formal</h1>
     <div class="row">
       <div class="col-sm-12 col-md-6">
-        <img src="assets/menFormal.jpg" alt="">
-        <p>HOMBRES</p>
+        <img src="assets/menFormal.jpg" alt="Vestimenta Formal de Hombre" i18n-alt>
+        <p i18n>HOMBRES</p>
       </div>
       <div class="col-sm-12 col-md-6">
-        <img src="assets/womenFormal.jpg" alt="">
-        <p>MUJERES</p>
+        <img src="assets/womenFormal.jpg" alt="Vestimenta Formal de Mujer" i18n-alt>
+        <p i18n>MUJERES</p>
       </div>
     </div>
     <p class="pt-5">- El color palo de rosa -</p>

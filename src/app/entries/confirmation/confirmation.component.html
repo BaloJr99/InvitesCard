@@ -2,44 +2,44 @@
   <form [formGroup]="confirmationForm" class="container" novalidate (ngSubmit)="saveInformation()" *ngIf="entry?.confirmation === null && entry">
     <div class="row">
     <div class="col-sm-12 col-md-6">
-      <h1>Confirmación</h1>
-      <p>Es muy importante para nosotros contar con tu confirmación lo antes posible</p>
+      <h1 i18n>Confirmación</h1>
+      <p i18n>Es muy importante para nosotros contar con tu confirmación lo antes posible</p>
     </div>
     <div class="col-sm-12 col-md-6">
       <div class="form">
       <div class="question">
-        <h2>¿ASISTIRÁS A MI FIESTA?</h2>
+        <h2 i18n>¿ASISTIRÁS A MI FIESTA?</h2>
       </div>
-      <p>
+      <p i18n>
         Selecciona una opción
       </p>
       <div class="form-check form-check-inline">
         <label class="form-check-label">
-          <input class="form-check-input" type="radio" value="true" formControlName="confirmation" checked>Asistiré
+          <input class="form-check-input" type="radio" value="true" formControlName="confirmation" checked i18n>Asistiré
         </label>
       </div>
       <div class="form-check form-check-inline">
         <label class="form-check-label">
-          <input class="form-check-input" type="radio" value="false" formControlName="confirmation">
+          <input class="form-check-input" type="radio" value="false" formControlName="confirmation" i18n>
           No asistiré
         </label>
       </div>
       <div class="form-group">
-        <p>Personas confirmadas</p>
+        <p i18n>Personas confirmadas</p>
         <select id="my-select" class="form-control" formControlName="entriesConfirmed" [ngClass]="{'is-invalid': displayMessage['entriesConfirmed']}">
-          <option value="0">Selecciona el numero de pases</option>
+          <option value="0" i18n>Selecciona el numero de pases</option>
           <option *ngFor="let number of numberOfEntries$ | async" [value]="number">{{ number }}</option>
         </select>
         <span class="invalid-feedback">
           {{ displayMessage['entriesConfirmed'] }}
         </span>
       </div>
-      <p>¡Envía una felicitación!</p>
+      <p i18n>¡Envía una felicitación!</p>
         <div class="form-group">
           <textarea id="my-textarea" class="form-control" name="" rows="3" formControlName="message"></textarea>
         </div>
         <div class="button">
-          <button data-testid="sendConfirmation" class="btn" type="submit">ENVIAR</button>
+          <button data-testid="sendConfirmation" class="btn" type="submit" i18n>ENVIAR</button>
         </div>
         </div>
     </div>
@@ -51,14 +51,14 @@
         <h1 class="card-title">{{ entry.family }}</h1>
         <div class="confirmed" *ngIf="entry.confirmation">
           <i class="fa-solid fa-circle-check"></i>
-          <h3>Su asistencia ha sido confirmada</h3>
-          <p class="card-text">Puede cerrar la página</p>
+          <h3 i18n>Su asistencia ha sido confirmada</h3>
+          <p class="card-text" i18n>Puede cerrar la página</p>
         </div>
         <div class="notConfirmed" *ngIf="!entry.confirmation">
           <i class="fa-solid fa-circle-xmark"></i>
-          <h3>Su asistencia ha sido cancelada.</h3>
-          <p class="card-text">Muchas gracias por su tiempo.</p>
-          <p class="card-text">Puede cerrar la página.</p>
+          <h3 i18n>Su asistencia ha sido cancelada.</h3>
+          <p class="card-text" i18n>Muchas gracias por su tiempo.</p>
+          <p class="card-text" i18n>Puede cerrar la página.</p>
         </div>
       </div>
     </div>
