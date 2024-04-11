@@ -1,27 +1,38 @@
-# Invites
+# INVITES FRONT END DEVELOPMENT
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.2.
+The invites angular frontend project was initially created as a hobby project to create invitations to events.
 
-## Development server
+Uses Node.js for the server-side programming (invitesbackend project).
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+This project uses the following technical features:
 
-## Code scaffolding
+* Auth0/angular-jwt for Authentication purposes
+* Angular-datatables to display advanced tables
+* Bootstrap for styling
+* Chart.js to create the dashboard charts
+* Dotenv for the env variables
+* Moment for date formatting
+* Ngx-toastr for action dialogs
+* Socket.io-client for websocket connection
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Installation
 
-## Build
+Use the package manager [npm](https://docs.npmjs.com/cli/v10/configuring-npm/install) to install the dependencies.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```bash
+npm install
+```
 
-## Running unit tests
+Create a .env file inside the src folder with the environment variables that you need
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+To fill the angular environment files run the following command for development
 
-## Running end-to-end tests
+```bash
+npm run start:dev
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+for production just run npm run start
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```bash
+npm start
+```
