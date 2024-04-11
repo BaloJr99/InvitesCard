@@ -3,7 +3,7 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
-        <li class="breadcrumb-item">HOME</li>
+        <li class="breadcrumb-item">INICIO</li>
       </ol>
     </nav>
   </div>
@@ -13,7 +13,7 @@
     <div class="invites-history col-md-12 col-lg-8">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">History of all invites</h5>
+          <h5 class="card-title">Todas las invitaciones</h5>
           <div class="row">
             <div class="col-12 col-md-6">
               <canvas id="historyChart"></canvas>
@@ -23,21 +23,21 @@
                 <table>
                   <tbody>
                     <tr>
-                      <td><i class="fa-solid fa-circle" style="color: #43cd63;"></i> Confirmed Entries</td>
+                      <td><i class="fa-solid fa-circle" style="color: #43cd63;"></i> Invitaciones Confirmadas</td>
                       <td>{{ statistics.confirmedEntries }}</td>
                     </tr>
                     <tr>
-                      <td><i class="fa-solid fa-circle" style="color: #facf4f;"></i> Pending Entries</td>
+                      <td><i class="fa-solid fa-circle" style="color: #facf4f;"></i> Invitaciones Pendientes</td>
                       <td>{{ statistics.pendingEntries }}</td>
                     </tr>
                     <tr>
-                      <td><i class="fa-solid fa-circle" style="color: #ff5d6d;"></i> Canceled Entries</td>
+                      <td><i class="fa-solid fa-circle" style="color: #ff5d6d;"></i> Invitaciones Canceladas</td>
                       <td>{{ statistics.canceledEntries }}</td>
                     </tr>
                   </tbody>
                   <tfoot>
                     <tr>
-                      <td><i class="fa-solid fa-circle" style="color: transparent;"></i> Total Entries</td>
+                      <td><i class="fa-solid fa-circle" style="color: transparent;"></i> Total de Invitaciones</td>
                       <td>{{ statistics.totalEntries }}</td>
                     </tr>
                   </tfoot>
