@@ -5,10 +5,10 @@
   "projects": {
     "invites": {
       "i18n": {
-        "sourceLocale":"es-MX",
+        "sourceLocale": "es-MX",
         "locales": {
           "en-US": {
-            "baseHref": "en-US/",
+            "baseHref": "",
             "translation": "src/locale/messages.en.json"
           }
         }
