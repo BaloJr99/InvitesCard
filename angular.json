@@ -5,11 +5,14 @@
   "projects": {
     "invites": {
       "i18n": {
-        "sourceLocale": "es-MX",
+        "sourceLocale": {
+          "code": "es-MX",
+          "baseHref": ""
+        },
         "locales": {
-          "en": {
+          "en-US": {
             "translation": "src/locale/messages.en.json",
-            "baseHref": "en-US"
+            "baseHref": ""
           }
         }
       },
@@ -79,8 +82,8 @@
                 }
               ]
             },
-            "en": {
-              "localize": ["en"]
+            "en-US": {
+              "localize": ["en-US"]
             }
           },
           "defaultConfiguration": "production"
@@ -94,8 +97,8 @@
             "development": {
               "buildTarget": "invites:build:development"
             },
-            "en": {
-              "buildTarget": "invites:build:development,en"
+            "en-US": {
+              "buildTarget": "invites:build:development,en-US"
             }
           },
           "defaultConfiguration": "development"
