@@ -6,12 +6,12 @@
   </h2>
   <div *ngIf="entryGroup.value.length > 0" [id]="entryGroup.key.replaceAll(' ', '')" class="accordion-collapse collapse">
     <div class="accordion-body">
-      <table datatable class="row-border hover" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+      <table class="row-border hover">
         <thead>
           <tr>
-            <th i18n>Familia</th>
-            <th i18n>Numero de entradas</th>
-            <th i18n>Acciones</th>
+            <th>Familia</th>
+            <th>Numero de entradas</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>

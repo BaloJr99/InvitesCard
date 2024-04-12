@@ -14,11 +14,11 @@
   </div>
   <div class="messages-chat">
     <div class="messages-header">
-      <h2 i18n>Mensajes</h2>
+      <h2>Mensajes</h2>
       <button class="btn" (click)="toggleMessages()"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="messages-container">
-      <div class="card" [style.display]="messages.size === 0 ? 'block' : 'none'" i18n>
+      <div class="card" [style.display]="messages.size === 0 ? 'block' : 'none'">
         No hay mensajes
       </div>
       <div class="message" *ngFor="let message of messages | keyvalue">

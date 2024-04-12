@@ -7,7 +7,7 @@
           {{ authErrorMessage }}
         </span>
         <div class="form-group">
-          <label for="username" i18n>Usuario</label>
+          <label for="username">Usuario</label>
           <div class="inputField">
             <i class="fa-solid fa-user"></i>
             <input id="usernameOrEmail" 
@@ -15,15 +15,14 @@
               type="text" 
               placeholder="Escriba su usuario" 
               formControlName="usernameOrEmail" 
-              [ngClass]="{'is-invalid': displayMessage['usernameOrEmail']}"
-              i18n-placeholder>
+              [ngClass]="{'is-invalid': displayMessage['usernameOrEmail']}">
           </div>
               <span class="invalid-feedback d-block">
                 {{ displayMessage['username'] }}
               </span>
         </div>
         <div class="form-group">
-          <label for="password" i18n>Contraseña</label>
+          <label for="password">Contraseña</label>
           <div class="inputField">
             <i class="fa-solid fa-lock"></i>
             <input id="password" 
@@ -31,17 +30,16 @@
               type="password" 
               placeholder="Escriba su contraseña"
               formControlName="password" 
-              [ngClass]="{'is-invalid': displayMessage['password']}"
-              i18n-placeholder>
+              [ngClass]="{'is-invalid': displayMessage['password']}">
           </div>
           <span class="invalid-feedback d-block">
             {{ displayMessage['password'] }}
           </span>
-          <span class="forgotPassword" id="forgotPassword"><a href="" i18n>¿Olvido su contraseña?</a></span>
+          <span class="forgotPassword" id="forgotPassword"><a href="">¿Olvido su contraseña?</a></span>
         </div>
-        <button class="btn" id="loginButton" i18n>Iniciar sesión</button>
+        <button class="btn" id="loginButton">Iniciar sesión</button>
       </form>
-      <span id="registerSpan" i18n>¿No tiene una cuenta?  <b><a routerLink="/account/register">Registrarse</a></b></span>
+      <span id="registerSpan">¿No tiene una cuenta?  <b><a routerLink="/account/register">Registrarse</a></b></span>
     </div>
   </div>
 </div>

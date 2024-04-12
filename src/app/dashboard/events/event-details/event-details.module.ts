@@ -8,7 +8,6 @@ import { TableComponent } from "./table/table.component";
 import { EntryModalComponent } from "./entryModal/modal.component";
 import { DialogComponent } from "./dialog/dialog.component";
 import { FamilyGroupsService } from "src/core/services/familyGroups.service";
-import { DataTablesModule } from "angular-datatables";
 
 const routes: Routes = [
   { 
@@ -23,7 +22,6 @@ const routes: Routes = [
     FamilyGroupsService
   ],
   imports: [
-    DataTablesModule,
     SharedModule,
     RouterModule.forChild(routes)
   ],

@@ -3,7 +3,7 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
-        <li class="breadcrumb-item" i18n>ARCHIVOS</li>
+        <li class="breadcrumb-item">ARCHIVOS</li>
       </ol>
     </nav>
   </div>
@@ -12,9 +12,9 @@
   <div class="row g-0 main-controls">
     <div class="col-12 col-md-4 gx-4">
       <div class="form-group">
-        <label for="event-select" i18n>Seleccione un evento</label>
+        <label for="event-select">Seleccione un evento</label>
         <select id="event-select" class="form-control" (change)="searchImages()">
-          <option value="" i18n>Seleccione...</option>
+          <option value="">Seleccione...</option>
           <option *ngFor="let event of events" value="{{ event.id }}">{{ event.nameOfEvent }}</option>
         </select>
       </div>
@@ -22,11 +22,11 @@
     <form class="upload-form col-12 col-md-8" [formGroup]="saveFilesForm" *ngIf="eventSelected">
       <div class="row g-0">
         <div class="col-12 col-md-8 gx-4">
-          <label for="photoFiles" i18n>Seleccionar fotos</label>
+          <label for="photoFiles">Seleccionar fotos</label>
           <input class="form-control" formControlName="photoFiles" type="file" (change)="onPhotosChange($event)" multiple accept=".png, .jpg, .jpeg">
         </div>
         <div class="col-12 col-md-4 form-footer gx-4" >
-          <button class="btn btn-primary" (click)="saveFiles()" i18n>Subir archivos</button>
+          <button class="btn btn-primary" (click)="saveFiles()">Subir archivos</button>
         </div>
       </div>
     </form>
@@ -42,11 +42,11 @@
           </div>
           <div class="controls">
             <div class="form-group">
-              <label for="my-select-{{i}}" i18n>Uso de la imagen</label>
+              <label for="my-select-{{i}}">Uso de la imagen</label>
               <select id="my-select-{{i}}" class="form-control" (change)="insertUpdatedImage($event)">
-                <option value="" i18n>Seleccione una opción</option>
-                <option value="C" [selected]="image.imageUsage === 'C'" i18n>Carrusel de imágenes</option>
-                <option value="G" [selected]="image.imageUsage === 'G'" i18n>Galería de fotos</option>
+                <option value="">Seleccione una opción</option>
+                <option value="C" [selected]="image.imageUsage === 'C'">Carrusel de imágenes</option>
+                <option value="G" [selected]="image.imageUsage === 'G'">Galería de fotos</option>
               </select>
               <button class="btn btn-danger" (click)="showDeleteDialog(image.id)"><i class="fa-solid fa-trash"></i></button>
             </div>
@@ -55,19 +55,19 @@
       </div>
     </div>
     <div class="footer" *ngIf="images.length > 0">
-      <button id="cancel-changes" class="btn btn-primary" (click)="cancelChanges()" [disabled]="imageUpdateForm.controls.length === 0" i18n>Cancelar Cambios</button>
-      <button id="save-changes" class="btn btn-primary" (click)="saveChanges()" [disabled]="imageUpdateForm.controls.length === 0" i18n>Guardar Cambios</button>
+      <button id="cancel-changes" class="btn btn-primary" (click)="cancelChanges()" [disabled]="imageUpdateForm.controls.length === 0">Cancelar Cambios</button>
+      <button id="save-changes" class="btn btn-primary" (click)="saveChanges()" [disabled]="imageUpdateForm.controls.length === 0">Guardar Cambios</button>
     </div>  
   </div>
 </section>
 <section class="files-empty" *ngIf="!eventSelected">
-  <p i18n>Porfavor, seleccione un evento</p>
+  <p>Porfavor, seleccione un evento</p>
 </section>
 <section class="show-image" *ngIf="scaleImageUrl"> 
   <div class="card">
     <div class="card-body">
       <img [src]="scaleImageUrl" alt="" lazyload>
-      <button class="btn btn-danger" (click)="scaleImageUrl = ''" i18n>Cerrar</button>
+      <button class="btn btn-danger" (click)="scaleImageUrl = ''">Cerrar</button>
     </div>
   </div>
 </section>
