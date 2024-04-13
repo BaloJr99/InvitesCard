@@ -1,8 +1,12 @@
 {
   "rewrites": [
+    { 
+      "source": "/api/:path", 
+      "destination": "${process.env.apiUrl}/:path*"
+    },
     {
-      "source": "/:path((?!api/).*)",
-      "destination": "/es/:path*"
+      "source": "/((?!api\/.*).*)",
+      "destination": "/es/"
     }
   ]
 }
