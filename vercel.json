@@ -1,12 +1,12 @@
 {
   "rewrites": [
     { 
-      "source": "/api/:path", 
+      "source": "/api/:path*", 
       "destination": "https://invitesbackend.onrender.com/api/:path*"
     },
     {
-      "source": "/((?!api\/.*).*)",
-      "destination": "/es/"
+      "source": "/:path*",
+      "destination": "/es/:path*"
     }
   ]
 }
