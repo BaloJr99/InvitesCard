@@ -4,5 +4,11 @@
       "source": "/",
       "destination": "/es"
     }
+  ],
+  "rewrite": [
+    {
+      "source": "/:path*",
+      "destination": "/es/:path*"
+    }
   ]
 }
