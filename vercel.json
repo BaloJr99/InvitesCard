@@ -3,6 +3,17 @@
     {
       "source": "/:path*",
       "destination": "/es/:path*"
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept-Language",
+          "value": "(en-[a-zA-Z]{2})"
+        }
+      ],
+      "destination": "/en/:path*"
     }
   ]
 }
