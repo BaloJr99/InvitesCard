@@ -2,7 +2,7 @@
   "rewrites": [
     { 
       "source": "/:path*", 
-      "destination": "dist/es/:path*" 
+      "destination": "/es/:path*" 
     }
   ]
 }
