@@ -5,7 +5,7 @@
       "destination": "https://invitesbackend.onrender.com/api/:path*"
     },
     {
-      "source": "/:path*",
+      "source": "/:path((?!api/).*)",
       "destination": "/es/:path*"
     }
   ]
