@@ -1,11 +1,7 @@
 {
   "rewrites": [
-    { 
-      "source": "/undefined/:path*", 
-      "destination": "https://invitesbackend.onrender.com/api/:path*"
-    },
     {
-      "source": "/:path((?!undefined/).*)",
+      "source": "/:path*)",
       "destination": "/es/:path*"
     }
   ]
