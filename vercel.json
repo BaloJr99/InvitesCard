@@ -1,10 +1,4 @@
 {
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "/es"
-    }
-  ],
   "rewrite": [
     {
       "source": "/:path*",
