@@ -1,5 +1,11 @@
 {
-  "rewrite": [
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/es"
+    }
+  ],
+  "rewrites": [
     {
       "source": "/:path*",
       "destination": "/es/:path*"
