@@ -6,9 +6,9 @@
     }
   ],
   "rewrites": [
-    { 
-      "source": "/(.*)", 
-      "destination": "/es/" 
+    {
+      "source": "/:path*",
+      "destination": "/es/"
     }
   ]
 }
