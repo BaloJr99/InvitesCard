@@ -3,21 +3,21 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
-        <li class="breadcrumb-item"><a routerLink="/dashboard/events" routerLinkActive="active">EVENTOS</a></li>
-        <li class="breadcrumb-item">INVITACIONES</li>
+        <li class="breadcrumb-item"><a routerLink="/dashboard/events" routerLinkActive="active" i18n>EVENTOS</a></li>
+        <li class="breadcrumb-item" i18n>INVITACIONES</li>
       </ol>
     </nav>
     <div class="buttons">
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationModal">Nueva invitación</button>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationModal" i18n>Nueva invitación</button>
     </div>
   </div>
 </div>
 <section class="row mx-1 card-section">
   <div class="col-12 card-container">
-    <app-card displayText="Invitaciones Confirmadas" [number]="stadistics.confirmedEntries" backgroundColor="#43cd63"></app-card>
-    <app-card displayText="Invitaciones Pendientes" [number]="stadistics.pendingEntries" backgroundColor="#facf4f"></app-card>
-    <app-card displayText="Invitaciones Canceladas" [number]="stadistics.canceledEntries" backgroundColor="#ff5d6d"></app-card>
-    <app-card displayText="Total de Invitaciones" [number]="stadistics.totalEntries" backgroundColor="#54a6ff"></app-card>
+    <app-card  i18n-displayText displayText="Invitaciones Confirmadas" [number]="stadistics.confirmedEntries" backgroundColor="#43cd63"></app-card>
+    <app-card  i18n-displayText displayText="Invitaciones Pendientes" [number]="stadistics.pendingEntries" backgroundColor="#facf4f"></app-card>
+    <app-card  i18n-displayText displayText="Invitaciones Canceladas" [number]="stadistics.canceledEntries" backgroundColor="#ff5d6d"></app-card>
+    <app-card  i18n-displayText displayText="Total de Invitaciones" [number]="stadistics.totalEntries" backgroundColor="#54a6ff"></app-card>
   </div>
 </section>
 <section class="row mx-1 table-accordion">
