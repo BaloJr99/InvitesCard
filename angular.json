@@ -4,6 +4,16 @@
   "newProjectRoot": "projects",
   "projects": {
     "invites": {
+      "i18n": {
+        "sourceLocale": {
+          "code": "es"
+        },
+        "locales": {
+          "en": {
+            "translation": "src/locale/messages.en.json"
+          }
+        }
+      },
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,6 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "localize": false,
             "allowedCommonJsDependencies": [
               "moment"
             ],
@@ -38,6 +49,7 @@
           },
           "configurations": {
             "production": {
+              "localize": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -53,6 +65,7 @@
               "outputHashing": "all"
             },
             "development": {
+              "localize": false,
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
@@ -80,6 +93,13 @@
             }
           },
           "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "buildTarget": "invites:build",
+            "outputPath": "src/locale"
+          }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",

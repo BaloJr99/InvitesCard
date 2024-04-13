@@ -1,0 +1,50 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept-Language",
+          "value": "(^en.*$)"
+        }
+      ],
+      "destination": "/en"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept-Language",
+          "value": "(^(?!^en).*$)"
+        }
+      ],
+      "destination": "/es"
+    }
+  ],
+  "rewrites": [
+    { 
+      "source": "/en/(.*)", 
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept-Language",
+          "value": "(^en.*$)"
+        }
+      ],
+      "destination": "/en/" 
+    },
+    { 
+      "source": "/es/(.*)", 
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept-Language",
+          "value": "(^(?!^en).*$)"
+        }
+      ],
+      "destination": "/es/" 
+    }
+  ]
+}

@@ -3,11 +3,11 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
-        <li class="breadcrumb-item">EVENTOS</li>
+        <li class="breadcrumb-item" i18n>EVENTOS</li>
       </ol>
     </nav>
     <div class="buttons">
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal">Nuevo evento</button>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal" i18n>Nuevo evento</button>
     </div>
   </div>
 </section>
@@ -20,7 +20,7 @@
             <i class="fa-solid fa-pen-to-square"></i>
           </button>
           <h5 class="card-title">{{ event.nameOfEvent }}</h5>
-          <p class="card-text">Fecha del evento: <br> {{ event.dateOfEvent | dateFormat }}</p>
+          <p class="card-text" i18n>Fecha del evento: <br> {{ event.dateOfEvent | dateFormat }}</p>
           <button routerLink="/dashboard/events/{{event.id}}" routerLinkActive="router-link-active" class="view-event btn btn-primary">
             <i class="fa-solid fa-arrow-right"></i>
           </button>

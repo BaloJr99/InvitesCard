@@ -3,7 +3,7 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
-        <li class="breadcrumb-item">INICIO</li>
+        <li class="breadcrumb-item" i18n>INICIO</li>
       </ol>
     </nav>
   </div>
@@ -13,7 +13,7 @@
     <div class="invites-history col-md-12 col-lg-8">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Todas las entradas</h5>
+          <h5 class="card-title" i18n>Todas las entradas</h5>
           <div class="row">
             <div class="col-12 col-md-6">
               <canvas id="historyChart"></canvas>
@@ -23,21 +23,21 @@
                 <table>
                   <tbody>
                     <tr>
-                      <td><i class="fa-solid fa-circle" style="color: #43cd63;"></i> Entradas Confirmadas</td>
+                      <td i18n><i class="fa-solid fa-circle" style="color: #43cd63;"></i> Entradas Confirmadas</td>
                       <td>{{ statistics.confirmedEntries }}</td>
                     </tr>
                     <tr>
-                      <td><i class="fa-solid fa-circle" style="color: #facf4f;"></i> Entradas Pendientes</td>
+                      <td i18n><i class="fa-solid fa-circle" style="color: #facf4f;"></i> Entradas Pendientes</td>
                       <td>{{ statistics.pendingEntries }}</td>
                     </tr>
                     <tr>
-                      <td><i class="fa-solid fa-circle" style="color: #ff5d6d;"></i> Entradas Canceladas</td>
+                      <td i18n><i class="fa-solid fa-circle" style="color: #ff5d6d;"></i> Entradas Canceladas</td>
                       <td>{{ statistics.canceledEntries }}</td>
                     </tr>
                   </tbody>
                   <tfoot>
                     <tr>
-                      <td><i class="fa-solid fa-circle" style="color: transparent;"></i> Total de Entradas</td>
+                      <td i18n><i class="fa-solid fa-circle" style="color: transparent;"></i> Total de Entradas</td>
                       <td>{{ statistics.totalEntries }}</td>
                     </tr>
                   </tfoot>
@@ -51,16 +51,16 @@
     <div class="percentage-history col-md-12 col-lg-4">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Porcentaje de <br> entradas confirmadas</h5>
+          <h5 class="card-title" i18n>Porcentaje de <br> entradas confirmadas</h5>
           <span style="color: #43cd63;">{{ percentajeOfConfirmation }}%</span>
-          <p>Basado en todos los eventos</p>
+          <p i18n>Basado en todos los eventos</p>
         </div>
       </div>
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Porcentaje de <br> entradas pendientes</h5>
+          <h5 class="card-title" i18n>Porcentaje de <br> entradas pendientes</h5>
           <span style="color: #ff5d6d;">{{ percentajeOfPendingResponse }}%</span>
-          <p>Basado en todos los eventos</p>
+          <p i18n>Basado en todos los eventos</p>
         </div>
       </div>
     </div>
@@ -69,7 +69,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Últimos 31 días</h5>
+          <h5 class="card-title" i18n>Últimos 31 días</h5>
           <canvas id="lastInvitesData"></canvas>
         </div>
       </div>
