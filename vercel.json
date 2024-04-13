@@ -8,7 +8,7 @@
   "rewrites": [
     {
       "source": "/:path*",
-      "destination": "/es/"
+      "destination": "/es/:path*"
     }
   ]
 }
