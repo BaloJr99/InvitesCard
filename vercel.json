@@ -4,8 +4,5 @@
       "source": "/:path*", 
       "destination": "dist/es/:path*" 
     }
-  ],
-  "redirects": [
-    { "src": "/", "dest": "/es" }
   ]
 }
