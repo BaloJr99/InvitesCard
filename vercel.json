@@ -5,7 +5,7 @@
       "destination": "dist/es/:path*" 
     }
   ],
-  "routes": [
+  "redirects": [
     { "src": "/", "dest": "/es" }
   ]
 }
