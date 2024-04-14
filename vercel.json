@@ -1,8 +1,2 @@
 {
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "/es"
-    }
-  ]
 }
