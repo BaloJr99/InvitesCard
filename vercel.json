@@ -5,7 +5,7 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept-Language ",
+          "key": "Accept-Language",
           "value": "(^en)"
         }
       ],
