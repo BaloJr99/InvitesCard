@@ -22,5 +22,11 @@
       ],
       "destination": "/es"
     }
+  ],
+  "rewrites": [
+    { 
+      "source": "/es/(.*)", 
+      "destination": "/es/index.html" 
+    }
   ]
 }
