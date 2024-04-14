@@ -10,7 +10,7 @@
         {
           "type": "header",
           "key": "Accept-Language ",
-          "value": "(^en([-])?([A-Za-z]{2})?$)"
+          "value": "(^en)"
         }
       ],
       "destination": "/en"
