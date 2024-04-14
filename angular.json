@@ -6,12 +6,10 @@
     "invites": {
       "i18n": {
         "sourceLocale": {
-          "code": "es",
-          "baseHref": "es"
+          "code": "es"
         },
         "locales": {
           "en": {
-            "baseHref": "en",
             "translation": "src/locale/messages.en.json"
           }
         }
@@ -29,7 +27,7 @@
             "allowedCommonJsDependencies": [
               "moment"
             ],
-            "outputPath": "dist/invites",
+            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
