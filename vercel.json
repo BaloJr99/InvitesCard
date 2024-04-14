@@ -25,7 +25,25 @@
   ],
   "rewrites": [
     { 
+      "source": "/en/(.*)", 
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept-Language",
+          "value": "(^en.*$)"
+        }
+      ],
+      "destination": "/en/index.html" 
+    },
+    { 
       "source": "/es/(.*)", 
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept-Language",
+          "value": "(^(?!^en).*$)"
+        }
+      ],
       "destination": "/es/index.html" 
     }
   ]
