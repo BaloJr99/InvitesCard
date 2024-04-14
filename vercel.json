@@ -2,10 +2,6 @@
   "redirects": [
     {
       "source": "/",
-      "destination": "/es"
-    },
-    {
-      "source": "/",
       "has": [
         {
           "type": "header",
@@ -14,6 +10,10 @@
         }
       ],
       "destination": "/en"
+    },
+    {
+      "source": "/",
+      "destination": "/es"
     }
   ]
 }
