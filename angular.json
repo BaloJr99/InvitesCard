@@ -27,7 +27,7 @@
             "allowedCommonJsDependencies": [
               "moment"
             ],
-            "outputPath": "dist",
+            "outputPath": "dist/invites",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [

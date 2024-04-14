@@ -1,2 +1,19 @@
 {
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/es"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept-Language ",
+          "value": "(^en([-])?([A-Za-z]{2})?$)"
+        }
+      ],
+      "destination": "/en"
+    }
+  ]
 }
