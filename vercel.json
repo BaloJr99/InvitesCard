@@ -33,7 +33,7 @@
           "value": "(^en.*$)"
         }
       ],
-      "destination": "/en/index.html" 
+      "destination": "/en/" 
     },
     { 
       "source": "/es/(.*)", 
@@ -44,7 +44,7 @@
           "value": "(^(?!^en).*$)"
         }
       ],
-      "destination": "/es/index.html" 
+      "destination": "/es/" 
     }
   ]
 }
