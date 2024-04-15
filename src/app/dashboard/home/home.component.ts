@@ -100,7 +100,7 @@ export class HomeComponent implements OnInit {
           y: {
             title: {
               display: true,
-              text: '# de invitaciones respondidas',
+              text: $localize `# de invitaciones respondidas`,
               font: {
                 size: 20
               }
@@ -111,7 +111,7 @@ export class HomeComponent implements OnInit {
           x: {
             title: {
               display: true,
-              text: 'Fecha',
+              text: $localize `Fecha`,
               font: {
                 size: 20
               }
@@ -121,13 +121,13 @@ export class HomeComponent implements OnInit {
       },
     });
 
-    new Chart("historyChart", {
+    new Chart('historyChart', {
       type: 'pie',
       data: {
-        labels: ['Confirmadas', 'Pendientes', 'Canceladas'],
+        labels: [$localize `Confirmadas`, $localize `Pendientes`, $localize `Canceladas`],
         datasets: [
           {
-            label: '# of Entries',
+            label: $localize `# de entradas`,
             data: [
               this.statistics.confirmedEntries,
               this.statistics.pendingEntries,
