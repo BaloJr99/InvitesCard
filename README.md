@@ -7,6 +7,7 @@ Uses Node.js for the server-side programming (invitesbackend project).
 This project uses the following technical features:
 
 * Auth0/angular-jwt for Authentication purposes
+* Angular-datatables to display advanced tables
 * Bootstrap for styling
 * Chart.js to create the dashboard charts
 * Dotenv for the env variables
