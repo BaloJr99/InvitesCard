@@ -80,6 +80,9 @@
                   "with": "src/environments/environment.development.ts"
                 }
               ]
+            },
+            "en": {
+              "localize": [ "en" ]
             }
           },
           "defaultConfiguration": "production"
@@ -92,6 +95,9 @@
             },
             "development": {
               "buildTarget": "invites:build:development"
+            },
+            "en": {
+              "buildTarget": "invites:build:development,en"
             }
           },
           "defaultConfiguration": "development"

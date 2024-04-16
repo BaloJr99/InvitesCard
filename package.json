@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "node -r dotenv/config mynode.js && ng build --localize",
-    "start:dev": "node -r dotenv/config mynode.development.js && ng serve",
+    "start:dev": "node -r dotenv/config mynode.development.js && ng serve --configuration=en",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --no-watch --no-progress --browsers=ChromeHeadless",
