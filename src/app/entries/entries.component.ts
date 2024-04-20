@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Meta } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { LoaderService } from 'src/core/services/loader.service';
@@ -26,7 +27,8 @@ export class EntriesComponent implements OnInit {
   constructor(
     private route: ActivatedRoute, 
     private router: Router,
-    private loaderService: LoaderService) { 
+    private loaderService: LoaderService,
+    private meta: Meta) { 
     setInterval(() => {
       this.updateBackground();
     }, 5000);
@@ -36,6 +38,9 @@ export class EntriesComponent implements OnInit {
     this.loaderService.setLoading(true);
     this.route.data.subscribe(() => {
       this.entryResolved = this.route.snapshot.data['entry'];
+      this.meta.updateTag({property: 'og:title', content: 'YOUR_TITLE'});
+      this.meta.updateTag({property: 'og:image', content: 'YOUR_IMAGE'});
+      this.meta.updateTag({property: 'og:url', content: 'YOUR_URL'})
       if (!this.entryResolved.entry) {
         this.router.navigate(['/error/page-not-found'])
       }
