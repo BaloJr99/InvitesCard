@@ -38,9 +38,6 @@ export class EntriesComponent implements OnInit {
     this.loaderService.setLoading(true);
     this.route.data.subscribe(() => {
       this.entryResolved = this.route.snapshot.data['entry'];
-      this.meta.updateTag({property: 'og:title', content: 'YOUR_TITLE'});
-      this.meta.updateTag({property: 'og:image', content: 'YOUR_IMAGE'});
-      this.meta.updateTag({property: 'og:url', content: 'YOUR_URL'})
       if (!this.entryResolved.entry) {
         this.router.navigate(['/error/page-not-found'])
       }
