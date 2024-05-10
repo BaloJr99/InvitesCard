@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { EventsService } from 'src/core/services/events.service';
 import { LoaderService } from 'src/core/services/loader.service';
+import { TokenStorageService } from 'src/core/services/token-storage.service';
+import { Roles } from 'src/shared/enum';
 import { IEvent, IEventAction } from 'src/shared/interfaces';
 
 @Component({
@@ -9,9 +11,13 @@ import { IEvent, IEventAction } from 'src/shared/interfaces';
   styleUrls: ['./events.component.css']
 })
 export class EventsComponent implements OnInit {
+
+  showNewEvent = false;
+  
   constructor(
     private eventsService: EventsService,
-    private loaderService: LoaderService) {
+    private loaderService: LoaderService, 
+    private tokenService: TokenStorageService) {
       
     }
     
@@ -26,6 +32,13 @@ export class EventsComponent implements OnInit {
         this.events = events;
       }
     }).add(() => this.loaderService.setLoading(false));
+
+    
+
+    const userInformation = this.tokenService.getTokenValues();
+    if (userInformation) {
+      this.showNewEvent = userInformation.roles.some(r => r.name == Roles.Admin);
+    }
   }
 
   updateEvents(eventAction: IEventAction) {

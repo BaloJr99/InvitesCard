@@ -32,8 +32,8 @@ export class TokenStorageService {
   public getTokenValues(): IUser | null {
     const token = window.sessionStorage.getItem(TOKEN_KEY);
     if (token) {
-      const userInformation = this.jwtService.decodeToken(token);
-      return userInformation as IUser;
+      const userInformation = this.jwtService.decodeToken(token) as IUser;
+      return userInformation;
     }
     return null;
   }

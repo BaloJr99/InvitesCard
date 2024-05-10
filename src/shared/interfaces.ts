@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { FormControl } from "@angular/forms";
+import { Roles } from "./enum";
 
 export interface IEntry {
   id: string,
@@ -62,7 +63,12 @@ export interface IMessage {
 export interface IUser {
   username: string,
   password: string,
-  email: string
+  email: string,
+  roles: IRole[]
+}
+
+export interface IRole {
+  name: Roles
 }
 
 export interface IAuthUser {

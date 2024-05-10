@@ -24,15 +24,13 @@ export class DashboardComponent implements OnInit {
   notifications: INotifications[] = [];
 
   username = "";
-  email = "";
+
   route = "";
   
   ngOnInit(): void {
     this.loaderService.setLoading(true);
     const userInformation = this.tokenService.getTokenValues();
     if (userInformation) {
-      this.username = userInformation.username;
-      this.email = userInformation.email;
       this.socket.joinRoom(this.username);
     }
 

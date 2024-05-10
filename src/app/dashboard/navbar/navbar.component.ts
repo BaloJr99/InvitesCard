@@ -10,8 +10,8 @@ import { INotifications } from 'src/shared/interfaces';
 })
 export class NavbarComponent implements OnInit {
 
-  @Input() email = "";
-  @Input() username = "";
+  email = "";
+  username = "";
   @Input() notifications: INotifications[] = [];
 
   numberOfNotifications = 0;
@@ -30,7 +30,13 @@ export class NavbarComponent implements OnInit {
       if (events instanceof NavigationStart) {
         this.route = events.url;
       }
-    })
+    });
+
+    const userInformation = this.tokenService.getTokenValues();
+    if (userInformation) {
+      this.username = userInformation.username;
+      this.email = userInformation.email;
+    }
   }
 
   toggleMenu(): void {
