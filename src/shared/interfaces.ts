@@ -24,7 +24,8 @@ export interface IInvite {
   confirmation: boolean | null,
   kidsAllowed: boolean,
   dateOfEvent: string,
-  maxDateOfConfirmation: string
+  maxDateOfConfirmation: string,
+  eventId: string
 }
 
 export interface IEvent {
@@ -147,4 +148,22 @@ export interface IStatistics {
   canceledEntries: number,
   pendingEntries: number,
   totalEntries: number
+}
+
+export interface ISettings {
+  eventId: string,
+  primaryColor: string,
+  secondaryColor: string,
+  parents: string,
+  godParents: string,
+  firstSectionSentences: string,
+  secondSectionSentences: string,
+  massUrl: string,
+  massTime: string,
+  massAddress: string,
+  receptionUrl: string,
+  receptionTime: string,
+  receptionPlace: string,
+  receptionAddress: string,
+  dressCodeColor: string
 }

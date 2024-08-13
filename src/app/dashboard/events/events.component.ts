@@ -25,15 +25,13 @@ export class EventsComponent implements OnInit {
   eventAction!: IEventAction;
   
   ngOnInit(): void {
-      this.loaderService.setLoading(true);
+    this.loaderService.setLoading(true);
 
-      this.eventsService.getAllEvents().subscribe({
+    this.eventsService.getAllEvents().subscribe({
       next: (events) => {
         this.events = events;
       }
     }).add(() => this.loaderService.setLoading(false));
-
-    
 
     const userInformation = this.tokenService.getTokenValues();
     if (userInformation) {

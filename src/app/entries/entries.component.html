@@ -1,18 +1,12 @@
 <div class="info">
-  <div class="backgroundImage1" style="background-image: url('assets/photoshoot/Img1.jpg');" alt=""></div>
-  <div class="backgroundImage2" style="visibility: hidden; background-image: url('assets/photoshoot/Img2.jpg');" alt=""></div>
-  <div class="backgroundImage3" style="visibility: hidden; background-image: url('assets/photoshoot/Img3.jpg');" alt=""></div>
-  <div class="backgroundImage4" style="visibility: hidden; background-image: url('assets/photoshoot/Img4.jpg');" alt=""></div>
-  <div class="backgroundImage5" style="visibility: hidden; background-image: url('assets/photoshoot/Img5.jpg');" alt=""></div>
-  <div class="backgroundImage6" style="visibility: hidden; background-image: url('assets/photoshoot/Img6.jpg');" alt=""></div>
-  <div class="backgroundImage7" style="visibility: hidden; background-image: url('assets/photoshoot/Img7.jpg');" alt=""></div>
-  <div class="backgroundImage8" style="visibility: hidden; background-image: url('assets/photoshoot/Img8.jpg');" alt=""></div>
-  <div class="backgroundImage9" style="visibility: hidden; background-image: url('assets/photoshoot/Img9.jpg');" alt=""></div>
-  <div class="backgroundImage10" style="visibility: hidden; background-image: url('assets/photoshoot/Img10.jpg');" alt=""></div>
-  <div class="backgroundImage11" style="visibility: hidden; background-image: url('assets/photoshoot/Img11.jpg');" alt=""></div>
-  <div class="backgroundImage12" style="visibility: hidden; background-image: url('assets/photoshoot/Img12.jpg');" alt=""></div>
-  <div class="backgroundImage13" style="visibility: hidden; background-image: url('assets/photoshoot/Img13.jpg');" alt=""></div>
-  <div class="backgroundImage14" style="visibility: hidden; background-image: url('assets/photoshoot/Img14.jpg');" alt=""></div>
+  <ng-container *ngFor="let downloadImage of downloadImages; index as i">  
+    <ng-container *ngIf="i === 0">
+      <div class="backgroundImage{{i}}" style="background-image: url('{{downloadImage.imageUrl}}');" alt=""></div>
+    </ng-container>
+    <ng-container *ngIf="i !== 0">
+      <div class="backgroundImage{{i}}" style="visibility: hidden; background-image: url('{{downloadImage.imageUrl}}');" alt=""></div>
+    </ng-container>
+  </ng-container>
   <button (click)="goToForm()" class="scrollFormButton"><i class="fa-solid fa-arrow-down"></i></button>
   <div class="container">
     <div class="header">
@@ -31,7 +25,7 @@
 </div>
 <div class="speech">
   <div class="container">
-    <p>Hay momentos en la vida que son especiales por si solos, pero compartirlos con personas tan especiales como tú, se convierten en momentos imposibles de olvidar.</p>
+    <p>{{eventSettings.firstSectionSentences.split(';')[0]}}</p>
     <div class="entries">
       <div class="divider">
         <hr>
@@ -43,7 +37,7 @@
         <hr>
       </div>
     </div>
-    <p i18n>Me hará muy feliz que me acompañes en este día tan especial.</p>
+    <p i18n>{{eventSettings.firstSectionSentences.split(';')[1]}}</p>
   </div>
 </div>
 <div class="ceremony">
@@ -52,24 +46,26 @@
     <div class="row">
       <div class="col-sm-12 col-md-6">
         <p i18n>En compañía de mis papás</p>
-        <p>Juan Rojas</p>
-        <p>Edith Calzada</p>
+        <ng-container *ngFor="let parent of eventSettings.parents.split(';')">
+          <p>{{parent}}</p>
+        </ng-container>
       </div>
       <div class="col-sm-12 col-md-6">
         <p i18n>Y mis padrinos</p>
-        <p>Gerardo Ramírez</p>
-        <p>Sonia Franco</p>
+        <ng-container *ngFor="let godParent of eventSettings.godParents.split(';')">
+          <p>{{godParent}}</p>
+        </ng-container>
       </div>
     </div>
-    <p class="pt-5">Tenemos el gusto de invitarlos a celebrar la Misa de Acción de Gracias con motivo de <br><br>¡Mis XV Años! </p>
+    <p class="pt-5">{{eventSettings.secondSectionSentences}} <br><br>¡Mis XV Años! </p>
     <br>
     <p class="pinkLetter">{{ dayOfTheWeek.substring(0, 1).toUpperCase() + dayOfTheWeek.slice(1) }} <br> {{ longDate }} <br> <i class="fa-regular fa-clock" style="color: #e57488;"></i> {{ time }} horas</p>
     <div class="row">
       <div class="col-sm-12 col-md-6">
-        <p>Capilla del Seminario Diocesano Cam. Real a Maravillas Km 6, Villa de Fuente, 26090 Piedras Negras, Coah.</p>
+        <p>{{eventSettings.massAddress}}</p>
       </div>
       <div class=" col-sm-12 col-md-6">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.0629721595274!2d-100.56744622496547!3d28.657833082932104!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x865f8b184d5c7f89%3A0x6a81cc0982535407!2sSeminario%20Diocesano%20de%20Piedras%20Negras%20El%20Buen%20Pastor!5e0!3m2!1ses-419!2smx!4v1695089768885!5m2!1ses-419!2smx" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe [src]="eventSettings.massUrl | safe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
   </div>
@@ -78,13 +74,13 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-12 col-md-6">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13998.777845541774!2d-100.53811115738448!3d28.698785051207338!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x865f8b8f2714f729%3A0x5c48c5d026fed242!2sCasa%20Grande%20Restaurant!5e0!3m2!1ses-419!2smx!4v1695089749463!5m2!1ses-419!2smx" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe [src]="eventSettings.receptionUrl | safe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
       <div class="col-sm-12 col-md-6">
         <h1 i18n>Recepción</h1>
-        <h2>Casa Grande Restaurant</h2>
-        <p>C. Román Cepeda 311, Buena Vista Nte, 26040 Piedras Negras, Coah.</p>
-        <span><i class="fa-regular fa-clock" style="color: #e57488;"></i> 20:00 horas</span>
+        <h2>{{eventSettings.receptionPlace}}</h2>
+        <p>{{eventSettings.receptionAddress}}</p>
+        <span><i class="fa-regular fa-clock" style="color: #e57488;"></i> {{eventSettings.receptionTime}} horas</span>
       </div>
     </div>
   </div>
@@ -102,7 +98,7 @@
         <p i18n>MUJERES</p>
       </div>
     </div>
-    <p class="pt-5">- El color palo de rosa -</p>
+    <p class="pt-5">- El color {{eventSettings.dressCodeColor}} -</p>
     <p i18n>Está reservado para la festejada</p>
   </div>
 </div>

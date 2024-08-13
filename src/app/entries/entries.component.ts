@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Meta } from '@angular/platform-browser';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { combineLatest } from 'rxjs';
+import { ImagesService } from 'src/core/services/images.service';
 import { LoaderService } from 'src/core/services/loader.service';
-import { IEntryResolved } from 'src/shared/interfaces';
+import { SettingsService } from 'src/core/services/settings.service';
+import { IDownloadImages, IEntryResolved, ISettings } from 'src/shared/interfaces';
 
 @Component({
   selector: 'app-entries',
@@ -22,13 +23,33 @@ export class EntriesComponent implements OnInit {
   time = "";
   
   entryResolved!: IEntryResolved;
-  entryResolvedEmiter$ = new Subject<IEntryResolved>();
+  eventSettings: ISettings = {
+    eventId: '',
+    primaryColor: '',
+    secondaryColor: '',
+    parents: '',
+    godParents: '',
+    firstSectionSentences: '',
+    secondSectionSentences: '',
+    massUrl: '',
+    massTime: '',
+    massAddress: '',
+    receptionUrl: '',
+    receptionTime: '',
+    receptionPlace: '',
+    receptionAddress: '',
+    dressCodeColor: ''
+  };
+
+  downloadImages: IDownloadImages[] = [];
 
   constructor(
     private route: ActivatedRoute, 
     private router: Router,
     private loaderService: LoaderService,
-    private meta: Meta) { 
+    private eventSettingsService: SettingsService,
+    private imagesService: ImagesService,
+    private elRef: ElementRef) { 
     setInterval(() => {
       this.updateBackground();
     }, 5000);
@@ -47,10 +68,19 @@ export class EntriesComponent implements OnInit {
       this.longDate = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString('es-mx', {  day: 'numeric', month: 'long', year: 'numeric' })
       this.time = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString('es-mx', {  hour: 'numeric', minute: 'numeric' })
 
-      this.entryResolvedEmiter$.next(this.entryResolved)
-      this.loaderService.setLoading(false);
-    }).add(() => {
-      this.loaderService.setLoading(false);
+      combineLatest([
+        this.eventSettingsService.getEventSettings(this.entryResolved.entry.eventId),
+        this.imagesService.getImageByEvent(this.entryResolved.entry.eventId)
+      ]).subscribe({
+        next: ([eventSettings, downloadImages]) => {
+          this.eventSettings = eventSettings;
+          this.downloadImages = downloadImages;
+          this.elRef.nativeElement.style.setProperty('--custom-primary-color', eventSettings.primaryColor);
+          this.elRef.nativeElement.style.setProperty('--custom-secondary-color', eventSettings.secondaryColor);
+        }
+      }).add(() => {
+        this.loaderService.setLoading(false);
+      });
     })
   }
 
@@ -64,21 +94,24 @@ export class EntriesComponent implements OnInit {
 
   updateBackground(){
     this.counter++;
-    if (this.counter > 14) {
-      this.counter = 1;
+    
+    if (this.counter > this.downloadImages.length - 1) {
+      this.counter = 0;
     }
 
-    const actualBackgroundImage:HTMLElement = document.querySelector(`.backgroundImage${this.counter}`) as HTMLElement;
+    const nextBackgroundImage:HTMLElement = document.querySelector(`.backgroundImage${this.counter}`) as HTMLElement;
     let oldBackgroundImage:HTMLElement;
 
-    if (this.counter == 1) {
-      
-      oldBackgroundImage = document.querySelector(`.backgroundImage14`) as HTMLElement
+    if (this.counter == 0) {
+      oldBackgroundImage = document.querySelector(`.backgroundImage${this.downloadImages.length - 1}`) as HTMLElement
     } else {
       oldBackgroundImage = document.querySelector(`.backgroundImage${this.counter - 1}`) as HTMLElement
     }
 
-    actualBackgroundImage.style.visibility = "visible";
-    oldBackgroundImage.style.visibility = "hidden";
+    if (oldBackgroundImage) {
+      oldBackgroundImage.style.visibility = "hidden";
+    }
+
+    nextBackgroundImage.style.visibility = "visible";
   }
 }

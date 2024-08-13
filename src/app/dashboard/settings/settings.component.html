@@ -1,0 +1,135 @@
+<section class="row mx-1 mt-3 breadcrumb-header">
+  <div class="col-12 header">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
+        <li class="breadcrumb-item" i18n>CONFIGURACION</li>
+      </ol>
+    </nav>
+  </div>
+</section>
+<section class="settings">
+  <div class="row g-0 main-controls">
+    <div class="col-12 col-md-4 gx-4">
+      <div class="form-group">
+        <label for="event-select" i18n>Seleccione un evento</label>
+        <select id="event-select" class="form-control" (change)="loadEventSettings()">
+          <option value="" i18n>Seleccione...</option>
+          <option *ngFor="let event of events" value="{{ event.id }}">{{ event.nameOfEvent }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="row image-container g-0" *ngIf="eventSelected">
+    <div class="col-12 gx-4">
+      <form [formGroup]="createEventSettingsForm">
+        <input type="text" formControlName="eventId" hidden>
+        <div class="form-group col-2">
+          <label for="primaryColor" class="form-label" i18n>Color Primario</label>
+          <input type="color" class="form-control" formControlName="primaryColor" [ngClass]="{'is-invalid': displayMessage['primaryColor']}">
+          <span class="invalid-feedback">
+            {{ displayMessage['primaryColor'] }}
+          </span>
+        </div>
+        <div class="form-group col-2">
+          <label for="secondaryColor" class="form-label" i18n>Color Secundario</label>
+          <input type="color" class="form-control" formControlName="secondaryColor" [ngClass]="{'is-invalid': displayMessage['secondaryColor']}">
+          <span class="invalid-feedback">
+            {{ displayMessage['secondaryColor'] }}
+          </span>
+        </div>
+        <div class="form-group col-4">
+          <label for="parents" class="form-label" i18n>Padres</label>
+          <input type="text" class="form-control" formControlName="parents" [ngClass]="{'is-invalid': displayMessage['parents']}">
+          <span class="invalid-feedback">
+            {{ displayMessage['parents'] }}
+          </span>
+        </div>
+        <div class="form-group col-4">
+          <label for="godParents" class="form-label" i18n>Padrinos</label>
+          <input type="text" class="form-control" formControlName="godParents" [ngClass]="{'is-invalid': displayMessage['godParents']}">
+          <span class="invalid-feedback">
+            {{ displayMessage['godParents'] }}
+          </span>
+        </div>
+        <div class="form-group col-12">
+          <label for="firstSectionSentences" class="form-label" i18n>Frases primera sección</label>
+          <textarea type="text" class="form-control" formControlName="firstSectionSentences" [ngClass]="{'is-invalid': displayMessage['firstSectionSentences']}"></textarea>
+          <span class="invalid-feedback">
+            {{ displayMessage['firstSectionSentences'] }}
+          </span>
+        </div>
+        <div class="form-group col-12">
+          <label for="secondSectionSentences" class="form-label" i18n>Frases segunda sección</label>
+          <textarea type="text" class="form-control" formControlName="secondSectionSentences" [ngClass]="{'is-invalid': displayMessage['secondSectionSentences']}"></textarea>
+          <span class="invalid-feedback">
+            {{ displayMessage['secondSectionSentences'] }}
+          </span>
+        </div>
+        <div class="form-group col-6">
+          <label for="massUrl" class="form-label" i18n>Url de la ubicación de la misa</label>
+          <input type="text" class="form-control" formControlName="massUrl" [ngClass]="{'is-invalid': displayMessage['massUrl']}">
+          <span class="invalid-feedback">
+            {{ displayMessage['massUrl'] }}
+          </span>
+        </div>
+        <div class="form-group col-2">
+          <label for="massTime" class="form-label" i18n>Hora de la Misa</label>
+          <input type="time" class="form-control" formControlName="massTime" [ngClass]="{'is-invalid': displayMessage['massTime']}">
+          <span class="invalid-feedback">
+            {{ displayMessage['massTime'] }}
+          </span>
+        </div>
+        <div class="form-group col-4">
+          <label for="massAddress" class="form-label" i18n>Dirección de la Misa</label>
+          <input type="text" class="form-control" formControlName="massAddress" [ngClass]="{'is-invalid': displayMessage['massAddress']}">
+          <span class="invalid-feedback">
+            {{ displayMessage['massAddress'] }}
+          </span>
+        </div>
+        <div class="form-group col-6">
+          <label for="receptionUrl" class="form-label" i18n>Url de la ubicación de la recepción</label>
+          <input type="text" class="form-control" formControlName="receptionUrl" [ngClass]="{'is-invalid': displayMessage['receptionUrl']}">
+          <span class="invalid-feedback">
+            {{ displayMessage['receptionUrl'] }}
+          </span>
+        </div>
+        <div class="form-group col-2">
+          <label for="receptionTime" class="form-label" i18n>Hora de la recepción</label>
+          <input type="time" class="form-control" formControlName="receptionTime" [ngClass]="{'is-invalid': displayMessage['receptionTime']}">
+          <span class="invalid-feedback">
+            {{ displayMessage['receptionTime'] }}
+          </span>
+        </div>
+        <div class="form-group col-4">
+          <label for="receptionPlace" class="form-label" i18n>Lugar de la recepción</label>
+          <input type="text" class="form-control" formControlName="receptionPlace" [ngClass]="{'is-invalid': displayMessage['receptionPlace']}">
+          <span class="invalid-feedback">
+            {{ displayMessage['receptionPlace'] }}
+          </span>
+        </div>
+        <div class="form-group col-12">
+          <label for="receptionAddress" class="form-label" i18n>Dirección de la recepción</label>
+          <input type="text" class="form-control" formControlName="receptionAddress" [ngClass]="{'is-invalid': displayMessage['receptionAddress']}">
+          <span class="invalid-feedback">
+            {{ displayMessage['receptionAddress'] }}
+          </span>
+        </div>
+        <div class="form-group col-12">
+          <label for="dressCodeColor" class="form-label" i18n>Código reservado para festejados</label>
+          <input type="text" class="form-control" formControlName="dressCodeColor" [ngClass]="{'is-invalid': displayMessage['dressCodeColor']}">
+          <span class="invalid-feedback">
+            {{ displayMessage['dressCodeColor'] }}
+          </span>
+        </div>
+      </form>
+    </div>
+    <div class="footer">
+      <button id="cancel-changes" class="btn btn-primary" (click)="cancelChanges()" [disabled]="!createEventSettingsForm.dirty" i18n>Cancelar Cambios</button>
+      <button id="save-changes" class="btn btn-primary" (click)="saveChanges()" [disabled]="!createEventSettingsForm.dirty" i18n>Guardar Cambios</button>
+    </div>  
+  </div>
+</section>
+<section class="files-empty" *ngIf="!eventSelected">
+  <p i18n>Porfavor, seleccione un evento</p>
+</section>
