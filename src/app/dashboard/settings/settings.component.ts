@@ -204,13 +204,13 @@ export class SettingsComponent implements OnInit, AfterViewInit {
   formatEventSetting(): ISettings {
     const updatedMassTime = this.createEventSettingsForm.get("massTime")?.value as string;
     const updatedReceptionTime = this.createEventSettingsForm.get("receptionTime")?.value as string;
-    if (updatedMassTime.length > 4) {
+    if (updatedMassTime.length > 5) {
       return {
         ...this.createEventSettingsForm.value  
       }
     }
 
-    if (updatedReceptionTime.length > 4) {
+    if (updatedReceptionTime.length > 5) {
       return {
         ...this.createEventSettingsForm.value  
       }
