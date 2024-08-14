@@ -32,7 +32,8 @@ export interface IEvent {
   id: string,
   nameOfEvent: string, 
   dateOfEvent: string, 
-  maxDateOfConfirmation: string
+  maxDateOfConfirmation: string,
+  allowCreateEntries: number
 }
 
 export interface IEventAction {
