@@ -20,7 +20,6 @@ export class EntriesComponent implements OnInit {
   dayOfTheWeek = "";
   shortDate = "";
   longDate = "";
-  time = "";
   
   entryResolved!: IEntryResolved;
   eventSettings: ISettings = {
@@ -66,7 +65,6 @@ export class EntriesComponent implements OnInit {
       this.dayOfTheWeek = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString('es-mx', {  weekday: 'long' })
       this.shortDate = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString('es-mx', { day: 'numeric', month: 'long' })
       this.longDate = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString('es-mx', {  day: 'numeric', month: 'long', year: 'numeric' })
-      this.time = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString('es-mx', {  hour: 'numeric', minute: 'numeric' })
 
       combineLatest([
         this.eventSettingsService.getEventSettings(this.entryResolved.entry.eventId),
