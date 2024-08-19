@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NavigationStart, Router, Scroll } from '@angular/router';
 import { TokenStorageService } from 'src/core/services/token-storage.service';
+import { Roles } from 'src/shared/enum';
 import { INotification } from 'src/shared/interfaces';
 
 @Component({
@@ -16,6 +17,7 @@ export class NavbarComponent implements OnInit {
 
   numberOfNotifications = 0;
   route = "";
+  isAdmin = false;
 
   constructor(
     private router: Router, 
@@ -36,6 +38,7 @@ export class NavbarComponent implements OnInit {
     if (userInformation) {
       this.username = userInformation.username;
       this.email = userInformation.email;
+      this.isAdmin = userInformation.roles.some(r => r.name == Roles.Admin);
     }
   }
 

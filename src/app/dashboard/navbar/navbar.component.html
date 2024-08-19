@@ -20,7 +20,7 @@
           <a routerLink="/dashboard/files" routerLinkActive="active" i18n>ARCHIVOS</a>
         </li>
         <li class="nav-item">
-          <a routerLink="/dashboard/users" routerLinkActive="active" i18n>USUARIOS</a>
+          <a routerLink="/dashboard/users" routerLinkActive="active" i18n *ngIf="isAdmin">USUARIOS</a>
         </li>
         <li class="nav-item">
           <a routerLink="/dashboard/settings" routerLinkActive="active" i18n>CONFIGURACIÓN</a>
