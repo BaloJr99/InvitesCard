@@ -4,6 +4,7 @@ import { combineLatest } from 'rxjs';
 import { ImagesService } from 'src/core/services/images.service';
 import { LoaderService } from 'src/core/services/loader.service';
 import { SettingsService } from 'src/core/services/settings.service';
+import { ImageUsage } from 'src/shared/enum';
 import { IDownloadImage, IEntryResolved, ISetting } from 'src/shared/interfaces';
 
 @Component({
@@ -72,14 +73,16 @@ export class EntriesComponent implements OnInit {
       ]).subscribe({
         next: ([eventSettings, downloadImages]) => {
           this.eventSettings = eventSettings;
-          this.downloadImages = downloadImages;
+          this.downloadImages = downloadImages.filter(image => 
+            window.innerWidth > 575 ? image.imageUsage === ImageUsage.Desktop : image.imageUsage === ImageUsage.Phone
+          );
           this.elRef.nativeElement.style.setProperty('--custom-primary-color', eventSettings.primaryColor);
           this.elRef.nativeElement.style.setProperty('--custom-secondary-color', eventSettings.secondaryColor);
         }
       }).add(() => {
         this.loaderService.setLoading(false);
       });
-    })
+    });
   }
 
   goToForm(): void {

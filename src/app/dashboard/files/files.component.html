@@ -45,8 +45,8 @@
               <label for="my-select-{{i}}" i18n>Uso de la imagen</label>
               <select id="my-select-{{i}}" class="form-control" (change)="insertUpdatedImage($event)">
                 <option value="" i18n>Seleccione una opción</option>
-                <option value="C" [selected]="image.imageUsage === 'C'" i18n>Carrusel de imágenes</option>
-                <option value="G" [selected]="image.imageUsage === 'G'" i18n>Galería de fotos</option>
+                <option value="P" [selected]="image.imageUsage === 'P'" i18n>Celular</option>
+                <option value="C" [selected]="image.imageUsage === 'C'" i18n>Computadora</option>
               </select>
               <button class="btn btn-danger" (click)="showDeleteDialog(image.id)"><i class="fa-solid fa-trash"></i></button>
             </div>
