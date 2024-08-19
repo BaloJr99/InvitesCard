@@ -72,4 +72,8 @@
   .header button.btn-primary {
     margin: 0px;
   }
+
+  .users .table-styling {
+    overflow: scroll;
+  }
 }
