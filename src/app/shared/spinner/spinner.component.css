@@ -9,6 +9,14 @@
   z-index: 9999;
 }
 
+.cssload-container.show {
+  display: block;
+}
+
+.cssload-container.hide {
+  display: none;
+}
+
 .cssload-speeding-wheel {
   content: "";
   display: block;

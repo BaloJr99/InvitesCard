@@ -1,0 +1,56 @@
+<!-- Modal -->
+<div class="modal fade" id="usersModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalLabel" i18n>User Profile</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="createUserForm">
+          <input type="text" formControlName="_id" hidden>
+          <div class="mb-3">
+            <label for="username" class="form-label" i18n>Usuario</label>
+            <input type="text" class="form-control" formControlName="username" [ngClass]="{'is-invalid': displayMessage['username']}">
+            <span class="invalid-feedback">
+              {{ displayMessage['username'] }}
+            </span>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label" i18n>Correo electrónico</label>
+            <input type="text" class="form-control" formControlName="email" [ngClass]="{'is-invalid': displayMessage['email']}">
+            <span class="invalid-feedback">
+              {{ displayMessage['email'] }}
+            </span>
+          </div>
+          <div class="mb-3">
+            <label for="roles" class="form-label" i18n>Roles</label>
+            <div class="filteringBox">
+              <input type="text" class="form-control" id="roleFilter" [ngClass]="{'is-invalid': displayMessage['roles']}" (keyup)="filterRoles(true)" (focus)="filterRoles(true)">
+              <ul id="filteredRoles" [ngClass]="filteredRoles.length > 0 ? 'show' : 'hide'">
+                <li *ngFor="let role of filteredRoles" (click)="addRole(role)">
+                  {{ role.name }}
+                </li>
+              </ul>
+              <span class="invalid-feedback">
+                {{ displayMessage['roles'] }}
+              </span>
+            </div>
+            <div class="roles">
+              <span class="badge text-bg-secondary" *ngFor="let role of userRoles">{{ role.name }} <i class="fa-solid fa-xmark" (click)="deleteRole(role._id)"></i></span>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="my-input" class="form-check-label" i18n>
+              <input class="form-check-input" type="checkbox" formControlName="isActive" checked> Activo
+            </label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="closeModal" class="btn btn-secondary" data-bs-dismiss="modal" i18n>Cerrar</button>
+        <button type="button" class="btn btn-primary" (click)="saveUser()" i18n>Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -5,7 +5,9 @@ import { Observable, combineLatest, take } from 'rxjs';
 import { EventsService } from 'src/core/services/events.service';
 import { ImagesService } from 'src/core/services/images.service';
 import { LoaderService } from 'src/core/services/loader.service';
-import { IDownloadImages, IEvent, IDeleteImage, IMessageResponse, IUpdateImageArray, IUpdateImage } from 'src/shared/interfaces';
+import { TokenStorageService } from 'src/core/services/token-storage.service';
+import { Roles } from 'src/shared/enum';
+import { IDownloadImage, IEvent, IDeleteImage, IMessageResponse, IUpdateImageArray, IUpdateImage } from 'src/shared/interfaces';
 
 @Component({
   selector: 'app-files',
@@ -13,10 +15,12 @@ import { IDownloadImages, IEvent, IDeleteImage, IMessageResponse, IUpdateImageAr
   styleUrl: './files.component.css'
 })
 export class FilesComponent implements OnInit {
+  isAdmin = false;
+
   events: IEvent[] = [];
   eventSelected: IEvent | undefined = undefined;
 
-  images: IDownloadImages[] = [];
+  images: IDownloadImage[] = [];
   imageAction!: IDeleteImage;
   scaleImageUrl = "";
   
@@ -34,6 +38,7 @@ export class FilesComponent implements OnInit {
     private loaderService: LoaderService,
     private eventsService: EventsService,
     private imagesService: ImagesService,
+    private tokenService: TokenStorageService,
     private fb: FormBuilder,
     private toastr: ToastrService
   ) { }
@@ -41,11 +46,18 @@ export class FilesComponent implements OnInit {
   ngOnInit (): void {
     this.loaderService.setLoading(true);
 
-    this.eventsService.getAllEvents().subscribe({
+    const userInformation = this.tokenService.getTokenValues();
+    if (userInformation) {
+      this.isAdmin = userInformation.roles.some(r => r.name == Roles.Admin);
+    }
+
+    this.eventsService.getEvents(this.isAdmin).subscribe({
       next: (events) => {
         this.events = events;
       }
-    }).add(() => this.loaderService.setLoading(false));
+    }).add(() => {
+      this.loaderService.setLoading(false)
+    })
   }
 
   searchImages(): void {
@@ -101,7 +113,9 @@ export class FilesComponent implements OnInit {
         next: (response) => {
           this.images = response;
         }
-      }).add(() => this.loaderService.setLoading(false));
+      }).add(() => {
+        this.loaderService.setLoading(false)
+      })
     }
   }
   
@@ -178,7 +192,9 @@ export class FilesComponent implements OnInit {
         this.toastr.success(response.message);
         this.imageUpdateForm = new FormArray<FormGroup<IUpdateImageArray>>([]);
       }
-    }).add(() => this.loaderService.setLoading(false));
+    }).add(() => {
+      this.loaderService.setLoading(false)
+    })
   }
  }
 

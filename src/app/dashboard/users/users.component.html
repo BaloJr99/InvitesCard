@@ -1,0 +1,44 @@
+<section class="row mx-1 my-3 breadcrumb-header">
+  <div class="col-12 header">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
+        <li class="breadcrumb-item" i18n>USUARIOS</li>
+      </ol>
+    </nav>
+    <div class="buttons">
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#usersModal" i18n>Nuevo usuario</button>
+    </div>
+  </div>
+</section>
+<section class="row mx-1 users">
+  <div class="col-12">
+    <div class="table-styling">
+      <table datatable class="row-border hover" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+        <thead>
+          <tr>
+            <th i18n>Usuario</th>
+            <th i18n>Correo</th>
+            <th i18n># Eventos</th>
+            <th i18n># Invitaciones</th>
+            <th i18n>Active</th>
+            <th i18n>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.numEvents }}</td>
+            <td>{{ user.numEntries }}</td>
+            <td><i class="fa-solid" [ngClass]="user.isActive ? 'fa-circle-check' : 'fa-circle-xmark'"></i></td>
+            <td>
+              <button class="btn btn-secondary" (click)="editUser(this.user.id)" data-bs-toggle="modal" data-bs-target="#usersModal"><i class="fa-solid fa-pen-to-square"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<app-user-modal [userAction]="userAction" (updateUsers)="updateUsers($event)"></app-user-modal>

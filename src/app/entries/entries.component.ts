@@ -4,7 +4,7 @@ import { combineLatest } from 'rxjs';
 import { ImagesService } from 'src/core/services/images.service';
 import { LoaderService } from 'src/core/services/loader.service';
 import { SettingsService } from 'src/core/services/settings.service';
-import { IDownloadImages, IEntryResolved, ISettings } from 'src/shared/interfaces';
+import { IDownloadImage, IEntryResolved, ISetting } from 'src/shared/interfaces';
 
 @Component({
   selector: 'app-entries',
@@ -22,7 +22,7 @@ export class EntriesComponent implements OnInit {
   longDate = "";
   
   entryResolved!: IEntryResolved;
-  eventSettings: ISettings = {
+  eventSettings: ISetting = {
     eventId: '',
     primaryColor: '',
     secondaryColor: '',
@@ -40,7 +40,7 @@ export class EntriesComponent implements OnInit {
     dressCodeColor: ''
   };
 
-  downloadImages: IDownloadImages[] = [];
+  downloadImages: IDownloadImage[] = [];
 
   constructor(
     private route: ActivatedRoute, 

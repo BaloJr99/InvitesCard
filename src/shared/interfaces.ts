@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { FormControl } from "@angular/forms";
-import { Roles } from "./enum";
 
 export interface IEntry {
   id: string,
@@ -31,13 +30,21 @@ export interface IInvite {
 export interface IEvent {
   id: string,
   nameOfEvent: string, 
-  dateOfEvent: string, 
-  maxDateOfConfirmation: string,
+  dateOfEvent: string
   allowCreateEntries: number
 }
 
+export interface IFullEvent {
+  id: string,
+  nameOfEvent: string, 
+  dateOfEvent: string, 
+  maxDateOfConfirmation: string,
+  userId: string
+}
+
 export interface IEventAction {
-  event: IEvent,
+  event: IFullEvent,
+  users: IUserBasicInfo[] | undefined,
   isNew: boolean
 }
 
@@ -62,15 +69,10 @@ export interface IMessage {
   message: string
 }
 
-export interface IUser {
-  username: string,
-  password: string,
-  email: string,
-  roles: IRole[]
-}
-
 export interface IRole {
-  name: Roles
+  _id: string
+  name: string,
+  isActive: boolean
 }
 
 export interface IAuthUser {
@@ -78,12 +80,12 @@ export interface IAuthUser {
   email: string
 }
 
-export interface IUploadImages {
+export interface IUploadImage {
   image: string
   eventId: string
 }
 
-export interface IDownloadImages {
+export interface IDownloadImage {
   id: string,
   imageUrl: string,
   publicId: string,
@@ -136,7 +138,7 @@ export interface IMessageResponse {
   message: string
 }
 
-export interface INotifications {
+export interface INotification {
   id: string,
   family: string,
   confirmation: boolean,
@@ -144,14 +146,14 @@ export interface INotifications {
   isMessageRead: boolean
 }
 
-export interface IStatistics {
+export interface IStatistic {
   confirmedEntries: number,
   canceledEntries: number,
   pendingEntries: number,
   totalEntries: number
 }
 
-export interface ISettings {
+export interface ISetting {
   eventId: string,
   primaryColor: string,
   secondaryColor: string,
@@ -167,4 +169,38 @@ export interface ISettings {
   receptionPlace: string,
   receptionAddress: string,
   dressCodeColor: string
+}
+
+export interface IFullUser {
+  username: string,
+  email: string,
+  password: string,
+  roles: string[]
+}
+
+export interface IUserBasicInfo {
+  _id: string,
+  username: string
+}
+
+export interface IUser {
+  _id: string,
+  username: string,
+  email: string,
+  isActive: boolean,
+  roles: IRole[]
+}
+
+export interface IUserEventsInfo {
+  id: string,
+  username: string,
+  email: string,
+  isActive: boolean,
+  numEvents: number,
+  numEntries: number
+}
+
+export interface IUserAction {
+  user: IUser,
+  isNew: boolean
 }

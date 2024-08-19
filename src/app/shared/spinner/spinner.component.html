@@ -1,3 +1,3 @@
-<div *ngIf="this.loader.getLoading()" class="cssload-container">
+<div class="cssload-container" [ngClass]="showSpinner ? 'show' : 'hide'">
   <div class="cssload-speeding-wheel"></div>
 </div>

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NavigationStart, Router, Scroll } from '@angular/router';
 import { TokenStorageService } from 'src/core/services/token-storage.service';
-import { INotifications } from 'src/shared/interfaces';
+import { INotification } from 'src/shared/interfaces';
 
 @Component({
   selector: 'app-navbar',
@@ -12,7 +12,7 @@ export class NavbarComponent implements OnInit {
 
   email = "";
   username = "";
-  @Input() notifications: INotifications[] = [];
+  @Input() notifications: INotification[] = [];
 
   numberOfNotifications = 0;
   route = "";

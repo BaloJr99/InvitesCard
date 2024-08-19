@@ -6,6 +6,7 @@ import { EventsComponent } from "./events.component";
 import { EventsService } from "src/core/services/events.service";
 import { EventModalComponent } from "./eventModal/modal.component";
 import { eventResolver } from "./event-details/event-resolver.service";
+import { UsersService } from "src/core/services/users.service";
 
 
 const routes: Routes = [
@@ -22,7 +23,8 @@ const routes: Routes = [
 
 @NgModule({
   providers: [
-    EventsService
+    EventsService,
+    UsersService
   ],
   imports: [
     SharedModule,

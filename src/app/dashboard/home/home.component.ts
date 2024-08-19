@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { EntriesService } from 'src/core/services/entries.service';
 import { LoaderService } from 'src/core/services/loader.service';
-import { IEntry, IStatistics } from 'src/shared/interfaces';
+import { IEntry, IStatistic } from 'src/shared/interfaces';
 import { createStatistics } from 'src/shared/utils'
 Chart.register(...registerables)
 
@@ -13,7 +13,7 @@ Chart.register(...registerables)
 })
 export class HomeComponent implements OnInit {
   entries: IEntry[] = [];
-  statistics: IStatistics = {
+  statistics: IStatistic = {
     canceledEntries: 0,
     confirmedEntries: 0,
     pendingEntries: 0,
@@ -25,11 +25,11 @@ export class HomeComponent implements OnInit {
 
   constructor (
     private entriesService: EntriesService,
-    private loadingService: LoaderService
+    private loaderService: LoaderService
   ) {}
 
   ngOnInit(): void {
-    this.loadingService.setLoading(true);
+    this.loaderService.setLoading(true);
     this.entriesService.getAllEntries()
     .subscribe({
       next: (entries) => {
@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
         this.RenderChart();
       }
     }).add(() => {
-      this.loadingService.setLoading(false)
+      this.loaderService.setLoading(false)
     });
   }
 

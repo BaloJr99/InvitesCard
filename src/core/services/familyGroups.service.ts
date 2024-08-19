@@ -16,10 +16,6 @@ export class FamilyGroupsService {
     return this.http.get<IFamilyGroup[]>(this.invitesBaseUrl)
   }
 
-  getFamilyGroupById(id: string): Observable<IFamilyGroup> {
-    return this.http.get<IFamilyGroup>(`${this.invitesBaseUrl}/${id}`)
-  }
-
   createFamilyGroup(familyGroup: IFamilyGroup): Observable<IMessageResponse> { 
     return this.http.post<IMessageResponse>(`${this.invitesBaseUrl}`, familyGroup)
   }

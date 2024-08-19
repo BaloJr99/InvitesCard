@@ -1,4 +1,4 @@
-import { IUploadImages, IMessageResponse, IDownloadImages, IDeleteImage, IUpdateImage } from '../../shared/interfaces'
+import { IUploadImage, IMessageResponse, IDownloadImage, IDeleteImage, IUpdateImage } from '../../shared/interfaces'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -12,12 +12,12 @@ export class ImagesService {
 
   constructor(private http: HttpClient) {  }
 
-  uploadImages(images: IUploadImages): Observable<IMessageResponse> { 
+  uploadImages(images: IUploadImage): Observable<IMessageResponse> { 
     return this.http.post<IMessageResponse>(this.invitesBaseUrl, images)
   }
 
-  getImageByEvent(id: string): Observable<IDownloadImages[]> {
-    return this.http.get<IDownloadImages[]>(`${this.invitesBaseUrl}/${id}`)
+  getImageByEvent(id: string): Observable<IDownloadImage[]> {
+    return this.http.get<IDownloadImage[]>(`${this.invitesBaseUrl}/${id}`)
   }
 
   deleteImage(deleteImage: IDeleteImage): Observable<IMessageResponse> { 

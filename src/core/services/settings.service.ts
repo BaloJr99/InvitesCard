@@ -1,4 +1,4 @@
-import { ISettings, IMessageResponse } from '../../shared/interfaces'
+import { ISetting, IMessageResponse } from '../../shared/interfaces'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -12,15 +12,15 @@ export class SettingsService {
 
   constructor(private http: HttpClient) {  }
 
-  getEventSettings(eventId: string): Observable<ISettings> {
-    return this.http.get<ISettings>(`${this.invitesBaseUrl}/${eventId}`)
+  getEventSettings(eventId: string): Observable<ISetting> {
+    return this.http.get<ISetting>(`${this.invitesBaseUrl}/${eventId}`)
   }
 
-  createEventSettings(settings: ISettings): Observable<IMessageResponse> { 
+  createEventSettings(settings: ISetting): Observable<IMessageResponse> { 
     return this.http.post<IMessageResponse>(`${this.invitesBaseUrl}`, settings)
   }
 
-  updateEventSettings(settings: ISettings, id: string): Observable<IMessageResponse> { 
+  updateEventSettings(settings: ISetting, id: string): Observable<IMessageResponse> { 
     return this.http.put<IMessageResponse>(`${this.invitesBaseUrl}/${id}`, settings)
   }
 }

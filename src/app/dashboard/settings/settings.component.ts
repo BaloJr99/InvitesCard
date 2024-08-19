@@ -6,7 +6,9 @@ import { GenericValidator } from 'src/app/shared/generic-validator';
 import { EventsService } from 'src/core/services/events.service';
 import { LoaderService } from 'src/core/services/loader.service';
 import { SettingsService } from 'src/core/services/settings.service';
-import { IEvent, IMessageResponse, ISettings } from 'src/shared/interfaces';
+import { TokenStorageService } from 'src/core/services/token-storage.service';
+import { Roles } from 'src/shared/enum';
+import { IEvent, IMessageResponse, ISetting } from 'src/shared/interfaces';
 
 @Component({
   selector: 'app-settings',
@@ -21,6 +23,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
 
   createEventSettingsForm!: FormGroup;
   errorMessage = '';
+  isAdmin = false;
     
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -31,6 +34,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     private eventsService: EventsService,
     private settingsService: SettingsService,
     private fb: FormBuilder,
+    private tokenService: TokenStorageService,
     private toastr: ToastrService,
   ) {
     this.validationMessages = {
@@ -102,11 +106,18 @@ export class SettingsComponent implements OnInit, AfterViewInit {
 
     this.loaderService.setLoading(true);
 
-    this.eventsService.getAllEvents().subscribe({
+    const userInformation = this.tokenService.getTokenValues();
+    if (userInformation) {
+      this.isAdmin = userInformation.roles.some(r => r.name == Roles.Admin);
+    }
+
+    this.eventsService.getEvents(this.isAdmin).subscribe({
       next: (events) => {
         this.events = events;
       }
-    }).add(() => this.loaderService.setLoading(false));
+    }).add(() => {
+      this.loaderService.setLoading(false)
+    })
   }
 
   loadEventSettings () {
@@ -153,7 +164,9 @@ export class SettingsComponent implements OnInit, AfterViewInit {
         error: () => {
           this.isNewSetting = true;
         }
-      }).add(() => this.loaderService.setLoading(false));
+      }).add(() => {
+        this.loaderService.setLoading(false)
+      })
     }
   }
 
@@ -201,7 +214,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  formatEventSetting(): ISettings {
+  formatEventSetting(): ISetting {
     const updatedMassTime = this.createEventSettingsForm.get("massTime")?.value as string;
     const updatedReceptionTime = this.createEventSettingsForm.get("receptionTime")?.value as string;
     if (updatedMassTime.length > 5) {
@@ -220,7 +233,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
       ...this.createEventSettingsForm.value,
       massTime: `${this.createEventSettingsForm.get("massTime")?.value}:00`,
       receptionTime: `${this.createEventSettingsForm.get("receptionTime")?.value}:00`,
-    } as ISettings
+    } as ISetting
   }
 
   ngAfterViewInit(): void {

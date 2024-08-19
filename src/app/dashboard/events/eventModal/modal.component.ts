@@ -1,11 +1,12 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { Observable, fromEvent, merge } from 'rxjs';
 import { GenericValidator } from 'src/app/shared/generic-validator';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from 'src/core/services/loader.service';
-import { IEvent, IEventAction, IMessageResponse } from 'src/shared/interfaces';
+import { IEventAction, IFullEvent, IMessageResponse, IUserBasicInfo } from 'src/shared/interfaces';
 import { EventsService } from 'src/core/services/events.service';
+import { UsersService } from 'src/core/services/users.service';
 
 @Component({
   selector: 'app-event-modal',
@@ -15,11 +16,17 @@ import { EventsService } from 'src/core/services/events.service';
 export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
 
-  @Input() eventAction!: IEventAction;
+  @Input() set eventAction (value: IEventAction) {
+    if (value && value.users) {
+      this.users = value.users;
+    }
+  }
+
   @Output() updateEvents: EventEmitter<IEventAction> = new EventEmitter();
   
   createEventForm!: FormGroup;
   errorMessage = '';
+  users: IUserBasicInfo[] = [];
     
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -27,9 +34,11 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   constructor(
     private eventsService: EventsService, 
+    private usersService: UsersService,
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private loadingService: LoaderService) { 
+    private loaderService: LoaderService,
+    private cd: ChangeDetectorRef) { 
     this.validationMessages = {
       nameOfEvent: {
         required: 'Ingresar nombre del evento'
@@ -39,6 +48,9 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
       },
       maxDateOfConfirmation: {
         required: 'Ingresar fecha límite de confirmación',
+      },
+      userId: {
+        required: 'Seleccionar usuario'
       }
     };
 
@@ -50,29 +62,33 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
       id: [''],
       nameOfEvent: ['', Validators.required],
       dateOfEvent: ['', Validators.required],
-      maxDateOfConfirmation: ['', Validators.required]
+      maxDateOfConfirmation: ['', Validators.required],
+      userId: ['', Validators.required]
     })
     
     $('#eventModal').on('hidden.bs.modal', () => {
       this.clearInputs();
+    });
+
+    $('#eventModal').on('show.bs.modal', () => {
+      this.loaderService.setLoading(true);
+
+      this.usersService.getUsersDropdownData().subscribe({
+        next: (users) => {
+          this.users = users;
+          this.cd.detectChanges();
+        }
+      }).add(() => this.loaderService.setLoading(false));
     })
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["eventAction"] && changes["eventAction"].currentValue) {
-      const event: IEvent = changes["eventAction"].currentValue.event;
+      const event: IFullEvent = changes["eventAction"].currentValue.event;
       this.createEventForm.patchValue({ 
-        id: event.id,
-        nameOfEvent: event.nameOfEvent,
-        dateOfEvent: this.convertDate(event.dateOfEvent),
-        maxDateOfConfirmation: this.convertDate(event.maxDateOfConfirmation)
+        ...event
       })
     }
-  }
-
-  convertDate(date: string): string {
-    const newDate = new Date(date);
-    return newDate.toISOString().slice(0, 16);
   }
 
   saveEvent() {
@@ -92,7 +108,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   createEvent() {
-    this.loadingService.setLoading(true);
+    this.loaderService.setLoading(true);
     this.eventsService.createEvent(this.formatEvent()).subscribe({
       next: (response: IMessageResponse) => {
         $("#eventModal").modal('hide');
@@ -101,28 +117,30 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
             ...this.formatEvent(),
             id: response.id
           },
+          users: undefined,
           isNew: true
         });
         this.toastr.success(response.message);
       }
     }).add(() => {
-      this.loadingService.setLoading(false);
+      this.loaderService.setLoading(false);
     });
   }
 
   updateEvent() {
-    this.loadingService.setLoading(true);
+    this.loaderService.setLoading(true);
     this.eventsService.updateEvent(this.formatEvent(), this.createEventForm.controls["id"].value).subscribe({
       next: (response: IMessageResponse) => {
         $("#eventModal").modal('hide');
         this.updateEvents.emit({
           event: this.formatEvent(),
+          users: undefined,
           isNew: false
         });
         this.toastr.success(response.message);
       }
     }).add(() => {
-      this.loadingService.setLoading(false);
+      this.loaderService.setLoading(false);
     });
   }
 
@@ -131,7 +149,8 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
       id: '',
       nameOfEvent: '',
       dateOfEvent: '',
-      maxDateOfConfirmation: ''
+      maxDateOfConfirmation: '',
+      userId: ''
     });
 
     this.displayMessage = {};
@@ -139,12 +158,12 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
     $("#eventId").val("");
   }
 
-  formatEvent(): IEvent {
+  formatEvent(): IFullEvent {
     return {
       ...this.createEventForm.value,
       dateOfEvent: `${this.createEventForm.get("dateOfEvent")?.value}:00Z`,
       maxDateOfConfirmation: `${this.createEventForm.get("maxDateOfConfirmation")?.value}:00Z`,
-    } as IEvent
+    } as IFullEvent
   }
 
   ngAfterViewInit(): void {

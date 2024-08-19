@@ -18,7 +18,9 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   dtOptions: ADTSettings = {};
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  dtTrigger: Subject<any> = new Subject<any>();ngOnInit(): void {
+  dtTrigger: Subject<any> = new Subject<any>();
+  
+  ngOnInit(): void {
     this.dtOptions = {
       searching: false,
       destroy: true,

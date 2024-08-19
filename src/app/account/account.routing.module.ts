@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from "@angular/router";
-import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { loginGuard } from 'src/core/guards/login.guard';
 
@@ -10,7 +9,6 @@ const routes: Routes = [
     component: LoginComponent, 
     canActivate: [loginGuard] 
   },
-  { path: 'register', component: RegisterComponent },
   { path: '', pathMatch: 'full', redirectTo: '/account/login' }
 ]
 
@@ -19,5 +17,5 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class AccountRoutingModule {
-  static components = [LoginComponent, RegisterComponent];
+  static components = [LoginComponent];
 }

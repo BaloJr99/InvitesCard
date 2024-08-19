@@ -36,7 +36,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
     private familyGroupsService: FamilyGroupsService,
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private loadingService: LoaderService) { 
+    private loaderService: LoaderService) { 
     this.validationMessages = {
       family: {
         required: 'Ingresar familia'
@@ -100,7 +100,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   createEntry() {
-    this.loadingService.setLoading(true);
+    this.loaderService.setLoading(true);
     this.entriesService.createEntry(this.formatEntry()).subscribe({
       next: (response: IMessageResponse) => {
         $("#confirmationModal").modal('hide');
@@ -115,12 +115,12 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success("Se ha guardado la invitación");
       }
     }).add(() => {
-      this.loadingService.setLoading(false);
+      this.loaderService.setLoading(false);
     });
   }
 
   updateEntry() {
-    this.loadingService.setLoading(true);
+    this.loaderService.setLoading(true);
     this.entriesService.updateEntry(this.formatEntry(), this.createEntryForm.controls["id"].value).subscribe({
       next: () => {
         $("#confirmationModal").modal('hide');
@@ -132,7 +132,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success("Se ha actualizado la invitación");
       }
     }).add(() => {
-      this.loadingService.setLoading(false);
+      this.loaderService.setLoading(false);
     });
   }
 
@@ -210,7 +210,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   createFamilyGroup () {
-    this.loadingService.setLoading(true);
+    this.loaderService.setLoading(true);
     this.familyGroupsService.createFamilyGroup(this.createFamilyGroupForm.value as IFamilyGroup).subscribe({
       next: (response: IMessageResponse) => {
         this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;
@@ -227,12 +227,12 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success("Grupo creado");
       }
     }).add(() => {
-      this.loadingService.setLoading(false);
+      this.loaderService.setLoading(false);
     });
   }
 
   updateFamilyGroup() {
-    this.loadingService.setLoading(true);
+    this.loaderService.setLoading(true);
     this.familyGroupsService.updateFamilyGroup(this.createFamilyGroupForm.value as IFamilyGroup, this.createFamilyGroupForm.controls["id"].value).subscribe({
       next: () => {
         this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;
@@ -245,7 +245,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success("Grupo actualizado");
       }
     }).add(() => {
-      this.loadingService.setLoading(false);
+      this.loaderService.setLoading(false);
     });
   }
 }

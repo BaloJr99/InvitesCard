@@ -1,6 +1,7 @@
-import { IEntry, IStatistics } from "./interfaces"
+import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
+import { IEntry, IStatistic } from "./interfaces"
 
-export const createStatistics = (entries: IEntry[]): IStatistics => {
+export const createStatistics = (entries: IEntry[]): IStatistic => {
   const stadistics = {
     confirmedEntries: 0,
     canceledEntries: 0,
@@ -23,4 +24,16 @@ export const createStatistics = (entries: IEntry[]): IStatistics => {
   });
 
   return stadistics;
+}
+
+export const matchPassword: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const password = control.get('password');
+  const confirmPassword = control.get('confirmPassword')
+
+  if (password && confirmPassword && password.value != confirmPassword.value) {
+    return {
+      passwordMatchError: true
+    }
+  }
+  return null
 }

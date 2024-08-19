@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IEntry, IEntryAction, IFamilyGroup, IFamilyGroupAction, IMessage, INotifications, IStatistics } from 'src/shared/interfaces';
+import { IEntry, IEntryAction, IFamilyGroup, IFamilyGroupAction, IMessage, INotification, IStatistic } from 'src/shared/interfaces';
 import { DialogComponent } from './dialog/dialog.component';
 import { LoaderService } from 'src/core/services/loader.service';
 import { ActivatedRoute } from '@angular/router';
@@ -24,7 +24,7 @@ export class EventDetailsComponent implements OnInit {
     private socket: SocketService) {
   }
 
-  stadistics: IStatistics = {
+  stadistics: IStatistic = {
     confirmedEntries: 0,
     canceledEntries: 0,
     pendingEntries: 0,
@@ -54,7 +54,9 @@ export class EventDetailsComponent implements OnInit {
         this.buildEntriesDashboard(data["eventResolved"]["entries"]);
         this.eventId = data["eventResolved"]["eventId"];
       }
-    }).add(() => this.loaderService.setLoading(false));
+    }).add(() => {
+      this.loaderService.setLoading(false)
+    })
 
     this.socket.io.on("newNotification", () => {
       // this.updateEntryService.updateEntries()
@@ -65,7 +67,7 @@ export class EventDetailsComponent implements OnInit {
     let counter = 0;
 
     this.entries = entries;
-    const notifications: INotifications[] = [];
+    const notifications: INotification[] = [];
     const messages: Map<number, IMessage> = new Map<number, IMessage>();
 
     entries.forEach((value) => {
