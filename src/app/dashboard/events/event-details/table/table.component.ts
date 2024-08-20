@@ -39,7 +39,7 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   copyToClipBoard(id: string): void {
-    const url = `${window.location.origin}/${$localize.locale}/entries/${id}`
+    const url = `${window.location.origin}/entries/${id}`
 
     navigator.clipboard.writeText(url)
   }
