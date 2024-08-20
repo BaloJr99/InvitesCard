@@ -6,13 +6,20 @@
         {
           "type": "header",
           "key": "Accept-Language",
-          "value": "(^es)"
+          "value": "(^es.*)"
         }
       ],
       "destination": "/es"
     },
     {
       "source": "/",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept-Language",
+          "value": "(^(?!es.*$).*)"
+        }
+      ],
       "destination": "/en"
     }
   ],
