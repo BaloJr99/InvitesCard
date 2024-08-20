@@ -17,10 +17,30 @@
         {
           "type": "header",
           "key": "Accept-Language",
-          "value": "(^(?!es.*$).*)"
+          "value": "(^(?!es.*).*)"
         }
       ],
       "destination": "/en"
+    },{
+      "source": "/:path(^(?!(en|es)/).*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept-Language",
+          "value": "(^es.*)"
+        }
+      ],
+      "destination": "/es/:path*"
+    },{
+      "source": "/:path(^(?!(en|es)/).*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept-Language",
+          "value": "(^(?!es.*).*"
+        }
+      ],
+      "destination": "/en/:path*"
     }
   ],
   "rewrites": [
