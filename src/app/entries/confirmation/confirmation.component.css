@@ -37,7 +37,7 @@
   }
 
 .entriesConfirmation {
-  background-color: rgb(229, 116, 136, 0.1);
+  background-color: var(--custom-secondary-color);
   display: flex;
   align-items: center;
   justify-content: center;
