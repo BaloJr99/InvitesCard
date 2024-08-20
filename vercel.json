@@ -22,7 +22,7 @@
       ],
       "destination": "/en"
     },{
-      "source": "/:path((?!es/).*)",
+      "source": "/:path((?!es|en/).*)",
       "has": [
         {
           "type": "header",
@@ -31,6 +31,16 @@
         }
       ],
       "destination": "/es/:path*"
+    },{
+      "source": "/:path((?!es|en/).*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept-Language",
+          "value": "(^(?!es.*).*)"
+        }
+      ],
+      "destination": "/en/:path*"
     }
   ],
   "rewrites": [
