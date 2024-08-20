@@ -63,6 +63,7 @@ iframe {
 .info .container .header h2 {
   font-size: 200px;
   font-family: 'Outfit';
+  color: var(--custom-secondary-color);
 }
 
 .info .container .header h2 span {
@@ -136,11 +137,11 @@ padding: 20px 0px;
 }
 
 .divider {
-display: flex;
+  display: flex;
 }
 
-.divider:nth-of-type(2) {
-justify-content: end;
+.divider:nth-of-type(2) { 
+  justify-content: end;
 }
 
 .speech .entries hr {
@@ -173,7 +174,7 @@ justify-content: end;
 .ceremony .container .col-sm-12 p:not(p:first-of-type)
 {
   font-family: 'Allura';
-  font-size: 34px;
+  font-size: 36px;
 }
 
 .ceremony .row:not(.row:first-of-type){

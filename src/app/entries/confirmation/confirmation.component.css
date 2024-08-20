@@ -1,17 +1,17 @@
 .container {
-  color: #E57488;
+  color: var(--custom-primary-color);
 }
 
 .container h1,
 .confirmedModal h1 {
-  color: #E57488;
+  color: var(--custom-primary-color);
   font-family: 'Allura';
   font-size: 50px;
 }
 
 .confirmedModal h3 {
   font-family: 'Raleway';
-  color: #E57488;
+  color: var(--custom-primary-color);
   font-size: 20px;
 }
 
@@ -72,7 +72,7 @@
 
 .entriesConfirmation h2 {
   font-size: 20px;
-  border-bottom: 2px solid #E57488;
+  border-bottom: 2px solid var(--custom-primary-color);
   padding-bottom: 20px;
   text-align: center;
 }
@@ -90,13 +90,13 @@
 }
 
 .btn {
-  background-color: #E57488;
+  background-color: var(--custom-primary-color);
   color: #ffffff;
   width: 200px;
 }
 
 .btn:hover {
-  border: 1px solid #E57488;
+  border: 1px solid var(--custom-primary-color);
 }
 
 .confirmedModal {
