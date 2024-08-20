@@ -31,6 +31,24 @@
             </span>
           </div>
           <div class="mb-3">
+            <label for="nameOfCelebrated" class="form-label" i18n>Nombre del festejado o festejados</label>
+            <input class="form-control" formControlName="nameOfCelebrated" [ngClass]="{'is-invalid': displayMessage['nameOfCelebrated']}">
+            <span class="invalid-feedback">
+              {{ displayMessage['nameOfCelebrated'] }}
+            </span>
+          </div>
+          <div class="mb-3">
+            <label for="typeOfEvent" class="form-label" i18n>Tipo de evento</label>
+            <select class="form-control" formControlName="typeOfEvent" [ngClass]="{'is-invalid': displayMessage['typeOfEvent']}">
+              <option value="" i18n>Seleccione...</option>
+              <option value="X">Xv</option>
+              <option value="W">Boda</option>
+            </select>
+            <span class="invalid-feedback">
+              {{ displayMessage['typeOfEvent'] }}
+            </span>
+          </div>
+          <div class="mb-3">
             <label for="userId" class="form-label" i18n>Usuario Asignado</label>
             <select class="form-control" formControlName="userId" [ngClass]="{'is-invalid': displayMessage['userId']}">
               <option value="" i18n>Seleccione...</option>

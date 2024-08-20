@@ -24,6 +24,8 @@ export interface IInvite {
   kidsAllowed: boolean,
   dateOfEvent: string,
   maxDateOfConfirmation: string,
+  nameOfCelebrated: string,
+  typeOfEvent: string,
   eventId: string
 }
 
@@ -39,6 +41,8 @@ export interface IFullEvent {
   nameOfEvent: string, 
   dateOfEvent: string, 
   maxDateOfConfirmation: string,
+  nameOfCelebrated: string,
+  typeOfEvent: string,
   userId: string
 }
 

@@ -49,6 +49,12 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
       maxDateOfConfirmation: {
         required: 'Ingresar fecha límite de confirmación',
       },
+      nameOfCelebrated: {
+        required: 'Ingresar nombre del festejado o festejados'
+      },
+      typeOfEvent: {
+        required: 'Seleccionar tipo de evento'
+      },
       userId: {
         required: 'Seleccionar usuario'
       }
@@ -63,6 +69,8 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
       nameOfEvent: ['', Validators.required],
       dateOfEvent: ['', Validators.required],
       maxDateOfConfirmation: ['', Validators.required],
+      nameOfCelebrated: ['', Validators.required],
+      typeOfEvent: ['', Validators.required],
       userId: ['', Validators.required]
     })
     
@@ -150,6 +158,8 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
       nameOfEvent: '',
       dateOfEvent: '',
       maxDateOfConfirmation: '',
+      nameOfCelebrated: '',
+      typeOfEvent: '',
       userId: ''
     });
 
