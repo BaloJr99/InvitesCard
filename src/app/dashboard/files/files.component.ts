@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, combineLatest, take } from 'rxjs';
-import { EventsService } from 'src/core/services/events.service';
-import { ImagesService } from 'src/core/services/images.service';
-import { LoaderService } from 'src/core/services/loader.service';
-import { TokenStorageService } from 'src/core/services/token-storage.service';
-import { Roles } from 'src/shared/enum';
-import { IDownloadImage, IEvent, IDeleteImage, IMessageResponse, IUpdateImageArray, IUpdateImage } from 'src/shared/interfaces';
+import { IMessageResponse } from 'src/app/core/models/common';
+import { Roles } from 'src/app/core/models/enum';
+import { IEvent } from 'src/app/core/models/events';
+import { IDeleteImage, IDownloadImage, IUpdateImage, IUpdateImageArray } from 'src/app/core/models/images';
+import { EventsService } from 'src/app/core/services/events.service';
+import { ImagesService } from 'src/app/core/services/images.service';
+import { LoaderService } from 'src/app/core/services/loader.service';
+import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 
 @Component({
   selector: 'app-files',

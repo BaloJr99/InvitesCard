@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { EntriesService } from 'src/core/services/entries.service';
-import { IEntryAction } from 'src/shared/interfaces';
 import { ToastrService } from 'ngx-toastr';
-import { LoaderService } from 'src/core/services/loader.service';
+import { IEntryAction } from 'src/app/core/models/entries';
+import { EntriesService } from 'src/app/core/services/entries.service';
+import { LoaderService } from 'src/app/core/services/loader.service';
 
 @Component({
   selector: 'app-dialog',

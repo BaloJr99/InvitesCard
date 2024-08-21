@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { TokenStorageService } from 'src/core/services/token-storage.service';
-import { IMessage, INotification } from 'src/shared/interfaces';
-import { SocketService } from 'src/core/services/socket.service';
-import { LoaderService } from 'src/core/services/loader.service';
-import { CommonEntriesService } from 'src/core/services/commonEntries.service';
 import { NavigationStart, Router, Scroll } from '@angular/router';
+import { TokenStorageService } from '../core/services/token-storage.service';
+import { SocketService } from '../core/services/socket.service';
+import { LoaderService } from '../core/services/loader.service';
+import { CommonEntriesService } from '../core/services/commonEntries.service';
+import { IMessage, INotification } from '../core/models/common';
 
 @Component({
   selector: 'app-dashboard',

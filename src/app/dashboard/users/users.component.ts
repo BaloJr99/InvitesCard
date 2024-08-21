@@ -2,9 +2,9 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular
 import { DataTableDirective } from 'angular-datatables';
 import { ADTSettings } from 'angular-datatables/src/models/settings';
 import { Subject } from 'rxjs';
-import { LoaderService } from 'src/core/services/loader.service';
-import { UsersService } from 'src/core/services/users.service';
-import { IUserAction, IUserEventsInfo } from 'src/shared/interfaces';
+import { IUserAction, IUserEventsInfo } from 'src/app/core/models/users';
+import { LoaderService } from 'src/app/core/services/loader.service';
+import { UsersService } from 'src/app/core/services/users.service';
 
 @Component({
   selector: 'app-users',

@@ -1,12 +1,14 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChildren } from '@angular/core';
 import { FormBuilder,FormControlName, FormGroup, Validators } from '@angular/forms';
 import { Observable, fromEvent, merge } from 'rxjs';
-import { GenericValidator } from 'src/app/shared/generic-validator';
 import { ToastrService } from 'ngx-toastr';
-import { LoaderService } from 'src/core/services/loader.service';
-import { IUser, IUserAction, IMessageResponse, IRole } from 'src/shared/interfaces';
-import { UsersService } from 'src/core/services/users.service';
-import { RolesService } from 'src/core/services/roles.service';
+import { IUser, IUserAction } from 'src/app/core/models/users';
+import { IRole } from 'src/app/core/models/roles';
+import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
+import { UsersService } from 'src/app/core/services/users.service';
+import { RolesService } from 'src/app/core/services/roles.service';
+import { LoaderService } from 'src/app/core/services/loader.service';
+import { IMessageResponse } from 'src/app/core/models/common';
 
 @Component({
   selector: 'app-user-modal',

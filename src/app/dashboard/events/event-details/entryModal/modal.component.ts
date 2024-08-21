@@ -1,12 +1,14 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { Observable, fromEvent, merge } from 'rxjs';
-import { GenericValidator } from 'src/app/shared/generic-validator';
-import { EntriesService } from 'src/core/services/entries.service';
-import { IEntry, IEntryAction, IFamilyGroup, IFamilyGroupAction, IMessageResponse } from 'src/shared/interfaces';
 import { ToastrService } from 'ngx-toastr';
-import { LoaderService } from 'src/core/services/loader.service';
-import { FamilyGroupsService } from 'src/core/services/familyGroups.service';
+import { IEntry, IEntryAction } from 'src/app/core/models/entries';
+import { IFamilyGroup, IFamilyGroupAction } from 'src/app/core/models/familyGroups';
+import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
+import { EntriesService } from 'src/app/core/services/entries.service';
+import { FamilyGroupsService } from 'src/app/core/services/familyGroups.service';
+import { LoaderService } from 'src/app/core/services/loader.service';
+import { IMessageResponse } from 'src/app/core/models/common';
 
 @Component({
   selector: 'app-entry-modal',

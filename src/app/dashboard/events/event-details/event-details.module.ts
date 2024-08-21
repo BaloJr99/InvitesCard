@@ -2,13 +2,13 @@ import { NgModule } from "@angular/core";
 import { SharedModule } from "src/app/shared/shared.module";
 import { RouterModule, Routes } from "@angular/router";
 import { EventDetailsComponent } from "./event-details.component";
-import { EntriesService } from "src/core/services/entries.service";
 import { CardComponent } from "./card/card.component";
 import { TableComponent } from "./table/table.component";
 import { EntryModalComponent } from "./entryModal/modal.component";
 import { DialogComponent } from "./dialog/dialog.component";
-import { FamilyGroupsService } from "src/core/services/familyGroups.service";
 import { DataTablesModule } from "angular-datatables";
+import { EntriesService } from "src/app/core/services/entries.service";
+import { FamilyGroupsService } from "src/app/core/services/familyGroups.service";
 
 const routes: Routes = [
   { 

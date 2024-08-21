@@ -1,12 +1,14 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { Observable, fromEvent, merge } from 'rxjs';
-import { GenericValidator } from 'src/app/shared/generic-validator';
 import { ToastrService } from 'ngx-toastr';
-import { LoaderService } from 'src/core/services/loader.service';
-import { IEventAction, IFullEvent, IMessageResponse, IUserBasicInfo } from 'src/shared/interfaces';
-import { EventsService } from 'src/core/services/events.service';
-import { UsersService } from 'src/core/services/users.service';
+import { IEventAction, IFullEvent } from 'src/app/core/models/events';
+import { IUserBasicInfo } from 'src/app/core/models/users';
+import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
+import { EventsService } from 'src/app/core/services/events.service';
+import { UsersService } from 'src/app/core/services/users.service';
+import { LoaderService } from 'src/app/core/services/loader.service';
+import { IMessageResponse } from 'src/app/core/models/common';
 
 @Component({
   selector: 'app-event-modal',

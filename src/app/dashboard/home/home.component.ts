@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { EntriesService } from 'src/core/services/entries.service';
-import { LoaderService } from 'src/core/services/loader.service';
-import { IEntry, IStatistic } from 'src/shared/interfaces';
-import { createStatistics } from 'src/shared/utils'
+import { IEntry } from 'src/app/core/models/entries';
+import { IStatistic } from 'src/app/core/models/events';
+import { EntriesService } from 'src/app/core/services/entries.service';
+import { LoaderService } from 'src/app/core/services/loader.service';
+import { createStatistics } from 'src/app/shared/utils/statistics/statistics';
 Chart.register(...registerables)
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TokenStorageService } from 'src/core/services/token-storage.service';
-import { Roles } from 'src/shared/enum';
+import { Roles } from 'src/app/core/models/enum';
+import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 
 @Component({
   selector: 'app-sidebar',

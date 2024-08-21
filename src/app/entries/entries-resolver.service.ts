@@ -1,8 +1,8 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn, Router } from "@angular/router";
 import { EMPTY, Observable, catchError, map } from "rxjs";
-import { EntriesService } from "src/core/services/entries.service";
-import { IEntryResolved } from "src/shared/interfaces";
+import { IEntryResolved } from "../core/models/entries";
+import { EntriesService } from "../core/services/entries.service";
 
 export const entriesResolver: ResolveFn<IEntryResolved> = (
   route: ActivatedRouteSnapshot): Observable<IEntryResolved> => {

@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { LoaderService } from 'src/core/services/loader.service';
-import { ImagesService } from 'src/core/services/images.service';
-import { IDeleteImage } from 'src/shared/interfaces';
+import { IDeleteImage } from 'src/app/core/models/images';
+import { ImagesService } from 'src/app/core/services/images.service';
+import { LoaderService } from 'src/app/core/services/loader.service';
 
 @Component({
   selector: 'app-dialog',

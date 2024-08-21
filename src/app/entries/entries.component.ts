@@ -1,11 +1,13 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
-import { ImagesService } from 'src/core/services/images.service';
-import { LoaderService } from 'src/core/services/loader.service';
-import { SettingsService } from 'src/core/services/settings.service';
-import { ImageUsage } from 'src/shared/enum';
-import { IDownloadImage, IEntryResolved, ISetting } from 'src/shared/interfaces';
+import { IEntryResolved } from '../core/models/entries';
+import { ISetting } from '../core/models/settings';
+import { IDownloadImage } from '../core/models/images';
+import { LoaderService } from '../core/services/loader.service';
+import { SettingsService } from '../core/services/settings.service';
+import { ImagesService } from '../core/services/images.service';
+import { ImageUsage } from '../core/models/enum';
 
 @Component({
   selector: 'app-entries',

@@ -1,12 +1,13 @@
 import { Component, AfterViewInit, ViewChildren, ElementRef, Input, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, fromEvent, merge } from 'rxjs';
-import { GenericValidator } from '../../shared/generic-validator';
-import { IEntry, IInvite } from 'src/shared/interfaces';
-import { EntriesService } from 'src/core/services/entries.service';
 import * as moment from 'moment';
-import { SocketService } from 'src/core/services/socket.service';
-import { LoaderService } from 'src/core/services/loader.service';
+import { IInvite } from 'src/app/core/models/invites';
+import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
+import { EntriesService } from 'src/app/core/services/entries.service';
+import { SocketService } from 'src/app/core/services/socket.service';
+import { LoaderService } from 'src/app/core/services/loader.service';
+import { IEntry } from 'src/app/core/models/entries';
 
 @Component({
   selector: 'app-confirmation',

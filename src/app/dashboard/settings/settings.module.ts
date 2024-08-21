@@ -2,8 +2,8 @@ import { NgModule } from "@angular/core";
 import { SharedModule } from "src/app/shared/shared.module";
 import { RouterModule, Routes } from "@angular/router";
 import { SettingsComponent } from "./settings.component";
-import { EventsService } from "src/core/services/events.service";
-import { SettingsService } from "src/core/services/settings.service";
+import { EventsService } from "src/app/core/services/events.service";
+import { SettingsService } from "src/app/core/services/settings.service";
 
 const routes: Routes = [
   { 

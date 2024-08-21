@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NavigationStart, Router, Scroll } from '@angular/router';
-import { TokenStorageService } from 'src/core/services/token-storage.service';
-import { Roles } from 'src/shared/enum';
-import { INotification } from 'src/shared/interfaces';
+import { INotification } from 'src/app/core/models/common';
+import { Roles } from 'src/app/core/models/enum';
+import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 
 @Component({
   selector: 'app-navbar',
@@ -68,7 +68,7 @@ export class NavbarComponent implements OnInit {
 
   logout(): void {
     this.tokenService.signOut();
-    this.router.navigate(['/account/login']);
+    this.router.navigate(['/auth/login']);
   }
 
   getTime(dateTime: string): string {

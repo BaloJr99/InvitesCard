@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { authGuard } from 'src/core/guards/auth.guard';
+import { authGuard } from './core/guards/auth.guard';
 
 const app_routes: Routes = [
   { 
@@ -12,15 +12,15 @@ const app_routes: Routes = [
     canActivate: [authGuard],
   },
   { 
-    path: 'account', 
-    loadChildren: () => import('./account/account.module').then(m => m.AccountModule) },
+    path: 'auth', 
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
   { 
     path: 'error', 
     loadChildren: () => import('./shared/shared.module').then(m => m.SharedModule) },
   { 
     path: '', 
     pathMatch: 'full', 
-    redirectTo: '/account/login' },
+    redirectTo: '/auth/login' },
   { 
     path: '**', 
     redirectTo: '/error/page-not-found' 

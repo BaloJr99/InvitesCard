@@ -1,10 +1,10 @@
 import { KeyValue } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { IEntry, IEntryAction } from 'src/shared/interfaces';
 import { } from 'bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { ADTSettings } from 'angular-datatables/src/models/settings';
+import { IEntry, IEntryAction } from 'src/app/core/models/entries';
 
 @Component({
   selector: 'app-table',

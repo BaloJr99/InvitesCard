@@ -2,13 +2,15 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChildren } from '@ang
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { fromEvent, merge, Observable } from 'rxjs';
-import { GenericValidator } from 'src/app/shared/generic-validator';
-import { EventsService } from 'src/core/services/events.service';
-import { LoaderService } from 'src/core/services/loader.service';
-import { SettingsService } from 'src/core/services/settings.service';
-import { TokenStorageService } from 'src/core/services/token-storage.service';
-import { Roles } from 'src/shared/enum';
-import { IEvent, IMessageResponse, ISetting } from 'src/shared/interfaces';
+import { IMessageResponse } from 'src/app/core/models/common';
+import { Roles } from 'src/app/core/models/enum';
+import { IEvent } from 'src/app/core/models/events';
+import { ISetting } from 'src/app/core/models/settings';
+import { EventsService } from 'src/app/core/services/events.service';
+import { LoaderService } from 'src/app/core/services/loader.service';
+import { SettingsService } from 'src/app/core/services/settings.service';
+import { TokenStorageService } from 'src/app/core/services/token-storage.service';
+import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 
 @Component({
   selector: 'app-settings',

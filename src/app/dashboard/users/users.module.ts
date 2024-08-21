@@ -2,12 +2,12 @@ import { NgModule } from "@angular/core";
 import { SharedModule } from "src/app/shared/shared.module";
 import { RouterModule, Routes } from "@angular/router";
 import { UsersComponent } from "./users.component";
-import { EventsService } from "src/core/services/events.service";
-import { SettingsService } from "src/core/services/settings.service";
 import { DataTablesModule } from "angular-datatables";
-import { UsersService } from "src/core/services/users.service";
 import { UserModalComponent } from "./usersModal/modal.component";
-import { RolesService } from "src/core/services/roles.service";
+import { EventsService } from "src/app/core/services/events.service";
+import { SettingsService } from "src/app/core/services/settings.service";
+import { UsersService } from "src/app/core/services/users.service";
+import { RolesService } from "src/app/core/services/roles.service";
 
 const routes: Routes = [
   { 

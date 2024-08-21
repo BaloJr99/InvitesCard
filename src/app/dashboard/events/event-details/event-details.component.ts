@@ -1,12 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IEntry, IEntryAction, IFamilyGroup, IFamilyGroupAction, IMessage, INotification, IStatistic } from 'src/shared/interfaces';
 import { DialogComponent } from './dialog/dialog.component';
-import { LoaderService } from 'src/core/services/loader.service';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest } from 'rxjs';
-import { FamilyGroupsService } from 'src/core/services/familyGroups.service';
-import { CommonEntriesService } from 'src/core/services/commonEntries.service';
-import { SocketService } from 'src/core/services/socket.service';
+import { LoaderService } from 'src/app/core/services/loader.service';
+import { FamilyGroupsService } from 'src/app/core/services/familyGroups.service';
+import { CommonEntriesService } from 'src/app/core/services/commonEntries.service';
+import { SocketService } from 'src/app/core/services/socket.service';
+import { IStatistic } from 'src/app/core/models/events';
+import { IEntry, IEntryAction } from 'src/app/core/models/entries';
+import { IFamilyGroup, IFamilyGroupAction } from 'src/app/core/models/familyGroups';
+import { IMessage, INotification } from 'src/app/core/models/common';
 
 @Component({
   selector: 'app-event-details',

@@ -11,7 +11,7 @@ const routes: Routes = [
     component: EntriesComponent,
     resolve: { entry: entriesResolver }
   }, 
-  { path: '', pathMatch: 'full', redirectTo: '/account/login' }
+  { path: '', pathMatch: 'full', redirectTo: '/auth/login' }
 ]
 
 @NgModule({
