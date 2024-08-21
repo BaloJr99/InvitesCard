@@ -150,7 +150,7 @@ export class FilesComponent implements OnInit {
         this.saveFilesForm.patchValue({
           photoFiles: ''
         });
-        this.toastr.error(`The file size limit is 2Mb: ${errorFiles.toString()}`);
+        this.toastr.error($localize `El tamaño limite es de 2MB: ${errorFiles.toString()}`);
       } else {
         this.saveFilesForm.patchValue({
           photoFilesSource: element.files

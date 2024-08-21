@@ -37,7 +37,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
     // These could instead be retrieved from a file or database.
     this.validationMessages = {
       entriesConfirmed: {
-        required: 'Favor de seleccionar'
+        required: $localize `Favor de seleccionar`
       }
     };
 

@@ -41,46 +41,46 @@ export class SettingsComponent implements OnInit, AfterViewInit {
   ) {
     this.validationMessages = {
       primaryColor: {
-        required: 'Ingresar color primario'
+        required: $localize `Ingresar color primario`
       },
       secondaryColor: {
-        required: 'Ingresar color secundario'
+        required: $localize `Ingresar color secundario`
       },
       parents: {
-        required: 'Ingresar nombre de los padres'
+        required: $localize `Ingresar nombre de los padres`
       },
       godParents: {
-        required: 'Ingresar nombre de los padrinos'
+        required: $localize `Ingresar nombre de los padrinos`
       },
       firstSectionSentences: {
-        required: 'Ingresar datos de la primer sección'
+        required: $localize `Ingresar datos de la primer sección`
       },
       secondSectionSentences: {
-        required: 'Ingresar datos de la segunda sección'
+        required: $localize `Ingresar datos de la segunda sección`
       },
       massUrl: {
-        required: 'Ingresar url de la ubicación de la misa'
+        required: $localize `Ingresar url de la ubicación de la misa`
       },
       massTime: {
-        required: 'Ingresar hora de la misa'
+        required: $localize `Ingresar hora de la misa`
       },
       massAddress: {
-        required: 'Ingresar dirección de la misa'
+        required: $localize `Ingresar dirección de la misa`
       },
       receptionUrl: {
-        required: 'Ingresar url de la ubicación de recepción'
+        required: $localize `Ingresar url de la ubicación de recepción`
       },
       receptionTime: {
-        required: 'Ingresar hora de la recepción'
+        required: $localize `Ingresar hora de la recepción`
       },
       receptionPlace: {
-        required: 'Ingresar nombre de salón de eventos'
+        required: $localize `Ingresar nombre de salón de eventos`
       },
       receptionAddress: {
-        required: 'Ingresar dirección de recepción'
+        required: $localize `Ingresar dirección de recepción`
       },
       dressCodeColor: {
-        required: 'Ingresar si existe restricción de color'
+        required: $localize `Ingresar si existe restricción de color`
       },
     };
 

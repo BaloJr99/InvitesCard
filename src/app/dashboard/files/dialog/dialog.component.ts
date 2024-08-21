@@ -28,7 +28,7 @@ export class DialogComponent {
       next: () => {
         this.hideModal();
         this.updateImages.emit(this.imageAction);
-        this.toastr.success("Se ha eliminado el archivo");
+        this.toastr.success($localize `Se ha eliminado el archivo`);
       }
     }).add(() => {
       this.loaderService.setLoading(false);

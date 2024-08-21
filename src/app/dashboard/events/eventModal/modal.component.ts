@@ -43,22 +43,22 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
     private cd: ChangeDetectorRef) { 
     this.validationMessages = {
       nameOfEvent: {
-        required: 'Ingresar nombre del evento'
+        required: $localize `Ingresar nombre del evento`
       },
       dateOfEvent: {
-        required: 'Ingresar fecha del evento'
+        required: $localize `Ingresar fecha del evento`
       },
       maxDateOfConfirmation: {
-        required: 'Ingresar fecha límite de confirmación',
+        required: $localize `Ingresar fecha límite de confirmación`,
       },
       nameOfCelebrated: {
-        required: 'Ingresar nombre del festejado o festejados'
+        required: $localize `Ingresar nombre del festejado o festejados`
       },
       typeOfEvent: {
-        required: 'Seleccionar tipo de evento'
+        required: $localize `Seleccionar tipo de evento`
       },
       userId: {
-        required: 'Seleccionar usuario'
+        required: $localize `Seleccionar usuario`
       }
     };
 

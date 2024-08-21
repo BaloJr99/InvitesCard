@@ -39,13 +39,13 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
     private loaderService: LoaderService) { 
     this.validationMessages = {
       username: {
-        required: 'Ingresar nombre de usuario'
+        required: $localize `Ingresar nombre de usuario`
       },
       email: {
-        required: 'Ingresar correo electronico'
+        required: $localize `Ingresar correo electronico`
       },
       roles: {
-        required: 'Seleccionar un rol'
+        required: $localize `Seleccionar un rol`
       }
     };
 

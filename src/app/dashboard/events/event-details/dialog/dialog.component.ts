@@ -41,7 +41,7 @@ export class DialogComponent implements OnChanges {
       next: () => {
         this.hideModal();
         this.updateEntries.emit(this.entryAction);
-        this.toastr.success("Se ha eliminado la invitación");
+        this.toastr.success($localize `Se ha eliminado la invitación`);
       }
     }).add(() => {
       this.loaderService.setLoading(false);

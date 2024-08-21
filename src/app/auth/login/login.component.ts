@@ -30,10 +30,10 @@ export class LoginComponent implements AfterViewInit {
     private loaderService: LoaderService) {
     this.validationMessages = {
       usernameOrEmail: {
-        required: 'Ingresar email o usuario'
+        required: $localize `Ingresar email o usuario`
       },
       password: {
-        required: 'Ingresar contraseña'
+        required: $localize `Ingresar contraseña`
       }
     };
 
@@ -74,7 +74,7 @@ export class LoginComponent implements AfterViewInit {
           },
           error: (error: HttpErrorResponse) => {
             if (error.status === 401) {
-              this.authErrorMessage = "Credenciales Incorrectas";
+              this.authErrorMessage = $localize `Credenciales Incorrectas`;
             }
           }
         }).add(() => {

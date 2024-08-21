@@ -41,17 +41,17 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
     private loaderService: LoaderService) { 
     this.validationMessages = {
       family: {
-        required: 'Ingresar familia'
+        required: $localize `Ingresar familia`
       },
       entriesNumber: {
-        required: 'Ingresar numero de invitaciones'
+        required: $localize `Ingresar numero de invitaciones`
       },
       phoneNumber: {
-        required: 'Ingresar numero de telefono',
-        pattern: 'Numero de telefono invalido'
+        required: $localize `Ingresar numero de telefono`,
+        pattern: $localize `Numero de telefono invalido`
       },
       familyGroupId: {
-        required: 'Seleccionar grupo'
+        required: $localize `Seleccionar grupo`
       }
     };
 
@@ -61,7 +61,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
   ngOnInit(): void {
     this.createEntryForm = this.fb.group({
       id: [''],
-      family: ['Familia', Validators.required],
+      family: [$localize `Familia`, Validators.required],
       entriesNumber: [1, Validators.required],
       phoneNumber: ['878', [Validators.required, Validators.pattern("[0-9]{10}")]],
       familyGroupId: ['', Validators.required],
@@ -114,7 +114,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
           },
           isNew: true
         });
-        this.toastr.success("Se ha guardado la invitación");
+        this.toastr.success($localize `Se ha guardado la invitación`);
       }
     }).add(() => {
       this.loaderService.setLoading(false);
@@ -131,7 +131,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
           entry: this.formatEntry(),
           isNew: false
         });
-        this.toastr.success("Se ha actualizado la invitación");
+        this.toastr.success($localize `Se ha actualizado la invitación`);
       }
     }).add(() => {
       this.loaderService.setLoading(false);
@@ -140,7 +140,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   clearInputs(): void {
     this.createEntryForm.reset({
-      family: 'Familia',
+      family: $localize `Familia`,
       entriesNumber: 1,
       phoneNumber: '878',
       familyGroupId: '',
@@ -177,7 +177,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
     if (!this.isCreatingNewFormGroup) {
       this.createFamilyGroupForm = this.fb.group({
         id: [''],
-        familyGroup: ['Familia', Validators.required],
+        familyGroup: [$localize `Familia`, Validators.required],
       })
     }
     this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;
@@ -226,7 +226,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.createEntryForm.patchValue({ 
           familyGroupId: response.id,
         })
-        this.toastr.success("Grupo creado");
+        this.toastr.success($localize `Grupo creado`);
       }
     }).add(() => {
       this.loaderService.setLoading(false);
@@ -244,7 +244,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
           },
           isNew: false
         });
-        this.toastr.success("Grupo actualizado");
+        this.toastr.success($localize `Grupo actualizado`);
       }
     }).add(() => {
       this.loaderService.setLoading(false);

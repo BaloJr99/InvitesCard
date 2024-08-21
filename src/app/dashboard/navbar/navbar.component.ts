@@ -94,15 +94,15 @@ export class NavbarComponent implements OnInit {
     };
 
     if (time.years > 0) {
-      return `Hace ${ time.years } ${ time.years === 1 ? 'año' : 'años'}`
+      return $localize `Hace ${ time.years } ${ time.years === 1 ? 'año' : 'años'}`
     } else if (time.days > 0) {
-      return `Hace ${ time.days } ${ time.days === 1 ? 'día' : 'días'}`
+      return $localize `Hace ${ time.days } ${ time.days === 1 ? 'día' : 'días'}`
     } else if (time.hours > 0) {
-      return `Hace ${ time.hours } ${ time.hours === 1 ? 'hora' : 'horas'}`
+      return $localize `Hace ${ time.hours } ${ time.hours === 1 ? 'hora' : 'horas'}`
     } else if (time.minutes > 0) {
-      return `Hace ${ time.minutes } ${ time.minutes === 1 ? 'minuto' : 'minutos'}`
+      return $localize `Hace ${ time.minutes } ${ time.minutes === 1 ? 'minuto' : 'minutos'}`
     } else if (time.seconds > 0) {
-      return `Hace ${ time.seconds } ${ time.seconds === 1 ? 'segundo' : 'segundos'}`
+      return $localize `Hace ${ time.seconds } ${ time.seconds === 1 ? 'segundo' : 'segundos'}`
     }
 
     return '';
