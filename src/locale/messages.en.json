@@ -8,7 +8,7 @@
     "5969680630589738314": "Forgot password?",
     "4311569858228721961": "Sign In",
     "4070447103781592772": "Don't have an account? {$START_BOLD_TEXT}{$START_LINK}Sign Up{$CLOSE_LINK}{$CLOSE_BOLD_TEXT}",
-    "1587846512137709186": "Emai is required",
+    "1587846512137709186": "Username or email is required",
     "8095186692585468410": "Password is required",
     "4207334564468227653": "Wrong password",
     "3717617899240412838": "Messages",
