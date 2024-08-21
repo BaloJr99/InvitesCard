@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { IEntryResolved } from '../core/models/entries';
@@ -51,7 +51,8 @@ export class EntriesComponent implements OnInit {
     private loaderService: LoaderService,
     private eventSettingsService: SettingsService,
     private imagesService: ImagesService,
-    private elRef: ElementRef) { 
+    private elRef: ElementRef,
+    @Inject(LOCALE_ID) private localeValue: string) { 
     setInterval(() => {
       this.updateBackground();
     }, 5000);
@@ -65,9 +66,9 @@ export class EntriesComponent implements OnInit {
         this.router.navigate(['/error/page-not-found'])
       }
 
-      this.dayOfTheWeek = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString('es-mx', {  weekday: 'long' })
-      this.shortDate = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString('es-mx', { day: 'numeric', month: 'long' })
-      this.longDate = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString('es-mx', {  day: 'numeric', month: 'long', year: 'numeric' })
+      this.dayOfTheWeek = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString(this.localeValue, {  weekday: 'long' })
+      this.shortDate = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString(this.localeValue, { day: 'numeric', month: 'long' })
+      this.longDate = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString(this.localeValue, {  day: 'numeric', month: 'long', year: 'numeric' })
 
       combineLatest([
         this.eventSettingsService.getEventSettings(this.entryResolved.entry.eventId),
