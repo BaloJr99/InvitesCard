@@ -17,9 +17,7 @@ export interface IUserBasicInfo {
   username: string
 }
 
-export interface IUser {
-  _id: string,
-  username: string,
+export interface IUser extends IUserBasicInfo {
   email: string,
   isActive: boolean,
   roles: IRole[]
