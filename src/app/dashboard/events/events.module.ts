@@ -8,7 +8,6 @@ import { EventsService } from "src/app/core/services/events.service";
 import { UsersService } from "src/app/core/services/users.service";
 import { DateFormatPipe } from "src/app/shared/pipes/date-format.pipe";
 
-
 const routes: Routes = [
   { 
     path: '',

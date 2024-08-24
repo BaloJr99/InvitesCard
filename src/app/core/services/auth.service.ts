@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { IAuthUser, IUser } from "../models/users";
 import { IToken } from "../models/tokens";
+import { IMessageResponse } from "../models/common";
 
 @Injectable()
 export class AuthService {
@@ -18,5 +19,17 @@ export class AuthService {
 
   loginAccount(user: IAuthUser): Observable<IToken> { 
     return this.http.post<IToken>(`${this.invitesBaseUrl}/signin`, user)
+  }
+
+  sendResetPassword(usernameOrEmail: string): Observable<IMessageResponse> { 
+    return this.http.post<IMessageResponse>(`${this.invitesBaseUrl}/forgotPassword`, usernameOrEmail)
+  }
+
+  isUserResettingPassword(userId: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.invitesBaseUrl}/forgotPassword/${userId}`)
+  }
+
+  resetPassword(userId: string, password: string): Observable<IMessageResponse> { 
+    return this.http.post<IMessageResponse>(`${this.invitesBaseUrl}/resetPassword/${userId}`, password)
   }
 }

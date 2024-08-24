@@ -9,6 +9,10 @@ const routes: Routes = [
     component: LoginComponent, 
     canActivate: [loginGuard] 
   },
+  {
+    path: 'forgotPassword',
+    loadChildren: () => import('./forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule)
+  },
   { path: '', pathMatch: 'full', redirectTo: '/auth/login' }
 ]
 

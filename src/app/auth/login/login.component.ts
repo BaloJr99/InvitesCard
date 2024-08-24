@@ -72,9 +72,9 @@ export class LoginComponent implements AfterViewInit {
               this.router.navigate(['/dashboard']);
             }
           },
-          error: (error: HttpErrorResponse) => {
-            if (error.status === 401) {
-              this.authErrorMessage = $localize `Credenciales Incorrectas`;
+          error: (httpError: HttpErrorResponse) => {
+            if (httpError.status === 401) {
+              this.authErrorMessage = httpError.error.error;
             }
           }
         }).add(() => {

@@ -6,7 +6,7 @@ import {
   HttpInterceptor,
   HttpErrorResponse
 } from '@angular/common/http';
-import { Observable, catchError, retry, throwError } from 'rxjs';
+import { Observable, catchError, of, retry, throwError } from 'rxjs';
 import { ErrorModalService } from '../services/error.service';
 
 @Injectable()
@@ -18,7 +18,17 @@ export class ErrorInterceptor implements HttpInterceptor {
     this.errorService.setError(false, null)
     return next.handle(request)
     .pipe(
-      retry({ count: 1, delay: 1000 }),
+      retry({ 
+        count: 1, 
+        delay: (error: HttpErrorResponse) => {
+          switch (error.status) {
+            case 401:
+              return throwError(() => error);
+            default: 
+            return of(null);
+          }
+        }
+      }),
       catchError((error: HttpErrorResponse) => {
         this.errorService.setError(true, error);
         return throwError(() => error);
