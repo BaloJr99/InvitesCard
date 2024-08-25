@@ -49,7 +49,7 @@ export class PasswordResetComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.passwordReset = !this.route.snapshot.data['entry'];
+    this.passwordReset = !this.route.snapshot.data['reset'];
   }
 
   ngAfterViewInit(): void {

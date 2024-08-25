@@ -2,12 +2,11 @@ import { Component, AfterViewInit, ViewChildren, ElementRef, Input, OnChanges, S
 import { FormBuilder, FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, fromEvent, merge } from 'rxjs';
 import * as moment from 'moment';
-import { IInvite } from 'src/app/core/models/invites';
+import { IInvite, IUserInvite } from 'src/app/core/models/invites';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
-import { EntriesService } from 'src/app/core/services/entries.service';
 import { SocketService } from 'src/app/core/services/socket.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
-import { IEntry } from 'src/app/core/models/entries';
+import { InvitesService } from 'src/app/core/services/invites.service';
 
 @Component({
   selector: 'app-confirmation',
@@ -16,8 +15,8 @@ import { IEntry } from 'src/app/core/models/entries';
 })
 export class ConfirmationComponent implements AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
-  @Input() entry!: IInvite;
-  @Output() newEntry = new EventEmitter<FormGroup>();
+  @Input() invite!: IUserInvite;
+  @Output() newInvite = new EventEmitter<FormGroup>();
 
   private numberOfEntries = new BehaviorSubject<number[]>([])
   numberOfEntries$ = this.numberOfEntries.asObservable();
@@ -29,7 +28,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
   private genericValidator: GenericValidator;
 
   constructor(private fb: FormBuilder,
-    private entriesService: EntriesService,
+    private invitesService: InvitesService,
     private socket: SocketService,
     private loaderService: LoaderService) {
 
@@ -51,8 +50,8 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes["entry"]) {
-      const { entriesNumber } = changes["entry"].currentValue as IEntry;
+    if (changes["invite"]) {
+      const { entriesNumber } = changes["invite"].currentValue as IInvite;
       this.numberOfEntries.next(Array.from({ length: entriesNumber}, (k, j) => j + 1).sort((a, b) => b - a))
     }
   }
@@ -65,7 +64,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
         this.confirmationForm.get('confirmation')?.setValue(assist)
         this.confirmationForm.get('entriesConfirmed')?.setValue(entriesConfirmed)
         this.confirmationForm.addControl('dateOfConfirmation', new FormControl(moment().format("YYYY-MM-DD[T]HH:mm:ss[Z]")))
-        this.addNewEntry();
+        this.addnewInvite();
       } else {
         this.onSaveComplete();
       }
@@ -74,14 +73,14 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  addNewEntry() {
-    if(this.entry.id) {
+  addnewInvite() {
+    if(this.invite.id) {
       this.loaderService.setLoading(true);
-      this.entriesService.sendConfirmation(this.confirmationForm.value as IEntry, this.entry.id)
+      this.invitesService.sendConfirmation(this.confirmationForm.value as IInvite, this.invite.id)
         .subscribe({
           next: (() => {
             this.showDiv();
-            this.socket.sendNotification(this.entry.id)
+            this.socket.sendNotification(this.invite.id)
           })
         }).add(() => {
           this.loaderService.setLoading(false);
@@ -90,7 +89,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
   }
 
   showDiv(): void {
-    this.entry.confirmation = this.confirmationForm.get('confirmation')?.value
+    this.invite.confirmation = this.confirmationForm.get('confirmation')?.value
   }
 
   ngAfterViewInit(): void {

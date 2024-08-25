@@ -4,26 +4,26 @@ import { ActivatedRoute } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { FamilyGroupsService } from 'src/app/core/services/familyGroups.service';
-import { CommonEntriesService } from 'src/app/core/services/commonEntries.service';
 import { SocketService } from 'src/app/core/services/socket.service';
 import { IStatistic } from 'src/app/core/models/events';
-import { IEntry, IEntryAction } from 'src/app/core/models/entries';
 import { IFamilyGroup, IFamilyGroupAction } from 'src/app/core/models/familyGroups';
 import { IMessage, INotification } from 'src/app/core/models/common';
+import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
+import { IInvite, IInviteAction } from 'src/app/core/models/invites';
 
 @Component({
   selector: 'app-event-details',
   templateUrl: './event-details.component.html',
   styleUrls: ['./event-details.component.css']
 })
-export class EventDetailsComponent implements OnInit {
+export class InviteDetailsComponent implements OnInit {
   @ViewChild(DialogComponent) dialogComponent!: DialogComponent;
 
   constructor(
     private route: ActivatedRoute,
     private loaderService: LoaderService,
     private familyGroupsService: FamilyGroupsService,
-    private commonEntriesService: CommonEntriesService,
+    private commonInvitesService: CommonInvitesService,
     private socket: SocketService) {
   }
 
@@ -36,11 +36,11 @@ export class EventDetailsComponent implements OnInit {
 
   eventId = "";
   
-  entryAction!: IEntryAction;
+  inviteAction!: IInviteAction;
 
-  entriesGrouped: { [key: string]: IEntry[] } = {};
+  invitesGrouped: { [key: string]: IInvite[] } = {};
 
-  entries: IEntry[] = [];
+  invites: IInvite[] = [];
   familyGroups: IFamilyGroup[] = [];
   
   ngOnInit(): void {
@@ -52,9 +52,9 @@ export class EventDetailsComponent implements OnInit {
       this.familyGroupsService.getAllFamilyGroups()
     ]).subscribe({
       next: ([data, familyGroups]) => {
-        this.commonEntriesService.clearNotifications();
+        this.commonInvitesService.clearNotifications();
         this.familyGroups = familyGroups;
-        this.buildEntriesDashboard(data["eventResolved"]["entries"]);
+        this.buildInvitesDashboard(data["eventResolved"]["invites"]);
         this.eventId = data["eventResolved"]["eventId"];
       }
     }).add(() => {
@@ -66,14 +66,14 @@ export class EventDetailsComponent implements OnInit {
     })
   }
 
-  buildEntriesDashboard(entries: IEntry[]) {
+  buildInvitesDashboard(invites: IInvite[]) {
     let counter = 0;
 
-    this.entries = entries;
+    this.invites = invites;
     const notifications: INotification[] = [];
     const messages: Map<number, IMessage> = new Map<number, IMessage>();
 
-    entries.forEach((value) => {
+    invites.forEach((value) => {
       if (value.confirmation) {
         this.stadistics.confirmedEntries += (value.entriesConfirmed ?? 0)
         this.stadistics.canceledEntries += (value.entriesNumber - (value.entriesConfirmed ?? 0))
@@ -101,26 +101,26 @@ export class EventDetailsComponent implements OnInit {
       }
     });
 
-    this.commonEntriesService.updateNotifications(notifications, messages);
-    this.groupEntries(entries);
+    this.commonInvitesService.updateNotifications(notifications, messages);
+    this.groupEntries(invites);
   }
 
-  groupEntries(entries: IEntry[]): void {
-    this.entriesGrouped = {};
+  groupEntries(invites: IInvite[]): void {
+    this.invitesGrouped = {};
 
     this.familyGroups.forEach((familyGroup) => {
-      if (entries.some(entry => entry.familyGroupId === familyGroup.id)) {
-        this.entriesGrouped[familyGroup.familyGroup] = entries.filter(entry => entry.familyGroupId === familyGroup.id);
+      if (invites.some(invite => invite.familyGroupId === familyGroup.id)) {
+        this.invitesGrouped[familyGroup.familyGroup] = invites.filter(invite => invite.familyGroupId === familyGroup.id);
       }
     })
   }
 
-  fillEntryAction(entryAction: IEntryAction): void {
-    this.entryAction = {
-      ...entryAction,
-      entry: {
-        ...entryAction.entry,
-        kidsAllowed: Boolean(entryAction.entry.kidsAllowed)
+  fillInviteAction(inviteAction: IInviteAction): void {
+    this.inviteAction = {
+      ...inviteAction,
+      invite: {
+        ...inviteAction.invite,
+        kidsAllowed: Boolean(inviteAction.invite.kidsAllowed)
       }
     }
   }
@@ -134,22 +134,22 @@ export class EventDetailsComponent implements OnInit {
 
   filterEntries(family: string): void {
     if (family) {
-      const filteredEntries = this.entries.filter((entry) => entry.family.toLocaleLowerCase().includes(family.toLocaleLowerCase()))
+      const filteredEntries = this.invites.filter((invite) => invite.family.toLocaleLowerCase().includes(family.toLocaleLowerCase()))
       this.groupEntries(filteredEntries);
     } else {
-      this.groupEntries(this.entries);
+      this.groupEntries(this.invites);
     }
   }
 
-  updateEntries(entryAction: IEntryAction) {
+  updateInvites(inviteAction: IInviteAction) {
     this.clearValues();
-    if (entryAction.isNew) {
-      this.buildEntriesDashboard(this.entries.concat(entryAction.entry));
+    if (inviteAction.isNew) {
+      this.buildInvitesDashboard(this.invites.concat(inviteAction.invite));
     } else {
-      if (entryAction.delete) {
-        this.buildEntriesDashboard(this.entries.filter(entry => entry.id !== entryAction.entry.id));
+      if (inviteAction.delete) {
+        this.buildInvitesDashboard(this.invites.filter(invite => invite.id !== inviteAction.invite.id));
       } else {
-        this.buildEntriesDashboard(this.entries.map(originalEntry => originalEntry.id === entryAction.entry.id ? entryAction.entry : originalEntry));
+        this.buildInvitesDashboard(this.invites.map(originalInvite => originalInvite.id === inviteAction.invite.id ? inviteAction.invite : originalInvite));
       }
     }
   }

@@ -10,14 +10,14 @@
   <button (click)="goToForm()" class="scrollFormButton"><i class="fa-solid fa-arrow-down"></i></button>
   <div class="container">
     <div class="header">
-      <h2 *ngIf="entryResolved.entry.typeOfEvent === 'X'">15<span>Sweet</span></h2>
-      <ng-container [ngSwitch]="entryResolved.entry.typeOfEvent">
+      <h2 *ngIf="inviteResolved.invite.typeOfEvent === 'X'">15<span>Sweet</span></h2>
+      <ng-container [ngSwitch]="inviteResolved.invite.typeOfEvent">
         <ng-container *ngSwitchCase="'X'">
-          <h3>{{entryResolved.entry.nameOfCelebrated}}</h3>
+          <h3>{{inviteResolved.invite.nameOfCelebrated}}</h3>
         </ng-container>
         <ng-container *ngSwitchCase="'W'">
           <h3>
-            <ng-container *ngFor="let celebrate of entryResolved.entry.nameOfCelebrated.split(';'); index as i">
+            <ng-container *ngFor="let celebrate of inviteResolved.invite.nameOfCelebrated.split(';'); index as i">
               {{celebrate}} <span *ngIf="i === 0"><br>&<br></span>
             </ng-container>
           </h3>
@@ -30,20 +30,20 @@
         <h4>{{ dayOfTheWeek.toLocaleUpperCase() }}, {{ shortDate.toLocaleUpperCase() }}</h4>
         <hr>
       </div>
-      <app-countdown [dateOfEvent]="entryResolved.entry.dateOfEvent"></app-countdown>
+      <app-countdown [dateOfEvent]="inviteResolved.invite.dateOfEvent"></app-countdown>
     </div>
   </div>
 </div>
 <div class="speech">
   <div class="container">
     <p>{{eventSettings.firstSectionSentences.split(';')[0]}}</p>
-    <div class="entries">
+    <div class="invites">
       <div class="divider">
         <hr>
       </div>
-      <p>{{ entryResolved.entry.family }}</p>
-      <p class="pinkLetter" i18n>Pases: {{ entryResolved.entry.entriesNumber }}</p>
-      <p class="noKids" *ngIf="!entryResolved.entry?.kidsAllowed" i18n>* No niños *</p>
+      <p>{{ inviteResolved.invite.family }}</p>
+      <p class="pinkLetter" i18n>Pases: {{ inviteResolved.invite.entriesNumber }}</p>
+      <p class="noKids" *ngIf="!inviteResolved.invite?.kidsAllowed" i18n>* No niños *</p>
       <div class="divider">
         <hr>
       </div>
@@ -113,4 +113,4 @@
     <p i18n>Está reservado para la festejada</p>
   </div>
 </div>
-<app-confirmation [entry]="entryResolved.entry"></app-confirmation>
+<app-confirmation [invite]="inviteResolved.invite"></app-confirmation>

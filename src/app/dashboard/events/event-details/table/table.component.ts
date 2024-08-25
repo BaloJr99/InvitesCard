@@ -4,7 +4,7 @@ import { } from 'bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { ADTSettings } from 'angular-datatables/src/models/settings';
-import { IEntry, IEntryAction } from 'src/app/core/models/entries';
+import { IInvite, IInviteAction } from 'src/app/core/models/invites';
 
 @Component({
   selector: 'app-table',
@@ -13,8 +13,8 @@ import { IEntry, IEntryAction } from 'src/app/core/models/entries';
 })
 export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
-  @Input() entryGroup!: KeyValue<string, IEntry[]>;
-  @Output() setEntryAction = new EventEmitter<IEntryAction>();
+  @Input() inviteGroup!: KeyValue<string, IInvite[]>;
+  @Output() setInviteAction = new EventEmitter<IInviteAction>();
 
   dtOptions: ADTSettings = {};
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -39,27 +39,27 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   copyToClipBoard(id: string): void {
-    const url = `${window.location.origin}/entries/${id}`
+    const url = `${window.location.origin}/invites/${id}`
 
     navigator.clipboard.writeText(url)
   }
 
   openEditModal(id: string): void {
-    const entryToEdit = this.entryGroup.value.find((entry) => entry.id === id);
-    if (entryToEdit) {
-      this.setEntryAction.emit({
-        entry: entryToEdit,
+    const inviteToEdit = this.inviteGroup.value.find((invite) => invite.id === id);
+    if (inviteToEdit) {
+      this.setInviteAction.emit({
+        invite: inviteToEdit,
         isNew: false,
         delete: false
       });
 
-      $("#confirmationModal").modal("show");
+      $("#inviteModal").modal("show");
     }
   }
 
-  showModal(entry: IEntry): void {
-    this.setEntryAction.emit({
-      entry: entry,
+  showModal(invite: IInvite): void {
+    this.setInviteAction.emit({
+      invite: invite,
       isNew: false,
       delete: true
     })

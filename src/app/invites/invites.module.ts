@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
-import { EntriesRoutingModule } from './entries.routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { SafePipe } from '../shared/pipes/safe.pipe';
 import { SocketService } from '../core/services/socket.service';
 import { SettingsService } from '../core/services/settings.service';
 import { ImagesService } from '../core/services/images.service';
+import { InvitesRoutingModule } from './invites.routing.module';
 
 @NgModule({
   imports: [
-    EntriesRoutingModule,
+    InvitesRoutingModule,
     SharedModule,
     SafePipe
   ],
@@ -17,6 +17,6 @@ import { ImagesService } from '../core/services/images.service';
     SettingsService,
     ImagesService
   ],
-  declarations: [EntriesRoutingModule.components]
+  declarations: [InvitesRoutingModule.components]
 })
-export class EntriesModule { }
+export class InvitesModule { }

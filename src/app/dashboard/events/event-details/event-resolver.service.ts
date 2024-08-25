@@ -12,9 +12,9 @@ export const eventResolver: ResolveFn<IEventResolved> = (
 
   const id = route.paramMap.get('id') ?? "";
 
-  const eventFound = eventsService.getEventEntries(id).pipe(
-    map(entries => {
-      return { entries: entries, eventId: id }
+  const eventFound = eventsService.getEventInvites(id).pipe(
+    map(invites => {
+      return { invites: invites, eventId: id }
     }),
     catchError(() => {
       router.navigate(['/dashboard/events'])

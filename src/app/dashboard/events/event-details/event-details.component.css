@@ -56,6 +56,10 @@
   overflow-y: auto;
 }
 
+.buttons button:first-of-type {
+  margin-right: 8px;
+}
+
 @media screen and (max-width: 575px) {
 
   .header {

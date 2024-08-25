@@ -3,8 +3,8 @@ import { NavigationStart, Router, Scroll } from '@angular/router';
 import { TokenStorageService } from '../core/services/token-storage.service';
 import { SocketService } from '../core/services/socket.service';
 import { LoaderService } from '../core/services/loader.service';
-import { CommonEntriesService } from '../core/services/commonEntries.service';
 import { IMessage, INotification } from '../core/models/common';
+import { CommonInvitesService } from '../core/services/commonInvites.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,7 +16,7 @@ export class DashboardComponent implements OnInit {
     private tokenService: TokenStorageService,
     private socket: SocketService,
     private loaderService: LoaderService,
-    private commonEntriesService: CommonEntriesService,
+    private commonInvitesService: CommonInvitesService,
     private router: Router) {    
     }
   
@@ -57,13 +57,13 @@ export class DashboardComponent implements OnInit {
 
     this.loaderService.setLoading(false);
 
-    this.commonEntriesService.messages$.subscribe({
+    this.commonInvitesService.messages$.subscribe({
       next: (messages) => {
         this.messages = messages;
       }
     });
 
-    this.commonEntriesService.notifications$.subscribe({
+    this.commonInvitesService.notifications$.subscribe({
       next: (notifications) => {
         this.notifications = notifications;
       }

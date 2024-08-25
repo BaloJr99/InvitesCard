@@ -1,7 +1,7 @@
-import { IEntry } from "src/app/core/models/entries";
 import { IStatistic } from "src/app/core/models/events";
+import { IInvite } from "src/app/core/models/invites";
 
-export const createStatistics = (entries: IEntry[]): IStatistic => {
+export const createStatistics = (invites: IInvite[]): IStatistic => {
   const stadistics = {
     confirmedEntries: 0,
     canceledEntries: 0,
@@ -9,7 +9,7 @@ export const createStatistics = (entries: IEntry[]): IStatistic => {
     totalEntries: 0,
   };
 
-  entries.forEach((value) => {
+  invites.forEach((value) => {
     if (value.confirmation) {
       stadistics.confirmedEntries += (value.entriesConfirmed ?? 0)
       stadistics.canceledEntries += (value.entriesNumber - (value.entriesConfirmed ?? 0))

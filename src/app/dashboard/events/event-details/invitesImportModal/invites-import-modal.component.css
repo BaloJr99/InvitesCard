@@ -1,0 +1,16 @@
+table {
+  text-align: center;
+}
+
+table i.fa-circle-check {
+  color: green;
+}
+
+table i.fa-circle-xmark {
+  color: red;
+}
+
+table td.error {
+  background-color: red;
+  color: white;
+}

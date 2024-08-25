@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { BehaviorSubject, Subscription, interval } from 'rxjs';
-import { ITimer } from 'src/app/core/models/entries';
+import { ITimer } from 'src/app/core/models/invites';
 
 @Component({
   selector: 'app-countdown',

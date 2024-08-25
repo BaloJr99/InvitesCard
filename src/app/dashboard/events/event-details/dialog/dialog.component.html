@@ -6,8 +6,8 @@
         <h1 class="modal-title fs-5" id="warningDialogLabel" i18n>Eliminando invitación</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body" *ngIf="entryAction">
-        <p i18n>Esta seguro de que desea eliminar la invitación de {{ entryAction.entry.family }}?</p>
+      <div class="modal-body" *ngIf="inviteAction">
+        <p i18n>Esta seguro de que desea eliminar la invitación de {{ inviteAction.invite.family }}?</p>
       </div>
       <div class="modal-footer">
         <button type="button" id="closeModal" class="btn btn-success" data-bs-dismiss="modal" i18n>Cancelar</button>

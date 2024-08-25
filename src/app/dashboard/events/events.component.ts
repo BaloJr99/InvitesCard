@@ -53,7 +53,7 @@ export class EventsComponent implements OnInit {
     if (eventAction.isNew) {
       this.events.push({
         ...eventAction.event,
-        allowCreateEntries: 0
+        allowCreateInvites: 0
       });
       this.events.sort((a, b) => a.nameOfEvent.toLowerCase().localeCompare(b.nameOfEvent.toLowerCase()));
     } else {
@@ -61,7 +61,7 @@ export class EventsComponent implements OnInit {
         if (originalEvent.id === eventAction.event.id) {
           return {
             ...eventAction.event,
-            allowCreateEntries: originalEvent.allowCreateEntries
+            allowCreateInvites: originalEvent.allowCreateInvites
           }
         }
         return originalEvent;

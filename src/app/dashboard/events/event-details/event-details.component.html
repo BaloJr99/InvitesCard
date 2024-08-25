@@ -8,7 +8,8 @@
       </ol>
     </nav>
     <div class="buttons">
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationModal" i18n>Nueva invitación</button>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#invitesImportModal" i18n>Importar invitaciones</button>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#inviteModal" i18n>Nueva invitación</button>
     </div>
   </div>
 </div>
@@ -22,16 +23,20 @@
 </section>
 <section class="row mx-1 table-accordion">
   <div class="col-12">
-    <div class="accordion" id="entryAccordion" *ngFor="let entryGroup of entriesGrouped | keyvalue">
-      <app-table [entryGroup]="entryGroup" (setEntryAction)="fillEntryAction($event)"></app-table>
+    <div class="accordion" id="inviteAccordion" *ngFor="let inviteGroup of invitesGrouped | keyvalue">
+      <app-table [inviteGroup]="inviteGroup" (setInviteAction)="fillInviteAction($event)"></app-table>
     </div>
   </div>
 </section>
-<app-entry-modal 
+<app-invite-modal 
   [familyGroups]="familyGroups" 
-  [entryAction]="entryAction"  
+  [inviteAction]="inviteAction"  
   [eventId]="eventId"
-  (updateEntries)="updateEntries($event)"
+  (updateInvites)="updateInvites($event)"
   (updateFamilyGroups)="updateFamilyGroups($event)">
-</app-entry-modal>
-<app-dialog *ngIf="entryAction" [entryAction]="entryAction" (updateEntries)="updateEntries($event)"></app-dialog>
+</app-invite-modal>
+<app-dialog *ngIf="inviteAction" [inviteAction]="inviteAction" (updateInvites)="updateInvites($event)"></app-dialog>
+<app-invites-import-dialog 
+  [eventId]="eventId"
+  [familyGroups]="familyGroups">
+</app-invites-import-dialog>

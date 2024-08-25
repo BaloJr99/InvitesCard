@@ -8,8 +8,8 @@ import { IMessageResponse } from '../models/common';
 @Injectable()
 export class SettingsService {
   
-  baseUrl = environment.apiUrl;
-  invitesBaseUrl = this.baseUrl + '/settings'
+  private baseUrl = environment.apiUrl;
+  private invitesBaseUrl = this.baseUrl + '/settings'
 
   constructor(private http: HttpClient) {  }
 

@@ -9,7 +9,7 @@ const routes: Routes = [
   { 
     path: '',
     component: PasswordResetComponent,
-    resolve: { entry: passwordResetResolver }
+    resolve: { reset: passwordResetResolver }
   }
 ]
 

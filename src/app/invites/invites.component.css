@@ -106,7 +106,7 @@ iframe {
   background-color: #ffffff;
 }
 
-.entries {
+.invites {
 padding: 20px 0px;
 }
 
@@ -123,15 +123,15 @@ padding: 20px 0px;
   font-size: 20px;
 }
 
-.speech .entries .noKids {
+.speech .invites .noKids {
   font-weight: bold;
 }
 
-.speech .entries p:first-child {
+.speech .invites p:first-child {
   color: #000000;
 }
 
-.speech .entries p:first-of-type {
+.speech .invites p:first-of-type {
   font-family: 'Allura';
   font-size: 40px;
 }
@@ -144,7 +144,7 @@ padding: 20px 0px;
   justify-content: end;
 }
 
-.speech .entries hr {
+.speech .invites hr {
   width: 30%;
   border: none;
   height: 3px;

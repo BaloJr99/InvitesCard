@@ -32,8 +32,6 @@ export class FilesComponent implements OnInit {
   saveFilesForm: FormGroup = this.fb.group({
     photoFiles: '',
     photoFilesSource: '',
-    musicFiles: '',
-    musicFilesSource: ''
   });
 
   constructor(
@@ -69,7 +67,7 @@ export class FilesComponent implements OnInit {
   }
 
   saveFiles(): void {
-    if (this.saveFilesForm.controls["photoFilesSource"].value !== "" || this.saveFilesForm.controls["musicFilesSource"].value !== "") {
+    if (this.saveFilesForm.controls["photoFilesSource"].value !== "") {
       this.loaderService.setLoading(true);
       const filesObservable: Observable<string>[] = [];
       Array.from(this.saveFilesForm.controls["photoFilesSource"].value as FileList).forEach(file => {
@@ -94,9 +92,7 @@ export class FilesComponent implements OnInit {
             next: (response) => {
               this.saveFilesForm.patchValue({
                 photoFiles: '',
-                photoFilesSource: '',
-                musicFiles: '',
-                musicFilesSource: ''
+                photoFilesSource: ''
               });
               this.getLatestImages();
               this.toastr.success(response[0].message);
@@ -173,9 +169,7 @@ export class FilesComponent implements OnInit {
  clearInformation(): void {
   this.saveFilesForm.patchValue({
     photoFiles: '',
-    photoFilesSource: '',
-    musicFiles: '',
-    musicFilesSource: ''
+    photoFilesSource: ''
   });
 
   this.images = [];

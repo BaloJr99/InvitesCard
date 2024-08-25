@@ -15,7 +15,7 @@ export class SocketService {
     this.io.emit("joinRoom", username);
   }
 
-  sendNotification (entryId: string) {
-    this.io.emit("sendNotification", entryId)
+  sendNotification (userId: string) {
+    this.io.emit("sendNotification", userId)
   }
 }

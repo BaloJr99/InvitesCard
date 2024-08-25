@@ -1,11 +1,11 @@
-import { IEntry } from "./entries"
+import { IInvite } from "./invites"
 import { IUserBasicInfo } from "./users"
 
 export interface IEvent {
   id: string,
   nameOfEvent: string, 
   dateOfEvent: string
-  allowCreateEntries: number
+  allowCreateInvites: number
 }
 
 export interface IFullEvent {
@@ -32,6 +32,6 @@ export interface IStatistic {
 }
 
 export interface IEventResolved {
-  entries: IEntry[];
+  invites: IInvite[];
   eventId: string;
 }

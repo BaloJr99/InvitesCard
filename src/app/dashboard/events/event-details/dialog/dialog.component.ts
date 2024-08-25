@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { IEntryAction } from 'src/app/core/models/entries';
-import { EntriesService } from 'src/app/core/services/entries.service';
+import { IInviteAction } from 'src/app/core/models/invites';
+import { InvitesService } from 'src/app/core/services/invites.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 
 @Component({
@@ -10,18 +10,18 @@ import { LoaderService } from 'src/app/core/services/loader.service';
   styleUrls: ['./dialog.component.css']
 })
 export class DialogComponent implements OnChanges {
-  @Input() entryAction!: IEntryAction;
-  @Output() updateEntries: EventEmitter<IEntryAction> = new EventEmitter();
+  @Input() inviteAction!: IInviteAction;
+  @Output() updateInvites: EventEmitter<IInviteAction> = new EventEmitter();
 
   constructor(
-    private entriesService: EntriesService,
+    private invitesService: InvitesService,
     private toastr: ToastrService,
     private loaderService: LoaderService) { }
 
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes["entryAction"] && changes["entryAction"].currentValue) {
-      if (changes["entryAction"].currentValue.delete) {
+    if (changes["inviteAction"] && changes["inviteAction"].currentValue) {
+      if (changes["inviteAction"].currentValue.delete) {
         this.showModal();
       }
     }
@@ -37,10 +37,10 @@ export class DialogComponent implements OnChanges {
 
   deleteEntry(): void {
     this.loaderService.setLoading(true);
-    this.entriesService.deleteEntry(this.entryAction.entry.id).subscribe({
+    this.invitesService.deleteInvite(this.inviteAction.invite.id).subscribe({
       next: () => {
         this.hideModal();
-        this.updateEntries.emit(this.entryAction);
+        this.updateInvites.emit(this.inviteAction);
         this.toastr.success($localize `Se ha eliminado la invitación`);
       }
     }).add(() => {

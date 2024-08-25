@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { IEntry } from 'src/app/core/models/entries';
 import { IStatistic } from 'src/app/core/models/events';
-import { EntriesService } from 'src/app/core/services/entries.service';
+import { IInvite } from 'src/app/core/models/invites';
+import { InvitesService } from 'src/app/core/services/invites.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { createStatistics } from 'src/app/shared/utils/statistics/statistics';
 Chart.register(...registerables)
@@ -13,7 +13,7 @@ Chart.register(...registerables)
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  entries: IEntry[] = [];
+  invites: IInvite[] = [];
   statistics: IStatistic = {
     canceledEntries: 0,
     confirmedEntries: 0,
@@ -25,16 +25,16 @@ export class HomeComponent implements OnInit {
   groupedByDate: { [key: string]: number } = {};
 
   constructor (
-    private entriesService: EntriesService,
+    private invitesService: InvitesService,
     private loaderService: LoaderService
   ) {}
 
   ngOnInit(): void {
     this.loaderService.setLoading(true);
-    this.entriesService.getAllEntries()
+    this.invitesService.getAllInvites()
     .subscribe({
-      next: (entries) => {
-        this.entries = entries;
+      next: (invites) => {
+        this.invites = invites;
         this.RenderChart();
       }
     }).add(() => {
@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
   }
 
   RenderChart() {
-    this.statistics = createStatistics(this.entries);
+    this.statistics = createStatistics(this.invites);
     this.percentajeOfConfirmation = (Math.trunc((this.statistics.confirmedEntries / this.statistics.totalEntries) * 100)).toString(); 
     this.percentajeOfPendingResponse = (Math.trunc((this.statistics.pendingEntries / this.statistics.totalEntries) * 100)).toString(); 
 
@@ -53,24 +53,24 @@ export class HomeComponent implements OnInit {
     this.groupedByDate = {};
     const randomColors: string[] = [];
 
-    const validEntries = this.entries.filter((entry) => entry.dateOfConfirmation);
+    const validInvites = this.invites.filter((invite) => invite.dateOfConfirmation);
 
     const uniqueValidDates = [...new Set(
-      validEntries.reduce((result: string[], entry) => {
-        if (entry.dateOfConfirmation) {
-          result.push(new Date(entry.dateOfConfirmation).toISOString().substring(0, 10));
+      validInvites.reduce((result: string[], invite) => {
+        if (invite.dateOfConfirmation) {
+          result.push(new Date(invite.dateOfConfirmation).toISOString().substring(0, 10));
         }
         return result;
       }, []))
     ]
 
     uniqueValidDates.forEach((date) => {
-      this.groupedByDate[date] = validEntries.filter((entry) => {
+      this.groupedByDate[date] = validInvites.filter((invite) => {
         randomColors.push(`rgb(${this.randomNum()}, ${this.randomNum()}, ${this.randomNum()})`)
-        if (entry.dateOfConfirmation) {
-          const entryDate = new Date(entry.dateOfConfirmation).toISOString().substring(0, 10);
+        if (invite.dateOfConfirmation) {
+          const inviteDate = new Date(invite.dateOfConfirmation).toISOString().substring(0, 10);
 
-          if (entryDate === date) {
+          if (inviteDate === date) {
             return true;
           }
         }

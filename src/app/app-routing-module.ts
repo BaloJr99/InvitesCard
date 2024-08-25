@@ -4,8 +4,8 @@ import { authGuard } from './core/guards/auth.guard';
 
 const app_routes: Routes = [
   { 
-    path: 'entries', 
-    loadChildren: () => import('./entries/entries.module').then(m => m.EntriesModule) },
+    path: 'invites', 
+    loadChildren: () => import('./invites/invites.module').then(m => m.InvitesModule) },
   { 
     path: 'dashboard', 
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),

@@ -1,14 +1,14 @@
 <!-- Modal -->
-<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+<div class="modal fade" id="inviteModal" tabindex="-1" aria-labelledby="inviteModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="confirmationModalLabel" i18n>Invitaciones Personalizadas</h1>
+        <h1 class="modal-title fs-5" id="inviteModalLabel" i18n>Invitaciones Personalizadas</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <ng-container *ngIf="!isCreatingNewFormGroup">
-          <form [formGroup]="createEntryForm">
+          <form [formGroup]="createInviteForm">
             <input type="text" formControlName="id" hidden>
             <div class="mb-3">
               <label for="family" class="form-label" i18n>Familia</label>
@@ -24,7 +24,7 @@
                   <option value="" i18n>Selecciona el grupo</option>
                   <option *ngFor="let familyGroup of familyGroups" [value]="familyGroup.id">{{ familyGroup.familyGroup }}</option>
                 </select>
-                <button class="btn btn-dark" (click)="toggleIsEditingFormGroup()" *ngIf="createEntryForm.get('familyGroupId')?.value"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button class="btn btn-dark" (click)="toggleIsEditingFormGroup()" *ngIf="createInviteForm.get('familyGroupId')?.value"><i class="fa-solid fa-pen-to-square"></i></button>
                 <button class="btn btn-dark" (click)="toggleIsCreatingNewFormGroup()"><i class="fa-solid fa-plus"></i></button>
               </div>
               <span class="invalid-feedback">
@@ -55,7 +55,7 @@
           </form>
           <div class="modal-footer">
             <button type="button" id="closeModal" class="btn btn-secondary" data-bs-dismiss="modal" i18n>Cerrar</button>
-            <button type="button" class="btn btn-primary" (click)="saveEntry()" i18n>Guardar</button>
+            <button type="button" class="btn btn-primary" (click)="saveInvite()" i18n>Guardar</button>
           </div>
         </ng-container>
         <ng-container  *ngIf="isCreatingNewFormGroup">

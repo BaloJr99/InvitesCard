@@ -3,14 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { IEvent, IFullEvent } from '../models/events';
-import { IEntry } from '../models/entries';
 import { IMessageResponse } from '../models/common';
+import { IInvite } from '../models/invites';
 
 @Injectable()
 export class EventsService {
   
-  baseUrl = environment.apiUrl;
-  invitesBaseUrl = this.baseUrl + '/events'
+  private baseUrl = environment.apiUrl;
+  private invitesBaseUrl = this.baseUrl + '/events'
 
   constructor(
     private http: HttpClient
@@ -23,8 +23,8 @@ export class EventsService {
     return this.http.get<IEvent[]>(`${this.invitesBaseUrl}/users`)
   }
 
-  getEventEntries(eventId: string): Observable<IEntry[]> {
-    return this.http.get<IEntry[]>(`${this.invitesBaseUrl}/entries/${eventId}`)
+  getEventInvites(eventId: string): Observable<IInvite[]> {
+    return this.http.get<IInvite[]>(`${this.invitesBaseUrl}/invites/${eventId}`)
   }
 
   getEventById(id: string): Observable<IFullEvent> {

@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from "@angular/router";
-import { EntriesComponent } from "./entries.component";
 import { CountdownComponent } from './countdown/countdown.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
-import { entriesResolver } from './entries-resolver.service';
+import { InvitesComponent } from './invites.component';
+import { invitesResolver } from './invites-resolver.service';
 
 const routes: Routes = [
   {
     path: ':id',
-    component: EntriesComponent,
-    resolve: { entry: entriesResolver }
+    component: InvitesComponent,
+    resolve: { invite: invitesResolver }
   }, 
   { path: '', pathMatch: 'full', redirectTo: '/auth/login' }
 ]
@@ -18,6 +18,6 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class EntriesRoutingModule {
-  static components = [EntriesComponent, CountdownComponent, ConfirmationComponent, ];
+export class InvitesRoutingModule {
+  static components = [InvitesComponent, CountdownComponent, ConfirmationComponent, ];
 }

@@ -1,20 +1,20 @@
 import { Component, ElementRef, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
-import { IEntryResolved } from '../core/models/entries';
 import { ISetting } from '../core/models/settings';
 import { IDownloadImage } from '../core/models/images';
 import { LoaderService } from '../core/services/loader.service';
 import { SettingsService } from '../core/services/settings.service';
 import { ImagesService } from '../core/services/images.service';
 import { ImageUsage } from '../core/models/enum';
+import { IInviteResolved } from '../core/models/invites';
 
 @Component({
-  selector: 'app-entries',
-  templateUrl: './entries.component.html',
-  styleUrls: ['./entries.component.css']
+  selector: 'app-invites',
+  templateUrl: './invites.component.html',
+  styleUrls: ['./invites.component.css']
 })
-export class EntriesComponent implements OnInit {
+export class InvitesComponent implements OnInit {
   title = 'invites';
 
   audio = new Audio()
@@ -24,7 +24,7 @@ export class EntriesComponent implements OnInit {
   shortDate = "";
   longDate = "";
   
-  entryResolved!: IEntryResolved;
+  inviteResolved!: IInviteResolved;
   eventSettings: ISetting = {
     eventId: '',
     primaryColor: '',
@@ -61,18 +61,18 @@ export class EntriesComponent implements OnInit {
   ngOnInit(): void {
     this.loaderService.setLoading(true);
     this.route.data.subscribe(() => {
-      this.entryResolved = this.route.snapshot.data['entry'];
-      if (!this.entryResolved.entry) {
+      this.inviteResolved = this.route.snapshot.data['invite'];
+      if (!this.inviteResolved.invite) {
         this.router.navigate(['/error/page-not-found'])
       }
 
-      this.dayOfTheWeek = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString(this.localeValue, {  weekday: 'long' })
-      this.shortDate = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString(this.localeValue, { day: 'numeric', month: 'long' })
-      this.longDate = new Date(this.entryResolved.entry.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString(this.localeValue, {  day: 'numeric', month: 'long', year: 'numeric' })
+      this.dayOfTheWeek = new Date(this.inviteResolved.invite.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString(this.localeValue, {  weekday: 'long' })
+      this.shortDate = new Date(this.inviteResolved.invite.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString(this.localeValue, { day: 'numeric', month: 'long' })
+      this.longDate = new Date(this.inviteResolved.invite.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString(this.localeValue, {  day: 'numeric', month: 'long', year: 'numeric' })
 
       combineLatest([
-        this.eventSettingsService.getEventSettings(this.entryResolved.entry.eventId),
-        this.imagesService.getImageByEvent(this.entryResolved.entry.eventId)
+        this.eventSettingsService.getEventSettings(this.inviteResolved.invite.eventId),
+        this.imagesService.getImageByEvent(this.inviteResolved.invite.eventId)
       ]).subscribe({
         next: ([eventSettings, downloadImages]) => {
           this.eventSettings = eventSettings;

@@ -2,29 +2,29 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, O
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { Observable, fromEvent, merge } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { IEntry, IEntryAction } from 'src/app/core/models/entries';
 import { IFamilyGroup, IFamilyGroupAction } from 'src/app/core/models/familyGroups';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
-import { EntriesService } from 'src/app/core/services/entries.service';
 import { FamilyGroupsService } from 'src/app/core/services/familyGroups.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
+import { IInvite, IInviteAction } from 'src/app/core/models/invites';
+import { InvitesService } from 'src/app/core/services/invites.service';
 
 @Component({
-  selector: 'app-entry-modal',
+  selector: 'app-invite-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css']
 })
-export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
+export class InvitesModalComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
 
-  @Input() entryAction!: IEntryAction;
+  @Input() inviteAction!: IInviteAction;
   @Input() eventId!: string;
   @Input() familyGroups!: IFamilyGroup[];
-  @Output() updateEntries: EventEmitter<IEntryAction> = new EventEmitter();
+  @Output() updateInvites: EventEmitter<IInviteAction> = new EventEmitter();
   @Output() updateFamilyGroups: EventEmitter<IFamilyGroupAction> = new EventEmitter();
 
-  createEntryForm!: FormGroup;
+  createInviteForm!: FormGroup;
   createFamilyGroupForm!: FormGroup;
   errorMessage = '';
   isCreatingNewFormGroup = false;
@@ -34,7 +34,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
   private genericValidator: GenericValidator;
 
   constructor(
-    private entriesService: EntriesService, 
+    private invitesService: InvitesService, 
     private familyGroupsService: FamilyGroupsService,
     private fb: FormBuilder,
     private toastr: ToastrService,
@@ -59,7 +59,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.createEntryForm = this.fb.group({
+    this.createInviteForm = this.fb.group({
       id: [''],
       family: [$localize `Familia`, Validators.required],
       entriesNumber: [1, Validators.required],
@@ -69,47 +69,47 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
       eventId: ['']
     })
     
-    $('#confirmationModal').on('hidden.bs.modal', () => {
+    $('#inviteModal').on('hidden.bs.modal', () => {
       this.clearInputs();
     })
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes["entryAction"] && changes["entryAction"].currentValue) {
-      if (!changes["entryAction"].currentValue.delete) {
-        const entry: IEntry = changes["entryAction"].currentValue.entry;
-        this.createEntryForm.patchValue({ 
-          ...entry
+    if (changes["inviteAction"] && changes["inviteAction"].currentValue) {
+      if (!changes["inviteAction"].currentValue.delete) {
+        const invite: IInvite = changes["inviteAction"].currentValue.invite;
+        this.createInviteForm.patchValue({ 
+          ...invite
         })
       }
     }
   }
 
-  saveEntry() {
-    if (this.createEntryForm.valid) {
-      if (this.createEntryForm.dirty) {
-        if (this.createEntryForm.controls["id"].value !== "" && this.createEntryForm.controls["id"].value !== null) {
-          this.updateEntry();
+  saveInvite() {
+    if (this.createInviteForm.valid) {
+      if (this.createInviteForm.dirty) {
+        if (this.createInviteForm.controls["id"].value !== "" && this.createInviteForm.controls["id"].value !== null) {
+          this.updateInvite();
         } else {
-          this.createEntry();
+          this.createInvite();
         }
       } else {
-        $("#confirmationModal").modal('hide');
+        $("#inviteModal").modal('hide');
       }
     } else {
-      this.displayMessage = this.genericValidator.processMessages(this.createEntryForm, true);
+      this.displayMessage = this.genericValidator.processMessages(this.createInviteForm, true);
     }
   }
 
-  createEntry() {
+  createInvite() {
     this.loaderService.setLoading(true);
-    this.entriesService.createEntry(this.formatEntry()).subscribe({
+    this.invitesService.createInvite(this.formatInvite()).subscribe({
       next: (response: IMessageResponse) => {
-        $("#confirmationModal").modal('hide');
-        this.updateEntries.emit({
-          ...this.entryAction,
-          entry: {
-            ...this.formatEntry(),
+        $("#inviteModal").modal('hide');
+        this.updateInvites.emit({
+          ...this.inviteAction,
+          invite: {
+            ...this.formatInvite(),
             id: response.id
           },
           isNew: true
@@ -121,14 +121,14 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
     });
   }
 
-  updateEntry() {
+  updateInvite() {
     this.loaderService.setLoading(true);
-    this.entriesService.updateEntry(this.formatEntry(), this.createEntryForm.controls["id"].value).subscribe({
+    this.invitesService.updateInvite(this.formatInvite(), this.createInviteForm.controls["id"].value).subscribe({
       next: () => {
-        $("#confirmationModal").modal('hide');
-        this.updateEntries.emit({
-          ...this.entryAction,
-          entry: this.formatEntry(),
+        $("#inviteModal").modal('hide');
+        this.updateInvites.emit({
+          ...this.inviteAction,
+          invite: this.formatInvite(),
           isNew: false
         });
         this.toastr.success($localize `Se ha actualizado la invitación`);
@@ -139,7 +139,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   clearInputs(): void {
-    this.createEntryForm.reset({
+    this.createInviteForm.reset({
       family: $localize `Familia`,
       entriesNumber: 1,
       phoneNumber: '878',
@@ -152,12 +152,12 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
     this.isCreatingNewFormGroup = false;
   }
 
-  formatEntry(): IEntry {
+  formatInvite(): IInvite {
     return {
-      ...this.createEntryForm.value,
-      entriesNumber: parseInt(this.createEntryForm.controls['entriesNumber'].value),
+      ...this.createInviteForm.value,
+      entriesNumber: parseInt(this.createInviteForm.controls['entriesNumber'].value),
       eventId: this.eventId,
-    } as IEntry
+    } as IInvite
   }
 
   ngAfterViewInit(): void {
@@ -168,8 +168,8 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
 
     // Merge the blur event observable with the valueChanges observable
     // so we only need to subscribe once.
-    merge(this.createEntryForm.valueChanges, ...controlBlurs).subscribe(() => {
-      this.displayMessage = this.genericValidator.processMessages(this.createEntryForm)
+    merge(this.createInviteForm.valueChanges, ...controlBlurs).subscribe(() => {
+      this.displayMessage = this.genericValidator.processMessages(this.createInviteForm)
     });
   }
 
@@ -186,7 +186,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
   toggleIsEditingFormGroup(): void {
     if (!this.isCreatingNewFormGroup) {
       const selectedFamilyGroup = this.familyGroups.find(famGroup => 
-        famGroup.id === this.createEntryForm.controls["familyGroupId"].value);
+        famGroup.id === this.createInviteForm.controls["familyGroupId"].value);
       this.createFamilyGroupForm = this.fb.group({
         id: [selectedFamilyGroup?.id],
         familyGroup: [selectedFamilyGroup?.familyGroup, Validators.required],
@@ -223,7 +223,7 @@ export class EntryModalComponent implements OnInit, AfterViewInit, OnChanges {
           },
           isNew: true
         });
-        this.createEntryForm.patchValue({ 
+        this.createInviteForm.patchValue({ 
           familyGroupId: response.id,
         })
         this.toastr.success($localize `Grupo creado`);
