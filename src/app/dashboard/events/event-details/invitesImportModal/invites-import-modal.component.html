@@ -12,6 +12,10 @@
           <small id="helpId" class="form-text text-muted">Los unicos archivos soportados son en formato CSV</small>
         </div>
 
+        <div class="mb-3 progress-bar" *ngIf="processingFile">
+          <div id="bar">1%</div>
+        </div>
+
         <table class="table table-striped" *ngIf="invites.length > 0">
           <thead>
             <th scope="col">Family</th>
@@ -30,18 +34,6 @@
               </td>
               <td>{{ getFamilyGroup(invite.familyGroupId) }}</td>
             </tr>
-          </tbody>
-        </table>
-
-        <table class="table table-striped" *ngIf="errorInvites.length > 0">
-          <thead>
-            <th scope="col">Family</th>
-            <th scope="col">Number of entries</th>
-            <th scope="col">Phone Number</th>
-            <th scope="col">Kids Allowed</th>
-            <th scope="col">Family Group</th>
-          </thead>
-          <tbody>
             <tr *ngFor="let invite of errorInvites">
               <td [ngClass]="invite.family.includes('ERROR') ? 'error' : ''">{{ invite.family }}</td>
               <td [ngClass]="invite.entriesNumber.includes('ERROR') ? 'error' : ''">{{ invite.entriesNumber }}</td>

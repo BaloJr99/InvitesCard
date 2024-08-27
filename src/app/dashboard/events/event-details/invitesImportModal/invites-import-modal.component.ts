@@ -16,6 +16,7 @@ export class InvitesImportModalComponent implements OnInit {
   @Input() familyGroups: IFamilyGroup[] = [];
   invites: IPartialInvite[] = [];
   errorInvites: IErrorInvite[] = [];
+  processingFile = false;
   
   constructor(
     private invitesService: InvitesService,
@@ -28,6 +29,7 @@ export class InvitesImportModalComponent implements OnInit {
       this.errorInvites = [];
       const input = document.getElementById('fileInput') as HTMLInputElement;
       input.value = '';
+      this.processingFile = false;
     });
   }
 
@@ -36,11 +38,13 @@ export class InvitesImportModalComponent implements OnInit {
 
     if (element.files && element.files.length > 0) {
       try {
+        this.processingFile = true;
         this.loaderService.setLoading(true);
         const content = await this.readFileContent(element.files.item(0) as File);
         this.processFile(content);
       } catch (error) {
         this.loaderService.setLoading(false);
+        this.processingFile = false;
       }
     } else {
       this.errorInvites = [];
@@ -76,10 +80,16 @@ export class InvitesImportModalComponent implements OnInit {
   }
 
   processFile(content: string) {
+    const progressBar = document.getElementById('bar') as HTMLDivElement;
     const rows = content.split('\r\n').filter((value, index) => (value.trim() !== '' && index !== 0));
+    const incrementValue = 100 / rows.length;
+    let progress = 0;
     this.invites = [];
 
     rows.map((row) => {
+      progress = progress + incrementValue;
+      progressBar.style.width = progress + "%";
+      progressBar.innerText = progress + "%";
       const columns = row.split(',');
       const familyGroup = this.familyGroups.find(f => f.familyGroup.toLowerCase() === columns[4].toLowerCase());
 
