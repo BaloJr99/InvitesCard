@@ -53,7 +53,12 @@ export class HomeComponent implements OnInit {
     this.groupedByDate = {};
     const randomColors: string[] = [];
 
-    const validInvites = this.invites.filter((invite) => invite.dateOfConfirmation);
+    const validInvites = this.invites.filter((invite) => {
+      if (invite.dateOfConfirmation != null && new Date(invite.dateOfConfirmation).getTime() >= todayMinus31Days.getTime()) {
+        return true;
+      }
+      return false;
+    });
 
     const uniqueValidDates = [...new Set(
       validInvites.reduce((result: string[], invite) => {
