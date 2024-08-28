@@ -9,6 +9,7 @@
       <div class="form">
       <div class="question">
         <h2 i18n>¿ASISTIRÁS A MI FIESTA?</h2>
+        <h3 i18n *ngIf="blockConfirmationForm">Este formulario no acepta mas respuestas</h3>
       </div>
       <p i18n>
         Selecciona una opción
@@ -38,7 +39,7 @@
           <textarea id="my-textarea" class="form-control" name="" rows="3" formControlName="message"></textarea>
         </div>
         <div class="button">
-          <button data-testid="sendConfirmation" class="btn" type="submit" i18n>ENVIAR</button>
+          <button data-testid="sendConfirmation" class="btn" type="submit" i18n [disabled]="blockConfirmationForm">ENVIAR</button>
         </div>
         </div>
     </div>

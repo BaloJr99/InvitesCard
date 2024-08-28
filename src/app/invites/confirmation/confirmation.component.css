@@ -77,6 +77,11 @@
   text-align: center;
 }
 
+.invitesConfirmation h3 {
+  font-size: 16px;
+  text-align: center;
+}
+
 .invitesConfirmation .form p {
   color: #635959;
   text-align: left;

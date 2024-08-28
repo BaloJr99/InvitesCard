@@ -45,6 +45,8 @@ export class InvitesComponent implements OnInit {
 
   downloadImages: IDownloadImage[] = [];
 
+  deadlineMet = false;
+
   constructor(
     private route: ActivatedRoute, 
     private router: Router,
@@ -66,9 +68,11 @@ export class InvitesComponent implements OnInit {
         this.router.navigate(['/error/page-not-found'])
       }
 
-      this.dayOfTheWeek = new Date(this.inviteResolved.invite.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString(this.localeValue, {  weekday: 'long' })
-      this.shortDate = new Date(this.inviteResolved.invite.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString(this.localeValue, { day: 'numeric', month: 'long' })
-      this.longDate = new Date(this.inviteResolved.invite.dateOfEvent.replace('Z', '').replace('T', ' ')).toLocaleString(this.localeValue, {  day: 'numeric', month: 'long', year: 'numeric' })
+      this.deadlineMet = (new Date().getTime()) > new Date(this.inviteResolved.invite.maxDateOfConfirmation).getTime();
+
+      this.dayOfTheWeek = new Date(this.inviteResolved.invite.dateOfEvent).toLocaleString(this.localeValue, {  weekday: 'long' })
+      this.shortDate = new Date(this.inviteResolved.invite.dateOfEvent).toLocaleString(this.localeValue, { day: 'numeric', month: 'long' })
+      this.longDate = new Date(this.inviteResolved.invite.dateOfEvent).toLocaleString(this.localeValue, {  day: 'numeric', month: 'long', year: 'numeric' })
 
       combineLatest([
         this.eventSettingsService.getEventSettings(this.inviteResolved.invite.eventId),

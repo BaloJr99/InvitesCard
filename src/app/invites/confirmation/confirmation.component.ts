@@ -16,7 +16,13 @@ import { InvitesService } from 'src/app/core/services/invites.service';
 export class ConfirmationComponent implements AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
   @Input() invite!: IUserInvite;
+  @Input() set deadlineMet (value: boolean) {
+    this.blockConfirmationForm = value;
+    this.confirmationForm.disable();
+  }
   @Output() newInvite = new EventEmitter<FormGroup>();
+
+  blockConfirmationForm = false;
 
   private numberOfEntries = new BehaviorSubject<number[]>([])
   numberOfEntries$ = this.numberOfEntries.asObservable();
