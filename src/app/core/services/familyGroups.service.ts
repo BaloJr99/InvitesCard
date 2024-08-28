@@ -13,8 +13,8 @@ export class FamilyGroupsService {
 
   constructor(private http: HttpClient) {  }
 
-  getAllFamilyGroups(): Observable<IFamilyGroup[]> {
-    return this.http.get<IFamilyGroup[]>(this.invitesBaseUrl)
+  getAllFamilyGroups(eventId: string): Observable<IFamilyGroup[]> {
+    return this.http.get<IFamilyGroup[]>(`${this.invitesBaseUrl}/${eventId}`)
   }
 
   createFamilyGroup(familyGroup: IFamilyGroup): Observable<IMessageResponse> { 

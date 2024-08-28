@@ -60,13 +60,13 @@ export class InvitesModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnInit(): void {
     this.createInviteForm = this.fb.group({
-      id: [''],
+      id: '',
       family: [$localize `Familia`, Validators.required],
       entriesNumber: [1, Validators.required],
       phoneNumber: ['878', [Validators.required, Validators.pattern("[0-9]{10}")]],
       familyGroupId: ['', Validators.required],
       kidsAllowed: [true, Validators.required],
-      eventId: ['']
+      eventId: ''
     })
     
     $('#inviteModal').on('hidden.bs.modal', () => {
@@ -176,8 +176,9 @@ export class InvitesModalComponent implements OnInit, AfterViewInit, OnChanges {
   toggleIsCreatingNewFormGroup(): void {
     if (!this.isCreatingNewFormGroup) {
       this.createFamilyGroupForm = this.fb.group({
-        id: [''],
+        id: '',
         familyGroup: [$localize `Familia`, Validators.required],
+        eventId: ''
       })
     }
     this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;
@@ -189,7 +190,7 @@ export class InvitesModalComponent implements OnInit, AfterViewInit, OnChanges {
         famGroup.id === this.createInviteForm.controls["familyGroupId"].value);
       this.createFamilyGroupForm = this.fb.group({
         id: [selectedFamilyGroup?.id],
-        familyGroup: [selectedFamilyGroup?.familyGroup, Validators.required],
+        familyGroup: [selectedFamilyGroup?.familyGroup, Validators.required]
       })
     }
     this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;
@@ -213,6 +214,9 @@ export class InvitesModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   createFamilyGroup () {
     this.loaderService.setLoading(true);
+    this.createFamilyGroupForm.patchValue({
+      eventId: this.eventId
+    })
     this.familyGroupsService.createFamilyGroup(this.createFamilyGroupForm.value as IFamilyGroup).subscribe({
       next: (response: IMessageResponse) => {
         this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;

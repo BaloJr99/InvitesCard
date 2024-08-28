@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DialogComponent } from './dialog/dialog.component';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest } from 'rxjs';
+import { filter, switchMap } from 'rxjs';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { FamilyGroupsService } from 'src/app/core/services/familyGroups.service';
 import { SocketService } from 'src/app/core/services/socket.service';
@@ -47,15 +47,21 @@ export class InviteDetailsComponent implements OnInit {
     this.loaderService.setLoading(true);
     this.loaderService.setLoading(false);
     
-    combineLatest([
-      this.route.data,
-      this.familyGroupsService.getAllFamilyGroups()
-    ]).subscribe({
-      next: ([data, familyGroups]) => {
-        this.commonInvitesService.clearNotifications();
+    this.route.data.pipe(
+      filter(response => {
+        if (response) {
+          this.invites = response["eventResolved"]["invites"];
+          this.eventId = response["eventResolved"]["eventId"];
+          this.commonInvitesService.clearNotifications();
+          return true
+        }
+        return false;
+      }),
+      switchMap(data => this.familyGroupsService.getAllFamilyGroups(data["eventResolved"]["eventId"]))
+    ).subscribe({
+      next: (familyGroups) => {
         this.familyGroups = familyGroups;
-        this.buildInvitesDashboard(data["eventResolved"]["invites"]);
-        this.eventId = data["eventResolved"]["eventId"];
+        this.buildInvitesDashboard(this.invites);
       }
     }).add(() => {
       this.loaderService.setLoading(false)
@@ -69,7 +75,6 @@ export class InviteDetailsComponent implements OnInit {
   buildInvitesDashboard(invites: IInvite[]) {
     let counter = 0;
 
-    this.invites = invites;
     const notifications: INotification[] = [];
     const messages: Map<number, IMessage> = new Map<number, IMessage>();
 
