@@ -9,17 +9,21 @@ import { ErrorModalService } from 'src/app/core/services/error.service';
 })
 export class ErrorModalComponent implements OnInit {
   errorTriggered = false;
+  errorMessage = "";
 
   constructor(public errorService: ErrorModalService) { }
 
   ngOnInit(): void {
     this.errorService.errorResponse.subscribe({
       next: (information) => {
+        if (information.hasError && information.serverError) {
+          this.errorMessage = information.serverError.error;
+        }
         if (
-          information.error?.status !== undefined && 
-          information.error.status !== 401 && 
-          information.error.status !== 404 &&
-          information.error.status !== 409) {
+          information.serverError?.status !== undefined && 
+          information.serverError.status !== 401 && 
+          information.serverError.status !== 404 &&
+          information.serverError.status !== 409) {
           this.errorTriggered = information.hasError;
           $("#errorModal").modal("show");
         }

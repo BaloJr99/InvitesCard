@@ -11,6 +11,6 @@ export class ErrorModalService {
   errorResponse = this._errorResponse.asObservable();
   
   setError(hasError: boolean, error: HttpErrorResponse | null) {
-    this._errorResponse.next({ hasError, error } as IError);
+    this._errorResponse.next({ hasError, serverError: error } as IError);
   }
 }

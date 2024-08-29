@@ -2,7 +2,7 @@ import { HttpErrorResponse } from "@angular/common/http"
 
 export interface IError {
   hasError: boolean,
-  error: HttpErrorResponse | null
+  serverError: HttpErrorResponse | null
 }
 
 export interface IMessageResponse {
