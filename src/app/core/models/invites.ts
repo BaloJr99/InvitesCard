@@ -11,6 +11,10 @@ export interface IUserInvite {
   eventId: string
 }
 
+export interface IEventInvite extends IInvite{
+  isDeadlineMet: boolean
+}
+
 export interface IInvite {
   id: string,
   family: string,

@@ -42,6 +42,8 @@ export class InviteDetailsComponent implements OnInit {
 
   invites: IInvite[] = [];
   familyGroups: IFamilyGroup[] = [];
+
+  isDeadlineMet = false;
   
   ngOnInit(): void {
     this.loaderService.setLoading(true);
@@ -50,6 +52,7 @@ export class InviteDetailsComponent implements OnInit {
     this.route.data.pipe(
       filter(response => {
         if (response) {
+          this.isDeadlineMet = Boolean(response["eventResolved"]["invites"][0].isDeadlineMet);
           this.invites = response["eventResolved"]["invites"];
           this.eventId = response["eventResolved"]["eventId"];
           this.commonInvitesService.clearNotifications();

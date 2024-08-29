@@ -14,6 +14,7 @@ import { IInvite, IInviteAction } from 'src/app/core/models/invites';
 export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   @Input() inviteGroup!: KeyValue<string, IInvite[]>;
+  @Input() isDeadlineMet = false;
   @Output() setInviteAction = new EventEmitter<IInviteAction>();
 
   dtOptions: ADTSettings = {};

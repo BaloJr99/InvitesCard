@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { IEvent, IFullEvent } from '../models/events';
 import { IMessageResponse } from '../models/common';
-import { IInvite } from '../models/invites';
+import { IEventInvite } from '../models/invites';
 
 @Injectable()
 export class EventsService {
@@ -23,8 +23,8 @@ export class EventsService {
     return this.http.get<IEvent[]>(`${this.invitesBaseUrl}/users`)
   }
 
-  getEventInvites(eventId: string): Observable<IInvite[]> {
-    return this.http.get<IInvite[]>(`${this.invitesBaseUrl}/invites/${eventId}`)
+  getEventInvites(eventId: string): Observable<IEventInvite[]> {
+    return this.http.get<IEventInvite[]>(`${this.invitesBaseUrl}/invites/${eventId}`)
   }
 
   getEventById(id: string): Observable<IFullEvent> {

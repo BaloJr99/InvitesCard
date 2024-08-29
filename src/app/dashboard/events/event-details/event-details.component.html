@@ -8,8 +8,8 @@
       </ol>
     </nav>
     <div class="buttons">
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#invitesImportModal" i18n>Importar invitaciones</button>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#inviteModal" i18n>Nueva invitación</button>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#invitesImportModal" i18n [disabled]="isDeadlineMet">Importar invitaciones</button>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#inviteModal" i18n [disabled]="isDeadlineMet">Nueva invitación</button>
     </div>
   </div>
 </div>
@@ -24,7 +24,7 @@
 <section class="row mx-1 table-accordion">
   <div class="col-12">
     <div class="accordion" id="inviteAccordion" *ngFor="let inviteGroup of invitesGrouped | keyvalue">
-      <app-table [inviteGroup]="inviteGroup" (setInviteAction)="fillInviteAction($event)"></app-table>
+      <app-table [inviteGroup]="inviteGroup" (setInviteAction)="fillInviteAction($event)" [isDeadlineMet]="isDeadlineMet"></app-table>
     </div>
   </div>
 </section>
