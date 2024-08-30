@@ -1,9 +1,9 @@
 import { NgModule } from "@angular/core";
 import { SharedModule } from "src/app/shared/shared.module";
 import { RouterModule, Routes } from "@angular/router";
-import { UsersService } from "src/app/core/services/users.service";
 import { ForgotPasswordComponent } from "./forgot-password.component";
 import { PasswordResetComponent } from "./password-reset/password-reset.component";
+import { AuthService } from "src/app/core/services/auth.service";
 
 const routes: Routes = [
   { 
@@ -18,7 +18,7 @@ const routes: Routes = [
 
 @NgModule({
   providers: [
-    UsersService
+    AuthService
   ],
   imports: [
     SharedModule,
