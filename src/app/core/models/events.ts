@@ -38,5 +38,6 @@ export interface IStatistic {
 
 export interface IEventResolved {
   invites: IInvite[];
+  isDeadlineMet: boolean;
   eventId: string;
 }

@@ -1,6 +1,6 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn, Router } from "@angular/router";
-import { EMPTY, Observable, catchError, map } from "rxjs";
+import { EMPTY, Observable, catchError, combineLatest, map } from "rxjs";
 import { IEventResolved } from "src/app/core/models/events";
 import { EventsService } from "src/app/core/services/events.service";
 
@@ -12,9 +12,16 @@ export const eventResolver: ResolveFn<IEventResolved> = (
 
   const id = route.paramMap.get('id') ?? "";
 
-  const eventFound = eventsService.getEventInvites(id).pipe(
-    map(invites => {
-      return { invites: invites, eventId: id }
+  const eventFound = combineLatest([
+    eventsService.getEventInvites(id),
+    eventsService.isDeadlineMet(id)
+  ]).pipe(
+    map(([invites, isDeadlineMet]) => {
+      return {
+        invites,
+        eventId: id,
+        isDeadlineMet
+      }
     }),
     catchError(() => {
       router.navigate(['/dashboard/events'])

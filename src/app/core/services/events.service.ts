@@ -28,6 +28,10 @@ export class EventsService {
     return this.http.get<IEventInvite[]>(`${this.invitesBaseUrl}/invites/${eventId}`)
   }
 
+  isDeadlineMet(eventId: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.invitesBaseUrl}/invites/${eventId}/deadlineMet`)
+  }
+
   getEventById(id: string): Observable<IFullEvent> {
     return this.http.get<IFullEvent>(`${this.invitesBaseUrl}/${id}`)
   }

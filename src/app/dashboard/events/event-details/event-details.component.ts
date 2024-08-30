@@ -52,7 +52,7 @@ export class InviteDetailsComponent implements OnInit {
     this.route.data.pipe(
       filter(response => {
         if (response) {
-          this.isDeadlineMet = Boolean(response["eventResolved"]["invites"][0].isDeadlineMet);
+          this.isDeadlineMet = Boolean(response["eventResolved"]["isDeadlineMet"]);
           this.invites = response["eventResolved"]["invites"];
           this.eventId = response["eventResolved"]["eventId"];
           this.commonInvitesService.clearNotifications();
