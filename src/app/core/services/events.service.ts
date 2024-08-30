@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { IEvent, IFullEvent } from '../models/events';
+import { IDropdownEvent, IDashboardEvent, IFullEvent } from '../models/events';
 import { IMessageResponse } from '../models/common';
 import { IEventInvite } from '../models/invites';
 
@@ -16,11 +16,12 @@ export class EventsService {
     private http: HttpClient
   ) {  }
 
-  getEvents(isAdmin: boolean): Observable<IEvent[]> {
-    if (isAdmin) {
-      return this.http.get<IEvent[]>(this.invitesBaseUrl)
-    }
-    return this.http.get<IEvent[]>(`${this.invitesBaseUrl}/users`)
+  getEvents(): Observable<IDashboardEvent[]> {
+    return this.http.get<IDashboardEvent[]>(this.invitesBaseUrl)
+  }
+
+  getDropdownEvents(): Observable<IDropdownEvent[]> {
+    return this.http.get<IDropdownEvent[]>(`${this.invitesBaseUrl}/dropdown`)
   }
 
   getEventInvites(eventId: string): Observable<IEventInvite[]> {

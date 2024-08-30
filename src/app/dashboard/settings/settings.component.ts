@@ -3,8 +3,7 @@ import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/fo
 import { ToastrService } from 'ngx-toastr';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
-import { Roles } from 'src/app/core/models/enum';
-import { IEvent } from 'src/app/core/models/events';
+import { IDropdownEvent } from 'src/app/core/models/events';
 import { ISetting } from 'src/app/core/models/settings';
 import { EventsService } from 'src/app/core/services/events.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
@@ -19,8 +18,8 @@ import { GenericValidator } from 'src/app/shared/utils/validators/generic-valida
 })
 export class SettingsComponent implements OnInit, AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
-  events: IEvent[] = [];
-  eventSelected: IEvent | undefined = undefined;
+  events: IDropdownEvent[] = [];
+  eventSelected: IDropdownEvent | undefined = undefined;
   isNewSetting = true;
 
   createEventSettingsForm!: FormGroup;
@@ -108,12 +107,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
 
     this.loaderService.setLoading(true);
 
-    const userInformation = this.tokenService.getTokenValues();
-    if (userInformation) {
-      this.isAdmin = userInformation.roles.some(r => r.name == Roles.Admin);
-    }
-
-    this.eventsService.getEvents(this.isAdmin).subscribe({
+    this.eventsService.getDropdownEvents().subscribe({
       next: (events) => {
         this.events = events;
       }

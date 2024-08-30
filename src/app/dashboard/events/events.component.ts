@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, map } from 'rxjs';
 import { Roles } from 'src/app/core/models/enum';
-import { IEvent, IEventAction } from 'src/app/core/models/events';
+import { IDashboardEvent, IEventAction } from 'src/app/core/models/events';
 import { EventsService } from 'src/app/core/services/events.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
@@ -24,17 +24,18 @@ export class EventsComponent implements OnInit {
       
     }
     
-  events: IEvent[] = [];
+  events: IDashboardEvent[] = [];
   eventAction!: IEventAction;
   
   ngOnInit(): void {
     this.loaderService.setLoading(true);
 
     const userInformation = this.tokenService.getTokenValues();
+    
     if (userInformation) {
       this.isAdmin = userInformation.roles.some(r => r.name == Roles.Admin);
 
-      this.eventsService.getEvents(this.isAdmin).subscribe({
+      this.eventsService.getEvents().subscribe({
         next: (events) => {
           this.events = events.map((event) => {
             return {

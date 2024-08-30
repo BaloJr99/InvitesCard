@@ -3,13 +3,11 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, combineLatest, take } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
-import { Roles } from 'src/app/core/models/enum';
-import { IEvent } from 'src/app/core/models/events';
+import { IDropdownEvent } from 'src/app/core/models/events';
 import { IDeleteImage, IDownloadImage, IUpdateImage, IUpdateImageArray } from 'src/app/core/models/images';
 import { EventsService } from 'src/app/core/services/events.service';
 import { ImagesService } from 'src/app/core/services/images.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
-import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 
 @Component({
   selector: 'app-files',
@@ -19,8 +17,8 @@ import { TokenStorageService } from 'src/app/core/services/token-storage.service
 export class FilesComponent implements OnInit {
   isAdmin = false;
 
-  events: IEvent[] = [];
-  eventSelected: IEvent | undefined = undefined;
+  events: IDropdownEvent[] = [];
+  eventSelected: IDropdownEvent | undefined = undefined;
 
   images: IDownloadImage[] = [];
   imageAction!: IDeleteImage;
@@ -38,7 +36,6 @@ export class FilesComponent implements OnInit {
     private loaderService: LoaderService,
     private eventsService: EventsService,
     private imagesService: ImagesService,
-    private tokenService: TokenStorageService,
     private fb: FormBuilder,
     private toastr: ToastrService
   ) { }
@@ -46,12 +43,7 @@ export class FilesComponent implements OnInit {
   ngOnInit (): void {
     this.loaderService.setLoading(true);
 
-    const userInformation = this.tokenService.getTokenValues();
-    if (userInformation) {
-      this.isAdmin = userInformation.roles.some(r => r.name == Roles.Admin);
-    }
-
-    this.eventsService.getEvents(this.isAdmin).subscribe({
+    this.eventsService.getDropdownEvents().subscribe({
       next: (events) => {
         this.events = events;
       }

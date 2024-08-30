@@ -1,11 +1,16 @@
 import { IInvite } from "./invites"
 import { IUserBasicInfo } from "./users"
 
-export interface IEvent {
+export interface IDashboardEvent {
   id: string,
-  nameOfEvent: string, 
-  dateOfEvent: string
+  nameOfEvent: string,
+  dateOfEvent: string,
   allowCreateInvites: number
+}
+
+export interface IDropdownEvent {
+  id: string,
+  nameOfEvent: string,
 }
 
 export interface IFullEvent {
