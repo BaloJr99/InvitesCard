@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChildren } from '@angular/core';
 import { FormBuilder,FormControlName, FormGroup, Validators } from '@angular/forms';
 import { Observable, fromEvent, merge } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -16,6 +16,15 @@ import { IMessageResponse } from 'src/app/core/models/common';
   styleUrls: ['./user-modal.component.css']
 })
 export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
+  @HostListener('window:click', ['$event.target']) userModalListener (clickedElement: HTMLElement) {
+    const filteredRoles = document.getElementById('filteredRoles') as HTMLElement;
+    const roleFilter = document.getElementById('roleFilter') as HTMLElement;
+    
+    if (!filteredRoles.contains(clickedElement) && clickedElement !== roleFilter){
+      this.filteredRoles = [];
+    } 
+  }
+
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
 
   @Input() userAction!: IUserAction;
@@ -75,16 +84,6 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
       }).add(() => {
         this.loaderService.setLoading(false)
       })
-    });
-
-    window.addEventListener('click', ({ target }) => {
-      const filteredRoles = document.getElementById('filteredRoles') as HTMLElement;
-      const roleFilter = document.getElementById('roleFilter') as HTMLElement;
-      const clickedElement = target as HTMLElement;
-      
-      if (!filteredRoles.contains(clickedElement) && clickedElement !== roleFilter){
-        this.filteredRoles = [];
-      } 
     });
   }
 
