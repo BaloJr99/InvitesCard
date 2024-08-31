@@ -3,7 +3,7 @@ import { SharedModule } from "src/app/shared/shared.module";
 import { RouterModule, Routes } from "@angular/router";
 import { UsersComponent } from "./users.component";
 import { DataTablesModule } from "angular-datatables";
-import { UserModalComponent } from "./usersModal/modal.component";
+import { UserModalComponent } from "./usersModal/users-modal.component";
 import { EventsService } from "src/app/core/services/events.service";
 import { SettingsService } from "src/app/core/services/settings.service";
 import { UsersService } from "src/app/core/services/users.service";

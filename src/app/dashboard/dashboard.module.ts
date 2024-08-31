@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { DashboardRoutingModule } from "./dashboard.routing.module";
 import { SharedModule } from "../shared/shared.module";
-import { SocketService } from "../core/services/socket.service";
 import { CommonInvitesService } from "../core/services/commonInvites.service";
 
 @NgModule({
@@ -10,7 +9,6 @@ import { CommonInvitesService } from "../core/services/commonInvites.service";
     SharedModule
   ],
   providers: [
-    SocketService,
     CommonInvitesService
   ],
   declarations: [DashboardRoutingModule.components ]

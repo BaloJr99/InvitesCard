@@ -1,0 +1,63 @@
+<section class="row mx-1 my-3 breadcrumb-header">
+  <div class="col-12">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
+        <li class="breadcrumb-item" i18n>LOGS</li>
+      </ol>
+    </nav>
+  </div>
+</section>
+<section class="history">
+  <div class="full-history row mb-3">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title" i18n>Logs de los ultimos 31 días</h5>
+          <canvas id="historyChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-md-12 col-lg-8">
+      <div class="table-styling">
+        <table datatable class="row-border hover" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+          <thead>
+            <tr>
+              <th i18n>Fecha del error</th>
+              <th i18n>Error</th>
+              <th i18n>Usuario</th>
+              <th i18n>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let log of logs">
+              <td>{{ log.dateOfError | date }}</td>
+              <td>{{ log.customError }}</td>
+              <td>{{ log.userId }}</td>
+              <td>
+                <button class="btn btn-secondary" (click)="showException(log.id)"><i class="fa-solid fa-eye"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="percentage-history col-md-12 col-lg-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title" i18n>Total de errores <br> últimos 31 días</h5>
+          <span style="color: #ff5d6d;">{{ numberOfErrorsLast31Days }}</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title" i18n>Total de errores <br> el día de hoy</h5>
+          <span style="color: #ff5d6d;">{{ numberOfErrorsToday }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-log-modal [log]="logSelected"></app-log-modal>

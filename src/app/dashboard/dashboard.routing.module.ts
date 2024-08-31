@@ -26,6 +26,10 @@ const routes: Routes = [
         loadChildren: () => import('./users/users.module').then(m => m.UsersModule)
       },
       {
+        path: 'logs',
+        loadChildren: () => import('./logs/logs.module').then(m => m.LoggerModule)
+      },
+      {
         path: 'settings',
         loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule)
       },

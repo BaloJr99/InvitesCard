@@ -1,0 +1,32 @@
+<!-- Modal -->
+<div class="modal fade" id="logModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalLabel" i18n>Log</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="log">
+        <div class="mb-3">
+          <label for="dateOfError" class="form-label" i18n>Fecha del error</label>
+          <input type="text" class="form-control" value="{{ log.dateOfError | date }}" disabled>
+        </div>
+        <div class="mb-3">
+          <label for="customError" class="form-label" i18n>Error</label>
+          <input type="text" class="form-control" value="{{ log.customError }}" disabled>
+        </div>
+        <div class="mb-3">
+          <label for="exceptionMessage" class="form-label" i18n>Excepción</label>
+          <textarea class="form-control" disabled>{{ log.exceptionMessage }}</textarea>
+        </div>
+        <div class="mb-3">
+          <label for="userId" class="form-label" i18n>Usuario</label>
+          <input type="text" class="form-control" value="{{ log.userId }}" disabled>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="closeModal" class="btn btn-secondary" data-bs-dismiss="modal" i18n>Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
