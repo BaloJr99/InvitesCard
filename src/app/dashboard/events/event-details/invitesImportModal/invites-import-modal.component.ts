@@ -39,11 +39,11 @@ export class InvitesImportModalComponent implements OnInit {
     if (element.files && element.files.length > 0) {
       try {
         this.processingFile = true;
-        this.loaderService.setLoading(true);
+        this.loaderService.setLoading(true, 'Procesando archivo');
         const content = await this.readFileContent(element.files.item(0) as File);
         this.processFile(content);
       } catch (error) {
-        this.loaderService.setLoading(false);
+        this.loaderService.setLoading(false, '');
         this.processingFile = false;
       }
     } else {
@@ -71,12 +71,12 @@ export class InvitesImportModalComponent implements OnInit {
   }
 
   sendData(): void {
-    this.loaderService.setLoading(true);
+    this.loaderService.setLoading(true, 'Procesando invitaciones');
     this.invitesService.bulkInvites(this.invites).subscribe({
       next: (messageResponse: IMessageResponse) => {
         this.toastr.success(messageResponse.message);
       }
-    }).add(this.loaderService.setLoading(false));
+    }).add(this.loaderService.setLoading(false, ''));
   }
 
   processFile(content: string) {
@@ -123,7 +123,7 @@ export class InvitesImportModalComponent implements OnInit {
       }
     });
 
-    this.loaderService.setLoading(false);
+    this.loaderService.setLoading(false, '');
   }
 
   getFamilyGroup(familyGroupId: string):string  {

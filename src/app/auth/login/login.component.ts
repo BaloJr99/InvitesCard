@@ -63,7 +63,7 @@ export class LoginComponent implements AfterViewInit {
       if(this.loginForm.dirty) {
         const user = this.loginForm.value;
         delete user.confirmPassword;
-        this.loaderService.setLoading(true);
+        this.loaderService.setLoading(true, 'Iniciando sesión');
         this.authService.loginAccount(user as IAuthUser).subscribe({
           next: (authInfo) => {
             this.authErrorMessage = "";
@@ -78,7 +78,7 @@ export class LoginComponent implements AfterViewInit {
             }
           }
         }).add(() => {
-          this.loaderService.setLoading(false);
+          this.loaderService.setLoading(false, '');
         })
       } else {
         this.onSaveComplete();

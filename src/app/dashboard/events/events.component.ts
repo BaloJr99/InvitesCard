@@ -28,7 +28,7 @@ export class EventsComponent implements OnInit {
   eventAction!: IEventAction;
   
   ngOnInit(): void {
-    this.loaderService.setLoading(true);
+    this.loaderService.setLoading(true, 'Cargando eventos');
 
     const userInformation = this.tokenService.getTokenValues();
     
@@ -45,7 +45,7 @@ export class EventsComponent implements OnInit {
           });
         }
       }).add(() => {
-        this.loaderService.setLoading(false)
+        this.loaderService.setLoading(false, '');
       });
     }
   }

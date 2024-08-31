@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
   route = "";
   
   ngOnInit(): void {
-    this.loaderService.setLoading(true);
+    this.loaderService.setLoading(true, 'Cargando dashboard');
     const userInformation = this.tokenService.getTokenValues();
     if (userInformation) {
       this.socket.joinRoom(this.username);
@@ -55,7 +55,7 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    this.loaderService.setLoading(false);
+    this.loaderService.setLoading(false, '');
 
     this.commonInvitesService.messages$.subscribe({
       next: (messages) => {

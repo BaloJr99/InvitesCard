@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loaderService.setLoading(true);
+    this.loaderService.setLoading(true, 'Cargando página principal');
     this.invitesService.getAllInvites()
     .subscribe({
       next: (invites) => {
@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
         this.RenderChart();
       }
     }).add(() => {
-      this.loaderService.setLoading(false)
+      this.loaderService.setLoading(false, '');
     });
   }
 

@@ -22,3 +22,8 @@ export interface IMessage {
   family: string,
   message: string
 }
+
+export interface ISpinner {
+  isLoading: boolean,
+  message: string
+}

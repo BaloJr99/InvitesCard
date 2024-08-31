@@ -81,7 +81,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
 
   addnewInvite() {
     if(this.invite.id) {
-      this.loaderService.setLoading(true);
+      this.loaderService.setLoading(true, 'Creando invitación');
       this.invitesService.sendConfirmation(this.confirmationForm.value as IInvite, this.invite.id)
         .subscribe({
           next: (() => {
@@ -89,7 +89,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
             this.socket.sendNotification(this.invite.id)
           })
         }).add(() => {
-          this.loaderService.setLoading(false);
+          this.loaderService.setLoading(false, '');
         });
     }
   }

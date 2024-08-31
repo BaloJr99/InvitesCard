@@ -36,7 +36,7 @@ export class EventDialogComponent implements OnChanges {
   }
 
   deleteEntry(): void {
-    this.loaderService.setLoading(true);
+    this.loaderService.setLoading(true, 'Eliminando invitación');
     this.invitesService.deleteInvite(this.inviteAction.invite.id).subscribe({
       next: () => {
         this.hideModal();
@@ -44,7 +44,7 @@ export class EventDialogComponent implements OnChanges {
         this.toastr.success($localize `Se ha eliminado la invitación`);
       }
     }).add(() => {
-      this.loaderService.setLoading(false);
+      this.loaderService.setLoading(false, '');
     });
   }
 }

@@ -102,7 +102,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   createInvite() {
-    this.loaderService.setLoading(true);
+    this.loaderService.setLoading(true, 'Creando invitación');
     this.invitesService.createInvite(this.formatInvite()).subscribe({
       next: (response: IMessageResponse) => {
         $("#inviteModal").modal('hide');
@@ -117,12 +117,12 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success($localize `Se ha guardado la invitación`);
       }
     }).add(() => {
-      this.loaderService.setLoading(false);
+      this.loaderService.setLoading(false, '');
     });
   }
 
   updateInvite() {
-    this.loaderService.setLoading(true);
+    this.loaderService.setLoading(true, 'Actualizando invitación');
     this.invitesService.updateInvite(this.formatInvite(), this.createInviteForm.controls["id"].value).subscribe({
       next: () => {
         $("#inviteModal").modal('hide');
@@ -134,7 +134,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success($localize `Se ha actualizado la invitación`);
       }
     }).add(() => {
-      this.loaderService.setLoading(false);
+      this.loaderService.setLoading(false, '');
     });
   }
 
@@ -213,7 +213,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   createFamilyGroup () {
-    this.loaderService.setLoading(true);
+    this.loaderService.setLoading(true, 'Creando grupo familiar');
     this.createFamilyGroupForm.patchValue({
       eventId: this.eventId
     })
@@ -233,12 +233,12 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success($localize `Grupo creado`);
       }
     }).add(() => {
-      this.loaderService.setLoading(false);
+      this.loaderService.setLoading(false, '');
     });
   }
 
   updateFamilyGroup() {
-    this.loaderService.setLoading(true);
+    this.loaderService.setLoading(true, 'Actualizando grupo familiar');
     this.familyGroupsService.updateFamilyGroup(this.createFamilyGroupForm.value as IFamilyGroup, this.createFamilyGroupForm.controls["id"].value).subscribe({
       next: () => {
         this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;
@@ -251,7 +251,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success($localize `Grupo actualizado`);
       }
     }).add(() => {
-      this.loaderService.setLoading(false);
+      this.loaderService.setLoading(false, '');
     });
   }
 }

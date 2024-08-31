@@ -61,7 +61,7 @@ export class InvitesComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    this.loaderService.setLoading(true);
+    this.loaderService.setLoading(true, 'Cargando invitaciones');
     this.route.data.subscribe(() => {
       this.inviteResolved = this.route.snapshot.data['invite'];
       if (!this.inviteResolved.invite) {
@@ -87,7 +87,7 @@ export class InvitesComponent implements OnInit {
           this.elRef.nativeElement.style.setProperty('--custom-secondary-color', eventSettings.secondaryColor);
         }
       }).add(() => {
-        this.loaderService.setLoading(false);
+        this.loaderService.setLoading(false, '');
       });
     });
   }

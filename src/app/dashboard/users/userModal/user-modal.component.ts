@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChildren } from '@angular/core';
 import { FormBuilder,FormControlName, FormGroup, Validators } from '@angular/forms';
 import { Observable, fromEvent, merge } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -75,14 +75,14 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
     });
 
     $('#usersModal').on('shown.bs.modal', () => {
-      this.loaderService.setLoading(true);
+      this.loaderService.setLoading(true, 'Cargando roles');
 
       this.rolesService.getAllRoles().subscribe({
         next: (roles) => {
           this.roles = roles;
         }
       }).add(() => {
-        this.loaderService.setLoading(false)
+        this.loaderService.setLoading(false, '');
       })
     });
   }
@@ -116,7 +116,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   createUser() {
-    this.loaderService.setLoading(true);
+    this.loaderService.setLoading(true, 'Creando usuario');
     this.usersService.createUser(this.createUserForm.value).subscribe({
       next: (response: IMessageResponse) => {
         $("#usersModal").modal('hide');
@@ -130,12 +130,12 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success(response.message);
       }
     }).add(() => {
-      this.loaderService.setLoading(false);
+      this.loaderService.setLoading(false, '');
     });
   }
 
   updateUser() {
-    this.loaderService.setLoading(true);
+    this.loaderService.setLoading(true, 'Actualizando usuario');
     this.usersService.updateUser(this.createUserForm.value, this.createUserForm.controls["_id"].value).subscribe({
       next: (response: IMessageResponse) => {
         $("#usersModal").modal('hide');
@@ -146,7 +146,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success(response.message);
       }
     }).add(() => {
-      this.loaderService.setLoading(false);
+      this.loaderService.setLoading(false, '');
     });
   }
 

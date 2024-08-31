@@ -52,14 +52,14 @@ export class ForgotPasswordComponent implements AfterViewInit {
   sendResetPassword(): void {
     if (this.forgotPasswordForm.valid) {
       if(this.forgotPasswordForm.dirty) {
-        this.loaderService.setLoading(true);
+        this.loaderService.setLoading(true, 'Enviando correo');
         this.authService.sendResetPassword(this.forgotPasswordForm.value).subscribe({
           next: (messageResponse) => {
             this.errorMessage = messageResponse.message;
             this.emailSent = true;
           }
         }).add(() => {
-          this.loaderService.setLoading(false);
+          this.loaderService.setLoading(false, '');
         })
       }
     } else {

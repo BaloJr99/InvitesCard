@@ -43,8 +43,8 @@ export class InviteDetailsComponent implements OnInit {
   isDeadlineMet = false;
   
   ngOnInit(): void {
-    this.loaderService.setLoading(true);
-    this.loaderService.setLoading(false);
+    this.loaderService.setLoading(true, 'Cargando los detalles del evento');
+    this.loaderService.setLoading(false, '');
     
     this.route.data.pipe(
       filter(response => {
@@ -64,7 +64,7 @@ export class InviteDetailsComponent implements OnInit {
         this.buildInvitesDashboard(this.invites);
       }
     }).add(() => {
-      this.loaderService.setLoading(false)
+      this.loaderService.setLoading(false, '');
     })
 
     this.socket.io.on("newNotification", () => {

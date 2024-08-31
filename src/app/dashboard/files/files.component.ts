@@ -41,14 +41,14 @@ export class FilesComponent implements OnInit {
   ) { }
 
   ngOnInit (): void {
-    this.loaderService.setLoading(true);
+    this.loaderService.setLoading(true, 'Cargando archivos');
 
     this.eventsService.getDropdownEvents().subscribe({
       next: (events) => {
         this.events = events;
       }
     }).add(() => {
-      this.loaderService.setLoading(false)
+      this.loaderService.setLoading(false, '')
     })
   }
 
@@ -60,7 +60,7 @@ export class FilesComponent implements OnInit {
 
   saveFiles(): void {
     if (this.saveFilesForm.controls["photoFilesSource"].value !== "") {
-      this.loaderService.setLoading(true);
+      this.loaderService.setLoading(true, 'Subiendo imagenes');
       const filesObservable: Observable<string>[] = [];
       Array.from(this.saveFilesForm.controls["photoFilesSource"].value as FileList).forEach(file => {
         const base64 = this.getBase64(file).pipe(
@@ -90,7 +90,7 @@ export class FilesComponent implements OnInit {
               this.toastr.success(response[0].message);
             }
           }).add(() => {
-            this.loaderService.setLoading(false);
+            this.loaderService.setLoading(false, '');
           });
         }
       });
@@ -104,7 +104,7 @@ export class FilesComponent implements OnInit {
           this.images = response;
         }
       }).add(() => {
-        this.loaderService.setLoading(false)
+        this.loaderService.setLoading(false, '');
       })
     }
   }
@@ -174,14 +174,14 @@ export class FilesComponent implements OnInit {
 
  saveChanges(): void {
   if (this.imageUpdateForm.valid && this.imageUpdateForm.controls.length > 0) {
-    this.loaderService.setLoading(true)
+    this.loaderService.setLoading(true, 'Guardando archivos');
     this.imagesService.updateImage(this.imageUpdateForm.value as IUpdateImage[]).subscribe({
       next: (response) => {
         this.toastr.success(response.message);
         this.imageUpdateForm = new FormArray<FormGroup<IUpdateImageArray>>([]);
       }
     }).add(() => {
-      this.loaderService.setLoading(false)
+      this.loaderService.setLoading(false, '');
     })
   }
  }

@@ -41,7 +41,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       ]
     }
 
-    this.loaderService.setLoading(true);
+    this.loaderService.setLoading(true, 'Cargando usuarios');
 
     this.usersService.getAllUsers().subscribe({
       next: (users) => {
@@ -49,7 +49,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
         this.rerender();
       }
     }).add(() => {
-      this.loaderService.setLoading(false)
+      this.loaderService.setLoading(false, '');
     })
   }
 
@@ -90,7 +90,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     }).add(() => {
-      this.loaderService.setLoading(false)
+      this.loaderService.setLoading(false, '');
     });
   }
 

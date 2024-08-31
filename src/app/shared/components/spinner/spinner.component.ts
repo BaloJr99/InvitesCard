@@ -7,7 +7,8 @@ import { LoaderService } from 'src/app/core/services/loader.service';
   styleUrls: ['./spinner.component.css']
 })
 export class SpinnerComponent implements OnInit {
-  showSpinner = false;
+  showSpinner = true;
+  text = 'Cargando archivos';
 
   constructor(
     private loader: LoaderService,
@@ -16,8 +17,9 @@ export class SpinnerComponent implements OnInit {
 
   ngOnInit(): void {
     this.loader.loading$.subscribe({
-      next: (value) => {
-        this.showSpinner = value;
+      next: (spinner) => {
+        this.showSpinner = spinner.isLoading;
+        this.text = spinner.message;
         this.cd.detectChanges();
       }
     })
