@@ -12,10 +12,10 @@ import { InvitesService } from 'src/app/core/services/invites.service';
 
 @Component({
   selector: 'app-invite-modal',
-  templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.css']
+  templateUrl: './invite-modal.component.html',
+  styleUrls: ['./invite-modal.component.css']
 })
-export class InvitesModalComponent implements OnInit, AfterViewInit, OnChanges {
+export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
 
   @Input() inviteAction!: IInviteAction;

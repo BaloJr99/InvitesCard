@@ -5,11 +5,11 @@ import { InvitesService } from 'src/app/core/services/invites.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 
 @Component({
-  selector: 'app-dialog',
-  templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.css']
+  selector: 'app-event-dialog',
+  templateUrl: './event-dialog.component.html',
+  styleUrls: ['./event-dialog.component.css']
 })
-export class DialogComponent implements OnChanges {
+export class EventDialogComponent implements OnChanges {
   @Input() inviteAction!: IInviteAction;
   @Output() updateInvites: EventEmitter<IInviteAction> = new EventEmitter();
 

@@ -5,11 +5,11 @@ import { ImagesService } from 'src/app/core/services/images.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 
 @Component({
-  selector: 'app-dialog',
-  templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.css']
+  selector: 'app-files-modal',
+  templateUrl: './files-modal.component.html',
+  styleUrls: ['./files-modal.component.css']
 })
-export class DialogComponent {
+export class FilesModalComponent {
   @Input() imageAction!: IDeleteImage;
   @Output() updateImages: EventEmitter<IDeleteImage> = new EventEmitter();
 

@@ -15,10 +15,10 @@
 </div>
 <section class="row mx-1 card-section">
   <div class="col-12 card-container">
-    <app-card  i18n-displayText displayText="Invitaciones Confirmadas" [number]="stadistics.confirmedEntries" backgroundColor="#43cd63"></app-card>
-    <app-card  i18n-displayText displayText="Invitaciones Pendientes" [number]="stadistics.pendingEntries" backgroundColor="#facf4f"></app-card>
-    <app-card  i18n-displayText displayText="Invitaciones Canceladas" [number]="stadistics.canceledEntries" backgroundColor="#ff5d6d"></app-card>
-    <app-card  i18n-displayText displayText="Total de Invitaciones" [number]="stadistics.totalEntries" backgroundColor="#54a6ff"></app-card>
+    <app-event-card  i18n-displayText displayText="Invitaciones Confirmadas" [number]="stadistics.confirmedEntries" backgroundColor="#43cd63"></app-event-card>
+    <app-event-card  i18n-displayText displayText="Invitaciones Pendientes" [number]="stadistics.pendingEntries" backgroundColor="#facf4f"></app-event-card>
+    <app-event-card  i18n-displayText displayText="Invitaciones Canceladas" [number]="stadistics.canceledEntries" backgroundColor="#ff5d6d"></app-event-card>
+    <app-event-card  i18n-displayText displayText="Total de Invitaciones" [number]="stadistics.totalEntries" backgroundColor="#54a6ff"></app-event-card>
   </div>
 </section>
 <section class="row mx-1 table-accordion">
@@ -35,7 +35,7 @@
   (updateInvites)="updateInvites($event)"
   (updateFamilyGroups)="updateFamilyGroups($event)">
 </app-invite-modal>
-<app-dialog *ngIf="inviteAction" [inviteAction]="inviteAction" (updateInvites)="updateInvites($event)"></app-dialog>
+<app-event-dialog *ngIf="inviteAction" [inviteAction]="inviteAction" (updateInvites)="updateInvites($event)"></app-event-dialog>
 <app-invites-import-dialog 
   [eventId]="eventId"
   [familyGroups]="familyGroups">

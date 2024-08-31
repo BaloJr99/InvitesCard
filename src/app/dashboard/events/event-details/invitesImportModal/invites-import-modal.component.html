@@ -16,7 +16,7 @@
           <div id="bar">1%</div>
         </div>
 
-        <table class="table table-striped" *ngIf="invites.length > 0">
+        <table class="table table-striped" *ngIf="invites.length > 0 || errorInvites.length > 0">
           <thead>
             <th scope="col">Family</th>
             <th scope="col">Number of entries</th>

@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { DialogComponent } from './dialog/dialog.component';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { LoaderService } from 'src/app/core/services/loader.service';
@@ -17,8 +16,6 @@ import { IInvite, IInviteAction } from 'src/app/core/models/invites';
   styleUrls: ['./event-details.component.css']
 })
 export class InviteDetailsComponent implements OnInit {
-  @ViewChild(DialogComponent) dialogComponent!: DialogComponent;
-
   constructor(
     private route: ActivatedRoute,
     private loaderService: LoaderService,

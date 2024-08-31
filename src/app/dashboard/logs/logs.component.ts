@@ -38,6 +38,7 @@ export class LogsComponent implements OnInit, AfterViewInit, OnDestroy {
       language: {
         lengthMenu: '_MENU_'
       },
+      order: [[0, 'desc']],
       columns: [
         {
           width: '20%',

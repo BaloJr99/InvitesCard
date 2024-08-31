@@ -12,8 +12,8 @@ import { IMessageResponse } from 'src/app/core/models/common';
 
 @Component({
   selector: 'app-user-modal',
-  templateUrl: './users-modal.component.html',
-  styleUrls: ['./users-modal.component.css']
+  templateUrl: './user-modal.component.html',
+  styleUrls: ['./user-modal.component.css']
 })
 export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];

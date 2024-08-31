@@ -12,8 +12,8 @@ import { IMessageResponse } from 'src/app/core/models/common';
 
 @Component({
   selector: 'app-event-modal',
-  templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.css']
+  templateUrl: './event-modal.component.html',
+  styleUrls: ['./event-modal.component.css']
 })
 export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
