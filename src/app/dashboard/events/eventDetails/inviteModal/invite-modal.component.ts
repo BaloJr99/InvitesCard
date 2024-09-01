@@ -66,7 +66,8 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
       phoneNumber: ['878', [Validators.required, Validators.pattern("[0-9]{10}")]],
       familyGroupId: ['', Validators.required],
       kidsAllowed: [true, Validators.required],
-      eventId: ''
+      eventId: '',
+      inviteViewed: null
     })
     
     $('#inviteModal').on('hidden.bs.modal', () => {
@@ -156,7 +157,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
     return {
       ...this.createInviteForm.value,
       entriesNumber: parseInt(this.createInviteForm.controls['entriesNumber'].value),
-      eventId: this.eventId,
+      eventId: this.eventId
     } as IInvite
   }
 

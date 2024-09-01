@@ -11,10 +11,6 @@ export interface IUserInvite {
   eventId: string
 }
 
-export interface IEventInvite extends IInvite{
-  isDeadlineMet: boolean
-}
-
 export interface IInvite {
   id: string,
   family: string,
@@ -27,7 +23,8 @@ export interface IInvite {
   dateOfConfirmation: string | null,
   isMessageRead: boolean,
   eventId: string,
-  familyGroupId: string
+  familyGroupId: string,
+  inviteViewed: string | null
 }
 
 export interface IPartialInvite {

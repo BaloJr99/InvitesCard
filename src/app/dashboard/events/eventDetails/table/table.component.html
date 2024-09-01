@@ -11,6 +11,7 @@
           <tr>
             <th i18n>Familia</th>
             <th i18n>Numero de entradas</th>
+            <th i18n>Vista</th>
             <th i18n>Acciones</th>
           </tr>
         </thead>
@@ -18,6 +19,7 @@
           <tr *ngFor="let invite of inviteGroup.value">
             <td>{{ invite.family }}</td>
             <td>{{ invite.entriesConfirmed === null || invite.entriesConfirmed === undefined ? 0 : invite.entriesConfirmed }} / {{ invite.entriesNumber }}</td>
+            <td><i class="fa-solid fa-eye" *ngIf="invite.inviteViewed"></i></td>
             <td>
               <button class="btn" [ngClass]="invite.confirmation === null || invite.confirmation === undefined ? 'btn-warning' : 'btn-secondary'" (click)="openEditModal(this.invite.id)" [disabled]="invite.confirmation !== null && invite.confirmation !== undefined" [disabled]="isDeadlineMet"><i class="fa-solid fa-pen-to-square"></i></button>
               <button class="btn btn-delete" [ngClass]="invite.confirmation === null || invite.confirmation === undefined ? 'btn-danger' : 'btn-secondary'" (click)="showModal(this.invite)" [disabled]="invite.confirmation !== null && invite.confirmation !== undefined" [disabled]="isDeadlineMet"><i class="fa-solid fa-trash"></i></button>
