@@ -41,7 +41,7 @@ export class FilesComponent implements OnInit {
   ) { }
 
   ngOnInit (): void {
-    this.loaderService.setLoading(true, 'Cargando archivos');
+    this.loaderService.setLoading(true, $localize `Cargando archivos`);
 
     this.eventsService.getDropdownEvents().subscribe({
       next: (events) => {
@@ -60,7 +60,7 @@ export class FilesComponent implements OnInit {
 
   saveFiles(): void {
     if (this.saveFilesForm.controls["photoFilesSource"].value !== "") {
-      this.loaderService.setLoading(true, 'Subiendo imagenes');
+      this.loaderService.setLoading(true, $localize `Subiendo imagenes`);
       const filesObservable: Observable<string>[] = [];
       Array.from(this.saveFilesForm.controls["photoFilesSource"].value as FileList).forEach(file => {
         const base64 = this.getBase64(file).pipe(
@@ -174,7 +174,7 @@ export class FilesComponent implements OnInit {
 
  saveChanges(): void {
   if (this.imageUpdateForm.valid && this.imageUpdateForm.controls.length > 0) {
-    this.loaderService.setLoading(true, 'Guardando archivos');
+    this.loaderService.setLoading(true, $localize `Guardando archivos`);
     this.imagesService.updateImage(this.imageUpdateForm.value as IUpdateImage[]).subscribe({
       next: (response) => {
         this.toastr.success(response.message);

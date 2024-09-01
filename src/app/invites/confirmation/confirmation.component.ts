@@ -81,7 +81,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
 
   addnewInvite() {
     if(this.invite.id) {
-      this.loaderService.setLoading(true, 'Creando invitación');
+      this.loaderService.setLoading(true, $localize `Creando invitación`);
       this.invitesService.sendConfirmation(this.confirmationForm.value as IInvite, this.invite.id)
         .subscribe({
           next: (() => {

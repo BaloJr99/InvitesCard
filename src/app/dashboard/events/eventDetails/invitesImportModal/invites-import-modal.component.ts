@@ -39,7 +39,7 @@ export class InvitesImportModalComponent implements OnInit {
     if (element.files && element.files.length > 0) {
       try {
         this.processingFile = true;
-        this.loaderService.setLoading(true, 'Procesando archivo');
+        this.loaderService.setLoading(true, $localize `Procesando archivo`);
         const content = await this.readFileContent(element.files.item(0) as File);
         this.processFile(content);
       } catch (error) {
@@ -71,7 +71,7 @@ export class InvitesImportModalComponent implements OnInit {
   }
 
   sendData(): void {
-    this.loaderService.setLoading(true, 'Procesando invitaciones');
+    this.loaderService.setLoading(true, $localize `Procesando invitaciones`);
     this.invitesService.bulkInvites(this.invites).subscribe({
       next: (messageResponse: IMessageResponse) => {
         this.toastr.success(messageResponse.message);
@@ -105,11 +105,11 @@ export class InvitesImportModalComponent implements OnInit {
         return false;
       })) {
         this.errorInvites.push({
-          family: columns[0] === '' ? 'ERROR: Family empty' : columns[0],
-          entriesNumber: isNaN(parseInt(columns[1])) ? 'ERROR: Not a number' : columns[1],
-          phoneNumber: !columns[2].match('[0-9]{10}') ? 'ERROR: Not a valid phone number' : columns[2],
+          family: columns[0] === '' ? $localize `ERROR: Campo cacío` : columns[0],
+          entriesNumber: isNaN(parseInt(columns[1])) ? $localize `ERROR: Campo no númerico` : columns[1],
+          phoneNumber: !columns[2].match('[0-9]{10}') ? $localize `ERROR: Tel inválido` : columns[2],
           kidsAllowed: Boolean(parseInt(columns[3])),
-          familyGroupId:  columns[0] === '' ? 'ERROR: Family Group empty' : columns[4]
+          familyGroupId:  columns[0] === '' ? $localize `ERROR: Campo vacío` : columns[4]
         })
       } else {
         const familyGroupFound = this.familyGroups.find(f => f.familyGroup.toLowerCase() === columns[4].toLowerCase());

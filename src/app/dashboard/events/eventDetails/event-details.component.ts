@@ -43,7 +43,7 @@ export class InviteDetailsComponent implements OnInit {
   isDeadlineMet = false;
   
   ngOnInit(): void {
-    this.loaderService.setLoading(true, 'Cargando los detalles del evento');
+    this.loaderService.setLoading(true, $localize `Cargando los detalles del evento`);
     this.loaderService.setLoading(false, '');
     
     this.route.data.pipe(

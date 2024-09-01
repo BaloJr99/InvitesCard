@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loaderService.setLoading(true, 'Cargando página principal');
+    this.loaderService.setLoading(true, $localize `Cargando página principal`);
     this.invitesService.getAllInvites()
     .subscribe({
       next: (invites) => {

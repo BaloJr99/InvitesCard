@@ -36,7 +36,7 @@ export class EventDialogComponent implements OnChanges {
   }
 
   deleteEntry(): void {
-    this.loaderService.setLoading(true, 'Eliminando invitación');
+    this.loaderService.setLoading(true, $localize `Eliminando invitación`);
     this.invitesService.deleteInvite(this.inviteAction.invite.id).subscribe({
       next: () => {
         this.hideModal();

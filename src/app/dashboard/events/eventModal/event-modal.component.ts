@@ -81,7 +81,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
     });
 
     $('#eventModal').on('show.bs.modal', () => {
-      this.loaderService.setLoading(true, 'Cargando usuarios');
+      this.loaderService.setLoading(true, $localize `Cargando usuarios`);
 
       this.usersService.getUsersDropdownData().subscribe({
         next: (users) => {
@@ -118,7 +118,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   createEvent() {
-    this.loaderService.setLoading(true, 'Creando evento');
+    this.loaderService.setLoading(true, $localize `Creando evento`);
     this.eventsService.createEvent(this.formatEvent()).subscribe({
       next: (response: IMessageResponse) => {
         $("#eventModal").modal('hide');
@@ -138,7 +138,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   updateEvent() {
-    this.loaderService.setLoading(true, 'Actualizando evento');
+    this.loaderService.setLoading(true, $localize `Actualizando evento`);
     this.eventsService.updateEvent(this.formatEvent(), this.createEventForm.controls["id"].value).subscribe({
       next: (response: IMessageResponse) => {
         $("#eventModal").modal('hide');

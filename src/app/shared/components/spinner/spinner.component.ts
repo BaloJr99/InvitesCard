@@ -8,7 +8,7 @@ import { LoaderService } from 'src/app/core/services/loader.service';
 })
 export class SpinnerComponent implements OnInit {
   showSpinner = true;
-  text = 'Cargando archivos';
+  text = '';
 
   constructor(
     private loader: LoaderService,

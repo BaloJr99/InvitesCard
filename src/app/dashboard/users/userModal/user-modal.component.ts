@@ -75,7 +75,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
     });
 
     $('#usersModal').on('shown.bs.modal', () => {
-      this.loaderService.setLoading(true, 'Cargando roles');
+      this.loaderService.setLoading(true, $localize `Cargando roles`);
 
       this.rolesService.getAllRoles().subscribe({
         next: (roles) => {
@@ -116,7 +116,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   createUser() {
-    this.loaderService.setLoading(true, 'Creando usuario');
+    this.loaderService.setLoading(true, $localize `Creando usuario`);
     this.usersService.createUser(this.createUserForm.value).subscribe({
       next: (response: IMessageResponse) => {
         $("#usersModal").modal('hide');
@@ -135,7 +135,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   updateUser() {
-    this.loaderService.setLoading(true, 'Actualizando usuario');
+    this.loaderService.setLoading(true, $localize `Actualizando usuario`);
     this.usersService.updateUser(this.createUserForm.value, this.createUserForm.controls["_id"].value).subscribe({
       next: (response: IMessageResponse) => {
         $("#usersModal").modal('hide');

@@ -68,7 +68,7 @@ export class PasswordResetComponent implements OnInit, AfterViewInit {
   resetPassword(): void {
     if (this.passwordResetForm.valid) {
       if(this.passwordResetForm.dirty) {
-        this.loaderService.setLoading(true, 'Cambiando contraseña');
+        this.loaderService.setLoading(true, $localize `Cambiando contraseña`);
         this.authService.resetPassword(this.route.snapshot.paramMap.get('id') ?? '' ,this.passwordResetForm.value).subscribe({
           next: () => {
             this.passwordReset = true;

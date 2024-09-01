@@ -55,7 +55,7 @@ export class LogsComponent implements OnInit, AfterViewInit, OnDestroy {
       ]
     }
 
-    this.loaderService.setLoading(true, 'Cargando Logs');
+    this.loaderService.setLoading(true, $localize `Cargando Logs`);
     this.loggerService.getLogs().subscribe({
       next: (logs) => {
         this.logs = logs;

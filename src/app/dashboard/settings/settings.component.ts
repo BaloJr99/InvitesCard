@@ -105,7 +105,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
       dressCodeColor: ['', Validators.required]
     });
 
-    this.loaderService.setLoading(true, 'Cargando configuraciones');
+    this.loaderService.setLoading(true, $localize `Cargando configuraciones`);
 
     this.eventsService.getDropdownEvents().subscribe({
       next: (events) => {
@@ -187,7 +187,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
   }
 
   createEventSettings() {
-    this.loaderService.setLoading(true, 'Creando configuraciones');
+    this.loaderService.setLoading(true, $localize `Creando configuraciones`);
     this.settingsService.createEventSettings(this.formatEventSetting()).subscribe({
       next: (response: IMessageResponse) => {
         this.toastr.success(response.message);
@@ -198,7 +198,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
   }
 
   updateEventSettings() {
-    this.loaderService.setLoading(true, 'Actualizando configuraciones');
+    this.loaderService.setLoading(true, $localize `Actualizando configuraciones`);
     if (this.eventSelected) {
       this.settingsService.updateEventSettings(this.formatEventSetting(), this.eventSelected?.id).subscribe({
         next: (response: IMessageResponse) => {

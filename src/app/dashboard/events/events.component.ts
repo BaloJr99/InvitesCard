@@ -28,7 +28,7 @@ export class EventsComponent implements OnInit {
   eventAction!: IEventAction;
   
   ngOnInit(): void {
-    this.loaderService.setLoading(true, 'Cargando eventos');
+    this.loaderService.setLoading(true, $localize `Cargando eventos`);
 
     const userInformation = this.tokenService.getTokenValues();
     

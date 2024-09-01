@@ -41,7 +41,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       ]
     }
 
-    this.loaderService.setLoading(true, 'Cargando usuarios');
+    this.loaderService.setLoading(true, $localize `Cargando usuarios`);
 
     this.usersService.getAllUsers().subscribe({
       next: (users) => {

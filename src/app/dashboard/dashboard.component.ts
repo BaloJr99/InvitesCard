@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
   route = "";
   
   ngOnInit(): void {
-    this.loaderService.setLoading(true, 'Cargando dashboard');
+    this.loaderService.setLoading(true, $localize `Cargando dashboard`);
     const userInformation = this.tokenService.getTokenValues();
     if (userInformation) {
       this.socket.joinRoom(this.username);

@@ -23,7 +23,7 @@ export class FilesModalComponent {
   }
 
   deleteImage(): void {
-    this.loaderService.setLoading(true, 'Eliminando imagen');
+    this.loaderService.setLoading(true, $localize `Eliminando imagen`);
     this.imagesService.deleteImage(this.imageAction).subscribe({
       next: () => {
         this.hideModal();

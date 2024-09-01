@@ -61,7 +61,7 @@ export class InvitesComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    this.loaderService.setLoading(true, 'Cargando invitaciones');
+    this.loaderService.setLoading(true, $localize `Cargando invitación`);
     this.route.data.subscribe(() => {
       this.inviteResolved = this.route.snapshot.data['invite'];
       if (!this.inviteResolved.invite) {
