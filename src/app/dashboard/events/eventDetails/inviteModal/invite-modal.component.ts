@@ -213,7 +213,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   createFamilyGroup () {
-    this.loaderService.setLoading(true, 'Creando grupo familiar');
+    this.loaderService.setLoading(true, 'Creando grupo');
     this.createFamilyGroupForm.patchValue({
       eventId: this.eventId
     })
@@ -238,7 +238,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   updateFamilyGroup() {
-    this.loaderService.setLoading(true, 'Actualizando grupo familiar');
+    this.loaderService.setLoading(true, 'Actualizando grupo');
     this.familyGroupsService.updateFamilyGroup(this.createFamilyGroupForm.value as IFamilyGroup, this.createFamilyGroupForm.controls["id"].value).subscribe({
       next: () => {
         this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;

@@ -34,9 +34,11 @@ export interface IPartialInvite {
   family: string,
   entriesNumber: number,
   phoneNumber: string,
-  familyGroupId: string,
   kidsAllowed: boolean,
-  eventId: string
+  eventId: string,
+  familyGroupId: string | undefined,
+  familyGroupName: string,
+  isNewFamilyGroup: boolean
 }
 
 export interface IErrorInvite {

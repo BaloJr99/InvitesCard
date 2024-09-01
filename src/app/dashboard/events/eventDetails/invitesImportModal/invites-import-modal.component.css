@@ -2,7 +2,8 @@ table {
   text-align: center;
 }
 
-table i.fa-circle-check {
+table i.fa-circle-check,
+table i.fa-star {
   color: green;
 }
 

@@ -62,7 +62,7 @@
           <form [formGroup]="createFamilyGroupForm">
             <input type="text" formControlName="id" hidden>
             <div class="mb-3">
-              <label for="familyGroup" class="form-label" i18n>Nuevo grupo familiar</label>
+              <label for="familyGroup" class="form-label" i18n>Nuevo grupo</label>
               <input type="text" min="1"  class="form-control" formControlName="familyGroup" [ngClass]="{'is-invalid': displayMessage['familyGroup']}">
               <span class="invalid-feedback">
                 {{ displayMessage['familyGroup'] }}

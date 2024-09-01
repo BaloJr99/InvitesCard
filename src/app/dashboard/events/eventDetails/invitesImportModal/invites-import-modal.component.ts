@@ -75,6 +75,7 @@ export class InvitesImportModalComponent implements OnInit {
     this.invitesService.bulkInvites(this.invites).subscribe({
       next: (messageResponse: IMessageResponse) => {
         this.toastr.success(messageResponse.message);
+        $("#invitesImportModal").modal("hide");
       }
     }).add(this.loaderService.setLoading(false, ''));
   }
@@ -91,7 +92,6 @@ export class InvitesImportModalComponent implements OnInit {
       progressBar.style.width = progress + "%";
       progressBar.innerText = progress + "%";
       const columns = row.split(',');
-      const familyGroup = this.familyGroups.find(f => f.familyGroup.toLowerCase() === columns[4].toLowerCase());
 
       if (columns.some((value, index) => {
         // Evaluate Family 
@@ -101,34 +101,31 @@ export class InvitesImportModalComponent implements OnInit {
         // Evaluate Phone Number
         if (index === 2 && !value.match('[0-9]{10}')) return true;
         // Evaluate Family Group
-        if (index === 4 && !this.familyGroups.some(f => f.familyGroup === value)) return true;
+        if (index === 4 && value === '') return true;
         return false;
       })) {
         this.errorInvites.push({
-          family: columns[0] === '' ? 'ERROR: Family Empty' : columns[0],
+          family: columns[0] === '' ? 'ERROR: Family empty' : columns[0],
           entriesNumber: isNaN(parseInt(columns[1])) ? 'ERROR: Not a number' : columns[1],
           phoneNumber: !columns[2].match('[0-9]{10}') ? 'ERROR: Not a valid phone number' : columns[2],
           kidsAllowed: Boolean(parseInt(columns[3])),
-          familyGroupId: !this.familyGroups.some(f => f.familyGroup === columns[4]) ? 'ERROR: Family Group doesnt exist' : columns[4]
+          familyGroupId:  columns[0] === '' ? 'ERROR: Family Group empty' : columns[4]
         })
       } else {
+        const familyGroupFound = this.familyGroups.find(f => f.familyGroup.toLowerCase() === columns[4].toLowerCase());
         this.invites.push({
           family: columns[0],
           entriesNumber: parseInt(columns[1]),
           phoneNumber: columns[2],
           kidsAllowed: Boolean(parseInt(columns[3])),
           eventId: this.eventId,
-          familyGroupId: familyGroup?.id ?? '',
+          familyGroupName: columns[4],
+          familyGroupId: familyGroupFound ? familyGroupFound.id : undefined,
+          isNewFamilyGroup: familyGroupFound ? false : true
         })
       }
     });
 
     this.loaderService.setLoading(false, '');
-  }
-
-  getFamilyGroup(familyGroupId: string):string  {
-    const familyFound = this.familyGroups.find(f => f.id === familyGroupId);
-
-    return familyFound ? familyFound.familyGroup : '';
   }
 }

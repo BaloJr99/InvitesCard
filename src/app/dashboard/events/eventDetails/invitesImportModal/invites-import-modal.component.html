@@ -18,11 +18,11 @@
 
         <table class="table table-striped" *ngIf="invites.length > 0 || errorInvites.length > 0">
           <thead>
-            <th scope="col">Family</th>
-            <th scope="col">Number of entries</th>
-            <th scope="col">Phone Number</th>
-            <th scope="col">Kids Allowed</th>
-            <th scope="col">Family Group</th>
+            <th scope="col">Familia</th>
+            <th scope="col"># de invitaciones</th>
+            <th scope="col">Numero de teléfono</th>
+            <th scope="col">Niños permitidos</th>
+            <th scope="col">Grupo</th>
           </thead>
           <tbody>
             <tr *ngFor="let invite of invites">
@@ -32,7 +32,7 @@
               <td>
                 <i class="fa-solid" [ngClass]="invite.kidsAllowed ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
               </td>
-              <td>{{ getFamilyGroup(invite.familyGroupId) }}</td>
+              <td>{{ invite.familyGroupName }} <i class="fa-solid fa-star" *ngIf="invite.isNewFamilyGroup"></i></td>
             </tr>
             <tr *ngFor="let invite of errorInvites">
               <td [ngClass]="invite.family.includes('ERROR') ? 'error' : ''">{{ invite.family }}</td>
