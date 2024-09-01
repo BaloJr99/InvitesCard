@@ -209,6 +209,10 @@
 }
 
 @media screen and (max-width: 575px) {
+  .main-controls .btn {
+    margin-bottom: 10px;
+  }
+  
   .show-image {
     width: 100%;
   }

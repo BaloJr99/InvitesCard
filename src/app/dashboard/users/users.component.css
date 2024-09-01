@@ -73,7 +73,7 @@
     margin: 0px;
   }
 
-  .users .table-styling {
+  .users .table-styling .inner {
     overflow: scroll;
   }
 }

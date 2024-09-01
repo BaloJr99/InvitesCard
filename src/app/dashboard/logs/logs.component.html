@@ -22,26 +22,28 @@
   <div class="row mb-3">
     <div class="col-md-12 col-lg-8">
       <div class="table-styling">
-        <table datatable class="row-border hover" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-          <thead>
-            <tr>
-              <th i18n>Fecha del error</th>
-              <th i18n>Error</th>
-              <th i18n>Usuario</th>
-              <th i18n>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let log of logs">
-              <td>{{ log.dateOfError | date }}</td>
-              <td>{{ log.customError }}</td>
-              <td>{{ log.userId }}</td>
-              <td>
-                <button class="btn btn-secondary" (click)="showException(log.id)"><i class="fa-solid fa-eye"></i></button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="inner">
+          <table datatable class="row-border hover" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+            <thead>
+              <tr>
+                <th i18n>Fecha del error</th>
+                <th i18n>Error</th>
+                <th i18n>Usuario</th>
+                <th i18n>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let log of logs">
+                <td>{{ log.dateOfError | date }}</td>
+                <td>{{ log.customError }}</td>
+                <td>{{ log.userId }}</td>
+                <td>
+                  <button class="btn btn-secondary" (click)="showException(log.id)"><i class="fa-solid fa-eye"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <div class="percentage-history col-md-12 col-lg-4">

@@ -115,4 +115,8 @@
     .history .errors-history canvas {
       margin-bottom: 20px;
     }
+
+    .table-styling .inner {
+      overflow-x: scroll;
+    }
   }
