@@ -11,9 +11,11 @@ export class CommonInvitesService {
   private messages = new BehaviorSubject<Map<number, IMessage>>(new Map<number, IMessage>())
   messages$ = this.messages.asObservable();
 
-  updateNotifications(notifications: INotification[], messages: Map<number, IMessage>): void {
+  updateNotifications(notifications: INotification[], messages: Map<number, IMessage> | null): void {
     this.notifications.next(notifications);
-    this.messages.next(messages);
+    if (messages) {
+      this.messages.next(messages);
+    }
   }
   
   clearNotifications() {

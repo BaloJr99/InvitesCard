@@ -8,7 +8,7 @@ import { IStatistic } from 'src/app/core/models/events';
 import { IFamilyGroup, IFamilyGroupAction } from 'src/app/core/models/familyGroups';
 import { IMessage, INotification } from 'src/app/core/models/common';
 import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
-import { IInvite, IInviteAction } from 'src/app/core/models/invites';
+import { IConfirmation, IInvite, IInviteAction } from 'src/app/core/models/invites';
 
 @Component({
   selector: 'app-event-details',
@@ -61,24 +61,47 @@ export class InviteDetailsComponent implements OnInit {
     ).subscribe({
       next: (familyGroups) => {
         this.familyGroups = familyGroups;
-        this.buildInvitesDashboard(this.invites);
+        this.buildInvitesDashboard();
       }
     }).add(() => {
       this.loaderService.setLoading(false, '');
     })
 
-    this.socket.io.on("newNotification", () => {
-      // this.updateEntryService.updateEntries()
+    this.commonInvitesService.notifications$.subscribe({
+      next: (notifications) => {
+        notifications.filter(n => n.isMessageRead).forEach((notification) => {
+          const index = this.invites.findIndex(i => i.id === notification.id);
+          (this.invites.at(index) as IInvite).isMessageRead = true;
+        });
+      }
+    });
+
+    this.socket.io.on("newNotification", (confirmation: IConfirmation) => {
+      this.invites = this.invites.map(invite => {
+        if (invite.id === confirmation.id) {
+          return {
+            ...invite,
+            confirmation: confirmation.confirmation,
+            dateOfConfirmation: confirmation.dateOfConfirmation,
+            entriesConfirmed: confirmation.entriesConfirmed,
+            message: confirmation.message,
+            inviteViewed: new Date().toISOString()
+          }
+        }
+        return invite;
+      });
+
+      this.buildInvitesDashboard();
     })
   }
 
-  buildInvitesDashboard(invites: IInvite[]) {
+  buildInvitesDashboard() {
     let counter = 0;
 
     const notifications: INotification[] = [];
     const messages: Map<number, IMessage> = new Map<number, IMessage>();
 
-    invites.forEach((value) => {
+    this.invites.forEach((value) => {
       if (value.confirmation) {
         this.stadistics.confirmedEntries += (value.entriesConfirmed ?? 0)
         this.stadistics.canceledEntries += (value.entriesNumber - (value.entriesConfirmed ?? 0))
@@ -107,7 +130,7 @@ export class InviteDetailsComponent implements OnInit {
     });
 
     this.commonInvitesService.updateNotifications(notifications, messages);
-    this.groupEntries(invites);
+    this.groupEntries(this.invites);
   }
 
   groupEntries(invites: IInvite[]): void {
@@ -149,12 +172,15 @@ export class InviteDetailsComponent implements OnInit {
   updateInvites(inviteAction: IInviteAction) {
     this.clearValues();
     if (inviteAction.isNew) {
-      this.buildInvitesDashboard(this.invites.concat(inviteAction.invite));
+      this.invites = this.invites.concat(inviteAction.invite);
+      this.buildInvitesDashboard();
     } else {
       if (inviteAction.delete) {
-        this.buildInvitesDashboard(this.invites.filter(invite => invite.id !== inviteAction.invite.id));
+        this.invites = this.invites.filter(invite => invite.id !== inviteAction.invite.id);
+        this.buildInvitesDashboard();
       } else {
-        this.buildInvitesDashboard(this.invites.map(originalInvite => originalInvite.id === inviteAction.invite.id ? inviteAction.invite : originalInvite));
+        this.invites = this.invites.map(originalInvite => originalInvite.id === inviteAction.invite.id ? inviteAction.invite : originalInvite);
+        this.buildInvitesDashboard();
       }
     }
   }

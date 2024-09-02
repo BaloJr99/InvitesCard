@@ -23,15 +23,13 @@ export class DashboardComponent implements OnInit {
   messages: Map<number, IMessage> = new Map<number, IMessage>();
   notifications: INotification[] = [];
 
-  username = "";
-
   route = "";
   
   ngOnInit(): void {
     this.loaderService.setLoading(true, $localize `Cargando dashboard`);
     const userInformation = this.tokenService.getTokenValues();
     if (userInformation) {
-      this.socket.joinRoom(this.username);
+      this.socket.joinRoom(userInformation.username);
     }
 
     window.addEventListener('click', ({ target }) => {
@@ -65,7 +63,7 @@ export class DashboardComponent implements OnInit {
 
     this.commonInvitesService.notifications$.subscribe({
       next: (notifications) => {
-        this.notifications = notifications;
+        this.notifications = notifications.sort((a, b) => (new Date(b.dateOfConfirmation).getTime() - (new Date(a.dateOfConfirmation).getTime())));
       }
     });
 

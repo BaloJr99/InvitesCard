@@ -63,3 +63,11 @@ export interface ITimer {
   minutes: number;
   seconds: number;
 }
+
+export interface IConfirmation {
+  confirmation: boolean,
+  dateOfConfirmation: string,
+  entriesConfirmed: number,
+  id: string,
+  message: string
+}

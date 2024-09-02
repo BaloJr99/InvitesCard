@@ -7,6 +7,7 @@ import { GenericValidator } from 'src/app/shared/utils/validators/generic-valida
 import { SocketService } from 'src/app/core/services/socket.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-confirmation',
@@ -38,7 +39,9 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
   constructor(private fb: FormBuilder,
     private invitesService: InvitesService,
     private socket: SocketService,
-    private loaderService: LoaderService) {
+    private loaderService: LoaderService,
+    private activatedRoute: ActivatedRoute
+  ) {
 
     // Defines all of the validation messages for the form.
     // These could instead be retrieved from a file or database.
@@ -88,7 +91,11 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
         .subscribe({
           next: (() => {
             this.showDiv();
-            this.socket.sendNotification(this.invite.id)
+            const inviteInfo = {
+              ...this.confirmationForm.value,
+              id: this.activatedRoute.snapshot.paramMap.get('id')
+            }
+            this.socket.sendNotification(inviteInfo)
           })
         }).add(() => {
           this.loaderService.setLoading(false, '');

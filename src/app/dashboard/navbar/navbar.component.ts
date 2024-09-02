@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { NavigationStart, Router, Scroll } from '@angular/router';
 import { INotification } from 'src/app/core/models/common';
 import { Roles } from 'src/app/core/models/enum';
+import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 
@@ -23,7 +24,9 @@ export class NavbarComponent implements OnInit, OnChanges {
   constructor(
     private router: Router, 
     private invitesService: InvitesService,
-    private tokenService: TokenStorageService) { }
+    private tokenService: TokenStorageService,
+    private commonService: CommonInvitesService
+  ) { }
 
   ngOnInit(): void {
     this.router.events.subscribe((events) => {
@@ -84,7 +87,11 @@ export class NavbarComponent implements OnInit, OnChanges {
     this.invitesService.readMessage(id).subscribe({
       next: () => {
         this.notifications = this.notifications.map((notification) => 
-        notification.id === id ? { ...notification, isMessageRead: true } : notification)
+        notification.id === id ? { ...notification, isMessageRead: true } : notification);
+
+        this.numberOfNotifications = this.notifications.reduce(( sum, { isMessageRead } ) => sum + ( isMessageRead ? 0 : 1) , 0);
+
+        this.commonService.updateNotifications(this.notifications, null);
       }
     });
   }
