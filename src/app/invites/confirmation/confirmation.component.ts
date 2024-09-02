@@ -18,7 +18,9 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
   @Input() invite!: IUserInvite;
   @Input() set deadlineMet (value: boolean) {
     this.blockConfirmationForm = value;
-    this.confirmationForm.disable();
+    if (value === true) {
+      this.confirmationForm.disable();
+    }
   }
   @Output() newInvite = new EventEmitter<FormGroup>();
 

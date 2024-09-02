@@ -51,7 +51,7 @@
     </div>
     <div class="base-menu notificationMessages">
       <ng-container *ngIf="notifications.length > 0">
-        <button *ngFor="let notification of notifications" [ngClass]="{'isMessageNotRead': !notification.isMessageRead}">
+        <button *ngFor="let notification of notifications" [ngClass]="{'isMessageNotRead': !notification.isMessageRead}" (click)="maskAsRead(notification.id)">
           <strong>{{ notification.family }} ha</strong>: <i class="fa-solid fa-circle" [ngClass]="{'hideActiveNotification': notification.isMessageRead}"></i>
           <br>
           <span>{{ notification.confirmation ? 'Confirmado' : 'Cancelado' }}</span>

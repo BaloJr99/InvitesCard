@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { NavigationStart, Router, Scroll } from '@angular/router';
 import { INotification } from 'src/app/core/models/common';
 import { Roles } from 'src/app/core/models/enum';
+import { InvitesService } from 'src/app/core/services/invites.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { TokenStorageService } from 'src/app/core/services/token-storage.service
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnChanges {
 
   email = "";
   username = "";
@@ -21,6 +22,7 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private router: Router, 
+    private invitesService: InvitesService,
     private tokenService: TokenStorageService) { }
 
   ngOnInit(): void {
@@ -39,6 +41,13 @@ export class NavbarComponent implements OnInit {
       this.username = userInformation.username;
       this.email = userInformation.email;
       this.isAdmin = userInformation.roles.some(r => r.name == Roles.Admin);
+    }
+  }
+    
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["notifications"].currentValue.length > 0) {
+      const notifications:INotification[] = changes["notifications"].currentValue
+      this.numberOfNotifications = notifications.reduce(( sum, { isMessageRead } ) => sum + ( isMessageRead ? 0 : 1) , 0)
     }
   }
 
@@ -69,6 +78,15 @@ export class NavbarComponent implements OnInit {
   logout(): void {
     this.tokenService.signOut();
     this.router.navigate(['/auth/login']);
+  }
+
+  maskAsRead(id: string): void {
+    this.invitesService.readMessage(id).subscribe({
+      next: () => {
+        this.notifications = this.notifications.map((notification) => 
+        notification.id === id ? { ...notification, isMessageRead: true } : notification)
+      }
+    });
   }
 
   getTime(dateTime: string): string {
