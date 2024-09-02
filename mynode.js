@@ -13,7 +13,8 @@ const __dirname = path.dirname(__filename); // get the name of the directory
 
 const envFile = `export const environment = {
   production: ${process.env.production},
-  apiUrl: '${process.env.apiUrl}'
+  apiUrl: '${process.env.apiUrl}',
+  url: '${process.env.url}'
 };`;
 
 const targetPath = join(
