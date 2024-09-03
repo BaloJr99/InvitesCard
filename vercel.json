@@ -1,27 +1,6 @@
 {
   "redirects": [
     {
-      "source": "/",
-      "has": [
-        {
-          "type": "header",
-          "key": "Accept-Language",
-          "value": "(^es.*)"
-        }
-      ],
-      "destination": "/es"
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "header",
-          "key": "Accept-Language",
-          "value": "(^(?!es.*).*)"
-        }
-      ],
-      "destination": "/en"
-    },{
       "source": "/:path((?!es|en/).*)",
       "has": [
         {
