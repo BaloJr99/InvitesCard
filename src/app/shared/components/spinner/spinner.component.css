@@ -18,9 +18,10 @@
 }
 
 .cssload-container span {
-  width: 10%;
   font-weight: bold;
   font-size: 18px;
+  width: 30%;
+  margin-top: 20px;
 }
 
 .cssload-speeding-wheel {
@@ -46,6 +47,11 @@
     top: 45%;
     width: 20%;
     height: 10%;
+  }
+
+  .cssload-container span {
+    width: 50%;
+    margin-top: 10%;
   }
 }
 

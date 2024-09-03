@@ -9,7 +9,7 @@ table {
 .accordion-body {
   padding: 0px;
   margin: 10px;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 .accordion-item {
