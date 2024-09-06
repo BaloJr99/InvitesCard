@@ -98,7 +98,7 @@ export class NavbarComponent implements OnInit, OnChanges {
 
   getTime(dateTime: string): string {
     const now = new Date();
-    const dateOfNotification = new Date(dateTime.replace('Z', '').replace('T', ' '))
+    const dateOfNotification = new Date(dateTime)
 
     const diff = now.getTime() - dateOfNotification.getTime();
 

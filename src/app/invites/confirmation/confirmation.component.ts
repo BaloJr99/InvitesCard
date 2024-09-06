@@ -1,7 +1,6 @@
 import { Component, AfterViewInit, ViewChildren, ElementRef, Input, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, fromEvent, merge } from 'rxjs';
-import * as moment from 'moment';
 import { IInvite, IUserInvite } from 'src/app/core/models/invites';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 import { SocketService } from 'src/app/core/services/socket.service';
@@ -74,7 +73,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
         const entriesConfirmed = parseInt(this.confirmationForm.controls['entriesConfirmed'].value);
         this.confirmationForm.get('confirmation')?.setValue(assist)
         this.confirmationForm.get('entriesConfirmed')?.setValue(entriesConfirmed)
-        this.confirmationForm.addControl('dateOfConfirmation', new FormControl(moment().format("YYYY-MM-DD[T]HH:mm:ss[Z]")))
+        this.confirmationForm.addControl('dateOfConfirmation', new FormControl(new Date().toISOString()))
         this.addnewInvite();
       } else {
         this.onSaveComplete();
@@ -86,7 +85,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
 
   addnewInvite() {
     if(this.invite.id) {
-      this.loaderService.setLoading(true, $localize `Creando invitación`);
+      this.loaderService.setLoading(true, $localize `Enviando confirmación`);
       this.invitesService.sendConfirmation(this.confirmationForm.value as IInvite, this.invite.id)
         .subscribe({
           next: (() => {
