@@ -44,7 +44,7 @@ export class EventDialogComponent implements OnChanges {
         this.toastr.success($localize `Se ha eliminado la invitación`);
       }
     }).add(() => {
-      this.loaderService.setLoading(false, '');
+      this.loaderService.setLoading(false);
     });
   }
 }

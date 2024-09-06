@@ -31,7 +31,7 @@ export class FilesModalComponent {
         this.toastr.success($localize `Se ha eliminado el archivo`);
       }
     }).add(() => {
-      this.loaderService.setLoading(false, '');
+      this.loaderService.setLoading(false);
     });
   }
 }

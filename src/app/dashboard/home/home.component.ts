@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
         this.RenderChart();
       }
     }).add(() => {
-      this.loaderService.setLoading(false, '');
+      this.loaderService.setLoading(false);
     });
   }
 

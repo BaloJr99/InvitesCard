@@ -62,7 +62,7 @@ export class LogsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.RenderChart();
         this.rerender();
       }
-    }).add(() => this.loaderService.setLoading(false, ''));
+    }).add(() => this.loaderService.setLoading(false));
   }
 
   ngAfterViewInit(): void {

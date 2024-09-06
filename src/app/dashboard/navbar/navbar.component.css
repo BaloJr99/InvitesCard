@@ -175,8 +175,8 @@
         border: none;
       }
 
-      .navbar .base-menu.notificationMessages button:not(:last-of-type) {
-        margin-bottom: 10px;
+      .navbar .base-menu.notificationMessages hr {
+        margin: 5px 0;
       }
 
       .navbar .base-menu.notificationMessages button.isMessageNotRead {

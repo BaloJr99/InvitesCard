@@ -20,7 +20,9 @@ export interface INotification {
 
 export interface IMessage {
   family: string,
-  message: string
+  message: string,
+  date: string,
+  time: string
 }
 
 export interface ISpinner {

@@ -98,7 +98,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
             this.socket.sendNotification(inviteInfo)
           })
         }).add(() => {
-          this.loaderService.setLoading(false, '');
+          this.loaderService.setLoading(false);
         });
     }
   }

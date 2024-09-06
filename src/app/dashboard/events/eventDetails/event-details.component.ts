@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { LoaderService } from 'src/app/core/services/loader.service';
@@ -21,7 +21,8 @@ export class InviteDetailsComponent implements OnInit {
     private loaderService: LoaderService,
     private familyGroupsService: FamilyGroupsService,
     private commonInvitesService: CommonInvitesService,
-    private socket: SocketService) {
+    private socket: SocketService,
+    @Inject(LOCALE_ID) private localeValue: string) {
   }
 
   stadistics: IStatistic = {
@@ -44,7 +45,7 @@ export class InviteDetailsComponent implements OnInit {
   
   ngOnInit(): void {
     this.loaderService.setLoading(true, $localize `Cargando los detalles del evento`);
-    this.loaderService.setLoading(false, '');
+    this.loaderService.setLoading(false);
     
     this.route.data.pipe(
       filter(response => {
@@ -64,7 +65,7 @@ export class InviteDetailsComponent implements OnInit {
         this.buildInvitesDashboard();
       }
     }).add(() => {
-      this.loaderService.setLoading(false, '');
+      this.loaderService.setLoading(false);
     })
 
     this.commonInvitesService.notifications$.subscribe({
@@ -96,10 +97,8 @@ export class InviteDetailsComponent implements OnInit {
   }
 
   buildInvitesDashboard() {
-    let counter = 0;
-
     const notifications: INotification[] = [];
-    const messages: Map<number, IMessage> = new Map<number, IMessage>();
+    const messages: IMessage[] = [];
 
     this.invites.forEach((value) => {
       if (value.confirmation) {
@@ -114,10 +113,14 @@ export class InviteDetailsComponent implements OnInit {
       }
       this.stadistics.totalEntries += value.entriesNumber
       if (value.message) {
-        messages.set(counter, { family: value.family, message: value.message });
-        counter++;
+        messages.push({ 
+          family: value.family, 
+          message: value.message,
+          date: new Date(value.dateOfConfirmation as string).toLocaleDateString(this.localeValue, { day: 'numeric', month: 'long', year: 'numeric' }),
+          time: new Date(value.dateOfConfirmation as string).toLocaleTimeString(this.localeValue, { hour: '2-digit', minute: '2-digit' }),
+        });
       }
-
+      
       if (value.confirmation !== null && value.confirmation !== undefined) {
         notifications.push({
           id: value.id,
@@ -151,6 +154,11 @@ export class InviteDetailsComponent implements OnInit {
         kidsAllowed: Boolean(inviteAction.invite.kidsAllowed)
       }
     }
+  }
+
+  removeInvites(invitesIds: string[]): void {
+    this.invites = this.invites.filter(invite => !invitesIds.includes(invite.id));
+    this.buildInvitesDashboard();
   }
 
   toggleMessages(): void {

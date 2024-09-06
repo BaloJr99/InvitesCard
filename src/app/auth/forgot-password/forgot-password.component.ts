@@ -59,7 +59,7 @@ export class ForgotPasswordComponent implements AfterViewInit {
             this.emailSent = true;
           }
         }).add(() => {
-          this.loaderService.setLoading(false, '');
+          this.loaderService.setLoading(false);
         })
       }
     } else {

@@ -9,7 +9,7 @@ export class LoaderService {
   private loading = new BehaviorSubject<ISpinner>({ isLoading: false, message: '' });
   loading$ = this.loading.asObservable();
   
-  setLoading(isLoading: boolean, message: string) {
+  setLoading(isLoading: boolean, message = '') {
     this.loading.next({
       isLoading,
       message

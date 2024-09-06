@@ -56,7 +56,7 @@
   overflow-y: auto;
 }
 
-.buttons button:first-of-type {
+.buttons button:not(:last-child) {
   margin-right: 8px;
 }
 

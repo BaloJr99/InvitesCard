@@ -71,3 +71,13 @@ export interface IConfirmation {
   id: string,
   message: string
 }
+
+export interface IInviteGroup {
+  id: string
+  family: string,
+  entriesConfirmed: number,
+  confirmation: boolean,
+  entriesNumber: number,
+  inviteViewed: string | null,
+  beingDeleted: boolean
+}

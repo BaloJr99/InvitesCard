@@ -38,6 +38,12 @@ export class InvitesService {
     return this.http.post<IMessageResponse>(`${this.invitesBaseUrl}/bulkInvites`, invites)
   }
 
+  bulkDeleteInvites(invitesIds: string[]): Observable<IMessageResponse> { 
+    return this.http.delete<IMessageResponse>(`${this.invitesBaseUrl}/bulkInvites`, {
+      body: invitesIds
+    })
+  }
+
   updateInvite(invite: IInvite, id: string): Observable<IMessageResponse> { 
     return this.http.put<IMessageResponse>(`${this.invitesBaseUrl}/${id}`, invite)
   }

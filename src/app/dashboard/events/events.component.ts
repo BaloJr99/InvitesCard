@@ -45,7 +45,7 @@ export class EventsComponent implements OnInit {
           });
         }
       }).add(() => {
-        this.loaderService.setLoading(false, '');
+        this.loaderService.setLoading(false);
       });
     }
   }

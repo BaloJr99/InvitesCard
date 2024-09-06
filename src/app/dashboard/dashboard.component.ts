@@ -5,6 +5,7 @@ import { SocketService } from '../core/services/socket.service';
 import { LoaderService } from '../core/services/loader.service';
 import { IMessage, INotification } from '../core/models/common';
 import { CommonInvitesService } from '../core/services/commonInvites.service';
+import { KeyValue } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,8 +21,9 @@ export class DashboardComponent implements OnInit {
     private router: Router) {    
     }
   
-  messages: Map<number, IMessage> = new Map<number, IMessage>();
   notifications: INotification[] = [];
+
+  messagesGrouped: KeyValue<string, IMessage[]>[] = [];
 
   route = "";
   
@@ -53,11 +55,11 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    this.loaderService.setLoading(false, '');
+    this.loaderService.setLoading(false);
 
     this.commonInvitesService.messages$.subscribe({
       next: (messages) => {
-        this.messages = messages;
+        this.groupMessages(Object.values(messages));
       }
     });
 
@@ -75,6 +77,20 @@ export class DashboardComponent implements OnInit {
       if (events instanceof NavigationStart) {
         this.route = events.url;
       }
+    });
+  }
+
+  groupMessages(messages: IMessage[]): void {
+    this.messagesGrouped = [];
+
+    const uniqueDates = [...new Set(messages.map(message => message.date))].sort((a, b) => (new Date(a).getTime() - new Date(b).getTime()));
+    uniqueDates.forEach((date) => {
+      this.messagesGrouped.push(
+        {
+          key: date,
+          value: messages.filter((message) => message.date === date).sort((a, b) => (a.time.localeCompare(b.time)))
+        }
+      );
     });
   }
 

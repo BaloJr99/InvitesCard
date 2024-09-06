@@ -78,7 +78,7 @@ export class LoginComponent implements AfterViewInit {
             }
           }
         }).add(() => {
-          this.loaderService.setLoading(false, '');
+          this.loaderService.setLoading(false);
         })
       } else {
         this.onSaveComplete();

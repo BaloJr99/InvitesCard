@@ -82,7 +82,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
           this.roles = roles;
         }
       }).add(() => {
-        this.loaderService.setLoading(false, '');
+        this.loaderService.setLoading(false);
       })
     });
   }
@@ -130,7 +130,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success(response.message);
       }
     }).add(() => {
-      this.loaderService.setLoading(false, '');
+      this.loaderService.setLoading(false);
     });
   }
 
@@ -146,7 +146,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success(response.message);
       }
     }).add(() => {
-      this.loaderService.setLoading(false, '');
+      this.loaderService.setLoading(false);
     });
   }
 

@@ -18,13 +18,21 @@
       <button class="btn" (click)="toggleMessages()"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="messages-container">
-      <div class="card" [style.display]="messages.size === 0 ? 'block' : 'none'" i18n>
+      <div class="card" [style.display]="messagesGrouped.length === 0 ? 'block' : 'none'" i18n>
         No hay mensajes
       </div>
-      <div class="message" *ngFor="let message of messages | keyvalue">
-        <div class="card text-start ps-2">
-          <p class="text-start mb-0">{{ message.value.family }}: </p>
-          {{ message.value.message }}
+      <div class="message" *ngFor="let group of messagesGrouped">
+        <span class="message-date">
+          <hr>
+          {{ group.key }}
+          <hr>
+        </span>
+        <div class="card text-start ps-2" *ngFor="let message of group.value">
+          <p class="text-start mb-0">
+            <span class="message-time">{{message.time}}</span>
+            {{ message.family }}:
+          </p>
+          <span class="chat-message">{{ message.message }}</span>
         </div>
       </div>
     </div>

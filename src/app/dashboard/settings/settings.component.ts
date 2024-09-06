@@ -112,7 +112,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
         this.events = events;
       }
     }).add(() => {
-      this.loaderService.setLoading(false, '');
+      this.loaderService.setLoading(false);
     })
   }
 
@@ -161,7 +161,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
           this.isNewSetting = true;
         }
       }).add(() => {
-        this.loaderService.setLoading(false, '');
+        this.loaderService.setLoading(false);
       })
     }
   }
@@ -193,7 +193,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
         this.toastr.success(response.message);
       }
     }).add(() => {
-      this.loaderService.setLoading(false, '');
+      this.loaderService.setLoading(false);
     });
   }
 
@@ -205,7 +205,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
           this.toastr.success(response.message);
         }
       }).add(() => {
-        this.loaderService.setLoading(false, '');
+        this.loaderService.setLoading(false);
       });
     }
   }

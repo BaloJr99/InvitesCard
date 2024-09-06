@@ -51,13 +51,16 @@
     </div>
     <div class="base-menu notificationMessages">
       <ng-container *ngIf="notifications.length > 0">
-        <button *ngFor="let notification of notifications" [ngClass]="{'isMessageNotRead': !notification.isMessageRead}" (click)="maskAsRead(notification.id)">
-          <strong>{{ notification.family }} ha</strong>: <i class="fa-solid fa-circle" [ngClass]="{'hideActiveNotification': notification.isMessageRead}"></i>
-          <br>
-          <span>{{ notification.confirmation ? 'Confirmado' : 'Cancelado' }}</span>
-          <br>
-          <small *ngIf="notification.dateOfConfirmation !== '1000-01-01T00:00:00.000Z'">{{ getTime(notification.dateOfConfirmation) }}</small>
-        </button>
+        <ng-container *ngFor="let notification of notifications; index as i">
+          <button [ngClass]="{'isMessageNotRead': !notification.isMessageRead}" (click)="maskAsRead(notification.id)">
+            <strong i18n>{{ notification.family }} ha</strong>: <i class="fa-solid fa-circle" [ngClass]="{'hideActiveNotification': notification.isMessageRead}"></i>
+            <br>
+            <span i18n>{ notification.confirmation, select, 1 {Confirmado} other {Cancelado}}</span>
+            <br>
+            <small *ngIf="notification.dateOfConfirmation !== '1000-01-01T00:00:00.000Z'">{{ getTime(notification.dateOfConfirmation) }}</small>
+          </button>
+          <hr *ngIf="i !== notifications.length - 1">
+        </ng-container>
       </ng-container>
       <p *ngIf="notifications.length <= 0" i18n>Sin notificationes por el momento</p>
     </div>

@@ -4,7 +4,11 @@ import { } from 'bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { ADTSettings } from 'angular-datatables/src/models/settings';
-import { IInvite, IInviteAction } from 'src/app/core/models/invites';
+import { IInvite, IInviteAction, IInviteGroup } from 'src/app/core/models/invites';
+import { InvitesService } from 'src/app/core/services/invites.service';
+import { IMessageResponse } from 'src/app/core/models/common';
+import { ToastrService } from 'ngx-toastr';
+import { LoaderService } from 'src/app/core/services/loader.service';
 
 @Component({
   selector: 'app-table',
@@ -13,13 +17,36 @@ import { IInvite, IInviteAction } from 'src/app/core/models/invites';
 })
 export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
-  @Input() inviteGroup!: KeyValue<string, IInvite[]>;
-  @Input() isDeadlineMet = false;
+
   @Output() setInviteAction = new EventEmitter<IInviteAction>();
+  @Output() removeInvites = new EventEmitter<string[]>();
+
+  @Input() isDeadlineMet = false;
+  @Input() set invites(invites: KeyValue<string, IInvite[]>) {
+    this.originalInvites = invites;
+    this.inviteGroup = {
+      key: invites.key,
+      value: invites.value.map((invite) => {
+        return {
+          ...invite,
+          beingDeleted: false
+        }
+      })
+    };    
+  }
+
+  originalInvites: KeyValue<string, IInvite[]> = { key: '', value: [] };
+  inviteGroup: KeyValue<string, IInviteGroup[]> = { key: '', value: [] };
 
   dtOptions: ADTSettings = {};
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dtTrigger: Subject<any> = new Subject<any>();
+
+  constructor(
+    private invitesService: InvitesService,
+    private toastrService: ToastrService,
+    private loaderService: LoaderService
+  ) { }
   
   ngOnInit(): void {
     this.dtOptions = {
@@ -27,7 +54,11 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
       destroy: true,
       language: {
         lengthMenu: '_MENU_'
-      }
+      },
+      columnDefs: [
+        { orderable: false, targets: [0, 2, 4] },
+      ],
+      order: [[1, 'asc']],
     }
   }
 
@@ -46,24 +77,59 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openEditModal(id: string): void {
-    const inviteToEdit = this.inviteGroup.value.find((invite) => invite.id === id);
-    if (inviteToEdit) {
-      this.setInviteAction.emit({
-        invite: inviteToEdit,
-        isNew: false,
-        delete: false
-      });
+    const inviteToEdit = this.originalInvites.value.find((invite) => invite.id === id) as IInvite;
+    this.setInviteAction.emit({
+      invite: inviteToEdit,
+      isNew: false,
+      delete: false
+    });
 
-      $("#inviteModal").modal("show");
-    }
+    $("#inviteModal").modal("show");
   }
 
-  showModal(invite: IInvite): void {
+  showModal(invite: IInviteGroup): void {
+    const inviteFound = this.originalInvites.value.find((original) => original.id === invite.id) as IInvite;
     this.setInviteAction.emit({
-      invite: invite,
+      invite: inviteFound,
       isNew: false,
       delete: true
     })
+  }
+
+  selectAll (event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.inviteGroup.value.forEach((invite) => {
+      invite.beingDeleted = target.checked;
+    });
+  }
+
+  selectInvite (event: Event, invite: IInviteGroup): void {
+    const target = event.target as HTMLInputElement;
+    this.inviteGroup.value.forEach((inviteFromGroup) => {
+      if (inviteFromGroup.id === invite.id) {
+        invite.beingDeleted = target.checked;
+      }
+    });
+  }
+
+  allSelected(): boolean {
+    return this.inviteGroup.value.every((invite) => invite.beingDeleted);
+  }
+
+  allowDeleteInvites(): boolean {
+    return !this.inviteGroup.value.some((invite) => invite.beingDeleted);
+  }
+
+  bulkDeleteInvites(): void {
+    this.loaderService.setLoading(true, 'Deleting invites');
+    const invitesBeingDeleted = this.inviteGroup.value.filter((invite) => invite.beingDeleted).map((invite) => invite.id);
+    this.invitesService.bulkDeleteInvites(invitesBeingDeleted)
+      .subscribe({
+        next: (response: IMessageResponse) => {
+          this.removeInvites.emit(invitesBeingDeleted);
+          this.toastrService.success(response.message);
+        }
+      }).add(() => this.loaderService.setLoading(false));
   }
 
   rerender(): void {

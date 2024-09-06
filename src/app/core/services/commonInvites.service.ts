@@ -8,10 +8,10 @@ export class CommonInvitesService {
   private notifications = new BehaviorSubject<INotification[]>([])
   notifications$ = this.notifications.asObservable();
 
-  private messages = new BehaviorSubject<Map<number, IMessage>>(new Map<number, IMessage>())
+  private messages = new BehaviorSubject<IMessage[]>([]);
   messages$ = this.messages.asObservable();
 
-  updateNotifications(notifications: INotification[], messages: Map<number, IMessage> | null): void {
+  updateNotifications(notifications: INotification[], messages: IMessage[] | null): void {
     this.notifications.next(notifications);
     if (messages) {
       this.messages.next(messages);
@@ -20,6 +20,6 @@ export class CommonInvitesService {
   
   clearNotifications() {
     this.notifications.next([]);
-    this.messages.next(new Map<number, IMessage>());
+    this.messages.next([]);
   }
 }

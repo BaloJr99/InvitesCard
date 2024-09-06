@@ -48,7 +48,7 @@ export class FilesComponent implements OnInit {
         this.events = events;
       }
     }).add(() => {
-      this.loaderService.setLoading(false, '')
+      this.loaderService.setLoading(false)
     })
   }
 
@@ -90,7 +90,7 @@ export class FilesComponent implements OnInit {
               this.toastr.success(response[0].message);
             }
           }).add(() => {
-            this.loaderService.setLoading(false, '');
+            this.loaderService.setLoading(false);
           });
         }
       });
@@ -104,7 +104,7 @@ export class FilesComponent implements OnInit {
           this.images = response;
         }
       }).add(() => {
-        this.loaderService.setLoading(false, '');
+        this.loaderService.setLoading(false);
       })
     }
   }
@@ -181,7 +181,7 @@ export class FilesComponent implements OnInit {
         this.imageUpdateForm = new FormArray<FormGroup<IUpdateImageArray>>([]);
       }
     }).add(() => {
-      this.loaderService.setLoading(false, '');
+      this.loaderService.setLoading(false);
     })
   }
  }

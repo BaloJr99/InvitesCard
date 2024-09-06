@@ -88,7 +88,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
           this.users = users;
           this.cd.detectChanges();
         }
-      }).add(() => this.loaderService.setLoading(false, ''));
+      }).add(() => this.loaderService.setLoading(false));
     })
   }
 
@@ -133,7 +133,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success(response.message);
       }
     }).add(() => {
-      this.loaderService.setLoading(false, '');
+      this.loaderService.setLoading(false);
     });
   }
 
@@ -150,7 +150,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success(response.message);
       }
     }).add(() => {
-      this.loaderService.setLoading(false, '');
+      this.loaderService.setLoading(false);
     });
   }
 

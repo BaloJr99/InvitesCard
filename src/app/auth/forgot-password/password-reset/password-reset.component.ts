@@ -74,7 +74,7 @@ export class PasswordResetComponent implements OnInit, AfterViewInit {
             this.passwordReset = true;
           }
         }).add(() => {
-          this.loaderService.setLoading(false, '');
+          this.loaderService.setLoading(false);
         })
       }
     } else {

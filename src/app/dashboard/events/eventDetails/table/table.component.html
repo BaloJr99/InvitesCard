@@ -9,6 +9,9 @@
       <table datatable class="row-border hover" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead>
           <tr>
+            <th>
+              <input type="checkbox" (change)="selectAll($event)" [disabled]="isDeadlineMet" [checked]="allSelected()">
+            </th>
             <th i18n>Familia</th>
             <th i18n>Numero de entradas</th>
             <th i18n>Vista</th>
@@ -17,6 +20,9 @@
         </thead>
         <tbody>
           <tr *ngFor="let invite of inviteGroup.value">
+            <td>
+              <input type="checkbox" (change)="selectInvite($event, invite)" [disabled]="isDeadlineMet" [checked]="invite.beingDeleted">
+            </td>
             <td>{{ invite.family }}</td>
             <td>{{ invite.entriesConfirmed === null || invite.entriesConfirmed === undefined ? 0 : invite.entriesConfirmed }} / {{ invite.entriesNumber }}</td>
             <td><i class="fa-solid fa-eye" *ngIf="invite.inviteViewed"></i></td>
@@ -28,6 +34,7 @@
           </tr>
         </tbody>
       </table>
+      <button class="btn btn-danger mt-3" (click)="bulkDeleteInvites()" [disabled]="allowDeleteInvites()">Eliminar Invitaciones</button>
     </div>
   </div>
 </div>

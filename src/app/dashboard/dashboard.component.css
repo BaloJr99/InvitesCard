@@ -84,6 +84,9 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-radius: 10px;
+  background-color: white;
+  margin-bottom: 10px;
 }
 
 .messages-header h2 {
@@ -92,15 +95,14 @@ main {
 
 .messages-chat {
   position: fixed;
-  background-color: white;
-  width: 400px;
+  background-color: #f4f3f3;
+  width: 300px;
   max-height: 500px;
   min-height: 300px;
   bottom: 0;
   right: 75px;
   border: 1px solid gray;
   border-radius: 10px 10px 0px 0px;
-  padding: 20px;
   transition: 0.5s;
   visibility: hidden;
   opacity: 0;
@@ -108,21 +110,51 @@ main {
 }
 
 .messages-chat .card {
-  margin: 10px 0px;
+  margin: 10px;
+  background-color: white;
+  border: none;
+  box-shadow: 0px 0px 2px 0px lightgray;
 } 
 
 .messages-container {
-  overflow-y: scroll;
-  height: 450px;
-  padding: 10px 0px;
+  overflow-y: auto;
+  max-height: 450px;
+  padding-bottom: 10px;
 }
 
   .messages-container p {
     font-weight: bold;
   }
 
+  .messages-container span.message-date {
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .messages-container span.message-time {
+    font-size: 14px;
+    color: gray;
+    position: absolute;
+    right: 10px;
+    top: 5px;
+  }
+
+  .messages-container span.chat-message {
+    font-size: 16px;
+  }
+
+  .messages-container span.message-date hr {
+    flex-grow: 1;
+    margin: 0px 10px;
+  }
+
 .messages-chat h2 {
-  font-size: 25px;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px;
 }
 
 .messages-chat.active {

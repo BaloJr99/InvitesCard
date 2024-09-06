@@ -118,7 +118,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success($localize `Se ha guardado la invitación`);
       }
     }).add(() => {
-      this.loaderService.setLoading(false, '');
+      this.loaderService.setLoading(false);
     });
   }
 
@@ -135,7 +135,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success($localize `Se ha actualizado la invitación`);
       }
     }).add(() => {
-      this.loaderService.setLoading(false, '');
+      this.loaderService.setLoading(false);
     });
   }
 
@@ -234,7 +234,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success($localize `Grupo creado`);
       }
     }).add(() => {
-      this.loaderService.setLoading(false, '');
+      this.loaderService.setLoading(false);
     });
   }
 
@@ -252,7 +252,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.toastr.success($localize `Grupo actualizado`);
       }
     }).add(() => {
-      this.loaderService.setLoading(false, '');
+      this.loaderService.setLoading(false);
     });
   }
 }

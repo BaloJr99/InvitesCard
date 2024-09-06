@@ -87,7 +87,7 @@ export class InvitesComponent implements OnInit {
           this.elRef.nativeElement.style.setProperty('--custom-secondary-color', eventSettings.secondaryColor);
         }
       }).add(() => {
-        this.loaderService.setLoading(false, '');
+        this.loaderService.setLoading(false);
       });
     });
   }

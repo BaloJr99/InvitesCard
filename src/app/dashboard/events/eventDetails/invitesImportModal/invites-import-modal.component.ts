@@ -43,7 +43,7 @@ export class InvitesImportModalComponent implements OnInit {
         const content = await this.readFileContent(element.files.item(0) as File);
         this.processFile(content);
       } catch (error) {
-        this.loaderService.setLoading(false, '');
+        this.loaderService.setLoading(false);
         this.processingFile = false;
       }
     } else {
@@ -77,7 +77,7 @@ export class InvitesImportModalComponent implements OnInit {
         this.toastr.success(messageResponse.message);
         $("#invitesImportModal").modal("hide");
       }
-    }).add(this.loaderService.setLoading(false, ''));
+    }).add(this.loaderService.setLoading(false));
   }
 
   processFile(content: string) {
@@ -126,6 +126,6 @@ export class InvitesImportModalComponent implements OnInit {
       }
     });
 
-    this.loaderService.setLoading(false, '');
+    this.loaderService.setLoading(false);
   }
 }
