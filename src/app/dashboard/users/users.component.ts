@@ -12,11 +12,10 @@ import { UsersService } from 'src/app/core/services/users.service';
   styleUrl: './users.component.css'
 })
 export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
+  @ViewChild(DataTableDirective, {static: false}) dtElement!: DataTableDirective;
 
   dtOptions: ADTSettings = {};
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  dtTrigger: Subject<any> = new Subject<any>();
+  dtTrigger: Subject<ADTSettings> = new Subject<ADTSettings>();
 
   users: IUserEventsInfo[] = [];
   userAction!: IUserAction;
@@ -54,7 +53,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.dtTrigger.next(false)
+    this.dtTrigger.next(this.dtOptions)
   }
 
   ngOnDestroy(): void {
@@ -98,6 +97,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dtElement.dtInstance.then((dtInstance) => {
       dtInstance.destroy();
     });
-    this.dtTrigger.next(false);
+
+    this.dtTrigger.next(this.dtOptions);
   }
 }
