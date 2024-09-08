@@ -31,21 +31,17 @@
       </ul>
     </div>
     <div class="base-menu menu">
+      <div class="arrow-up"></div>
       <h3>{{ username }}<br /><span>{{ email }}</span></h3>
       <ul>
         <li>
           <i class="fa-solid fa-user"></i><a href="#" i18n>Mi perfil</a>
         </li>
         <li>
-          <i class="fa-solid fa-envelope"></i><a href="#" i18n>Mensajes</a>
-        </li>
-        <li>
           <i class="fa-solid fa-gear"></i><a href="#" i18n>Configuración</a>
         </li>
         <li>
-          <i class="fa-solid fa-circle-info"></i><a href="#" i18n>Ayuda</a></li>
-        <li>
-          <i class="fa-solid fa-power-off"></i><a href="#" (click)="logout()" i18n>Cerrar sesión</a>
+          <i class="fa-solid fa-right-from-bracket"></i><button (click)="logout()" i18n>Cerrar sesión</button>
         </li>
       </ul>
     </div>
