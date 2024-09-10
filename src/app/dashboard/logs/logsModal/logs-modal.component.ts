@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ILog } from 'src/app/core/models/logs';
 
 @Component({
@@ -8,10 +8,13 @@ import { ILog } from 'src/app/core/models/logs';
 })
 export class LogsModalComponent implements OnInit {
   @Input() log: ILog | undefined = undefined;
+  @Output() clearSelectedLog = new EventEmitter<void>();
 
   ngOnInit(): void {
     $('#logModal').on('hidden.bs.modal', () => {
-      this.log = undefined;
+      this.clearSelectedLog.emit();
     });
   }
+
+
 }

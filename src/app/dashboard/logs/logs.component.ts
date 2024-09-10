@@ -154,6 +154,10 @@ export class LogsComponent implements OnInit, AfterViewInit, OnDestroy {
     $("#logModal").modal("show");
   }
 
+  clearSelectedLog() {
+    this.logSelected = undefined;
+  }
+
   rerender(): void {
     this.dtElement.dtInstance.then((dtInstance) => {
       dtInstance.destroy();
