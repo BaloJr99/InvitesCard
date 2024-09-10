@@ -15,30 +15,7 @@
   <div class="col-12">
     <div class="table-styling">
       <div class="inner">
-        <table datatable class="row-border hover" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-          <thead>
-            <tr>
-              <th i18n>Usuario</th>
-              <th i18n>Correo</th>
-              <th i18n># Eventos</th>
-              <th i18n># Invitaciones</th>
-              <th i18n>Activo</th>
-              <th i18n>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let user of users">
-              <td>{{ user.username }}</td>
-              <td>{{ user.email }}</td>
-              <td>{{ user.numEvents }}</td>
-              <td>{{ user.numEntries }}</td>
-              <td><i class="fa-solid" [ngClass]="user.isActive ? 'fa-circle-check' : 'fa-circle-xmark'"></i></td>
-              <td>
-                <button class="btn btn-secondary" (click)="editUser(this.user.id)" data-bs-toggle="modal" data-bs-target="#usersModal"><i class="fa-solid fa-pen-to-square"></i></button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <table datatable class="row-border hover" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"></table>
       </div>
     </div>
   </div>
