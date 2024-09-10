@@ -1,5 +1,5 @@
-import { HttpErrorResponse } from "@angular/common/http";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { HttpErrorResponse, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { By } from "@angular/platform-browser";
@@ -40,23 +40,22 @@ describe('Register Component: Integrated Test', () => {
   beforeEach(() => {
     authServiceSpy = jasmine.createSpyObj('AuthService', ['createNewAccount']);
     TestBed.configureTestingModule({
-      declarations: [
+    declarations: [
         RegisterComponent
-      ],
-      imports: [
-        RouterTestingModule.withRoutes([
-          { path: 'account', children: [
-            { path: 'login', component: LoginComponent }
-          ] }
+    ],
+    imports: [RouterTestingModule.withRoutes([
+            { path: 'account', children: [
+                    { path: 'login', component: LoginComponent }
+                ] }
         ]),
-        ReactiveFormsModule,
-        HttpClientTestingModule
-      ],
-      providers: [
+        ReactiveFormsModule],
+    providers: [
         { provide: AuthService, useValue: authServiceSpy },
         { provide: TokenStorageService, useValue: tokenStorageServiceSpy },
-      ]
-    });
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+});
 
     fixture = TestBed.createComponent(RegisterComponent);
     router = TestBed.inject(Router);

@@ -1,7 +1,7 @@
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { HttpClientTestingModule }from '@angular/common/http/testing'
+import { provideHttpClientTesting }from '@angular/common/http/testing'
 import { By } from "@angular/platform-browser";
 
 import { LoginComponent } from "src/app/account/login/login.component";
@@ -10,7 +10,7 @@ import { TokenStorageService } from "src/core/services/token-storage.service";
 import { validUser } from "src/tests/mocks/mock";
 import { of, throwError } from "rxjs";
 import { Router } from "@angular/router";
-import { HttpErrorResponse } from "@angular/common/http";
+import { HttpErrorResponse, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 
 describe('Login Component: Integrated Test', () => {
   let fixture: ComponentFixture<LoginComponent>;
@@ -32,21 +32,20 @@ describe('Login Component: Integrated Test', () => {
   beforeEach(() => {
     authServiceSpy = jasmine.createSpyObj('AuthService', ['loginAccount']);
     TestBed.configureTestingModule({
-      declarations: [
+    declarations: [
         LoginComponent
-      ],
-      imports: [
-        RouterTestingModule.withRoutes([
-          { path: 'dashboard', component: LoginComponent }
+    ],
+    imports: [RouterTestingModule.withRoutes([
+            { path: 'dashboard', component: LoginComponent }
         ]),
-        ReactiveFormsModule,
-        HttpClientTestingModule
-      ],
-      providers: [
+        ReactiveFormsModule],
+    providers: [
         { provide: AuthService, useValue: authServiceSpy },
         { provide: TokenStorageService, useValue: tokenStorageServiceSpy },
-      ]
-    });
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+});
 
     fixture = TestBed.createComponent(LoginComponent);
     router = TestBed.inject(Router);
