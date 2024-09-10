@@ -62,7 +62,7 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.dtTrigger.next(this.dtOptions)
+    this.dtTrigger.next(this.dtOptions);
   }
 
   ngOnDestroy(): void {
@@ -70,9 +70,9 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   copyToClipBoard(id: string): void {
-    const url = `${window.location.origin}/invites/${id}`
+    const url = `${window.location.origin}/invites/${id}`;
 
-    navigator.clipboard.writeText(url)
+    navigator.clipboard.writeText(url);
   }
 
   openEditModal(id: string): void {
@@ -92,7 +92,7 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
       invite: inviteFound,
       isNew: false,
       delete: true
-    })
+    });
   }
 
   selectAll (event: Event): void {

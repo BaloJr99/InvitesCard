@@ -12,7 +12,7 @@ import { UsersService } from 'src/app/core/services/users.service';
   styleUrl: './users.component.css'
 })
 export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild(DataTableDirective, {static: false}) dtElement!: DataTableDirective;
+  @ViewChild(DataTableDirective, { static: false }) dtElement!: DataTableDirective;
 
   dtOptions: ADTSettings = {};
   dtTrigger: Subject<ADTSettings> = new Subject<ADTSettings>();
@@ -49,11 +49,11 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }).add(() => {
       this.loaderService.setLoading(false);
-    })
+    });
   }
 
   ngAfterViewInit(): void {
-    this.dtTrigger.next(this.dtOptions)
+    this.dtTrigger.next(this.dtOptions);
   }
 
   ngOnDestroy(): void {
