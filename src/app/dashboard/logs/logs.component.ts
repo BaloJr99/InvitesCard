@@ -14,15 +14,31 @@ Chart.register(...registerables)
   styleUrl: './logs.component.css'
 })
 export class LogsComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
+  @ViewChild(DataTableDirective, { static: false }) dtElement!: DataTableDirective;
 
-  logs: ILog[] = [];
   logSelected: ILog | undefined = undefined;
   numberOfErrorsLast31Days = 0;
   numberOfErrorsToday = 0;
   groupedByDate: { [key: string]: number } = {};
 
-  dtOptions: ADTSettings = {};
+  dtOptions: ADTSettings  = {
+    searching: false,
+    destroy: true,
+    language: {
+      lengthMenu: '_MENU_'
+    },
+    order: [[0, 'desc']],
+    columns: [
+      { title: $localize `Fecha del error`, data: 'dateOfError', width: '20%' },
+      { title: $localize `Error`, data: 'customError', width: '50%' },
+      { title: $localize `Usuario`, data: 'userId', width: '20%' },
+      { title: $localize `Acciones`, data: 'id',
+        render(data) {
+          return `<button class="btn btn-secondary log-btn" data-id="${data}"><i class="fa-solid fa-eye"></i></button>`;
+        }
+      }
+    ]
+  }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dtTrigger: Subject<ADTSettings> = new Subject<ADTSettings>();
 
@@ -32,33 +48,10 @@ export class LogsComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.dtOptions = {
-      searching: false,
-      destroy: true,
-      language: {
-        lengthMenu: '_MENU_'
-      },
-      order: [[0, 'desc']],
-      columns: [
-        {
-          width: '20%',
-        },
-        {
-          width: '50%',
-        },
-        {
-          width: '20%',
-        },
-        {
-          width: '10%'
-        }
-      ]
-    }
-
     this.loaderService.setLoading(true, $localize `Cargando Logs`);
     this.loggerService.getLogs().subscribe({
       next: (logs) => {
-        this.logs = logs;
+        this.dtOptions.data = logs;
         this.RenderChart();
         this.rerender();
       }
@@ -67,6 +60,12 @@ export class LogsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.dtTrigger.next(this.dtOptions)
+
+    // Delegate click event for edit buttons
+    $(document).on('click', '.log-btn', (event) => {
+      const logId = $(event.currentTarget).data('id');
+      this.showException(logId);
+    });
   }
 
   ngOnDestroy(): void {
@@ -74,8 +73,8 @@ export class LogsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   RenderChart() {
-    this.numberOfErrorsLast31Days = this.logs.length;
-    this.numberOfErrorsToday = this.logs.filter(l => new Date().getDay() === new Date(l.dateOfError).getDate()).length;
+    this.numberOfErrorsLast31Days = (this.dtOptions.data as ILog[]).length;
+    this.numberOfErrorsToday = (this.dtOptions.data as ILog[]).filter(l => new Date().getDay() === new Date(l.dateOfError).getDate()).length;
 
     const randomColors: string[] = [];
 
@@ -89,7 +88,7 @@ export class LogsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     validDates.forEach((date) => {
-      this.groupedByDate[date] = this.logs.filter((log) => {
+      this.groupedByDate[date] = (this.dtOptions.data as ILog[]).filter((log) => {
         randomColors.push(`rgb(${this.randomNum()}, ${this.randomNum()}, ${this.randomNum()})`)
         const errorDate = new Date(log.dateOfError).toLocaleDateString();
 
@@ -151,7 +150,7 @@ export class LogsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   showException(logId: string) {
-    this.logSelected = this.logs.find(l => l.id === logId);
+    this.logSelected = (this.dtOptions.data as ILog[]).find(l => l.id === logId);
     $("#logModal").modal("show");
   }
 
