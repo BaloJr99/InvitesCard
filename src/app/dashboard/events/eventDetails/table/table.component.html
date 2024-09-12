@@ -10,7 +10,7 @@
         <thead>
           <tr>
             <th>
-              <input type="checkbox" (change)="selectAll($event)" [disabled]="isDeadlineMet" [checked]="allSelected()">
+              <input type="checkbox" (change)="selectAll($event)" [disabled]="isDeadlineMet" [checked]="allSelected()" [attr.aria-label]="getAccessibilityMessage(inviteGroup.key, true)">
             </th>
             <th i18n>Familia</th>
             <th i18n>Numero de entradas</th>
@@ -21,15 +21,15 @@
         <tbody>
           <tr *ngFor="let invite of inviteGroup.value">
             <td>
-              <input type="checkbox" (change)="selectInvite($event, invite)" [disabled]="isDeadlineMet" [checked]="invite.beingDeleted">
+              <input type="checkbox" (change)="selectInvite($event, invite)" [disabled]="isDeadlineMet" [checked]="invite.beingDeleted" [attr.aria-label]="getAccessibilityMessage(invite.family, false)">
             </td>
             <td>{{ invite.family }}</td>
             <td>{{ invite.entriesConfirmed === null || invite.entriesConfirmed === undefined ? 0 : invite.entriesConfirmed }} / {{ invite.entriesNumber }}</td>
-            <td><i class="fa-solid fa-eye" *ngIf="invite.inviteViewed"></i></td>
+            <td><i class="fa-solid fa-eye" *ngIf="invite.inviteViewed" aria-hidden="true"></i></td>
             <td>
-              <button class="btn" [ngClass]="invite.confirmation === null || invite.confirmation === undefined ? 'btn-warning' : 'btn-secondary'" (click)="openEditModal(this.invite.id)" [disabled]="invite.confirmation !== null && invite.confirmation !== undefined" [disabled]="isDeadlineMet"><i class="fa-solid fa-pen-to-square"></i></button>
-              <button class="btn btn-delete" [ngClass]="invite.confirmation === null || invite.confirmation === undefined ? 'btn-danger' : 'btn-secondary'" (click)="showModal(this.invite)" [disabled]="invite.confirmation !== null && invite.confirmation !== undefined" [disabled]="isDeadlineMet"><i class="fa-solid fa-trash"></i></button>
-              <button class="btn" [ngClass]="invite.confirmation === null || invite.confirmation === undefined ? 'btn-success' : 'btn-secondary'" (click)="copyToClipBoard(this.invite.id)" [disabled]="invite.confirmation !== null && invite.confirmation !== undefined" [disabled]="isDeadlineMet"><i class="fa-solid fa-copy"></i></button>
+              <button class="btn" [ngClass]="invite.confirmation === null || invite.confirmation === undefined ? 'btn-warning' : 'btn-secondary'" (click)="openEditModal(this.invite.id)" [disabled]="invite.confirmation !== null && invite.confirmation !== undefined" [disabled]="isDeadlineMet" i18n-title="Edit {{invite.family}}"><i aria-hidden="true" class="fa-solid fa-pen-to-square"></i></button>
+              <button class="btn btn-delete" [ngClass]="invite.confirmation === null || invite.confirmation === undefined ? 'btn-danger' : 'btn-secondary'" (click)="showModal(this.invite)" [disabled]="invite.confirmation !== null && invite.confirmation !== undefined" [disabled]="isDeadlineMet" i18n-title="Delete {{invite.family}}"><i aria-hidden="true" class="fa-solid fa-trash"></i></button>
+              <button class="btn" [ngClass]="invite.confirmation === null || invite.confirmation === undefined ? 'btn-success' : 'btn-secondary'" (click)="copyToClipBoard(this.invite.id)" [disabled]="invite.confirmation !== null && invite.confirmation !== undefined" [disabled]="isDeadlineMet" i18n-title="Copy {{invite.family}} invite url"><i aria-hidden="true" class="fa-solid fa-copy"></i></button>
             </td>
           </tr>
         </tbody>

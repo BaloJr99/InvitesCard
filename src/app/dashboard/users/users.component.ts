@@ -34,12 +34,12 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       { title: $localize `# Eventos`, data: 'numEvents' },
       { title: $localize `Activo`, 
         render(data, type, row) {
-          return `<i class="fa-solid ${row.isActive ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>`;
+          return `<i class="fa-solid ${row.isActive ? 'fa-circle-check' : 'fa-circle-xmark'}" aria-hidden="true"></i>`;
         }
       },
       { title: $localize `Acciones`, data: 'id',
         render(data) {
-          return `<button class="btn btn-secondary edit-btn" data-id="${data}" data-bs-toggle="modal" data-bs-target="#usersModal"><i class="fa-solid fa-pen-to-square"></i></button>`;
+          return `<button class="btn btn-secondary edit-btn" data-id="${data}" data-bs-toggle="modal" data-bs-target="#usersModal"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></button>`;
         }
       }
     ]

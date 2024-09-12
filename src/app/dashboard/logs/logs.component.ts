@@ -34,7 +34,7 @@ export class LogsComponent implements OnInit, AfterViewInit, OnDestroy {
       { title: $localize `Usuario`, data: 'userId', width: '20%' },
       { title: $localize `Acciones`, data: 'id',
         render(data) {
-          return `<button class="btn btn-secondary log-btn" data-id="${data}"><i class="fa-solid fa-eye"></i></button>`;
+          return `<button class="btn btn-secondary log-btn" data-id="${data}"><i class="fa-solid fa-eye" aria-hidden="true"></i></button>`;
         }
       }
     ]

@@ -3,11 +3,11 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" i18n-aria-label aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <i class="fa-solid fa-ban"></i>
-          <h1>Error</h1>
+          <i class="fa-solid fa-ban" aria-hidden="true"></i>
+          <h1 id="errorModalLabel">Error</h1>
           <p>{{ errorMessage }}</p>
         </div>
         <div class="modal-footer">

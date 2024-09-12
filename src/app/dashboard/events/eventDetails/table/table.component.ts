@@ -137,4 +137,8 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
     });
     this.dtTrigger.next(this.dtOptions);
   }
+
+  getAccessibilityMessage(name: string, isAll: boolean) {
+    return isAll ? $localize `Seleccionar todos ${name}` : $localize `Seleccionar ${name}`;
+  }
 }

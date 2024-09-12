@@ -7,7 +7,7 @@
       <div class="backgroundImage{{i}}" style="visibility: hidden; background-image: url('{{downloadImage.imageUrl}}');" alt=""></div>
     </ng-container>
   </ng-container>
-  <button (click)="goToForm()" class="scrollFormButton"><i class="fa-solid fa-arrow-down"></i></button>
+  <button (click)="goToForm()" class="scrollFormButton"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>
   <div class="container">
     <div class="header">
       <h2 *ngIf="inviteResolved.invite.typeOfEvent === 'X'">15<span>Sweet</span></h2>
@@ -70,7 +70,7 @@
     </div>
     <p class="pt-5">{{eventSettings.secondSectionSentences}} <br><br>¡Mis XV Años! </p>
     <br>
-    <p class="pinkLetter">{{ dayOfTheWeek.substring(0, 1).toUpperCase() + dayOfTheWeek.slice(1) }} <br> {{ longDate }} <br> <i class="fa-regular fa-clock" style="color: var(--custom-primary-color);"></i> {{ eventSettings.massTime.substring(0,5) }} horas</p>
+    <p class="pinkLetter">{{ dayOfTheWeek.substring(0, 1).toUpperCase() + dayOfTheWeek.slice(1) }} <br> {{ longDate }} <br> <i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{ eventSettings.massTime.substring(0,5) }} horas</p>
     <div class="row">
       <div class="col-sm-12 col-md-6">
         <p>{{eventSettings.massAddress}}</p>
@@ -91,7 +91,7 @@
         <h1 i18n>Recepción</h1>
         <h2>{{eventSettings.receptionPlace}}</h2>
         <p>{{eventSettings.receptionAddress}}</p>
-        <span><i class="fa-regular fa-clock" style="color: var(--custom-primary-color);"></i> {{eventSettings.receptionTime.substring(0, 5)}} horas</span>
+        <span><i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{eventSettings.receptionTime.substring(0, 5)}} horas</span>
       </div>
     </div>
   </div>

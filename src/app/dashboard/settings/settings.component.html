@@ -26,99 +26,99 @@
         <input type="text" formControlName="eventId" hidden>
         <div class="form-group col-6 col-md-2">
           <label for="primaryColor" class="form-label" i18n>Color Primario</label>
-          <input type="color" class="form-control" formControlName="primaryColor" [ngClass]="{'is-invalid': displayMessage['primaryColor']}">
-          <span class="invalid-feedback">
+          <input id="primaryColor" type="color" class="form-control" formControlName="primaryColor" [ngClass]="{'is-invalid': displayMessage['primaryColor']}">
+          <span class="invalid-feedback" role="alert">
             {{ displayMessage['primaryColor'] }}
           </span>
         </div>
         <div class="form-group col-6 col-md-2">
           <label for="secondaryColor" class="form-label" i18n>Color Secundario</label>
-          <input type="color" class="form-control" formControlName="secondaryColor" [ngClass]="{'is-invalid': displayMessage['secondaryColor']}">
-          <span class="invalid-feedback">
+          <input id="secondaryColor" type="color" class="form-control" formControlName="secondaryColor" [ngClass]="{'is-invalid': displayMessage['secondaryColor']}">
+          <span class="invalid-feedback" role="alert">
             {{ displayMessage['secondaryColor'] }}
           </span>
         </div>
         <div class="form-group col-12 col-md-4">
           <label for="parents" class="form-label" i18n>Padres</label>
-          <input type="text" class="form-control" formControlName="parents" [ngClass]="{'is-invalid': displayMessage['parents']}">
-          <span class="invalid-feedback">
+          <input id="parents" type="text" class="form-control" formControlName="parents" [ngClass]="{'is-invalid': displayMessage['parents']}">
+          <span class="invalid-feedback" role="alert">
             {{ displayMessage['parents'] }}
           </span>
         </div>
         <div class="form-group col-12 col-md-4">
           <label for="godParents" class="form-label" i18n>Padrinos</label>
-          <input type="text" class="form-control" formControlName="godParents" [ngClass]="{'is-invalid': displayMessage['godParents']}">
-          <span class="invalid-feedback">
+          <input id="godParents" type="text" class="form-control" formControlName="godParents" [ngClass]="{'is-invalid': displayMessage['godParents']}">
+          <span class="invalid-feedback" role="alert">
             {{ displayMessage['godParents'] }}
           </span>
         </div>
         <div class="form-group col-12">
           <label for="firstSectionSentences" class="form-label" i18n>Frases primera sección</label>
-          <textarea type="text" class="form-control" formControlName="firstSectionSentences" [ngClass]="{'is-invalid': displayMessage['firstSectionSentences']}"></textarea>
-          <span class="invalid-feedback">
+          <textarea id="firstSectionSentences" type="text" class="form-control" formControlName="firstSectionSentences" [ngClass]="{'is-invalid': displayMessage['firstSectionSentences']}"></textarea>
+          <span class="invalid-feedback" role="alert">
             {{ displayMessage['firstSectionSentences'] }}
           </span>
         </div>
         <div class="form-group col-12">
           <label for="secondSectionSentences" class="form-label" i18n>Frases segunda sección</label>
-          <textarea type="text" class="form-control" formControlName="secondSectionSentences" [ngClass]="{'is-invalid': displayMessage['secondSectionSentences']}"></textarea>
-          <span class="invalid-feedback">
+          <textarea id="secondSectionSentences" type="text" class="form-control" formControlName="secondSectionSentences" [ngClass]="{'is-invalid': displayMessage['secondSectionSentences']}"></textarea>
+          <span class="invalid-feedback" role="alert">
             {{ displayMessage['secondSectionSentences'] }}
           </span>
         </div>
         <div class="form-group col-12 col-md-6">
           <label for="massUrl" class="form-label" i18n>Url de la ubicación de la misa</label>
-          <input type="text" class="form-control" formControlName="massUrl" [ngClass]="{'is-invalid': displayMessage['massUrl']}">
-          <span class="invalid-feedback">
+          <input id="massUrl" type="text" class="form-control" formControlName="massUrl" [ngClass]="{'is-invalid': displayMessage['massUrl']}">
+          <span class="invalid-feedback" role="alert">
             {{ displayMessage['massUrl'] }}
           </span>
         </div>
         <div class="form-group col-6 col-md-2">
           <label for="massTime" class="form-label" i18n>Hora de la Misa</label>
-          <input type="time" class="form-control" formControlName="massTime" [ngClass]="{'is-invalid': displayMessage['massTime']}">
-          <span class="invalid-feedback">
+          <input id="massTime" type="time" class="form-control" formControlName="massTime" [ngClass]="{'is-invalid': displayMessage['massTime']}">
+          <span class="invalid-feedback" role="alert">
             {{ displayMessage['massTime'] }}
           </span>
         </div>
         <div class="form-group col-6 col-md-4">
           <label for="massAddress" class="form-label" i18n>Dirección de la Misa</label>
-          <input type="text" class="form-control" formControlName="massAddress" [ngClass]="{'is-invalid': displayMessage['massAddress']}">
-          <span class="invalid-feedback">
+          <input id="massAddress" type="text" class="form-control" formControlName="massAddress" [ngClass]="{'is-invalid': displayMessage['massAddress']}">
+          <span class="invalid-feedback" role="alert">
             {{ displayMessage['massAddress'] }}
           </span>
         </div>
         <div class="form-group col-12 col-md-6">
           <label for="receptionUrl" class="form-label" i18n>Url de la ubicación de la recepción</label>
-          <input type="text" class="form-control" formControlName="receptionUrl" [ngClass]="{'is-invalid': displayMessage['receptionUrl']}">
-          <span class="invalid-feedback">
+          <input id="receptionUrl" type="text" class="form-control" formControlName="receptionUrl" [ngClass]="{'is-invalid': displayMessage['receptionUrl']}">
+          <span class="invalid-feedback" role="alert">
             {{ displayMessage['receptionUrl'] }}
           </span>
         </div>
         <div class="form-group col-6 col-md-2">
           <label for="receptionTime" class="form-label" i18n>Hora de la recepción</label>
-          <input type="time" class="form-control" formControlName="receptionTime" [ngClass]="{'is-invalid': displayMessage['receptionTime']}">
-          <span class="invalid-feedback">
+          <input id="receptionTime" type="time" class="form-control" formControlName="receptionTime" [ngClass]="{'is-invalid': displayMessage['receptionTime']}">
+          <span class="invalid-feedback" role="alert">
             {{ displayMessage['receptionTime'] }}
           </span>
         </div>
         <div class="form-group col-6 col-md-4">
           <label for="receptionPlace" class="form-label" i18n>Lugar de la recepción</label>
-          <input type="text" class="form-control" formControlName="receptionPlace" [ngClass]="{'is-invalid': displayMessage['receptionPlace']}">
-          <span class="invalid-feedback">
+          <input id="receptionPlace" type="text" class="form-control" formControlName="receptionPlace" [ngClass]="{'is-invalid': displayMessage['receptionPlace']}">
+          <span class="invalid-feedback" role="alert">
             {{ displayMessage['receptionPlace'] }}
           </span>
         </div>
         <div class="form-group col-12">
           <label for="receptionAddress" class="form-label" i18n>Dirección de la recepción</label>
-          <input type="text" class="form-control" formControlName="receptionAddress" [ngClass]="{'is-invalid': displayMessage['receptionAddress']}">
-          <span class="invalid-feedback">
+          <input id="receptionAddress" type="text" class="form-control" formControlName="receptionAddress" [ngClass]="{'is-invalid': displayMessage['receptionAddress']}">
+          <span class="invalid-feedback" role="alert">
             {{ displayMessage['receptionAddress'] }}
           </span>
         </div>
         <div class="form-group col-12">
           <label for="dressCodeColor" class="form-label" i18n>Código reservado para festejados</label>
-          <input type="text" class="form-control" formControlName="dressCodeColor" [ngClass]="{'is-invalid': displayMessage['dressCodeColor']}">
-          <span class="invalid-feedback">
+          <input id="dressCodeColor" type="text" class="form-control" formControlName="dressCodeColor" [ngClass]="{'is-invalid': displayMessage['dressCodeColor']}">
+          <span class="invalid-feedback" role="alert">
             {{ displayMessage['dressCodeColor'] }}
           </span>
         </div>

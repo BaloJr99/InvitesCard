@@ -50,12 +50,12 @@
       <div class="card-body">
         <h1 class="card-title">{{ invite.family }}</h1>
         <div class="confirmed" *ngIf="invite.confirmation">
-          <i class="fa-solid fa-circle-check"></i>
+          <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
           <h3 i18n>Su asistencia ha sido confirmada</h3>
           <p class="card-text" i18n>Puede cerrar la página</p>
         </div>
         <div class="notConfirmed" *ngIf="!invite.confirmation">
-          <i class="fa-solid fa-circle-xmark"></i>
+          <i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>
           <h3 i18n>Su asistencia ha sido cancelada.</h3>
           <p class="card-text" i18n>Muchas gracias por su tiempo.</p>
           <p class="card-text" i18n>Puede cerrar la página.</p>

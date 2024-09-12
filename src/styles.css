@@ -17,3 +17,11 @@ html, body {
   font-family: 'Raleway';
   text-align: center;  
 }
+
+* {
+  --focus-outline: 2px solid blue;
+}
+
+*:focus-visible {
+  outline: var(--focus-outline, 2px solid #0af) !important;
+}

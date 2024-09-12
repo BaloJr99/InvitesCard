@@ -99,4 +99,8 @@ export class EventsComponent implements OnInit {
     const newDate = new Date(date);
     return newDate.toISOString().slice(0, 16);
   }
+  
+  getAccessibilityMessage(eventName: string) {
+    return $localize `Editar ${eventName}`;
+  }
 }

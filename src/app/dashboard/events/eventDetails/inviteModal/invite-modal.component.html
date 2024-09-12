@@ -4,7 +4,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="inviteModalLabel" i18n>Invitaciones Personalizadas</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" i18n-aria-label aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
         <ng-container *ngIf="!isCreatingNewFormGroup">
@@ -12,43 +12,43 @@
             <input type="text" formControlName="id" hidden>
             <div class="mb-3">
               <label for="family" class="form-label" i18n>Familia</label>
-              <input type="text" class="form-control" formControlName="family" [ngClass]="{'is-invalid': displayMessage['family']}">
-              <span class="invalid-feedback">
+              <input id="family" type="text" class="form-control" formControlName="family" [ngClass]="{'is-invalid': displayMessage['family']}">
+              <span class="invalid-feedback" role="alert">
                 {{ displayMessage['family'] }}
               </span>
             </div>
             <div class="mb-3">
               <label for="familyGroupId" class="form-label" i18n>Grupo</label>
               <div class="familyGroupActions">
-                <select class="form-control" formControlName="familyGroupId" [ngClass]="{'is-invalid': displayMessage['familyGroupId']}">
+                <select id="familyGroupId" class="form-control" formControlName="familyGroupId" [ngClass]="{'is-invalid': displayMessage['familyGroupId']}">
                   <option value="" i18n>Selecciona el grupo</option>
                   <option *ngFor="let familyGroup of familyGroups" [value]="familyGroup.id">{{ familyGroup.familyGroup }}</option>
                 </select>
                 <button class="btn btn-dark" (click)="toggleIsEditingFormGroup()" *ngIf="createInviteForm.get('familyGroupId')?.value"><i class="fa-solid fa-pen-to-square"></i></button>
-                <button class="btn btn-dark" (click)="toggleIsCreatingNewFormGroup()"><i class="fa-solid fa-plus"></i></button>
+                <button class="btn btn-dark" (click)="toggleIsCreatingNewFormGroup()"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
               </div>
-              <span class="invalid-feedback">
+              <span class="invalid-feedback" role="alert">
                 {{ displayMessage['familyGroupId'] }}
               </span>
             </div>
             <div class="mb-3">
               <label for="entriesNumber" class="form-label" i18n>Numero de entradas</label>
-              <input type="number" min="1"  class="form-control" formControlName="entriesNumber" [ngClass]="{'is-invalid': displayMessage['entriesNumber']}">
-              <span class="invalid-feedback">
+              <input id="entriesNumber" type="number" min="1"  class="form-control" formControlName="entriesNumber" [ngClass]="{'is-invalid': displayMessage['entriesNumber']}">
+              <span class="invalid-feedback" role="alert">
                 {{ displayMessage['entriesNumber'] }}
               </span>
             </div>
             <div class="mb-3">
               <label for="phoneNumber" class="form-label" i18n>Telefono de contacto</label>
-              <input type="tel" class="form-control" formControlName="phoneNumber" [ngClass]="{'is-invalid': displayMessage['phoneNumber']}" maxlength="10">
-              <span class="invalid-feedback">
+              <input id="phoneNumber" type="tel" class="form-control" formControlName="phoneNumber" [ngClass]="{'is-invalid': displayMessage['phoneNumber']}" maxlength="10">
+              <span class="invalid-feedback" role="alert">
                 {{ displayMessage['phoneNumber'] }}
               </span>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" formControlName="kidsAllowed" [ngClass]="{'is-invalid': displayMessage['kidsAllowed']}" checked>
-              <label for="my-input" class="form-check-label" i18n>Niños permitidos</label>
-              <span class="invalid-feedback">
+              <input id="kidsAllowed" class="form-check-input" type="checkbox" formControlName="kidsAllowed" [ngClass]="{'is-invalid': displayMessage['kidsAllowed']}" checked>
+              <label for="kidsAllowed" class="form-check-label" i18n>Niños permitidos</label>
+              <span class="invalid-feedback" role="alert">
                 {{ displayMessage['kidsAllowed'] }}
               </span>
             </div>
@@ -63,8 +63,8 @@
             <input type="text" formControlName="id" hidden>
             <div class="mb-3">
               <label for="familyGroup" class="form-label" i18n>Nuevo grupo</label>
-              <input type="text" min="1"  class="form-control" formControlName="familyGroup" [ngClass]="{'is-invalid': displayMessage['familyGroup']}">
-              <span class="invalid-feedback">
+              <input id="familyGroup" type="text" min="1"  class="form-control" formControlName="familyGroup" [ngClass]="{'is-invalid': displayMessage['familyGroup']}">
+              <span class="invalid-feedback" role="alert">
                 {{ displayMessage['familyGroup'] }}
               </span>
             </div>

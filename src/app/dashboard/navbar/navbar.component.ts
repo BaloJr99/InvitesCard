@@ -139,4 +139,8 @@ export class NavbarComponent implements OnInit, OnChanges {
 
     return $localize `Hace ${ timeSpanValue } ${ timeSpan }`
   }
+
+  getAccessibilityMessage(numberOfNotifications: number) {
+    return $localize `Tienes ${numberOfNotifications} notificaciones sin leer`;
+  }
 }
