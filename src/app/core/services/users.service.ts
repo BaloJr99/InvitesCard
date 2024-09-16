@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { IFullUser, IUser, IUserBasicInfo, IUserEventsInfo } from '../models/users';
+import { IFullUser, IUser, IUserBasicInfo, IUserEventsInfo, IUserProfile } from '../models/users';
 import { IMessageResponse } from '../models/common';
 
 @Injectable()
@@ -35,5 +35,13 @@ export class UsersService {
 
   deleteUser(id: string): Observable<IMessageResponse> { 
     return this.http.delete<IMessageResponse>(`${this.invitesBaseUrl}/${id}`);
+  }
+
+  updateProfile(profile: IUserProfile): Observable<IMessageResponse> { 
+    return this.http.put<IMessageResponse>(`${this.invitesBaseUrl}/profile`, profile);
+  }
+  
+  getUserProfile(id: string): Observable<IUserProfile> {
+    return this.http.get<IUserProfile>(`${this.invitesBaseUrl}/profile/${id}`);
   }
 }

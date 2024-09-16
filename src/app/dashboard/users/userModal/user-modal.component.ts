@@ -63,7 +63,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnInit(): void {
     this.createUserForm = this.fb.group({
-      _id: [''],
+      id: [''],
       username: ['', Validators.required],
       email: ['', Validators.required],
       roles: [[], Validators.minLength(1)],
@@ -92,7 +92,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
       const user: IUser = changes["userAction"].currentValue.user;
       this.createUserForm.patchValue({ 
         ...user,
-        roles: user.roles.map(r => r._id)
+        roles: user.roles.map(r => r.id)
       });
 
       this.userRoles = user.roles;
@@ -102,7 +102,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
   saveUser() {
     if (this.createUserForm.valid) {
       if (this.createUserForm.dirty) {
-        if (this.createUserForm.controls["_id"].value !== "") {
+        if (this.createUserForm.controls["id"].value !== "") {
           this.updateUser();
         } else {
           this.createUser();
@@ -123,7 +123,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.updateUsers.emit({
           user: {
             ...this.createUserForm.value,
-            _id: response.id
+            id: response.id
           },
           isNew: true
         });
@@ -136,7 +136,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   updateUser() {
     this.loaderService.setLoading(true, $localize `Actualizando usuario`);
-    this.usersService.updateUser(this.createUserForm.value, this.createUserForm.controls["_id"].value).subscribe({
+    this.usersService.updateUser(this.createUserForm.value, this.createUserForm.controls["id"].value).subscribe({
       next: (response: IMessageResponse) => {
         $("#usersModal").modal('hide');
         this.updateUsers.emit({
@@ -152,7 +152,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   clearInputs(): void {
     this.createUserForm.reset({
-      _id: '',
+      id: '',
       username: '',
       email: '',
       roles: [],
@@ -179,16 +179,16 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
     this.filteredRoles = [];
     this.createUserForm.patchValue({
       roles: [
-        ...this.userRoles.map(x => x._id)
+        ...this.userRoles.map(x => x.id)
       ]
     });
   }
 
   deleteRole(roleId: string): void {
-    this.userRoles = this.userRoles.filter(r => r._id !== roleId);
+    this.userRoles = this.userRoles.filter(r => r.id !== roleId);
     this.createUserForm.patchValue({
       roles: [
-        ...this.userRoles.map(x => x._id)
+        ...this.userRoles.map(x => x.id)
       ]
     })
   }

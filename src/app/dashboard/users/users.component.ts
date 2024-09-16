@@ -84,7 +84,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   updateUsers(userAction: IUserAction) {
     const userInfo = userAction.user;
     const userEventsInfo = {
-      id: userInfo._id,
+      id: userInfo.id,
       username: userInfo.username,
       email: userInfo.email,
       isActive: userAction.isNew ? true : userInfo.isActive,
@@ -96,7 +96,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       this.dtOptions.data = this.dtOptions.data?.concat(userEventsInfo);
       this.rerender();
     } else {
-      this.dtOptions.data = this.dtOptions.data?.map(originalUser => originalUser.id === userInfo._id ? userEventsInfo : originalUser);
+      this.dtOptions.data = this.dtOptions.data?.map(originalUser => originalUser.id === userInfo.id ? userEventsInfo : originalUser);
     }
     this.dtOptions.data?.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
   }

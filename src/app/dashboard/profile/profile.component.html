@@ -1,0 +1,106 @@
+<section class="row mx-1 my-3 breadcrumb-header">
+  <div class="col-12">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
+        <li class="breadcrumb-item" i18n>PERFIL</li>
+      </ol>
+    </nav>
+  </div>
+</section>
+<section class="profile">
+  <div class="row">
+    <div class="col-12 col-md-4 profile-aside">
+      <div class="card">
+        <div class="card-body">
+          <div class="profile-image">
+            <i class="fa-solid fa-user" *ngIf="!createProfileForm.get('profilePhoto')?.value">
+              <button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button>
+            </i>
+            <img src="assets/images/profile.png" alt="profile" *ngIf="createProfileForm.get('profilePhoto')?.value">
+          </div>
+          <br>
+          <div class="profile-info">
+            <p class="profile-name">{{user.firstName}} {{user.lastName}}</p>
+            <p class="profile-email">{{user.email}}</p>
+            <button class="btn btn-warning">
+              <i class="fa-solid fa-key"></i> &nbsp;
+              <span i18n>Cambiar contraseña</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-8">
+      <form [formGroup]="createProfileForm">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h2 i18n>Información Personal</h2>
+            <div class="row">
+              <div class="mb-3 col-12 col-md-4">
+                <label for="firstName" class="form-label" i18n>Nombre</label>
+                <input id="firstName" type="text" autocomplete="given-name" class="form-control" formControlName="firstName" [ngClass]="{'is-invalid': displayMessage['firstName']}">
+                <span class="invalid-feedback" role="alert">
+                  {{ displayMessage['firstName'] }}
+                </span>
+              </div>
+              <div class="mb-3 col-12 col-md-8">
+                <label for="lastName" class="form-label" i18n>Apellidos</label>
+                <input id="lastName" type="text" autocomplete="family-name" class="form-control" formControlName="lastName" [ngClass]="{'is-invalid': displayMessage['lastName']}">
+                <span class="invalid-feedback" role="alert">
+                  {{ displayMessage['lastName'] }}
+                </span>
+              </div>
+              <div class="mb-3 mb-md-0 col-12 col-md-4">
+                <label for="username" class="form-label" i18n>Usuario</label>
+                <input id="username" type="text" autocomplete="username" class="form-control" formControlName="username" [ngClass]="{'is-invalid': displayMessage['username']}">
+                <span class="invalid-feedback" role="alert">
+                  {{ displayMessage['username'] }}
+                </span>
+              </div>
+              <div class="mb-0 col-12 col-md-4">
+                <label for="gender" class="form-label" i18n>Genero</label>
+                <select id="gender" type="text" class="form-control" formControlName="gender" [ngClass]="{'is-invalid': displayMessage['gender']}">
+                  <option value="" i18n>Seleccionar...</option>
+                  <option value="H" i18n>Hombre</option>
+                  <option value="M" i18n>Mujer</option>
+                  <option value="O" i18n>Otro</option>
+                </select>
+                <span class="invalid-feedback" role="alert">
+                  {{ displayMessage['gender'] }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h2 i18n>Contactos</h2>
+            <div class="row">
+              <div class="mb-3 mb-md-0 col-12 col-md-6">
+                <label for="email" class="form-label" i18n>Correo</label>
+                <input id="email" type="email" autocomplete="email" class="form-control" formControlName="email" [ngClass]="{'is-invalid': displayMessage['email']}">
+                <span class="invalid-feedback" role="alert">
+                  {{ displayMessage['email'] }}
+                </span>
+              </div>
+              <div class="mb-0 col-12 col-md-6">
+                <label for="phoneNumber" class="form-label" i18n>Número de teléfono</label>
+                <input id="phoneNumber" type="tel" class="form-control" formControlName="phoneNumber" [ngClass]="{'is-invalid': displayMessage['phoneNumber']}">
+                <span class="invalid-feedback" role="alert">
+                  {{ displayMessage['phoneNumber'] }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-4">
+          <div class="card-body d-flex justify-content-end">
+            <button class="btn btn-success" [disabled]="!createProfileForm.valid || !createProfileForm.dirty" i18n (click)="saveProfile()">Guardar Cambios</button>
+            <button class="btn btn-danger ms-md-1" [disabled]="!createProfileForm.dirty" (click)="cancelChanges()" i18n>Cancelar Cambios</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

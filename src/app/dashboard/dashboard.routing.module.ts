@@ -3,6 +3,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { DashboardComponent } from "./dashboard.component";
 import { NavbarComponent } from "./navbar/navbar.component";
 import { SidebarComponent } from "./sidebar/sidebar.component";
+import { ProfileComponent } from "./profile/profile.component";
 
 const routes: Routes = [
   { 
@@ -32,6 +33,10 @@ const routes: Routes = [
       {
         path: 'settings',
         loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule)
+      },
+      {
+        path: 'profile',
+        loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule)
       },
       {
         path: '**',

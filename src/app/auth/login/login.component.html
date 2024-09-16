@@ -13,6 +13,7 @@
             <input id="usernameOrEmail" 
               class="form-control" 
               type="text" 
+              autocomplete="email username"
               placeholder="Escriba su usuario" 
               formControlName="usernameOrEmail" 
               [ngClass]="{'is-invalid': displayMessage['usernameOrEmail']}"

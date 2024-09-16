@@ -13,7 +13,7 @@ export interface IFullUser {
 }
 
 export interface IUserBasicInfo {
-  _id: string,
+  id: string,
   username: string
 }
 
@@ -35,4 +35,15 @@ export interface IUserEventsInfo {
 export interface IUserAction {
   user: IUser,
   isNew: boolean
+}
+
+export interface IUserProfile {
+  id: string,
+  username: string,
+  firstName: string,
+  lastName: string,
+  phoneNumber: string,
+  email: string,
+  password: string,
+  gender: string
 }

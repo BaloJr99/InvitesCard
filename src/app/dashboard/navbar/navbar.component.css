@@ -10,6 +10,11 @@
     color: var(--primary-orange);
   }
 
+    .navbar .navbar-brand h1 {
+      font-size: inherit;
+      margin-bottom: 0;
+    }
+
   .navbar .navbar-nav .nav-item {
     font-family: 'Raleway';
   }
