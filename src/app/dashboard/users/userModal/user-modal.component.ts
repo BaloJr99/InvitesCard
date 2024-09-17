@@ -9,6 +9,7 @@ import { UsersService } from 'src/app/core/services/users.service';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
+import { usernameDuplicated } from 'src/app/shared/utils/validators/usernameDuplicated';
 
 @Component({
   selector: 'app-user-modal',
@@ -55,6 +56,9 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
       },
       roles: {
         required: $localize `Seleccionar un rol`
+      },
+      usernameDuplicated: {
+        duplicated: $localize `Ya existe un usuario con este nombre de usuario`
       }
     };
 
@@ -67,7 +71,10 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
       username: ['', Validators.required],
       email: ['', Validators.required],
       roles: [[], [Validators.required ,Validators.minLength(1)]],
-      isActive: [true]
+      isActive: [true],
+      usernameIsValid: [false]
+    }, {
+      validators: usernameDuplicated
     });
     
     $('#usersModal').on('hidden.bs.modal', () => {
@@ -156,7 +163,8 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
       username: '',
       email: '',
       roles: [],
-      isActive: true
+      isActive: true,
+      usernameIsValid: false
     });
 
     this.userRoles = [];
@@ -255,5 +263,21 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
         }
       }
     }
+  }
+
+  checkUsername(event: Event) {
+    const username = (event.target as HTMLInputElement).value;
+
+    if (username === '') {
+      this.createUserForm.patchValue({ usernameIsValid: false });
+      return;
+    }
+
+    this.usersService.checkUsername(username).subscribe({
+      next: (response: boolean) => {
+        this.createUserForm.patchValue({ usernameIsValid: !response });
+        this.displayMessage = this.genericValidator.processMessages(this.createUserForm);
+      }
+    });
   }
 }

@@ -59,3 +59,24 @@
   display: inline;
   cursor: pointer;
 }
+
+i.fa-circle-check {
+  color: green;
+}
+
+i.fa-circle-xmark {
+  color: red;
+}
+
+.username-validation {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+  .username-validation #username {
+    width: calc(100% - 26px);
+    margin-right: 10px;
+  }
