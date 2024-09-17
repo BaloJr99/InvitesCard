@@ -53,6 +53,12 @@ export class GenericValidator {
       messages['passwordMatch'] = '';
       messages['passwordMatch'] += this.validationMessages['passwordMatch']['matchError'];
     }
+
+    if (container.errors && container.errors["usernameDuplicatedError"]) {
+      messages['usernameDuplicated'] = '';
+      messages['usernameDuplicated'] += this.validationMessages['usernameDuplicated']['duplicated'];
+    }
+    
     return messages;
   }
 

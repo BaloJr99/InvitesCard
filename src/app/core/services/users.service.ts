@@ -44,4 +44,8 @@ export class UsersService {
   getUserProfile(id: string): Observable<IUserProfile> {
     return this.http.get<IUserProfile>(`${this.invitesBaseUrl}/profile/${id}`);
   }
+
+  checkUsername(username: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.invitesBaseUrl}/profile/check-username/${username}`);
+  }
 }

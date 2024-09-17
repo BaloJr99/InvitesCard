@@ -8,6 +8,7 @@ import { IUserProfile } from 'src/app/core/models/users';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
+import { usernameDuplicated } from 'src/app/shared/utils/validators/usernameDuplicated';
 
 @Component({
   selector: 'app-profile',
@@ -50,7 +51,10 @@ export class ProfileComponent {
       },
       gender:{
         required: $localize `El género es requerido`,
-      } 
+      },
+      usernameDuplicated: {
+        duplicated: $localize `Ya existe un usuario con este nombre de usuario`
+      }
     };
 
     this.genericValidator = new GenericValidator(this.validationMessages);
@@ -65,7 +69,10 @@ export class ProfileComponent {
       phoneNumber: ['', Validators.required],
       email: ['', Validators.required],
       gender: ['', Validators.required],
-      profilePhoto: ['']
+      profilePhoto: [''],
+      usernameIsValid: [true]
+    }, {
+      validators: usernameDuplicated
     });
 
     this.route.data.subscribe(() => {
@@ -108,7 +115,8 @@ export class ProfileComponent {
       phoneNumber: '',
       email: '',
       gender: '',
-      profilePhoto: ''
+      profilePhoto: '',
+      usernameIsValid: true
     });
 
     this.displayMessage = {};
@@ -130,5 +138,25 @@ export class ProfileComponent {
   cancelChanges() {
     this.clearInputs();
     this.createProfileForm.patchValue(this.user);
+  }
+
+  checkUsername(event: Event) {
+    const username = (event.target as HTMLInputElement).value;
+    if (username === this.user.username) {
+      this.createProfileForm.patchValue({ usernameIsValid: true });
+      return;
+    }
+
+    if (username === '') {
+      this.createProfileForm.patchValue({ usernameIsValid: false });
+      return;
+    }
+
+    this.usersService.checkUsername(username).subscribe({
+      next: (response: boolean) => {
+        this.createProfileForm.patchValue({ usernameIsValid: !response });
+        this.displayMessage = this.genericValidator.processMessages(this.createProfileForm);
+      }
+    });
   }
 }
