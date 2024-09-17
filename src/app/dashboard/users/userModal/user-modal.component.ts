@@ -66,7 +66,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
       id: [''],
       username: ['', Validators.required],
       email: ['', Validators.required],
-      roles: [[], Validators.minLength(1)],
+      roles: [[], [Validators.required ,Validators.minLength(1)]],
       isActive: [true]
     });
     
@@ -182,6 +182,9 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
         ...this.userRoles.map(x => x.id)
       ]
     });
+
+    const inputFilter = document.getElementById("roleFilter") as HTMLInputElement;
+    inputFilter.focus();
   }
 
   deleteRole(roleId: string): void {
@@ -204,5 +207,53 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
     merge(this.createUserForm.valueChanges, ...controlBlurs).subscribe(() => {
       this.displayMessage = this.genericValidator.processMessages(this.createUserForm);
     });
+  }
+
+  moveFocus(event: Event, role?: IRole): void {
+    if (event instanceof KeyboardEvent) {
+      if (event.key === 'ArrowDown') {
+        const filteredRoles = document.getElementById('filteredRoles') as HTMLElement;
+        const allFilteredRoles = filteredRoles.getElementsByTagName('li');
+        if (allFilteredRoles.length > 0) {
+          const selectedElement = filteredRoles.querySelector('.selected') as HTMLElement;
+
+          if (selectedElement) {
+            const nextElement = selectedElement.nextElementSibling as HTMLElement;
+            if (nextElement) {
+              selectedElement.classList.remove('selected');
+              nextElement.classList.add('selected');
+              nextElement.focus();
+            }
+          } else {
+            const firstElement = allFilteredRoles[0] as HTMLElement;
+            firstElement.classList.add('selected');
+            firstElement.focus();
+          }
+        }
+      } else if (event.key === 'ArrowUp') {
+        const filteredRoles = document.getElementById('filteredRoles') as HTMLElement;
+        const allFilteredRoles = filteredRoles.getElementsByTagName('li');
+        if (allFilteredRoles.length > 0) {
+          const selectedElement = filteredRoles.querySelector('.selected') as HTMLElement;
+
+          if (selectedElement) {
+            const previousElement = selectedElement.previousElementSibling as HTMLElement;
+            if (previousElement) {
+              selectedElement.classList.remove('selected');
+              previousElement.classList.add('selected');
+              previousElement.focus();
+            } else {
+              const inputFilter = document.getElementById("roleFilter") as HTMLInputElement;
+              inputFilter.focus();
+              selectedElement.classList.remove('selected');
+            }
+          }
+        }
+      } else if (event.key === 'Enter') {
+        if (role) {
+          this.addRole(role);
+        }
+      }
+    }
   }
 }

@@ -37,7 +37,8 @@
   padding: 5px 10px;
 }
 
-.filteringBox ul li:hover {
+.filteringBox ul li:hover,
+.filteringBox ul li.selected {
   background-color: #dcdcdc;
 }
 
