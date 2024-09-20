@@ -36,6 +36,12 @@
       text-decoration: none;
     }
 
+    .breadcrumb-header .header button.btn-primary {
+      background-color: var(--secondary-blue);
+      color: var(--grey);
+      border: none;
+    }
+
     .users .table-styling {
       background-color: white;
       border-radius: 0.375rem;

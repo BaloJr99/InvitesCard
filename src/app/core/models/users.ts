@@ -20,6 +20,7 @@ export interface IUserBasicInfo {
 export interface IUser extends IUserBasicInfo {
   email: string,
   isActive: boolean,
+  profilePhoto: string,
   roles: IRole[]
 }
 
@@ -45,5 +46,11 @@ export interface IUserProfile {
   phoneNumber: string,
   email: string,
   password: string,
-  gender: string
+  gender: string,
+  profilePhoto: string
+}
+
+export interface IUserProfilePhoto {
+  userId: string,
+  profilePhotoSource: string
 }

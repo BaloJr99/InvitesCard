@@ -15,6 +15,8 @@ export class NavbarComponent implements OnInit, OnChanges {
 
   email = "";
   username = "";
+  profilePhoto = "";
+
   @Input() notifications: INotification[] = [];
 
   numberOfNotifications = 0;
@@ -43,6 +45,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     if (userInformation) {
       this.username = userInformation.username;
       this.email = userInformation.email;
+      this.profilePhoto = userInformation.profilePhoto;
       this.isAdmin = userInformation.roles.some(r => r.name == Roles.Admin);
     }
   }

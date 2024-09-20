@@ -74,12 +74,12 @@ i.fa-circle-xmark {
 }
 
   .profile .profile-aside .profile-image {
+    position: relative;
     display: flex;
     justify-content: center;
   }
 
     .profile .profile-aside i.fa-user {
-      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -94,7 +94,7 @@ i.fa-circle-xmark {
     .profile .profile-aside .profile-image button {
       position: absolute;
       bottom: 0;
-      right: 0;
+      right: calc(50% - 75px);
       font-size: 15px;
       height: 30px;
       width: 30px;

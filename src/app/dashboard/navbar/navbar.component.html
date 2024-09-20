@@ -7,7 +7,9 @@
     </a>
     <div class="navbarWithSearchAndForm">
       <button *ngIf="route.includes('/dashboard/events/')" class="btn notifications" (click)="toggleNotifications()" i18n-title="Toggle notifications"><i class="fa-solid fa-bell" aria-hidden="true"></i><span [style.visibility]="numberOfNotifications > 0 ? 'visible' : 'hidden'" aria-live="polite" [attr.aria-label]="getAccessibilityMessage(numberOfNotifications)">{{ numberOfNotifications }}</span></button> 
-      <button class="btn account" (click)="toggleMenu()" title="Toggle User Menu"><i class="fa-solid fa-user" aria-hidden="true"></i></button>  
+      <button class="btn account" (click)="toggleMenu()" title="Toggle User Menu" [ngStyle]="{'background-image': 'url(' + profilePhoto + ')'}">
+        <i class="fa-solid fa-user" aria-hidden="true" *ngIf="!profilePhoto"></i>
+      </button>  
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" i18n-title="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>

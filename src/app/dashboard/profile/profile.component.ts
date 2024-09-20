@@ -159,4 +159,9 @@ export class ProfileComponent {
       }
     });
   }
+
+  updateUserProfilePhoto(profileUrl: string) {
+    this.user.profilePhoto = profileUrl;
+    this.createProfileForm.patchValue({ profilePhoto: profileUrl });
+  }
 }

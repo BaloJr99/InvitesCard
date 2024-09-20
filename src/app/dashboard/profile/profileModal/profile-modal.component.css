@@ -8,7 +8,6 @@
   border: none;
 }
 
-.familyGroupActions {
-  display: flex;
-  gap: 10px;
+.modal #profile-photo {
+  width: 100%;
 }

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { IFullUser, IUser, IUserBasicInfo, IUserEventsInfo, IUserProfile } from '../models/users';
+import { IFullUser, IUser, IUserBasicInfo, IUserEventsInfo, IUserProfile, IUserProfilePhoto } from '../models/users';
 import { IMessageResponse } from '../models/common';
 
 @Injectable()
@@ -47,5 +47,9 @@ export class UsersService {
 
   checkUsername(username: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.invitesBaseUrl}/profile/check-username/${username}`);
+  }
+
+  uploadProfilePhoto(userProfilePhoto: IUserProfilePhoto): Observable<IMessageResponse> {
+    return this.http.put<IMessageResponse>(`${this.invitesBaseUrl}/profile/photo`, userProfilePhoto);
   }
 }

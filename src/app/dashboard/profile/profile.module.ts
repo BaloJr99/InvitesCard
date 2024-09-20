@@ -5,6 +5,7 @@ import { UsersService } from "src/app/core/services/users.service";
 import { DateFormatPipe } from "src/app/shared/pipes/date-format.pipe";
 import { ProfileComponent } from "./profile.component";
 import { profileResolver } from "./profile-resolver.service";
+import { ProfileModalComponent } from "./profileModal/profile-modal.component";
 
 const routes: Routes = [
   { 
@@ -29,7 +30,8 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [ 
-    ProfileComponent
+    ProfileComponent,
+    ProfileModalComponent
   ]
 })
 

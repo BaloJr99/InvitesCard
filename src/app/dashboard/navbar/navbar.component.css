@@ -47,6 +47,11 @@
 
     .navbar .navbarWithSearchAndForm .account {
       margin-right: 20px;
+      width: 40px;
+      height: 40px;
+      background-repeat: no-repeat;
+      background-size: cover;
+      border: 1px solid #fff;
     }
 
       .navbar .navbarWithSearchAndForm .notifications span {

@@ -14,10 +14,9 @@
       <div class="card">
         <div class="card-body">
           <div class="profile-image">
-            <i class="fa-solid fa-user" *ngIf="!createProfileForm.get('profilePhoto')?.value">
-              <button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button>
-            </i>
-            <img src="assets/images/profile.png" alt="profile" *ngIf="createProfileForm.get('profilePhoto')?.value">
+            <i class="fa-solid fa-user" *ngIf="!createProfileForm.get('profilePhoto')?.value"></i>
+            <img [src]="user.profilePhoto" alt="profile" *ngIf="createProfileForm.get('profilePhoto')?.value">
+            <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#profileModal" i18n-aria-label aria-label="Add Profile Photo"><i class="fa-solid fa-camera"></i></button>
           </div>
           <br>
           <div class="profile-info">
@@ -110,3 +109,4 @@
     </div>
   </div>
 </section>
+<app-profile-modal [userId]="user.id" (updateProfilePhoto)="updateUserProfilePhoto($event)"></app-profile-modal>

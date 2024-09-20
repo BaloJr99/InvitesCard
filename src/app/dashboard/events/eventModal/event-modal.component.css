@@ -3,7 +3,7 @@
 }
 
 .modal button.btn-primary {
-  background-color: #ffb7e0;
-  color: #000000;
+  background-color: var(--primary-blue);
+  color: #fff;
   border: none;
 }
