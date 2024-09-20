@@ -15,7 +15,6 @@ export const profileResolver: ResolveFn<IUserProfile> = (
   const userInformation = tokenService.getTokenValues();
 
   if (!userInformation) {
-    console.log("No user information found");
     router.navigate(['/auth/login']);
     return EMPTY;
   }
