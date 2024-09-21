@@ -98,7 +98,8 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
     if (changes["userAction"] && changes["userAction"].currentValue) {
       const user: IUpsertUser = changes["userAction"].currentValue.user;
       this.createUserForm.patchValue({ 
-        ...user
+        ...user,
+        usernameIsValid: true
       });
     }
   }
@@ -264,7 +265,6 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   checkUsername(event: Event) {
     const username = (event.target as HTMLInputElement).value;
-
     if (username === '') {
       this.createUserForm.patchValue({ usernameIsValid: false });
       return;
