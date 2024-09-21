@@ -91,6 +91,12 @@ i.fa-circle-xmark {
       width: 150px;
     }
 
+    .profile .profile-aside .btn-warning {
+      display: flex;
+      align-items: center;
+      margin: auto;
+    }
+
     .profile .profile-aside .profile-image button {
       position: absolute;
       bottom: 0;

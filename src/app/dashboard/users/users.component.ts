@@ -6,6 +6,7 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { ADTSettings } from 'angular-datatables/src/models/settings';
 import { Subject } from 'rxjs';
@@ -53,7 +54,8 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
         title: $localize`Acciones`,
         data: 'id',
         render(data) {
-          return `<button class="btn btn-secondary edit-btn" data-id="${data}" data-bs-toggle="modal" data-bs-target="#usersModal"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></button>`;
+          return `<button class="btn btn-secondary edit-btn" data-id="${data}" data-bs-toggle="modal" data-bs-target="#usersModal"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></button>
+                  <button class="btn btn-success show-btn" data-id="${data}"><i class="fa-solid fa-user" aria-hidden="true"></i></button>`;
         },
       },
     ],
@@ -66,7 +68,8 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private usersService: UsersService,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -92,6 +95,11 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
     $(document).on('click', '.edit-btn', (event) => {
       const userId = $(event.currentTarget).data('id');
       this.editUser(userId);
+    });
+
+    $(document).on('click', '.show-btn', (event) => {
+      const userId = $(event.currentTarget).data('id');
+      this.router.navigate(['/dashboard/profile', userId]);
     });
   }
 

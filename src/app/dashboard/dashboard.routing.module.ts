@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { adminGuard } from '../core/guards/admin.guard';
 
 const routes: Routes = [
   {
@@ -28,11 +29,13 @@ const routes: Routes = [
         path: 'users',
         loadChildren: () =>
           import('./users/users.module').then((m) => m.UsersModule),
+        canActivate: [adminGuard],
       },
       {
         path: 'logs',
         loadChildren: () =>
           import('./logs/logs.module').then((m) => m.LoggerModule),
+        canActivate: [adminGuard],
       },
       {
         path: 'settings',

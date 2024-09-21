@@ -17,6 +17,7 @@ import { fromEvent, merge, Observable } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { IUserProfile } from 'src/app/core/models/users';
 import { LoaderService } from 'src/app/core/services/loader.service';
+import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 import { usernameDuplicated } from 'src/app/shared/utils/validators/usernameDuplicated';
@@ -32,6 +33,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
   errorMessage = '';
   user!: IUserProfile;
+  isMyProfile = true;
 
   createProfileForm!: FormGroup;
 
@@ -44,7 +46,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     private usersService: UsersService,
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private tokenService: TokenStorageService
   ) {
     this.validationMessages = {
       username: {
@@ -94,6 +97,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.route.data.subscribe(() => {
       this.user = this.route.snapshot.data['userProfile'];
       this.createProfileForm.patchValue(this.user);
+
+      if (this.tokenService.getTokenValues()?.id !== this.user.id) {
+        this.isMyProfile = false;
+      }
 
       this.createProfileForm.markAsUntouched();
     });

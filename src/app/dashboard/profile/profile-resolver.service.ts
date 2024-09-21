@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
 import { EMPTY, Observable } from 'rxjs';
+import { Roles } from 'src/app/core/models/enum';
 import { IUserProfile } from 'src/app/core/models/users';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { UsersService } from 'src/app/core/services/users.service';
@@ -20,9 +21,8 @@ export const profileResolver: ResolveFn<IUserProfile> = (
   }
 
   const id = route.paramMap.get('id');
-
-  if (!id) {
-    router.navigate([`dashboard/profile/${userInformation.id}`]);
+  if (!id || (userInformation.roles.some((r) => r.name !== Roles.Admin) && userInformation.id !== id)) {
+    router.navigate([`/dashboard/profile/${userInformation.id}`]);
     return EMPTY;
   }
 
