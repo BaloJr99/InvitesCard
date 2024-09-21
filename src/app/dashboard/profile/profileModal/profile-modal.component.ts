@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, take } from 'rxjs';
@@ -12,7 +12,7 @@ import { UsersService } from 'src/app/core/services/users.service';
   templateUrl: './profile-modal.component.html',
   styleUrls: ['./profile-modal.component.css']
 })
-export class ProfileModalComponent {
+export class ProfileModalComponent implements OnInit {
   @Input() userId: string = '';
   @Output() updateProfilePhoto = new EventEmitter<string>();
   showImage = false;
@@ -23,6 +23,17 @@ export class ProfileModalComponent {
     private userService: UsersService,
     private toastr: ToastrService
   ) { }
+
+  ngOnInit(): void {
+    $('#profileModal').on('hidden.bs.modal', () => {
+      this.profilePhotoForm.patchValue({
+        photoFiles: '',
+        photoFilesSource: ''
+      });
+
+      this.showImage = false;
+    });
+  }
 
   profilePhotoForm: FormGroup = this.fb.group({
     photoFiles: ['', Validators.required],
