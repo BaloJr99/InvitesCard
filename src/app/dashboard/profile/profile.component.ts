@@ -15,7 +15,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
-import { IUserProfile } from 'src/app/core/models/users';
+import { IUser, IUserProfile } from 'src/app/core/models/users';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { UsersService } from 'src/app/core/services/users.service';
@@ -34,6 +35,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   errorMessage = '';
   user!: IUserProfile;
   isMyProfile = true;
+  showChangePassword = false;
+  private userInformation: IUser;
 
   createProfileForm!: FormGroup;
 
@@ -44,6 +47,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   constructor(
     private route: ActivatedRoute,
     private usersService: UsersService,
+    private authService: AuthService,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private loaderService: LoaderService,
@@ -74,6 +78,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     };
 
     this.genericValidator = new GenericValidator(this.validationMessages);
+    this.userInformation = this.tokenService.getTokenValues() as IUser;
   }
 
   ngOnInit(): void {
@@ -98,9 +103,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       this.user = this.route.snapshot.data['userProfile'];
       this.createProfileForm.patchValue(this.user);
 
-      if (this.tokenService.getTokenValues()?.id !== this.user.id) {
-        this.isMyProfile = false;
-      }
+      this.isMyProfile = this.userInformation.id === this.user.id;
 
       this.createProfileForm.markAsUntouched();
     });
@@ -197,5 +200,22 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   updateUserProfilePhoto(profileUrl: string) {
     this.user.profilePhoto = profileUrl;
     this.createProfileForm.patchValue({ profilePhoto: profileUrl });
+  }
+
+  changePassword() {
+    if (this.userInformation.id !== this.user.id) {
+      this.loaderService.setLoading(true, $localize`Enviando correo electrónico`);
+      this.authService.sendResetPasswordToUser(this.user.id).subscribe({
+        next: (response: IMessageResponse) => {
+          this.toastr.success(response.message);
+        }
+      }).add(() => this.loaderService.setLoading(false));
+    } else {
+      this.showChangePassword = true;
+    }
+  }
+
+  showChangePasswordValue(value: boolean) {
+    this.showChangePassword = !value;
   }
 }

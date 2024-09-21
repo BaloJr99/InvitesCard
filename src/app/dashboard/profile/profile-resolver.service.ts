@@ -21,7 +21,13 @@ export const profileResolver: ResolveFn<IUserProfile> = (
   }
 
   const id = route.paramMap.get('id');
-  if (!id || (userInformation.roles.some((r) => r.name !== Roles.Admin) && userInformation.id !== id)) {
+  if (
+    !id ||
+    (
+      !userInformation.roles.some((r) => r.name === Roles.Admin) &&
+      userInformation.id !== id
+    )
+  ) {
     router.navigate([`/dashboard/profile/${userInformation.id}`]);
     return EMPTY;
   }

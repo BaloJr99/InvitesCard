@@ -6,6 +6,7 @@ import { DateFormatPipe } from 'src/app/shared/pipes/date-format.pipe';
 import { ProfileComponent } from './profile.component';
 import { profileResolver } from './profile-resolver.service';
 import { ProfileModalComponent } from './profileModal/profile-modal.component';
+import { ChangePasswordComponent } from './changePassword/changePassword.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,10 @@ const routes: Routes = [
 @NgModule({
   providers: [UsersService],
   imports: [SharedModule, DateFormatPipe, RouterModule.forChild(routes)],
-  declarations: [ProfileComponent, ProfileModalComponent],
+  declarations: [
+    ProfileComponent,
+    ProfileModalComponent,
+    ChangePasswordComponent,
+  ],
 })
 export class ProfileModule {}

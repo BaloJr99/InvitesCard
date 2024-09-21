@@ -24,6 +24,15 @@ export class AuthService {
     );
   }
 
+  sendResetPasswordToUser(id: string): Observable<IMessageResponse> {
+    return this.http.post<IMessageResponse>(
+      `${this.invitesBaseUrl}/forgotPasswordToUser`,
+      {
+        id
+      }
+    );
+  }
+
   isUserResettingPassword(userId: string): Observable<boolean> {
     return this.http.get<boolean>(
       `${this.invitesBaseUrl}/forgotPassword/${userId}`
