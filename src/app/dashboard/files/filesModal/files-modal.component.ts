@@ -7,7 +7,7 @@ import { LoaderService } from 'src/app/core/services/loader.service';
 @Component({
   selector: 'app-files-modal',
   templateUrl: './files-modal.component.html',
-  styleUrls: ['./files-modal.component.css']
+  styleUrls: ['./files-modal.component.css'],
 })
 export class FilesModalComponent {
   @Input() imageAction!: IDeleteImage;
@@ -16,23 +16,26 @@ export class FilesModalComponent {
   constructor(
     private imagesService: ImagesService,
     private toastr: ToastrService,
-    private loaderService: LoaderService) { }
+    private loaderService: LoaderService
+  ) {}
 
   hideModal(): void {
-    $("#warningDialog").modal("hide");
+    $('#warningDialog').modal('hide');
   }
 
   deleteImage(): void {
-    this.loaderService.setLoading(true, $localize `Eliminando imagen`);
-    this.imagesService.deleteImage(this.imageAction).subscribe({
-      next: () => {
-        this.hideModal();
-        this.updateImages.emit(this.imageAction);
-        this.toastr.success($localize `Se ha eliminado el archivo`);
-      }
-    }).add(() => {
-      this.loaderService.setLoading(false);
-    });
+    this.loaderService.setLoading(true, $localize`Eliminando imagen`);
+    this.imagesService
+      .deleteImage(this.imageAction)
+      .subscribe({
+        next: () => {
+          this.hideModal();
+          this.updateImages.emit(this.imageAction);
+          this.toastr.success($localize`Se ha eliminado el archivo`);
+        },
+      })
+      .add(() => {
+        this.loaderService.setLoading(false);
+      });
   }
 }
- 

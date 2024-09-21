@@ -1,5 +1,22 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChildren } from '@angular/core';
-import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChildren,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormControlName,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Observable, fromEvent, merge } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { IEventAction, IFullEvent } from 'src/app/core/models/events';
@@ -13,53 +30,55 @@ import { IMessageResponse } from 'src/app/core/models/common';
 @Component({
   selector: 'app-event-modal',
   templateUrl: './event-modal.component.html',
-  styleUrls: ['./event-modal.component.css']
+  styleUrls: ['./event-modal.component.css'],
 })
 export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
-  @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
+  @ViewChildren(FormControlName, { read: ElementRef })
+  formInputElements!: ElementRef[];
 
-  @Input() set eventAction (value: IEventAction) {
+  @Input() set eventAction(value: IEventAction) {
     if (value && value.users) {
       this.users = value.users;
     }
   }
 
   @Output() updateEvents: EventEmitter<IEventAction> = new EventEmitter();
-  
+
   createEventForm!: FormGroup;
   errorMessage = '';
   users: IUserDropdownData[] = [];
-    
+
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;
 
   constructor(
-    private eventsService: EventsService, 
+    private eventsService: EventsService,
     private usersService: UsersService,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private loaderService: LoaderService,
-    private cd: ChangeDetectorRef) { 
+    private cd: ChangeDetectorRef
+  ) {
     this.validationMessages = {
       nameOfEvent: {
-        required: $localize `Ingresar nombre del evento`
+        required: $localize`Ingresar nombre del evento`,
       },
       dateOfEvent: {
-        required: $localize `Ingresar fecha del evento`
+        required: $localize`Ingresar fecha del evento`,
       },
       maxDateOfConfirmation: {
-        required: $localize `Ingresar fecha límite de confirmación`,
+        required: $localize`Ingresar fecha límite de confirmación`,
       },
       nameOfCelebrated: {
-        required: $localize `Ingresar nombre del festejado o festejados`
+        required: $localize`Ingresar nombre del festejado o festejados`,
       },
       typeOfEvent: {
-        required: $localize `Seleccionar tipo de evento`
+        required: $localize`Seleccionar tipo de evento`,
       },
       userId: {
-        required: $localize `Seleccionar usuario`
-      }
+        required: $localize`Seleccionar usuario`,
+      },
     };
 
     this.genericValidator = new GenericValidator(this.validationMessages);
@@ -73,85 +92,100 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
       maxDateOfConfirmation: ['', Validators.required],
       nameOfCelebrated: ['', Validators.required],
       typeOfEvent: ['', Validators.required],
-      userId: ['', Validators.required]
-    })
-    
+      userId: ['', Validators.required],
+    });
+
     $('#eventModal').on('hidden.bs.modal', () => {
       this.clearInputs();
     });
 
     $('#eventModal').on('show.bs.modal', () => {
-      this.loaderService.setLoading(true, $localize `Cargando usuarios`);
+      this.loaderService.setLoading(true, $localize`Cargando usuarios`);
 
-      this.usersService.getUsersDropdownData().subscribe({
-        next: (users) => {
-          this.users = users;
-          this.cd.detectChanges();
-        }
-      }).add(() => this.loaderService.setLoading(false));
-    })
+      this.usersService
+        .getUsersDropdownData()
+        .subscribe({
+          next: (users) => {
+            this.users = users;
+            this.cd.detectChanges();
+          },
+        })
+        .add(() => this.loaderService.setLoading(false));
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes["eventAction"] && changes["eventAction"].currentValue) {
-      const event: IFullEvent = changes["eventAction"].currentValue.event;
-      this.createEventForm.patchValue({ 
-        ...event
-      })
+    if (changes['eventAction'] && changes['eventAction'].currentValue) {
+      const event: IFullEvent = changes['eventAction'].currentValue.event;
+      this.createEventForm.patchValue({
+        ...event,
+      });
     }
   }
 
   saveEvent() {
     if (this.createEventForm.valid) {
       if (this.createEventForm.dirty) {
-        if (this.createEventForm.controls["id"].value !== "") {
+        if (this.createEventForm.controls['id'].value !== '') {
           this.updateEvent();
         } else {
           this.createEvent();
         }
       } else {
-        $("#eventModal").modal('hide');
+        $('#eventModal').modal('hide');
       }
     } else {
-      this.displayMessage = this.genericValidator.processMessages(this.createEventForm, true);
+      this.displayMessage = this.genericValidator.processMessages(
+        this.createEventForm,
+        true
+      );
     }
   }
 
   createEvent() {
-    this.loaderService.setLoading(true, $localize `Creando evento`);
-    this.eventsService.createEvent(this.formatEvent()).subscribe({
-      next: (response: IMessageResponse) => {
-        $("#eventModal").modal('hide');
-        this.updateEvents.emit({
-          event: {
-            ...this.formatEvent(),
-            id: response.id
-          },
-          users: [],
-          isNew: true
-        });
-        this.toastr.success(response.message);
-      }
-    }).add(() => {
-      this.loaderService.setLoading(false);
-    });
+    this.loaderService.setLoading(true, $localize`Creando evento`);
+    this.eventsService
+      .createEvent(this.formatEvent())
+      .subscribe({
+        next: (response: IMessageResponse) => {
+          $('#eventModal').modal('hide');
+          this.updateEvents.emit({
+            event: {
+              ...this.formatEvent(),
+              id: response.id,
+            },
+            users: [],
+            isNew: true,
+          });
+          this.toastr.success(response.message);
+        },
+      })
+      .add(() => {
+        this.loaderService.setLoading(false);
+      });
   }
 
   updateEvent() {
-    this.loaderService.setLoading(true, $localize `Actualizando evento`);
-    this.eventsService.updateEvent(this.formatEvent(), this.createEventForm.controls["id"].value).subscribe({
-      next: (response: IMessageResponse) => {
-        $("#eventModal").modal('hide');
-        this.updateEvents.emit({
-          event: this.formatEvent(),
-          users: [],
-          isNew: false
-        });
-        this.toastr.success(response.message);
-      }
-    }).add(() => {
-      this.loaderService.setLoading(false);
-    });
+    this.loaderService.setLoading(true, $localize`Actualizando evento`);
+    this.eventsService
+      .updateEvent(
+        this.formatEvent(),
+        this.createEventForm.controls['id'].value
+      )
+      .subscribe({
+        next: (response: IMessageResponse) => {
+          $('#eventModal').modal('hide');
+          this.updateEvents.emit({
+            event: this.formatEvent(),
+            users: [],
+            isNew: false,
+          });
+          this.toastr.success(response.message);
+        },
+      })
+      .add(() => {
+        this.loaderService.setLoading(false);
+      });
   }
 
   clearInputs(): void {
@@ -162,32 +196,37 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
       maxDateOfConfirmation: '',
       nameOfCelebrated: '',
       typeOfEvent: '',
-      userId: ''
+      userId: '',
     });
 
     this.displayMessage = {};
-    
-    $("#eventId").val("");
+
+    $('#eventId').val('');
   }
 
   formatEvent(): IFullEvent {
     return {
       ...this.createEventForm.value,
-      dateOfEvent: `${this.createEventForm.get("dateOfEvent")?.value}:00Z`,
-      maxDateOfConfirmation: `${this.createEventForm.get("maxDateOfConfirmation")?.value}:00Z`,
-    } as IFullEvent
+      dateOfEvent: `${this.createEventForm.get('dateOfEvent')?.value}:00Z`,
+      maxDateOfConfirmation: `${
+        this.createEventForm.get('maxDateOfConfirmation')?.value
+      }:00Z`,
+    } as IFullEvent;
   }
 
   ngAfterViewInit(): void {
     // Watch for the blur event from any input element on the form.
     // This is required because the valueChanges does not provide notification on blur
-    const controlBlurs: Observable<unknown>[] = this.formInputElements
-      .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
+    const controlBlurs: Observable<unknown>[] = this.formInputElements.map(
+      (formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur')
+    );
 
     // Merge the blur event observable with the valueChanges observable
     // so we only need to subscribe once.
     merge(this.createEventForm.valueChanges, ...controlBlurs).subscribe(() => {
-      this.displayMessage = this.genericValidator.processMessages(this.createEventForm);
+      this.displayMessage = this.genericValidator.processMessages(
+        this.createEventForm
+      );
     });
   }
 }

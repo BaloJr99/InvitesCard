@@ -10,43 +10,44 @@ import { UsersService } from 'src/app/core/services/users.service';
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
-  styleUrls: ['./events.component.css']
+  styleUrls: ['./events.component.css'],
 })
 export class EventsComponent implements OnInit {
-
   isAdmin = false;
-  
+
   constructor(
     private eventsService: EventsService,
     private usersService: UsersService,
-    private loaderService: LoaderService, 
-    private tokenService: TokenStorageService) {
-      
-    }
-    
+    private loaderService: LoaderService,
+    private tokenService: TokenStorageService
+  ) {}
+
   events: IDashboardEvent[] = [];
   eventAction!: IEventAction;
-  
+
   ngOnInit(): void {
-    this.loaderService.setLoading(true, $localize `Cargando eventos`);
+    this.loaderService.setLoading(true, $localize`Cargando eventos`);
 
     const userInformation = this.tokenService.getTokenValues();
-    
-    if (userInformation) {
-      this.isAdmin = userInformation.roles.some(r => r.name == Roles.Admin);
 
-      this.eventsService.getEvents().subscribe({
-        next: (events) => {
-          this.events = events.map((event) => {
-            return {
-              ...event,
-              dateOfEvent: this.convertDate(event.dateOfEvent)
-            }
-          });
-        }
-      }).add(() => {
-        this.loaderService.setLoading(false);
-      });
+    if (userInformation) {
+      this.isAdmin = userInformation.roles.some((r) => r.name == Roles.Admin);
+
+      this.eventsService
+        .getEvents()
+        .subscribe({
+          next: (events) => {
+            this.events = events.map((event) => {
+              return {
+                ...event,
+                dateOfEvent: this.convertDate(event.dateOfEvent),
+              };
+            });
+          },
+        })
+        .add(() => {
+          this.loaderService.setLoading(false);
+        });
     }
   }
 
@@ -54,20 +55,24 @@ export class EventsComponent implements OnInit {
     if (eventAction.isNew) {
       this.events.push({
         ...eventAction.event,
-        allowCreateInvites: 0
+        allowCreateInvites: 0,
       });
-      this.events.sort((a, b) => a.nameOfEvent.toLowerCase().localeCompare(b.nameOfEvent.toLowerCase()));
+      this.events.sort((a, b) =>
+        a.nameOfEvent.toLowerCase().localeCompare(b.nameOfEvent.toLowerCase())
+      );
     } else {
-      this.events = this.events.map(originalEvent => {
+      this.events = this.events.map((originalEvent) => {
         if (originalEvent.id === eventAction.event.id) {
           return {
             ...eventAction.event,
-            allowCreateInvites: originalEvent.allowCreateInvites
-          }
+            allowCreateInvites: originalEvent.allowCreateInvites,
+          };
         }
         return originalEvent;
       });
-      this.events.sort((a, b) => a.nameOfEvent.toLowerCase().localeCompare(b.nameOfEvent.toLowerCase()));
+      this.events.sort((a, b) =>
+        a.nameOfEvent.toLowerCase().localeCompare(b.nameOfEvent.toLowerCase())
+      );
     }
   }
 
@@ -78,29 +83,31 @@ export class EventsComponent implements OnInit {
           return {
             ...event,
             dateOfEvent: this.convertDate(event.dateOfEvent),
-            maxDateOfConfirmation: this.convertDate(event.maxDateOfConfirmation),
-            userId: event.userId
-          }
+            maxDateOfConfirmation: this.convertDate(
+              event.maxDateOfConfirmation
+            ),
+            userId: event.userId,
+          };
         })
       ),
-      this.usersService.getUsersDropdownData()
+      this.usersService.getUsersDropdownData(),
     ]).subscribe({
       next: ([event, users]) => {
         this.eventAction = {
-          event, 
+          event,
           users,
-          isNew: false
-        }
-      }
-    })
+          isNew: false,
+        };
+      },
+    });
   }
 
   convertDate(date: string): string {
     const newDate = new Date(date);
     return newDate.toISOString().slice(0, 16);
   }
-  
+
   getAccessibilityMessage(eventName: string) {
-    return $localize `Editar ${eventName}`;
+    return $localize`Editar ${eventName}`;
   }
 }

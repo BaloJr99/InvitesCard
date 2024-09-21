@@ -1,12 +1,14 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-export const usernameDuplicated: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-  const usernameIsValid = control.get('usernameIsValid')?.value as boolean
+export const usernameDuplicated: ValidatorFn = (
+  control: AbstractControl
+): ValidationErrors | null => {
+  const usernameIsValid = control.get('usernameIsValid')?.value as boolean;
 
   if (!usernameIsValid) {
     return {
-      usernameDuplicatedError: true
-    }
+      usernameDuplicatedError: true,
+    };
   }
-  return null
-}
+  return null;
+};

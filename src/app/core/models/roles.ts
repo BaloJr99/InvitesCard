@@ -1,5 +1,5 @@
 export interface IRole {
-  id: string
-  name: string,
-  isActive: boolean
+  id: string;
+  name: string;
+  isActive: boolean;
 }

@@ -1,5 +1,22 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChildren } from '@angular/core';
-import { FormBuilder,FormControlName, FormGroup, Validators } from '@angular/forms';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChildren,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormControlName,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Observable, fromEvent, merge } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { IUpsertUser, IUserAction } from 'src/app/core/models/users';
@@ -14,29 +31,37 @@ import { usernameDuplicated } from 'src/app/shared/utils/validators/usernameDupl
 @Component({
   selector: 'app-user-modal',
   templateUrl: './user-modal.component.html',
-  styleUrls: ['./user-modal.component.css']
+  styleUrls: ['./user-modal.component.css'],
 })
 export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
-  @HostListener('window:click', ['$event.target']) userModalListener (clickedElement: HTMLElement) {
-    const filteredRoles = document.getElementById('filteredRoles') as HTMLElement;
+  @HostListener('window:click', ['$event.target']) userModalListener(
+    clickedElement: HTMLElement
+  ) {
+    const filteredRoles = document.getElementById(
+      'filteredRoles'
+    ) as HTMLElement;
     const roleFilter = document.getElementById('roleFilter') as HTMLElement;
-    
-    if (!filteredRoles.contains(clickedElement) && clickedElement !== roleFilter){
+
+    if (
+      !filteredRoles.contains(clickedElement) &&
+      clickedElement !== roleFilter
+    ) {
       this.filteredRoles = [];
-    } 
+    }
   }
 
-  @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
+  @ViewChildren(FormControlName, { read: ElementRef })
+  formInputElements!: ElementRef[];
 
   @Input() userAction!: IUserAction;
   @Input() userRoles: IRole[] = [];
   @Output() updateUsers: EventEmitter<IUserAction> = new EventEmitter();
-  
+
   createUserForm!: FormGroup;
   errorMessage = '';
   roles: IRole[] = [];
   filteredRoles: IRole[] = [];
-    
+
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;
@@ -46,60 +71,67 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
     private rolesService: RolesService,
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private loaderService: LoaderService) { 
+    private loaderService: LoaderService
+  ) {
     this.validationMessages = {
       username: {
-        required: $localize `Ingresar nombre de usuario`
+        required: $localize`Ingresar nombre de usuario`,
       },
       email: {
-        required: $localize `Ingresar correo electronico`
+        required: $localize`Ingresar correo electronico`,
       },
       roles: {
-        required: $localize `Seleccionar un rol`
+        required: $localize`Seleccionar un rol`,
       },
       usernameDuplicated: {
-        duplicated: $localize `Ya existe un usuario con este nombre de usuario`
-      }
+        duplicated: $localize`Ya existe un usuario con este nombre de usuario`,
+      },
     };
 
     this.genericValidator = new GenericValidator(this.validationMessages);
   }
 
   ngOnInit(): void {
-    this.createUserForm = this.fb.group({
-      id: [''],
-      username: ['', Validators.required],
-      email: ['', Validators.required],
-      roles: [[], [Validators.required ,Validators.minLength(1)]],
-      isActive: [true],
-      usernameIsValid: [false]
-    }, {
-      validators: usernameDuplicated
-    });
-    
+    this.createUserForm = this.fb.group(
+      {
+        id: [''],
+        username: ['', Validators.required],
+        email: ['', Validators.required],
+        roles: [[], [Validators.required, Validators.minLength(1)]],
+        isActive: [true],
+        usernameIsValid: [false],
+      },
+      {
+        validators: usernameDuplicated,
+      }
+    );
+
     $('#usersModal').on('hidden.bs.modal', () => {
       this.clearInputs();
     });
 
     $('#usersModal').on('shown.bs.modal', () => {
-      this.loaderService.setLoading(true, $localize `Cargando roles`);
+      this.loaderService.setLoading(true, $localize`Cargando roles`);
 
-      this.rolesService.getAllRoles().subscribe({
-        next: (roles) => {
-          this.roles = roles;
-        }
-      }).add(() => {
-        this.loaderService.setLoading(false);
-      })
+      this.rolesService
+        .getAllRoles()
+        .subscribe({
+          next: (roles) => {
+            this.roles = roles;
+          },
+        })
+        .add(() => {
+          this.loaderService.setLoading(false);
+        });
     });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes["userAction"] && changes["userAction"].currentValue) {
-      const user: IUpsertUser = changes["userAction"].currentValue.user;
-      this.createUserForm.patchValue({ 
+    if (changes['userAction'] && changes['userAction'].currentValue) {
+      const user: IUpsertUser = changes['userAction'].currentValue.user;
+      this.createUserForm.patchValue({
         ...user,
-        usernameIsValid: true
+        usernameIsValid: true,
       });
     }
   }
@@ -107,52 +139,64 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
   saveUser() {
     if (this.createUserForm.valid) {
       if (this.createUserForm.dirty) {
-        if (this.createUserForm.controls["id"].value !== "") {
+        if (this.createUserForm.controls['id'].value !== '') {
           this.updateUser();
         } else {
           this.createUser();
         }
       } else {
-        $("#usersModal").modal('hide');
+        $('#usersModal').modal('hide');
       }
     } else {
-      this.displayMessage = this.genericValidator.processMessages(this.createUserForm, true);
+      this.displayMessage = this.genericValidator.processMessages(
+        this.createUserForm,
+        true
+      );
     }
   }
 
   createUser() {
-    this.loaderService.setLoading(true, $localize `Creando usuario`);
-    this.usersService.createUser(this.createUserForm.value).subscribe({
-      next: (response: IMessageResponse) => {
-        $("#usersModal").modal('hide');
-        this.updateUsers.emit({
-          user: {
-            ...this.createUserForm.value,
-            id: response.id
-          },
-          isNew: true
-        });
-        this.toastr.success(response.message);
-      }
-    }).add(() => {
-      this.loaderService.setLoading(false);
-    });
+    this.loaderService.setLoading(true, $localize`Creando usuario`);
+    this.usersService
+      .createUser(this.createUserForm.value)
+      .subscribe({
+        next: (response: IMessageResponse) => {
+          $('#usersModal').modal('hide');
+          this.updateUsers.emit({
+            user: {
+              ...this.createUserForm.value,
+              id: response.id,
+            },
+            isNew: true,
+          });
+          this.toastr.success(response.message);
+        },
+      })
+      .add(() => {
+        this.loaderService.setLoading(false);
+      });
   }
 
   updateUser() {
-    this.loaderService.setLoading(true, $localize `Actualizando usuario`);
-    this.usersService.updateUser(this.createUserForm.value, this.createUserForm.controls["id"].value).subscribe({
-      next: (response: IMessageResponse) => {
-        $("#usersModal").modal('hide');
-        this.updateUsers.emit({
-          user: this.createUserForm.value,
-          isNew: false
-        });
-        this.toastr.success(response.message);
-      }
-    }).add(() => {
-      this.loaderService.setLoading(false);
-    });
+    this.loaderService.setLoading(true, $localize`Actualizando usuario`);
+    this.usersService
+      .updateUser(
+        this.createUserForm.value,
+        this.createUserForm.controls['id'].value
+      )
+      .subscribe({
+        next: (response: IMessageResponse) => {
+          $('#usersModal').modal('hide');
+          this.updateUsers.emit({
+            user: this.createUserForm.value,
+            isNew: false,
+          });
+          this.toastr.success(response.message);
+        },
+      })
+      .add(() => {
+        this.loaderService.setLoading(false);
+      });
   }
 
   clearInputs(): void {
@@ -162,7 +206,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
       email: '',
       roles: [],
       isActive: true,
-      usernameIsValid: false
+      usernameIsValid: false,
     });
 
     this.userRoles = [];
@@ -170,11 +214,17 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   filterRoles(filter: boolean): void {
-    const inputFilter = document.getElementById("roleFilter") as HTMLInputElement;
+    const inputFilter = document.getElementById(
+      'roleFilter'
+    ) as HTMLInputElement;
     if (filter) {
       // remove duplicated values
-      this.filteredRoles = this.roles.filter(x => !this.userRoles.find(u => x.name === u.name));
-      this.filteredRoles = this.filteredRoles.filter(f => f.name.includes(inputFilter.value));
+      this.filteredRoles = this.roles.filter(
+        (x) => !this.userRoles.find((u) => x.name === u.name)
+      );
+      this.filteredRoles = this.filteredRoles.filter((f) =>
+        f.name.includes(inputFilter.value)
+      );
     } else {
       this.filteredRoles = [];
     }
@@ -184,47 +234,53 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
     this.userRoles.push(role);
     this.filteredRoles = [];
     this.createUserForm.patchValue({
-      roles: [
-        ...this.userRoles.map(x => x.id)
-      ]
+      roles: [...this.userRoles.map((x) => x.id)],
     });
 
-    const inputFilter = document.getElementById("roleFilter") as HTMLInputElement;
+    const inputFilter = document.getElementById(
+      'roleFilter'
+    ) as HTMLInputElement;
     inputFilter.focus();
   }
 
   deleteRole(roleId: string): void {
-    this.userRoles = this.userRoles.filter(r => r.id !== roleId);
+    this.userRoles = this.userRoles.filter((r) => r.id !== roleId);
     this.createUserForm.patchValue({
-      roles: [
-        ...this.userRoles.map(x => x.id)
-      ]
-    })
+      roles: [...this.userRoles.map((x) => x.id)],
+    });
   }
 
   ngAfterViewInit(): void {
     // Watch for the blur event from any input element on the form.
     // This is required because the valueChanges does not provide notification on blur
-    const controlBlurs: Observable<unknown>[] = this.formInputElements
-      .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
+    const controlBlurs: Observable<unknown>[] = this.formInputElements.map(
+      (formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur')
+    );
 
     // Merge the blur event observable with the valueChanges observable
     // so we only need to subscribe once.
     merge(this.createUserForm.valueChanges, ...controlBlurs).subscribe(() => {
-      this.displayMessage = this.genericValidator.processMessages(this.createUserForm);
+      this.displayMessage = this.genericValidator.processMessages(
+        this.createUserForm
+      );
     });
   }
 
   moveFocus(event: Event, role?: IRole): void {
     if (event instanceof KeyboardEvent) {
       if (event.key === 'ArrowDown') {
-        const filteredRoles = document.getElementById('filteredRoles') as HTMLElement;
+        const filteredRoles = document.getElementById(
+          'filteredRoles'
+        ) as HTMLElement;
         const allFilteredRoles = filteredRoles.getElementsByTagName('li');
         if (allFilteredRoles.length > 0) {
-          const selectedElement = filteredRoles.querySelector('.selected') as HTMLElement;
+          const selectedElement = filteredRoles.querySelector(
+            '.selected'
+          ) as HTMLElement;
 
           if (selectedElement) {
-            const nextElement = selectedElement.nextElementSibling as HTMLElement;
+            const nextElement =
+              selectedElement.nextElementSibling as HTMLElement;
             if (nextElement) {
               selectedElement.classList.remove('selected');
               nextElement.classList.add('selected');
@@ -237,19 +293,26 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
           }
         }
       } else if (event.key === 'ArrowUp') {
-        const filteredRoles = document.getElementById('filteredRoles') as HTMLElement;
+        const filteredRoles = document.getElementById(
+          'filteredRoles'
+        ) as HTMLElement;
         const allFilteredRoles = filteredRoles.getElementsByTagName('li');
         if (allFilteredRoles.length > 0) {
-          const selectedElement = filteredRoles.querySelector('.selected') as HTMLElement;
+          const selectedElement = filteredRoles.querySelector(
+            '.selected'
+          ) as HTMLElement;
 
           if (selectedElement) {
-            const previousElement = selectedElement.previousElementSibling as HTMLElement;
+            const previousElement =
+              selectedElement.previousElementSibling as HTMLElement;
             if (previousElement) {
               selectedElement.classList.remove('selected');
               previousElement.classList.add('selected');
               previousElement.focus();
             } else {
-              const inputFilter = document.getElementById("roleFilter") as HTMLInputElement;
+              const inputFilter = document.getElementById(
+                'roleFilter'
+              ) as HTMLInputElement;
               inputFilter.focus();
               selectedElement.classList.remove('selected');
             }
@@ -273,8 +336,10 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
     this.usersService.checkUsername(username).subscribe({
       next: (response: boolean) => {
         this.createUserForm.patchValue({ usernameIsValid: !response });
-        this.displayMessage = this.genericValidator.processMessages(this.createUserForm);
-      }
+        this.displayMessage = this.genericValidator.processMessages(
+          this.createUserForm
+        );
+      },
     });
   }
 }

@@ -6,14 +6,8 @@ import { NotAuthorizedComponent } from './components/not-authorized/not-authoriz
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    SharedRoutingModule
-  ],
-  exports: [ CommonModule, ReactiveFormsModule],
-  declarations: [
-    NotAuthorizedComponent,
-    PageNotFoundComponent
-  ],
+  imports: [CommonModule, SharedRoutingModule],
+  exports: [CommonModule, ReactiveFormsModule],
+  declarations: [NotAuthorizedComponent, PageNotFoundComponent],
 })
-export class SharedModule { }
+export class SharedModule {}

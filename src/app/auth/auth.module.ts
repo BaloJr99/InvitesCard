@@ -5,14 +5,11 @@ import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 @NgModule({
-  imports: [
-    AuthRoutingModule,
-    SharedModule
-  ],
+  imports: [AuthRoutingModule, SharedModule],
   declarations: [
-    AuthRoutingModule.components, 
-    LoginComponent, 
-    ForgotPasswordComponent
-  ]
+    AuthRoutingModule.components,
+    LoginComponent,
+    ForgotPasswordComponent,
+  ],
 })
-export class AuthModule { }
+export class AuthModule {}

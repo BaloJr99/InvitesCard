@@ -1,13 +1,12 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { IUser } from "../models/users";
+import { IUser } from '../models/users';
 
 const TOKEN_KEY = 'x-access-token';
 
-@Injectable() 
+@Injectable()
 export class TokenStorageService {
-
-  constructor(private jwtService: JwtHelperService) { }
+  constructor(private jwtService: JwtHelperService) {}
 
   signOut(): void {
     window.sessionStorage.clear();

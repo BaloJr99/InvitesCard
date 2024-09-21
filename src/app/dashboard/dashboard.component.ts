@@ -10,7 +10,7 @@ import { KeyValue } from '@angular/common';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
   constructor(
@@ -18,38 +18,48 @@ export class DashboardComponent implements OnInit {
     private socket: SocketService,
     private loaderService: LoaderService,
     private commonInvitesService: CommonInvitesService,
-    private router: Router) {    
-    }
-  
+    private router: Router
+  ) {}
+
   notifications: INotification[] = [];
 
   messagesGrouped: KeyValue<string, IMessage[]>[] = [];
 
-  route = "";
-  
+  route = '';
+
   ngOnInit(): void {
-    this.loaderService.setLoading(true, $localize `Cargando dashboard`);
+    this.loaderService.setLoading(true, $localize`Cargando dashboard`);
     const userInformation = this.tokenService.getTokenValues();
     if (userInformation) {
       this.socket.joinRoom(userInformation.username);
     }
 
     window.addEventListener('click', ({ target }) => {
-      const toggleMenu = document.querySelector(".menu");
-      const toggleNotifications = document.querySelector(".notificationMessages");
+      const toggleMenu = document.querySelector('.menu');
+      const toggleNotifications = document.querySelector(
+        '.notificationMessages'
+      );
 
       const clickedElement = target as HTMLElement;
-      if (!clickedElement.classList.contains("notifications")
-        && !clickedElement.classList.contains("fa-bell")
-        && !clickedElement.classList.contains("account")
-        && !clickedElement.classList.contains("fa-user")){
-        if(!toggleMenu?.contains(clickedElement) && (!toggleNotifications?.contains(clickedElement))) {
-          if (toggleNotifications && toggleNotifications.classList.contains("active")) {
-            toggleNotifications.classList.toggle("active");
+      if (
+        !clickedElement.classList.contains('notifications') &&
+        !clickedElement.classList.contains('fa-bell') &&
+        !clickedElement.classList.contains('account') &&
+        !clickedElement.classList.contains('fa-user')
+      ) {
+        if (
+          !toggleMenu?.contains(clickedElement) &&
+          !toggleNotifications?.contains(clickedElement)
+        ) {
+          if (
+            toggleNotifications &&
+            toggleNotifications.classList.contains('active')
+          ) {
+            toggleNotifications.classList.toggle('active');
           }
 
-          if (toggleMenu && toggleMenu.classList.contains("active")) {
-            toggleMenu.classList.toggle("active");
+          if (toggleMenu && toggleMenu.classList.contains('active')) {
+            toggleMenu.classList.toggle('active');
           }
         }
       }
@@ -60,20 +70,24 @@ export class DashboardComponent implements OnInit {
     this.commonInvitesService.messages$.subscribe({
       next: (messages) => {
         this.groupMessages(Object.values(messages));
-      }
+      },
     });
 
     this.commonInvitesService.notifications$.subscribe({
       next: (notifications) => {
-        this.notifications = notifications.sort((a, b) => (new Date(b.dateOfConfirmation).getTime() - (new Date(a.dateOfConfirmation).getTime())));
-      }
+        this.notifications = notifications.sort(
+          (a, b) =>
+            new Date(b.dateOfConfirmation).getTime() -
+            new Date(a.dateOfConfirmation).getTime()
+        );
+      },
     });
 
     this.router.events.subscribe((events) => {
       if (events instanceof Scroll) {
         this.route = events.routerEvent.url;
       }
-      
+
       if (events instanceof NavigationStart) {
         this.route = events.url;
       }
@@ -83,21 +97,23 @@ export class DashboardComponent implements OnInit {
   groupMessages(messages: IMessage[]): void {
     this.messagesGrouped = [];
 
-    const uniqueDates = [...new Set(messages.map(message => message.date))].sort((a, b) => (new Date(a).getTime() - new Date(b).getTime()));
+    const uniqueDates = [
+      ...new Set(messages.map((message) => message.date)),
+    ].sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
     uniqueDates.forEach((date) => {
-      this.messagesGrouped.push(
-        {
-          key: date,
-          value: messages.filter((message) => message.date === date).sort((a, b) => (a.time.localeCompare(b.time)))
-        }
-      );
+      this.messagesGrouped.push({
+        key: date,
+        value: messages
+          .filter((message) => message.date === date)
+          .sort((a, b) => a.time.localeCompare(b.time)),
+      });
     });
   }
 
   toggleMessages(): void {
-    const toggleMessages = document.querySelector(".messages-chat");
+    const toggleMessages = document.querySelector('.messages-chat');
     if (toggleMessages) {
-      toggleMessages.classList.toggle("active");
+      toggleMessages.classList.toggle('active');
     }
   }
 }

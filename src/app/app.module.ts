@@ -10,21 +10,17 @@ import { ErrorModalComponent } from './shared/components/error-modal/error-modal
 import { CoreModule } from './core/core.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    SpinnerComponent,
-    ErrorModalComponent
-  ],
+  declarations: [AppComponent, SpinnerComponent, ErrorModalComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     CoreModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
-      positionClass: 'toast-bottom-right'
-    })
+      positionClass: 'toast-bottom-right',
+    }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

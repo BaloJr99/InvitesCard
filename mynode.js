@@ -1,8 +1,8 @@
 import { writeFile } from "fs";
 import { join } from "path";
 import dotenv from "dotenv";
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config({ path: "src/.env" });
 
@@ -17,10 +17,7 @@ const envFile = `export const environment = {
   url: '${process.env.url}'
 };`;
 
-const targetPath = join(
-  __dirname,
-  "./src/environments/environment.ts"
-);
+const targetPath = join(__dirname, "./src/environments/environment.ts");
 
 writeFile(targetPath, envFile, (err) => {
   if (err) {

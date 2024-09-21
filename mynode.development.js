@@ -1,8 +1,8 @@
 import { writeFile } from "fs";
 import { join } from "path";
 import dotenv from "dotenv";
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config({ path: "src/.env.development" });
 

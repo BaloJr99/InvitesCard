@@ -1,17 +1,23 @@
-import { HttpClient } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ISearchUser, IUpsertUser, IUserDropdownData, IUserEventsInfo, IUserProfile, IUserProfilePhoto } from '../models/users';
+import {
+  ISearchUser,
+  IUpsertUser,
+  IUserDropdownData,
+  IUserEventsInfo,
+  IUserProfile,
+  IUserProfilePhoto,
+} from '../models/users';
 import { IMessageResponse } from '../models/common';
 
 @Injectable()
 export class UsersService {
-  
   private baseUrl = environment.apiUrl;
-  private invitesBaseUrl = this.baseUrl + '/users'
+  private invitesBaseUrl = this.baseUrl + '/users';
 
-  constructor(private http: HttpClient) {  }
+  constructor(private http: HttpClient) {}
 
   getAllUsers(): Observable<IUserEventsInfo[]> {
     return this.http.get<IUserEventsInfo[]>(this.invitesBaseUrl);
@@ -25,31 +31,44 @@ export class UsersService {
     return this.http.get<ISearchUser>(`${this.invitesBaseUrl}/${id}`);
   }
 
-  createUser(users: IUpsertUser): Observable<IMessageResponse> { 
+  createUser(users: IUpsertUser): Observable<IMessageResponse> {
     return this.http.post<IMessageResponse>(`${this.invitesBaseUrl}`, users);
   }
 
-  updateUser(users: IUpsertUser, id: string): Observable<IMessageResponse> { 
-    return this.http.put<IMessageResponse>(`${this.invitesBaseUrl}/${id}`, users);
+  updateUser(users: IUpsertUser, id: string): Observable<IMessageResponse> {
+    return this.http.put<IMessageResponse>(
+      `${this.invitesBaseUrl}/${id}`,
+      users
+    );
   }
 
-  deleteUser(id: string): Observable<IMessageResponse> { 
+  deleteUser(id: string): Observable<IMessageResponse> {
     return this.http.delete<IMessageResponse>(`${this.invitesBaseUrl}/${id}`);
   }
 
-  updateProfile(profile: IUserProfile): Observable<IMessageResponse> { 
-    return this.http.put<IMessageResponse>(`${this.invitesBaseUrl}/profile`, profile);
+  updateProfile(profile: IUserProfile): Observable<IMessageResponse> {
+    return this.http.put<IMessageResponse>(
+      `${this.invitesBaseUrl}/profile`,
+      profile
+    );
   }
-  
+
   getUserProfile(id: string): Observable<IUserProfile> {
     return this.http.get<IUserProfile>(`${this.invitesBaseUrl}/profile/${id}`);
   }
 
   checkUsername(username: string): Observable<boolean> {
-    return this.http.get<boolean>(`${this.invitesBaseUrl}/profile/check-username/${username}`);
+    return this.http.get<boolean>(
+      `${this.invitesBaseUrl}/profile/check-username/${username}`
+    );
   }
 
-  uploadProfilePhoto(userProfilePhoto: IUserProfilePhoto): Observable<IMessageResponse> {
-    return this.http.put<IMessageResponse>(`${this.invitesBaseUrl}/profile/photo`, userProfilePhoto);
+  uploadProfilePhoto(
+    userProfilePhoto: IUserProfilePhoto
+  ): Observable<IMessageResponse> {
+    return this.http.put<IMessageResponse>(
+      `${this.invitesBaseUrl}/profile/photo`,
+      userProfilePhoto
+    );
   }
 }

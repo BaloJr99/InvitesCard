@@ -6,15 +6,8 @@ import { ImagesService } from '../core/services/images.service';
 import { InvitesRoutingModule } from './invites.routing.module';
 
 @NgModule({
-  imports: [
-    InvitesRoutingModule,
-    SharedModule,
-    SafePipe
-  ],
-  providers: [
-    SettingsService,
-    ImagesService
-  ],
-  declarations: [InvitesRoutingModule.components]
+  imports: [InvitesRoutingModule, SharedModule, SafePipe],
+  providers: [SettingsService, ImagesService],
+  declarations: [InvitesRoutingModule.components],
 })
-export class InvitesModule { }
+export class InvitesModule {}

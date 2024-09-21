@@ -1,5 +1,5 @@
-import { IStatistic } from "src/app/core/models/events";
-import { IDashboardInvite } from "src/app/core/models/invites";
+import { IStatistic } from 'src/app/core/models/events';
+import { IDashboardInvite } from 'src/app/core/models/invites';
 
 export const createStatistics = (invites: IDashboardInvite[]): IStatistic => {
   const stadistics = {
@@ -11,11 +11,12 @@ export const createStatistics = (invites: IDashboardInvite[]): IStatistic => {
 
   invites.forEach((value) => {
     if (value.confirmation) {
-      stadistics.confirmedEntries += (value.entriesConfirmed ?? 0)
-      stadistics.canceledEntries += (value.entriesNumber - (value.entriesConfirmed ?? 0))
+      stadistics.confirmedEntries += value.entriesConfirmed ?? 0;
+      stadistics.canceledEntries +=
+        value.entriesNumber - (value.entriesConfirmed ?? 0);
     } else {
       if (value.confirmation === null || value.confirmation === undefined) {
-        stadistics.pendingEntries += value.entriesNumber
+        stadistics.pendingEntries += value.entriesNumber;
       } else {
         stadistics.canceledEntries += value.entriesNumber;
       }
@@ -24,4 +25,4 @@ export const createStatistics = (invites: IDashboardInvite[]): IStatistic => {
   });
 
   return stadistics;
-}
+};

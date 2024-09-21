@@ -1,9 +1,9 @@
 export interface IFamilyGroupAction {
-  familyGroup: IFamilyGroup,
-  isNew: boolean,
+  familyGroup: IFamilyGroup;
+  isNew: boolean;
 }
 
 export interface IFamilyGroup {
-  id: string,
-  familyGroup: string, 
+  id: string;
+  familyGroup: string;
 }

@@ -1,5 +1,16 @@
-import { Component, ElementRef, ViewChildren } from '@angular/core';
-import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChildren,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormControlName,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { fromEvent, merge, Observable } from 'rxjs';
@@ -13,73 +24,76 @@ import { usernameDuplicated } from 'src/app/shared/utils/validators/usernameDupl
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.css'
+  styleUrl: './profile.component.css',
 })
-export class ProfileComponent {
-  @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
+export class ProfileComponent implements OnInit, AfterViewInit {
+  @ViewChildren(FormControlName, { read: ElementRef })
+  formInputElements!: ElementRef[];
 
   errorMessage = '';
   user!: IUserProfile;
-  
+
   createProfileForm!: FormGroup;
-    
+
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private usersService: UsersService,
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private loaderService: LoaderService) { 
+    private loaderService: LoaderService
+  ) {
     this.validationMessages = {
       username: {
-        required: $localize `El nombre de usuario es requerido`,
+        required: $localize`El nombre de usuario es requerido`,
       },
       firstName: {
-        required: $localize `El nombre es requerido`,
+        required: $localize`El nombre es requerido`,
       },
       lastName: {
-        required: $localize `El apellido es requerido`,
+        required: $localize`El apellido es requerido`,
       },
       phoneNumber: {
-        required: $localize `El número de teléfono es requerido`,
+        required: $localize`El número de teléfono es requerido`,
       },
       email: {
-        required: $localize `El correo electrónico es requerido`,
+        required: $localize`El correo electrónico es requerido`,
       },
-      gender:{
-        required: $localize `El género es requerido`,
+      gender: {
+        required: $localize`El género es requerido`,
       },
       usernameDuplicated: {
-        duplicated: $localize `Ya existe un usuario con este nombre de usuario`
-      }
+        duplicated: $localize`Ya existe un usuario con este nombre de usuario`,
+      },
     };
 
     this.genericValidator = new GenericValidator(this.validationMessages);
   }
 
   ngOnInit(): void {
-    this.createProfileForm = this.fb.group({
-      id: ['', Validators.required],
-      username: ['', Validators.required],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
-      email: ['', Validators.required],
-      gender: ['', Validators.required],
-      profilePhoto: [''],
-      usernameIsValid: [true]
-    }, {
-      validators: usernameDuplicated
-    });
+    this.createProfileForm = this.fb.group(
+      {
+        id: ['', Validators.required],
+        username: ['', Validators.required],
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        phoneNumber: ['', Validators.required],
+        email: ['', Validators.required],
+        gender: ['', Validators.required],
+        profilePhoto: [''],
+        usernameIsValid: [true],
+      },
+      {
+        validators: usernameDuplicated,
+      }
+    );
 
     this.route.data.subscribe(() => {
       this.user = this.route.snapshot.data['userProfile'];
-      this.createProfileForm.patchValue(
-        this.user
-      );
+      this.createProfileForm.patchValue(this.user);
 
       this.createProfileForm.markAsUntouched();
     });
@@ -89,21 +103,27 @@ export class ProfileComponent {
     if (this.createProfileForm.valid && this.createProfileForm.dirty) {
       this.updateProfile();
     } else {
-      this.displayMessage = this.genericValidator.processMessages(this.createProfileForm, true);
+      this.displayMessage = this.genericValidator.processMessages(
+        this.createProfileForm,
+        true
+      );
     }
   }
 
   updateProfile() {
-    this.loaderService.setLoading(true, $localize `Actualizando perfil`);
-    this.usersService.updateProfile(this.createProfileForm.value).subscribe({
-      next: (response: IMessageResponse) => {
-        this.toastr.success(response.message);
-        this.user = this.createProfileForm.value;
-        this.createProfileForm.markAsUntouched();
-      }
-    }).add(() => {
-      this.loaderService.setLoading(false);
-    });
+    this.loaderService.setLoading(true, $localize`Actualizando perfil`);
+    this.usersService
+      .updateProfile(this.createProfileForm.value)
+      .subscribe({
+        next: (response: IMessageResponse) => {
+          this.toastr.success(response.message);
+          this.user = this.createProfileForm.value;
+          this.createProfileForm.markAsUntouched();
+        },
+      })
+      .add(() => {
+        this.loaderService.setLoading(false);
+      });
   }
 
   clearInputs(): void {
@@ -116,7 +136,7 @@ export class ProfileComponent {
       email: '',
       gender: '',
       profilePhoto: '',
-      usernameIsValid: true
+      usernameIsValid: true,
     });
 
     this.displayMessage = {};
@@ -125,14 +145,19 @@ export class ProfileComponent {
   ngAfterViewInit(): void {
     // Watch for the blur event from any input element on the form.
     // This is required because the valueChanges does not provide notification on blur
-    const controlBlurs: Observable<unknown>[] = this.formInputElements
-      .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
+    const controlBlurs: Observable<unknown>[] = this.formInputElements.map(
+      (formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur')
+    );
 
     // Merge the blur event observable with the valueChanges observable
     // so we only need to subscribe once.
-    merge(this.createProfileForm.valueChanges, ...controlBlurs).subscribe(() => {
-      this.displayMessage = this.genericValidator.processMessages(this.createProfileForm);
-    });
+    merge(this.createProfileForm.valueChanges, ...controlBlurs).subscribe(
+      () => {
+        this.displayMessage = this.genericValidator.processMessages(
+          this.createProfileForm
+        );
+      }
+    );
   }
 
   cancelChanges() {
@@ -155,8 +180,10 @@ export class ProfileComponent {
     this.usersService.checkUsername(username).subscribe({
       next: (response: boolean) => {
         this.createProfileForm.patchValue({ usernameIsValid: !response });
-        this.displayMessage = this.genericValidator.processMessages(this.createProfileForm);
-      }
+        this.displayMessage = this.genericValidator.processMessages(
+          this.createProfileForm
+        );
+      },
     });
   }
 

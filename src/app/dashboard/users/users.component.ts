@@ -1,4 +1,11 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { ADTSettings } from 'angular-datatables/src/models/settings';
 import { Subject } from 'rxjs';
@@ -11,62 +18,71 @@ import { UsersService } from 'src/app/core/services/users.service';
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrl: './users.component.css',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild(DataTableDirective, { static: false }) dtElement!: DataTableDirective;
+  @ViewChild(DataTableDirective, { static: false })
+  dtElement!: DataTableDirective;
 
   dtOptions: ADTSettings = {
     searching: false,
     destroy: true,
     language: {
-      lengthMenu: '_MENU_'
+      lengthMenu: '_MENU_',
     },
     columnDefs: [
       {
         className: 'text-center',
-        targets: "_all"
-      }
+        targets: '_all',
+      },
     ],
     columns: [
-      { title: $localize `Usuario`, data: 'username' },
-      { title: $localize `Correo`, data: 'email' },
-      { title: $localize `# Entradas`, data: 'numEntries' },
-      { title: $localize `# Eventos`, data: 'numEvents' },
-      { title: $localize `Activo`, 
+      { title: $localize`Usuario`, data: 'username' },
+      { title: $localize`Correo`, data: 'email' },
+      { title: $localize`# Entradas`, data: 'numEntries' },
+      { title: $localize`# Eventos`, data: 'numEvents' },
+      {
+        title: $localize`Activo`,
         render(data, type, row) {
-          return `<i class="fa-solid ${row.isActive ? 'fa-circle-check' : 'fa-circle-xmark'}" aria-hidden="true"></i>`;
-        }
+          return `<i class="fa-solid ${
+            row.isActive ? 'fa-circle-check' : 'fa-circle-xmark'
+          }" aria-hidden="true"></i>`;
+        },
       },
-      { title: $localize `Acciones`, data: 'id',
+      {
+        title: $localize`Acciones`,
+        data: 'id',
         render(data) {
           return `<button class="btn btn-secondary edit-btn" data-id="${data}" data-bs-toggle="modal" data-bs-target="#usersModal"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></button>`;
-        }
-      }
-    ]
+        },
+      },
+    ],
   };
 
   dtTrigger: Subject<ADTSettings> = new Subject<ADTSettings>();
-  
+
   userAction!: IUserAction;
   roles: IRole[] = [];
 
-  constructor (
+  constructor(
     private usersService: UsersService,
     private loaderService: LoaderService
   ) {}
 
   ngOnInit(): void {
-    this.loaderService.setLoading(true, $localize `Cargando usuarios`);
+    this.loaderService.setLoading(true, $localize`Cargando usuarios`);
 
-    this.usersService.getAllUsers().subscribe({
-      next: (users) => {
-        this.dtOptions.data = users;
-        this.rerender();
-      }
-    }).add(() => {
-      this.loaderService.setLoading(false);
-    });
+    this.usersService
+      .getAllUsers()
+      .subscribe({
+        next: (users) => {
+          this.dtOptions.data = users;
+          this.rerender();
+        },
+      })
+      .add(() => {
+        this.loaderService.setLoading(false);
+      });
   }
 
   ngAfterViewInit(): void {
@@ -98,26 +114,33 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       this.dtOptions.data = this.dtOptions.data?.concat(userEventsInfo);
       this.rerender();
     } else {
-      this.dtOptions.data = this.dtOptions.data?.map(originalUser => originalUser.id === userInfo.id ? userEventsInfo : originalUser);
+      this.dtOptions.data = this.dtOptions.data?.map((originalUser) =>
+        originalUser.id === userInfo.id ? userEventsInfo : originalUser
+      );
     }
-    this.dtOptions.data?.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
+    this.dtOptions.data?.sort((a, b) =>
+      a.username.toLowerCase().localeCompare(b.username.toLowerCase())
+    );
   }
 
   editUser(userId: string): void {
-    this.usersService.getUserById(userId).subscribe({
-      next: (user) => {
-        this.roles = user.roles;
-        this.userAction = {
-          user: {
-            ...user,
-            roles: user.roles.map(r => r.id)
-          },
-          isNew: false
-        }
-      }
-    }).add(() => {
-      this.loaderService.setLoading(false);
-    });
+    this.usersService
+      .getUserById(userId)
+      .subscribe({
+        next: (user) => {
+          this.roles = user.roles;
+          this.userAction = {
+            user: {
+              ...user,
+              roles: user.roles.map((r) => r.id),
+            },
+            isNew: false,
+          };
+        },
+      })
+      .add(() => {
+        this.loaderService.setLoading(false);
+      });
   }
 
   rerender(): void {

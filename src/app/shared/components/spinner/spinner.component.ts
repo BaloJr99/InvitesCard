@@ -4,16 +4,13 @@ import { LoaderService } from 'src/app/core/services/loader.service';
 @Component({
   selector: 'app-spinner',
   templateUrl: './spinner.component.html',
-  styleUrls: ['./spinner.component.css']
+  styleUrls: ['./spinner.component.css'],
 })
 export class SpinnerComponent implements OnInit {
   showSpinner = true;
   text = '';
 
-  constructor(
-    private loader: LoaderService,
-    private cd: ChangeDetectorRef
-  ) { }
+  constructor(private loader: LoaderService, private cd: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loader.loading$.subscribe({
@@ -21,7 +18,7 @@ export class SpinnerComponent implements OnInit {
         this.showSpinner = spinner.isLoading;
         this.text = spinner.message;
         this.cd.detectChanges();
-      }
-    })
+      },
+    });
   }
 }
