@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { IErrorInvite, IPartialInvite } from 'src/app/core/models/invites';
+import { IErrorInvite, IBulkInvite } from 'src/app/core/models/invites';
 import { IFamilyGroup } from 'src/app/core/models/familyGroups';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
@@ -14,7 +14,7 @@ import { IMessageResponse } from 'src/app/core/models/common';
 export class InvitesImportModalComponent implements OnInit {
   @Input() eventId: string = "";
   @Input() familyGroups: IFamilyGroup[] = [];
-  invites: IPartialInvite[] = [];
+  invites: IBulkInvite[] = [];
   errorInvites: IErrorInvite[] = [];
   processingFile = false;
   
@@ -120,7 +120,7 @@ export class InvitesImportModalComponent implements OnInit {
           kidsAllowed: Boolean(parseInt(columns[3])),
           eventId: this.eventId,
           familyGroupName: columns[4],
-          familyGroupId: familyGroupFound ? familyGroupFound.id : undefined,
+          familyGroupId: familyGroupFound ? familyGroupFound.id : '',
           isNewFamilyGroup: familyGroupFound ? false : true
         })
       }

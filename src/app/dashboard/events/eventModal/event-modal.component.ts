@@ -3,7 +3,7 @@ import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/fo
 import { Observable, fromEvent, merge } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { IEventAction, IFullEvent } from 'src/app/core/models/events';
-import { IUserBasicInfo } from 'src/app/core/models/users';
+import { IUserDropdownData } from 'src/app/core/models/users';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
@@ -28,7 +28,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
   
   createEventForm!: FormGroup;
   errorMessage = '';
-  users: IUserBasicInfo[] = [];
+  users: IUserDropdownData[] = [];
     
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -127,7 +127,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
             ...this.formatEvent(),
             id: response.id
           },
-          users: undefined,
+          users: [],
           isNew: true
         });
         this.toastr.success(response.message);
@@ -144,7 +144,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
         $("#eventModal").modal('hide');
         this.updateEvents.emit({
           event: this.formatEvent(),
-          users: undefined,
+          users: [],
           isNew: false
         });
         this.toastr.success(response.message);

@@ -1,31 +1,33 @@
-import { IInvite } from "./invites"
-import { IUserBasicInfo } from "./users"
-
-export interface IDashboardEvent {
-  id: string,
-  nameOfEvent: string,
-  dateOfEvent: string,
-  allowCreateInvites: number
-}
-
-export interface IDropdownEvent {
-  id: string,
-  nameOfEvent: string,
-}
+import { IFullInvite } from "./invites"
+import { IUserDropdownData } from "./users"
 
 export interface IFullEvent {
   id: string,
   nameOfEvent: string, 
-  dateOfEvent: string, 
+  dateOfEvent: string,
+  allowCreateInvites: number
   maxDateOfConfirmation: string,
   nameOfCelebrated: string,
   typeOfEvent: string,
   userId: string
 }
 
+export type IDashboardEvent = Pick<IFullEvent, 
+  'id' | 
+  'nameOfEvent' | 
+  'dateOfEvent' | 
+  'allowCreateInvites'>;
+
+export type IDropdownEvent = Pick<IFullEvent, 
+  'id' | 
+  'nameOfEvent'>;
+
+export type IEvent = Omit<IFullEvent, 
+  'allowCreateInvites'>;
+
 export interface IEventAction {
   event: IFullEvent,
-  users: IUserBasicInfo[] | undefined,
+  users: IUserDropdownData[],
   isNew: boolean
 }
 
@@ -37,7 +39,7 @@ export interface IStatistic {
 }
 
 export interface IEventResolved {
-  invites: IInvite[];
+  invites: IFullInvite[];
   isDeadlineMet: boolean;
-  eventId: string;
+  id: string;
 }

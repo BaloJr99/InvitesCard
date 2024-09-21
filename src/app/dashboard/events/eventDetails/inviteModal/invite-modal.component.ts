@@ -7,7 +7,7 @@ import { GenericValidator } from 'src/app/shared/utils/validators/generic-valida
 import { FamilyGroupsService } from 'src/app/core/services/familyGroups.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
-import { IInvite, IInviteAction } from 'src/app/core/models/invites';
+import { IUpsertInvite, IInviteAction } from 'src/app/core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
 
 @Component({
@@ -78,7 +78,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["inviteAction"] && changes["inviteAction"].currentValue) {
       if (!changes["inviteAction"].currentValue.delete) {
-        const invite: IInvite = changes["inviteAction"].currentValue.invite;
+        const invite: IUpsertInvite = changes["inviteAction"].currentValue.invite;
         this.createInviteForm.patchValue({ 
           ...invite
         })
@@ -153,12 +153,12 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
     this.isCreatingNewFormGroup = false;
   }
 
-  formatInvite(): IInvite {
+  formatInvite(): IUpsertInvite {
     return {
       ...this.createInviteForm.value,
       entriesNumber: parseInt(this.createInviteForm.controls['entriesNumber'].value),
       eventId: this.eventId
-    } as IInvite
+    } as IUpsertInvite
   }
 
   ngAfterViewInit(): void {

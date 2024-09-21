@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input
 import { FormBuilder,FormControlName, FormGroup, Validators } from '@angular/forms';
 import { Observable, fromEvent, merge } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { IUser, IUserAction } from 'src/app/core/models/users';
+import { IUpsertUser, IUserAction } from 'src/app/core/models/users';
 import { IRole } from 'src/app/core/models/roles';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 import { UsersService } from 'src/app/core/services/users.service';
@@ -29,12 +29,12 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
 
   @Input() userAction!: IUserAction;
+  @Input() userRoles: IRole[] = [];
   @Output() updateUsers: EventEmitter<IUserAction> = new EventEmitter();
   
   createUserForm!: FormGroup;
   errorMessage = '';
   roles: IRole[] = [];
-  userRoles: IRole[] = [];
   filteredRoles: IRole[] = [];
     
   displayMessage: { [key: string]: string } = {};
@@ -96,13 +96,10 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["userAction"] && changes["userAction"].currentValue) {
-      const user: IUser = changes["userAction"].currentValue.user;
+      const user: IUpsertUser = changes["userAction"].currentValue.user;
       this.createUserForm.patchValue({ 
-        ...user,
-        roles: user.roles.map(r => r.id)
+        ...user
       });
-
-      this.userRoles = user.roles;
     }
   }
 

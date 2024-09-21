@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { io } from "socket.io-client";
 import { environment } from "src/environments/environment";
-import { IInvite } from "../models/invites";
+import { IConfirmation } from "../models/invites";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class SocketService {
     this.io.emit("joinRoom", username);
   }
 
-  sendNotification (confirmation: IInvite) {
+  sendNotification (confirmation: IConfirmation) {
     this.io.emit("sendNotification", confirmation);
   }
 }

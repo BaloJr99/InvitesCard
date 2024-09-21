@@ -19,7 +19,7 @@ export const eventResolver: ResolveFn<IEventResolved> = (
     map(([invites, isDeadlineMet]) => {
       return {
         invites,
-        eventId: id,
+        id,
         isDeadlineMet
       }
     }),

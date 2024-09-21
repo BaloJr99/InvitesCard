@@ -1,83 +1,89 @@
-export interface IUserInvite {
+export interface IFullInvite {
   id: string,
   family: string,
   entriesNumber: number,
+  entriesConfirmed: number | null,
+  message: string | null,
   confirmation: boolean | null,
-  kidsAllowed: boolean,
-  dateOfEvent: string,
-  maxDateOfConfirmation: string,
-  nameOfCelebrated: string,
-  typeOfEvent: string,
-  eventId: string
-}
-
-export interface IInvite {
-  id: string,
-  family: string,
-  entriesNumber: number,
-  entriesConfirmed: number,
-  message?: string | null,
-  confirmation: boolean,
   phoneNumber: string,
   kidsAllowed: boolean,
-  dateOfConfirmation: string | null,
+  dateOfConfirmation: string | null
   isMessageRead: boolean,
   eventId: string,
   familyGroupId: string,
-  inviteViewed: string | null
+  inviteViewed: string
 }
 
-export interface IPartialInvite {
-  family: string,
-  entriesNumber: number,
-  phoneNumber: string,
-  kidsAllowed: boolean,
-  eventId: string,
-  familyGroupId: string | undefined,
-  familyGroupName: string,
-  isNewFamilyGroup: boolean
-}
+export type IUpsertInvite = Omit<IFullInvite, 
+'entriesConfirmed' | 
+'message' | 
+'confirmation' | 
+'dateOfConfirmation' | 
+'isMessageRead'>;
 
-export interface IErrorInvite {
-  family: string,
-  entriesNumber: string,
-  phoneNumber: string,
-  familyGroupId: string,
-  kidsAllowed: boolean,
-}
+export type IInviteGroup = Pick<IFullInvite, 
+'id' | 
+'family' | 
+'entriesConfirmed' | 
+'confirmation' | 
+'entriesNumber' | 
+  'inviteViewed'> 
+  & { beingDeleted: boolean };
+  
+  export type  IBulkInvite = Pick<IFullInvite, 
+  'family' | 
+  'entriesNumber' | 
+  'phoneNumber' | 
+  'kidsAllowed' | 
+  'eventId' | 
+  'familyGroupId'> 
+  & { familyGroupName: string, isNewFamilyGroup: boolean };
+  
+  export type IErrorInvite = Omit<IUpsertInvite, 
+  'id' | 
+  'eventId' | 
+  'entriesNumber' |
+  'inviteViewed'> & { entriesNumber: string };
 
-export interface IInviteAction {
-  invite: IInvite,
-  isNew: boolean,
-  delete: boolean
-}
+  export type IConfirmation = Pick<IFullInvite,
+  "confirmation" |
+  "dateOfConfirmation" |
+  "entriesConfirmed" |
+  "entriesNumber" |
+  "id" |
+  "message">;
 
-export interface IInviteResolved {
-  invite: IUserInvite;
-  error?: string;
-}
+  export type IUserInvite = Pick<IFullInvite,
+  "id" |
+  "family" |
+  "entriesNumber" |
+  "confirmation" |
+  "kidsAllowed" |
+  "eventId"> & {
+    dateOfEvent: string,
+    maxDateOfConfirmation: string,
+    nameOfCelebrated: string,
+    typeOfEvent: string
+  };
 
-export interface ITimer {
-  days: number;
+  export type IDashboardInvite = Omit<IConfirmation, 
+    'id' | 
+    'message'>;
+  
+  export interface IInviteAction {
+    invite: IUpsertInvite,
+    isNew: boolean,
+    delete: boolean
+  }
+  
+  export interface IInviteResolved {
+    invite: IUserInvite;
+    error?: string;
+  }
+  
+  export interface ITimer {
+    days: number;
   hours: number;
   minutes: number;
   seconds: number;
-}
-
-export interface IConfirmation {
-  confirmation: boolean,
-  dateOfConfirmation: string,
-  entriesConfirmed: number,
-  id: string,
-  message: string
-}
-
-export interface IInviteGroup {
-  id: string
-  family: string,
-  entriesConfirmed: number,
-  confirmation: boolean,
-  entriesNumber: number,
-  inviteViewed: string | null,
-  beingDeleted: boolean
 }

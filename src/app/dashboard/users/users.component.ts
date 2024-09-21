@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulati
 import { DataTableDirective } from 'angular-datatables';
 import { ADTSettings } from 'angular-datatables/src/models/settings';
 import { Subject } from 'rxjs';
+import { IRole } from 'src/app/core/models/roles';
 import { IUserAction, IUserEventsInfo } from 'src/app/core/models/users';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { UsersService } from 'src/app/core/services/users.service';
@@ -48,6 +49,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   dtTrigger: Subject<ADTSettings> = new Subject<ADTSettings>();
   
   userAction!: IUserAction;
+  roles: IRole[] = [];
 
   constructor (
     private usersService: UsersService,
@@ -104,8 +106,12 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   editUser(userId: string): void {
     this.usersService.getUserById(userId).subscribe({
       next: (user) => {
+        this.roles = user.roles;
         this.userAction = {
-          user,
+          user: {
+            ...user,
+            roles: user.roles.map(r => r.id)
+          },
           isNew: false
         }
       }

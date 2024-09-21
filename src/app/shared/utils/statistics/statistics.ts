@@ -1,7 +1,7 @@
 import { IStatistic } from "src/app/core/models/events";
-import { IInvite } from "src/app/core/models/invites";
+import { IDashboardInvite } from "src/app/core/models/invites";
 
-export const createStatistics = (invites: IInvite[]): IStatistic => {
+export const createStatistics = (invites: IDashboardInvite[]): IStatistic => {
   const stadistics = {
     confirmedEntries: 0,
     canceledEntries: 0,

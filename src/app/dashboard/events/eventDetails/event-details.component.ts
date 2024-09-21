@@ -8,7 +8,7 @@ import { IStatistic } from 'src/app/core/models/events';
 import { IFamilyGroup, IFamilyGroupAction } from 'src/app/core/models/familyGroups';
 import { IMessage, INotification } from 'src/app/core/models/common';
 import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
-import { IConfirmation, IInvite, IInviteAction } from 'src/app/core/models/invites';
+import { IConfirmation, IFullInvite, IInviteAction } from 'src/app/core/models/invites';
 
 @Component({
   selector: 'app-event-details',
@@ -36,9 +36,9 @@ export class InviteDetailsComponent implements OnInit {
   
   inviteAction!: IInviteAction;
 
-  invitesGrouped: { [key: string]: IInvite[] } = {};
+  invitesGrouped: { [key: string]: IFullInvite[] } = {};
 
-  invites: IInvite[] = [];
+  invites: IFullInvite[] = [];
   familyGroups: IFamilyGroup[] = [];
 
   isDeadlineMet = false;
@@ -52,13 +52,13 @@ export class InviteDetailsComponent implements OnInit {
         if (response) {
           this.isDeadlineMet = Boolean(response["eventResolved"]["isDeadlineMet"]);
           this.invites = response["eventResolved"]["invites"];
-          this.eventId = response["eventResolved"]["eventId"];
+          this.eventId = response["eventResolved"]["id"];
           this.commonInvitesService.clearNotifications();
           return true
         }
         return false;
       }),
-      switchMap(data => this.familyGroupsService.getAllFamilyGroups(data["eventResolved"]["eventId"]))
+      switchMap(data => this.familyGroupsService.getAllFamilyGroups(data["eventResolved"]["id"]))
     ).subscribe({
       next: (familyGroups) => {
         this.familyGroups = familyGroups;
@@ -72,7 +72,7 @@ export class InviteDetailsComponent implements OnInit {
       next: (notifications) => {
         notifications.filter(n => n.isMessageRead).forEach((notification) => {
           const index = this.invites.findIndex(i => i.id === notification.id);
-          (this.invites.at(index) as IInvite).isMessageRead = true;
+          (this.invites.at(index) as IFullInvite).isMessageRead = true;
         });
       }
     });
@@ -136,7 +136,7 @@ export class InviteDetailsComponent implements OnInit {
     this.groupEntries(this.invites);
   }
 
-  groupEntries(invites: IInvite[]): void {
+  groupEntries(invites: IFullInvite[]): void {
     this.invitesGrouped = {};
 
     this.familyGroups.forEach((familyGroup) => {
@@ -180,14 +180,33 @@ export class InviteDetailsComponent implements OnInit {
   updateInvites(inviteAction: IInviteAction) {
     this.clearValues();
     if (inviteAction.isNew) {
-      this.invites = this.invites.concat(inviteAction.invite);
+      this.invites = this.invites.concat({
+        ...inviteAction.invite,
+        entriesConfirmed: null,
+        message: null,
+        confirmation: null,
+        dateOfConfirmation: null,
+        isMessageRead: false
+      });
       this.buildInvitesDashboard();
     } else {
       if (inviteAction.delete) {
         this.invites = this.invites.filter(invite => invite.id !== inviteAction.invite.id);
         this.buildInvitesDashboard();
       } else {
-        this.invites = this.invites.map(originalInvite => originalInvite.id === inviteAction.invite.id ? inviteAction.invite : originalInvite);
+        this.invites = this.invites.map((originalInvite) => {
+          if (originalInvite.id === inviteAction.invite.id) {
+            return {
+              ...inviteAction.invite,
+              entriesConfirmed: null,
+              message: null,
+              confirmation: null,
+              dateOfConfirmation: null,
+              isMessageRead: false
+            };
+          }
+          return originalInvite;
+        });
         this.buildInvitesDashboard();
       }
     }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { IStatistic } from 'src/app/core/models/events';
-import { IInvite } from 'src/app/core/models/invites';
+import { IDashboardInvite } from 'src/app/core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { createStatistics } from 'src/app/shared/utils/statistics/statistics';
@@ -13,7 +13,7 @@ Chart.register(...registerables)
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  invites: IInvite[] = [];
+  invites: IDashboardInvite[] = [];
   statistics: IStatistic = {
     canceledEntries: 0,
     confirmedEntries: 0,

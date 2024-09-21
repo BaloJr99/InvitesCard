@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { IDropdownEvent, IDashboardEvent, IFullEvent } from '../models/events';
 import { IMessageResponse } from '../models/common';
-import { IInvite } from '../models/invites';
+import { IFullInvite } from '../models/invites';
 
 @Injectable()
 export class EventsService {
@@ -24,8 +24,8 @@ export class EventsService {
     return this.http.get<IDropdownEvent[]>(`${this.invitesBaseUrl}/dropdown`)
   }
 
-  getEventInvites(eventId: string): Observable<IInvite[]> {
-    return this.http.get<IInvite[]>(`${this.invitesBaseUrl}/invites/${eventId}`)
+  getEventInvites(eventId: string): Observable<IFullInvite[]> {
+    return this.http.get<IFullInvite[]>(`${this.invitesBaseUrl}/invites/${eventId}`)
   }
 
   isDeadlineMet(eventId: string): Observable<boolean> {

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { IFullUser, IUser, IUserBasicInfo, IUserEventsInfo, IUserProfile, IUserProfilePhoto } from '../models/users';
+import { ISearchUser, IUpsertUser, IUserDropdownData, IUserEventsInfo, IUserProfile, IUserProfilePhoto } from '../models/users';
 import { IMessageResponse } from '../models/common';
 
 @Injectable()
@@ -17,19 +17,19 @@ export class UsersService {
     return this.http.get<IUserEventsInfo[]>(this.invitesBaseUrl);
   }
 
-  getUsersDropdownData(): Observable<IUserBasicInfo[]> {
-    return this.http.get<IUserBasicInfo[]>(`${this.invitesBaseUrl}/basic`);
+  getUsersDropdownData(): Observable<IUserDropdownData[]> {
+    return this.http.get<IUserDropdownData[]>(`${this.invitesBaseUrl}/basic`);
   }
 
-  getUserById(id: string): Observable<IUser> {
-    return this.http.get<IUser>(`${this.invitesBaseUrl}/${id}`);
+  getUserById(id: string): Observable<ISearchUser> {
+    return this.http.get<ISearchUser>(`${this.invitesBaseUrl}/${id}`);
   }
 
-  createUser(users: IFullUser): Observable<IMessageResponse> { 
+  createUser(users: IUpsertUser): Observable<IMessageResponse> { 
     return this.http.post<IMessageResponse>(`${this.invitesBaseUrl}`, users);
   }
 
-  updateUser(users: IUser, id: string): Observable<IMessageResponse> { 
+  updateUser(users: IUpsertUser, id: string): Observable<IMessageResponse> { 
     return this.http.put<IMessageResponse>(`${this.invitesBaseUrl}/${id}`, users);
   }
 

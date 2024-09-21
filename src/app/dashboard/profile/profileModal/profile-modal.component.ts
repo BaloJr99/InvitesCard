@@ -90,7 +90,7 @@ export class ProfileModalComponent implements OnInit {
       next: (fileBase64) => {
         this.loaderService.setLoading(true, $localize `Subiendo imagenes`);
         this.userService.uploadProfilePhoto({
-          userId: this.userId,
+          id: this.userId,
           profilePhotoSource: fileBase64
         }).subscribe({
           next: (response: IMessageResponse) => {

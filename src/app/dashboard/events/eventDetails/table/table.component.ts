@@ -4,7 +4,7 @@ import { } from 'bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { ADTSettings } from 'angular-datatables/src/models/settings';
-import { IInvite, IInviteAction, IInviteGroup } from 'src/app/core/models/invites';
+import { IFullInvite, IInviteAction, IInviteGroup } from 'src/app/core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { ToastrService } from 'ngx-toastr';
@@ -22,7 +22,7 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() removeInvites = new EventEmitter<string[]>();
 
   @Input() isDeadlineMet = false;
-  @Input() set invites(invites: KeyValue<string, IInvite[]>) {
+  @Input() set invites(invites: KeyValue<string, IFullInvite[]>) {
     this.originalInvites = invites;
     this.inviteGroup = {
       key: invites.key,
@@ -35,7 +35,7 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
     };    
   }
 
-  originalInvites: KeyValue<string, IInvite[]> = { key: '', value: [] };
+  originalInvites: KeyValue<string, IFullInvite[]> = { key: '', value: [] };
   inviteGroup: KeyValue<string, IInviteGroup[]> = { key: '', value: [] };
 
   dtOptions: ADTSettings = {};
@@ -76,9 +76,11 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openEditModal(id: string): void {
-    const inviteToEdit = this.originalInvites.value.find((invite) => invite.id === id) as IInvite;
+    const inviteToEdit = this.originalInvites.value.find((invite) => invite.id === id) as IFullInvite;
     this.setInviteAction.emit({
-      invite: inviteToEdit,
+      invite: {
+        ...inviteToEdit
+      },
       isNew: false,
       delete: false
     });
@@ -87,7 +89,7 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   showModal(invite: IInviteGroup): void {
-    const inviteFound = this.originalInvites.value.find((original) => original.id === invite.id) as IInvite;
+    const inviteFound = this.originalInvites.value.find((original) => original.id === invite.id) as IFullInvite;
     this.setInviteAction.emit({
       invite: inviteFound,
       isNew: false,

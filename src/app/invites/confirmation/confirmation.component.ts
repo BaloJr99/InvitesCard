@@ -1,7 +1,7 @@
 import { Component, AfterViewInit, ViewChildren, ElementRef, Input, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, fromEvent, merge } from 'rxjs';
-import { IInvite, IUserInvite } from 'src/app/core/models/invites';
+import { IConfirmation, IUserInvite } from 'src/app/core/models/invites';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 import { SocketService } from 'src/app/core/services/socket.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
@@ -61,7 +61,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["invite"]) {
-      const { entriesNumber } = changes["invite"].currentValue as IInvite;
+      const { entriesNumber } = changes["invite"].currentValue as IConfirmation;
       this.numberOfEntries.next(Array.from({ length: entriesNumber}, (k, j) => j + 1).sort((a, b) => b - a))
     }
   }
@@ -86,7 +86,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
   addnewInvite() {
     if(this.invite.id) {
       this.loaderService.setLoading(true, $localize `Enviando confirmación`);
-      this.invitesService.sendConfirmation(this.confirmationForm.value as IInvite, this.invite.id)
+      this.invitesService.sendConfirmation(this.confirmationForm.value as IConfirmation, this.invite.id)
         .subscribe({
           next: (() => {
             this.showDiv();
