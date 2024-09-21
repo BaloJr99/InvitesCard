@@ -237,6 +237,8 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
       roles: [...this.userRoles.map((x) => x.id)],
     });
 
+    this.createUserForm.controls['roles'].markAsDirty();
+
     const inputFilter = document.getElementById(
       'roleFilter'
     ) as HTMLInputElement;
@@ -248,6 +250,11 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
     this.createUserForm.patchValue({
       roles: [...this.userRoles.map((x) => x.id)],
     });
+
+    this.createUserForm.controls['roles'].markAsDirty();
+    this.displayMessage = this.genericValidator.processMessages(
+      this.createUserForm
+    );
   }
 
   ngAfterViewInit(): void {

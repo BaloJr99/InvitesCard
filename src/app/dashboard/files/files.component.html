@@ -56,7 +56,7 @@
     </div>
     <div class="footer" *ngIf="images.length > 0">
       <button id="cancel-changes" class="btn btn-primary" (click)="cancelChanges()" [disabled]="imageUpdateForm.controls.length === 0" i18n>Cancelar Cambios</button>
-      <button id="save-changes" class="btn btn-primary" (click)="saveChanges()" [disabled]="imageUpdateForm.controls.length === 0" i18n>Guardar Cambios</button>
+      <button id="save-changes" class="btn btn-primary" (click)="saveChanges()" [disabled]="imageUpdateForm.controls.length === 0 || !imageUpdateForm.valid" i18n>Guardar Cambios</button>
     </div>  
   </div>
 </section>

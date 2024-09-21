@@ -55,7 +55,7 @@
           </form>
           <div class="modal-footer">
             <button type="button" id="closeModal" class="btn btn-secondary" data-bs-dismiss="modal" i18n>Cerrar</button>
-            <button type="button" class="btn btn-primary" (click)="saveInvite()" i18n>Guardar</button>
+            <button type="button" class="btn btn-primary" (click)="saveInvite()" i18n [disabled]="!createInviteForm.valid || !createInviteForm.dirty">Guardar</button>
           </div>
         </ng-container>
         <ng-container  *ngIf="isCreatingNewFormGroup">
@@ -71,7 +71,7 @@
           </form>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="toggleIsCreatingNewFormGroup()" i18n>Cancelar</button>
-            <button type="button" class="btn btn-primary" (click)="saveFamilyGroup()" i18n>Guardar</button>
+            <button type="button" class="btn btn-primary" (click)="saveFamilyGroup()" i18n [disabled]="!createFamilyGroupForm.valid || !createFamilyGroupForm.dirty">Guardar</button>
           </div>
         </ng-container>
       </div>

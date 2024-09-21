@@ -3,13 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
+  IBulkInvite,
   IConfirmation,
   IDashboardInvite,
   IUpsertInvite,
   IUserInvite,
 } from '../models/invites';
 import { IMessageResponse } from '../models/common';
-import { IBulkInvite } from '../models/invites';
 
 @Injectable()
 export class InvitesService {

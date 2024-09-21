@@ -105,18 +105,25 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       id: userInfo.id,
       username: userInfo.username,
       email: userInfo.email,
-      isActive: userAction.isNew ? true : userInfo.isActive,
-      numEntries: 0,
-      numEvents: 0,
+      isActive: userAction.isNew ? true : userInfo.isActive
     } as IUserEventsInfo;
 
     if (userAction.isNew) {
-      this.dtOptions.data = this.dtOptions.data?.concat(userEventsInfo);
+      this.dtOptions.data = this.dtOptions.data?.concat({
+        ...userEventsInfo,
+        numEntries: 0,
+        numEvents: 0,
+      });
       this.rerender();
     } else {
       this.dtOptions.data = this.dtOptions.data?.map((originalUser) =>
-        originalUser.id === userInfo.id ? userEventsInfo : originalUser
+        originalUser.id === userInfo.id ? {
+          ...userEventsInfo,
+          numEntries: originalUser.numEntries,
+          numEvents: originalUser.numEvents,
+        } : originalUser
       );
+      this.rerender();
     }
     this.dtOptions.data?.sort((a, b) =>
       a.username.toLowerCase().localeCompare(b.username.toLowerCase())

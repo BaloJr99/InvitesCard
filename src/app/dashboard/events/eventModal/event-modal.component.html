@@ -31,13 +31,6 @@
             </span>
           </div>
           <div class="mb-3">
-            <label for="nameOfCelebrated" class="form-label" i18n>Nombre del festejado o festejados</label>
-            <input id="nameOfCelebrated" class="form-control" formControlName="nameOfCelebrated" [ngClass]="{'is-invalid': displayMessage['nameOfCelebrated']}">
-            <span class="invalid-feedback" role="alert">
-              {{ displayMessage['nameOfCelebrated'] }}
-            </span>
-          </div>
-          <div class="mb-3">
             <label for="typeOfEvent" class="form-label" i18n>Tipo de evento</label>
             <select id="typeOfEvent" class="form-control" formControlName="typeOfEvent" [ngClass]="{'is-invalid': displayMessage['typeOfEvent']}">
               <option value="" i18n>Seleccione...</option>
@@ -46,6 +39,13 @@
             </select>
             <span class="invalid-feedback" role="alert">
               {{ displayMessage['typeOfEvent'] }}
+            </span>
+          </div>
+          <div class="mb-3">
+            <label for="nameOfCelebrated" class="form-label" i18n>Nombre del festejado o festejados</label>
+            <input id="nameOfCelebrated" class="form-control" formControlName="nameOfCelebrated" [ngClass]="{'is-invalid': displayMessage['nameOfCelebrated']}">
+            <span class="invalid-feedback" role="alert">
+              {{ displayMessage['nameOfCelebrated'] }}
             </span>
           </div>
           <div class="mb-3">
@@ -62,7 +62,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" id="closeModal" class="btn btn-secondary" data-bs-dismiss="modal" i18n>Cerrar</button>
-        <button type="button" class="btn btn-primary" (click)="saveEvent()" i18n>Guardar</button>
+        <button type="button" class="btn btn-primary" (click)="saveEvent()" i18n [disabled]="!createEventForm.valid">Guardar</button>
       </div>
     </div>
   </div>

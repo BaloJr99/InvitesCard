@@ -20,10 +20,6 @@ export class RolesService {
     return this.http.get<IRole>(`${this.invitesBaseUrl}/${id}`);
   }
 
-  createRole(role: IRole): Observable<IMessageResponse> {
-    return this.http.post<IMessageResponse>(`${this.invitesBaseUrl}`, role);
-  }
-
   updateRole(role: IRole, id: string): Observable<IMessageResponse> {
     return this.http.put<IMessageResponse>(
       `${this.invitesBaseUrl}/${id}`,
