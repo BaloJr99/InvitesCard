@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { IErrorInvite, IBulkInvite } from 'src/app/core/models/invites';
-import { IFamilyGroup } from 'src/app/core/models/familyGroups';
+import { IInviteGroups } from 'src/app/core/models/inviteGroups';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { IMessageResponse } from 'src/app/core/models/common';
@@ -13,7 +13,7 @@ import { IMessageResponse } from 'src/app/core/models/common';
 })
 export class InvitesImportModalComponent implements OnInit {
   @Input() eventId: string = '';
-  @Input() familyGroups: IFamilyGroup[] = [];
+  @Input() inviteGroups: IInviteGroups[] = [];
   invites: IBulkInvite[] = [];
   errorInvites: IErrorInvite[] = [];
   processingFile = false;
@@ -109,7 +109,7 @@ export class InvitesImportModalComponent implements OnInit {
           if (index === 1 && isNaN(parseInt(value))) return true;
           // Evaluate Phone Number
           if (index === 2 && !value.match('[0-9]{10}')) return true;
-          // Evaluate Family Group
+          // Evaluate Invite Group
           if (index === 4 && value === '') return true;
           return false;
         })
@@ -124,12 +124,12 @@ export class InvitesImportModalComponent implements OnInit {
             ? $localize`ERROR: Tel inválido`
             : columns[2],
           kidsAllowed: Boolean(parseInt(columns[3])),
-          familyGroupId:
+          inviteGroupId:
             columns[0] === '' ? $localize`ERROR: Campo vacío` : columns[4],
         });
       } else {
-        const familyGroupFound = this.familyGroups.find(
-          (f) => f.familyGroup.toLowerCase() === columns[4].toLowerCase()
+        const inviteGroupFound = this.inviteGroups.find(
+          (f) => f.inviteGroup.toLowerCase() === columns[4].toLowerCase()
         );
         this.invites.push({
           family: columns[0],
@@ -137,9 +137,9 @@ export class InvitesImportModalComponent implements OnInit {
           phoneNumber: columns[2],
           kidsAllowed: Boolean(parseInt(columns[3])),
           eventId: this.eventId,
-          familyGroupName: columns[4],
-          familyGroupId: familyGroupFound ? familyGroupFound.id : '',
-          isNewFamilyGroup: familyGroupFound ? false : true,
+          inviteGroupName: columns[4],
+          inviteGroupId: inviteGroupFound ? inviteGroupFound.id : '',
+          isNewInviteGroup: inviteGroupFound ? false : true,
         });
       }
     });

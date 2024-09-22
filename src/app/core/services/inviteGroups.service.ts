@@ -2,34 +2,34 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { IFamilyGroup } from '../models/familyGroups';
+import { IInviteGroups } from '../models/inviteGroups';
 import { IMessageResponse } from '../models/common';
 
 @Injectable()
-export class FamilyGroupsService {
+export class InviteGroupsService {
   private baseUrl = environment.apiUrl;
-  private invitesBaseUrl = this.baseUrl + '/familyGroups';
+  private invitesBaseUrl = this.baseUrl + '/inviteGroups';
 
   constructor(private http: HttpClient) {}
 
-  getAllFamilyGroups(eventId: string): Observable<IFamilyGroup[]> {
-    return this.http.get<IFamilyGroup[]>(`${this.invitesBaseUrl}/${eventId}`);
+  getAllInviteGroups(eventId: string): Observable<IInviteGroups[]> {
+    return this.http.get<IInviteGroups[]>(`${this.invitesBaseUrl}/${eventId}`);
   }
 
-  createFamilyGroup(familyGroup: IFamilyGroup): Observable<IMessageResponse> {
+  createInviteGroup(inviteGroup: IInviteGroups): Observable<IMessageResponse> {
     return this.http.post<IMessageResponse>(
       `${this.invitesBaseUrl}`,
-      familyGroup
+      inviteGroup
     );
   }
 
-  updateFamilyGroup(
-    familyGroup: IFamilyGroup,
+  updateInviteGroup(
+    inviteGroup: IInviteGroups,
     id: string
   ): Observable<IMessageResponse> {
     return this.http.put<IMessageResponse>(
       `${this.invitesBaseUrl}/${id}`,
-      familyGroup
+      inviteGroup
     );
   }
 }

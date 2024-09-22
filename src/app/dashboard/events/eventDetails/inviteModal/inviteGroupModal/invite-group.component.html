@@ -1,0 +1,14 @@
+<form [formGroup]="createInviteGroupForm">
+  <input type="text" formControlName="id" hidden>
+  <div class="mb-3">
+    <label for="inviteGroup" class="form-label" i18n>Nuevo grupo</label>
+    <input id="inviteGroup" type="text" min="1"  class="form-control" formControlName="inviteGroup" [ngClass]="{'is-invalid': displayMessage['inviteGroup']}">
+    <span class="invalid-feedback" role="alert">
+      {{ displayMessage['inviteGroup'] }}
+    </span>
+  </div>
+</form>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="toggleIsCreatingNewFormGroup()" i18n>Cancelar</button>
+  <button type="button" class="btn btn-primary" (click)="saveInviteGroup()" i18n [disabled]="!createInviteGroupForm.valid || !createInviteGroupForm.dirty">Guardar</button>
+</div>

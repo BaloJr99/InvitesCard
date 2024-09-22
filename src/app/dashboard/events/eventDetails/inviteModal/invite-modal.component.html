@@ -7,7 +7,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" i18n-aria-label aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
-        <ng-container *ngIf="!isCreatingNewFormGroup">
+        <ng-container *ngIf="!showNewGroupForm">
           <form [formGroup]="createInviteForm">
             <input type="text" formControlName="id" hidden>
             <div class="mb-3">
@@ -18,17 +18,17 @@
               </span>
             </div>
             <div class="mb-3">
-              <label for="familyGroupId" class="form-label" i18n>Grupo</label>
-              <div class="familyGroupActions">
-                <select id="familyGroupId" class="form-control" formControlName="familyGroupId" [ngClass]="{'is-invalid': displayMessage['familyGroupId']}">
+              <label for="inviteGroupId" class="form-label" i18n>Grupo</label>
+              <div class="inviteGroupActions">
+                <select id="inviteGroupId" class="form-control" formControlName="inviteGroupId" [ngClass]="{'is-invalid': displayMessage['inviteGroupId']}">
                   <option value="" i18n>Selecciona el grupo</option>
-                  <option *ngFor="let familyGroup of familyGroups" [value]="familyGroup.id">{{ familyGroup.familyGroup }}</option>
+                  <option *ngFor="let inviteGroup of inviteGroups" [value]="inviteGroup.id">{{ inviteGroup.inviteGroup }}</option>
                 </select>
-                <button class="btn btn-dark" (click)="toggleIsEditingFormGroup()" *ngIf="createInviteForm.get('familyGroupId')?.value"><i class="fa-solid fa-pen-to-square"></i></button>
-                <button class="btn btn-dark" (click)="toggleIsCreatingNewFormGroup()"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                <button class="btn btn-dark" (click)="editGroupForm()" *ngIf="createInviteForm.get('inviteGroupId')?.value"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button class="btn btn-dark" (click)="newGroupForm()"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
               </div>
               <span class="invalid-feedback" role="alert">
-                {{ displayMessage['familyGroupId'] }}
+                {{ displayMessage['inviteGroupId'] }}
               </span>
             </div>
             <div class="mb-3">
@@ -58,21 +58,8 @@
             <button type="button" class="btn btn-primary" (click)="saveInvite()" i18n [disabled]="!createInviteForm.valid || !createInviteForm.dirty">Guardar</button>
           </div>
         </ng-container>
-        <ng-container  *ngIf="isCreatingNewFormGroup">
-          <form [formGroup]="createFamilyGroupForm">
-            <input type="text" formControlName="id" hidden>
-            <div class="mb-3">
-              <label for="familyGroup" class="form-label" i18n>Nuevo grupo</label>
-              <input id="familyGroup" type="text" min="1"  class="form-control" formControlName="familyGroup" [ngClass]="{'is-invalid': displayMessage['familyGroup']}">
-              <span class="invalid-feedback" role="alert">
-                {{ displayMessage['familyGroup'] }}
-              </span>
-            </div>
-          </form>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" (click)="toggleIsCreatingNewFormGroup()" i18n>Cancelar</button>
-            <button type="button" class="btn btn-primary" (click)="saveFamilyGroup()" i18n [disabled]="!createFamilyGroupForm.valid || !createFamilyGroupForm.dirty">Guardar</button>
-          </div>
+        <ng-container  *ngIf="showNewGroupForm">
+          <app-invite-group [eventId]="eventId" [inviteGroup]="groupSelected"></app-invite-group>
         </ng-container>
       </div>
     </div>

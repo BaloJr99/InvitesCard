@@ -2,13 +2,13 @@ import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { LoaderService } from 'src/app/core/services/loader.service';
-import { FamilyGroupsService } from 'src/app/core/services/familyGroups.service';
+import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
 import { SocketService } from 'src/app/core/services/socket.service';
 import { IStatistic } from 'src/app/core/models/events';
 import {
-  IFamilyGroup,
-  IFamilyGroupAction,
-} from 'src/app/core/models/familyGroups';
+  IInviteGroups,
+  IInviteGroupsAction,
+} from 'src/app/core/models/inviteGroups';
 import { IMessage, INotification } from 'src/app/core/models/common';
 import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
 import {
@@ -26,7 +26,7 @@ export class InviteDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private loaderService: LoaderService,
-    private familyGroupsService: FamilyGroupsService,
+    private inviteGroupsService: InviteGroupsService,
     private commonInvitesService: CommonInvitesService,
     private socket: SocketService,
     @Inject(LOCALE_ID) private localeValue: string
@@ -46,7 +46,7 @@ export class InviteDetailsComponent implements OnInit {
   invitesGrouped: { [key: string]: IFullInvite[] } = {};
 
   invites: IFullInvite[] = [];
-  familyGroups: IFamilyGroup[] = [];
+  inviteGroups: IInviteGroups[] = [];
 
   isDeadlineMet = false;
 
@@ -72,14 +72,14 @@ export class InviteDetailsComponent implements OnInit {
           return false;
         }),
         switchMap((data) =>
-          this.familyGroupsService.getAllFamilyGroups(
+          this.inviteGroupsService.getAllInviteGroups(
             data['eventResolved']['id']
           )
         )
       )
       .subscribe({
-        next: (familyGroups) => {
-          this.familyGroups = familyGroups;
+        next: (inviteGroups) => {
+          this.inviteGroups = inviteGroups;
           this.buildInvitesDashboard();
         },
       })
@@ -169,10 +169,10 @@ export class InviteDetailsComponent implements OnInit {
   groupEntries(invites: IFullInvite[]): void {
     this.invitesGrouped = {};
 
-    this.familyGroups.forEach((familyGroup) => {
-      if (invites.some((invite) => invite.familyGroupId === familyGroup.id)) {
-        this.invitesGrouped[familyGroup.familyGroup] = invites.filter(
-          (invite) => invite.familyGroupId === familyGroup.id
+    this.inviteGroups.forEach((inviteGroup) => {
+      if (invites.some((invite) => invite.inviteGroupId === inviteGroup.id)) {
+        this.invitesGrouped[inviteGroup.inviteGroup] = invites.filter(
+          (invite) => invite.inviteGroupId === inviteGroup.id
         );
       }
     });
@@ -250,20 +250,20 @@ export class InviteDetailsComponent implements OnInit {
     }
   }
 
-  updateFamilyGroups(familyGroupsAction: IFamilyGroupAction) {
-    if (familyGroupsAction.isNew) {
-      this.familyGroups.push(familyGroupsAction.familyGroup);
-      this.familyGroups.sort((a, b) =>
-        a.familyGroup.toLowerCase().localeCompare(b.familyGroup.toLowerCase())
+  updateInviteGroups(inviteGroupsAction: IInviteGroupsAction) {
+    if (inviteGroupsAction.isNew) {
+      this.inviteGroups.push(inviteGroupsAction.inviteGroup);
+      this.inviteGroups.sort((a, b) =>
+        a.inviteGroup.toLowerCase().localeCompare(b.inviteGroup.toLowerCase())
       );
     } else {
-      this.familyGroups = this.familyGroups.map((originalFamilyGroup) =>
-        originalFamilyGroup.id === familyGroupsAction.familyGroup.id
-          ? familyGroupsAction.familyGroup
-          : originalFamilyGroup
+      this.inviteGroups = this.inviteGroups.map((originalInviteGroup) =>
+        originalInviteGroup.id === inviteGroupsAction.inviteGroup.id
+          ? inviteGroupsAction.inviteGroup
+          : originalInviteGroup
       );
-      this.familyGroups.sort((a, b) =>
-        a.familyGroup.toLowerCase().localeCompare(b.familyGroup.toLowerCase())
+      this.inviteGroups.sort((a, b) =>
+        a.inviteGroup.toLowerCase().localeCompare(b.inviteGroup.toLowerCase())
       );
     }
   }

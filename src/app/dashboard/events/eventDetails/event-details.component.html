@@ -33,14 +33,14 @@
   </div>
 </section>
 <app-invite-modal 
-  [familyGroups]="familyGroups" 
+  [inviteGroups]="inviteGroups" 
   [inviteAction]="inviteAction"  
   [eventId]="eventId"
   (updateInvites)="updateInvites($event)"
-  (updateFamilyGroups)="updateFamilyGroups($event)">
+  (updateInviteGroups)="updateInviteGroups($event)">
 </app-invite-modal>
 <app-event-dialog *ngIf="inviteAction" [inviteAction]="inviteAction" (updateInvites)="updateInvites($event)"></app-event-dialog>
 <app-invites-import-dialog 
   [eventId]="eventId"
-  [familyGroups]="familyGroups">
+  [inviteGroups]="inviteGroups">
 </app-invites-import-dialog>

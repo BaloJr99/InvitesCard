@@ -10,7 +10,7 @@ export interface IFullInvite {
   dateOfConfirmation: string | null;
   isMessageRead: boolean;
   eventId: string;
-  familyGroupId: string;
+  inviteGroupId: string;
   inviteViewed: string;
 }
 
@@ -40,8 +40,8 @@ export type IBulkInvite = Pick<
   | 'phoneNumber'
   | 'kidsAllowed'
   | 'eventId'
-  | 'familyGroupId'
-> & { familyGroupName: string; isNewFamilyGroup: boolean };
+  | 'inviteGroupId'
+> & { inviteGroupName: string; isNewInviteGroup: boolean };
 
 export type IErrorInvite = Omit<
   IUpsertInvite,

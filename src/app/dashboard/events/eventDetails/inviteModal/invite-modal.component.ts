@@ -19,11 +19,11 @@ import {
 import { Observable, fromEvent, merge } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import {
-  IFamilyGroup,
-  IFamilyGroupAction,
-} from 'src/app/core/models/familyGroups';
+  IInviteGroups,
+  IInviteGroupsAction,
+} from 'src/app/core/models/inviteGroups';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
-import { FamilyGroupsService } from 'src/app/core/services/familyGroups.service';
+import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { IUpsertInvite, IInviteAction } from 'src/app/core/models/invites';
@@ -40,15 +40,14 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Input() inviteAction!: IInviteAction;
   @Input() eventId!: string;
-  @Input() familyGroups!: IFamilyGroup[];
+  @Input() inviteGroups!: IInviteGroups[];
   @Output() updateInvites: EventEmitter<IInviteAction> = new EventEmitter();
-  @Output() updateFamilyGroups: EventEmitter<IFamilyGroupAction> =
+  @Output() updateInviteGroups: EventEmitter<IInviteGroupsAction> =
     new EventEmitter();
 
   createInviteForm!: FormGroup;
-  createFamilyGroupForm!: FormGroup;
-  errorMessage = '';
-  isCreatingNewFormGroup = false;
+  showNewGroupForm = false;
+  groupSelected: IInviteGroups | undefined = undefined;
 
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -56,7 +55,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   constructor(
     private invitesService: InvitesService,
-    private familyGroupsService: FamilyGroupsService,
+    private inviteGroupsService: InviteGroupsService,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private loaderService: LoaderService
@@ -72,7 +71,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
         required: $localize`Ingresar numero de telefono`,
         pattern: $localize`Numero de telefono invalido`,
       },
-      familyGroupId: {
+      inviteGroupId: {
         required: $localize`Seleccionar grupo`,
       },
     };
@@ -89,7 +88,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
         '878',
         [Validators.required, Validators.pattern('[0-9]{10}')],
       ],
-      familyGroupId: ['', Validators.required],
+      inviteGroupId: ['', Validators.required],
       kidsAllowed: [true, Validators.required],
       eventId: '',
       inviteViewed: null,
@@ -185,13 +184,13 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
       family: $localize`Familia`,
       entriesNumber: 1,
       phoneNumber: '878',
-      familyGroupId: '',
+      inviteGroupId: '',
       kidsAllowed: true,
     });
 
     this.displayMessage = {};
 
-    this.isCreatingNewFormGroup = false;
+    this.showNewGroupForm = false;
   }
 
   formatInvite(): IUpsertInvite {
@@ -220,102 +219,16 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
     });
   }
 
-  toggleIsCreatingNewFormGroup(): void {
-    if (!this.isCreatingNewFormGroup) {
-      this.createFamilyGroupForm = this.fb.group({
-        id: '',
-        familyGroup: [$localize`Familia`, Validators.required],
-        eventId: '',
-      });
-    }
-    this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;
+  newGroupForm(): void {
+    this.groupSelected = undefined;
+    this.showNewGroupForm = true;
   }
 
-  toggleIsEditingFormGroup(): void {
-    if (!this.isCreatingNewFormGroup) {
-      const selectedFamilyGroup = this.familyGroups.find(
-        (famGroup) =>
-          famGroup.id === this.createInviteForm.controls['familyGroupId'].value
-      );
-      this.createFamilyGroupForm = this.fb.group({
-        id: [selectedFamilyGroup?.id],
-        familyGroup: [selectedFamilyGroup?.familyGroup, Validators.required],
-      });
-    }
-    this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;
-  }
-
-  saveFamilyGroup(): void {
-    if (this.createFamilyGroupForm.valid) {
-      if (this.createFamilyGroupForm.dirty) {
-        if (
-          this.createFamilyGroupForm.controls['id'].value !== '' &&
-          this.createFamilyGroupForm.controls['id'].value !== null
-        ) {
-          this.updateFamilyGroup();
-        } else {
-          this.createFamilyGroup();
-        }
-      } else {
-        this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;
-      }
-    } else {
-      this.displayMessage = this.genericValidator.processMessages(
-        this.createFamilyGroupForm,
-        true
-      );
-    }
-  }
-
-  createFamilyGroup() {
-    this.loaderService.setLoading(true, $localize`Creando grupo`);
-    this.createFamilyGroupForm.patchValue({
-      eventId: this.eventId,
-    });
-    this.familyGroupsService
-      .createFamilyGroup(this.createFamilyGroupForm.value as IFamilyGroup)
-      .subscribe({
-        next: (response: IMessageResponse) => {
-          this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;
-          this.updateFamilyGroups.emit({
-            familyGroup: {
-              ...(this.createFamilyGroupForm.value as IFamilyGroup),
-              id: response.id,
-            },
-            isNew: true,
-          });
-          this.createInviteForm.patchValue({
-            familyGroupId: response.id,
-          });
-          this.toastr.success($localize`Grupo creado`);
-        },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
-      });
-  }
-
-  updateFamilyGroup() {
-    this.loaderService.setLoading(true, $localize`Actualizando grupo`);
-    this.familyGroupsService
-      .updateFamilyGroup(
-        this.createFamilyGroupForm.value as IFamilyGroup,
-        this.createFamilyGroupForm.controls['id'].value
-      )
-      .subscribe({
-        next: () => {
-          this.isCreatingNewFormGroup = !this.isCreatingNewFormGroup;
-          this.updateFamilyGroups.emit({
-            familyGroup: {
-              ...(this.createFamilyGroupForm.value as IFamilyGroup),
-            },
-            isNew: false,
-          });
-          this.toastr.success($localize`Grupo actualizado`);
-        },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
-      });
+  editGroupForm(): void {
+    this.groupSelected = this.inviteGroups.find(
+      (famGroup) =>
+        famGroup.id === this.createInviteForm.controls['inviteGroupId'].value
+    );
+    this.showNewGroupForm = true;
   }
 }
