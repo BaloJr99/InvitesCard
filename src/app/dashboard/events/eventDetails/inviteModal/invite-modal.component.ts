@@ -55,7 +55,6 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   constructor(
     private invitesService: InvitesService,
-    private inviteGroupsService: InviteGroupsService,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private loaderService: LoaderService
@@ -219,16 +218,26 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
     });
   }
 
-  newGroupForm(): void {
-    this.groupSelected = undefined;
-    this.showNewGroupForm = true;
+  inviteGroupAction(isEditing: boolean, showNewGroupForm: boolean) {
+    if (isEditing) {
+      this.groupSelected = this.inviteGroups.find(
+        (famGroup) =>
+          famGroup.id === this.createInviteForm.controls['inviteGroupId'].value
+      );
+      this.showNewGroupForm = showNewGroupForm;
+    } else if (!isEditing && showNewGroupForm) {
+      this.groupSelected = undefined;
+      this.showNewGroupForm = showNewGroupForm;
+    } else {
+      this.showNewGroupForm = showNewGroupForm;
+    }
   }
 
-  editGroupForm(): void {
-    this.groupSelected = this.inviteGroups.find(
-      (famGroup) =>
-        famGroup.id === this.createInviteForm.controls['inviteGroupId'].value
-    );
-    this.showNewGroupForm = true;
+  updateCurrentInviteGroup(event: IInviteGroupsAction) {
+    this.createInviteForm.patchValue({
+      inviteGroupId: event.inviteGroup.id,
+    });
+    this.updateInviteGroups.emit(event);
+    this.showNewGroupForm = false;
   }
 }

@@ -13,7 +13,6 @@ import {
 import {
   FormBuilder,
   FormControlName,
-  FormGroup,
   Validators,
 } from '@angular/forms';
 import { Observable, fromEvent, merge } from 'rxjs';
@@ -32,7 +31,7 @@ import { IMessageResponse } from 'src/app/core/models/common';
   templateUrl: './invite-group.component.html',
   styleUrls: ['./invite-group.component.css'],
 })
-export class InviteGroupComponent implements OnInit, AfterViewInit, OnChanges {
+export class InviteGroupComponent implements AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
@@ -43,7 +42,12 @@ export class InviteGroupComponent implements OnInit, AfterViewInit, OnChanges {
     new EventEmitter();
   @Output() isCreatingNewFormGroup: EventEmitter<boolean> = new EventEmitter();
 
-  createInviteGroupForm!: FormGroup;
+  createInviteGroupForm = this.fb.group({
+    id: '',
+    inviteGroup: ['', Validators.required],
+    eventId: '',
+  });;
+
   errorMessage = '';
 
   displayMessage: { [key: string]: string } = {};
@@ -65,27 +69,19 @@ export class InviteGroupComponent implements OnInit, AfterViewInit, OnChanges {
     this.genericValidator = new GenericValidator(this.validationMessages);
   }
 
-  ngOnInit(): void {
-    this.createInviteGroupForm = this.fb.group({
-      id: '',
-      inviteGroup: [Validators.required],
-      eventId: '',
-    });
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['inviteGroup'] && changes['inviteGroup'].currentValue) {
       if (this.inviteGroup) {
         this.createInviteGroupForm.patchValue({
-          id: [this.inviteGroup.id],
-          inviteGroup: [this.inviteGroup.inviteGroup],
+          id: this.inviteGroup.id,
+          inviteGroup: this.inviteGroup.inviteGroup,
         });
       }
     }
 
     if (changes['eventId'] && changes['eventId'].currentValue) {
       this.createInviteGroupForm.patchValue({
-        eventId: [this.eventId],
+        eventId: this.eventId,
       });
     }
   }
@@ -156,7 +152,7 @@ export class InviteGroupComponent implements OnInit, AfterViewInit, OnChanges {
     this.inviteGroupsService
       .updateInviteGroup(
         this.createInviteGroupForm.value as IInviteGroups,
-        this.createInviteGroupForm.controls['id'].value
+        this.createInviteGroupForm.controls['id'].value as string
       )
       .subscribe({
         next: () => {

@@ -19,13 +19,13 @@
             </div>
             <div class="mb-3">
               <label for="inviteGroupId" class="form-label" i18n>Grupo</label>
-              <div class="inviteGroupActions">
+              <div class="inviteGroupActions" [ngClass]="{'is-invalid': displayMessage['inviteGroupId']}">
                 <select id="inviteGroupId" class="form-control" formControlName="inviteGroupId" [ngClass]="{'is-invalid': displayMessage['inviteGroupId']}">
                   <option value="" i18n>Selecciona el grupo</option>
                   <option *ngFor="let inviteGroup of inviteGroups" [value]="inviteGroup.id">{{ inviteGroup.inviteGroup }}</option>
                 </select>
-                <button class="btn btn-dark" (click)="editGroupForm()" *ngIf="createInviteForm.get('inviteGroupId')?.value"><i class="fa-solid fa-pen-to-square"></i></button>
-                <button class="btn btn-dark" (click)="newGroupForm()"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                <button class="btn btn-dark" (click)="inviteGroupAction(true, true)" *ngIf="createInviteForm.get('inviteGroupId')?.value"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button class="btn btn-dark" (click)="inviteGroupAction(false, true)"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
               </div>
               <span class="invalid-feedback" role="alert">
                 {{ displayMessage['inviteGroupId'] }}
@@ -59,7 +59,12 @@
           </div>
         </ng-container>
         <ng-container  *ngIf="showNewGroupForm">
-          <app-invite-group [eventId]="eventId" [inviteGroup]="groupSelected"></app-invite-group>
+          <app-invite-group 
+            [eventId]="eventId" 
+            [inviteGroup]="groupSelected" 
+            (isCreatingNewFormGroup)="inviteGroupAction(false, $event)"
+            (updateInviteGroups)="updateCurrentInviteGroup($event)">
+          </app-invite-group>
         </ng-container>
       </div>
     </div>
