@@ -45,7 +45,6 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
   @Output() updateEvents: EventEmitter<IEventAction> = new EventEmitter();
 
   createEventForm!: FormGroup;
-  errorMessage = '';
   users: IUserDropdownData[] = [];
 
   displayMessage: { [key: string]: string } = {};

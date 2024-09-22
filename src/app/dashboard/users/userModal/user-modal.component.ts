@@ -58,7 +58,6 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
   @Output() updateUsers: EventEmitter<IUserAction> = new EventEmitter();
 
   createUserForm!: FormGroup;
-  errorMessage = '';
   roles: IRole[] = [];
   filteredRoles: IRole[] = [];
 

@@ -28,7 +28,6 @@ export class ForgotPasswordComponent implements AfterViewInit {
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;
-  errorMessage = '';
   emailSent = false;
 
   constructor(
@@ -74,8 +73,7 @@ export class ForgotPasswordComponent implements AfterViewInit {
         this.authService
           .sendResetPassword(this.forgotPasswordForm.value)
           .subscribe({
-            next: (messageResponse) => {
-              this.errorMessage = messageResponse.message;
+            next: () => {
               this.emailSent = true;
             },
           })

@@ -6,7 +6,7 @@ import { DateFormatPipe } from 'src/app/shared/pipes/date-format.pipe';
 import { ProfileComponent } from './profile.component';
 import { profileResolver } from './profile-resolver.service';
 import { ProfileModalComponent } from './profileModal/profile-modal.component';
-import { ChangePasswordComponent } from './changePassword/changePassword.component';
+import { ChangePasswordComponent } from './changePassword/change-password.component';
 
 const routes: Routes = [
   {

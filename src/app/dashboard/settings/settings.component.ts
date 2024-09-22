@@ -35,7 +35,6 @@ export class SettingsComponent implements OnInit, AfterViewInit {
   isNewSetting = true;
 
   createEventSettingsForm!: FormGroup;
-  errorMessage = '';
   isAdmin = false;
 
   displayMessage: { [key: string]: string } = {};

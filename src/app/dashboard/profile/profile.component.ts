@@ -32,7 +32,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  errorMessage = '';
   user!: IUserProfile;
   isMyProfile = true;
   showChangePassword = false;
