@@ -5,7 +5,6 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  OnInit,
   Output,
   SimpleChanges,
   ViewChildren,
@@ -139,7 +138,7 @@ export class InviteGroupComponent implements AfterViewInit, OnChanges {
             },
             isNew: true,
           });
-          this.toastr.success($localize`Grupo creado`);
+          this.toastr.success(response.message);
         },
       })
       .add(() => {
@@ -155,14 +154,14 @@ export class InviteGroupComponent implements AfterViewInit, OnChanges {
         this.createInviteGroupForm.controls['id'].value as string
       )
       .subscribe({
-        next: () => {
+        next: (response: IMessageResponse) => {
           this.updateInviteGroups.emit({
             inviteGroup: {
               ...(this.createInviteGroupForm.value as IInviteGroups),
             },
             isNew: false,
           });
-          this.toastr.success($localize`Grupo actualizado`);
+          this.toastr.success(response.message);
         },
       })
       .add(() => {

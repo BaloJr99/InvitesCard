@@ -3,13 +3,14 @@
 }
 
 .modal button.btn-primary {
-  background-color: var(--primary-blue);
-  color: #fff;
+  background-color: var(--secondary-blue);
+  color: var(--grey);
   border: none;
 }
 
 .filteringBox {
   position: relative;
+  z-index: 1;
 }
 
 .filteringBox ul {
@@ -26,6 +27,7 @@
 
 .filteringBox .show {
   display: block;
+  overflow-y: auto;
 }
 
 .filteringBox .hide {
@@ -80,3 +82,8 @@ i.fa-circle-xmark {
     width: calc(100% - 26px);
     margin-right: 10px;
   }
+
+.roleActions {
+  display: flex;
+  gap: 10px;
+}

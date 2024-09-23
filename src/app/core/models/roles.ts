@@ -3,3 +3,8 @@ export interface IRole {
   name: string;
   isActive: boolean;
 }
+
+export interface IRoleAction {
+  role: IRole;
+  isNew: boolean;
+}

@@ -36,6 +36,12 @@
       text-decoration: none;
     }
 
+.btn-primary {
+  background-color: var(--secondary-blue);
+  color: var(--grey);
+  border: none;
+}
+
 .files {
   text-align: left;
   flex-grow: 1;
@@ -201,9 +207,6 @@
   
   .header button.btn-primary {
     width: 100%;
-  }
-
-  .header button.btn-primary {
     margin: 0px;
   }
 }

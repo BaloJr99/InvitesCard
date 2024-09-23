@@ -23,7 +23,6 @@ import {
   IInviteGroupsAction,
 } from 'src/app/core/models/inviteGroups';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
-import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { IUpsertInvite, IInviteAction } from 'src/app/core/models/invites';
@@ -147,7 +146,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
             },
             isNew: true,
           });
-          this.toastr.success($localize`Se ha guardado la invitación`);
+          this.toastr.success(response.message);
         },
       })
       .add(() => {
@@ -163,14 +162,14 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.createInviteForm.controls['id'].value
       )
       .subscribe({
-        next: () => {
+        next: (response: IMessageResponse) => {
           $('#inviteModal').modal('hide');
           this.updateInvites.emit({
             ...this.inviteAction,
             invite: this.formatInvite(),
             isNew: false,
           });
-          this.toastr.success($localize`Se ha actualizado la invitación`);
+          this.toastr.success(response.message);
         },
       })
       .add(() => {

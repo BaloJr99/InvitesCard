@@ -6,10 +6,9 @@
         <h1 class="modal-title fs-5" id="inviteModalLabel" i18n>Invitaciones Personalizadas</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" i18n-aria-label aria-label="Cerrar"></button>
       </div>
-      <div class="modal-body">
-        <ng-container *ngIf="!showNewGroupForm">
+      <ng-container *ngIf="!showNewGroupForm">
+        <div class="modal-body">
           <form [formGroup]="createInviteForm">
-            <input type="text" formControlName="id" hidden>
             <div class="mb-3">
               <label for="family" class="form-label" i18n>Familia</label>
               <input id="family" type="text" class="form-control" formControlName="family" [ngClass]="{'is-invalid': displayMessage['family']}">
@@ -53,20 +52,24 @@
               </span>
             </div>
           </form>
-          <div class="modal-footer">
-            <button type="button" id="closeModal" class="btn btn-secondary" data-bs-dismiss="modal" i18n>Cerrar</button>
-            <button type="button" class="btn btn-primary" (click)="saveInvite()" i18n [disabled]="!createInviteForm.valid || !createInviteForm.dirty">Guardar</button>
-          </div>
-        </ng-container>
-        <ng-container  *ngIf="showNewGroupForm">
-          <app-invite-group 
-            [eventId]="eventId" 
-            [inviteGroup]="groupSelected" 
-            (isCreatingNewFormGroup)="inviteGroupAction(false, $event)"
-            (updateInviteGroups)="updateCurrentInviteGroup($event)">
-          </app-invite-group>
-        </ng-container>
-      </div>
+        </div>
+        <div class="modal-footer" *ngIf="!showNewGroupForm">
+          <button type="button" id="closeModal" class="btn btn-secondary" data-bs-dismiss="modal" i18n>Cerrar</button>
+          <button type="button" class="btn btn-primary" (click)="saveInvite()" i18n [disabled]="!createInviteForm.valid || !createInviteForm.dirty">Guardar</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="showNewGroupForm">
+        <div class="modal-body">
+          <ng-container>
+            <app-invite-group 
+              [eventId]="eventId" 
+              [inviteGroup]="groupSelected" 
+              (isCreatingNewFormGroup)="inviteGroupAction(false, $event)"
+              (updateInviteGroups)="updateCurrentInviteGroup($event)">
+            </app-invite-group>
+          </ng-container>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>

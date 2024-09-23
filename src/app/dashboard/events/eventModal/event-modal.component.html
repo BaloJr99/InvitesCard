@@ -8,7 +8,6 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="createEventForm" *ngIf="users.length > 0">
-          <input type="text" formControlName="id" hidden>
           <div class="mb-3">
             <label for="nameOfEvent" class="form-label" i18n>Nombre del evento</label>
             <input id="nameOfEvent" type="text" class="form-control" formControlName="nameOfEvent" [ngClass]="{'is-invalid': displayMessage['nameOfEvent']}">

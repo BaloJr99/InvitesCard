@@ -69,6 +69,12 @@ export class GenericValidator {
         this.validationMessages['usernameDuplicated']['duplicated'];
     }
 
+    if (container.errors && container.errors['roleNameDuplicatedError']) {
+      messages['nameDuplicated'] = '';
+      messages['nameDuplicated'] +=
+        this.validationMessages['nameDuplicated']['duplicated'];
+    }
+
     return messages;
   }
 }

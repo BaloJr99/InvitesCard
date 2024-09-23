@@ -8,6 +8,7 @@ import { UsersService } from 'src/app/core/services/users.service';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { UserModalComponent } from './userModal/user-modal.component';
 import { UsersComponent } from './users.component';
+import { UserRoleComponent } from './userModal/userRoleModal/user-role.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,6 @@ const routes: Routes = [
 @NgModule({
   providers: [EventsService, SettingsService, UsersService, RolesService],
   imports: [DataTablesModule, SharedModule, RouterModule.forChild(routes)],
-  declarations: [UsersComponent, UserModalComponent],
+  declarations: [UsersComponent, UserModalComponent, UserRoleComponent],
 })
 export class UsersModule {}

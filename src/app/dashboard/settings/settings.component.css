@@ -89,19 +89,4 @@
     align-items: flex-start;
     gap: 10px;
   }
-
-  .header .buttons {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 10px;
-  }
-  
-  .header button.btn-primary {
-    width: 100%;
-  }
-
-  .header button.btn-primary {
-    margin: 0px;
-  }
 }

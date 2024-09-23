@@ -7,6 +7,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { IMessageResponse } from 'src/app/core/models/common';
 import { IInviteAction } from 'src/app/core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
@@ -47,10 +48,10 @@ export class EventDialogComponent implements OnChanges {
     this.invitesService
       .deleteInvite(this.inviteAction.invite.id)
       .subscribe({
-        next: () => {
+        next: (response: IMessageResponse) => {
           this.hideModal();
           this.updateInvites.emit(this.inviteAction);
-          this.toastr.success($localize`Se ha eliminado la invitación`);
+          this.toastr.success(response.message);
         },
       })
       .add(() => {

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { IMessageResponse } from 'src/app/core/models/common';
 import { IDeleteImage } from 'src/app/core/models/images';
 import { ImagesService } from 'src/app/core/services/images.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
@@ -28,10 +29,10 @@ export class FilesModalComponent {
     this.imagesService
       .deleteImage(this.imageAction)
       .subscribe({
-        next: () => {
+        next: (response: IMessageResponse) => {
           this.hideModal();
           this.updateImages.emit(this.imageAction);
-          this.toastr.success($localize`Se ha eliminado el archivo`);
+          this.toastr.success(response.message);
         },
       })
       .add(() => {

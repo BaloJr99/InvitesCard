@@ -30,13 +30,6 @@ main {
   flex-grow: 1;
 }
 
-.header button.btn-primary {
-  background-color: var(--secondary-blue);
-  color: var(--grey);
-  border: none;
-  margin: 0px 10px;
-}
-
 .breadcrumb-header {
   flex: 0 1 auto;
 }
@@ -194,14 +187,6 @@ main {
     flex-direction: column;
     width: 100%;
     gap: 10px;
-  }
-  
-  .header button.btn-primary {
-    width: 100%;
-  }
-
-  .header button.btn-primary {
-    margin: 0px;
   }
 
   .messages-chat {

@@ -20,7 +20,7 @@ import {
 import { Observable, fromEvent, merge } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { IUpsertUser, IUserAction } from 'src/app/core/models/users';
-import { IRole } from 'src/app/core/models/roles';
+import { IRole, IRoleAction } from 'src/app/core/models/roles';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 import { UsersService } from 'src/app/core/services/users.service';
 import { RolesService } from 'src/app/core/services/roles.service';
@@ -43,6 +43,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
     const roleFilter = document.getElementById('roleFilter') as HTMLElement;
 
     if (
+      filteredRoles &&
       !filteredRoles.contains(clickedElement) &&
       clickedElement !== roleFilter
     ) {
@@ -60,6 +61,8 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
   createUserForm!: FormGroup;
   roles: IRole[] = [];
   filteredRoles: IRole[] = [];
+  roleSelected: IRole | undefined = undefined;
+  showNewRoleForm = false;
 
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -210,6 +213,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
 
     this.userRoles = [];
     this.displayMessage = {};
+    this.showNewRoleForm = false;
   }
 
   filterRoles(filter: boolean): void {
@@ -231,17 +235,22 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   addRole(role: IRole): void {
     this.userRoles.push(role);
+    this.roleSelected = role;
+
     this.filteredRoles = [];
+
+    const inputFilter = document.getElementById(
+      'roleFilter'
+    ) as HTMLInputElement;
+
+    inputFilter.value = role.name;
+    inputFilter.focus();
+
     this.createUserForm.patchValue({
       roles: [...this.userRoles.map((x) => x.id)],
     });
 
     this.createUserForm.controls['roles'].markAsDirty();
-
-    const inputFilter = document.getElementById(
-      'roleFilter'
-    ) as HTMLInputElement;
-    inputFilter.focus();
   }
 
   deleteRole(roleId: string): void {
@@ -274,6 +283,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   moveFocus(event: Event, role?: IRole): void {
     if (event instanceof KeyboardEvent) {
+      console.log(event.key);
       if (event.key === 'ArrowDown') {
         const filteredRoles = document.getElementById(
           'filteredRoles'
@@ -328,6 +338,13 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
         if (role) {
           this.addRole(role);
         }
+      } else if (event.key === 'Tab') {
+        this.filterRoles(false);
+        this.roleSelected = undefined;
+        const inputFilter = document.getElementById(
+          'roleFilter'
+        ) as HTMLInputElement;
+        inputFilter.value = '';
       }
     }
   }
@@ -347,5 +364,30 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
         );
       },
     });
+  }
+
+  roleAction(isEditingRole:boolean, showNewRoleForm: boolean) {
+    if (!isEditingRole) {
+      this.roleSelected = undefined;
+
+      if (showNewRoleForm) {
+        const inputFilter = document.getElementById(
+          'roleFilter'
+        ) as HTMLInputElement;
+        
+        inputFilter.value = '';
+      }
+    }
+    this.showNewRoleForm = showNewRoleForm;
+  }
+
+  updateRoles(role: IRoleAction) {
+    if (role.isNew) {
+      this.roles.push(role.role);
+    } else {
+      this.roles = this.roles.map((r) => r.id === role.role.id ? role.role : r);
+      this.userRoles = this.userRoles.map((r) => r.id === role.role.id ? role.role : r);
+    }
+    this.showNewRoleForm = false;
   }
 }

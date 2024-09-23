@@ -11,13 +11,6 @@
       flex-grow: 1;
     }
 
-    .breadcrumb-header button.btn-primary {
-      background-color: var(--secondary-blue);
-      color: var(--grey);
-      border: none;
-      margin: 0px 10px;
-    }
-
     .breadcrumb-header .breadcrumb {
       margin-bottom: 0;
     }
