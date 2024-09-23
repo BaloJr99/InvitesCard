@@ -75,43 +75,34 @@ export class LoginComponent implements AfterViewInit {
   }
 
   loginAccount(): void {
-    if (this.loginForm.valid) {
-      if (this.loginForm.dirty) {
-        const user = this.loginForm.value;
-        delete user.confirmPassword;
-        this.loaderService.setLoading(true, $localize`Iniciando sesión`);
-        this.authService
-          .loginAccount(user as IAuthUser)
-          .subscribe({
-            next: (authInfo) => {
-              this.authErrorMessage = '';
-              if (authInfo) {
-                this.tokenService.saveToken(authInfo.token);
-                this.router.navigate(['/dashboard']);
-              }
-            },
-            error: (httpError: HttpErrorResponse) => {
-              if (httpError.status === 401) {
-                this.authErrorMessage = httpError.error.error;
-              }
-            },
-          })
-          .add(() => {
-            this.loaderService.setLoading(false);
-          });
-      } else {
-        this.onSaveComplete();
-      }
+    if (this.loginForm.valid && this.loginForm.dirty) {
+      const user = this.loginForm.value;
+      delete user.confirmPassword;
+      this.loaderService.setLoading(true, $localize`Iniciando sesión`);
+      this.authService
+        .loginAccount(user as IAuthUser)
+        .subscribe({
+          next: (authInfo) => {
+            this.authErrorMessage = '';
+            if (authInfo) {
+              this.tokenService.saveToken(authInfo.token);
+              this.router.navigate(['/dashboard']);
+            }
+          },
+          error: (httpError: HttpErrorResponse) => {
+            if (httpError.status === 401) {
+              this.authErrorMessage = httpError.error.error;
+            }
+          },
+        })
+        .add(() => {
+          this.loaderService.setLoading(false);
+        });
     } else {
       this.displayMessage = this.genericValidator.processMessages(
         this.loginForm,
         true
       );
     }
-  }
-
-  onSaveComplete(): void {
-    // Reset the form to clear the flags
-    this.loginForm.reset();
   }
 }

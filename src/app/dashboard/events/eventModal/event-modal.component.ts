@@ -36,16 +36,12 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  @Input() set eventAction(value: IEventAction) {
-    if (value && value.users) {
-      this.users = value.users;
-    }
-  }
-
+  @Input() eventAction!: IEventAction;
   @Output() updateEvents: EventEmitter<IEventAction> = new EventEmitter();
 
   createEventForm!: FormGroup;
   users: IUserDropdownData[] = [];
+  userEmptyMessage = '';
 
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -106,6 +102,11 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
         .subscribe({
           next: (users) => {
             this.users = users;
+            if (users.length === 0) {
+              this.userEmptyMessage = $localize`No hay usuarios disponibles`;
+            } else {
+              this.userEmptyMessage = '';
+            }
             this.cd.detectChanges();
           },
         })
@@ -123,15 +124,11 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   saveEvent() {
-    if (this.createEventForm.valid) {
-      if (this.createEventForm.dirty) {
-        if (this.createEventForm.controls['id'].value !== '') {
-          this.updateEvent();
-        } else {
-          this.createEvent();
-        }
+    if (this.createEventForm.valid && this.createEventForm.dirty) {
+      if (this.createEventForm.controls['id'].value !== '') {
+        this.updateEvent();
       } else {
-        $('#eventModal').modal('hide');
+        this.createEvent();
       }
     } else {
       this.displayMessage = this.genericValidator.processMessages(
@@ -153,7 +150,6 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
               ...this.formatEvent(),
               id: response.id,
             },
-            users: [],
             isNew: true,
           });
           this.toastr.success(response.message);
@@ -176,7 +172,6 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
           $('#eventModal').modal('hide');
           this.updateEvents.emit({
             event: this.formatEvent(),
-            users: [],
             isNew: false,
           });
           this.toastr.success(response.message);

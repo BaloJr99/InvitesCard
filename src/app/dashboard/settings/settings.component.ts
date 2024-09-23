@@ -190,15 +190,11 @@ export class SettingsComponent implements OnInit, AfterViewInit {
   }
 
   saveChanges(): void {
-    if (this.createEventSettingsForm.valid) {
-      if (this.createEventSettingsForm.dirty) {
-        if (this.isNewSetting) {
-          this.createEventSettings();
-        } else {
-          this.updateEventSettings();
-        }
+    if (this.createEventSettingsForm.valid && this.createEventSettingsForm.dirty) {
+      if (this.isNewSetting) {
+        this.createEventSettings();
       } else {
-        $('#eventModal').modal('hide');
+        this.updateEventSettings();
       }
     } else {
       this.displayMessage = this.genericValidator.processMessages(

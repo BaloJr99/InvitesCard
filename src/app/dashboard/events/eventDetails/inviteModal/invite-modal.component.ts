@@ -110,18 +110,14 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   saveInvite() {
-    if (this.createInviteForm.valid) {
-      if (this.createInviteForm.dirty) {
-        if (
-          this.createInviteForm.controls['id'].value !== '' &&
-          this.createInviteForm.controls['id'].value !== null
-        ) {
-          this.updateInvite();
-        } else {
-          this.createInvite();
-        }
+    if (this.createInviteForm.valid && this.createInviteForm.dirty) {
+      if (
+        this.createInviteForm.controls['id'].value !== '' &&
+        this.createInviteForm.controls['id'].value !== null
+      ) {
+        this.updateInvite();
       } else {
-        $('#inviteModal').modal('hide');
+        this.createInvite();
       }
     } else {
       this.displayMessage = this.genericValidator.processMessages(

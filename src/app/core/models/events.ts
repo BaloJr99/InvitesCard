@@ -23,7 +23,6 @@ export type IEvent = Omit<IFullEvent, 'allowCreateInvites'>;
 
 export interface IEventAction {
   event: IFullEvent;
-  users: IUserDropdownData[];
   isNew: boolean;
 }
 

@@ -88,25 +88,21 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
   }
 
   saveInformation(): void {
-    if (this.confirmationForm.valid) {
-      if (this.confirmationForm.dirty) {
-        const assist =
-          this.confirmationForm.controls['confirmation'].value === 'true';
-        const entriesConfirmed = parseInt(
-          this.confirmationForm.controls['entriesConfirmed'].value
-        );
-        this.confirmationForm.get('confirmation')?.setValue(assist);
-        this.confirmationForm
-          .get('entriesConfirmed')
-          ?.setValue(entriesConfirmed);
-        this.confirmationForm.addControl(
-          'dateOfConfirmation',
-          new FormControl(new Date().toISOString())
-        );
-        this.addnewInvite();
-      } else {
-        this.onSaveComplete();
-      }
+    if (this.confirmationForm.valid && this.confirmationForm.dirty) {
+      const assist =
+        this.confirmationForm.controls['confirmation'].value === 'true';
+      const entriesConfirmed = parseInt(
+        this.confirmationForm.controls['entriesConfirmed'].value
+      );
+      this.confirmationForm.get('confirmation')?.setValue(assist);
+      this.confirmationForm
+        .get('entriesConfirmed')
+        ?.setValue(entriesConfirmed);
+      this.confirmationForm.addControl(
+        'dateOfConfirmation',
+        new FormControl(new Date().toISOString())
+      );
+      this.addnewInvite();
     } else {
       this.displayMessage = this.genericValidator.processMessages(
         this.confirmationForm,
@@ -181,10 +177,5 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
         this.confirmationForm
       );
     });
-  }
-
-  onSaveComplete(): void {
-    // Reset the form to clear the flags
-    this.confirmationForm.reset();
   }
 }

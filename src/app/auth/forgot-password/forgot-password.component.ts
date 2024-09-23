@@ -67,20 +67,18 @@ export class ForgotPasswordComponent implements AfterViewInit {
   }
 
   sendResetPassword(): void {
-    if (this.forgotPasswordForm.valid) {
-      if (this.forgotPasswordForm.dirty) {
-        this.loaderService.setLoading(true, $localize`Enviando correo`);
-        this.authService
-          .sendResetPassword(this.forgotPasswordForm.value)
-          .subscribe({
-            next: () => {
-              this.emailSent = true;
-            },
-          })
-          .add(() => {
-            this.loaderService.setLoading(false);
-          });
-      }
+    if (this.forgotPasswordForm.valid && this.forgotPasswordForm.dirty) {
+      this.loaderService.setLoading(true, $localize`Enviando correo`);
+      this.authService
+        .sendResetPassword(this.forgotPasswordForm.value)
+        .subscribe({
+          next: () => {
+            this.emailSent = true;
+          },
+        })
+        .add(() => {
+          this.loaderService.setLoading(false);
+        });
     } else {
       this.displayMessage = this.genericValidator.processMessages(
         this.forgotPasswordForm,

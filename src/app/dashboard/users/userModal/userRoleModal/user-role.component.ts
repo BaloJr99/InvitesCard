@@ -43,8 +43,6 @@ export class UserRoleComponent implements AfterViewInit, OnChanges {
     validators: roleNameDuplicated,
   });
 
-  errorMessage = '';
-
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;

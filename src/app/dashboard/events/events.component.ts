@@ -77,8 +77,9 @@ export class EventsComponent implements OnInit {
   }
 
   editEvent(eventId: string): void {
-    forkJoin([
-      this.eventsService.getEventById(eventId).pipe(
+    this.eventsService
+      .getEventById(eventId)
+      .pipe(
         map((event) => {
           return {
             ...event,
@@ -89,17 +90,15 @@ export class EventsComponent implements OnInit {
             userId: event.userId,
           };
         })
-      ),
-      this.usersService.getUsersDropdownData(),
-    ]).subscribe({
-      next: ([event, users]) => {
-        this.eventAction = {
-          event,
-          users,
-          isNew: false,
-        };
-      },
-    });
+      )
+      .subscribe({
+        next: (event) => {
+          this.eventAction = {
+            event,
+            isNew: false,
+          };
+        },
+      });
   }
 
   convertDate(date: string): string {
