@@ -1,3 +1,7 @@
+.modal-body {
+  text-align: left;
+}
+
 .btn-primary {
   background-color: var(--secondary-blue);
   color: var(--grey);

@@ -5,6 +5,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   SimpleChanges,
   ViewChildren,
@@ -18,20 +19,20 @@ import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { IRole, IRoleAction } from 'src/app/core/models/roles';
 import { roleNameDuplicated } from 'src/app/shared/utils/validators/nameDuplicated';
+import { RoleActionEvent } from 'src/app/core/models/enum';
 
 @Component({
   selector: 'app-user-role',
   templateUrl: './user-role.component.html',
   styleUrls: ['./user-role.component.css'],
 })
-export class UserRoleComponent implements AfterViewInit, OnChanges {
+export class UserRoleComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
   @Input() role: IRole | undefined = undefined;
-
   @Output() updateRoles: EventEmitter<IRoleAction> = new EventEmitter();
-  @Output() isCreatingNewRole: EventEmitter<boolean> = new EventEmitter();
+  currentRoleAction = RoleActionEvent.None;
 
   createRoleForm = this.fb.group({
     id: '',
@@ -65,6 +66,24 @@ export class UserRoleComponent implements AfterViewInit, OnChanges {
     this.genericValidator = new GenericValidator(this.validationMessages);
   }
 
+  ngOnInit(): void {
+    $('#rolesModal').on('show.bs.modal', () => {
+      this.currentRoleAction = RoleActionEvent.None;
+    });
+
+    $('#rolesModal').on('hidden.bs.modal', () => {
+      this.createRoleForm.reset();
+      this.createRoleForm.patchValue({ isActive: true, nameIsValid: true });
+      this.displayMessage = {};
+      if (this.currentRoleAction === RoleActionEvent.None) {
+        this.updateRoles.emit({
+          role: undefined,
+          action: this.currentRoleAction,
+        });
+      }
+    });
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['role'] && changes['role'].currentValue) {
       if (this.role) {
@@ -94,10 +113,6 @@ export class UserRoleComponent implements AfterViewInit, OnChanges {
     });
   }
 
-  toggleIsCreatingNewRole(): void {
-    this.isCreatingNewRole.emit(false);
-  }
-
   saveRole(): void {
     if (this.createRoleForm.valid && this.createRoleForm.dirty) {
       if (this.createRoleForm.controls['id'].value !== '') {
@@ -119,13 +134,15 @@ export class UserRoleComponent implements AfterViewInit, OnChanges {
       .createRole(this.createRoleForm.value as IRole)
       .subscribe({
         next: (response: IMessageResponse) => {
+          this.currentRoleAction = RoleActionEvent.Create;
           this.updateRoles.emit({
             role: {
               ...(this.createRoleForm.value as IRole),
             },
-            isNew: true,
+            action: this.currentRoleAction,
           });
           this.toastr.success(response.message);
+          $('#rolesModal').modal('hide');
         },
       })
       .add(() => {
@@ -142,13 +159,15 @@ export class UserRoleComponent implements AfterViewInit, OnChanges {
       )
       .subscribe({
         next: (response: IMessageResponse) => {
+          this.currentRoleAction = RoleActionEvent.Update;
           this.updateRoles.emit({
             role: {
               ...(this.createRoleForm.value as IRole),
             },
-            isNew: false,
+            action: this.currentRoleAction,
           });
           this.toastr.success(response.message);
+          $('#rolesModal').modal('hide');
         },
       })
       .add(() => {

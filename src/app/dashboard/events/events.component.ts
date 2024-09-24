@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { forkJoin, map } from 'rxjs';
+import { map } from 'rxjs';
 import { Roles } from 'src/app/core/models/enum';
 import { IDashboardEvent, IEventAction } from 'src/app/core/models/events';
 import { EventsService } from 'src/app/core/services/events.service';

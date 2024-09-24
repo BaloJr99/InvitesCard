@@ -133,7 +133,6 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
       .createInvite(this.formatInvite())
       .subscribe({
         next: (response: IMessageResponse) => {
-          $('#inviteModal').modal('hide');
           this.updateInvites.emit({
             ...this.inviteAction,
             invite: {
@@ -143,6 +142,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
             isNew: true,
           });
           this.toastr.success(response.message);
+          $('#inviteModal').modal('hide');
         },
       })
       .add(() => {
@@ -159,13 +159,13 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
       )
       .subscribe({
         next: (response: IMessageResponse) => {
-          $('#inviteModal').modal('hide');
           this.updateInvites.emit({
             ...this.inviteAction,
             invite: this.formatInvite(),
             isNew: false,
           });
           this.toastr.success(response.message);
+          $('#inviteModal').modal('hide');
         },
       })
       .add(() => {

@@ -7,7 +7,8 @@
       </ol>
     </nav>
     <div class="buttons">
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#usersModal" i18n>Nuevo usuario</button>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rolesModal" i18n>Nuevo rol</button>
+      <button class="btn btn-primary ms-md-1" data-bs-toggle="modal" data-bs-target="#usersModal" i18n>Nuevo usuario</button>
     </div>
   </div>
 </section>
@@ -20,4 +21,14 @@
     </div>
   </div>
 </section>
-<app-user-modal [userAction]="userAction" [userRoles]="roles" (updateUsers)="updateUsers($event)"></app-user-modal>
+
+<app-user-modal 
+  [userAction]="userAction" 
+  (updateUsers)="updateUsers($event)"
+  (selectRole)="setSelectedRole($event)">
+</app-user-modal>
+
+<app-user-role 
+  [role]="roleSelected"
+  (updateRoles)="updateSavedInformation($event)">
+</app-user-role>

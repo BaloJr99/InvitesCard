@@ -10,8 +10,14 @@ import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { ADTSettings } from 'angular-datatables/src/models/settings';
 import { Subject } from 'rxjs';
-import { IRole } from 'src/app/core/models/roles';
-import { IUserAction, IUserEventsInfo } from 'src/app/core/models/users';
+import { RoleActionEvent } from 'src/app/core/models/enum';
+import { IRole, IRoleAction } from 'src/app/core/models/roles';
+import {
+  ISavedUserRole,
+  IUpsertUser,
+  IUserAction,
+  IUserEventsInfo,
+} from 'src/app/core/models/users';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { UsersService } from 'src/app/core/services/users.service';
 
@@ -64,7 +70,8 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   dtTrigger: Subject<ADTSettings> = new Subject<ADTSettings>();
 
   userAction!: IUserAction;
-  roles: IRole[] = [];
+  roleSelected: IRole | undefined = undefined;
+  savedUser: IUpsertUser | undefined = undefined;
 
   constructor(
     private usersService: UsersService,
@@ -113,7 +120,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       id: userInfo.id,
       username: userInfo.username,
       email: userInfo.email,
-      isActive: userAction.isNew ? true : userInfo.isActive
+      isActive: userAction.isNew ? true : userInfo.isActive,
     } as IUserEventsInfo;
 
     if (userAction.isNew) {
@@ -125,11 +132,13 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       this.rerender();
     } else {
       this.dtOptions.data = this.dtOptions.data?.map((originalUser) =>
-        originalUser.id === userInfo.id ? {
-          ...userEventsInfo,
-          numEntries: originalUser.numEntries,
-          numEvents: originalUser.numEvents,
-        } : originalUser
+        originalUser.id === userInfo.id
+          ? {
+              ...userEventsInfo,
+              numEntries: originalUser.numEntries,
+              numEvents: originalUser.numEvents,
+            }
+          : originalUser
       );
       this.rerender();
     }
@@ -143,7 +152,6 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       .getUserById(userId)
       .subscribe({
         next: (user) => {
-          this.roles = user.roles;
           this.userAction = {
             user: {
               ...user,
@@ -164,5 +172,31 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.dtTrigger.next(this.dtOptions);
+  }
+
+  setSelectedRole(savedUser: ISavedUserRole): void {
+    this.roleSelected = savedUser.role;
+    this.savedUser = savedUser.savedUser;
+  }
+
+  updateSavedInformation(roleAction: IRoleAction): void {
+    // This means that the we are updating an active user
+    if (
+      (roleAction.action === RoleActionEvent.Update ||
+        roleAction.action === RoleActionEvent.None) &&
+      this.savedUser
+    ) {
+      this.userAction = {
+        isNew: false,
+        user: {
+          id: this.savedUser.id,
+          email: this.savedUser.email,
+          username: this.savedUser.username,
+          roles: this.savedUser.roles,
+          isActive: this.savedUser.isActive,
+        },
+      }
+      $('#usersModal').modal('show');
+    }
   }
 }

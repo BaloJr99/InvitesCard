@@ -1,3 +1,5 @@
+import { RoleActionEvent } from "./enum";
+
 export interface IRole {
   id: string;
   name: string;
@@ -5,6 +7,6 @@ export interface IRole {
 }
 
 export interface IRoleAction {
-  role: IRole;
-  isNew: boolean;
+  role: IRole | undefined;
+  action: RoleActionEvent;
 }

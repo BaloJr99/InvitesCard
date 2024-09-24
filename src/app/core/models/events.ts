@@ -1,5 +1,4 @@
 import { IFullInvite } from './invites';
-import { IUserDropdownData } from './users';
 
 export interface IFullEvent {
   id: string;

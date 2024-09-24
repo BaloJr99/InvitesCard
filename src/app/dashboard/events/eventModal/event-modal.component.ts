@@ -144,7 +144,6 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
       .createEvent(this.formatEvent())
       .subscribe({
         next: (response: IMessageResponse) => {
-          $('#eventModal').modal('hide');
           this.updateEvents.emit({
             event: {
               ...this.formatEvent(),
@@ -153,6 +152,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
             isNew: true,
           });
           this.toastr.success(response.message);
+          $('#eventModal').modal('hide');
         },
       })
       .add(() => {
@@ -169,12 +169,12 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
       )
       .subscribe({
         next: (response: IMessageResponse) => {
-          $('#eventModal').modal('hide');
           this.updateEvents.emit({
             event: this.formatEvent(),
             isNew: false,
           });
           this.toastr.success(response.message);
+          $('#eventModal').modal('hide');
         },
       })
       .add(() => {

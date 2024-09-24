@@ -47,3 +47,8 @@ export interface IUserAction {
   user: IUpsertUser;
   isNew: boolean;
 }
+
+export interface ISavedUserRole {
+  role: IRole;
+  savedUser: IUpsertUser;
+}

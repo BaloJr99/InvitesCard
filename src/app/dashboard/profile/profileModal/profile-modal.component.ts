@@ -108,7 +108,6 @@ export class ProfileModalComponent implements OnInit {
                 });
 
                 this.updateProfilePhoto.emit(response.id);
-
                 $('#profileModal').modal('hide');
               },
             })

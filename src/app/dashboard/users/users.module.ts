@@ -8,7 +8,7 @@ import { UsersService } from 'src/app/core/services/users.service';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { UserModalComponent } from './userModal/user-modal.component';
 import { UsersComponent } from './users.component';
-import { UserRoleComponent } from './userModal/userRoleModal/user-role.component';
+import { UserRoleComponent } from './userRoleModal/user-role.component';
 
 const routes: Routes = [
   {
