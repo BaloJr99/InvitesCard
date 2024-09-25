@@ -8,42 +8,6 @@
   border: none;
 }
 
-.filteringBox {
-  position: relative;
-  z-index: 1;
-}
-
-.filteringBox ul {
-  border: var(--bs-border-width) solid var(--bs-border-color);
-  max-height: 100px;
-  padding: 0px;
-  border-radius: 0px 0px 10px 10px;
-  border-top: 0px;
-  position: absolute;
-  width: 100%;
-  bottom: auto;
-  background-color: white;
-}
-
-.filteringBox .show {
-  display: block;
-  overflow-y: auto;
-}
-
-.filteringBox .hide {
-  display: none;
-}
-
-.filteringBox ul li {
-  list-style: none;
-  padding: 5px 10px;
-}
-
-.filteringBox ul li:hover,
-.filteringBox ul li.selected {
-  background-color: #dcdcdc;
-}
-
 .roles span {
   display: inline-block;
   margin-right: 10px;

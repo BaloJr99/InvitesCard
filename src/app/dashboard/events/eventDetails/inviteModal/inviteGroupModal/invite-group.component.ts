@@ -9,11 +9,7 @@ import {
   SimpleChanges,
   ViewChildren,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormControlName,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormControlName, Validators } from '@angular/forms';
 import { Observable, fromEvent, merge } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import {
@@ -24,6 +20,7 @@ import { GenericValidator } from 'src/app/shared/utils/validators/generic-valida
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
+import { controlIsDuplicated } from 'src/app/shared/utils/validators/controlIsDuplicated';
 
 @Component({
   selector: 'app-invite-group',
@@ -41,11 +38,15 @@ export class InviteGroupComponent implements AfterViewInit, OnChanges {
     new EventEmitter();
   @Output() isCreatingNewFormGroup: EventEmitter<boolean> = new EventEmitter();
 
-  createInviteGroupForm = this.fb.group({
-    id: '',
-    inviteGroup: ['', Validators.required],
-    eventId: '',
-  });;
+  createInviteGroupForm = this.fb.group(
+    {
+      id: '',
+      inviteGroup: ['', Validators.required],
+      eventId: '',
+      controlIsValid: true,
+    },
+    { validators: controlIsDuplicated }
+  );
 
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -60,6 +61,9 @@ export class InviteGroupComponent implements AfterViewInit, OnChanges {
     this.validationMessages = {
       inviteGroup: {
         required: $localize`El nombre del grupo es requerido`,
+      },
+      controlValueDuplicated: {
+        duplicated: $localize`Ya existe un grupo con este nombre`,
       },
     };
 
@@ -164,6 +168,30 @@ export class InviteGroupComponent implements AfterViewInit, OnChanges {
       })
       .add(() => {
         this.loaderService.setLoading(false);
+      });
+  }
+
+  checkInviteGroup(event: Event) {
+    const inviteGroup = (event.target as HTMLInputElement).value;
+    if (inviteGroup === this.inviteGroup?.inviteGroup) {
+      this.createInviteGroupForm.patchValue({ controlIsValid: true });
+      return;
+    }
+
+    if (inviteGroup === '') {
+      this.createInviteGroupForm.patchValue({ controlIsValid: false });
+      return;
+    }
+
+    this.inviteGroupsService
+      .checkInviteGroup(this.eventId, inviteGroup)
+      .subscribe({
+        next: (response: boolean) => {
+          this.createInviteGroupForm.patchValue({ controlIsValid: !response });
+          this.displayMessage = this.genericValidator.processMessages(
+            this.createInviteGroupForm
+          );
+        },
       });
   }
 }

@@ -32,4 +32,10 @@ export class InviteGroupsService {
       inviteGroup
     );
   }
+
+  checkInviteGroup(eventId: string, inviteGroup: string): Observable<boolean> {
+    return this.http.get<boolean>(
+      `${this.invitesBaseUrl}/check-invite-group/${eventId}/${inviteGroup}`
+    );
+  }
 }
