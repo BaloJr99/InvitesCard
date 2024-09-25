@@ -1,10 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { IErrorInvite, IBulkInvite } from 'src/app/core/models/invites';
 import { IInviteGroups } from 'src/app/core/models/inviteGroups';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
-import { IMessageResponse } from 'src/app/core/models/common';
+import { IBulkMessageResponse, IBulkResults } from 'src/app/core/models/common';
 
 @Component({
   selector: 'app-invites-import-dialog',
@@ -14,6 +14,7 @@ import { IMessageResponse } from 'src/app/core/models/common';
 export class InvitesImportModalComponent implements OnInit {
   @Input() eventId: string = '';
   @Input() inviteGroups: IInviteGroups[] = [];
+  @Output() updateBulkResults = new EventEmitter<IBulkResults>();
   invites: IBulkInvite[] = [];
   errorInvites: IErrorInvite[] = [];
   processingFile = false;
@@ -52,6 +53,7 @@ export class InvitesImportModalComponent implements OnInit {
     } else {
       this.errorInvites = [];
       this.invites = [];
+      this.processingFile = false;
     }
   };
 
@@ -78,8 +80,14 @@ export class InvitesImportModalComponent implements OnInit {
     this.invitesService
       .bulkInvites(this.invites)
       .subscribe({
-        next: (messageResponse: IMessageResponse) => {
+        next: (messageResponse: IBulkMessageResponse) => {
           this.toastr.success(messageResponse.message);
+
+          this.updateBulkResults.emit({
+            inviteGroupsGenerated: messageResponse.inviteGroupsGenerated,
+            invitesGenerated: messageResponse.invitesGenerated
+          })
+
           $('#invitesImportModal').modal('hide');
         },
       })

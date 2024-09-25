@@ -9,7 +9,7 @@ import {
   IInviteGroups,
   IInviteGroupsAction,
 } from 'src/app/core/models/inviteGroups';
-import { IMessage, INotification } from 'src/app/core/models/common';
+import { IBulkResults, IMessage, INotification } from 'src/app/core/models/common';
 import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
 import {
   IConfirmation,
@@ -266,6 +266,27 @@ export class InviteDetailsComponent implements OnInit {
         a.inviteGroup.toLowerCase().localeCompare(b.inviteGroup.toLowerCase())
       );
     }
+  }
+
+  updateBulkResults(bulkResults: IBulkResults): void {
+    bulkResults.inviteGroupsGenerated.forEach((inviteGroup) => {
+      this.inviteGroups.push(inviteGroup);
+      this.inviteGroups.sort((a, b) =>
+        a.inviteGroup.toLowerCase().localeCompare(b.inviteGroup.toLowerCase())
+      );
+    });
+
+    bulkResults.invitesGenerated.forEach((invite) => {
+      this.invites = this.invites.concat({
+        ...invite,
+        entriesConfirmed: null,
+        message: null,
+        confirmation: null,
+        dateOfConfirmation: null,
+        isMessageRead: false,
+      });
+      this.buildInvitesDashboard();
+    });
   }
 
   clearValues(): void {

@@ -1,4 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { IUpsertInvite } from './invites';
+import { IInviteGroups } from './inviteGroups';
 
 export interface IError {
   hasError: boolean;
@@ -9,6 +11,13 @@ export interface IMessageResponse {
   id: string;
   message: string;
 }
+
+export interface IBulkResults {
+  inviteGroupsGenerated: IInviteGroups[],
+  invitesGenerated: IUpsertInvite[],
+};
+
+export type IBulkMessageResponse = Pick<IMessageResponse, 'message'> & IBulkResults;
 
 export interface INotification {
   id: string;

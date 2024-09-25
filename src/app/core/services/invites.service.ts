@@ -9,7 +9,7 @@ import {
   IUpsertInvite,
   IUserInvite,
 } from '../models/invites';
-import { IMessageResponse } from '../models/common';
+import { IBulkMessageResponse, IMessageResponse } from '../models/common';
 
 @Injectable()
 export class InvitesService {
@@ -40,8 +40,8 @@ export class InvitesService {
     return this.http.post<IMessageResponse>(`${this.invitesBaseUrl}`, invite);
   }
 
-  bulkInvites(invites: IBulkInvite[]): Observable<IMessageResponse> {
-    return this.http.post<IMessageResponse>(
+  bulkInvites(invites: IBulkInvite[]): Observable<IBulkMessageResponse> {
+    return this.http.post<IBulkMessageResponse>(
       `${this.invitesBaseUrl}/bulkInvites`,
       invites
     );
