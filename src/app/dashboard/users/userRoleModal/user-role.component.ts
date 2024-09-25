@@ -18,7 +18,7 @@ import { RolesService } from 'src/app/core/services/roles.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { IRole, IRoleAction } from 'src/app/core/models/roles';
-import { roleNameDuplicated } from 'src/app/shared/utils/validators/nameDuplicated';
+import { controlIsDuplicated } from 'src/app/shared/utils/validators/controlIsDuplicated';
 import { RoleActionEvent } from 'src/app/core/models/enum';
 
 @Component({
@@ -38,10 +38,10 @@ export class UserRoleComponent implements OnInit, AfterViewInit, OnChanges {
     id: '',
     name: ['', Validators.required],
     isActive: true,
-    nameIsValid: true
+    controlIsValid: true
   },
   {
-    validators: roleNameDuplicated,
+    validators: controlIsDuplicated,
   });
 
   displayMessage: { [key: string]: string } = {};
@@ -58,7 +58,7 @@ export class UserRoleComponent implements OnInit, AfterViewInit, OnChanges {
       name: {
         required: $localize`El nombre del rol es requerido`,
       },
-      nameDuplicated: {
+      controlValueDuplicated: {
         duplicated: $localize`Ya existe un rol con este nombre`,
       },
     };
@@ -73,7 +73,7 @@ export class UserRoleComponent implements OnInit, AfterViewInit, OnChanges {
 
     $('#rolesModal').on('hidden.bs.modal', () => {
       this.createRoleForm.reset();
-      this.createRoleForm.patchValue({ isActive: true, nameIsValid: true });
+      this.createRoleForm.patchValue({ isActive: true, controlIsValid: true });
       this.displayMessage = {};
       if (this.currentRoleAction === RoleActionEvent.None) {
         this.updateRoles.emit({
@@ -91,7 +91,7 @@ export class UserRoleComponent implements OnInit, AfterViewInit, OnChanges {
           id: this.role.id,
           name: this.role.name,
           isActive: this.role.isActive,
-          nameIsValid: true,
+          controlIsValid: true,
         });
       }
     }
@@ -178,7 +178,7 @@ export class UserRoleComponent implements OnInit, AfterViewInit, OnChanges {
   checkRole(event: Event) {
     const roleName = (event.target as HTMLInputElement).value;
     if (this.role && roleName === this.role.name) {
-      this.createRoleForm.patchValue({ nameIsValid: true });
+      this.createRoleForm.patchValue({ controlIsValid: true });
       if (this.createRoleForm.valid) {
         this.createRoleForm.markAsPristine();
       }
@@ -186,13 +186,13 @@ export class UserRoleComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     if (roleName === '') {
-      this.createRoleForm.patchValue({ nameIsValid: false });
+      this.createRoleForm.patchValue({ controlIsValid: false });
       return;
     }
 
     this.rolesService.checkRoleName(roleName).subscribe({
       next: (response: boolean) => {
-        this.createRoleForm.patchValue({ nameIsValid: !response });
+        this.createRoleForm.patchValue({ controlIsValid: !response });
         this.displayMessage = this.genericValidator.processMessages(
           this.createRoleForm
         );

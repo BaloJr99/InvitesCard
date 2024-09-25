@@ -11,13 +11,13 @@
           <div class="mb-3">
             <label for="name" class="form-label" i18n>Nuevo rol</label>
             <div class="roleName-validation">
-              <input id="name" type="text" min="1"  class="form-control" formControlName="name" [ngClass]="{'is-invalid': displayMessage['name'] || displayMessage['nameDuplicated']}" (keyup)="checkRole($event)">
-              <i class="fa-solid" aria-hidden="true" [ngClass]="createRoleForm.get('nameIsValid')?.value ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
+              <input id="name" type="text" min="1"  class="form-control" formControlName="name" [ngClass]="{'is-invalid': displayMessage['name'] || displayMessage['controlValueDuplicated']}" (keyup)="checkRole($event)">
+              <i class="fa-solid" aria-hidden="true" [ngClass]="createRoleForm.get('controlIsValid')?.value ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
               <span class="invalid-feedback" role="alert">
                 {{ displayMessage['name'] }}
               </span>
               <span class="invalid-feedback d-block" *ngIf="!displayMessage['name']">
-                {{ displayMessage['nameDuplicated'] }}
+                {{ displayMessage['controlValueDuplicated'] }}
               </span>
             </div>
           </div>

@@ -30,7 +30,7 @@ import { UsersService } from 'src/app/core/services/users.service';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
-import { usernameDuplicated } from 'src/app/shared/utils/validators/usernameDuplicated';
+import { controlIsDuplicated } from 'src/app/shared/utils/validators/controlIsDuplicated';
 import { RoleActionEvent } from 'src/app/core/models/enum';
 
 @Component({
@@ -75,7 +75,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
       roles: {
         required: $localize`Seleccionar un rol`,
       },
-      usernameDuplicated: {
+      controlValueDuplicated: {
         duplicated: $localize`Ya existe un usuario con este nombre de usuario`,
       },
     };
@@ -91,10 +91,10 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
         email: ['', Validators.required],
         roles: [[], [Validators.required, Validators.minLength(1)]],
         isActive: [true],
-        usernameIsValid: [false],
+        controlIsValid: [false],
       },
       {
-        validators: usernameDuplicated,
+        validators: controlIsDuplicated,
       }
     );
 
@@ -132,7 +132,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
       const user: IUpsertUser = changes['userAction'].currentValue.user;
       this.createUserForm.patchValue({
         ...user,
-        usernameIsValid: true,
+        controlIsValid: true,
       });
 
       this.editedUser = user;
@@ -205,7 +205,7 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
       email: '',
       roles: [],
       isActive: true,
-      usernameIsValid: false,
+      controlIsValid: false,
     });
 
     this.userRoles = [];
@@ -286,13 +286,13 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
   checkUsername(event: Event) {
     const username = (event.target as HTMLInputElement).value;
     if (username === '') {
-      this.createUserForm.patchValue({ usernameIsValid: false });
+      this.createUserForm.patchValue({ controlIsValid: false });
       return;
     }
 
     this.usersService.checkUsername(username).subscribe({
       next: (response: boolean) => {
-        this.createUserForm.patchValue({ usernameIsValid: !response });
+        this.createUserForm.patchValue({ controlIsValid: !response });
         this.displayMessage = this.genericValidator.processMessages(
           this.createUserForm
         );

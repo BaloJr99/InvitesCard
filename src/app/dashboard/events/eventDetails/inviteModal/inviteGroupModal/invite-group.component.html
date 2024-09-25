@@ -1,5 +1,4 @@
 <form [formGroup]="createInviteGroupForm">
-  
   <div class="mb-3">
     <label for="inviteGroup" class="form-label" i18n>Nuevo grupo</label>
     <input id="inviteGroup" type="text" min="1"  class="form-control" formControlName="inviteGroup" [ngClass]="{'is-invalid': displayMessage['inviteGroup']}">

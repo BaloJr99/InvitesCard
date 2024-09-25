@@ -59,13 +59,13 @@
               <div class="mb-3 mb-md-0 col-12 col-md-4">
                 <label for="username" class="form-label" i18n>Usuario</label>
                 <div class="username-validation">
-                  <input id="username" type="text" autocomplete="username" class="form-control" formControlName="username" [ngClass]="{'is-invalid': displayMessage['username'] || displayMessage['usernameDuplicated']}" (keyup)="checkUsername($event)">
-                  <i class="fa-solid" aria-hidden="true" [ngClass]="createProfileForm.get('usernameIsValid')?.value ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
+                  <input id="username" type="text" autocomplete="username" class="form-control" formControlName="username" [ngClass]="{'is-invalid': displayMessage['username'] || displayMessage['controlValueDuplicated']}" (keyup)="checkUsername($event)">
+                  <i class="fa-solid" aria-hidden="true" [ngClass]="createProfileForm.get('controlIsValid')?.value ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
                   <span class="invalid-feedback d-block">
                     {{ displayMessage['username'] }}
                   </span>
                   <span class="invalid-feedback d-block" *ngIf="!displayMessage['username']">
-                    {{ displayMessage['usernameDuplicated'] }}
+                    {{ displayMessage['controlValueDuplicated'] }}
                   </span>
                 </div>
               </div>

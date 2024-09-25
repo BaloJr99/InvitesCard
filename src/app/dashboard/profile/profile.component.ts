@@ -21,7 +21,7 @@ import { LoaderService } from 'src/app/core/services/loader.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
-import { usernameDuplicated } from 'src/app/shared/utils/validators/usernameDuplicated';
+import { controlIsDuplicated } from 'src/app/shared/utils/validators/controlIsDuplicated';
 
 @Component({
   selector: 'app-profile',
@@ -71,7 +71,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       gender: {
         required: $localize`El género es requerido`,
       },
-      usernameDuplicated: {
+      controlValueDuplicated: {
         duplicated: $localize`Ya existe un usuario con este nombre de usuario`,
       },
     };
@@ -91,10 +91,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         email: ['', Validators.required],
         gender: ['', Validators.required],
         profilePhoto: [''],
-        usernameIsValid: [true],
+        controlIsValid: [true],
       },
       {
-        validators: usernameDuplicated,
+        validators: controlIsDuplicated,
       }
     );
 
@@ -145,7 +145,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       email: '',
       gender: '',
       profilePhoto: '',
-      usernameIsValid: true,
+      controlIsValid: true,
     });
 
     this.displayMessage = {};
@@ -177,18 +177,18 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   checkUsername(event: Event) {
     const username = (event.target as HTMLInputElement).value;
     if (username === this.user.username) {
-      this.createProfileForm.patchValue({ usernameIsValid: true });
+      this.createProfileForm.patchValue({ controlIsValid: true });
       return;
     }
 
     if (username === '') {
-      this.createProfileForm.patchValue({ usernameIsValid: false });
+      this.createProfileForm.patchValue({ controlIsValid: false });
       return;
     }
 
     this.usersService.checkUsername(username).subscribe({
       next: (response: boolean) => {
-        this.createProfileForm.patchValue({ usernameIsValid: !response });
+        this.createProfileForm.patchValue({ controlIsValid: !response });
         this.displayMessage = this.genericValidator.processMessages(
           this.createProfileForm
         );
