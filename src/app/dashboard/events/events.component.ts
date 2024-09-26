@@ -40,7 +40,6 @@ export class EventsComponent implements OnInit {
             this.events = events.map((event) => {
               return {
                 ...event,
-                dateOfEvent: this.convertDate(event.dateOfEvent),
               };
             });
           },
@@ -83,10 +82,6 @@ export class EventsComponent implements OnInit {
         map((event) => {
           return {
             ...event,
-            dateOfEvent: this.convertDate(event.dateOfEvent),
-            maxDateOfConfirmation: this.convertDate(
-              event.maxDateOfConfirmation
-            ),
             userId: event.userId,
           };
         })
@@ -99,11 +94,6 @@ export class EventsComponent implements OnInit {
           };
         },
       });
-  }
-
-  convertDate(date: string): string {
-    const newDate = new Date(date);
-    return newDate.toISOString().slice(0, 16);
   }
 
   getAccessibilityMessage(eventName: string) {

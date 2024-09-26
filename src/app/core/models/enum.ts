@@ -13,3 +13,9 @@ export const enum RoleActionEvent {
   Update = 'update',
   None = 'none',
 }
+
+export const enum EventType {
+  Xv = 'X',
+  Boda = 'W',
+  SaveTheDate = 'S',
+}

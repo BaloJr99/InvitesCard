@@ -75,23 +75,27 @@ export class InvitesComponent implements OnInit {
         this.router.navigate(['/error/page-not-found']);
       }
 
+      this.inviteResolved.invite.dateOfEvent = `${this.inviteResolved.invite.dateOfEvent}T00:00:00`;
+      this.inviteResolved.invite.maxDateOfConfirmation = `${this.inviteResolved.invite.maxDateOfConfirmation}T00:00:00`;
+
       this.deadlineMet =
         new Date().getTime() >
         new Date(this.inviteResolved.invite.maxDateOfConfirmation).getTime();
 
-      this.dayOfTheWeek = new Date(
-        this.inviteResolved.invite.dateOfEvent
-      ).toLocaleString(this.localeValue, { weekday: 'long' });
-      this.shortDate = new Date(
-        this.inviteResolved.invite.dateOfEvent
-      ).toLocaleString(this.localeValue, { day: 'numeric', month: 'long' });
-      this.longDate = new Date(
-        this.inviteResolved.invite.dateOfEvent
-      ).toLocaleString(this.localeValue, {
+      this.dayOfTheWeek = new Intl.DateTimeFormat(this.localeValue, {
+        weekday: 'long',
+      }).format(new Date(this.inviteResolved.invite.dateOfEvent));
+
+      this.shortDate = new Intl.DateTimeFormat(this.localeValue, {
+        day: 'numeric',
+        month: 'long',
+      }).format(new Date(this.inviteResolved.invite.dateOfEvent));
+
+      this.longDate = new Intl.DateTimeFormat(this.localeValue, {
         day: 'numeric',
         month: 'long',
         year: 'numeric',
-      });
+      }).format(new Date(this.inviteResolved.invite.dateOfEvent));
 
       combineLatest([
         this.eventSettingsService.getEventSettings(

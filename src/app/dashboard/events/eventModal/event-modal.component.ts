@@ -119,6 +119,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
       const event: IFullEvent = changes['eventAction'].currentValue.event;
       this.createEventForm.patchValue({
         ...event,
+        dateOfEvent: event.dateOfEvent.split('T')[0],
       });
     }
   }
@@ -141,12 +142,12 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
   createEvent() {
     this.loaderService.setLoading(true, $localize`Creando evento`);
     this.eventsService
-      .createEvent(this.formatEvent())
+      .createEvent(this.createEventForm.value)
       .subscribe({
         next: (response: IMessageResponse) => {
           this.updateEvents.emit({
             event: {
-              ...this.formatEvent(),
+              ...this.createEventForm.value,
               id: response.id,
             },
             isNew: true,
@@ -164,13 +165,13 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
     this.loaderService.setLoading(true, $localize`Actualizando evento`);
     this.eventsService
       .updateEvent(
-        this.formatEvent(),
+        this.createEventForm.value,
         this.createEventForm.controls['id'].value
       )
       .subscribe({
         next: (response: IMessageResponse) => {
           this.updateEvents.emit({
-            event: this.formatEvent(),
+            event: this.createEventForm.value,
             isNew: false,
           });
           this.toastr.success(response.message);
@@ -196,16 +197,6 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
     this.displayMessage = {};
 
     $('#eventId').val('');
-  }
-
-  formatEvent(): IFullEvent {
-    return {
-      ...this.createEventForm.value,
-      dateOfEvent: `${this.createEventForm.get('dateOfEvent')?.value}:00Z`,
-      maxDateOfConfirmation: `${
-        this.createEventForm.get('maxDateOfConfirmation')?.value
-      }:00Z`,
-    } as IFullEvent;
   }
 
   ngAfterViewInit(): void {

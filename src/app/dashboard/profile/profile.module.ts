@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { RouterModule, Routes } from '@angular/router';
 import { UsersService } from 'src/app/core/services/users.service';
-import { DateFormatPipe } from 'src/app/shared/pipes/date-format.pipe';
 import { ProfileComponent } from './profile.component';
 import { profileResolver } from './profile-resolver.service';
 import { ProfileModalComponent } from './profileModal/profile-modal.component';
@@ -23,7 +22,7 @@ const routes: Routes = [
 
 @NgModule({
   providers: [UsersService],
-  imports: [SharedModule, DateFormatPipe, RouterModule.forChild(routes)],
+  imports: [SharedModule, RouterModule.forChild(routes)],
   declarations: [
     ProfileComponent,
     ProfileModalComponent,

@@ -20,14 +20,14 @@
           </div>
           <div class="mb-3">
             <label for="dateOfEvent" class="form-label" i18n>Fecha del evento</label>
-            <input id="dateOfEvent" type="datetime-local" class="form-control" formControlName="dateOfEvent" [ngClass]="{'is-invalid': displayMessage['dateOfEvent']}">
+            <input id="dateOfEvent" type="date" class="form-control" formControlName="dateOfEvent" [ngClass]="{'is-invalid': displayMessage['dateOfEvent']}">
             <span class="invalid-feedback" role="alert">
               {{ displayMessage['dateOfEvent'] }}
             </span>
           </div>
           <div class="mb-3">
             <label for="maxDateOfConfirmation" class="form-label" i18n>Fecha límite de confirmación de invitaciones</label>
-            <input id="maxDateOfConfirmation" type="datetime-local" class="form-control" formControlName="maxDateOfConfirmation" [ngClass]="{'is-invalid': displayMessage['maxDateOfConfirmation']}">
+            <input id="maxDateOfConfirmation" type="date" class="form-control" formControlName="maxDateOfConfirmation" [ngClass]="{'is-invalid': displayMessage['maxDateOfConfirmation']}">
             <span class="invalid-feedback" role="alert">
               {{ displayMessage['maxDateOfConfirmation'] }}
             </span>
@@ -38,6 +38,7 @@
               <option value="" i18n>Seleccione...</option>
               <option value="X">Xv</option>
               <option value="W">Boda</option>
+              <option value="S">Save the date</option>
             </select>
             <span class="invalid-feedback" role="alert">
               {{ displayMessage['typeOfEvent'] }}
