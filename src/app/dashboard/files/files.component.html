@@ -32,33 +32,35 @@
     </form>
   </div>
 
-  <div class="row image-container g-0" *ngIf="images.length > 0">
-    <div class="col-12 col-sm-6 col-md-4 gx-4" *ngFor="let image of images; index as i">
-      <div class="card">
-        <div class="card-body">
-          <div class="image-controls">
-            <img src="{{ image.imageUrl }}" alt="Invite Photo">
-            <button class="btn btn-light" (click)="scaleImageUrl = image.imageUrl" i18n-title="Expand photo"><i aria-hidden="true" class="fa-solid fa-expand"></i></button>
-          </div>
-          <div class="controls">
-            <div class="form-group">
-              <label for="my-select-{{i}}" i18n>Uso de la imagen</label>
-              <select id="my-select-{{i}}" class="form-control" (change)="insertUpdatedImage($event)">
-                <option value="" i18n>Seleccione una opción</option>
-                <option value="P" [selected]="image.imageUsage === 'P'" i18n>Celular</option>
-                <option value="C" [selected]="image.imageUsage === 'C'" i18n>Computadora</option>
-              </select>
-              <button class="btn btn-danger" (click)="showDeleteDialog(image.id)"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+  <div class="row g-0">
+    <div class="col-12 gx-4">
+      <div class="image-container" *ngIf="images.length > 0">
+        <div class="card" *ngFor="let image of images; index as i">
+          <div class="card-body">
+            <div class="image-controls">
+              <img src="{{ image.imageUrl }}" alt="Invite Photo">
+              <button class="btn btn-light" (click)="scaleImageUrl = image.imageUrl" i18n-title="Expand photo"><i aria-hidden="true" class="fa-solid fa-expand"></i></button>
+            </div>
+            <div class="controls">
+              <div class="form-group">
+                <label for="my-select-{{i}}" i18n>Uso de la imagen</label>
+                <select id="my-select-{{i}}" class="form-control" (change)="insertUpdatedImage($event)">
+                  <option value="" i18n>Seleccione una opción</option>
+                  <option value="P" [selected]="image.imageUsage === 'P'" i18n>Celular</option>
+                  <option value="C" [selected]="image.imageUsage === 'C'" i18n>Computadora</option>
+                </select>
+                <button class="btn btn-danger" (click)="showDeleteDialog(image.id)"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="footer" *ngIf="images.length > 0">
-      <button id="cancel-changes" class="btn btn-primary" (click)="cancelChanges()" [disabled]="imageUpdateForm.controls.length === 0" i18n>Cancelar Cambios</button>
-      <button id="save-changes" class="btn btn-primary" (click)="saveChanges()" [disabled]="imageUpdateForm.controls.length === 0" i18n>Guardar Cambios</button>
-    </div>  
   </div>
+  <div class="footer" *ngIf="images.length > 0">
+    <button id="cancel-changes" class="btn btn-primary" (click)="cancelChanges()" [disabled]="imageUpdateForm.controls.length === 0" i18n>Cancelar Cambios</button>
+    <button id="save-changes" class="btn btn-primary" (click)="saveChanges()" [disabled]="imageUpdateForm.controls.length === 0" i18n>Guardar Cambios</button>
+  </div>  
 </section>
 <section class="files-empty" *ngIf="!eventSelected">
   <p i18n>Porfavor, seleccione un evento</p>

@@ -81,11 +81,14 @@
   }
 
 .image-container {
+  columns: 4 320px;
+  column-gap: 10px;
   padding-top: 10px;
 }
 
   .image-container .card {
     margin-bottom: 10px;
+    break-inside: avoid;
   }
 
     .image-container .card img {
