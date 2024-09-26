@@ -8,7 +8,7 @@ export class DateFormatPipe implements PipeTransform {
   constructor(@Inject(LOCALE_ID) private localeValue: string) {}
 
   transform(date: string): string {
-    const newDate = new Date(`${date}T00:00:00`);
+    const newDate = new Date(date);
     const formatter = new Intl.DateTimeFormat(this.localeValue, {
       day: 'numeric',
       month: 'long',

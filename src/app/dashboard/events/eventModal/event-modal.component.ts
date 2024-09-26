@@ -120,6 +120,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
       this.createEventForm.patchValue({
         ...event,
         dateOfEvent: event.dateOfEvent.split('T')[0],
+        maxDateOfConfirmation: event.maxDateOfConfirmation.split('T')[0],
       });
     }
   }
@@ -148,6 +149,8 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
           this.updateEvents.emit({
             event: {
               ...this.createEventForm.value,
+              dateOfEvent: `${this.createEventForm.value.dateOfEvent}T00:00:00.000`,
+              maxDateOfConfirmation: `${this.createEventForm.value.maxDateOfConfirmation}T00:00:00.000`,
               id: response.id,
             },
             isNew: true,
@@ -171,7 +174,11 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
       .subscribe({
         next: (response: IMessageResponse) => {
           this.updateEvents.emit({
-            event: this.createEventForm.value,
+            event: {
+              ...this.createEventForm.value,
+              dateOfEvent: `${this.createEventForm.value.dateOfEvent}T00:00:00.000`,
+              maxDateOfConfirmation: `${this.createEventForm.value.maxDateOfConfirmation}T00:00:00.000`,
+            },
             isNew: false,
           });
           this.toastr.success(response.message);

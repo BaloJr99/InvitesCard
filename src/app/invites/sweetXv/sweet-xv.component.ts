@@ -79,8 +79,14 @@ export class SweetXvComponent implements OnInit {
         next: (userInvite) => {
           this.userInvite = userInvite;
 
-          this.userInvite.dateOfEvent = `${this.userInvite.dateOfEvent}T00:00:00`;
-          this.userInvite.maxDateOfConfirmation = `${this.userInvite.maxDateOfConfirmation}T00:00:00`;
+          this.userInvite.dateOfEvent = this.userInvite.dateOfEvent.slice(
+            0,
+            this.userInvite.dateOfEvent.length - 1
+          );
+          this.userInvite.maxDateOfConfirmation = this.userInvite.maxDateOfConfirmation.slice(
+            0,
+            this.userInvite.maxDateOfConfirmation.length - 1
+          );
 
           this.deadlineMet =
             new Date().getTime() >

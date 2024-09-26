@@ -17,7 +17,6 @@ export class EventsComponent implements OnInit {
 
   constructor(
     private eventsService: EventsService,
-    private usersService: UsersService,
     private loaderService: LoaderService,
     private tokenService: TokenStorageService
   ) {}
@@ -40,6 +39,7 @@ export class EventsComponent implements OnInit {
             this.events = events.map((event) => {
               return {
                 ...event,
+                dateOfEvent: event.dateOfEvent.slice(0, event.dateOfEvent.length - 1),
               };
             });
           },
