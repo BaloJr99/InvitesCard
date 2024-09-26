@@ -76,8 +76,8 @@ export interface IInviteAction {
   delete: boolean;
 }
 
-export interface IInviteResolved {
-  invite: IUserInvite;
+export interface IEventTypeResolved {
+  eventType: string;
   error?: string;
 }
 

@@ -26,6 +26,24 @@ export class InvitesService {
     return this.http.get<IUserInvite>(`${this.invitesBaseUrl}/invite/${id}`);
   }
 
+  createInvite(invite: IUpsertInvite): Observable<IMessageResponse> {
+    return this.http.post<IMessageResponse>(`${this.invitesBaseUrl}`, invite);
+  }
+
+  updateInvite(
+    invite: IUpsertInvite,
+    id: string
+  ): Observable<IMessageResponse> {
+    return this.http.put<IMessageResponse>(
+      `${this.invitesBaseUrl}/${id}`,
+      invite
+    );
+  }
+
+  deleteInvite(id: string): Observable<IMessageResponse> {
+    return this.http.delete<IMessageResponse>(`${this.invitesBaseUrl}/${id}`);
+  }
+
   sendConfirmation(
     invite: IConfirmation,
     id: string
@@ -36,8 +54,11 @@ export class InvitesService {
     );
   }
 
-  createInvite(invite: IUpsertInvite): Observable<IMessageResponse> {
-    return this.http.post<IMessageResponse>(`${this.invitesBaseUrl}`, invite);
+  readMessage(id: string): Observable<IMessageResponse> {
+    return this.http.patch<IMessageResponse>(
+      `${this.invitesBaseUrl}/messages/${id}`,
+      null
+    );
   }
 
   bulkInvites(invites: IBulkInvite[]): Observable<IBulkMessageResponse> {
@@ -56,24 +77,7 @@ export class InvitesService {
     );
   }
 
-  updateInvite(
-    invite: IUpsertInvite,
-    id: string
-  ): Observable<IMessageResponse> {
-    return this.http.put<IMessageResponse>(
-      `${this.invitesBaseUrl}/${id}`,
-      invite
-    );
-  }
-
-  deleteInvite(id: string): Observable<IMessageResponse> {
-    return this.http.delete<IMessageResponse>(`${this.invitesBaseUrl}/${id}`);
-  }
-
-  readMessage(id: string): Observable<IMessageResponse> {
-    return this.http.patch<IMessageResponse>(
-      `${this.invitesBaseUrl}/messages/${id}`,
-      null
-    );
+  getInviteEventType(id: string): Observable<string> {
+    return this.http.get<string>(`${this.invitesBaseUrl}/invite/${id}/event`);
   }
 }

@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CountdownComponent } from './countdown/countdown.component';
-import { ConfirmationComponent } from './confirmation/confirmation.component';
+import { CountdownComponent } from './sweetXv/countdown/countdown.component';
+import { ConfirmationComponent } from './sweetXv/confirmation/confirmation.component';
 import { InvitesComponent } from './invites.component';
 import { invitesResolver } from './invites-resolver.service';
+import { SweetXvComponent } from './sweetXv/sweet-xv.component';
 
 const routes: Routes = [
   {
@@ -23,5 +24,6 @@ export class InvitesRoutingModule {
     InvitesComponent,
     CountdownComponent,
     ConfirmationComponent,
+    SweetXvComponent,
   ];
 }

@@ -1,19 +1,19 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
 import { EMPTY, Observable, catchError, map } from 'rxjs';
-import { IInviteResolved } from '../core/models/invites';
+import { IEventTypeResolved } from '../core/models/invites';
 import { InvitesService } from '../core/services/invites.service';
 
-export const invitesResolver: ResolveFn<IInviteResolved> = (
+export const invitesResolver: ResolveFn<IEventTypeResolved> = (
   route: ActivatedRouteSnapshot
-): Observable<IInviteResolved> => {
+): Observable<IEventTypeResolved> => {
   const invitesService = inject(InvitesService);
   const router = inject(Router);
 
   const id = route.paramMap.get('id') ?? '';
 
-  const inviteFound = invitesService.getInvite(id).pipe(
-    map((invite) => ({ invite: invite })),
+  const inviteFound = invitesService.getInviteEventType(id).pipe(
+    map((eventType) => ({ eventType: eventType })),
     catchError(() => {
       router.navigate(['/error/page-not-found']);
       return EMPTY;
