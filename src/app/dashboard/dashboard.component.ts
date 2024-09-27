@@ -112,8 +112,16 @@ export class DashboardComponent implements OnInit {
 
   toggleMessages(): void {
     const toggleMessages = document.querySelector('.messages-chat');
+    const messageContainer = document.querySelector('.messages-container');
     if (toggleMessages) {
       toggleMessages.classList.toggle('active');
+    }
+
+    if (messageContainer) {
+      messageContainer.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
     }
   }
 }

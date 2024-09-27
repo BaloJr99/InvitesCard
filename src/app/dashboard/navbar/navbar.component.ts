@@ -89,6 +89,10 @@ export class NavbarComponent implements OnInit, OnChanges {
 
     const toggleNotifications = document.querySelector('.notificationMessages');
     if (toggleNotifications) {
+      toggleNotifications.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      })
       toggleNotifications.classList.toggle('active');
     }
   }
