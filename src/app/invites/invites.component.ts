@@ -9,7 +9,6 @@ import { IEventTypeResolved } from '../core/models/invites';
 @Component({
   selector: 'app-invites',
   templateUrl: './invites.component.html',
-  styleUrls: ['./invites.component.css'],
 })
 export class InvitesComponent implements OnInit {
   inviteResolved: IEventTypeResolved | undefined = undefined;
