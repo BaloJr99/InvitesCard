@@ -6,7 +6,7 @@ import { eventResolver } from './eventDetails/event-resolver.service';
 import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { DateFormatPipe } from 'src/app/shared/pipes/date-format.pipe';
-import { EventModalComponent } from './eventModal/event-modal.component';
+import { EventModalComponent } from './event-modal/event-modal.component';
 
 const routes: Routes = [
   {

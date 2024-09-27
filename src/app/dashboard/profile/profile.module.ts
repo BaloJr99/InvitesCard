@@ -4,8 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { UsersService } from 'src/app/core/services/users.service';
 import { ProfileComponent } from './profile.component';
 import { profileResolver } from './profile-resolver.service';
-import { ProfileModalComponent } from './profileModal/profile-modal.component';
-import { ChangePasswordComponent } from './changePassword/change-password.component';
+import { ProfileModalComponent } from './profile-modal/profile-modal.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 const routes: Routes = [
   {

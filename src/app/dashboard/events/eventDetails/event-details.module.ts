@@ -6,11 +6,11 @@ import { TableComponent } from './table/table.component';
 import { DataTablesModule } from 'angular-datatables';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
-import { InvitesImportModalComponent } from './invitesImportModal/invites-import-modal.component';
-import { EventCardComponent } from './eventCard/event-card.component';
-import { InviteModalComponent } from './inviteModal/invite-modal.component';
-import { EventDialogComponent } from './eventDialog/event-dialog.component';
-import { InviteGroupComponent } from './inviteModal/inviteGroupModal/invite-group.component';
+import { InvitesImportModalComponent } from './invites-import-modal/invites-import-modal.component';
+import { EventCardComponent } from './event-card/event-card.component';
+import { InviteModalComponent } from './invite-modal/invite-modal.component';
+import { EventDialogComponent } from './event-dialog/event-dialog.component';
+import { InviteGroupComponent } from './invite-modal/invite-group-modal/invite-group.component';
 
 const routes: Routes = [
   {

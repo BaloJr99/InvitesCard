@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { RouterModule, Routes } from '@angular/router';
 import { FilesComponent } from './files.component';
-import { FilesModalComponent } from './filesModal/files-modal.component';
+import { FilesModalComponent } from './files-modal/files-modal.component';
 import { EventsService } from 'src/app/core/services/events.service';
 import { ImagesService } from 'src/app/core/services/images.service';
 

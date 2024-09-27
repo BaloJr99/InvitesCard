@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CountdownComponent } from './sweetXv/countdown/countdown.component';
-import { ConfirmationComponent } from './sweetXv/confirmation/confirmation.component';
+import { CountdownComponent } from './sweet-xv/countdown/countdown.component';
+import { ConfirmationComponent } from './sweet-xv/confirmation/confirmation.component';
 import { InvitesComponent } from './invites.component';
 import { invitesResolver } from './invites-resolver.service';
-import { SweetXvComponent } from './sweetXv/sweet-xv.component';
+import { SweetXvComponent } from './sweet-xv/sweet-xv.component';
 
 const routes: Routes = [
   {

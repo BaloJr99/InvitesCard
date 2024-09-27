@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LogsComponent } from './logs.component';
 import { LoggerService } from 'src/app/core/services/logger.service';
 import { DataTablesModule } from 'angular-datatables';
-import { LogsModalComponent } from './logsModal/logs-modal.component';
+import { LogsModalComponent } from './logs-modal/logs-modal.component';
 
 const routes: Routes = [
   {
