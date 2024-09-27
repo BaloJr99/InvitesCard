@@ -35,3 +35,29 @@ table td.error {
   color: var(--grey);
   border: none;
 }
+
+.download-template {
+  display: flex;
+  gap: 10px;
+}
+
+.download-template span {
+  display: none;
+  position: absolute;
+}
+
+.download-template i.fa-circle-info {
+  position: relative;
+}
+
+.download-template i.fa-circle-info:hover span {
+  font-family: 'Raleway';
+  display: block;
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+  top: 0px;
+  left: 20px;
+  border: 1px solid black;
+  text-transform: none;
+}

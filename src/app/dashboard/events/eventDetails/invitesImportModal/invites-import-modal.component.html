@@ -8,8 +8,12 @@
       </div>
       <div class="modal-body text-start">
         <div class="mb-3">
-          <input id="fileInput" aria-labelledby="helpId" type="file" class="form-control" placeholder="Seleccionar Archivo CSV" accept=".csv" (change)="onFileChange($event)"/>
-          <small id="helpId" class="form-text text-muted">Los unicos archivos soportados son en formato CSV</small>
+          <div class="download-template">
+            <input id="fileInput" aria-labelledby="helpId" type="file" class="form-control" placeholder="Seleccionar Archivo CSV" accept=".csv" (change)="onFileChange($event)"/>
+            <button class="btn btn-primary" i18n-aria-label aria-label="Descargar plantilla" (click)="downloadTemplate()"><i class="fa-solid fa-download"></i></button>
+            <i class="fa-solid fa-circle-info btn-secondary"><span i18n>Descargar plantilla</span></i>
+          </div>
+          <small id="helpId" class="form-text text-muted" i18n>Los unicos archivos soportados son en formato CSV</small>
         </div>
 
         <div class="mb-3 progress-bar" *ngIf="processingFile">

@@ -85,8 +85,8 @@ export class InvitesImportModalComponent implements OnInit {
 
           this.updateBulkResults.emit({
             inviteGroupsGenerated: messageResponse.inviteGroupsGenerated,
-            invitesGenerated: messageResponse.invitesGenerated
-          })
+            invitesGenerated: messageResponse.invitesGenerated,
+          });
 
           $('#invitesImportModal').modal('hide');
         },
@@ -153,5 +153,20 @@ export class InvitesImportModalComponent implements OnInit {
     });
 
     this.loaderService.setLoading(false);
+  }
+
+  downloadTemplate() {
+    const csv = `Family,Entries Number,Phone Number,Kids Allowed,Invite Group\n`;
+    const blob = new Blob([csv], {
+      type: 'text/csv',
+    });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', url);
+    a.setAttribute('download', 'invitesTemplate.csv');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
 }
