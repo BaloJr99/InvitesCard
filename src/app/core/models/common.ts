@@ -38,3 +38,9 @@ export interface ISpinner {
   isLoading: boolean;
   message: string;
 }
+
+export interface IZodErrors {
+  message: string;
+  code: string;
+  path: string[];
+}

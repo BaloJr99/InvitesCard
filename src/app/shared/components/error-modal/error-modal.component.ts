@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {} from 'bootstrap';
+import { IZodErrors } from 'src/app/core/models/common';
 import { ErrorModalService } from 'src/app/core/services/error.service';
 
 @Component({
@@ -18,7 +19,15 @@ export class ErrorModalComponent implements OnInit {
       next: (information) => {
         if (information.hasError && information.serverError) {
           this.errorMessage = information.serverError.error;
+          if (information.serverError.status === 422) {
+            const zodErrorMessage = information.serverError.error as IZodErrors[];
+            this.errorMessage = zodErrorMessage
+              .map((error, index) => {
+                  return `${index === 0 ? '' : '\n'}${error.path.join(' ').toLocaleUpperCase()}: ${error.message}`
+              }).join(', ');
+          }
         }
+
         if (
           information.serverError?.status !== undefined &&
           information.serverError.status !== 401 &&
