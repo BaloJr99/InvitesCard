@@ -243,22 +243,11 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     const updatedReceptionTime = this.createEventSettingsForm.get(
       'receptionTime'
     )?.value as string;
-    if (updatedMassTime.length > 5) {
-      return {
-        ...this.createEventSettingsForm.value,
-      };
-    }
-
-    if (updatedReceptionTime.length > 5) {
-      return {
-        ...this.createEventSettingsForm.value,
-      };
-    }
 
     return {
       ...this.createEventSettingsForm.value,
-      massTime: `${this.createEventSettingsForm.get('massTime')?.value}:00`,
-      receptionTime: `${
+      massTime: updatedMassTime.length > 5 ? this.createEventSettingsForm.get('massTime')?.value : `${this.createEventSettingsForm.get('massTime')?.value}:00`,
+      receptionTime: updatedReceptionTime.length > 5 ? this.createEventSettingsForm.get('receptionTime')?.value : `${
         this.createEventSettingsForm.get('receptionTime')?.value
       }:00`,
     } as ISetting;
