@@ -26,7 +26,7 @@
       <div class="form-group">
         <p i18n>Personas confirmadas</p>
         <select id="my-select" class="form-control" formControlName="entriesConfirmed" [ngClass]="{'is-invalid': displayMessage['entriesConfirmed']}">
-          <option value="0" i18n>Selecciona el numero de pases</option>
+          <option value="" i18n>Selecciona el numero de pases</option>
           <option *ngFor="let number of numberOfEntries$ | async" [value]="number">{{ number }}</option>
         </select>
         <span class="invalid-feedback">
