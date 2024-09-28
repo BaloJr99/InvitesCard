@@ -4,6 +4,7 @@ import {
   Inject,
   LOCALE_ID,
   OnInit,
+  ViewEncapsulation,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
@@ -20,6 +21,7 @@ import { InvitesService } from 'src/app/core/services/invites.service';
   selector: 'app-sweet-xv',
   templateUrl: './sweet-xv.component.html',
   styleUrls: ['./sweet-xv.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class SweetXvComponent implements OnInit {
   counter = 0;

@@ -6,10 +6,15 @@
 .container {
   color: var(--custom-primary-color);
 }
-.container h1 {
+
+.container h2 {
   color: var(--custom-primary-color);
-  font-family: 'Allura';
+  font-family: "Allura";
   font-size: 50px;
+}
+
+.full-invite .invite-section:nth-child(odd):not(:first-child) {
+  background-color: var(--custom-secondary-color);
 }
 
 iframe {
@@ -60,30 +65,30 @@ iframe {
   overflow-x: clip;
 }
 
-.info .container .header h2 {
+.info .container .header h1 {
   font-size: 200px;
-  font-family: 'Outfit';
+  font-family: "Outfit";
   color: var(--custom-secondary-color);
 }
 
-.info .container .header h2 span {
+.info .container .header h1 span {
   font-size: 64px;
   color: #ffffff;
-  font-family: 'Allura';
+  font-family: "Allura";
   position: absolute;
   left: 0;
   right: 0;
   top: 110px;
 }
 
-.info .container .header h3 {
-  font-family: 'Allura';
+.info .container .header p {
+  font-family: "Allura";
   font-size: 96px;
   padding: 100px 0px;
   color: #ffffff;
 }
 
-.info .container .datetime .date h4 {
+.info .container .datetime .date p {
   font-size: 20px;
   padding: 0px 10px;
   margin: 0;
@@ -98,20 +103,19 @@ iframe {
   align-items: center;
 }
 
-.info .container .datetime .date hr{
+.info .container .datetime .date hr {
   width: 10%;
   border: none;
   height: 3px;
-  color: #ffffff;  
+  color: #ffffff;
   background-color: #ffffff;
 }
 
 .invites {
-padding: 20px 0px;
+  padding: 20px 0px;
 }
 
 .speech {
-  background-color: var(--custom-secondary-color);
   padding: 100px 0px;
   display: flex;
   align-items: center;
@@ -132,7 +136,7 @@ padding: 20px 0px;
 }
 
 .speech .invites p:first-of-type {
-  font-family: 'Allura';
+  font-family: "Allura";
   font-size: 40px;
 }
 
@@ -140,7 +144,7 @@ padding: 20px 0px;
   display: flex;
 }
 
-.divider:nth-of-type(2) { 
+.divider:nth-of-type(2) {
   justify-content: end;
 }
 
@@ -148,8 +152,7 @@ padding: 20px 0px;
   width: 30%;
   border: none;
   height: 3px;
-  color: var(--custom-primary-color);  
-  background-color: var(--custom-primary-color);
+  color: var(--custom-primary-color);
 }
 
 .pinkLetter {
@@ -161,7 +164,7 @@ padding: 20px 0px;
 }
 
 .ceremony .container > p.pinkLetter {
-  font-family: 'Raleway';
+  font-family: "Raleway";
   font-size: 24px;
 }
 
@@ -171,13 +174,12 @@ padding: 20px 0px;
 }
 
 .ceremony .container .col-md-6 p:not(p:first-of-type),
-.ceremony .container .col-sm-12 p:not(p:first-of-type)
-{
-  font-family: 'Allura';
+.ceremony .container .col-sm-12 p:not(p:first-of-type) {
+  font-family: "Allura";
   font-size: 36px;
 }
 
-.ceremony .row:not(.row:first-of-type){
+.ceremony .row:not(.row:first-of-type) {
   padding: 50px;
 }
 
@@ -188,18 +190,18 @@ padding: 20px 0px;
 }
 
 .reception {
-  background-color: var(--custom-secondary-color);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 100px 0px;
 }
 
-.reception h2, .reception p {
+.reception h3,
+.reception p {
   color: #635959;
 }
 
-.reception h2 {
+.reception h3 {
   font-size: 25px;
 }
 
@@ -208,22 +210,23 @@ padding: 20px 0px;
   font-size: 20px;
 }
 
-.dressCode {
+.dressCode,
+.gifts {
   padding: 100px;
 }
 
 .dressCode .col-md-6 p,
-.dressCode .col-sm-12 p,
-.dressCode .col-md-6 h5,
-.dressCode .col-sm-12 h5 {
+.dressCode .col-sm-12 p {
   font-size: 20px;
 }
 
-.dressCode .col-md-6:first-of-type {
+.dressCode .col-md-6:first-of-type,
+.gifts .col-md-6:first-of-type {
   padding-left: 100px;
 }
 
-.dressCode .col-md-6:nth-of-type(2) {
+.dressCode .col-md-6:nth-of-type(2),
+.gifts .col-md-6:nth-of-type(2) {
   padding-right: 100px;
 }
 
@@ -238,6 +241,26 @@ padding: 20px 0px;
 .dressCode img {
   margin-bottom: 20px;
   height: 200px;
+}
+
+.gifts img {
+  margin-bottom: 20px;
+  width: 150px;
+}
+
+.gifts p {
+  font-size: 20px;
+}
+
+.gifts p:last-of-type {
+  font-size: 40px;
+  font-family: 'Allura';
+}
+
+.invitesConfirmation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @keyframes shrink {
@@ -267,12 +290,13 @@ padding: 20px 0px;
 }
 
 @media (max-width: 768px) {
-
-  .dressCode .col-md-6:first-of-type {
+  .dressCode .col-md-6:first-of-type,
+  .gifts .col-md-6:first-of-type {
     padding: 0px;
   }
-  
-  .dressCode .col-md-6:nth-of-type(2) {
+
+  .dressCode .col-md-6:nth-of-type(2),
+  .gifts .col-md-6:nth-of-type(2) {
     padding: 0px;
   }
 
@@ -282,16 +306,19 @@ padding: 20px 0px;
 
   .reception .col-sm-12:first-of-type {
     padding-top: 20px;
+  }
+
+  .invitesConfirmation {
+    padding: 50px 0px;
   }
 }
 
 @media (max-width: 575px) {
-
-  .info .container .header h3 {
+  .info .container .header h1 {
     font-size: 96px;
   }
-  
-  .ceremony .row:not(.row:first-of-type){
+
+  .ceremony .row:not(.row:first-of-type) {
     padding: 0px;
   }
 
@@ -303,11 +330,13 @@ padding: 20px 0px;
     padding-top: 20px;
   }
 
-  .dressCode .col-md-6:first-of-type {
+  .dressCode .col-md-6:first-of-type,
+  .gifts .col-md-6:first-of-type {
     padding: 0px;
   }
-  
-  .dressCode .col-md-6:nth-of-type(2) {
+
+  .dressCode .col-md-6:nth-of-type(2),
+  .gifts .col-md-6:nth-of-type(2) {
     padding: 0px;
   }
 
@@ -315,11 +344,11 @@ padding: 20px 0px;
     background-size: cover;
   }
 
-  .info .header h2 {
+  .info .header h1 {
     text-align: end;
   }
 
-  .info .header h2 span {
+  .info .header h1 span {
     right: 50px !important;
     top: 105px !important;
   }
@@ -328,6 +357,10 @@ padding: 20px 0px;
     background-size: cover;
     background-position: center !important;
     animation: shrinkSmall ease 5s infinite;
+  }
+
+  .invitesConfirmation {
+    padding: 50px 0px;
   }
 
   @keyframes shrinkSmall {

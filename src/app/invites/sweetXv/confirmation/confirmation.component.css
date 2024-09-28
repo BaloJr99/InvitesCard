@@ -9,7 +9,8 @@
   font-size: 50px;
 }
 
-.confirmedModal h3 {
+.confirmedModal .confirmed span,
+.confirmedModal .not-confirmed span {
   font-family: 'Raleway';
   color: var(--custom-primary-color);
   font-size: 20px;
@@ -36,33 +37,26 @@
     color: rgb(0, 182, 0);
   }
 
-.invitesConfirmation {
-  background-color: var(--custom-secondary-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.invitesConfirmation .col-md-6:first-of-type,
-.invitesConfirmation .col-sm-12:first-of-type {
+.container .col-md-6:first-of-type,
+.container .col-sm-12:first-of-type {
   display: flex;
   justify-content: center;
   align-items: flex-end;
   flex-direction: column;
 }
 
-.invitesConfirmation .col-md-6:first-of-type,
-.invitesConfirmation .col-sm-12:first-of-type {
+.container .col-md-6:first-of-type,
+.container .col-sm-12:first-of-type {
   text-align: right;
 }
 
-.invitesConfirmation .col-md-6:first-of-type p,
-.invitesConfirmation .col-sm-12:first-of-type p {
+.container .col-md-6:first-of-type p,
+.container .col-sm-12:first-of-type p {
   color: #635959;
   font-size: 20px;
 }
 
-.invitesConfirmation .form {
+.container .form {
   border: 1px solid #B79BA0;
   margin: 80px 50px;
   padding: 50px;
@@ -70,19 +64,20 @@
   text-align: left;
 }
 
-.invitesConfirmation h2 {
+.container h3 {
   font-size: 20px;
   border-bottom: 2px solid var(--custom-primary-color);
   padding-bottom: 20px;
   text-align: center;
 }
 
-.invitesConfirmation h3 {
+.container .question span {
+  display: block;
   font-size: 16px;
   text-align: center;
 }
 
-.invitesConfirmation .form p {
+.container .form p {
   color: #635959;
   text-align: left;
   padding-top: 10px;
@@ -114,30 +109,20 @@
   }
 }
 
-@media (max-width: 768px) {
-  .invitesConfirmation {
-    padding: 50px 0px;
-  }
-}
-
 @media (max-width: 1024px) {
-  .invitesConfirmation .form {
+  .form {
     margin: 80px 20px;
     padding: 40px;
   }
 }
 
-@media (max-width: 575px) {
-  .invitesConfirmation {
-    padding: 50px 0px;
-  }
-  
-  .invitesConfirmation .col-sm-12 {
+@media (max-width: 575px) {  
+  .col-sm-12 {
     text-align: center !important;
     align-items: center !important;
   }
   
-  .invitesConfirmation .form {
+  .form {
     margin: 20px;
   }
 
