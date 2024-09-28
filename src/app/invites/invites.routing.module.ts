@@ -5,6 +5,7 @@ import { ConfirmationComponent } from './sweet-xv/confirmation/confirmation.comp
 import { InvitesComponent } from './invites.component';
 import { invitesResolver } from './invites-resolver.service';
 import { SweetXvComponent } from './sweet-xv/sweet-xv.component';
+import { SaveTheDateComponent } from './save-the-date/save-the-date.component';
 
 const routes: Routes = [
   {
@@ -25,5 +26,6 @@ export class InvitesRoutingModule {
     CountdownComponent,
     ConfirmationComponent,
     SweetXvComponent,
+    SaveTheDateComponent
   ];
 }
