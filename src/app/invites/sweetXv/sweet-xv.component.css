@@ -13,7 +13,7 @@
   font-size: 50px;
 }
 
-.full-invite .invite-section:nth-child(odd):not(:first-child) {
+.full-invite .invite-section:nth-child(even):not(:first-child) {
   background-color: var(--custom-secondary-color);
 }
 
