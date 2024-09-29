@@ -69,7 +69,6 @@ export class SweetXvComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loaderService.setLoading(true, $localize`Cargando invitación`);
     this.route.params.subscribe((params) => {
       const inviteId = params['id'];
 
