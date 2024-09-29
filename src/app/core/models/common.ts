@@ -37,6 +37,7 @@ export interface IMessage {
 export interface ISpinner {
   isLoading: boolean;
   message: string;
+  showInviteLoader: boolean;
 }
 
 export interface IZodErrors {
