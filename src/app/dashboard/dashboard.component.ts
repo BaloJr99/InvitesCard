@@ -105,7 +105,7 @@ export class DashboardComponent implements OnInit {
         key: date,
         value: messages
           .filter((message) => message.date === date)
-          .sort((a, b) => a.time.localeCompare(b.time)),
+          .sort((a, b) => b.time.localeCompare(a.time)),
       });
     });
   }
