@@ -9,6 +9,7 @@ import { LoaderService } from 'src/app/core/services/loader.service';
 export class SpinnerComponent implements OnInit {
   showSpinner = true;
   text = '';
+  showInviteLoader = false;
 
   constructor(private loader: LoaderService, private cd: ChangeDetectorRef) {}
 
@@ -17,6 +18,7 @@ export class SpinnerComponent implements OnInit {
       next: (spinner) => {
         this.showSpinner = spinner.isLoading;
         this.text = spinner.message;
+        this.showInviteLoader = spinner.showInviteLoader;
         this.cd.detectChanges();
       },
     });

@@ -19,6 +19,7 @@
   color: gray;
   font-size: 20px;
   margin: 0;
+  white-space: pre-line;
 }
 
 .modal-body h1 {

@@ -123,6 +123,13 @@ export class InviteDetailsComponent implements OnInit {
     const notifications: INotification[] = [];
     const messages: IMessage[] = [];
 
+    this.stadistics = {
+      confirmedEntries: 0,
+      canceledEntries: 0,
+      pendingEntries: 0,
+      totalEntries: 0,
+    };
+
     this.invites.forEach((value) => {
       if (value.confirmation) {
         this.stadistics.confirmedEntries += value.entriesConfirmed ?? 0;

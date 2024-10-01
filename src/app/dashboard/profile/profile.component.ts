@@ -105,6 +105,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       this.isMyProfile = this.userInformation.id === this.user.id;
 
       this.createProfileForm.markAsUntouched();
+      this.loaderService.setLoading(false);
     });
   }
 

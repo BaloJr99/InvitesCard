@@ -117,6 +117,10 @@ main {
 
   .messages-container p {
     font-weight: bold;
+    width: calc(100% - 75px);
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
   .messages-container span.message-date {

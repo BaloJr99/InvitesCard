@@ -1,4 +1,5 @@
-<div class="cssload-container" [ngClass]="showSpinner ? 'show' : 'hide'">
-  <div class="cssload-speeding-wheel"></div>
+<div class="cssload-container" [ngClass]="showSpinner || showInviteLoader ? 'show' : 'hide'">
+  <div class="cssload-speeding-wheel" *ngIf="showSpinner"></div>
+  <iframe *ngIf="showInviteLoader" src="https://lottie.host/embed/9d3a1db5-0d52-4b62-a801-1f5edb5dbddd/vTnaQHW4G4.json"></iframe>
   <span>{{ text }}</span>
 </div>

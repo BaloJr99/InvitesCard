@@ -71,7 +71,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
 
     this.confirmationForm = this.fb.group({
       confirmation: ['true', Validators.required],
-      entriesConfirmed: ['0', Validators.required],
+      entriesConfirmed: ['', Validators.required],
       message: [''],
     });
   }
@@ -95,9 +95,7 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
         this.confirmationForm.controls['entriesConfirmed'].value
       );
       this.confirmationForm.get('confirmation')?.setValue(assist);
-      this.confirmationForm
-        .get('entriesConfirmed')
-        ?.setValue(entriesConfirmed);
+      this.confirmationForm.get('entriesConfirmed')?.setValue(isNaN(entriesConfirmed) ? 0 : entriesConfirmed);
       this.confirmationForm.addControl(
         'dateOfConfirmation',
         new FormControl(new Date().toISOString())
@@ -153,22 +151,24 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
       ...controlBlurs
     ).subscribe(() => {
       if (this.confirmationForm.controls['confirmation'].value === 'true') {
-        const select = document.getElementById('my-select');
-        select?.removeAttribute('disabled');
+        const select = document.getElementById('my-select') as HTMLSelectElement;
+        select.removeAttribute('disabled');
         if (this.confirmationForm.get('entriesConfirmed')?.value === '') {
-          this.confirmationForm.get('entriesConfirmed')?.setValue('0');
+          this.confirmationForm.patchValue({
+            entriesConfirmed: '',
+          });
         }
         this.confirmationForm
           .get('entriesConfirmed')
           ?.setValidators(Validators.required);
-        this.confirmationForm.get('entriesConfirmed')?.updateValueAndValidity();
+        this.confirmationForm.updateValueAndValidity();
       } else if (
         this.confirmationForm.controls['confirmation'].value === 'false'
       ) {
-        const select = document.getElementById('my-select');
-        select?.setAttribute('disabled', '');
+        const select = document.getElementById('my-select') as HTMLSelectElement;
+        select.setAttribute('disabled', '');
         this.confirmationForm.patchValue({
-          entriesConfirmed: '0',
+          entriesConfirmed: '',
         });
         this.confirmationForm.get('entriesConfirmed')?.clearValidators();
         this.confirmationForm.get('entriesConfirmed')?.updateValueAndValidity();
