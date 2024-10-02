@@ -40,48 +40,11 @@
   text-align: left;
   flex-grow: 1;
 }
-  .settings .form-group {
-    display: flex;
-    flex-direction: column;
-  }
 
-  .settings .form-group input[type="color"] {
-    flex-grow: 1;
-  }
-
-  .settings .form-group label {
-    padding: 10px 5px 5px;
-    font-weight: bold;
-  }
-
-  .settings .form-group .form-label {
-    margin: 0px;
-  }
-
-  .settings form {
-    margin-bottom: 10px;
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-.footer {
-  text-align: end;
-  padding: 10px;
-  position: sticky;
-  bottom: 0px;
-  background: var(--light-blue);
-  border-top: 2px solid var(--teal-blue);
+.settings .form-group label {
+  padding: 10px 5px 5px;
+  font-weight: bold;
 }
-
-  .footer button {
-    background-color: var(--secondary-blue);
-    color: var(--grey);
-    border: none;
-  }
-
-  .footer button#cancel-changes {
-    margin-right: 10px;
-  }
 
 @media (max-width: 768px) {
   .header {

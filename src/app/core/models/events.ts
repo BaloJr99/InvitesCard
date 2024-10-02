@@ -16,7 +16,7 @@ export type IDashboardEvent = Pick<
   'id' | 'nameOfEvent' | 'dateOfEvent' | 'allowCreateInvites'
 >;
 
-export type IDropdownEvent = Pick<IFullEvent, 'id' | 'nameOfEvent'>;
+export type IDropdownEvent = Pick<IFullEvent, 'id' | 'nameOfEvent' | 'typeOfEvent'>;
 
 export type IEvent = Omit<IFullEvent, 'allowCreateInvites'>;
 

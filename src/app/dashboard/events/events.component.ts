@@ -5,7 +5,6 @@ import { IDashboardEvent, IEventAction } from 'src/app/core/models/events';
 import { EventsService } from 'src/app/core/services/events.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
-import { UsersService } from 'src/app/core/services/users.service';
 
 @Component({
   selector: 'app-events',

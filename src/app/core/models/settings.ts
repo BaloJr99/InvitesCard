@@ -1,3 +1,5 @@
+import { ISettingType } from './enum';
+
 export interface ISetting {
   eventId: string;
   primaryColor: string;
@@ -14,4 +16,10 @@ export interface ISetting {
   receptionPlace: string;
   receptionAddress: string;
   dressCodeColor: string;
+}
+
+export interface ISettingAction {
+  eventId: string;
+  isNew: boolean;
+  settingType: ISettingType;
 }
