@@ -1,37 +1,26 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Input,
-  ViewChildren,
-} from '@angular/core';
-import {
-  FormBuilder,
-  FormControlName,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { AfterViewInit, Component, ElementRef, Input, ViewChildren } from '@angular/core';
+import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { EventType } from 'src/app/core/models/enum';
-import { ISweetXvSetting, ISettingAction } from 'src/app/core/models/settings';
+import { ISettingAction } from 'src/app/core/models/settings';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 
 @Component({
-  selector: 'app-sweet-xv-settings',
-  templateUrl: './sweet-xv-settings.component.html',
-  styleUrl: './sweet-xv-settings.component.css',
+  selector: 'app-save-the-date',
+  templateUrl: './save-the-date.component.html',
+  styleUrl: './save-the-date.component.css',
 })
-export class SweetXvSettingsComponent implements AfterViewInit {
+export class SaveTheDateComponent implements AfterViewInit{
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
   @Input() set eventSettingAction(eventSettingAction: ISettingAction) {
-    const eventId = eventSettingAction?.eventId;
-    this.sweetXvSettings = {
+    const eventId = eventSettingAction.eventId;
+    this.saveTheDateSettings = {
       eventId: eventId,
       isNew: true,
       settingType: EventType.Xv,
@@ -40,24 +29,13 @@ export class SweetXvSettingsComponent implements AfterViewInit {
     this.getEventSetting();
   }
 
-  sweetXvSettings: ISettingAction = {} as ISettingAction;
+  saveTheDateSettings: ISettingAction = {} as ISettingAction;
 
   createEventSettingsForm: FormGroup = this.fb.group({
     eventId: [''],
     primaryColor: ['', Validators.required],
     secondaryColor: ['', Validators.required],
-    parents: ['', Validators.required],
-    godParents: ['', Validators.required],
-    firstSectionSentences: ['', Validators.required],
-    secondSectionSentences: ['', Validators.required],
-    massUrl: ['', Validators.required],
-    massTime: ['', Validators.required],
-    massAddress: ['', Validators.required],
-    receptionUrl: ['', Validators.required],
-    receptionTime: ['', Validators.required],
     receptionPlace: ['', Validators.required],
-    receptionAddress: ['', Validators.required],
-    dressCodeColor: ['', Validators.required],
   });
 
   displayMessage: { [key: string]: string } = {};
@@ -77,41 +55,8 @@ export class SweetXvSettingsComponent implements AfterViewInit {
       secondaryColor: {
         required: $localize`Ingresar color secundario`,
       },
-      parents: {
-        required: $localize`Ingresar nombre de los padres`,
-      },
-      godParents: {
-        required: $localize`Ingresar nombre de los padrinos`,
-      },
-      firstSectionSentences: {
-        required: $localize`Ingresar datos de la primer sección`,
-      },
-      secondSectionSentences: {
-        required: $localize`Ingresar datos de la segunda sección`,
-      },
-      massUrl: {
-        required: $localize`Ingresar url de la ubicación de la misa`,
-      },
-      massTime: {
-        required: $localize`Ingresar hora de la misa`,
-      },
-      massAddress: {
-        required: $localize`Ingresar dirección de la misa`,
-      },
-      receptionUrl: {
-        required: $localize`Ingresar url de la ubicación de recepción`,
-      },
-      receptionTime: {
-        required: $localize`Ingresar hora de la recepción`,
-      },
       receptionPlace: {
-        required: $localize`Ingresar nombre de salón de eventos`,
-      },
-      receptionAddress: {
-        required: $localize`Ingresar dirección de recepción`,
-      },
-      dressCodeColor: {
-        required: $localize`Ingresar si existe restricción de color`,
+        required: $localize`Ingresar lugar del evento`,
       },
     };
 
@@ -123,27 +68,16 @@ export class SweetXvSettingsComponent implements AfterViewInit {
       eventId: '',
       primaryColor: '',
       secondaryColor: '',
-      parents: '',
-      godParents: '',
-      firstSectionSentences: '',
-      secondSectionSentences: '',
-      massUrl: '',
-      massTime: '',
-      massAddress: '',
-      receptionUrl: '',
-      receptionTime: '',
       receptionPlace: '',
-      receptionAddress: '',
-      dressCodeColor: '',
     });
 
     this.displayMessage = {};
   }
 
   getEventSetting(): void {
-    if (this.sweetXvSettings.eventId) {
+    if (this.saveTheDateSettings.eventId) {
       this.settingsService
-        .getEventSettings(this.sweetXvSettings.eventId)
+        .getEventSettings(this.saveTheDateSettings.eventId)
         .subscribe({
           next: (response) => {
             this.createEventSettingsForm.patchValue({
@@ -151,14 +85,14 @@ export class SweetXvSettingsComponent implements AfterViewInit {
               eventId: response.eventId,
             });
 
-            this.sweetXvSettings = {
-              ...this.sweetXvSettings,
+            this.saveTheDateSettings = {
+              ...this.saveTheDateSettings,
               isNew: false,
             };
           },
           error: () => {
-            this.sweetXvSettings = {
-              ...this.sweetXvSettings,
+            this.saveTheDateSettings = {
+              ...this.saveTheDateSettings,
               isNew: true,
             };
           },
@@ -179,7 +113,7 @@ export class SweetXvSettingsComponent implements AfterViewInit {
       this.createEventSettingsForm.valid &&
       this.createEventSettingsForm.dirty
     ) {
-      if (this.sweetXvSettings.isNew) {
+      if (this.saveTheDateSettings.isNew) {
         this.createEventSettings();
       } else {
         this.updateEventSettings();
@@ -195,7 +129,7 @@ export class SweetXvSettingsComponent implements AfterViewInit {
   createEventSettings() {
     this.loaderService.setLoading(true, $localize`Creando configuraciones`);
     this.settingsService
-      .createEventSettings(this.formatEventSetting())
+      .createEventSettings(this.createEventSettingsForm.value)
       .subscribe({
         next: (response: IMessageResponse) => {
           this.toastr.success(response.message);
@@ -211,11 +145,11 @@ export class SweetXvSettingsComponent implements AfterViewInit {
       true,
       $localize`Actualizando configuraciones`
     );
-    if (this.sweetXvSettings.eventId !== '') {
+    if (this.saveTheDateSettings.eventId !== '') {
       this.settingsService
         .updateEventSettings(
-          this.formatEventSetting(),
-          this.sweetXvSettings.eventId
+          this.createEventSettingsForm.value,
+          this.saveTheDateSettings.eventId
         )
         .subscribe({
           next: (response: IMessageResponse) => {
@@ -226,26 +160,6 @@ export class SweetXvSettingsComponent implements AfterViewInit {
           this.loaderService.setLoading(false);
         });
     }
-  }
-
-  formatEventSetting(): ISweetXvSetting {
-    const updatedMassTime = this.createEventSettingsForm.get('massTime')
-      ?.value as string;
-    const updatedReceptionTime = this.createEventSettingsForm.get(
-      'receptionTime'
-    )?.value as string;
-
-    return {
-      ...this.createEventSettingsForm.value,
-      massTime:
-        updatedMassTime.length > 5
-          ? this.createEventSettingsForm.get('massTime')?.value
-          : `${this.createEventSettingsForm.get('massTime')?.value}:00`,
-      receptionTime:
-        updatedReceptionTime.length > 5
-          ? this.createEventSettingsForm.get('receptionTime')?.value
-          : `${this.createEventSettingsForm.get('receptionTime')?.value}:00`,
-    } as ISweetXvSetting;
   }
 
   ngAfterViewInit(): void {

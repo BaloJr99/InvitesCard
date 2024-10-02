@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ISetting } from '../models/settings';
+import { IBaseSettings, ISaveTheDateSetting, ISweetXvSetting } from '../models/settings';
 import { IMessageResponse } from '../models/common';
 
 @Injectable()
@@ -12,16 +12,16 @@ export class SettingsService {
 
   constructor(private http: HttpClient) {}
 
-  getEventSettings(eventId: string): Observable<ISetting> {
-    return this.http.get<ISetting>(`${this.invitesBaseUrl}/${eventId}`);
+  getEventSettings(eventId: string): Observable<IBaseSettings> {
+    return this.http.get<IBaseSettings>(`${this.invitesBaseUrl}/${eventId}`);
   }
 
-  createEventSettings(settings: ISetting): Observable<IMessageResponse> {
+  createEventSettings(settings: ISweetXvSetting | ISaveTheDateSetting): Observable<IMessageResponse> {
     return this.http.post<IMessageResponse>(`${this.invitesBaseUrl}`, settings);
   }
 
   updateEventSettings(
-    settings: ISetting,
+    settings: ISweetXvSetting,
     id: string
   ): Observable<IMessageResponse> {
     return this.http.put<IMessageResponse>(

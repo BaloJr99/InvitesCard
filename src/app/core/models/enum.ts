@@ -19,9 +19,3 @@ export const enum EventType {
   Boda = 'W',
   SaveTheDate = 'S',
 }
-
-export const enum ISettingType {
-  SweetXv = 'X',
-  Wedding = 'W',
-  SaveTheDate = 'S',
-}

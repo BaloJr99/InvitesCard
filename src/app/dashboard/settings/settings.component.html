@@ -20,10 +20,11 @@
       </div>
     </div>
   </div>
-  <ng-container *ngIf="eventSelected">
-    <app-sweet-xv-settings [eventSelected]="eventSelected"></app-sweet-xv-settings>
+  <ng-container [ngSwitch]="eventSettingAction.settingType">
+    <app-sweet-xv-settings *ngSwitchCase="'X'" [eventSettingAction]="eventSettingAction"></app-sweet-xv-settings>
+    <app-save-the-date *ngSwitchCase="'S'" [eventSettingAction]="eventSettingAction"></app-save-the-date>
   </ng-container>
 </section>
-<section class="files-empty" *ngIf="!eventSelected">
+<section class="files-empty" *ngIf="!eventSettingAction">
   <p i18n>Porfavor, seleccione un evento</p>
 </section>

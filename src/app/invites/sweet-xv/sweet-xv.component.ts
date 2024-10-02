@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
-import { ISetting } from '../../core/models/settings';
+import { ISweetXvSetting } from '../../core/models/settings';
 import { IDownloadImage } from '../../core/models/images';
 import { LoaderService } from '../../core/services/loader.service';
 import { SettingsService } from '../../core/services/settings.service';
@@ -31,7 +31,7 @@ export class SweetXvComponent implements OnInit {
   longDate = '';
 
   userInvite!: IUserInvite;
-  eventSettings: ISetting = {
+  eventSettings: ISweetXvSetting = {
     eventId: '',
     primaryColor: '',
     secondaryColor: '',
@@ -84,10 +84,11 @@ export class SweetXvComponent implements OnInit {
             0,
             this.userInvite.dateOfEvent.length - 1
           );
-          this.userInvite.maxDateOfConfirmation = this.userInvite.maxDateOfConfirmation.slice(
-            0,
-            this.userInvite.maxDateOfConfirmation.length - 1
-          );
+          this.userInvite.maxDateOfConfirmation =
+            this.userInvite.maxDateOfConfirmation.slice(
+              0,
+              this.userInvite.maxDateOfConfirmation.length - 1
+            );
 
           this.deadlineMet =
             new Date().getTime() >
@@ -114,7 +115,10 @@ export class SweetXvComponent implements OnInit {
           ])
             .subscribe({
               next: ([eventSettings, downloadImages]) => {
-                this.eventSettings = eventSettings;
+                this.eventSettings = {
+                  ...JSON.parse(eventSettings.settings),
+                  eventId: eventSettings.eventId,
+                };
                 this.downloadImages = downloadImages.filter((image) =>
                   window.innerWidth > 575
                     ? image.imageUsage === ImageUsage.Desktop
@@ -122,11 +126,11 @@ export class SweetXvComponent implements OnInit {
                 );
                 this.elRef.nativeElement.style.setProperty(
                   '--custom-primary-color',
-                  eventSettings.primaryColor
+                  this.eventSettings.primaryColor
                 );
                 this.elRef.nativeElement.style.setProperty(
                   '--custom-secondary-color',
-                  eventSettings.secondaryColor
+                  this.eventSettings.secondaryColor
                 );
               },
             })

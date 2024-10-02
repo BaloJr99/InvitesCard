@@ -1,0 +1,42 @@
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group input[type="color"] {
+  flex-grow: 1;
+}
+
+.form-group label {
+  padding: 10px 5px 5px;
+  font-weight: bold;
+}
+
+.form-group .form-label {
+  margin: 0px;
+}
+
+form {
+  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.footer {
+  text-align: end;
+  padding: 10px;
+  position: sticky;
+  bottom: 0px;
+  background: var(--light-blue);
+  border-top: 2px solid var(--teal-blue);
+}
+
+.footer button {
+  background-color: var(--secondary-blue);
+  color: var(--grey);
+  border: none;
+}
+
+.footer button#cancel-changes {
+  margin-right: 10px;
+}

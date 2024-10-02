@@ -1,9 +1,6 @@
-import {
-  Component,
-  OnInit,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { IDropdownEvent } from 'src/app/core/models/events';
+import { ISettingAction } from 'src/app/core/models/settings';
 import { EventsService } from 'src/app/core/services/events.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 
@@ -15,7 +12,7 @@ import { LoaderService } from 'src/app/core/services/loader.service';
 })
 export class SettingsComponent implements OnInit {
   events: IDropdownEvent[] = [];
-  eventSelected: string = '';
+  eventSettingAction: ISettingAction = {} as ISettingAction;
 
   constructor(
     private loaderService: LoaderService,
@@ -43,7 +40,11 @@ export class SettingsComponent implements OnInit {
     );
 
     if (eventFound) {
-      this.eventSelected = eventFound.id;
+      this.eventSettingAction = {
+        eventId: eventFound.id,
+        isNew: false,
+        settingType: eventFound.typeOfEvent,
+      } as ISettingAction;
     }
   }
 }

@@ -1,0 +1,32 @@
+<div class="row g-0">
+  <div class="col-12 gx-4">
+    <form [formGroup]="createEventSettingsForm">
+      <input type="text" formControlName="eventId" hidden>
+      <div class="form-group col-6 col-md-2">
+        <label for="primaryColor" class="form-label" i18n>Color Primario</label>
+        <input id="primaryColor" type="color" class="form-control" formControlName="primaryColor" [ngClass]="{'is-invalid': displayMessage['primaryColor']}">
+        <span class="invalid-feedback" role="alert">
+          {{ displayMessage['primaryColor'] }}
+        </span>
+      </div>
+      <div class="form-group col-6 col-md-2">
+        <label for="secondaryColor" class="form-label" i18n>Color Secundario</label>
+        <input id="secondaryColor" type="color" class="form-control" formControlName="secondaryColor" [ngClass]="{'is-invalid': displayMessage['secondaryColor']}">
+        <span class="invalid-feedback" role="alert">
+          {{ displayMessage['secondaryColor'] }}
+        </span>
+      </div>
+      <div class="form-group col-6 col-md-4">
+        <label for="receptionPlace" class="form-label" i18n>Lugar del evento</label>
+        <input id="receptionPlace" type="text" class="form-control" formControlName="receptionPlace" [ngClass]="{'is-invalid': displayMessage['receptionPlace']}">
+        <span class="invalid-feedback" role="alert">
+          {{ displayMessage['receptionPlace'] }}
+        </span>
+      </div>
+    </form>
+  </div>
+  <div class="footer">
+    <button id="cancel-changes" class="btn btn-primary" (click)="cancelChanges()" i18n>Cancelar Cambios</button>
+    <button id="save-changes" class="btn btn-primary" (click)="saveChanges()" i18n>Guardar Cambios</button>
+  </div>  
+</div>
