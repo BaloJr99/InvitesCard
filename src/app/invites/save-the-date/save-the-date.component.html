@@ -1,1 +1,68 @@
-<p>save-the-date works!</p>
+<div class="full-invite container gx-0 gx-lg-4" *ngIf="userInvite">
+  <div class="row gx-0 gx-lg-4">
+    <div class="col-12 col-lg-6">
+      <div class="info invite-section">
+        <ng-container *ngFor="let downloadImage of downloadImages; index as i">  
+          <ng-container *ngIf="i === 0">
+            <img class="backgroundImage{{i}}" [src]="downloadImage.imageUrl" alt="Photo shoot">
+          </ng-container>
+          <ng-container *ngIf="i !== 0">
+            <img class="backgroundImage{{i}}" [src]="downloadImage.imageUrl" style="visibility: hidden" alt="Photo shoot">
+          </ng-container>
+        </ng-container>
+        <div class="header">
+          <h1>SAVE<span> The </span>DATE</h1>
+          <p class="names">
+            <ng-container *ngFor="let celebrate of userInvite.nameOfCelebrated.split(';'); index as i">
+              {{celebrate}} 
+              <span *ngIf="i === 0">&nbsp;&&nbsp;</span>
+            </ng-container>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <div class="reception invite-section">
+        <p>
+          <span>{{shortDate.toUpperCase()}}</span> 
+          <svg width="25" height="25" viewBox="0 0 256 256">
+            <path fill="currentColor" d="M136 24v208a8 8 0 0 1-16 0V24a8 8 0 0 1 16 0"/>
+          </svg>
+          <span>{{eventSettings.receptionPlace}}</span>
+        </p>
+        <hr>
+        <table>
+          <thead>
+            <tr>
+              <th i18n>D</th>
+              <th i18n>L</th>
+              <th i18n>M</th>
+              <th i18n>M</th>
+              <th i18n>J</th>
+              <th i18n>V</th>
+              <th i18n>S</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let week of dateDictionary">
+              <ng-container *ngFor="let dayOfTheWeek of week.days">
+                <td [ngClass]="{'dateOfEvent': dayOfTheWeek.isDateOfEvent}">
+                  <i class="fa-solid fa-heart" *ngIf="dayOfTheWeek.isDateOfEvent"></i>
+                  <span *ngIf="dayOfTheWeek.show">{{dayOfTheWeek.day}}</span>
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+        <hr>
+        <p class="phrase" i18n>
+          Dos corazones, una vida. <br> ¿Nos acompañas?
+        </p>
+        <p class="banner" i18n><strong>Próximamente: </strong>Invitación oficial.</p>
+      </div>
+      <div class="invitesConfirmation invite-section">
+        <app-accomodation [invite]="userInvite" [deadlineMet]="deadlineMet"></app-accomodation>
+      </div>
+    </div>
+  </div>
+</div>

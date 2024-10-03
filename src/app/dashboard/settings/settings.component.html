@@ -20,7 +20,7 @@
       </div>
     </div>
   </div>
-  <ng-container [ngSwitch]="eventSettingAction.settingType">
+  <ng-container [ngSwitch]="eventSettingAction.eventType">
     <app-sweet-xv-settings *ngSwitchCase="'X'" [eventSettingAction]="eventSettingAction"></app-sweet-xv-settings>
     <app-save-the-date *ngSwitchCase="'S'" [eventSettingAction]="eventSettingAction"></app-save-the-date>
   </ng-container>

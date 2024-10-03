@@ -16,16 +16,17 @@ export class SettingsService {
     return this.http.get<IBaseSettings>(`${this.invitesBaseUrl}/${eventId}`);
   }
 
-  createEventSettings(settings: ISweetXvSetting | ISaveTheDateSetting): Observable<IMessageResponse> {
-    return this.http.post<IMessageResponse>(`${this.invitesBaseUrl}`, settings);
+  createEventSettings(settings: ISweetXvSetting | ISaveTheDateSetting, eventType: string): Observable<IMessageResponse> {
+    return this.http.post<IMessageResponse>(`${this.invitesBaseUrl}/${eventType}`, settings);
   }
 
   updateEventSettings(
     settings: ISweetXvSetting,
-    id: string
+    id: string, 
+    eventType: string
   ): Observable<IMessageResponse> {
     return this.http.put<IMessageResponse>(
-      `${this.invitesBaseUrl}/${id}`,
+      `${this.invitesBaseUrl}/${id}/${eventType}`,
       settings
     );
   }

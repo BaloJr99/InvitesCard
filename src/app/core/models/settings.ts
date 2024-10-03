@@ -33,5 +33,5 @@ export interface ISaveTheDateSetting {
 export interface ISettingAction {
   eventId: string;
   isNew: boolean;
-  settingType: EventType;
+  eventType: EventType;
 }

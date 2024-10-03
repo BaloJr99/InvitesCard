@@ -1,5 +1,16 @@
-import { AfterViewInit, Component, ElementRef, Input, ViewChildren } from '@angular/core';
-import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  ViewChildren,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormControlName,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
@@ -14,7 +25,7 @@ import { GenericValidator } from 'src/app/shared/utils/validators/generic-valida
   templateUrl: './save-the-date.component.html',
   styleUrl: './save-the-date.component.css',
 })
-export class SaveTheDateComponent implements AfterViewInit{
+export class SaveTheDateComponent implements AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
@@ -23,7 +34,7 @@ export class SaveTheDateComponent implements AfterViewInit{
     this.saveTheDateSettings = {
       eventId: eventId,
       isNew: true,
-      settingType: EventType.Xv,
+      eventType: EventType.SaveTheDate,
     } as ISettingAction;
 
     this.getEventSetting();
@@ -129,7 +140,10 @@ export class SaveTheDateComponent implements AfterViewInit{
   createEventSettings() {
     this.loaderService.setLoading(true, $localize`Creando configuraciones`);
     this.settingsService
-      .createEventSettings(this.createEventSettingsForm.value)
+      .createEventSettings(
+        this.createEventSettingsForm.value,
+        this.saveTheDateSettings.eventType
+      )
       .subscribe({
         next: (response: IMessageResponse) => {
           this.toastr.success(response.message);
@@ -149,7 +163,8 @@ export class SaveTheDateComponent implements AfterViewInit{
       this.settingsService
         .updateEventSettings(
           this.createEventSettingsForm.value,
-          this.saveTheDateSettings.eventId
+          this.saveTheDateSettings.eventId,
+          this.saveTheDateSettings.eventType
         )
         .subscribe({
           next: (response: IMessageResponse) => {

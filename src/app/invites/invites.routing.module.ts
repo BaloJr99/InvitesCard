@@ -6,6 +6,7 @@ import { InvitesComponent } from './invites.component';
 import { invitesResolver } from './invites-resolver.service';
 import { SweetXvComponent } from './sweet-xv/sweet-xv.component';
 import { SaveTheDateComponent } from './save-the-date/save-the-date.component';
+import { AccomodationComponent } from './save-the-date/accomodations/accomodation.component';
 
 const routes: Routes = [
   {
@@ -22,10 +23,11 @@ const routes: Routes = [
 })
 export class InvitesRoutingModule {
   static components = [
+    AccomodationComponent,
     InvitesComponent,
     CountdownComponent,
     ConfirmationComponent,
     SweetXvComponent,
-    SaveTheDateComponent
+    SaveTheDateComponent,
   ];
 }

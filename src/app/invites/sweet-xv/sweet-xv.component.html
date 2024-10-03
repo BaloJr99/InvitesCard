@@ -11,19 +11,8 @@
     <button (click)="goToForm()" class="scrollFormButton"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>
     <div class="container">
       <div class="header">
-        <h1 *ngIf="userInvite.typeOfEvent === 'X'">15<span>Sweet</span></h1>
-        <ng-container [ngSwitch]="userInvite.typeOfEvent">
-          <ng-container *ngSwitchCase="'X'">
-            <p>{{userInvite.nameOfCelebrated}}</p>
-          </ng-container>
-          <ng-container *ngSwitchCase="'W'">
-            <p>
-              <ng-container *ngFor="let celebrate of userInvite.nameOfCelebrated.split(';'); index as i">
-                {{celebrate}} <span *ngIf="i === 0"><br>&<br></span>
-              </ng-container>
-            </p>
-          </ng-container>
-        </ng-container>
+        <h1>15<span>Sweet</span></h1>
+        <p>{{userInvite.nameOfCelebrated}}</p>
       </div>
       <div class="datetime">
         <div class="date">

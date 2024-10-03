@@ -43,8 +43,10 @@ export class SettingsComponent implements OnInit {
       this.eventSettingAction = {
         eventId: eventFound.id,
         isNew: false,
-        settingType: eventFound.typeOfEvent,
+        eventType: eventFound.typeOfEvent,
       } as ISettingAction;
+    } else {
+      this.eventSettingAction = {} as ISettingAction;
     }
   }
 }

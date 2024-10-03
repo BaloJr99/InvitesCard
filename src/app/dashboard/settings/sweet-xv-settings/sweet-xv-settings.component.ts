@@ -34,7 +34,7 @@ export class SweetXvSettingsComponent implements AfterViewInit {
     this.sweetXvSettings = {
       eventId: eventId,
       isNew: true,
-      settingType: EventType.Xv,
+      eventType: EventType.Xv,
     } as ISettingAction;
 
     this.getEventSetting();
@@ -195,7 +195,7 @@ export class SweetXvSettingsComponent implements AfterViewInit {
   createEventSettings() {
     this.loaderService.setLoading(true, $localize`Creando configuraciones`);
     this.settingsService
-      .createEventSettings(this.formatEventSetting())
+      .createEventSettings(this.formatEventSetting(), this.sweetXvSettings.eventType)
       .subscribe({
         next: (response: IMessageResponse) => {
           this.toastr.success(response.message);
@@ -215,7 +215,8 @@ export class SweetXvSettingsComponent implements AfterViewInit {
       this.settingsService
         .updateEventSettings(
           this.formatEventSetting(),
-          this.sweetXvSettings.eventId
+          this.sweetXvSettings.eventId,
+          this.sweetXvSettings.eventType
         )
         .subscribe({
           next: (response: IMessageResponse) => {

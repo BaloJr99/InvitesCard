@@ -87,3 +87,14 @@ export interface ITimer {
   minutes: number;
   seconds: number;
 }
+
+export interface ICalendarWeeks {
+  weekNumber: number;
+  days: ICalendarDays[];
+}
+
+export interface ICalendarDays {
+  day: number;
+  isDateOfEvent: boolean;
+  show: boolean;
+}

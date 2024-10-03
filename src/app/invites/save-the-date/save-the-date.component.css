@@ -1,0 +1,155 @@
+:host {
+  --custom-primary-color: #000000;
+  --custom-secondary-color: #ffffff;
+  display: block;
+  height: 100vh;
+  background-color: var(--custom-secondary-color);
+}
+
+.container {
+  color: var(--custom-primary-color);
+}
+
+.container p {
+  color: var(--custom-primary-color);
+  font-family: "Allura";
+  font-size: 50px;
+}
+
+.container .row .col-lg-6:last-of-type {
+  overflow-y: auto;
+  height: 100vh;
+}
+
+[class*="backgroundImage"] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.info {
+  position: relative;
+  height: 100vh;
+}
+
+.info .header {
+  z-index: 1;
+  position: relative;
+}
+
+.info .header h1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
+  font-family: "Merriweather";
+  color: var(--custom-primary-color);
+  letter-spacing: 5px;
+  padding-top: 20px;
+}
+
+.info .header h1 span {
+  font-size: 35px;
+  color: var(--custom-primary-color);
+  font-family: "Great Vibes";
+  position: relative;
+  top: 5px;
+}
+
+.info .header p.names {
+  font-size: 50px;
+  font-family: "Great Vibes";
+  color: var(--custom-primary-color);
+  margin: 0px;
+  padding: 0px;
+}
+
+.reception {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.reception p {
+  margin: 0px;
+  padding: 0px;
+}
+
+.reception p span {
+  font-family: "Merriweather";
+  color: var(--custom-primary-color);
+  font-size: 25px;
+}
+
+.reception hr {
+  width: 70%;
+  border: 1px solid var(--custom-primary-color);
+  opacity: 1;
+}
+
+.reception table th {
+  font-family: "Merriweather";
+  font-weight: bold;
+}
+
+.reception table tr td {
+  font-family: "Merriweather";
+  padding: 10px;
+  font-size: 20px;
+}
+
+.reception table tr td.dateOfEvent {
+  position: relative;
+  color: white;
+  z-index: 0;
+}
+
+.reception table tr td.dateOfEvent i {
+  position: absolute;
+  z-index: -1;
+  color: red;
+  font-size: 35px;
+  left: 4px;
+}
+
+.reception .phrase {
+  font-family: "M";
+  font-style: italic;
+  font-size: 25px;
+}
+
+.reception .banner {
+  font-family: "M";
+  font-size: 20px;
+}
+
+@media (max-width: 991px) {
+  :host {
+    height: auto;
+  }
+
+  .container {
+    max-width: 100%;
+  }
+
+  .container .row .col-lg-6:last-of-type {
+    overflow-y: unset;
+    height: auto;
+  }
+
+  .reception hr {
+    width: 90%;
+  }
+
+  .info .header h1 {
+    font-size: 40px;
+  }
+  
+  .info .header h1 span {
+    font-size: 30px;
+  }
+}
