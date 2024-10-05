@@ -35,6 +35,7 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() removeInvites = new EventEmitter<string[]>();
 
   @Input() isDeadlineMet = false;
+  @Input() eventType = '';
   @Input() set invites(invites: KeyValue<string, IFullInvite[]>) {
     this.originalInvites = invites;
     this.inviteGroup = {

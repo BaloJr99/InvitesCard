@@ -7,6 +7,14 @@ table {
   text-align: center !important;
 }
 
+table i.fa-circle-check {
+  color: green;
+}
+
+table i.fa-circle-xmark {
+  color: red;
+}
+
 .accordion-body {
   padding: 0px;
   margin: 10px;

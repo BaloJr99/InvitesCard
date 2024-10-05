@@ -32,6 +32,7 @@ export type IInviteGroup = Pick<
   | 'confirmation'
   | 'entriesNumber'
   | 'inviteViewed'
+  | 'needsAccomodation'
 > & { beingDeleted: boolean };
 
 export type IBulkInvite = Pick<
