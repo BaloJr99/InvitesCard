@@ -1,10 +1,17 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { IUpsertInvite } from './invites';
 import { IInviteGroups } from './inviteGroups';
+import { CommonModalType } from './enum';
 
 export interface IError {
   hasError: boolean;
   serverError: HttpErrorResponse | null;
+}
+
+export interface ICommonModal {
+  title: string;
+  modalBody: string;
+  modalType: CommonModalType;
 }
 
 export interface IMessageResponse {
@@ -13,11 +20,12 @@ export interface IMessageResponse {
 }
 
 export interface IBulkResults {
-  inviteGroupsGenerated: IInviteGroups[],
-  invitesGenerated: IUpsertInvite[],
-};
+  inviteGroupsGenerated: IInviteGroups[];
+  invitesGenerated: IUpsertInvite[];
+}
 
-export type IBulkMessageResponse = Pick<IMessageResponse, 'message'> & IBulkResults;
+export type IBulkMessageResponse = Pick<IMessageResponse, 'message'> &
+  IBulkResults;
 
 export interface INotification {
   id: string;

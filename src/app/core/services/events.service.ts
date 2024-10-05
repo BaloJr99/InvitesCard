@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { IDropdownEvent, IDashboardEvent, IFullEvent } from '../models/events';
 import { IMessageResponse } from '../models/common';
 import { IFullInvite } from '../models/invites';
+import { param } from 'jquery';
 
 @Injectable()
 export class EventsService {
@@ -45,10 +46,15 @@ export class EventsService {
     return this.http.post<IMessageResponse>(`${this.invitesBaseUrl}`, event);
   }
 
-  updateEvent(event: IFullEvent, id: string): Observable<IMessageResponse> {
+  updateEvent(event: IFullEvent, id: string, override: boolean): Observable<IMessageResponse> {
     return this.http.put<IMessageResponse>(
       `${this.invitesBaseUrl}/${id}`,
-      event
+      event,
+      {
+        params: {
+          override,
+        }
+      }
     );
   }
 

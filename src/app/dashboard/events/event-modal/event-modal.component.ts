@@ -17,7 +17,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Observable, fromEvent, merge } from 'rxjs';
+import { Observable, combineLatest, fromEvent, merge, take } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { IEventAction, IFullEvent } from 'src/app/core/models/events';
 import { IUserDropdownData } from 'src/app/core/models/users';
@@ -26,6 +26,12 @@ import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
+import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import {
+  CommonModalResponse,
+  CommonModalType,
+  EventType,
+} from 'src/app/core/models/enum';
 
 @Component({
   selector: 'app-event-modal',
@@ -40,6 +46,8 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
   @Output() updateEvents: EventEmitter<IEventAction> = new EventEmitter();
 
   createEventForm!: FormGroup;
+
+  originalEventType: EventType | undefined = undefined;
   users: IUserDropdownData[] = [];
   userEmptyMessage = '';
 
@@ -53,6 +61,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
     private fb: FormBuilder,
     private toastr: ToastrService,
     private loaderService: LoaderService,
+    private commonModalService: CommonModalService,
     private cd: ChangeDetectorRef
   ) {
     this.validationMessages = {
@@ -120,19 +129,53 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
       this.createEventForm.patchValue({
         ...eventAction.event,
         dateOfEvent: eventAction.event.dateOfEvent.split('T')[0],
-        maxDateOfConfirmation: eventAction.event.maxDateOfConfirmation.split('T')[0],
+        maxDateOfConfirmation:
+          eventAction.event.maxDateOfConfirmation.split('T')[0],
       });
 
       if (!eventAction.isNew) {
-        this.createEventForm.controls['typeOfEvent'].disable();
+        this.originalEventType = eventAction.event.typeOfEvent;
       }
     }
   }
 
   saveEvent() {
     if (this.createEventForm.valid && this.createEventForm.dirty) {
-      if (this.createEventForm.controls['id'].value !== '') {
-        this.updateEvent();
+      if (
+        this.createEventForm.controls['id'].value !== '' &&
+        this.originalEventType
+      ) {
+        const weddingEventTypes = [EventType.Wedding, EventType.SaveTheDate];
+        if (
+          (weddingEventTypes.includes(this.originalEventType) &&
+            this.createEventForm.controls['typeOfEvent'].value ===
+              EventType.Xv) ||
+          (this.originalEventType === EventType.Xv &&
+            weddingEventTypes.includes(
+              this.createEventForm.controls['typeOfEvent'].value
+            ))
+        ) {
+          this.commonModalService.setData({
+            title: $localize`Sobreescribiendo evento`,
+            modalBody: $localize`Usted esta cambiando el tipo de evento por uno que no es compatible, ¿está seguro de sobreescribir el evento ${this.createEventForm.controls['nameOfEvent'].value}? Esto causará que se borre la información capturada por los invitados y las configuraciones.`,
+            modalType: CommonModalType.Confirm,
+          });
+
+          this.commonModalService.commonModalResponse$
+            .pipe(take(1))
+            .subscribe((response) => {
+              console.log(response);
+              if (response === CommonModalResponse.Confirm) {
+                this.updateEvent(true);
+              } else {
+                this.createEventForm.controls['typeOfEvent'].setValue(
+                  this.originalEventType
+                );
+              }
+            });
+        } else {
+          this.updateEvent();
+        }
       } else {
         this.createEvent();
       }
@@ -168,12 +211,13 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
       });
   }
 
-  updateEvent() {
+  updateEvent(override: boolean = false) {
     this.loaderService.setLoading(true, $localize`Actualizando evento`);
     this.eventsService
       .updateEvent(
         this.createEventForm.value,
-        this.createEventForm.controls['id'].value
+        this.createEventForm.controls['id'].value,
+        override
       )
       .subscribe({
         next: (response: IMessageResponse) => {
@@ -209,6 +253,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
 
     this.displayMessage = {};
     this.eventAction = undefined;
+    this.originalEventType = undefined;
 
     $('#eventId').val('');
   }
@@ -227,9 +272,5 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.createEventForm
       );
     });
-  }
-
-  overrideField(): void {
-    this.toastr.warning('Proximamente');
   }
 }

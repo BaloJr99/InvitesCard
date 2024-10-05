@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {} from 'bootstrap';
 import { DataTableDirective } from 'angular-datatables';
-import { Subject } from 'rxjs';
+import { Subject, take } from 'rxjs';
 import { ADTSettings } from 'angular-datatables/src/models/settings';
 import {
   IFullInvite,
@@ -22,6 +22,8 @@ import { InvitesService } from 'src/app/core/services/invites.service';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from 'src/app/core/services/loader.service';
+import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { CommonModalResponse, CommonModalType } from 'src/app/core/models/enum';
 
 @Component({
   selector: 'app-table',
@@ -58,7 +60,8 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private invitesService: InvitesService,
     private toastrService: ToastrService,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private commonModalService: CommonModalService
   ) {}
 
   ngOnInit(): void {
@@ -96,7 +99,6 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
         ...inviteToEdit,
       },
       isNew: false,
-      delete: false,
     });
 
     $('#inviteModal').modal('show');
@@ -106,11 +108,31 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
     const inviteFound = this.originalInvites.value.find(
       (original) => original.id === invite.id
     ) as IFullInvite;
-    this.setInviteAction.emit({
-      invite: inviteFound,
-      isNew: false,
-      delete: true,
+
+    this.commonModalService.setData({
+      title: $localize`Eliminar invitación`,
+      modalBody: $localize`¿Estás seguro de eliminar la invitación de ${inviteFound.family}?`,
+      modalType: CommonModalType.Confirm,
     });
+
+    this.commonModalService.commonModalResponse$
+      .pipe(take(1))
+      .subscribe((response) => {
+        if (response === CommonModalResponse.Confirm) {
+          this.loaderService.setLoading(true, $localize`Eliminando invitación`);
+          this.invitesService
+            .deleteInvite(inviteFound.id)
+            .subscribe({
+              next: (response: IMessageResponse) => {
+                this.removeInvites.emit([inviteFound.id]);
+                this.toastrService.success(response.message);
+              },
+            })
+            .add(() => {
+              this.loaderService.setLoading(false);
+            });
+        }
+      });
   }
 
   selectAll(event: Event): void {
@@ -138,7 +160,7 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   bulkDeleteInvites(): void {
-    this.loaderService.setLoading(true, 'Deleting invites');
+    this.loaderService.setLoading(true, $localize`Eliminando invitaciones`);
     const invitesBeingDeleted = this.inviteGroup.value
       .filter((invite) => invite.beingDeleted)
       .map((invite) => invite.id);

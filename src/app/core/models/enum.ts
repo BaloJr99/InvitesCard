@@ -19,3 +19,12 @@ export const enum EventType {
   Wedding = 'W',
   SaveTheDate = 'S',
 }
+
+export const enum CommonModalType {
+  Confirm = 'confirm',
+}
+
+export const enum CommonModalResponse {
+  Confirm = 1,
+  Cancel = 2,
+}

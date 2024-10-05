@@ -22,11 +22,11 @@
 
         <table class="table table-striped" *ngIf="invites.length > 0 || errorInvites.length > 0">
           <thead>
-            <th scope="col">Familia</th>
-            <th scope="col"># de invitaciones</th>
-            <th scope="col">Numero de teléfono</th>
-            <th scope="col">Niños permitidos</th>
-            <th scope="col">Grupo</th>
+            <th scope="col" i18n>Familia</th>
+            <th scope="col" i18n># de pases</th>
+            <th scope="col" i18n>Numero de teléfono</th>
+            <th scope="col" i18n>Niños permitidos</th>
+            <th scope="col" i18n>Grupo</th>
           </thead>
           <tbody>
             <tr *ngFor="let invite of invites">
@@ -51,8 +51,8 @@
         </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary" (click)="sendData()" [disabled]="this.invites.length === 0">Procesar archivo</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" i18n>Cerrar</button>
+        <button type="button" class="btn btn-primary" (click)="sendData()" [disabled]="this.invites.length === 0" i18n>Procesar archivo</button>
       </div>
     </div>
   </div>

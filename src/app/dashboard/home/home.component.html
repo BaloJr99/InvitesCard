@@ -24,7 +24,7 @@
                   <tbody>
                     <ng-container *ngFor="let statistic of statistics; index as i">
                       <tr *ngIf="i !== statistics.length - 1">
-                        <td i18n><i class="fa-solid fa-circle" [ngStyle]="{color: statistic.color}" aria-hidden="true"></i> {{ statistic.name }}</td>
+                        <td><i class="fa-solid fa-circle" [ngStyle]="{color: statistic.color}" aria-hidden="true"></i> {{ statistic.name }}</td>
                         <td>{{ statistic.value }}</td>
                       </tr>
                     </ng-container>
@@ -32,7 +32,7 @@
                   <tfoot>
                     <ng-container *ngFor="let statistic of statistics; index as i">
                       <tr *ngIf="i === statistics.length - 1">
-                        <td i18n><i class="fa-solid fa-circle" [ngStyle]="{color: statistic.color}" aria-hidden="true"></i> {{ statistic.name }}</td>
+                        <td><i class="fa-solid fa-circle" [ngStyle]="{color: statistic.color}" aria-hidden="true"></i> {{ statistic.name }}</td>
                         <td>{{ statistic.value }}</td>
                       </tr>
                     </ng-container>

@@ -87,7 +87,6 @@ export type IDashboardInvite = Omit<IConfirmation, 'id' | 'message'>;
 export interface IInviteAction {
   invite: IUpsertInvite;
   isNew: boolean;
-  delete: boolean;
 }
 
 export interface IEventTypeResolved {

@@ -156,7 +156,7 @@ export class InvitesImportModalComponent implements OnInit {
   }
 
   downloadTemplate() {
-    const csv = `Family,Entries Number,Phone Number,Kids Allowed,Invite Group\n`;
+    const csv = $localize`Familia,Numero de pases,Telefóno,Niños permitidos,Grupo\n`;
     const blob = new Blob([csv], {
       type: 'text/csv',
     });
@@ -164,7 +164,7 @@ export class InvitesImportModalComponent implements OnInit {
     const a = document.createElement('a');
     a.setAttribute('hidden', '');
     a.setAttribute('href', url);
-    a.setAttribute('download', 'invitesTemplate.csv');
+    a.setAttribute('download', $localize`plantillaInvitaciones.csv`);
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

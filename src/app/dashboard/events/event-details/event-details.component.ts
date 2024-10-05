@@ -300,27 +300,20 @@ export class InviteDetailsComponent implements OnInit {
       });
       this.buildInvitesDashboard();
     } else {
-      if (inviteAction.delete) {
-        this.invites = this.invites.filter(
-          (invite) => invite.id !== inviteAction.invite.id
-        );
-        this.buildInvitesDashboard();
-      } else {
-        this.invites = this.invites.map((originalInvite) => {
-          if (originalInvite.id === inviteAction.invite.id) {
-            return {
-              ...inviteAction.invite,
-              entriesConfirmed: null,
-              message: null,
-              confirmation: null,
-              dateOfConfirmation: null,
-              isMessageRead: false,
-            };
-          }
-          return originalInvite;
-        });
-        this.buildInvitesDashboard();
-      }
+      this.invites = this.invites.map((originalInvite) => {
+        if (originalInvite.id === inviteAction.invite.id) {
+          return {
+            ...inviteAction.invite,
+            entriesConfirmed: null,
+            message: null,
+            confirmation: null,
+            dateOfConfirmation: null,
+            isMessageRead: false,
+          };
+        }
+        return originalInvite;
+      });
+      this.buildInvitesDashboard();
     }
   }
 

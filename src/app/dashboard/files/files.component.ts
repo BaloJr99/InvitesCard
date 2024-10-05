@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, combineLatest, take } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
+import { CommonModalResponse, CommonModalType } from 'src/app/core/models/enum';
 import { IDropdownEvent } from 'src/app/core/models/events';
 import {
   IDeleteImage,
@@ -10,6 +11,7 @@ import {
   IUpdateImage,
   IUpdateImageArray,
 } from 'src/app/core/models/images';
+import { CommonModalService } from 'src/app/core/services/commonModal.service';
 import { EventsService } from 'src/app/core/services/events.service';
 import { ImagesService } from 'src/app/core/services/images.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
@@ -26,7 +28,6 @@ export class FilesComponent implements OnInit {
   eventSelected: IDropdownEvent | undefined = undefined;
 
   images: IDownloadImage[] = [];
-  imageAction!: IDeleteImage;
   scaleImageUrl = '';
 
   imageUpdateForm: FormArray<FormGroup<IUpdateImageArray>> = new FormArray<
@@ -42,6 +43,7 @@ export class FilesComponent implements OnInit {
     private loaderService: LoaderService,
     private eventsService: EventsService,
     private imagesService: ImagesService,
+    private commonModalService: CommonModalService,
     private fb: FormBuilder,
     private toastr: ToastrService
   ) {}
@@ -127,17 +129,36 @@ export class FilesComponent implements OnInit {
     }
   }
 
-  updateImages(imageAction: IDeleteImage): void {
-    this.images = this.images.filter((image) => image.id !== imageAction.id);
-  }
-
   showDeleteDialog(id: string): void {
     const imageFound = this.images.find((image) => image.id === id);
 
     if (imageFound) {
-      this.imageAction = imageFound;
+      this.commonModalService.setData({
+        title: $localize`Eliminando imagen`,
+        modalBody: $localize`¿Está seguro que desea eliminar la imagen?`,
+        modalType: CommonModalType.Confirm,
+      });
 
-      $('#warningDialog').modal('show');
+      this.commonModalService.commonModalResponse$
+        .pipe(take(1))
+        .subscribe((response) => {
+          if (response === CommonModalResponse.Confirm) {
+            this.loaderService.setLoading(true, $localize`Eliminando imagen`);
+            this.imagesService
+              .deleteImage(imageFound)
+              .subscribe({
+                next: (response: IMessageResponse) => {
+                  this.images = this.images.filter(
+                    (image) => image.id !== imageFound.id
+                  );
+                  this.toastr.success(response.message);
+                },
+              })
+              .add(() => {
+                this.loaderService.setLoading(false);
+              });
+          }
+        });
     }
   }
 

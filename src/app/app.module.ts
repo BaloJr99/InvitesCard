@@ -8,9 +8,15 @@ import { ToastrModule } from 'ngx-toastr';
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
 import { ErrorModalComponent } from './shared/components/error-modal/error-modal.component';
 import { CoreModule } from './core/core.module';
+import { CommonModalComponent } from './shared/components/common-modal/common-modal.component';
 
 @NgModule({
-  declarations: [AppComponent, SpinnerComponent, ErrorModalComponent],
+  declarations: [
+    AppComponent,
+    CommonModalComponent,
+    SpinnerComponent,
+    ErrorModalComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

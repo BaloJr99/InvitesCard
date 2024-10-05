@@ -37,7 +37,6 @@
   (updateInvites)="updateInvites($event)"
   (updateInviteGroups)="updateInviteGroups($event)">
 </app-invite-modal>
-<app-event-dialog *ngIf="inviteAction" [inviteAction]="inviteAction" (updateInvites)="updateInvites($event)"></app-event-dialog>
 <app-invites-import-dialog 
   [eventId]="eventId"
   [inviteGroups]="inviteGroups"

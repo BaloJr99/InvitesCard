@@ -9,7 +9,6 @@ import { InvitesService } from 'src/app/core/services/invites.service';
 import { InvitesImportModalComponent } from './invites-import-modal/invites-import-modal.component';
 import { EventCardComponent } from './event-card/event-card.component';
 import { InviteModalComponent } from './invite-modal/invite-modal.component';
-import { EventDialogComponent } from './event-dialog/event-dialog.component';
 import { InviteGroupComponent } from './invite-modal/invite-group-modal/invite-group.component';
 
 const routes: Routes = [
@@ -28,7 +27,6 @@ const routes: Routes = [
     TableComponent,
     InvitesImportModalComponent,
     InviteModalComponent,
-    EventDialogComponent,
     InviteGroupComponent,
   ],
 })

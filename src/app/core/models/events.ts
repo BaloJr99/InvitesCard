@@ -1,3 +1,4 @@
+import { EventType } from './enum';
 import { IFullInvite } from './invites';
 
 export interface IFullEvent {
@@ -7,7 +8,7 @@ export interface IFullEvent {
   allowCreateInvites: number;
   maxDateOfConfirmation: string;
   nameOfCelebrated: string;
-  typeOfEvent: string;
+  typeOfEvent: EventType;
   userId: string;
 }
 
