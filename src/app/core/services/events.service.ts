@@ -21,6 +21,10 @@ export class EventsService {
     return this.http.get<IDropdownEvent[]>(`${this.invitesBaseUrl}/dropdown`);
   }
 
+  getEventType(eventId: string): Observable<string> {
+    return this.http.get<string>(`${this.invitesBaseUrl}/${eventId}/eventType`);
+  }
+
   getEventInvites(eventId: string): Observable<IFullInvite[]> {
     return this.http.get<IFullInvite[]>(
       `${this.invitesBaseUrl}/invites/${eventId}`

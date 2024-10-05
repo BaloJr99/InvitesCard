@@ -106,6 +106,10 @@ export class SaveTheDateComponent implements AfterViewInit {
               ...this.saveTheDateSettings,
               isNew: true,
             };
+
+            this.createEventSettingsForm.patchValue({
+              eventId: this.saveTheDateSettings.eventId,
+            });
           },
         })
         .add(() => {

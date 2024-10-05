@@ -8,16 +8,16 @@ import {
 } from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
   FormControlName,
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { IConfirmation, IUserInvite } from 'src/app/core/models/invites';
+import { ISaveTheDateConfirmation, ISaveTheDateUserInvite } from 'src/app/core/models/invites';
 import { SocketService } from 'src/app/core/services/socket.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { ActivatedRoute } from '@angular/router';
+import { EventType } from 'src/app/core/models/enum';
 
 @Component({
   selector: 'app-accomodation',
@@ -27,7 +27,7 @@ import { ActivatedRoute } from '@angular/router';
 export class AccomodationComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
-  @Input() invite!: IUserInvite;
+  @Input() invite!: ISaveTheDateUserInvite;
   @Input() set deadlineMet(value: boolean) {
     this.blockAccomodationForm = value;
     if (value === true) {
@@ -47,18 +47,14 @@ export class AccomodationComponent {
     private activatedRoute: ActivatedRoute
   ) {
     this.accomodationForm = this.fb.group({
-      confirmation: ['true', Validators.required],
+      needsAccomodation: ['true', Validators.required],
     });
   }
 
   saveInformation(): void {
     const assist =
-      this.accomodationForm.controls['confirmation'].value === 'true';
-    this.accomodationForm.patchValue({ confirmation: assist });
-    this.accomodationForm.addControl(
-      'dateOfConfirmation',
-      new FormControl(new Date().toISOString())
-    );
+      this.accomodationForm.controls['needsAccomodation'].value === 'true';
+    this.accomodationForm.patchValue({ needsAccomodation: assist });
     this.addnewInvite();
   }
 
@@ -67,8 +63,9 @@ export class AccomodationComponent {
       this.loaderService.setLoading(true, $localize`Enviando confirmación`);
       this.invitesService
         .sendConfirmation(
-          this.accomodationForm.value as IConfirmation,
-          this.invite.id
+          this.accomodationForm.value as ISaveTheDateConfirmation,
+          this.invite.id,
+          EventType.SaveTheDate
         )
         .subscribe({
           next: () => {
@@ -87,6 +84,6 @@ export class AccomodationComponent {
   }
 
   showDiv(): void {
-    this.invite.confirmation = this.accomodationForm.get('confirmation')?.value;
+    this.invite.needsAccomodation = this.accomodationForm.get('needsAccomodation')?.value;
   }
 }

@@ -26,10 +26,9 @@ export interface IEventAction {
 }
 
 export interface IStatistic {
-  confirmedEntries: number;
-  canceledEntries: number;
-  pendingEntries: number;
-  totalEntries: number;
+  name: string;
+  value: number;
+  color: string;
 }
 
 export interface IEventResolved {

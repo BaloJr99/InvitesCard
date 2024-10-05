@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, LOCALE_ID } from '@angular/core';
+import { Component, ElementRef, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { ImageUsage } from 'src/app/core/models/enum';
@@ -6,7 +6,7 @@ import { IDownloadImage } from 'src/app/core/models/images';
 import {
   ICalendarDays,
   ICalendarWeeks,
-  IUserInvite,
+  ISaveTheDateUserInvite,
 } from 'src/app/core/models/invites';
 import { ISaveTheDateSetting } from 'src/app/core/models/settings';
 import { ImagesService } from 'src/app/core/services/images.service';
@@ -19,10 +19,10 @@ import { SettingsService } from 'src/app/core/services/settings.service';
   templateUrl: './save-the-date.component.html',
   styleUrl: './save-the-date.component.css',
 })
-export class SaveTheDateComponent {
+export class SaveTheDateComponent implements OnInit{
   counter = 0;
 
-  userInvite!: IUserInvite;
+  userInvite!: ISaveTheDateUserInvite;
   eventSettings: ISaveTheDateSetting = {
     eventId: '',
     primaryColor: '',
@@ -62,7 +62,7 @@ export class SaveTheDateComponent {
 
       this.invitesService.getInvite(inviteId).subscribe({
         next: (userInvite) => {
-          this.userInvite = userInvite;
+          this.userInvite = userInvite as ISaveTheDateUserInvite;
 
           this.userInvite.dateOfEvent = this.userInvite.dateOfEvent.slice(
             0,
@@ -151,28 +151,21 @@ export class SaveTheDateComponent {
   generateCalendar() {
     const date = new Date(this.userInvite.dateOfEvent);
     // Get the first day of the month
-    let dayone = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+    const dayone = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
 
     // Get the last date of the month
-    let lastdate = new Date(
+    const lastdate = new Date(
       date.getFullYear(),
       date.getMonth() + 1,
       0
     ).getDate();
 
     // Get the day of the last date of the month
-    let dayend = new Date(
+    const dayend = new Date(
       date.getFullYear(),
       date.getMonth(),
       lastdate
     ).getDay();
-
-    // Get the last date of the previous month
-    let monthlastdate = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      0
-    ).getDate();
 
     let daysOfWeek: ICalendarDays[] = [];
 
@@ -224,7 +217,7 @@ export class SaveTheDateComponent {
           days: daysOfWeek,
         });
         daysOfWeek = [];
-      } 
+      }
     }
   }
 }

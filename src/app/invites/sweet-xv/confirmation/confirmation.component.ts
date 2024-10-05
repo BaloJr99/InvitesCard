@@ -23,6 +23,7 @@ import { SocketService } from 'src/app/core/services/socket.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { ActivatedRoute } from '@angular/router';
+import { EventType } from 'src/app/core/models/enum';
 
 @Component({
   selector: 'app-confirmation',
@@ -115,7 +116,8 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
       this.invitesService
         .sendConfirmation(
           this.confirmationForm.value as IConfirmation,
-          this.invite.id
+          this.invite.id,
+          EventType.Xv
         )
         .subscribe({
           next: () => {

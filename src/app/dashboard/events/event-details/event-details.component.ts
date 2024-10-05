@@ -1,6 +1,6 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { filter, switchMap } from 'rxjs';
+import { combineLatest, filter, switchMap } from 'rxjs';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
 import { SocketService } from 'src/app/core/services/socket.service';
@@ -9,13 +9,19 @@ import {
   IInviteGroups,
   IInviteGroupsAction,
 } from 'src/app/core/models/inviteGroups';
-import { IBulkResults, IMessage, INotification } from 'src/app/core/models/common';
+import {
+  IBulkResults,
+  IMessage,
+  INotification,
+} from 'src/app/core/models/common';
 import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
 import {
   IConfirmation,
   IFullInvite,
   IInviteAction,
 } from 'src/app/core/models/invites';
+import { EventsService } from 'src/app/core/services/events.service';
+import { EventType } from 'src/app/core/models/enum';
 
 @Component({
   selector: 'app-event-details',
@@ -27,24 +33,19 @@ export class InviteDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private loaderService: LoaderService,
     private inviteGroupsService: InviteGroupsService,
+    private eventsService: EventsService,
     private commonInvitesService: CommonInvitesService,
     private socket: SocketService,
     @Inject(LOCALE_ID) private localeValue: string
   ) {}
 
-  stadistics: IStatistic = {
-    confirmedEntries: 0,
-    canceledEntries: 0,
-    pendingEntries: 0,
-    totalEntries: 0,
-  };
+  statistics: IStatistic[] = [];
 
   eventId = '';
+  eventType = '';
 
   inviteAction!: IInviteAction;
-
   invitesGrouped: { [key: string]: IFullInvite[] } = {};
-
   invites: IFullInvite[] = [];
   inviteGroups: IInviteGroups[] = [];
 
@@ -72,14 +73,18 @@ export class InviteDetailsComponent implements OnInit {
           return false;
         }),
         switchMap((data) =>
-          this.inviteGroupsService.getAllInviteGroups(
-            data['eventResolved']['id']
-          )
+          combineLatest([
+            this.inviteGroupsService.getAllInviteGroups(
+              data['eventResolved']['id']
+            ),
+            this.eventsService.getEventType(data['eventResolved']['id']),
+          ])
         )
       )
       .subscribe({
-        next: (inviteGroups) => {
+        next: ([inviteGroups, eventType]) => {
           this.inviteGroups = inviteGroups;
+          this.eventType = eventType;
           this.buildInvitesDashboard();
         },
       })
@@ -123,54 +128,117 @@ export class InviteDetailsComponent implements OnInit {
     const notifications: INotification[] = [];
     const messages: IMessage[] = [];
 
-    this.stadistics = {
-      confirmedEntries: 0,
-      canceledEntries: 0,
-      pendingEntries: 0,
-      totalEntries: 0,
-    };
+    this.statistics = [];
 
-    this.invites.forEach((value) => {
-      if (value.confirmation) {
-        this.stadistics.confirmedEntries += value.entriesConfirmed ?? 0;
-        this.stadistics.canceledEntries +=
-          value.entriesNumber - (value.entriesConfirmed ?? 0);
-      } else {
-        if (value.confirmation === null || value.confirmation === undefined) {
-          this.stadistics.pendingEntries += value.entriesNumber;
+    if (
+      this.eventType === EventType.Xv ||
+      this.eventType === EventType.Wedding
+    ) {
+      this.statistics = [
+        {
+          name: $localize`Confirmados`,
+          value: 0,
+          color: '#4CAF50',
+        },
+        {
+          name: $localize`Pendientes`,
+          value: 0,
+          color: '#FFC107',
+        },
+        {
+          name: $localize`Cancelados`,
+          value: 0,
+          color: '#F44336',
+        },
+        {
+          name: $localize`Total`,
+          value: 0,
+          color: '#2196F3',
+        },
+      ];
+
+      this.invites.forEach((value) => {
+        if (value.confirmation) {
+          this.statistics[0].value += value.entriesConfirmed ?? 0;
+          this.statistics[2].value +=
+            value.entriesNumber - (value.entriesConfirmed ?? 0);
         } else {
-          this.stadistics.canceledEntries += value.entriesNumber;
+          if (value.confirmation === null || value.confirmation === undefined) {
+            this.statistics[1].value += value.entriesNumber;
+          } else {
+            this.statistics[2].value += value.entriesNumber;
+          }
         }
-      }
-      this.stadistics.totalEntries += value.entriesNumber;
-      if (value.message) {
-        messages.push({
-          family: value.family,
-          message: value.message,
-          date: new Date(value.dateOfConfirmation as string).toLocaleDateString(
-            this.localeValue,
-            { day: 'numeric', month: 'long', year: 'numeric' }
-          ),
-          time: new Date(value.dateOfConfirmation as string).toLocaleTimeString(
-            this.localeValue,
-            { hour: '2-digit', minute: '2-digit' }
-          ),
-        });
-      }
+        this.statistics[3].value += value.entriesNumber;
+        if (value.message) {
+          messages.push({
+            family: value.family,
+            message: value.message,
+            date: new Date(
+              value.dateOfConfirmation as string
+            ).toLocaleDateString(this.localeValue, {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            }),
+            time: new Date(
+              value.dateOfConfirmation as string
+            ).toLocaleTimeString(this.localeValue, {
+              hour: '2-digit',
+              minute: '2-digit',
+            }),
+          });
+        }
 
-      if (value.confirmation !== null && value.confirmation !== undefined) {
-        notifications.push({
-          id: value.id,
-          confirmation: value.confirmation,
-          dateOfConfirmation: value.dateOfConfirmation ?? '',
-          family: value.family,
-          isMessageRead: value.isMessageRead,
-        });
-      }
-    });
+        if (value.confirmation !== null && value.confirmation !== undefined) {
+          notifications.push({
+            id: value.id,
+            confirmation: value.confirmation,
+            dateOfConfirmation: value.dateOfConfirmation ?? '',
+            family: value.family,
+            isMessageRead: value.isMessageRead,
+          });
+        }
+      });
 
-    this.commonInvitesService.updateNotifications(notifications, messages);
-    this.groupEntries(this.invites);
+      this.commonInvitesService.updateNotifications(notifications, messages);
+      this.groupEntries(this.invites);
+    } else if (this.eventType === EventType.SaveTheDate) {
+      this.statistics = [
+        {
+          name: $localize`Respondidos`,
+          value: 0,
+          color: '#4CAF50',
+        },
+        {
+          name: $localize`Pendientes`,
+          value: 0,
+          color: '#F44336',
+        },
+        {
+          name: $localize`Hospedaje`,
+          value: 0,
+          color: '#FFC107',
+        },
+        {
+          name: $localize`Total`,
+          value: 0,
+          color: '#2196F3',
+        },
+      ];
+
+      this.invites.forEach((value) => {
+        if (value.needsAccomodation !== null) {
+          this.statistics[0].value += 1;
+          this.statistics[2].value += value.needsAccomodation ? 1 : 0;
+        } else {
+          this.statistics[1].value += 1;
+        }
+        this.statistics[3].value += 1;
+      });
+
+      this.groupEntries(this.invites);
+    }
   }
 
   groupEntries(invites: IFullInvite[]): void {
@@ -221,7 +289,6 @@ export class InviteDetailsComponent implements OnInit {
   }
 
   updateInvites(inviteAction: IInviteAction) {
-    this.clearValues();
     if (inviteAction.isNew) {
       this.invites = this.invites.concat({
         ...inviteAction.invite,
@@ -294,14 +361,5 @@ export class InviteDetailsComponent implements OnInit {
       });
       this.buildInvitesDashboard();
     });
-  }
-
-  clearValues(): void {
-    this.stadistics = {
-      confirmedEntries: 0,
-      canceledEntries: 0,
-      pendingEntries: 0,
-      totalEntries: 0,
-    };
   }
 }

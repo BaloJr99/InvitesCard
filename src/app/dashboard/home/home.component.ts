@@ -14,12 +14,7 @@ Chart.register(...registerables);
 })
 export class HomeComponent implements OnInit {
   invites: IDashboardInvite[] = [];
-  statistics: IStatistic = {
-    canceledEntries: 0,
-    confirmedEntries: 0,
-    pendingEntries: 0,
-    totalEntries: 0,
-  };
+  statistics: IStatistic[] = [];
   percentajeOfConfirmation: string = '0';
   percentajeOfPendingResponse: string = '0';
   groupedByDate: { [key: string]: number } = {};
@@ -47,10 +42,10 @@ export class HomeComponent implements OnInit {
   RenderChart() {
     this.statistics = createStatistics(this.invites);
     this.percentajeOfConfirmation = Math.trunc(
-      (this.statistics.confirmedEntries / this.statistics.totalEntries) * 100
+      (this.statistics[0].value / this.statistics[3].value) * 100
     ).toString();
     this.percentajeOfPendingResponse = Math.trunc(
-      (this.statistics.pendingEntries / this.statistics.totalEntries) * 100
+      (this.statistics[1].value / this.statistics[3].value) * 100
     ).toString();
 
     const todayMinus31Days = new Date();
@@ -156,9 +151,9 @@ export class HomeComponent implements OnInit {
           {
             label: $localize`# de entradas`,
             data: [
-              this.statistics.confirmedEntries,
-              this.statistics.pendingEntries,
-              this.statistics.canceledEntries,
+              this.statistics[0].value,
+              this.statistics[1].value,
+              this.statistics[2].value,
             ],
             backgroundColor: ['#43cd63', '#facf4f', '#ff5d6d'],
             borderWidth: 1,

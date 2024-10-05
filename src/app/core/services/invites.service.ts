@@ -6,6 +6,8 @@ import {
   IBulkInvite,
   IConfirmation,
   IDashboardInvite,
+  ISaveTheDateConfirmation,
+  ISaveTheDateUserInvite,
   IUpsertInvite,
   IUserInvite,
 } from '../models/invites';
@@ -22,8 +24,8 @@ export class InvitesService {
     return this.http.get<IDashboardInvite[]>(this.invitesBaseUrl);
   }
 
-  getInvite(id: string): Observable<IUserInvite> {
-    return this.http.get<IUserInvite>(`${this.invitesBaseUrl}/invite/${id}`);
+  getInvite(id: string): Observable<IUserInvite | ISaveTheDateUserInvite> {
+    return this.http.get<IUserInvite | ISaveTheDateUserInvite>(`${this.invitesBaseUrl}/invite/${id}`);
   }
 
   createInvite(invite: IUpsertInvite): Observable<IMessageResponse> {
@@ -45,11 +47,12 @@ export class InvitesService {
   }
 
   sendConfirmation(
-    invite: IConfirmation,
-    id: string
+    invite: IConfirmation | ISaveTheDateConfirmation,
+    id: string,
+    eventType: string
   ): Observable<IMessageResponse> {
     return this.http.patch<IMessageResponse>(
-      `${this.invitesBaseUrl}/${id}`,
+      `${this.invitesBaseUrl}/${id}/${eventType}`,
       invite
     );
   }

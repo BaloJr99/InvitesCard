@@ -12,6 +12,7 @@ export interface IFullInvite {
   eventId: string;
   inviteGroupId: string;
   inviteViewed: string;
+  needsAccomodation: boolean | null;
 }
 
 export type IUpsertInvite = Omit<
@@ -45,7 +46,7 @@ export type IBulkInvite = Pick<
 
 export type IErrorInvite = Omit<
   IUpsertInvite,
-  'id' | 'eventId' | 'entriesNumber' | 'inviteViewed'
+  'id' | 'eventId' | 'entriesNumber' | 'inviteViewed' | 'needsAccomodation'
 > & { entriesNumber: string };
 
 export type IConfirmation = Pick<
@@ -58,9 +59,21 @@ export type IConfirmation = Pick<
   | 'message'
 >;
 
+export type ISaveTheDateConfirmation = Pick<IFullInvite, 'needsAccomodation'>;
+
 export type IUserInvite = Pick<
   IFullInvite,
   'id' | 'family' | 'entriesNumber' | 'confirmation' | 'kidsAllowed' | 'eventId'
+> & {
+  dateOfEvent: string;
+  maxDateOfConfirmation: string;
+  nameOfCelebrated: string;
+  typeOfEvent: string;
+};
+
+export type ISaveTheDateUserInvite = Pick<
+  IFullInvite,
+  'id' | 'family' | 'eventId' | 'needsAccomodation'
 > & {
   dateOfEvent: string;
   maxDateOfConfirmation: string;

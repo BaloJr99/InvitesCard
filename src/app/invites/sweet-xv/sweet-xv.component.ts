@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
-import { ISweetXvSetting } from '../../core/models/settings';
+import { ISetting } from '../../core/models/settings';
 import { IDownloadImage } from '../../core/models/images';
 import { LoaderService } from '../../core/services/loader.service';
 import { SettingsService } from '../../core/services/settings.service';
@@ -31,7 +31,7 @@ export class SweetXvComponent implements OnInit {
   longDate = '';
 
   userInvite!: IUserInvite;
-  eventSettings: ISweetXvSetting = {
+  eventSettings: ISetting = {
     eventId: '',
     primaryColor: '',
     secondaryColor: '',
@@ -78,7 +78,7 @@ export class SweetXvComponent implements OnInit {
 
       this.invitesService.getInvite(inviteId).subscribe({
         next: (userInvite) => {
-          this.userInvite = userInvite;
+          this.userInvite = userInvite as IUserInvite;
 
           this.userInvite.dateOfEvent = this.userInvite.dateOfEvent.slice(
             0,

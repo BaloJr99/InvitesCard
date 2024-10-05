@@ -15,10 +15,7 @@
 </div>
 <section class="row mx-1 card-section">
   <div class="col-12 card-container">
-    <app-event-card  i18n-displayText displayText="Invitaciones Confirmadas" [number]="stadistics.confirmedEntries" backgroundColor="#43cd63"></app-event-card>
-    <app-event-card  i18n-displayText displayText="Invitaciones Pendientes" [number]="stadistics.pendingEntries" backgroundColor="#facf4f"></app-event-card>
-    <app-event-card  i18n-displayText displayText="Invitaciones Canceladas" [number]="stadistics.canceledEntries" backgroundColor="#ff5d6d"></app-event-card>
-    <app-event-card  i18n-displayText displayText="Total de Invitaciones" [number]="stadistics.totalEntries" backgroundColor="#54a6ff"></app-event-card>
+    <app-event-card *ngFor="let statistic of statistics" [displayText]="statistic.name" [number]="statistic.value" [backgroundColor]="statistic.color"></app-event-card>
   </div>
 </section>
 <section class="row mx-1 table-accordion">

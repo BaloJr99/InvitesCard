@@ -15,7 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { EventType } from 'src/app/core/models/enum';
-import { ISweetXvSetting, ISettingAction } from 'src/app/core/models/settings';
+import { ISetting, ISettingAction } from 'src/app/core/models/settings';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
@@ -161,6 +161,10 @@ export class SweetXvSettingsComponent implements AfterViewInit {
               ...this.sweetXvSettings,
               isNew: true,
             };
+
+            this.createEventSettingsForm.patchValue({
+              eventId: this.sweetXvSettings.eventId,
+            });
           },
         })
         .add(() => {
@@ -195,7 +199,10 @@ export class SweetXvSettingsComponent implements AfterViewInit {
   createEventSettings() {
     this.loaderService.setLoading(true, $localize`Creando configuraciones`);
     this.settingsService
-      .createEventSettings(this.formatEventSetting(), this.sweetXvSettings.eventType)
+      .createEventSettings(
+        this.formatEventSetting(),
+        this.sweetXvSettings.eventType
+      )
       .subscribe({
         next: (response: IMessageResponse) => {
           this.toastr.success(response.message);
@@ -229,7 +236,7 @@ export class SweetXvSettingsComponent implements AfterViewInit {
     }
   }
 
-  formatEventSetting(): ISweetXvSetting {
+  formatEventSetting(): ISetting {
     const updatedMassTime = this.createEventSettingsForm.get('massTime')
       ?.value as string;
     const updatedReceptionTime = this.createEventSettingsForm.get(
@@ -246,7 +253,7 @@ export class SweetXvSettingsComponent implements AfterViewInit {
         updatedReceptionTime.length > 5
           ? this.createEventSettingsForm.get('receptionTime')?.value
           : `${this.createEventSettingsForm.get('receptionTime')?.value}:00`,
-    } as ISweetXvSetting;
+    } as ISetting;
   }
 
   ngAfterViewInit(): void {
