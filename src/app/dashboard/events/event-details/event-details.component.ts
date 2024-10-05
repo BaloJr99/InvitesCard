@@ -136,24 +136,24 @@ export class InviteDetailsComponent implements OnInit {
     ) {
       this.statistics = [
         {
-          name: $localize`Confirmados`,
+          name: $localize`Invitaciones Confirmadas`,
           value: 0,
-          color: '#4CAF50',
+          color: '#43CD63',
         },
         {
-          name: $localize`Pendientes`,
+          name: $localize`Invitaciones Pendientes`,
           value: 0,
-          color: '#FFC107',
+          color: '#FACF4F',
         },
         {
-          name: $localize`Cancelados`,
+          name: $localize`Invitaciones Canceladas`,
           value: 0,
-          color: '#F44336',
+          color: '#FF5D6D',
         },
         {
-          name: $localize`Total`,
+          name: $localize`Total de Invitaciones`,
           value: 0,
-          color: '#2196F3',
+          color: '#54A6FF',
         },
       ];
 
@@ -206,24 +206,24 @@ export class InviteDetailsComponent implements OnInit {
     } else if (this.eventType === EventType.SaveTheDate) {
       this.statistics = [
         {
-          name: $localize`Respondidos`,
+          name: $localize`Invitaciones Respondidas`,
           value: 0,
-          color: '#4CAF50',
+          color: '#43CD63',
         },
         {
-          name: $localize`Pendientes`,
+          name: $localize`Invitaciones Pendientes`,
           value: 0,
-          color: '#F44336',
+          color: '#FACF4F',
         },
         {
-          name: $localize`Hospedaje`,
+          name: $localize`Invitaciones Hospedaje`,
           value: 0,
-          color: '#FFC107',
+          color: '#FF5D6D',
         },
         {
-          name: $localize`Total`,
+          name: $localize`Total de Invitaciones`,
           value: 0,
-          color: '#2196F3',
+          color: '#54A6FF',
         },
       ];
 

@@ -46,7 +46,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
     columns: [
       { title: $localize`Usuario`, data: 'username' },
       { title: $localize`Correo`, data: 'email' },
-      { title: $localize`# Entradas`, data: 'numEntries' },
+      { title: $localize`# Pases`, data: 'numEntries' },
       { title: $localize`# Eventos`, data: 'numEvents' },
       {
         title: $localize`Activo`,

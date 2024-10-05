@@ -149,7 +149,7 @@ export class HomeComponent implements OnInit {
         ],
         datasets: [
           {
-            label: $localize`# de entradas`,
+            label: $localize`# de pases`,
             data: [
               this.statistics[0].value,
               this.statistics[1].value,

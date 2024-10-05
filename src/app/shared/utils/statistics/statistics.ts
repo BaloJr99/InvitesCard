@@ -4,22 +4,22 @@ import { IDashboardInvite } from 'src/app/core/models/invites';
 export const createStatistics = (invites: IDashboardInvite[]): IStatistic[] => {
   const stadistics: IStatistic[] = [
     {
-      name: $localize`Confirmados`,
+      name: $localize`Pases Confirmados`,
       value: 0,
       color: '#4CAF50',
     },
     {
-      name: $localize`Pendientes`,
+      name: $localize`Pases Pendientes`,
       value: 0,
       color: '#FFC107',
     },
     {
-      name: $localize`Cancelados`,
+      name: $localize`Pases Cancelados`,
       value: 0,
       color: '#F44336',
     },
     {
-      name: $localize`Total`,
+      name: $localize`Total de Pases`,
       value: 0,
       color: '#2196F3',
     }
