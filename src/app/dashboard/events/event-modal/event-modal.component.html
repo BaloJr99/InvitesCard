@@ -34,12 +34,15 @@
           </div>
           <div class="mb-3">
             <label for="typeOfEvent" class="form-label" i18n>Tipo de evento</label>
-            <select id="typeOfEvent" class="form-control" formControlName="typeOfEvent" [ngClass]="{'is-invalid': displayMessage['typeOfEvent']}">
-              <option value="" i18n>Seleccione...</option>
-              <option value="X">Xv</option>
-              <option value="W">Boda</option>
-              <option value="S">Save the date</option>
-            </select>
+            <div class="typeOfEventControls" [ngClass]="{'is-invalid': displayMessage['typeOfEvent']}">
+              <select id="typeOfEvent" class="form-control" formControlName="typeOfEvent" [ngClass]="{'is-invalid': displayMessage['typeOfEvent']}">
+                <option value="" i18n>Seleccione...</option>
+                <option value="X">Xv</option>
+                <option value="W">Boda</option>
+                <option value="S">Save the date</option>
+              </select>
+              <button class="btn btn-primary" *ngIf="eventAction &&!eventAction.isNew" (click)="overrideField()"><i class="fa-solid fa-lock"></i></button>
+            </div>
             <span class="invalid-feedback" role="alert">
               {{ displayMessage['typeOfEvent'] }}
             </span>

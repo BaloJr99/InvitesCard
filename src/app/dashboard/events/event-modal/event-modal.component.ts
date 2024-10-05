@@ -36,7 +36,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  @Input() eventAction!: IEventAction;
+  @Input() eventAction: IEventAction | undefined = undefined;
   @Output() updateEvents: EventEmitter<IEventAction> = new EventEmitter();
 
   createEventForm!: FormGroup;
@@ -116,12 +116,16 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['eventAction'] && changes['eventAction'].currentValue) {
-      const event: IFullEvent = changes['eventAction'].currentValue.event;
+      const eventAction: IEventAction = changes['eventAction'].currentValue;
       this.createEventForm.patchValue({
-        ...event,
-        dateOfEvent: event.dateOfEvent.split('T')[0],
-        maxDateOfConfirmation: event.maxDateOfConfirmation.split('T')[0],
+        ...eventAction.event,
+        dateOfEvent: eventAction.event.dateOfEvent.split('T')[0],
+        maxDateOfConfirmation: eventAction.event.maxDateOfConfirmation.split('T')[0],
       });
+
+      if (!eventAction.isNew) {
+        this.createEventForm.controls['typeOfEvent'].disable();
+      }
     }
   }
 
@@ -201,7 +205,10 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
       userId: '',
     });
 
+    this.createEventForm.enable();
+
     this.displayMessage = {};
+    this.eventAction = undefined;
 
     $('#eventId').val('');
   }
@@ -220,5 +227,9 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
         this.createEventForm
       );
     });
+  }
+
+  overrideField(): void {
+    this.toastr.warning('Proximamente');
   }
 }
