@@ -1,11 +1,18 @@
 <section class="row mx-1 my-3 breadcrumb-header">
-  <div class="col-12">
+  <div class="col-12 header">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
         <li class="breadcrumb-item" i18n>INICIO</li>
       </ol>
     </nav>
+    <div class="filter">
+      <label for="eventId" i18n>Evento:</label>
+      <select id="eventId" class="form-control" (change)="filterInvites($event)">
+        <option value="" i18n>Todos los eventos</option>
+        <option *ngFor="let event of events" [value]="event.id">{{ event.nameOfEvent }}</option>
+      </select>
+    </div>
   </div>
 </section>
 <section class="history">

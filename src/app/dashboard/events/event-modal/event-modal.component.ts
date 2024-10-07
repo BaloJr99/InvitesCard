@@ -17,9 +17,9 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Observable, combineLatest, fromEvent, merge, take } from 'rxjs';
+import { Observable, fromEvent, merge, take } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { IEventAction, IFullEvent } from 'src/app/core/models/events';
+import { IEventAction } from 'src/app/core/models/events';
 import { IUserDropdownData } from 'src/app/core/models/users';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 import { EventsService } from 'src/app/core/services/events.service';
@@ -226,6 +226,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
               ...this.createEventForm.value,
               dateOfEvent: `${this.createEventForm.value.dateOfEvent}T00:00:00.000`,
               maxDateOfConfirmation: `${this.createEventForm.value.maxDateOfConfirmation}T00:00:00.000`,
+              allowCreateInvites: override ? override : this.eventAction?.event.allowCreateInvites,
             },
             isNew: false,
           });

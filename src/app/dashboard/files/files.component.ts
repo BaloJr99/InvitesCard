@@ -6,7 +6,6 @@ import { IMessageResponse } from 'src/app/core/models/common';
 import { CommonModalResponse, CommonModalType } from 'src/app/core/models/enum';
 import { IDropdownEvent } from 'src/app/core/models/events';
 import {
-  IDeleteImage,
   IDownloadImage,
   IUpdateImage,
   IUpdateImageArray,

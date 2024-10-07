@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { IStatistic } from 'src/app/core/models/events';
+import { combineLatest } from 'rxjs';
+import { EventType } from 'src/app/core/models/enum';
+import { IDropdownEvent, IStatistic } from 'src/app/core/models/events';
 import { IDashboardInvite } from 'src/app/core/models/invites';
+import { EventsService } from 'src/app/core/services/events.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { createStatistics } from 'src/app/shared/utils/statistics/statistics';
@@ -18,19 +21,30 @@ export class HomeComponent implements OnInit {
   percentajeOfConfirmation: string = '0';
   percentajeOfPendingResponse: string = '0';
   groupedByDate: { [key: string]: number } = {};
+  events: IDropdownEvent[] = [];
+  eventSelected: string = '';
+  lastInvitesChart: Chart<"bar", number[], string> | undefined;
+  historyChart: Chart<"pie", number[], string> | undefined;
 
   constructor(
     private invitesService: InvitesService,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private eventsService: EventsService
   ) {}
 
   ngOnInit(): void {
     this.loaderService.setLoading(true, $localize`Cargando página principal`);
-    this.invitesService
-      .getAllInvites()
+
+    combineLatest([
+      this.invitesService.getAllInvites(),
+      this.eventsService.getDropdownEvents(),
+    ])
       .subscribe({
-        next: (invites) => {
+        next: ([invites, events]) => {
           this.invites = invites;
+          this.events = events.filter(
+            (event) => event.typeOfEvent !== EventType.SaveTheDate
+          );
           this.RenderChart();
         },
       })
@@ -39,8 +53,15 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  filterInvites(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    this.eventSelected = target.value;
+    this.RenderChart();
+  }
+
   RenderChart() {
-    this.statistics = createStatistics(this.invites);
+    const invitesByEvent = this.invites.filter((invite) => this.eventSelected !== '' ? invite.eventId === this.eventSelected : true);
+    this.statistics = createStatistics(invitesByEvent);
     this.percentajeOfConfirmation = Math.trunc(
       (this.statistics[0].value / this.statistics[3].value) * 100
     ).toString();
@@ -54,7 +75,7 @@ export class HomeComponent implements OnInit {
     this.groupedByDate = {};
     const randomColors: string[] = [];
 
-    const validInvites = this.invites.filter((invite) => {
+    const validInvites = invitesByEvent.filter((invite) => {
       if (
         invite.dateOfConfirmation != null &&
         new Date(invite.dateOfConfirmation).getTime() >=
@@ -96,7 +117,11 @@ export class HomeComponent implements OnInit {
       }).length;
     });
 
-    new Chart('lastInvitesData', {
+    if (this.lastInvitesChart) {
+      this.lastInvitesChart.destroy();
+    }
+
+    this.lastInvitesChart = new Chart('lastInvitesData', {
       type: 'bar',
       data: {
         labels: Object.keys(this.groupedByDate),
@@ -139,7 +164,11 @@ export class HomeComponent implements OnInit {
       },
     });
 
-    new Chart('historyChart', {
+    if (this.historyChart) {
+      this.historyChart.destroy();
+    }
+
+    this.historyChart = new Chart('historyChart', {
       type: 'pie',
       data: {
         labels: [

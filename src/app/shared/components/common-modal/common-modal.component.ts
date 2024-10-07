@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ICommonModal } from 'src/app/core/models/common';
 import { CommonModalResponse, CommonModalType } from 'src/app/core/models/enum';
 import { CommonModalService } from 'src/app/core/services/commonModal.service';
@@ -7,7 +7,6 @@ import { CommonModalService } from 'src/app/core/services/commonModal.service';
   selector: 'app-common-modal',
   templateUrl: './common-modal.component.html',
   styleUrl: './common-modal.component.css',
-  encapsulation: ViewEncapsulation.None,
 })
 export class CommonModalComponent implements OnInit{
   commonModalData: ICommonModal = {

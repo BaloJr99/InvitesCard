@@ -82,7 +82,14 @@ export type ISaveTheDateUserInvite = Pick<
   typeOfEvent: string;
 };
 
-export type IDashboardInvite = Omit<IConfirmation, 'id' | 'message'>;
+export type IDashboardInvite = Pick<
+  IFullInvite,
+  | 'entriesConfirmed'
+  | 'confirmation'
+  | 'dateOfConfirmation'
+  | 'entriesNumber'
+  | 'eventId'
+>;
 
 export interface IInviteAction {
   invite: IUpsertInvite;

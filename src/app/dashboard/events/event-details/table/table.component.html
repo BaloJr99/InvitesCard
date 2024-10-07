@@ -44,11 +44,22 @@
             <td>
               <i class="fa-solid fa-eye" *ngIf="invite.inviteViewed" aria-hidden="true"></i>
             </td>
-            <td>
-              <button class="btn" [ngClass]="invite.confirmation === null || invite.confirmation === undefined ? 'btn-warning' : 'btn-secondary'" (click)="openEditModal(this.invite.id)" [disabled]="(invite.confirmation !== null && invite.confirmation !== undefined) || isDeadlineMet" i18n-title="Edit {{invite.family}}"><i aria-hidden="true" class="fa-solid fa-pen-to-square"></i></button>
-              <button class="btn btn-delete" [ngClass]="invite.confirmation === null || invite.confirmation === undefined ? 'btn-danger' : 'btn-secondary'" (click)="showModal(this.invite)" [disabled]="(invite.confirmation !== null && invite.confirmation !== undefined) || isDeadlineMet" i18n-title="Delete {{invite.family}}"><i aria-hidden="true" class="fa-solid fa-trash"></i></button>
-              <button class="btn" [ngClass]="invite.confirmation === null || invite.confirmation === undefined ? 'btn-success' : 'btn-secondary'" (click)="copyToClipBoard(this.invite.id)" [disabled]="(invite.confirmation !== null && invite.confirmation !== undefined) || isDeadlineMet" i18n-title="Copy {{invite.family}} invite url"><i aria-hidden="true" class="fa-solid fa-copy"></i></button>
-            </td>
+            <ng-container [ngSwitch]="eventType">
+              <ng-container *ngSwitchCase="'S'">
+                <td>
+                  <button class="btn" [ngClass]="invite.needsAccomodation === null || invite.needsAccomodation === undefined ? 'btn-warning' : 'btn-secondary'" (click)="openEditModal(this.invite.id)" [disabled]="(invite.needsAccomodation !== null && invite.needsAccomodation !== undefined) || isDeadlineMet" i18n-title="Edit {{invite.family}}"><i aria-hidden="true" class="fa-solid fa-pen-to-square"></i></button>
+                  <button class="btn btn-delete" [ngClass]="invite.needsAccomodation === null || invite.needsAccomodation === undefined ? 'btn-danger' : 'btn-secondary'" (click)="showModal(this.invite)" [disabled]="(invite.needsAccomodation !== null && invite.needsAccomodation !== undefined) || isDeadlineMet" i18n-title="Delete {{invite.family}}"><i aria-hidden="true" class="fa-solid fa-trash"></i></button>
+                  <button class="btn" [ngClass]="invite.needsAccomodation === null || invite.needsAccomodation === undefined ? 'btn-success' : 'btn-secondary'" (click)="copyToClipBoard(this.invite.id)" [disabled]="(invite.needsAccomodation !== null && invite.needsAccomodation !== undefined) || isDeadlineMet" i18n-title="Copy {{invite.family}} invite url"><i aria-hidden="true" class="fa-solid fa-copy"></i></button>
+                </td>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                <td>
+                  <button class="btn" [ngClass]="invite.confirmation === null || invite.confirmation === undefined ? 'btn-warning' : 'btn-secondary'" (click)="openEditModal(this.invite.id)" [disabled]="(invite.confirmation !== null && invite.confirmation !== undefined) || isDeadlineMet" i18n-title="Edit {{invite.family}}"><i aria-hidden="true" class="fa-solid fa-pen-to-square"></i></button>
+                  <button class="btn btn-delete" [ngClass]="invite.confirmation === null || invite.confirmation === undefined ? 'btn-danger' : 'btn-secondary'" (click)="showModal(this.invite)" [disabled]="(invite.confirmation !== null && invite.confirmation !== undefined) || isDeadlineMet" i18n-title="Delete {{invite.family}}"><i aria-hidden="true" class="fa-solid fa-trash"></i></button>
+                  <button class="btn" [ngClass]="invite.confirmation === null || invite.confirmation === undefined ? 'btn-success' : 'btn-secondary'" (click)="copyToClipBoard(this.invite.id)" [disabled]="(invite.confirmation !== null && invite.confirmation !== undefined) || isDeadlineMet" i18n-title="Copy {{invite.family}} invite url"><i aria-hidden="true" class="fa-solid fa-copy"></i></button>
+                </td>
+              </ng-container>
+            </ng-container>
           </tr>
         </tbody>
       </table>

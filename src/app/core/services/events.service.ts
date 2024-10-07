@@ -5,7 +5,6 @@ import { environment } from '../../../environments/environment';
 import { IDropdownEvent, IDashboardEvent, IFullEvent } from '../models/events';
 import { IMessageResponse } from '../models/common';
 import { IFullInvite } from '../models/invites';
-import { param } from 'jquery';
 
 @Injectable()
 export class EventsService {
