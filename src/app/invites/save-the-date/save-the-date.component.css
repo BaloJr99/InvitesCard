@@ -130,8 +130,9 @@
   z-index: -1;
   color: red;
   font-size: 50px;
-  left: 8px;
-  top: 8px;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .reception .phrase {
@@ -193,8 +194,6 @@
 
   .reception table tr td.dateOfEvent i {
     font-size: 60px;
-    left: 10px;
-    top: 7px;
   }
 
   .reception .phrase {
@@ -229,17 +228,17 @@
   }
 
   .info .header h1 {
-    font-size: 35px !important;
+    font-size: 45px !important;
     padding-left: 0px;
     justify-content: center;
   }
   
   .info .header h1 span {
-    font-size: 25px !important;
+    font-size: 30px !important;
   }
 
   .info .header p.names {
-    font-size: 30px !important;
+    font-size: 45px !important;
     padding-left: 0px;
   }
 
@@ -258,8 +257,6 @@
 
   .reception table tr td.dateOfEvent i {
     font-size: 35px;
-    left: 6px;
-    top: 6px;
   }
 
   .reception .phrase {
