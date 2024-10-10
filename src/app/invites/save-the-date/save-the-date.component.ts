@@ -98,8 +98,8 @@ export class SaveTheDateComponent implements OnInit{
                 };
                 this.downloadImages = downloadImages.filter((image) =>
                   window.innerWidth > 575
-                    ? image.imageUsage === ImageUsage.Desktop
-                    : image.imageUsage === ImageUsage.Phone
+                    ? image.imageUsage === ImageUsage.Desktop || image.imageUsage === null
+                    : image.imageUsage === ImageUsage.Phone || image.imageUsage === null
                 );
                 this.elRef.nativeElement.style.setProperty(
                   '--custom-primary-color',

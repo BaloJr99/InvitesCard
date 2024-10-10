@@ -4,10 +4,10 @@
       <div class="info invite-section">
         <ng-container *ngFor="let downloadImage of downloadImages; index as i">  
           <ng-container *ngIf="i === 0">
-            <img class="backgroundImage{{i}}" [src]="downloadImage.imageUrl" alt="Photo shoot">
+            <div class="backgroundImage{{i}}" [ngStyle]="{'background-image': 'url(' + downloadImage.imageUrl + ')'}" alt="Photo shoot"></div>
           </ng-container>
           <ng-container *ngIf="i !== 0">
-            <img class="backgroundImage{{i}}" [src]="downloadImage.imageUrl" style="visibility: hidden" alt="Photo shoot">
+            <div class="backgroundImage{{i}}" [ngStyle]="{'background-image': 'url(' + downloadImage.imageUrl + ')'}" style="visibility: hidden" alt="Photo shoot"></div>
           </ng-container>
         </ng-container>
         <div class="header">

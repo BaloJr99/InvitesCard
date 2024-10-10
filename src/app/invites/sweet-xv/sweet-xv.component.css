@@ -330,6 +330,11 @@ iframe {
     padding-top: 20px;
   }
 
+  .dressCode,
+  .gifts {
+    padding: 100px 0px;
+  }
+
   .dressCode .col-md-6:first-of-type,
   .gifts .col-md-6:first-of-type {
     padding: 0px;

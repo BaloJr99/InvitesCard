@@ -13,7 +13,6 @@
 .container p {
   color: var(--custom-primary-color);
   font-family: "Allura";
-  font-size: 50px;
 }
 
 .container .row .col-lg-6:last-of-type {
@@ -27,7 +26,10 @@
   top: 0;
   height: 100%;
   width: 100%;
-  object-fit: cover;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: inset 0px 0px 5px 5px var(--custom-secondary-color);
 }
 
 .info {
@@ -38,17 +40,21 @@
 .info .header {
   z-index: 1;
   position: relative;
+  text-align: left;
 }
 
 .info .header h1 {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   font-size: 50px;
   font-family: "Merriweather";
   color: var(--custom-primary-color);
   letter-spacing: 5px;
   padding-top: 20px;
+  padding-left: 25px;
+  text-shadow: -1px 0 #ffffff, 0 1px #ffffff, 1px 0 #ffffff, 0 -1px #ffffff;
+  margin-bottom: 0px;
 }
 
 .info .header h1 span {
@@ -65,6 +71,8 @@
   color: var(--custom-primary-color);
   margin: 0px;
   padding: 0px;
+  padding-left: 50px;
+  text-shadow: -1px 0 #ffffff, 0 1px #ffffff, 1px 0 #ffffff, 0 -1px #ffffff;
 }
 
 .reception {
@@ -72,6 +80,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  padding: 25px 0px 0px;
 }
 
 .reception p {
@@ -82,7 +91,7 @@
 .reception p span {
   font-family: "Merriweather";
   color: var(--custom-primary-color);
-  font-size: 25px;
+  font-size: 30px;
 }
 
 .reception hr {
@@ -91,15 +100,23 @@
   opacity: 1;
 }
 
+.reception table {
+  width: 80%;
+}
+
 .reception table th {
   font-family: "Merriweather";
   font-weight: bold;
 }
 
+.reception table th, 
+.reception table td {
+  font-size: 22px;
+}
+
 .reception table tr td {
   font-family: "Merriweather";
   padding: 10px;
-  font-size: 20px;
 }
 
 .reception table tr td.dateOfEvent {
@@ -112,19 +129,81 @@
   position: absolute;
   z-index: -1;
   color: red;
-  font-size: 35px;
-  left: 4px;
+  font-size: 50px;
+  left: 8px;
+  top: 8px;
 }
 
 .reception .phrase {
   font-family: "M";
   font-style: italic;
-  font-size: 25px;
+  font-size: 30px;
 }
 
 .reception .banner {
   font-family: "M";
   font-size: 20px;
+}
+
+@media (min-width: 576px) and (max-width: 991px) {
+  :host {
+    height: auto;
+  }
+
+  .container {
+    max-width: 100%;
+  }
+
+  .container .row .col-lg-6:last-of-type {
+    overflow-y: unset;
+    height: auto;
+  }
+
+  .reception hr {
+    width: 90%;
+  }
+
+  .info .header {
+    text-align: center;
+  }
+
+  .info .header h1 {
+    font-size: 80px !important;
+    padding-left: 0px;
+    justify-content: center;
+  }
+  
+  .info .header h1 span {
+    font-size: 50px !important;
+  }
+
+  .info .header p.names {
+    font-size: 65px !important;
+    padding-left: 0px;
+  }
+
+  .reception p span {
+    font-size: 35px;
+  }
+
+  .reception table th, 
+  .reception table td {
+    font-size: 30px;
+  }
+
+  .reception table tr td.dateOfEvent i {
+    font-size: 60px;
+    left: 10px;
+    top: 7px;
+  }
+
+  .reception .phrase {
+    font-size: 45px;
+  }
+
+  .reception .banner {
+    font-size: 25px;
+  }
 }
 
 @media (max-width: 991px) {
@@ -145,11 +224,49 @@
     width: 90%;
   }
 
+  .info .header {
+    text-align: center;
+  }
+
   .info .header h1 {
-    font-size: 40px;
+    font-size: 35px !important;
+    padding-left: 0px;
+    justify-content: center;
   }
   
   .info .header h1 span {
-    font-size: 30px;
+    font-size: 25px !important;
+  }
+
+  .info .header p.names {
+    font-size: 30px !important;
+    padding-left: 0px;
+  }
+
+  .reception p span {
+    font-size: 18px;
+  }
+
+  .reception table th, 
+  .reception table td {
+    font-size: 15px;
+  }
+
+  .reception table {
+    width: 90%;
+  }
+
+  .reception table tr td.dateOfEvent i {
+    font-size: 35px;
+    left: 6px;
+    top: 6px;
+  }
+
+  .reception .phrase {
+    font-size: 25px;
+  }
+
+  .reception .banner {
+    font-size: 15px;
   }
 }

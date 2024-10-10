@@ -297,6 +297,7 @@ export class InviteDetailsComponent implements OnInit {
         confirmation: null,
         dateOfConfirmation: null,
         isMessageRead: false,
+        needsAccomodation: null,
       });
       this.buildInvitesDashboard();
     } else {

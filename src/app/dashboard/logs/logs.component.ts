@@ -34,6 +34,12 @@ export class LogsComponent implements OnInit, AfterViewInit, OnDestroy {
     language: {
       lengthMenu: '_MENU_',
     },
+    columnDefs: [
+      {
+        className: 'text-center',
+        targets: '_all',
+      },
+    ],
     order: [[0, 'desc']],
     columns: [
       { title: $localize`Fecha del error`, data: 'dateOfError', width: '20%' },

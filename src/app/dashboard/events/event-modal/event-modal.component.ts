@@ -226,7 +226,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
               ...this.createEventForm.value,
               dateOfEvent: `${this.createEventForm.value.dateOfEvent}T00:00:00.000`,
               maxDateOfConfirmation: `${this.createEventForm.value.maxDateOfConfirmation}T00:00:00.000`,
-              allowCreateInvites: override ? override : this.eventAction?.event.allowCreateInvites,
+              allowCreateInvites: override ? false : this.eventAction?.event.allowCreateInvites,
             },
             isNew: false,
           });

@@ -122,10 +122,6 @@
     text-align: center !important;
     align-items: center !important;
   }
-  
-  .form {
-    margin: 20px;
-  }
 
   .confirmedModal {
     margin: 30px;
@@ -133,5 +129,13 @@
 
   .confirmedModal .card {
     padding: 20px;
+  }
+
+  .container .form {
+    border: 1px solid #B79BA0;
+    margin: 30px 0px;
+    padding: 20px;
+    background-color: #ffffff;
+    text-align: left;
   }
 }
