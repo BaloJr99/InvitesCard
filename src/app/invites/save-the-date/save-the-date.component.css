@@ -147,6 +147,7 @@
   top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
+  animation: shake 1s infinite;
 }
 
 .reception .phrase {
@@ -294,5 +295,23 @@ table {
 
   50% {
     transform: scale(1);
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(-50%, -50%) rotate(5deg);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) rotate(-5deg);
+  }
+
+  75% {
+    transform: translate(-50%, -50%) rotate(5deg);
   }
 }
