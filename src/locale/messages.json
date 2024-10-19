@@ -261,7 +261,7 @@
     "5308089386353373336": "Activo",
     "1434166545231100975": "Cargando invitación",
     "371903623143061325": "¿Necesitas hospedaje?",
-    "1158639731698476888": "El salón cuenta con un convenio con el hotel {$START_LINK}Holiday Inn Express{$CLOSE_LINK} y cuenta con los siguientes traslados {$START_TAG_STRONG}(hotel -> iglesia -> recepción -> hotel){$CLOSE_TAG_STRONG}. Para mayor información seleccionar sí y nos pondremos en contacto con usted!",
+    "9074563583489717156": "El salón tiene un convenio con el hotel {$START_LINK}Holiday Inn Express{$CLOSE_LINK} y cuenta con los siguientes traslados {$START_TAG_STRONG}(hotel -> iglesia -> recepción -> hotel){$CLOSE_TAG_STRONG}. Para mayor información seleccionar {$START_TAG_STRONG}SÍ{$CLOSE_TAG_STRONG} y nos pondremos en contacto con usted!",
     "2864016824360456069": "Este formulario no acepta mas respuestas",
     "1347314167185277216": " Require hospedaje? ",
     "4691526352479014641": "{$TAG_INPUT} Si ",

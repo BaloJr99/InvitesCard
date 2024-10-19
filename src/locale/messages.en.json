@@ -261,7 +261,7 @@
     "5308089386353373336": "Active",
     "1434166545231100975": "Loading invite",
     "371903623143061325": "Do you need accomodation?",
-    "1158639731698476888": "The event venue has an agreement with the hotel {$START_LINK}Holiday Inn Express{$CLOSE_LINK} and has the following transfers {$START_TAG_STRONG}(hotel -> church -> reception -> hotel){$CLOSE_TAG_STRONG}. For more information select yes and we will contact you!",
+    "9074563583489717156": "The event venue has an agreement with the hotel {$START_LINK}Holiday Inn Express{$CLOSE_LINK} and has the following transfers {$START_TAG_STRONG}(hotel -> church -> reception -> hotel){$CLOSE_TAG_STRONG}. For more information select {$START_TAG_STRONG}YES{$CLOSE_TAG_STRONG} and we will contact you!",
     "2864016824360456069": "This form doesn't accept more responses",
     "1347314167185277216": " Need accomodation? ",
     "4691526352479014641": "{$TAG_INPUT} Yes ",

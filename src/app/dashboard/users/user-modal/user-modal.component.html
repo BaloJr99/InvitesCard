@@ -30,9 +30,9 @@
           </div>
           <div class="mb-3">
             <label for="roleFilter" class="form-label" i18n>Roles</label>
-            <div class="filteringBox" [ngClass]="{'is-invalid': displayMessage['roles']}">
-              <div class="roleActions" [ngClass]="{'is-invalid': displayMessage['roleId']}">
-                <select class="form-select" id="roleFilter" (change)="selectedRole($event)">
+            <div class="filteringBox">
+              <div class="roleActions" [ngClass]="{'is-invalid': displayMessage['roles']}">
+                <select class="form-select" id="roleFilter" (change)="selectedRole($event)" [ngClass]="{'is-invalid': displayMessage['roles']}">
                   <option value="" selected i18n>Seleccionar un rol</option>
                   <option *ngFor="let role of filteredRoles" [value]="role.id">{{ role.name }}</option>
                 </select>
