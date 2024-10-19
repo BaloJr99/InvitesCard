@@ -45,7 +45,7 @@
               <div class="form-group">
                 <label for="my-select-{{i}}" i18n>Uso de la imagen</label>
                 <select id="my-select-{{i}}" class="form-control" (change)="insertUpdatedImage($event)">
-                  <option value="" i18n>Seleccione una opción</option>
+                  <option value="" i18n>Ambos</option>
                   <option value="P" [selected]="image.imageUsage === 'P'" i18n>Celular</option>
                   <option value="C" [selected]="image.imageUsage === 'C'" i18n>Computadora</option>
                 </select>

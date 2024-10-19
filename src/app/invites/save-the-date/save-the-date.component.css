@@ -234,6 +234,15 @@
     height: auto;
   }
 
+  .info {
+    position: relative;
+    height: 90vh;
+  }
+
+  .reception {
+    padding: 15px 0px 0px;
+  }
+
   .reception hr {
     width: 90%;
   }
