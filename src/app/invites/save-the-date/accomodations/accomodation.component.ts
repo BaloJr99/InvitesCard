@@ -55,10 +55,10 @@ export class AccomodationComponent {
     const assist =
       this.accomodationForm.controls['needsAccomodation'].value === 'true';
     this.accomodationForm.patchValue({ needsAccomodation: assist });
-    this.addnewInvite();
+    this.sendUserResponse();
   }
 
-  addnewInvite() {
+  sendUserResponse() {
     if (this.invite.id) {
       this.loaderService.setLoading(true, $localize`Enviando confirmación`);
       this.invitesService
