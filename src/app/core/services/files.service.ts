@@ -13,7 +13,7 @@ import { IMessageResponse } from '../models/common';
 @Injectable()
 export class FilesService {
   private baseUrl = environment.apiUrl;
-  private invitesBaseUrl = this.baseUrl + '/images';
+  private invitesBaseUrl = this.baseUrl + '/files';
 
   constructor(private http: HttpClient) {}
 

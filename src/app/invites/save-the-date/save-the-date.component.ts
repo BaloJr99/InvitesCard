@@ -7,7 +7,11 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
-import { CommonModalResponse, CommonModalType, ImageUsage } from 'src/app/core/models/enum';
+import {
+  CommonModalResponse,
+  CommonModalType,
+  ImageUsage,
+} from 'src/app/core/models/enum';
 import { IDownloadAudio, IDownloadImage } from 'src/app/core/models/images';
 import {
   ICalendarDays,
@@ -107,31 +111,37 @@ export class SaveTheDateComponent implements OnInit {
                   eventId: eventSettings.eventId,
                 };
 
-                this.downloadAudio = downloadFiles.eventAudios.length > 0 ? downloadFiles.eventAudios[0] : undefined;
+                this.downloadAudio =
+                  downloadFiles.eventAudios.length > 0
+                    ? downloadFiles.eventAudios[0]
+                    : undefined;
                 if (this.downloadAudio) {
                   this.audio = new Audio(this.downloadAudio.fileUrl);
 
                   this.commonModalService.setData({
-                    modalBody: '¿Desea reproducir el audio?',
-                    modalTitle: 'Música de los novios',
+                    modalTitle: $localize`Nuestra canción`,
+                    modalBody: $localize`¿Desea reproducir el audio?`,
                     modalType: CommonModalType.YesNo,
-                  })
-
-                  this.commonModalService.commonModalResponse$.subscribe((response) => {
-                    if (response === CommonModalResponse.Confirm) {
-                      this.reproduceAudio();
-                    }
                   });
+
+                  this.commonModalService.commonModalResponse$.subscribe(
+                    (response) => {
+                      if (response === CommonModalResponse.Confirm) {
+                        this.reproduceAudio();
+                      }
+                    }
+                  );
                 }
 
-                this.downloadImages = downloadFiles.eventImages.filter((image) =>
-                  window.innerWidth > 575
-                    ? image.imageUsage === ImageUsage.Desktop ||
-                      image.imageUsage === null
-                    : image.imageUsage === ImageUsage.Phone ||
-                      image.imageUsage === null
+                this.downloadImages = downloadFiles.eventImages.filter(
+                  (image) =>
+                    window.innerWidth > 575
+                      ? image.imageUsage === ImageUsage.Desktop ||
+                        image.imageUsage === null
+                      : image.imageUsage === ImageUsage.Phone ||
+                        image.imageUsage === null
                 );
-                
+
                 this.elRef.nativeElement.style.setProperty(
                   '--custom-primary-color',
                   this.eventSettings.primaryColor

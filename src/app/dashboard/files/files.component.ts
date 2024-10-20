@@ -267,6 +267,7 @@ export class FilesComponent implements OnInit {
     });
 
     this.images = [];
+    this.audios = [];
   }
 
   cancelChanges(): void {
