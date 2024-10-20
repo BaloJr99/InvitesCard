@@ -46,8 +46,11 @@ export class InviteDetailsComponent implements OnInit {
 
   inviteAction!: IInviteAction;
   invitesGrouped: { [key: string]: IFullInvite[] } = {};
-  invites: IFullInvite[] = [];
+  originalInvites: IFullInvite[] = [];
+  filteredInvites: IFullInvite[] = [];
   inviteGroups: IInviteGroups[] = [];
+
+  filterValue = '';
 
   isDeadlineMet = false;
 
@@ -65,7 +68,8 @@ export class InviteDetailsComponent implements OnInit {
             this.isDeadlineMet = Boolean(
               response['eventResolved']['isDeadlineMet']
             );
-            this.invites = response['eventResolved']['invites'];
+            this.originalInvites = response['eventResolved']['invites'];
+            this.filteredInvites = this.originalInvites;
             this.eventId = response['eventResolved']['id'];
             this.commonInvitesService.clearNotifications();
             return true;
@@ -97,16 +101,17 @@ export class InviteDetailsComponent implements OnInit {
         notifications
           .filter((n) => n.isMessageRead)
           .forEach((notification) => {
-            const index = this.invites.findIndex(
+            const index = this.originalInvites.findIndex(
               (i) => i.id === notification.id
             );
-            (this.invites.at(index) as IFullInvite).isMessageRead = true;
+            (this.originalInvites.at(index) as IFullInvite).isMessageRead =
+              true;
           });
       },
     });
 
     this.socket.io.on('newNotification', (confirmation: IConfirmation) => {
-      this.invites = this.invites.map((invite) => {
+      this.originalInvites = this.originalInvites.map((invite) => {
         if (invite.id === confirmation.id) {
           return {
             ...invite,
@@ -157,7 +162,7 @@ export class InviteDetailsComponent implements OnInit {
         },
       ];
 
-      this.invites.forEach((value) => {
+      this.filteredInvites.forEach((value) => {
         if (value.confirmation) {
           this.statistics[0].value += value.entriesConfirmed ?? 0;
           this.statistics[2].value +=
@@ -202,7 +207,7 @@ export class InviteDetailsComponent implements OnInit {
       });
 
       this.commonInvitesService.updateNotifications(notifications, messages);
-      this.groupEntries(this.invites);
+      this.groupEntries(this.filteredInvites);
     } else if (this.eventType === EventType.SaveTheDate) {
       this.statistics = [
         {
@@ -227,7 +232,7 @@ export class InviteDetailsComponent implements OnInit {
         },
       ];
 
-      this.invites.forEach((value) => {
+      this.filteredInvites.forEach((value) => {
         if (value.needsAccomodation !== null) {
           this.statistics[0].value += 1;
           this.statistics[2].value += value.needsAccomodation ? 1 : 0;
@@ -237,7 +242,7 @@ export class InviteDetailsComponent implements OnInit {
         this.statistics[3].value += 1;
       });
 
-      this.groupEntries(this.invites);
+      this.groupEntries(this.filteredInvites);
     }
   }
 
@@ -264,10 +269,11 @@ export class InviteDetailsComponent implements OnInit {
   }
 
   removeInvites(invitesIds: string[]): void {
-    this.invites = this.invites.filter(
+    this.originalInvites = this.originalInvites.filter(
       (invite) => !invitesIds.includes(invite.id)
     );
-    this.buildInvitesDashboard();
+
+    this.filterInvites();
   }
 
   toggleMessages(): void {
@@ -279,18 +285,18 @@ export class InviteDetailsComponent implements OnInit {
 
   filterEntries(family: string): void {
     if (family) {
-      const filteredEntries = this.invites.filter((invite) =>
+      const filteredEntries = this.originalInvites.filter((invite) =>
         invite.family.toLocaleLowerCase().includes(family.toLocaleLowerCase())
       );
       this.groupEntries(filteredEntries);
     } else {
-      this.groupEntries(this.invites);
+      this.groupEntries(this.originalInvites);
     }
   }
 
   updateInvites(inviteAction: IInviteAction) {
     if (inviteAction.isNew) {
-      this.invites = this.invites.concat({
+      this.originalInvites = this.originalInvites.concat({
         ...inviteAction.invite,
         entriesConfirmed: null,
         message: null,
@@ -299,9 +305,10 @@ export class InviteDetailsComponent implements OnInit {
         isMessageRead: false,
         needsAccomodation: null,
       });
-      this.buildInvitesDashboard();
+
+      this.filterInvites();
     } else {
-      this.invites = this.invites.map((originalInvite) => {
+      this.originalInvites = this.originalInvites.map((originalInvite) => {
         if (originalInvite.id === inviteAction.invite.id) {
           return {
             ...inviteAction.invite,
@@ -310,12 +317,13 @@ export class InviteDetailsComponent implements OnInit {
             confirmation: null,
             dateOfConfirmation: null,
             isMessageRead: false,
-            needsAccomodation: null
+            needsAccomodation: null,
           };
         }
         return originalInvite;
       });
-      this.buildInvitesDashboard();
+      
+      this.filterInvites();
     }
   }
 
@@ -346,7 +354,7 @@ export class InviteDetailsComponent implements OnInit {
     });
 
     bulkResults.invitesGenerated.forEach((invite) => {
-      this.invites = this.invites.concat({
+      this.originalInvites = this.originalInvites.concat({
         ...invite,
         entriesConfirmed: null,
         message: null,
@@ -354,7 +362,25 @@ export class InviteDetailsComponent implements OnInit {
         dateOfConfirmation: null,
         isMessageRead: false,
       });
-      this.buildInvitesDashboard();
+      
+      this.filterInvites();
     });
+  }
+
+  filter(event: Event) {
+    event.preventDefault();
+    const target = event.target as HTMLInputElement;
+    this.filterValue = target.value.trim().toLocaleLowerCase();
+
+    this.filterInvites();
+  }
+
+  filterInvites() {
+    const invitesThatMatch = this.originalInvites.filter((invite) =>
+      invite.family.toLocaleLowerCase().includes(this.filterValue) || invite.phoneNumber.toLocaleLowerCase().includes(this.filterValue)
+    );
+
+    this.filteredInvites = invitesThatMatch;
+    this.buildInvitesDashboard();
   }
 }
