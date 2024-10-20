@@ -34,9 +34,9 @@ import { SettingsService } from 'src/app/core/services/settings.service';
 export class SaveTheDateComponent implements OnInit {
   @HostListener('document:visibilitychange', ['$event'])
   visibilitychange() {
-    if (document.visibilityState === 'hidden' && this.downloadAudio) {
+    if (document.visibilityState === 'hidden' && this.playAudio) {
       this.audio.pause();
-    } else if (document.visibilityState === 'visible' && this.downloadAudio) {
+    } else if (document.visibilityState === 'visible' && this.playAudio) {
       this.audio.play();
     }
   }
@@ -57,6 +57,7 @@ export class SaveTheDateComponent implements OnInit {
   downloadImages: IDownloadImage[] = [];
   downloadAudio: IDownloadAudio | undefined = undefined;
   audio = new Audio();
+  playAudio = false;
 
   deadlineMet = false;
 
@@ -274,6 +275,7 @@ export class SaveTheDateComponent implements OnInit {
   }
 
   reproduceAudio() {
+    this.playAudio = true;
     this.audio.play();
   }
 }
