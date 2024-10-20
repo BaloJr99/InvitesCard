@@ -136,6 +136,8 @@ export class FilesComponent implements OnInit {
               musicFiles: '',
               musicFilesSource: '',
             });
+
+            this.getLatestFiles();
             this.toastr.success(response.message);
           },
         })
@@ -178,12 +180,18 @@ export class FilesComponent implements OnInit {
           if (response === CommonModalResponse.Confirm) {
             this.loaderService.setLoading(true, $localize`Eliminando archivo`);
             this.filesService
-              .deleteFile(imageFound ?? audioFound as IDownloadAudio)
+              .deleteFile(imageFound ?? (audioFound as IDownloadAudio))
               .subscribe({
                 next: (response: IMessageResponse) => {
                   if (imageFound) {
                     this.images = this.images.filter(
                       (image) => image.id !== imageFound.id
+                    );
+                  }
+
+                  if (audioFound) {
+                    this.audios = this.audios.filter(
+                      (audio) => audio.id !== audioFound.id
                     );
                   }
                   this.toastr.success(response.message);
