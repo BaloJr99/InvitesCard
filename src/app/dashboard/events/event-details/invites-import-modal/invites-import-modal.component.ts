@@ -71,7 +71,7 @@ export class InvitesImportModalComponent implements OnInit {
         resolve('');
       };
 
-      reader.readAsText(file);
+      reader.readAsText(file, 'UTF-8');
     });
   }
 
@@ -158,7 +158,8 @@ export class InvitesImportModalComponent implements OnInit {
   downloadTemplate() {
     const csv = $localize`Familia,Numero de pases,Telefóno,Niños permitidos,Grupo\n`;
     const blob = new Blob([csv], {
-      type: 'text/csv',
+      type: 'text/csv; charset=utf-8',
+      
     });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
