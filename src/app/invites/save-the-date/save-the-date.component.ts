@@ -1,6 +1,7 @@
 import {
   Component,
   ElementRef,
+  HostListener,
   Inject,
   LOCALE_ID,
   OnInit,
@@ -31,6 +32,15 @@ import { SettingsService } from 'src/app/core/services/settings.service';
   styleUrl: './save-the-date.component.css',
 })
 export class SaveTheDateComponent implements OnInit {
+  @HostListener('document:visibilitychange', ['$event'])
+  visibilitychange() {
+    if (document.visibilityState === 'hidden' && this.downloadAudio) {
+      this.audio.pause();
+    } else if (document.visibilityState === 'visible' && this.downloadAudio) {
+      this.audio.play();
+    }
+  }
+
   counter = 0;
 
   userInvite!: ISaveTheDateUserInvite;
