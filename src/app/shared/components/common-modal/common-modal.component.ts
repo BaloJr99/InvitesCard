@@ -10,7 +10,7 @@ import { CommonModalService } from 'src/app/core/services/commonModal.service';
 })
 export class CommonModalComponent implements OnInit{
   commonModalData: ICommonModal = {
-    title: '',
+    modalTitle: '',
     modalBody: '',
     modalType: CommonModalType.Confirm,
     actionFunction: () => {},
@@ -29,6 +29,11 @@ export class CommonModalComponent implements OnInit{
           this.actionButton1 = $localize`Cancelar`;
           this.actionButton2 = $localize`Confirmar`;
         }
+
+        if (data.modalType === CommonModalType.YesNo) {
+          this.actionButton1 = $localize`No`;
+          this.actionButton2 = $localize`Sí`;
+        }
         $('#commonModal').modal('show');
       },
     });
@@ -39,9 +44,7 @@ export class CommonModalComponent implements OnInit{
   }
 
   action(): void {
-    if (this.commonModalData.modalType === CommonModalType.Confirm) {
-      this.commonModalService.sendResponse(CommonModalResponse.Confirm);
-    }
+    this.commonModalService.sendResponse(CommonModalResponse.Confirm);
     $('#commonModal').modal('hide');
   }
 }

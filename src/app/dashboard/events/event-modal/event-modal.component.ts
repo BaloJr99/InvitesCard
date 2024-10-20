@@ -156,7 +156,7 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
             ))
         ) {
           this.commonModalService.setData({
-            title: $localize`Sobreescribiendo evento`,
+            modalTitle: $localize`Sobreescribiendo evento`,
             modalBody: $localize`Usted esta cambiando el tipo de evento por uno que no es compatible, ¿está seguro de sobreescribir el evento ${this.createEventForm.controls['nameOfEvent'].value}? Esto causará que se borre la información capturada por los invitados y las configuraciones.`,
             modalType: CommonModalType.Confirm,
           });

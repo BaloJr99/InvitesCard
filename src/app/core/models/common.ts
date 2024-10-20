@@ -9,7 +9,7 @@ export interface IError {
 }
 
 export interface ICommonModal {
-  title: string;
+  modalTitle: string;
   modalBody: string;
   modalType: CommonModalType;
 }

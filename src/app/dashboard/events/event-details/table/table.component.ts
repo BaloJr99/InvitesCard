@@ -110,7 +110,7 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
     ) as IFullInvite;
 
     this.commonModalService.setData({
-      title: $localize`Eliminar invitación`,
+      modalTitle: $localize`Eliminar invitación`,
       modalBody: $localize`¿Estás seguro de eliminar la invitación de ${inviteFound.family}?`,
       modalType: CommonModalType.Confirm,
     });

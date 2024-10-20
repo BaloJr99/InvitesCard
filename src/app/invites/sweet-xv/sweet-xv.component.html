@@ -2,10 +2,10 @@
   <div class="info invite-section">
     <ng-container *ngFor="let downloadImage of downloadImages; index as i">  
       <ng-container *ngIf="i === 0">
-        <div class="backgroundImage{{i}}" style="background-image: url('{{downloadImage.imageUrl}}');" alt=""></div>
+        <div class="backgroundImage{{i}}" style="background-image: url('{{downloadImage.fileUrl}}');" alt=""></div>
       </ng-container>
       <ng-container *ngIf="i !== 0">
-        <div class="backgroundImage{{i}}" style="visibility: hidden; background-image: url('{{downloadImage.imageUrl}}');" alt=""></div>
+        <div class="backgroundImage{{i}}" style="visibility: hidden; background-image: url('{{downloadImage.fileUrl}}');" alt=""></div>
       </ng-container>
     </ng-container>
     <button (click)="goToForm()" class="scrollFormButton"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>

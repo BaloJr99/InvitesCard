@@ -20,12 +20,16 @@
       </div>
     </div>
     <form class="upload-form col-12 col-md-8" [formGroup]="saveFilesForm" *ngIf="eventSelected">
-      <div class="row g-0">
-        <div class="col-12 col-md-8 gx-4">
+      <div class="row g-0 justify-content-end">
+        <div class="col-12 col-md-6 gx-4">
           <label for="photoFiles" i18n>Seleccionar fotos</label>
           <input id="photoFiles" class="form-control" formControlName="photoFiles" type="file" (change)="onPhotosChange($event)" multiple accept=".png, .jpg, .jpeg">
         </div>
-        <div class="col-12 col-md-4 form-footer gx-4" >
+        <div class="col-12 col-md-6 gx-4">
+          <label for="musicFiles" i18n>Seleccionar música</label>
+          <input id="musicFiles" class="form-control" formControlName="musicFiles" type="file" (change)="onMusicChange($event)" accept=".mp3">
+        </div>
+        <div class="col-12 col-md-4 form-footer gx-4 mt-2" >
           <button class="btn btn-primary" (click)="saveFiles()" i18n>Subir archivos</button>
         </div>
       </div>
@@ -34,12 +38,12 @@
 
   <div class="row g-0">
     <div class="col-12 gx-4">
-      <div class="image-container" *ngIf="images.length > 0">
+      <div class="image-container mb-3" *ngIf="images.length > 0">
         <div class="card" *ngFor="let image of images; index as i">
           <div class="card-body">
             <div class="image-controls">
-              <img src="{{ image.imageUrl }}" alt="Invite Photo">
-              <button class="btn btn-light" (click)="scaleImageUrl = image.imageUrl" i18n-title="Expand photo"><i aria-hidden="true" class="fa-solid fa-expand"></i></button>
+              <img src="{{ image.fileUrl }}" alt="Invite Photo">
+              <button class="btn btn-light" (click)="scaleImageUrl = image.fileUrl" i18n-title="Expand photo"><i aria-hidden="true" class="fa-solid fa-expand"></i></button>
             </div>
             <div class="controls">
               <div class="form-group">
@@ -51,6 +55,19 @@
                 </select>
                 <button class="btn btn-danger" (click)="showDeleteDialog(image.id)"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="music-container mb-3" *ngIf="audios.length > 0">
+        <div class="card" *ngFor="let audio of audios;">
+          <div class="card-body">
+            <div class="audio-controls">
+              <audio controls>
+                <source src="{{ audio.fileUrl }}" type="audio/mp3">
+                Your browser does not support the audio element.
+              </audio>
+              <button class="btn btn-danger" (click)="showDeleteDialog(audio.id)"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
             </div>
           </div>
         </div>

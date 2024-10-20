@@ -3,7 +3,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { RouterModule, Routes } from '@angular/router';
 import { FilesComponent } from './files.component';
 import { EventsService } from 'src/app/core/services/events.service';
-import { ImagesService } from 'src/app/core/services/images.service';
+import { FilesService } from 'src/app/core/services/files.service';
 
 const routes: Routes = [
   {
@@ -13,7 +13,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  providers: [EventsService, ImagesService],
+  providers: [EventsService, FilesService],
   imports: [SharedModule, RouterModule.forChild(routes)],
   declarations: [FilesComponent],
 })

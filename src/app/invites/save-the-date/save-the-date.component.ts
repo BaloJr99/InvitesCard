@@ -1,15 +1,22 @@
-import { Component, ElementRef, Inject, LOCALE_ID, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  LOCALE_ID,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
-import { ImageUsage } from 'src/app/core/models/enum';
-import { IDownloadImage } from 'src/app/core/models/images';
+import { CommonModalResponse, CommonModalType, ImageUsage } from 'src/app/core/models/enum';
+import { IDownloadAudio, IDownloadImage } from 'src/app/core/models/images';
 import {
   ICalendarDays,
   ICalendarWeeks,
   ISaveTheDateUserInvite,
 } from 'src/app/core/models/invites';
 import { ISaveTheDateSetting } from 'src/app/core/models/settings';
-import { ImagesService } from 'src/app/core/services/images.service';
+import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { FilesService } from 'src/app/core/services/files.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
@@ -19,7 +26,7 @@ import { SettingsService } from 'src/app/core/services/settings.service';
   templateUrl: './save-the-date.component.html',
   styleUrl: './save-the-date.component.css',
 })
-export class SaveTheDateComponent implements OnInit{
+export class SaveTheDateComponent implements OnInit {
   counter = 0;
 
   userInvite!: ISaveTheDateUserInvite;
@@ -34,6 +41,8 @@ export class SaveTheDateComponent implements OnInit{
   // Variable to store the generated calendar HTML
   dateDictionary: ICalendarWeeks[] = [];
   downloadImages: IDownloadImage[] = [];
+  downloadAudio: IDownloadAudio | undefined = undefined;
+  audio = new Audio();
 
   deadlineMet = false;
 
@@ -42,9 +51,10 @@ export class SaveTheDateComponent implements OnInit{
     private router: Router,
     private loaderService: LoaderService,
     private eventSettingsService: SettingsService,
-    private imagesService: ImagesService,
+    private filesService: FilesService,
     private invitesService: InvitesService,
     private elRef: ElementRef,
+    private commonModalService: CommonModalService,
     @Inject(LOCALE_ID) private localeValue: string
   ) {
     setInterval(() => {
@@ -88,23 +98,45 @@ export class SaveTheDateComponent implements OnInit{
 
           combineLatest([
             this.eventSettingsService.getEventSettings(this.userInvite.eventId),
-            this.imagesService.getImageByEvent(this.userInvite.eventId),
+            this.filesService.getFilesByEvent(this.userInvite.eventId),
           ])
             .subscribe({
-              next: ([eventSettings, downloadImages]) => {
+              next: ([eventSettings, downloadFiles]) => {
                 this.eventSettings = {
                   ...JSON.parse(eventSettings.settings),
                   eventId: eventSettings.eventId,
                 };
-                this.downloadImages = downloadImages.filter((image) =>
+
+                this.downloadAudio = downloadFiles.eventAudios.length > 0 ? downloadFiles.eventAudios[0] : undefined;
+                if (this.downloadAudio) {
+                  this.audio = new Audio(this.downloadAudio.fileUrl);
+
+                  this.commonModalService.setData({
+                    modalBody: '¿Desea reproducir el audio?',
+                    modalTitle: 'Música de los novios',
+                    modalType: CommonModalType.YesNo,
+                  })
+
+                  this.commonModalService.commonModalResponse$.subscribe((response) => {
+                    if (response === CommonModalResponse.Confirm) {
+                      this.reproduceAudio();
+                    }
+                  });
+                }
+
+                this.downloadImages = downloadFiles.eventImages.filter((image) =>
                   window.innerWidth > 575
-                    ? image.imageUsage === ImageUsage.Desktop || image.imageUsage === null
-                    : image.imageUsage === ImageUsage.Phone || image.imageUsage === null
+                    ? image.imageUsage === ImageUsage.Desktop ||
+                      image.imageUsage === null
+                    : image.imageUsage === ImageUsage.Phone ||
+                      image.imageUsage === null
                 );
+                
                 this.elRef.nativeElement.style.setProperty(
                   '--custom-primary-color',
                   this.eventSettings.primaryColor
                 );
+
                 this.elRef.nativeElement.style.setProperty(
                   '--custom-secondary-color',
                   this.eventSettings.secondaryColor
@@ -219,5 +251,9 @@ export class SaveTheDateComponent implements OnInit{
         daysOfWeek = [];
       }
     }
+  }
+
+  reproduceAudio() {
+    this.audio.play();
   }
 }

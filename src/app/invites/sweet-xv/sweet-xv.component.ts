@@ -12,7 +12,7 @@ import { ISetting } from '../../core/models/settings';
 import { IDownloadImage } from '../../core/models/images';
 import { LoaderService } from '../../core/services/loader.service';
 import { SettingsService } from '../../core/services/settings.service';
-import { ImagesService } from '../../core/services/images.service';
+import { FilesService } from '../../core/services/files.service';
 import { ImageUsage } from '../../core/models/enum';
 import { IUserInvite } from '../../core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
@@ -58,7 +58,7 @@ export class SweetXvComponent implements OnInit {
     private router: Router,
     private loaderService: LoaderService,
     private eventSettingsService: SettingsService,
-    private imagesService: ImagesService,
+    private filesService: FilesService,
     private invitesService: InvitesService,
     private elRef: ElementRef,
     @Inject(LOCALE_ID) private localeValue: string
@@ -111,15 +111,15 @@ export class SweetXvComponent implements OnInit {
 
           combineLatest([
             this.eventSettingsService.getEventSettings(this.userInvite.eventId),
-            this.imagesService.getImageByEvent(this.userInvite.eventId),
+            this.filesService.getFilesByEvent(this.userInvite.eventId),
           ])
             .subscribe({
-              next: ([eventSettings, downloadImages]) => {
+              next: ([eventSettings, downloadFiles]) => {
                 this.eventSettings = {
                   ...JSON.parse(eventSettings.settings),
                   eventId: eventSettings.eventId,
                 };
-                this.downloadImages = downloadImages.filter((image) =>
+                this.downloadImages = downloadFiles.eventImages.filter((image) =>
                   window.innerWidth > 575
                     ? image.imageUsage === ImageUsage.Desktop
                     : image.imageUsage === ImageUsage.Phone

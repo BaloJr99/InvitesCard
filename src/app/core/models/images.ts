@@ -1,18 +1,23 @@
 import { FormControl } from '@angular/forms';
 
-export interface IFullImage {
+export interface IFullFile {
   id: string;
-  imageUrl: string;
+  fileUrl: string;
   publicId: string;
   image: string;
   eventId: string;
   imageUsage: string;
 }
 
-export type IUploadImage = Pick<IFullImage, 'image' | 'eventId'>;
-export type IDownloadImage = Omit<IFullImage, 'image' | 'eventId'>;
-export type IDeleteImage = Pick<IFullImage, 'id' | 'publicId'>;
-export type IUpdateImage = Pick<IFullImage, 'id' | 'imageUsage'>;
+export type IUploadImage = Pick<IFullFile, 'image' | 'eventId'>;
+export type IDownloadImage = Omit<IFullFile, 'image' | 'eventId'>;
+export type IDownloadAudio = Omit<IFullFile, 'image' | 'eventId' | 'imageUsage'>;
+export interface IDownloadFiles {
+  eventImages: IDownloadImage[];
+  eventAudios: IDownloadAudio[];
+};
+export type IDeleteImage = Pick<IFullFile, 'id' | 'publicId'>;
+export type IUpdateImage = Pick<IFullFile, 'id' | 'imageUsage'>;
 
 export interface IUpdateImageArray {
   id: FormControl<string>;
