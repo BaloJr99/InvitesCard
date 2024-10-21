@@ -60,12 +60,7 @@
   margin-right: 8px;
 }
 
-#filterByFamily {
-  width: 200px;
-}
-
 @media screen and (max-width: 575px) {
-
   .header {
     flex-direction: column;
     align-items: flex-start;
@@ -86,10 +81,6 @@
 
   .table-accordion {
     flex: none;
-  }
-
-  #filterByFamily {
-    width: 100%;
   }
 }
 

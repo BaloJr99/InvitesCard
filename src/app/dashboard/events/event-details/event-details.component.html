@@ -19,13 +19,31 @@
   </div>
 </section>
 <section class="row mx-1 table-accordion">
-  <div class="col-12">
-    <div class="mt-3 d-flex justify-content-end align-items-center">
-      <label for="filterByFamily" class="form-label mb-0 me-1">
-        <strong>Filtrar</strong>
-      </label>
-      <input type="text" class="form-control" name="filterByFamily" id="filterByFamily" placeholder="Buscar familia" (keyup)="filter($event)"/>
-    </div>
+  <div class="col-12 col-md-4 mt-3 text-start">
+    <label for="filterByInviteViewed" class="form-label">
+      <strong i18n>Filtrar (Vista)</strong>
+    </label>
+    <select class="form-select" name="filterByInviteViewed" id="filterByInviteViewed" (change)="filter($event, 'inviteViewed')">
+      <option value="all" selected i18n>Todos</option>
+      <option value="true" i18n>Vista</option>
+      <option value="false" i18n>No vista</option>
+    </select>
+  </div>
+  <div class="col-12 col-md-4 mt-3 text-start">
+    <label for="filterByNeedsAccomodation" class="form-label">
+      <strong i18n>Filtrar (Necesita hospedaje)</strong>
+    </label>
+    <select class="form-select" name="filterByNeedsAccomodation" id="filterByNeedsAccomodation" (change)="filter($event, 'needsAccomodation')">
+      <option value="all" selected i18n>Todos</option>
+      <option value="true" i18n>Requiere hospedaje</option>
+      <option value="false" i18n>No requiere hospedaje</option>
+    </select>
+  </div>
+  <div class="col-12 col-md-4 mt-3 text-start">
+    <label for="filterByFamily" class="form-label">
+      <strong i18n>Filtrar (Familia)</strong>
+    </label>
+    <input type="text" class="form-control" name="filterByFamily" id="filterByFamily" placeholder="Buscar familia" (keyup)="filter($event, 'family')"/>
   </div>
   <div class="col-12">
     <div class="accordion" id="inviteAccordion" *ngFor="let inviteGroup of invitesGrouped | keyvalue">

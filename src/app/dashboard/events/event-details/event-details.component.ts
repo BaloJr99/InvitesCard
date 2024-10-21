@@ -50,7 +50,9 @@ export class InviteDetailsComponent implements OnInit {
   filteredInvites: IFullInvite[] = [];
   inviteGroups: IInviteGroups[] = [];
 
-  filterValue = '';
+  filterByFamily = '';
+  filterByInviteViewed: boolean | undefined = undefined;
+  filterByNeedsAccomodation: boolean | undefined = undefined;
 
   isDeadlineMet = false;
 
@@ -367,17 +369,40 @@ export class InviteDetailsComponent implements OnInit {
     });
   }
 
-  filter(event: Event) {
-    event.preventDefault();
-    const target = event.target as HTMLInputElement;
-    this.filterValue = target.value.trim().toLocaleLowerCase();
+  filter(event: Event, filterType: string) {
+    if (filterType === 'family') {
+      const target = event.target as HTMLInputElement;
+      this.filterByFamily = target.value.trim().toLocaleLowerCase();
+    }
 
+    if (filterType === 'inviteViewed') {
+      const target = event.target as HTMLSelectElement;
+
+      if (target.value === 'all') {
+        this.filterByInviteViewed = undefined;
+      } else {
+        this.filterByInviteViewed = target.value === 'true' ? true : false;
+      }
+    }
+
+    if (filterType === 'needsAccomodation') {
+      const target = event.target as HTMLSelectElement;
+
+      if (target.value === 'all') {
+        this.filterByNeedsAccomodation = undefined;
+      } else {
+        this.filterByNeedsAccomodation = target.value === 'true' ? true : false;
+      }
+    }
+    
     this.filterInvites();
   }
 
   filterInvites() {
-    const invitesThatMatch = this.originalInvites.filter((invite) =>
-      invite.family.toLocaleLowerCase().includes(this.filterValue) || invite.phoneNumber.toLocaleLowerCase().includes(this.filterValue)
+    const invitesThatMatch = this.originalInvites.filter((invite) => 
+      (invite.family.toLocaleLowerCase().includes(this.filterByFamily) || invite.phoneNumber.toLocaleLowerCase().includes(this.filterByFamily))
+      && (this.filterByInviteViewed === undefined ? true : this.filterByInviteViewed ? invite.inviteViewed : !invite.inviteViewed)
+      && (this.filterByNeedsAccomodation === undefined ? true : this.filterByNeedsAccomodation ? invite.needsAccomodation : invite.needsAccomodation == false)
     );
 
     this.filteredInvites = invitesThatMatch;
