@@ -87,7 +87,13 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   copyToClipBoard(id: string): void {
     const url = `${window.location.origin}/invites/${id}`;
 
-    navigator.clipboard.writeText(url);
+    const inviteFound = this.originalInvites.value.find(
+      (f) => f.id === id
+    ) as IFullInvite;
+
+    const message = $localize`${inviteFound.family} estamos felices de compartir este momento contigo, y aunque sabemos que faltan algunos meses 📅 queremos comunicarte la fecha 📣, para que puedas reservarla y compartir con nosotros este gran día! ❤️\n\nLink de la invitación: ${url}\n\nAtte: Brisa Rojas y Braulio Chávez`;
+
+    navigator.clipboard.writeText(message.trim());
   }
 
   openEditModal(id: string): void {
