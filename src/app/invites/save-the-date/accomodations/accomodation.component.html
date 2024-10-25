@@ -7,7 +7,7 @@
     <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
         <form [formGroup]="accomodationForm" class="container" novalidate (ngSubmit)="saveInformation()">
-          <p i18n>El salón tiene un convenio con el hotel <a href="https://maps.app.goo.gl/2YJ38t8kV2FYAdkq6" target="_blank">Holiday Inn Express</a> y cuenta con los siguientes traslados <strong>(hotel -> iglesia -> recepción -> hotel)</strong>. Para mayor información seleccionar <strong>SÍ</strong> y nos pondremos en contacto con usted!</p>
+          <p i18n>El salón tiene un convenio con el hotel <a href="https://maps.app.goo.gl/2YJ38t8kV2FYAdkq6" target="_blank">Holiday Inn Express</a> y cuenta con los siguientes traslados <strong>(hotel <i class="fa-solid fa-arrow-right"></i> iglesia <i class="fa-solid fa-arrow-right"></i> recepción <i class="fa-solid fa-arrow-right"></i> hotel)</strong>. Para mayor información seleccionar <strong>SÍ</strong> y nos pondremos en contacto con usted!</p>
           <div class="form">
             <div class="question">
               <span i18n *ngIf="blockAccomodationForm">Este formulario no acepta mas respuestas</span>
@@ -40,7 +40,11 @@
       <div class="confirmed">
         <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
         <span i18n>Su respuesta ha sido enviada</span>
-        <p class="card-text" i18n>Muchas gracias por su tiempo.</p>
+        <p class="card-text" i18n>Muchas gracias por su tiempo. Le compartimos el Flyer con información sobre el hotel 
+          <br>
+          <i class="fa-solid fa-arrow-down"></i>
+          <br>
+          <a href="https://drive.google.com/drive/folders/13bEcobo2ch8C4_HYF_ucDoYDeJ6PwXyn?usp=sharing">Holiday Inn Tecnológico</a></p>
         <p class="card-text" i18n>Puede cerrar la página</p>
       </div>
     </div>

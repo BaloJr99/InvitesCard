@@ -97,20 +97,25 @@
     font-size: 20px;
   }
 
-  .confirmedModal .confirmed .card {
+  .confirmedModal .card .confirmed {
     padding: 50px;
   }
 
-    .confirmedModal .confirmed .card p {
+  .confirmedModal .card .confirmed i.fa-circle-check {
+    display: block;
+    font-size: 80px;
+    margin-bottom: 1rem;
+    color: rgb(0, 182, 0);
+  }
+
+    .confirmedModal .card .confirmed p {
       font-family: 'Raleway';
       color: #635959;
     }
 
-    .confirmedModal .confirmed .card i.fa-circle-check {
-      display: block;
-      font-size: 80px;
-      margin-bottom: 1rem;
-      color: rgb(0, 182, 0);
+    .confirmedModal .card .confirmed p a {
+      color: var(--custom-primary-color);
+      font-weight: bold;
     }
 
 @media (min-width: 576px) and (max-width: 991px) {  
