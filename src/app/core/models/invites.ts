@@ -1,3 +1,5 @@
+import { ISaveTheDateSetting } from "./settings";
+
 export interface IFullInvite {
   id: string;
   family: string;
@@ -80,7 +82,7 @@ export type ISaveTheDateUserInvite = Pick<
   maxDateOfConfirmation: string;
   nameOfCelebrated: string;
   typeOfEvent: string;
-};
+} & Pick<ISaveTheDateSetting, 'hotelName' | 'hotelInformation'>;
 
 export type IDashboardInvite = Pick<
   IFullInvite,

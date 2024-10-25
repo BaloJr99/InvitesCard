@@ -23,7 +23,13 @@ import { IMessageResponse } from 'src/app/core/models/common';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { CommonModalService } from 'src/app/core/services/commonModal.service';
-import { CommonModalResponse, CommonModalType } from 'src/app/core/models/enum';
+import {
+  CommonModalResponse,
+  CommonModalType,
+  EventType,
+} from 'src/app/core/models/enum';
+import { IEventInformation } from 'src/app/core/models/events';
+import { ISaveTheDateSetting } from 'src/app/core/models/settings';
 
 @Component({
   selector: 'app-table',
@@ -37,7 +43,10 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() removeInvites = new EventEmitter<string[]>();
 
   @Input() isDeadlineMet = false;
-  @Input() eventType = '';
+  @Input() eventInformation: IEventInformation = {
+    typeOfEvent: EventType.None,
+    settings: '',
+  };
   @Input() set invites(invites: KeyValue<string, IFullInvite[]>) {
     this.originalInvites = invites;
     this.inviteGroup = {
@@ -91,7 +100,19 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
       (f) => f.id === id
     ) as IFullInvite;
 
-    const message = $localize`${inviteFound.family} estamos felices de compartir este momento contigo, y aunque sabemos que faltan algunos meses 📅 queremos comunicarte la fecha 📣, para que puedas reservarla y compartir con nosotros este gran día! ❤️\n\nLink de la invitación: ${url}\n\nAtte: Brisa Rojas y Braulio Chávez`;
+    const settings = JSON.parse(
+      this.eventInformation.settings
+    ) as ISaveTheDateSetting;
+
+    let message = settings.copyMessage;
+
+    if (message.includes('[family]')) {
+      message = message.replace('[family]', inviteFound.family);
+    }
+
+    if (message.includes('[invite_url]')) {
+      message = message.replace('[invite_url]', url);
+    }
 
     navigator.clipboard.writeText(message.trim());
   }

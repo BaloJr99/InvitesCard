@@ -4,7 +4,7 @@ import { combineLatest, filter, switchMap } from 'rxjs';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
 import { SocketService } from 'src/app/core/services/socket.service';
-import { IStatistic } from 'src/app/core/models/events';
+import { IEventInformation, IStatistic } from 'src/app/core/models/events';
 import {
   IInviteGroups,
   IInviteGroupsAction,
@@ -42,7 +42,10 @@ export class InviteDetailsComponent implements OnInit {
   statistics: IStatistic[] = [];
 
   eventId = '';
-  eventType = '';
+  copyEventInformation: IEventInformation = {
+    typeOfEvent: EventType.None,
+    settings: ''
+  };
 
   inviteAction!: IInviteAction;
   invitesGrouped: { [key: string]: IFullInvite[] } = {};
@@ -83,14 +86,14 @@ export class InviteDetailsComponent implements OnInit {
             this.inviteGroupsService.getAllInviteGroups(
               data['eventResolved']['id']
             ),
-            this.eventsService.getEventType(data['eventResolved']['id']),
+            this.eventsService.getEventInformation(data['eventResolved']['id'], ['copyMessage', 'test']),
           ])
         )
       )
       .subscribe({
-        next: ([inviteGroups, eventType]) => {
+        next: ([inviteGroups, eventInformation]) => {
           this.inviteGroups = inviteGroups;
-          this.eventType = eventType;
+          this.copyEventInformation = eventInformation;
           this.buildInvitesDashboard();
         },
       })
@@ -138,8 +141,8 @@ export class InviteDetailsComponent implements OnInit {
     this.statistics = [];
 
     if (
-      this.eventType === EventType.Xv ||
-      this.eventType === EventType.Wedding
+      this.copyEventInformation.typeOfEvent === EventType.Xv ||
+      this.copyEventInformation.typeOfEvent === EventType.Wedding
     ) {
       this.statistics = [
         {
@@ -210,7 +213,7 @@ export class InviteDetailsComponent implements OnInit {
 
       this.commonInvitesService.updateNotifications(notifications, messages);
       this.groupEntries(this.filteredInvites);
-    } else if (this.eventType === EventType.SaveTheDate) {
+    } else if (this.copyEventInformation.typeOfEvent === EventType.SaveTheDate) {
       this.statistics = [
         {
           name: $localize`Invitaciones Respondidas`,

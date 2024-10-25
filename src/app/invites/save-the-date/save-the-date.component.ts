@@ -49,6 +49,9 @@ export class SaveTheDateComponent implements OnInit {
     primaryColor: '',
     secondaryColor: '',
     receptionPlace: '',
+    copyMessage: '',
+    hotelName: '',
+    hotelInformation: '',
   };
 
   shortDate = '';
@@ -121,6 +124,9 @@ export class SaveTheDateComponent implements OnInit {
                   ...JSON.parse(eventSettings.settings),
                   eventId: eventSettings.eventId,
                 };
+
+                this.userInvite.hotelName = this.eventSettings.hotelName;
+                this.userInvite.hotelInformation = this.eventSettings.hotelInformation;
 
                 this.downloadAudio =
                   downloadFiles.eventAudios.length > 0

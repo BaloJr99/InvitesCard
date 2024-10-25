@@ -48,7 +48,7 @@
   <div class="col-12">
     <div class="accordion" id="inviteAccordion" *ngFor="let inviteGroup of invitesGrouped | keyvalue">
       <app-table 
-        [eventType]="eventType"
+        [eventInformation]="copyEventInformation"
         [invites]="inviteGroup" 
         (setInviteAction)="fillInviteAction($event)" 
         (removeInvites)="removeInvites($event)"

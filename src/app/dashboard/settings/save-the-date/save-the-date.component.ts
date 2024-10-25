@@ -47,6 +47,9 @@ export class SaveTheDateComponent implements AfterViewInit {
     primaryColor: ['', Validators.required],
     secondaryColor: ['', Validators.required],
     receptionPlace: ['', Validators.required],
+    copyMessage: ['', Validators.required],
+    hotelName: ['', Validators.required],
+    hotelInformation: ['', Validators.required],
   });
 
   displayMessage: { [key: string]: string } = {};
@@ -69,6 +72,15 @@ export class SaveTheDateComponent implements AfterViewInit {
       receptionPlace: {
         required: $localize`Ingresar lugar del evento`,
       },
+      copyMessage: {
+        required: $localize`Ingresar mensaje para copiar`,
+      },
+      hotelName: {
+        required: $localize`Ingresar nombre del hotel`,
+      },
+      hotelInformation: {
+        required: $localize`Ingresar url con información del hotel`,
+      },
     };
 
     this.genericValidator = new GenericValidator(this.validationMessages);
@@ -80,6 +92,9 @@ export class SaveTheDateComponent implements AfterViewInit {
       primaryColor: '',
       secondaryColor: '',
       receptionPlace: '',
+      copyMessage: '',
+      hotelName: '',
+      hotelInformation: '',
     });
 
     this.displayMessage = {};

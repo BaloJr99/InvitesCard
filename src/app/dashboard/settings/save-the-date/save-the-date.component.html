@@ -16,11 +16,32 @@
           {{ displayMessage['secondaryColor'] }}
         </span>
       </div>
-      <div class="form-group col-6 col-md-4">
+      <div class="form-group col-12 col-md-8">
         <label for="receptionPlace" class="form-label" i18n>Lugar del evento</label>
         <input id="receptionPlace" type="text" class="form-control" formControlName="receptionPlace" [ngClass]="{'is-invalid': displayMessage['receptionPlace']}">
         <span class="invalid-feedback" role="alert">
           {{ displayMessage['receptionPlace'] }}
+        </span>
+      </div>
+      <div class="form-group col-12 col-md-12">
+        <label for="copyMessage" class="form-label" i18n>Mensaje para copiar</label>
+        <textarea id="copyMessage" class="form-control" rows="3" formControlName="copyMessage" [ngClass]="{'is-invalid': displayMessage['copyMessage']}"></textarea>
+        <span class="invalid-feedback" role="alert">
+          {{ displayMessage['copyMessage'] }}
+        </span>
+      </div>
+      <div class="form-group col-12 col-md-4">
+        <label for="hotelName" class="form-label" i18n>Nombre del Hotel</label>
+        <input id="hotelName" type="text" class="form-control" formControlName="hotelName" [ngClass]="{'is-invalid': displayMessage['hotelName']}">
+        <span class="invalid-feedback" role="alert">
+          {{ displayMessage['hotelName'] }}
+        </span>
+      </div>
+      <div class="form-group col-12 col-md-8">
+        <label for="hotelInformation" class="form-label" i18n>Url con información</label>
+        <input id="hotelInformation" type="url" class="form-control" formControlName="hotelInformation" [ngClass]="{'is-invalid': displayMessage['hotelInformation']}">
+        <span class="invalid-feedback" role="alert">
+          {{ displayMessage['hotelInformation'] }}
         </span>
       </div>
     </form>

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { IDropdownEvent, IDashboardEvent, IFullEvent } from '../models/events';
+import { IDropdownEvent, IDashboardEvent, IFullEvent, IEventInformation } from '../models/events';
 import { IMessageResponse } from '../models/common';
 import { IFullInvite } from '../models/invites';
 
@@ -21,8 +21,12 @@ export class EventsService {
     return this.http.get<IDropdownEvent[]>(`${this.invitesBaseUrl}/dropdown`);
   }
 
-  getEventType(eventId: string): Observable<string> {
-    return this.http.get<string>(`${this.invitesBaseUrl}/${eventId}/eventType`);
+  getEventInformation(eventId: string, eventSettings: string[]): Observable<IEventInformation> {
+    return this.http.get<IEventInformation>(`${this.invitesBaseUrl}/${eventId}/eventInformation`, {
+      params: {
+        eventSettings,
+      }
+    });
   }
 
   getEventInvites(eventId: string): Observable<IFullInvite[]> {

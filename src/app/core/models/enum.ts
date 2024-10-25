@@ -18,6 +18,7 @@ export const enum EventType {
   Xv = 'X',
   Wedding = 'W',
   SaveTheDate = 'S',
+  None = ''
 }
 
 export const enum CommonModalType {

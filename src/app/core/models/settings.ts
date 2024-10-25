@@ -1,8 +1,8 @@
-import { EventType } from "./enum";
+import { EventType } from './enum';
 
 export interface IBaseSettings {
-  eventId: string
-  settings: string
+  eventId: string;
+  settings: string;
 }
 
 export interface ISetting {
@@ -28,6 +28,9 @@ export interface ISaveTheDateSetting {
   primaryColor: string;
   secondaryColor: string;
   receptionPlace: string;
+  copyMessage: string;
+  hotelName: string;
+  hotelInformation: string;
 }
 
 export interface ISettingAction {
