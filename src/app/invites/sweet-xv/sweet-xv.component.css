@@ -3,61 +3,19 @@
   --custom-seconday-color: #ffffff;
 }
 
-.container {
-  color: var(--custom-primary-color);
-}
-
-.container h2 {
-  color: var(--custom-primary-color);
-  font-family: "Allura";
-  font-size: 50px;
-}
-
 .full-invite .invite-section:nth-child(even):not(:first-child) {
   background-color: var(--custom-secondary-color);
 }
 
-iframe {
-  width: 100%;
-  border-radius: 10px;
+.container {
+  color: var(--custom-primary-color);
 }
 
-.scrollFormButton {
-  border-radius: 5px;
-  background-color: #515050;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50px;
-  width: 40px;
-  position: absolute;
-  z-index: 1;
-  left: 5vh;
-  animation: floatingAnimation ease-in-out 2s infinite;
-  text-decoration: none;
-}
-
-.scrollFormButton i {
-  color: #ffffff;
-  font-size: 1.5rem;
-}
-
-[class*="backgroundImage"] {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-  background-repeat: no-repeat;
-  background-size: 100%;
-  background-position: 20% 30%;
-  padding-bottom: 20px;
-  animation: shrink ease 5s infinite;
-  transition: 0.5 ease backgound-size;
-  z-index: -1;
-  opacity: 0.9;
-}
+  .container h2 {
+    color: var(--custom-primary-color);
+    font-family: "Allura";
+    font-size: 50px;
+  }
 
 .info {
   position: relative;
@@ -65,55 +23,88 @@ iframe {
   overflow-x: clip;
 }
 
-.info .container .header h1 {
-  font-size: 200px;
-  font-family: "Outfit";
-  color: var(--custom-secondary-color);
-}
+  .info .scrollFormButton {
+    border-radius: 5px;
+    background-color: #515050;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    width: 40px;
+    position: absolute;
+    z-index: 1;
+    left: 5vh;
+    animation: floatingAnimation ease-in-out 2s infinite;
+    text-decoration: none;
+  }
 
-.info .container .header h1 span {
-  font-size: 64px;
-  color: #ffffff;
-  font-family: "Allura";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 110px;
-}
+    .info .scrollFormButton i {
+      color: #ffffff;
+      font-size: 1.5rem;
+    }
 
-.info .container .header p {
-  font-family: "Allura";
-  font-size: 96px;
-  padding: 100px 0px;
-  color: #ffffff;
-}
+  .info [class*="backgroundImage"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: 20% 30%;
+    padding-bottom: 20px;
+    animation: shrink ease 5s infinite;
+    transition: 0.5 ease backgound-size;
+    z-index: -1;
+    opacity: 0.9;
+  }
 
-.info .container .datetime .date p {
-  font-size: 20px;
-  padding: 0px 10px;
-  margin: 0;
-  letter-spacing: 2px;
-  color: #ffffff;
-  font-weight: bold;
-}
+  .info h1 {
+    font-size: 200px;
+    font-family: "Outfit";
+    color: var(--custom-secondary-color);
+  }
 
-.info .container .datetime .date {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+    .info h1 span {
+      font-size: 64px;
+      color: #ffffff;
+      font-family: "Allura";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 110px;
+    }
 
-.info .container .datetime .date hr {
-  width: 10%;
-  border: none;
-  height: 3px;
-  color: #ffffff;
-  background-color: #ffffff;
-}
+  .info .container .header p {
+    font-family: "Allura";
+    font-size: 96px;
+    padding: 100px 0px;
+    color: #ffffff;
+  }
 
-.invites {
-  padding: 20px 0px;
-}
+  .info .container .datetime .date {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+    .info .container .datetime .date p {
+      font-size: 20px;
+      padding: 0px 10px;
+      margin: 0;
+      letter-spacing: 2px;
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .info .container .datetime .date hr {
+      width: 10%;
+      border: none;
+      height: 3px;
+      color: #ffffff;
+      background-color: #ffffff;
+    }
 
 .speech {
   padding: 100px 0px;
@@ -122,38 +113,38 @@ iframe {
   justify-content: center;
 }
 
-.speech p {
-  color: #635959;
-  font-size: 20px;
-}
+  .speech p {
+    color: #635959;
+    font-size: 20px;
+  }
 
-.speech .invites .noKids {
-  font-weight: bold;
-}
+  .speech .invites {
+    padding: 20px 0px;
+  }
 
-.speech .invites p:first-child {
-  color: #000000;
-}
+    .speech .invites .noKids {
+      font-weight: bold;
+    }
 
-.speech .invites p:first-of-type {
-  font-family: "Allura";
-  font-size: 40px;
-}
+    .speech .invites p:first-of-type {
+      font-family: "Allura";
+      font-size: 40px;
+    }
 
-.divider {
-  display: flex;
-}
+    .speech .invites .divider {
+      display: flex;
+    }
 
-.divider:nth-of-type(2) {
-  justify-content: end;
-}
+    .speech .invites .divider:nth-of-type(2) {
+      justify-content: end;
+    }
 
-.speech .invites hr {
-  width: 30%;
-  border: none;
-  height: 3px;
-  color: var(--custom-primary-color);
-}
+      .speech .invites .divider hr {
+        width: 30%;
+        border: none;
+        height: 3px;
+        color: var(--custom-secondary-color);
+      }
 
 .pinkLetter {
   color: var(--custom-primary-color) !important;
@@ -163,31 +154,31 @@ iframe {
   padding: 100px 0px;
 }
 
-.ceremony .container > p.pinkLetter {
-  font-family: "Raleway";
-  font-size: 24px;
-}
+  .ceremony p.pinkLetter {
+    font-family: "Raleway";
+    font-size: 24px;
+  }
 
-.ceremony .container p:first-of-type {
-  color: #635959;
-  font-size: 20px;
-}
+  .ceremony p:first-of-type {
+    color: #635959;
+    font-size: 20px;
+  }
 
-.ceremony .container .col-md-6 p:not(p:first-of-type),
-.ceremony .container .col-sm-12 p:not(p:first-of-type) {
-  font-family: "Allura";
-  font-size: 36px;
-}
+  .ceremony .col-md-6 p:not(p:first-of-type),
+  .ceremony .col-sm-12 p:not(p:first-of-type) {
+    font-family: "Allura";
+    font-size: 36px;
+  }
 
-.ceremony .row:not(.row:first-of-type) {
-  padding: 50px;
-}
+  .ceremony .row:not(.row:first-of-type) {
+    padding: 50px;
+  }
 
-.ceremony .row:not(.row:first-of-type),
-.reception .row {
-  justify-content: center;
-  align-items: center;
-}
+  .ceremony .row:not(.row:first-of-type),
+  .reception .row {
+    justify-content: center;
+    align-items: center;
+  }
 
 .reception {
   display: flex;
@@ -196,66 +187,71 @@ iframe {
   padding: 100px 0px;
 }
 
-.reception h3,
-.reception p {
-  color: #635959;
-}
+  .reception iframe {
+    width: 100%;
+    border-radius: 10px;
+  }
 
-.reception h3 {
-  font-size: 25px;
-}
+  .reception h3,
+  .reception p {
+    color: #635959;
+  }
 
-.reception p,
-.reception span {
-  font-size: 20px;
-}
+  .reception h3 {
+    font-size: 25px;
+  }
+
+  .reception p,
+  .reception span {
+    font-size: 20px;
+  }
 
 .dressCode,
 .gifts {
   padding: 100px;
 }
 
-.dressCode .col-md-6 p,
-.dressCode .col-sm-12 p {
-  font-size: 20px;
-}
+  .dressCode .col-md-6 p,
+  .dressCode .col-sm-12 p {
+    font-size: 20px;
+  }
 
-.dressCode .col-md-6:first-of-type,
-.gifts .col-md-6:first-of-type {
-  padding-left: 100px;
-}
+  .dressCode .col-md-6:first-of-type,
+  .gifts .col-md-6:first-of-type {
+    padding-left: 100px;
+  }
 
-.dressCode .col-md-6:nth-of-type(2),
-.gifts .col-md-6:nth-of-type(2) {
-  padding-right: 100px;
-}
+  .dressCode .col-md-6:nth-of-type(2),
+  .gifts .col-md-6:nth-of-type(2) {
+    padding-right: 100px;
+  }
 
-.dressCode p {
-  color: #635959;
-}
+  .dressCode p {
+    color: #635959;
+  }
 
-.dressCode .container > p {
-  font-size: 22px;
-}
+  .dressCode .container > p {
+    font-size: 22px;
+  }
 
-.dressCode img {
-  margin-bottom: 20px;
-  height: 200px;
-}
+  .dressCode img {
+    margin-bottom: 20px;
+    height: 200px;
+  }
 
-.gifts img {
-  margin-bottom: 20px;
-  width: 150px;
-}
+  .gifts img {
+    margin-bottom: 20px;
+    width: 150px;
+  }
 
-.gifts p {
-  font-size: 20px;
-}
+  .gifts p {
+    font-size: 20px;
+  }
 
-.gifts p:last-of-type {
-  font-size: 40px;
-  font-family: 'Allura';
-}
+  .gifts p:last-of-type {
+    font-size: 40px;
+    font-family: 'Allura';
+  }
 
 .invitesConfirmation {
   display: flex;
@@ -290,13 +286,8 @@ iframe {
 }
 
 @media (max-width: 768px) {
-  .dressCode .col-md-6:first-of-type,
-  .gifts .col-md-6:first-of-type {
-    padding: 0px;
-  }
-
-  .dressCode .col-md-6:nth-of-type(2),
-  .gifts .col-md-6:nth-of-type(2) {
+  .gifts .col-md-6
+  .dressCode .col-md-6 {
     padding: 0px;
   }
 
@@ -314,8 +305,25 @@ iframe {
 }
 
 @media (max-width: 575px) {
-  .info .container .header h1 {
+
+  .info {
+    background-size: cover;
+  }
+  
+  .info h1 {
     font-size: 96px;
+    text-align: end;
+  }
+
+  .info .header h1 span {
+    right: 50px !important;
+    top: 105px !important;
+  }
+
+  .info [class*="backgroundImage"] {
+    background-size: cover;
+    background-position: center !important;
+    animation: shrinkSmall ease 5s infinite;
   }
 
   .ceremony .row:not(.row:first-of-type) {
@@ -335,34 +343,15 @@ iframe {
     padding: 100px 0px;
   }
 
-  .dressCode .col-md-6:first-of-type,
-  .gifts .col-md-6:first-of-type {
-    padding: 0px;
-  }
+    .dressCode .col-md-6:first-of-type,
+    .gifts .col-md-6:first-of-type {
+      padding: 0px;
+    }
 
-  .dressCode .col-md-6:nth-of-type(2),
-  .gifts .col-md-6:nth-of-type(2) {
-    padding: 0px;
-  }
-
-  .info {
-    background-size: cover;
-  }
-
-  .info .header h1 {
-    text-align: end;
-  }
-
-  .info .header h1 span {
-    right: 50px !important;
-    top: 105px !important;
-  }
-
-  [class*="backgroundImage"] {
-    background-size: cover;
-    background-position: center !important;
-    animation: shrinkSmall ease 5s infinite;
-  }
+    .dressCode .col-md-6:nth-of-type(2),
+    .gifts .col-md-6:nth-of-type(2) {
+      padding: 0px;
+    }
 
   .invitesConfirmation {
     padding: 50px 0px;

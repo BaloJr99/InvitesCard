@@ -10,6 +10,12 @@
   align-items: center;
 }
 
+  .breadcrumb-header .header .buttons .btn-primary {
+    background-color: var(--secondary-blue);
+    color: var(--grey);
+    border: none;
+  }
+
   .breadcrumb-header .header nav {
     flex-grow: 1;
   }
@@ -18,29 +24,23 @@
     margin-bottom: 0;
   }
 
-  .breadcrumb-header .header .breadcrumb .breadcrumb-item {
-    font-size: 15px;
-  }
-
-    .breadcrumb-header .header .breadcrumb .breadcrumb-item a {
-      text-decoration: none; 
-      color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
+    .breadcrumb-header .header .breadcrumb .breadcrumb-item {
+      font-size: 15px;
     }
 
-    .breadcrumb-header .header .breadcrumb .breadcrumb-item a:hover {
-      text-decoration: underline; 
-    }
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item a {
+        text-decoration: none; 
+        color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
+      }
 
-    .breadcrumb-header .header .breadcrumb .breadcrumb-item:first-of-type a {
-      font-weight: bold;
-      text-decoration: none;
-    }
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item a:hover {
+        text-decoration: underline; 
+      }
 
-    .breadcrumb-header .header button.btn-primary {
-      background-color: var(--secondary-blue);
-      color: var(--grey);
-      border: none;
-    }
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item:first-of-type a {
+        font-weight: bold;
+        text-decoration: none;
+      }
 
     .users .table-styling {
       background-color: white;
@@ -49,29 +49,29 @@
       border: var(--bs-border-width) solid var(--bs-border-color-translucent);
     }
 
-    .users .table-styling table i.fa-circle-check {
-      color: green;
-    }
+      .users .table-styling table i.fa-circle-check {
+        color: green;
+      }
 
-    .users .table-styling table i.fa-circle-xmark {
-      color: red;
-    }
+      .users .table-styling table i.fa-circle-xmark {
+        color: red;
+      }
 
 @media (max-width: 768px) {
-  .header {
+  .breadcrumb-header .header {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
 
-  .header .buttons {
+  .breadcrumb-header .header .buttons {
     display: flex;
     flex-direction: column;
     width: 100%;
     gap: 10px;
   }
   
-  .header button.btn-primary {
+  .breadcrumb-header .header .buttons .btn-primary {
     width: 100%;
     margin: 0px;
   }

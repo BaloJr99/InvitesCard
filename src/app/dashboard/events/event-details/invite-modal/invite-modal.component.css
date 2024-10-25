@@ -1,14 +1,14 @@
-.modal-body {
+.modal .modal-body {
   text-align: left;
 }
+
+  .modal .modal-body .inviteGroupActions {
+    display: flex;
+    gap: 10px;
+  }
 
 .modal button.btn-primary {
   background-color: var(--secondary-blue);
   color: var(--grey);
   border: none;
-}
-
-.inviteGroupActions {
-  display: flex;
-  gap: 10px;
 }

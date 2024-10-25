@@ -18,23 +18,22 @@
     margin-bottom: 0;
   }
 
-  .breadcrumb-header .header .breadcrumb .breadcrumb-item {
-    font-size: 15px;
-  }
-
-    .breadcrumb-header .header .breadcrumb .breadcrumb-item a {
-      text-decoration: none; 
-      color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
+    .breadcrumb-header .header .breadcrumb .breadcrumb-item {
+      font-size: 15px;
     }
 
-    .breadcrumb-header .header .breadcrumb .breadcrumb-item a:hover {
-      text-decoration: underline; 
-    }
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item a {
+        text-decoration: none; 
+      }
 
-    .breadcrumb-header .header .breadcrumb .breadcrumb-item:first-of-type a {
-      font-weight: bold;
-      text-decoration: none;
-    }
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item a:hover {
+        text-decoration: underline; 
+      }
+
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item:first-of-type a {
+        font-weight: bold;
+        text-decoration: none;
+      }
 
 .btn-primary {
   background-color: var(--secondary-blue);
@@ -44,24 +43,9 @@
 
 .files {
   text-align: left;
-  flex-grow: 1;
 }
 
-  .files .form-group label {
-    padding: 10px 5px 5px;
-    font-weight: bold;
-  }
-
-.files-empty {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.files-empty p {
-  margin-top: 20px;
-}
-
+  .files .form-group label,
   .files .upload-form label {
     padding: 10px 5px 5px;
     font-weight: bold;
@@ -75,9 +59,29 @@
 
   .files .upload-form button {
     width: 100%;
-    background-color: var(--secondary-blue);
-    color: var(--grey);
-    border: none;
+  }
+
+  .files .footer {
+    text-align: end;
+    padding: 10px;
+    position: sticky;
+    bottom: 0px;
+    background: var(--light-blue);
+    border-top: 2px solid var(--teal-blue);
+  }
+  
+    .files .footer button#cancel-changes {
+      margin-right: 10px;
+    }
+
+.files-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+  .files-empty p {
+    margin-top: 20px;
   }
 
 .image-container {
@@ -97,11 +101,11 @@
       border-radius: 5px;
     }
 
-    .image-container .image-controls {
+    .image-container .card .image-controls {
       position: relative;
     }
 
-      .image-container .image-controls button {
+      .image-container .card .image-controls button {
         position: absolute;
         bottom: 10px;
         right: 10px;
@@ -133,12 +137,12 @@
   width: fit-content;
 }
 
-.music-container .audio-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
+  .music-container .card .audio-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
 
 .show-image {
   position: fixed;
@@ -165,25 +169,6 @@
       .show-image .card .card-body button {
         margin-top: 10px;
       }
-
-.footer {
-  text-align: end;
-  padding: 10px;
-  position: sticky;
-  bottom: 0px;
-  background: var(--light-blue);
-  border-top: 2px solid var(--teal-blue);
-}
-
-  .footer button {
-    background-color: var(--secondary-blue);
-    color: var(--grey);
-    border: none;
-  }
-
-  .footer button#cancel-changes {
-    margin-right: 10px;
-  }
 @media (max-width: 991px) {
   .files .upload-form button {
     margin-top: 10px;
@@ -206,28 +191,24 @@
       flex-grow: 1;
     }
 
-  .header {
+  .breadcrumb-header .header {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
-
-  .header .buttons {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 10px;
-  }
-  
-  .header button.btn-primary {
-    width: 100%;
-    margin: 0px;
-  }
 }
 
 @media screen and (max-width: 575px) {
-  .main-controls .btn {
+  .files .main-controls .btn {
     margin-bottom: 10px;
+  }
+
+  .files .footer {
+    display: flex;
+  }
+
+  .files .footer button {
+    flex: 1 1 0px;
   }
 
   .music-container .card {
@@ -237,13 +218,5 @@
   
   .show-image {
     width: 100%;
-  }
-
-  .footer {
-    display: flex;
-  }
-
-  .footer button {
-    flex: 1 1 0px;
   }
 }

@@ -2,18 +2,13 @@
   flex: 0 1 auto;
 }
 
-  .breadcrumb-header {
-    display: flex;
-    align-items: center;
+  .breadcrumb-header nav {
+    flex-grow: 1;
   }
 
-    .breadcrumb-header nav {
-      flex-grow: 1;
-    }
-
-    .breadcrumb-header .breadcrumb {
-      margin-bottom: 0;
-    }
+  .breadcrumb-header .breadcrumb {
+    margin-bottom: 0;
+  }
 
     .breadcrumb-header .breadcrumb .breadcrumb-item {
       font-size: 15px;
@@ -50,12 +45,6 @@
       margin-bottom: 20px
     }
 
-      .history .percentage-history .card .card-title {
-        font-size: 25px;
-        font-weight: bold;
-        font-family: 'Outfit';
-      }
-
       .history .percentage-history .card .card-body {
         display: flex;
         justify-content: center;
@@ -63,53 +52,59 @@
         flex-direction: column;
       }
 
+        .history .percentage-history .card .card-body .card-title {
+          font-size: 25px;
+          font-weight: bold;
+          font-family: 'Outfit';
+        }
+
         .history .percentage-history .card .card-body span {
           font-size: 40px;
           font-weight: bold;
         }
 
-        .history .last-history {
-          margin-top: 20px;
-        }
+  .history .last-history {
+    margin-top: 20px;
+  }
 
-  .table-styling {
+  .history .table-styling {
     background-color: white;
     border-radius: 0.375rem;
     padding: 1rem;
     border: var(--bs-border-width) solid var(--bs-border-color-translucent);
   }
-
-  th {
-    text-align: center !important;
-  }
   
-  table {
+  .history .table-styling table {
     width: 100% !important;
   }
 
-  @media (max-width: 991px) {
-    .history .errors-history {
-      margin-bottom: 20px;
+    .history .table-styling table th {
+      text-align: center !important;
     }
-  }
 
-  @media (min-width: 576px) and (max-width: 991px) {
-    .history .percentage-history {
-      flex-direction: row;
-      gap: 20px;
-    }
+@media (max-width: 991px) {
+  .history .errors-history {
+    margin-bottom: 20px;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 991px) {
+  .history .percentage-history {
+    flex-direction: row;
+    gap: 20px;
+  }
 
     .history .percentage-history .card:first-of-type {
       margin-bottom: 0px;
     }
+}
+
+@media (max-width: 575px) {
+  .history .errors-history canvas {
+    margin-bottom: 20px;
   }
 
-  @media (max-width: 575px) {
-    .history .errors-history canvas {
-      margin-bottom: 20px;
-    }
-
-    .table-styling .inner {
-      overflow-x: auto;
-    }
+  .history .table-styling .inner {
+    overflow-x: auto;
   }
+}

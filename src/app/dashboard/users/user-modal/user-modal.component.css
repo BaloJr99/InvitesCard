@@ -1,53 +1,53 @@
-.modal-body {
+.modal .modal-body {
   text-align: left;
 }
 
-.modal button.btn-primary {
-  background-color: var(--secondary-blue);
-  color: var(--grey);
-  border: none;
-}
-
-.roles span {
-  display: inline-block;
-  margin-right: 10px;
-}
-
-.roles span i {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: fit-content;
-  display: none;
-}
-
-.roles span:hover i {
-  display: inline;
-  cursor: pointer;
-}
-
-i.fa-circle-check {
-  color: green;
-}
-
-i.fa-circle-xmark {
-  color: red;
-}
-
-.username-validation {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-  .username-validation #username {
-    width: calc(100% - 26px);
+  .modal .modal-body .roles span {
+    display: inline-block;
     margin-right: 10px;
   }
 
-.roleActions {
-  display: flex;
-  gap: 10px;
+    .modal .modal-body .roles span i {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: fit-content;
+      display: none;
+    }
+
+    .modal .modal-body .roles span:hover i {
+      display: inline;
+      cursor: pointer;
+    }
+
+  .modal .modal-body i.fa-circle-check {
+    color: green;
+  }
+  
+  .modal .modal-body i.fa-circle-xmark {
+    color: red;
+  }
+
+  .modal .modal-body .username-validation {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+    .modal .modal-body .username-validation #username {
+      width: calc(100% - 26px);
+      margin-right: 10px;
+    }
+
+    .modal .modal-body .roleActions {
+      display: flex;
+      gap: 10px;
+    }
+
+.modal .modal-footer .btn-primary {
+  background-color: var(--secondary-blue);
+  color: var(--grey);
+  border: none;
 }

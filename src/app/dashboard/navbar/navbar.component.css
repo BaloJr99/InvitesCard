@@ -15,11 +15,47 @@
       margin-bottom: 0;
     }
 
-  .navbar .navbar-nav .nav-item {
+    .navbar .navbarWithSearchAndForm {
+      display: flex;
+      justify-content: flex-end;
+      flex-grow: 1;
+    }
+  
+      .navbar .navbarWithSearchAndForm .account,
+      .navbar .navbarWithSearchAndForm .notifications {
+        background-color: #ffffff;
+        border-radius: 100%;
+        margin-left: 10px;
+      }
+  
+      .navbar .navbarWithSearchAndForm .account {
+        margin-right: 20px;
+        width: 40px;
+        height: 40px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        border: 1px solid #fff;
+      }
+  
+        .navbar .navbarWithSearchAndForm .notifications span {
+          position: absolute;
+          top: 3px;
+          right: 75px;
+          background-color: blue;
+          height: 21px;
+          width: 21px;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #ffffff;
+        }
+
+  .navbar .navbar-collapse .navbar-nav .nav-item {
     font-family: 'Raleway';
   }
 
-    .navbar .navbar-nav .nav-item a {
+    .navbar .navbar-collapse .navbar-nav .nav-item a {
       margin: auto;
       display: block;
       color: #fff;
@@ -28,45 +64,9 @@
       border-bottom: 1px solid var(--light-blue);
     }
 
-    .navbar .navbar-nav .nav-item a.active {
+    .navbar .navbar-collapse .navbar-nav .nav-item a.active {
       color: var(--primary-orange);
     }
-
-  .navbar .navbarWithSearchAndForm {
-    display: flex;
-    justify-content: flex-end;
-    flex-grow: 1;
-  }
-
-    .navbar .navbarWithSearchAndForm .account,
-    .navbar .navbarWithSearchAndForm .notifications {
-      background-color: #ffffff;
-      border-radius: 100%;
-      margin-left: 10px;
-    }
-
-    .navbar .navbarWithSearchAndForm .account {
-      margin-right: 20px;
-      width: 40px;
-      height: 40px;
-      background-repeat: no-repeat;
-      background-size: cover;
-      border: 1px solid #fff;
-    }
-
-      .navbar .navbarWithSearchAndForm .notifications span {
-        position: absolute;
-        top: 3px;
-        right: 75px;
-        background-color: blue;
-        height: 21px;
-        width: 21px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #ffffff;
-      }
 
   .navbar .base-menu {
     position: absolute;
@@ -81,46 +81,23 @@
     border: 1px solid gray;
     z-index: 3;
   }
-
-  .navbar .base-menu .arrow-up {
-    position: absolute;
-    top: -7px;
-    right: 15px;
-    width: 15px;
-    height: 15px;
-    background: #fff;
-    border-top: 1px solid gray;
-    border-left: 1px solid gray;
-    transform: rotate(45deg);
+    
+  .navbar .base-menu.active {
+    top: 70px;
+    visibility: visible;
+    opacity: 1;
   }
 
-    .navbar .base-menu ul {
-      margin: 0;
-      padding: 0;
+    .navbar .base-menu.menu h3 {
+      width: 100%;
+      text-align: center;
+      font-size: 18px;
+      padding: 10px 0;
+      font-weight: 500;
+      color: #555;
+      line-height: 1.5em;
+      border-bottom: 1px solid #ccc;
     }
-    
-    .navbar .base-menu.active {
-      top: 70px;
-      visibility: visible;
-      opacity: 1;
-    }
-
-    .navbar .base-menu.menu {
-      background: #fff;
-      width: 200px;
-      padding: 10px 20px;
-    }
-
-      .navbar .base-menu.menu h3 {
-        width: 100%;
-        text-align: center;
-        font-size: 18px;
-        padding: 10px 0;
-        font-weight: 500;
-        color: #555;
-        line-height: 1.5em;
-        border-bottom: 1px solid #ccc;
-      }
 
       .navbar .base-menu.menu h3 span {
         display: block;
@@ -132,12 +109,12 @@
         overflow: hidden;
       }
 
-      .navbar .base-menu.menu ul li {
-        list-style: none;
-        padding: 10px 0;
-        display: flex;
-        align-items: center;
-      }
+    .navbar .base-menu.menu ul li {
+      list-style: none;
+      padding: 10px 0;
+      display: flex;
+      align-items: center;
+    }
 
       .navbar .base-menu.menu ul li i {
         max-width: 20px;
@@ -167,6 +144,29 @@
         color: #ff5d94;
       }
 
+    .navbar .base-menu .arrow-up {
+      position: absolute;
+      top: -7px;
+      right: 15px;
+      width: 15px;
+      height: 15px;
+      background: #fff;
+      border-top: 1px solid gray;
+      border-left: 1px solid gray;
+      transform: rotate(45deg);
+    }
+
+    .navbar .base-menu ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar .base-menu.menu {
+      background: #fff;
+      width: 200px;
+      padding: 10px 20px;
+    }
+
     .navbar .base-menu.notificationMessages {
       width: 350px;
       max-height: 300px;
@@ -174,23 +174,28 @@
       overflow-x: hidden;
       padding: 10px;
     }
-      .navbar .base-menu.notificationMessages::-webkit-scrollbar {
-        width: 20px;
-      }
-      
-      .navbar .base-menu.notificationMessages::-webkit-scrollbar-track {
-        background-color: transparent;
-      }
 
-      .navbar .base-menu.notificationMessages::-webkit-scrollbar-thumb {
-        background-color: #d6dee1;
-        border-radius: 20px;
-        border: 6px solid transparent;
-        background-clip: content-box;
-      }
+    .navbar .base-menu.notificationMessages::-webkit-scrollbar {
+      width: 20px;
+    }
+    
+    .navbar .base-menu.notificationMessages::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+
+    .navbar .base-menu.notificationMessages::-webkit-scrollbar-thumb {
+      background-color: #d6dee1;
+      border-radius: 20px;
+      border: 6px solid transparent;
+      background-clip: content-box;
+    }
 
       .navbar .base-menu.notificationMessages p {
         margin-bottom: 0px;
+      }
+
+      .navbar .base-menu.notificationMessages hr {
+        margin: 5px 0;
       }
 
       .navbar .base-menu.notificationMessages button {
@@ -200,10 +205,6 @@
         width: 100%;
         background-color: #ffffff;
         border: none;
-      }
-
-      .navbar .base-menu.notificationMessages hr {
-        margin: 5px 0;
       }
 
       .navbar .base-menu.notificationMessages button.isMessageNotRead {
@@ -231,50 +232,26 @@
         }
 
 @media (max-width: 575px) {
-  .menu.active {
-    top: 110px;
+  .navbar .base-menu.active {
     visibility: visible;
     opacity: 1;
   }
 
-  .notificationMessages.active {
-    top: 110px;
-    right: 12px;
-    visibility: visible;
-    opacity: 1;
+  .navbar .base-menu.notificationMessages.active {
+    right: 12px !important;
   }
 
   .navbar .base-menu .arrow-up {
     right: 70px;
   }
 
-  .navbar .notifications span {
+  .navbar .navbarWithSearchAndForm .notifications span {
     right: 130px !important;
   }
 }
 
 @media (min-width: 576px) and (max-width: 991px) {
-
-  .navbarWithSearchAndForm {
-    display: flex;
-  }
-
-  form {
-    flex-grow: 1;
-  }
-
-  .navbar .account {
-    margin-right: 5px;
-  }
-
-  .menu.active {
-    top: 100px;
-    visibility: visible;
-    opacity: 1;
-  }
-
-  .notificationMessages.active {
-    top: 100px;
+  .navbar .base-menu.active {
     visibility: visible;
     opacity: 1;
   }
@@ -283,9 +260,17 @@
     right: 70px;
   }
 
-  .navbar .notifications span {
-    right: 130px !important;
+  .navbar .navbarWithSearchAndForm {
+    display: flex;
   }
+
+    .navbar .navbarWithSearchAndForm .notifications span {
+      right: 130px !important;
+    }
+
+    .navbar .navbarWithSearchAndForm .account {
+      margin-right: 5px;
+    }
 }
 
 @media (min-width: 991px) {

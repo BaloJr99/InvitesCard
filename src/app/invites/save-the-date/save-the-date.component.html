@@ -1,7 +1,7 @@
 <div class="full-invite container gx-0 gx-lg-4" *ngIf="userInvite">
   <div class="row gx-0 gx-lg-4">
     <div class="col-12 col-lg-6">
-      <div class="info invite-section">
+      <div class="info">
         <ng-container *ngFor="let downloadImage of downloadImages; index as i">  
           <ng-container *ngIf="i === 0">
             <div class="backgroundImage{{i}}" [ngStyle]="{'background-image': 'url(' + downloadImage.fileUrl + ')'}" alt="Photo shoot"></div>

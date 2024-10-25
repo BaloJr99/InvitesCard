@@ -17,9 +17,9 @@
     border-bottom: 1px solid var(--primary-blue);
   }
 
-    .sidebar a.active {
-      color: var(--primary-orange);
-    }
+  .sidebar a.active {
+    color: var(--primary-orange);
+  }
 
     .sidebar a i {
       width: 20px;

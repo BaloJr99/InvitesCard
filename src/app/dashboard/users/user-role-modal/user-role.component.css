@@ -2,29 +2,29 @@
   text-align: left;
 }
 
-.btn-primary {
+  .modal-body i.fa-circle-check {
+    color: green;
+  }
+
+  .modal-body i.fa-circle-xmark {
+    color: red;
+  }
+
+  .modal-body .roleName-validation {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+    .modal-body .roleName-validation #name {
+      width: calc(100% - 26px);
+      margin-right: 10px;
+    }
+
+.modal-footer .btn-primary {
   background-color: var(--secondary-blue);
   color: var(--grey);
   border: none;
 }
-
-i.fa-circle-check {
-  color: green;
-}
-
-i.fa-circle-xmark {
-  color: red;
-}
-
-.roleName-validation {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-  .roleName-validation #name {
-    width: calc(100% - 26px);
-    margin-right: 10px;
-  }

@@ -1,13 +1,13 @@
-.modal-body {
+.modal .modal-body {
   text-align: left;
 }
 
-.modal button.btn-primary {
+  .modal .modal-body #profile-photo {
+    width: 100%;
+  }
+
+.modal .modal-footer .btn-primary {
   background-color: var(--secondary-blue);
   color: var(--grey);
   border: none;
-}
-
-.modal #profile-photo {
-  width: 100%;
 }

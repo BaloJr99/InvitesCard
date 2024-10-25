@@ -2,59 +2,30 @@
   color: var(--custom-primary-color);
 }
 
+  .container .col-md-6:first-of-type,
+  .container .col-sm-12:first-of-type {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-direction: column;
+  }
+
+  .container .col-md-6:first-of-type,
+  .container .col-sm-12:first-of-type {
+    text-align: right;
+  }
+
+  .container .col-md-6:first-of-type p,
+  .container .col-sm-12:first-of-type p {
+    color: #635959;
+    font-size: 20px;
+  }
+
 .container h1,
 .confirmedModal h1 {
   color: var(--custom-primary-color);
   font-family: 'Allura';
   font-size: 50px;
-}
-
-.confirmedModal .confirmed span,
-.confirmedModal .not-confirmed span {
-  font-family: 'Raleway';
-  color: var(--custom-primary-color);
-  font-size: 20px;
-}
-
-.confirmedModal p {
-  font-family: 'Raleway';
-  color: #635959;
-}
-
-.confirmedModal .card {
-  padding: 50px;
-}
-
-.confirmedModal i {
-  display: block;
-  font-size: 80px;
-  margin-bottom: 1rem;
-}
-  .confirmedModal i.fa-circle-xmark {
-    color: red;    
-  }
-
-  .confirmedModal i.fa-circle-check {
-    color: rgb(0, 182, 0);
-  }
-
-.container .col-md-6:first-of-type,
-.container .col-sm-12:first-of-type {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  flex-direction: column;
-}
-
-.container .col-md-6:first-of-type,
-.container .col-sm-12:first-of-type {
-  text-align: right;
-}
-
-.container .col-md-6:first-of-type p,
-.container .col-sm-12:first-of-type p {
-  color: #635959;
-  font-size: 20px;
 }
 
 .container .form {
@@ -65,44 +36,74 @@
   text-align: left;
 }
 
-.container h3 {
-  font-size: 20px;
-  border-bottom: 2px solid var(--custom-primary-color);
-  padding-bottom: 20px;
-  text-align: center;
-}
+  .container .form h3 {
+    font-size: 20px;
+    border-bottom: 2px solid var(--custom-primary-color);
+    padding-bottom: 20px;
+    text-align: center;
+  }
 
-.container .question span {
-  display: block;
-  font-size: 16px;
-  text-align: center;
-}
+  .container .form p {
+    color: #635959;
+    text-align: left;
+    padding-top: 10px;
+  }
 
-.container .form p {
-  color: #635959;
-  text-align: left;
-  padding-top: 10px;
-}
+  .container .form .question span {
+    display: block;
+    font-size: 16px;
+    text-align: center;
+  }
 
-.button {
-  padding-top: 20px;
-  width: 100%;
-  text-align: center;
-}
+  .container .form .button {
+    padding-top: 20px;
+    width: 100%;
+    text-align: center;
+  }
 
-.btn {
-  background-color: var(--custom-primary-color);
-  color: #ffffff;
-  width: 200px;
-}
+    .container .form .button .btn {
+      background-color: var(--custom-primary-color);
+      color: #ffffff;
+      width: 200px;
+    }
 
-.btn:hover {
-  border: 1px solid var(--custom-primary-color);
-}
+    .container .form .button .btn:hover {
+      border: 1px solid var(--custom-primary-color);
+    }
 
 .confirmedModal {
   margin: 50px;
 }
+
+  .confirmedModal .confirmed span,
+  .confirmedModal .not-confirmed span {
+    font-family: 'Raleway';
+    color: var(--custom-primary-color);
+    font-size: 20px;
+  }
+
+  .confirmedModal p {
+    font-family: 'Raleway';
+    color: #635959;
+  }
+
+  .confirmedModal .card {
+    padding: 50px;
+  }
+
+    .confirmedModal .card i {
+      display: block;
+      font-size: 80px;
+      margin-bottom: 1rem;
+    }
+
+      .confirmedModal .card i.fa-circle-xmark {
+        color: red;    
+      }
+
+      .confirmedModal .card i.fa-circle-check {
+        color: rgb(0, 182, 0);
+      }
 
 @media (min-width: 768px) and (max-width: 992px) {
   .container {
@@ -111,24 +112,16 @@
 }
 
 @media (max-width: 1024px) {
-  .form {
+  .container .form {
     margin: 80px 20px;
     padding: 40px;
   }
 }
 
 @media (max-width: 575px) {  
-  .col-sm-12 {
+  .container .col-sm-12 {
     text-align: center !important;
     align-items: center !important;
-  }
-
-  .confirmedModal {
-    margin: 30px;
-  }
-
-  .confirmedModal .card {
-    padding: 20px;
   }
 
   .container .form {
@@ -138,4 +131,12 @@
     background-color: #ffffff;
     text-align: left;
   }
+
+  .confirmedModal {
+    margin: 30px;
+  }
+
+    .confirmedModal .card {
+      padding: 20px;
+    }
 }

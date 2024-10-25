@@ -6,20 +6,6 @@
   background-color: var(--custom-secondary-color);
 }
 
-.container {
-  color: var(--custom-primary-color);
-}
-
-.container p {
-  color: var(--custom-primary-color);
-  font-family: "Allura";
-}
-
-.container .row .col-lg-6:last-of-type {
-  overflow-y: auto;
-  height: 100vh;
-}
-
 ::-webkit-scrollbar-track {
   background-color: #c3c3c3;
 }
@@ -34,60 +20,74 @@
   border: 4px solid #c3c3c3;
 }
 
-[class*="backgroundImage"] {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  box-shadow: inset 0px 0px 5px 5px var(--custom-secondary-color);
+.container {
+  color: var(--custom-primary-color);
 }
+
+  .container p {
+    color: var(--custom-primary-color);
+    font-family: "Allura";
+  }
+
+  .container .row .col-lg-6:last-of-type {
+    overflow-y: auto;
+    height: 100vh;
+  }
 
 .info {
   position: relative;
   height: 100vh;
 }
 
-.info .header {
-  z-index: 1;
-  position: relative;
-  text-align: left;
-}
+  .info [class*="backgroundImage"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: inset 0px 0px 5px 5px var(--custom-secondary-color);
+  }
 
-.info .header h1 {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  font-size: 50px;
-  font-family: "Merriweather";
-  color: var(--custom-primary-color);
-  letter-spacing: 5px;
-  padding-top: 20px;
-  padding-left: 25px;
-  text-shadow: -1px 0 #ffffff, 0 1px #ffffff, 1px 0 #ffffff, 0 -1px #ffffff;
-  margin-bottom: 0px;
-}
+  .info .header {
+    z-index: 1;
+    position: relative;
+    text-align: left;
+  }
 
-.info .header h1 span {
-  font-size: 35px;
-  color: var(--custom-primary-color);
-  font-family: "Great Vibes";
-  position: relative;
-  top: 5px;
-}
+    .info .header h1 {
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      font-size: 50px;
+      font-family: "Merriweather";
+      color: var(--custom-primary-color);
+      letter-spacing: 5px;
+      padding-top: 20px;
+      padding-left: 25px;
+      text-shadow: -1px 0 #ffffff, 0 1px #ffffff, 1px 0 #ffffff, 0 -1px #ffffff;
+      margin-bottom: 0px;
+    }
 
-.info .header p.names {
-  font-size: 50px;
-  font-family: "Great Vibes";
-  color: var(--custom-primary-color);
-  margin: 0px;
-  padding: 0px;
-  padding-left: 50px;
-  text-shadow: -1px 0 #ffffff, 0 1px #ffffff, 1px 0 #ffffff, 0 -1px #ffffff;
-}
+      .info .header h1 span {
+        font-size: 35px;
+        color: var(--custom-primary-color);
+        font-family: "Great Vibes";
+        position: relative;
+        top: 5px;
+      }
+
+    .info .header p.names {
+      font-size: 50px;
+      font-family: "Great Vibes";
+      color: var(--custom-primary-color);
+      margin: 0px;
+      padding: 0px;
+      padding-left: 50px;
+      text-shadow: -1px 0 #ffffff, 0 1px #ffffff, 1px 0 #ffffff, 0 -1px #ffffff;
+    }
 
 .reception {
   display: flex;
@@ -97,69 +97,71 @@
   padding: 25px 0px 0px;
 }
 
-.reception p {
-  margin: 0px;
-  padding: 0px;
-}
+  .reception p {
+    margin: 0px;
+    padding: 0px;
+  }
 
-.reception p span {
-  font-family: "Merriweather";
-  color: var(--custom-primary-color);
-  font-size: 30px;
-}
+    .reception p span {
+      font-family: "Merriweather";
+      color: var(--custom-primary-color);
+      font-size: 30px;
+    }
 
-.reception hr {
-  width: 70%;
-  border: 1px solid var(--custom-primary-color);
-  opacity: 1;
-}
+  .reception hr {
+    width: 70%;
+    border: 1px solid var(--custom-primary-color);
+    opacity: 1;
+  }
 
-.reception table {
-  width: 80%;
-}
+  .reception table {
+    width: 80%;
+    animation: fadeIn linear;
+    animation-timeline: view();
+  }
 
-.reception table th {
-  font-family: "Merriweather";
-  font-weight: bold;
-}
+    .reception table th {
+      font-family: "Merriweather";
+      font-weight: bold;
+    }
 
-.reception table th, 
-.reception table td {
-  font-size: 22px;
-}
+    .reception table th, 
+    .reception table td {
+      font-size: 22px;
+    }
 
-.reception table tr td {
-  font-family: "Merriweather";
-  padding: 10px;
-}
+    .reception table tr td {
+      font-family: "Merriweather";
+      padding: 10px;
+    }
 
-.reception table tr td.dateOfEvent {
-  position: relative;
-  color: white;
-  z-index: 0;
-}
+    .reception table tr td.dateOfEvent {
+      position: relative;
+      color: white;
+      z-index: 0;
+    }
 
-.reception table tr td.dateOfEvent i {
-  position: absolute;
-  z-index: -1;
-  color: red;
-  font-size: 50px;
-  top: 55%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: shake 1s infinite;
-}
+      .reception table tr td.dateOfEvent i {
+        position: absolute;
+        z-index: -1;
+        color: red;
+        font-size: 50px;
+        top: 55%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: shake 1s infinite;
+      }
 
-.reception .phrase {
-  font-family: "M";
-  font-style: italic;
-  font-size: 30px;
-}
+  .reception .phrase {
+    font-family: "M";
+    font-style: italic;
+    font-size: 30px;
+  }
 
-.reception .banner {
-  font-family: "M";
-  font-size: 20px;
-}
+  .reception .banner {
+    font-family: "M";
+    font-size: 20px;
+  }
 
 @media (min-width: 576px) and (max-width: 991px) {
   :host {
@@ -170,32 +172,32 @@
     max-width: 100%;
   }
 
-  .container .row .col-lg-6:last-of-type {
-    overflow-y: unset;
-    height: auto;
-  }
-
-  .reception hr {
-    width: 90%;
-  }
+    .container .row .col-lg-6:last-of-type {
+      overflow-y: unset;
+      height: auto;
+    }
 
   .info .header {
     text-align: center;
   }
 
-  .info .header h1 {
-    font-size: 80px !important;
-    padding-left: 0px;
-    justify-content: center;
-  }
-  
-  .info .header h1 span {
-    font-size: 50px !important;
-  }
+    .info .header h1 {
+      font-size: 80px !important;
+      padding-left: 0px;
+      justify-content: center;
+    }
+    
+      .info .header h1 span {
+        font-size: 50px !important;
+      }
 
-  .info .header p.names {
-    font-size: 65px !important;
-    padding-left: 0px;
+    .info .header p.names {
+      font-size: 65px !important;
+      padding-left: 0px;
+    }
+
+  .reception hr {
+    width: 90%;
   }
 
   .reception p span {
@@ -229,72 +231,67 @@
     max-width: 100%;
   }
 
-  .container .row .col-lg-6:last-of-type {
-    overflow-y: unset;
-    height: auto;
-  }
+    .container .row .col-lg-6:last-of-type {
+      overflow-y: unset;
+      height: auto;
+    }
 
   .info {
     position: relative;
     height: 90vh;
   }
 
+    .info .header {
+      text-align: center;
+    }
+
+      .info .header h1 {
+        font-size: 45px !important;
+        padding-left: 0px;
+        justify-content: center;
+      }
+  
+        .info .header h1 span {
+          font-size: 30px !important;
+        }
+
+      .info .header p.names {
+        font-size: 45px !important;
+        padding-left: 0px;
+      }
+
   .reception {
     padding: 15px 0px 0px;
   }
 
-  .reception hr {
-    width: 90%;
-  }
+    .reception hr {
+      width: 90%;
+    }
 
-  .info .header {
-    text-align: center;
-  }
+    .reception p span {
+      font-size: 18px;
+    }
 
-  .info .header h1 {
-    font-size: 45px !important;
-    padding-left: 0px;
-    justify-content: center;
-  }
-  
-  .info .header h1 span {
-    font-size: 30px !important;
-  }
+    .reception table th, 
+    .reception table td {
+      font-size: 15px;
+    }
 
-  .info .header p.names {
-    font-size: 45px !important;
-    padding-left: 0px;
-  }
+    .reception table {
+      width: 90%;
+    }
 
-  .reception p span {
-    font-size: 18px;
-  }
+      .reception table tr td.dateOfEvent i {
+        font-size: 35px;
+      }
 
-  .reception table th, 
-  .reception table td {
-    font-size: 15px;
-  }
+    .reception .phrase {
+      font-size: 25px;
+    }
 
-  .reception table {
-    width: 90%;
-  }
-
-  .reception table tr td.dateOfEvent i {
-    font-size: 35px;
-  }
-
-  .reception .phrase {
-    font-size: 25px;
-  }
-
-  .reception .banner {
-    font-size: 15px;
-  }
-}
-
-table {
-  animation: fadeIn linear;
-  animation-timeline: view();
+    .reception .banner {
+      font-size: 15px;
+    }
 }
 
 @keyframes fadeIn {

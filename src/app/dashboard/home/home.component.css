@@ -2,123 +2,118 @@
   flex: 0 1 auto;
 }
 
-.breadcrumb-header {
-  display: flex;
-  align-items: center;
-}
+  .breadcrumb-header .header {
+    display: flex;
+    align-items: center;
+  }
 
-.breadcrumb-header nav {
-  flex-grow: 1;
-}
+    .breadcrumb-header .header nav {
+      flex-grow: 1;
+    }
 
-.breadcrumb-header .breadcrumb {
-  margin-bottom: 0;
-}
+    .breadcrumb-header .header .breadcrumb {
+      margin-bottom: 0;
+    }
 
-.breadcrumb-header .header {
-  display: flex;
-  align-items: center;
-}
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item {
+        font-size: 15px;
+      }
 
-.breadcrumb-header .breadcrumb .breadcrumb-item {
-  font-size: 15px;
-}
+        .breadcrumb-header .header .breadcrumb .breadcrumb-item a {
+          text-decoration: none;
+          color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
+        }
 
-.breadcrumb-header .breadcrumb .breadcrumb-item a {
-  text-decoration: none;
-  color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
-}
+        .breadcrumb-header .header .breadcrumb .breadcrumb-item a:hover {
+          text-decoration: underline;
+        }
 
-.breadcrumb-header .breadcrumb .breadcrumb-item a:hover {
-  text-decoration: underline;
-}
+        .breadcrumb-header .header .breadcrumb .breadcrumb-item:first-of-type a {
+          font-weight: bold;
+          text-decoration: none;
+        }
 
-.breadcrumb-header .breadcrumb .breadcrumb-item:first-of-type a {
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.filter {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
+    .breadcrumb-header .header .filter {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
 
 .history {
   padding: 0px 15px;
 }
 
-.history .invites-history .card-title,
-.history .last-history .card-title {
-  font-weight: bold;
-  font-size: 30px;
-  font-family: "Outfit";
-}
+  .history .invites-history .card-title,
+  .history .last-history .card-title {
+    font-weight: bold;
+    font-size: 30px;
+    font-family: "Outfit";
+  }
 
-.history .invites-history .history-information {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  .history .invites-history .history-information {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-.history .invites-history .history-information table {
-  width: 100%;
-}
+    .history .invites-history .history-information table {
+      width: 100%;
+    }
 
-.history .invites-history .history-information table tr {
-  font-size: 20px;
-}
+      .history .invites-history .history-information table tr {
+        font-size: 20px;
+      }
 
-.history .invites-history .history-information table tr td:first-of-type {
-  text-align: left;
-  font-weight: bold;
-}
+        .history .invites-history .history-information table tr td:first-of-type {
+          text-align: left;
+          font-weight: bold;
+        }
 
-.history .invites-history .history-information table tfoot tr td {
-  border-top: 1px solid var(--secondary-blue);
-}
+          .history .invites-history .history-information table tr td i {
+            font-size: 16px;
+          }
 
-.history .invites-history .history-information table tr td i {
-  font-size: 16px;
-}
+      .history .invites-history .history-information table tfoot tr td {
+        border-top: 1px solid var(--secondary-blue);
+      }
 
 .history .percentage-history {
   display: flex;
   flex-direction: column;
 }
 
-.history .percentage-history .card {
-  flex-grow: 1;
-}
+  .history .percentage-history .card {
+    flex-grow: 1;
+  }
 
-.history .percentage-history .card:first-of-type,
-.history .last-history .card:first-of-type {
-  margin-bottom: 20px;
-}
+  .history .percentage-history .card:first-of-type,
+  .history .last-history .card:first-of-type {
+    margin-bottom: 20px;
+  }
 
-.history .percentage-history .card .card-title {
-  font-size: 25px;
-  font-weight: bold;
-  font-family: "Outfit";
-}
+    .history .percentage-history .card .card-body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
 
-.history .percentage-history .card .card-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.history .percentage-history .card .card-body span {
-  font-size: 40px;
-  font-weight: bold;
-}
-
-.history .percentage-history .card .card-body p {
-  padding-bottom: 0;
-}
+      .history .percentage-history .card .card-body .card-title {
+        font-size: 25px;
+        font-weight: bold;
+        font-family: "Outfit";
+      }
+    
+      .history .percentage-history .card .card-body span {
+        font-size: 40px;
+        font-weight: bold;
+      }
+    
+      .history .percentage-history .card .card-body p {
+        padding-bottom: 0;
+      }
 
 .history .last-history {
   margin-top: 20px;
@@ -136,22 +131,22 @@
     gap: 20px;
   }
 
-  .history .percentage-history .card:first-of-type {
-    margin-bottom: 0px;
-  }
+    .history .percentage-history .card:first-of-type {
+      margin-bottom: 0px;
+    }
 }
 
 @media (max-width: 575px) {
-  .history .invites-history canvas {
-    margin-bottom: 20px;
-  }
-
-  .header {
+  .breadcrumb-header .header {
     flex-direction: column;
     gap: 10px;
   }
 
-  .header .filter {
+  .history .invites-history canvas {
+    margin-bottom: 20px;
+  }
+
+  .breadcrumb-header .header .filter {
     display: flex;
     flex-direction: row;
     width: 100%;

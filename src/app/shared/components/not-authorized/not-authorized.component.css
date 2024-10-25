@@ -6,24 +6,24 @@
   font-family: 'Outfit';
 }
 
-.modal-dialog i {
-  font-size: 100px;
-  color: red;
-}
+  .notAuth button {
+    font-size: 20px;
+  }
 
-.modal-dialog h1 {
-  font-size: 30 px;
-  font-weight: bold;
-  margin-top: 20px;
-  font-family: 'Merriweather';
-}
+  .notAuth .modal-dialog i {
+    font-size: 100px;
+    color: red;
+  }
 
-.modal-dialog p {
-  font-size: 20px;
-  color: gray;
-  margin: 20px 0px;
-}
+  .notAuth .modal-dialog h1 {
+    font-size: 30 px;
+    font-weight: bold;
+    margin-top: 20px;
+    font-family: 'Merriweather';
+  }
 
-.notAuth .btn {
-  font-size: 20px;
-}
+  .notAuth .modal-dialog p {
+    font-size: 20px;
+    color: gray;
+    margin: 20px 0px;
+  }

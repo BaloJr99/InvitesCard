@@ -3,18 +3,6 @@
   color: red;
 }
 
-.modal-header {
-  border-bottom: none;
-}
-
-.modal-footer {
-  border-top: none;
-}
-
-.modal-footer .btn-danger {
-  width: 100%;
-}
-
 .modal-body p {
   color: gray;
   font-size: 20px;
@@ -26,3 +14,15 @@
   font-size: 35px;
   margin: 10px 0px;
 }
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-footer {
+  border-top: none;
+}
+
+  .modal-footer .btn-danger {
+    width: 100%;
+  }

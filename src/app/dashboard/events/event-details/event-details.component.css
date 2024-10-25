@@ -1,87 +1,79 @@
-.header {
-  display: flex;
-  align-items: center;
-}
-
-.breadcrumb {
-  margin-bottom: 0;
-}
-
-.header nav {
-  flex-grow: 1;
-}
-
-.header button.btn-primary {
-  background-color: var(--secondary-blue);
-  color: var(--grey);
-  border: none;
-}
-
 .breadcrumb-header {
   flex: 0 1 auto;
 }
 
-.breadcrumb-header {
-  flex: 0 1 auto;
-}
-
-.breadcrumb-item {
-  font-size: 15px;
-}
-
-  .breadcrumb-item a {
-    text-decoration: none; 
+  .breadcrumb-header .header {
+    display: flex;
+    align-items: center;
   }
 
-  .breadcrumb-item a:hover {
-    text-decoration: underline; 
-  }
+    .breadcrumb-header .header nav {
+      flex-grow: 1;
+    }
 
-.breadcrumb-item:first-of-type a {
-  font-weight: bold;
-  text-decoration: none;
-}
+    .breadcrumb-header .header .breadcrumb {
+      margin-bottom: 0;
+    }
+
+    .breadcrumb-header .header .breadcrumb .breadcrumb-item {
+      font-size: 15px;
+    }
+    
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item a {
+        text-decoration: none; 
+      }
+    
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item a:hover {
+        text-decoration: underline; 
+      }
+    
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item:first-of-type a {
+        font-weight: bold;
+        text-decoration: none;
+      }
+
+    .breadcrumb-header .header .buttons .btn-primary {
+      background-color: var(--secondary-blue);
+      color: var(--grey);
+      border: none;
+    }
+
+    .breadcrumb-header .header .buttons .btn-primary:not(:last-child) {
+      margin-right: 8px;
+    }
 
 .card-section {
   flex: 0 1 auto;
 }
 
-.card-container {
-  display: flex;
-  justify-content: space-between;
-}
+  .card-section .card-container {
+    display: flex;
+    justify-content: space-between;
+  }
 
 .table-accordion {
   flex: 1 1 0;
   overflow-y: auto;
 }
 
-.buttons button:not(:last-child) {
-  margin-right: 8px;
-}
-
 @media screen and (max-width: 575px) {
-  .header {
+  .breadcrumb-header .header {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
 
-  .header .buttons {
+  .breadcrumb-header .header .buttons {
     display: flex;
     flex-direction: column;
     width: 100%;
     gap: 10px;
   }
   
-  .header button.btn-primary {
-    width: 100%;
-    margin: 0px;
-  }
-
-  .table-accordion {
-    flex: none;
-  }
+    .breadcrumb-header .header .buttons .btn-primary {
+      width: 100%;
+      margin: 0px;
+    }
 }
 
 @media screen and (max-width: 700px) {
@@ -91,10 +83,6 @@
 }
 
 @media screen and (max-width: 991px) {
-  .col-lg-10 {
-    padding-bottom: 60px;
-  }
-
   .table-accordion {
     flex: none;
   }

@@ -1,28 +1,28 @@
 <div class="time" *ngIf="time$ | async as time">
-    <div class="card">
-        <div class="card-body">
-        <h5 class="card-title">{{ time.days }}</h5>
-        <p class="card-text" i18n>Días</p>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body">
-        <h5 class="card-title">{{ time.hours }}</h5>
-        <p class="card-text" i18n>Horas</p>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body">
-        <h5 class="card-title">{{ time.minutes }}</h5>
-        <p class="card-text" i18n>Minutos</p>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body">
-        <h5 class="card-title">{{ time.seconds }}</h5>
-        <p class="card-text" i18n>Segundos</p>
-        </div>
-    </div>
+  <div class="card">
+      <div class="card-body">
+      <h5 class="card-title">{{ time.days }}</h5>
+      <p class="card-text" i18n>Días</p>
+      </div>
+  </div>
+  <div class="card">
+      <div class="card-body">
+      <h5 class="card-title">{{ time.hours }}</h5>
+      <p class="card-text" i18n>Horas</p>
+      </div>
+  </div>
+  <div class="card">
+      <div class="card-body">
+      <h5 class="card-title">{{ time.minutes }}</h5>
+      <p class="card-text" i18n>Minutos</p>
+      </div>
+  </div>
+  <div class="card">
+      <div class="card-body">
+      <h5 class="card-title">{{ time.seconds }}</h5>
+      <p class="card-text" i18n>Segundos</p>
+      </div>
+  </div>
 </div>
 <div class="fireworks" *ngIf="eventWasMet">
   <img src="assets/fireworks.gif" alt="Fuegos artificiales" i18n-alt>

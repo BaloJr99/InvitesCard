@@ -2,42 +2,6 @@
   color: var(--custom-primary-color);
 }
 
-.container h3,
-.confirmedModal h3 {
-  color: var(--custom-primary-color);
-  font-family: 'Allura';
-  font-size: 50px;
-}
-
-.confirmedModal .confirmed span,
-.confirmedModal .not-confirmed span {
-  font-family: 'Raleway';
-  color: var(--custom-primary-color);
-  font-size: 20px;
-}
-
-.confirmedModal p {
-  font-family: 'Raleway';
-  color: #635959;
-}
-
-.confirmedModal .card {
-  padding: 50px;
-}
-
-.confirmedModal i {
-  display: block;
-  font-size: 80px;
-  margin-bottom: 1rem;
-}
-  .confirmedModal i.fa-circle-xmark {
-    color: red;    
-  }
-
-  .confirmedModal i.fa-circle-check {
-    color: rgb(0, 182, 0);
-  }
-
 .container .col-md-6:first-of-type,
 .container .col-sm-12:first-of-type {
   display: flex;
@@ -57,75 +21,97 @@
   font-size: 20px;
 }
 
-.container .form {
-  border: 1px solid #B79BA0;
-  padding: 0px 20px 20px;
-  background-color: #ffffff;
-  text-align: left;
-}
-
-.container .question span {
-  display: block;
-  font-size: 16px;
-  text-align: center;
-  background-color: red;
-  color: white;
-  border-radius: 20px;
-  padding: 5px;
-  margin-top: 10px;
-}
-
-.container .form p {
-  color: #000000;
-  font-weight: bold;
-  text-align: left;
-  padding-top: 10px;
-}
-
 .accordion {
   margin: 20px 0px;
 }
 
-.accordion h2 button {
-  font-size: 20px;
-  padding-bottom: 20px;
-  text-align: center;
-}
+  .accordion .accordion-button {
+    font-size: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+  }
 
-.accordion a {
-  color: var(--custom-primary-color);
-  font-weight: bold;
-}
+  .accordion .accordion-button:focus {
+    box-shadow: none;
+  }
 
-.accordion-button:focus {
-  box-shadow: none;
-}
+  .accordion .accordion-button:not(.collapsed) {
+    color: var(--bs-accordion-active-color);
+    background-color: var(--custom-secondary-color);
+    border: 1px solid black;
+  }
 
-.accordion-button:not(.collapsed) {
-  color: var(--bs-accordion-active-color);
-  background-color: var(--custom-secondary-color);
-  border: 1px solid black;
-}
+    .accordion .accordion-body a {
+      color: var(--custom-primary-color);
+      font-weight: bold;
+    }
 
-.button {
-  padding-top: 20px;
-  width: 100%;
-  text-align: center;
-}
+    .accordion .accordion-body .form {
+      border: 1px solid #B79BA0;
+      padding: 0px 20px 20px;
+      background-color: #ffffff;
+      text-align: left;
+    }
+      
+      .accordion .accordion-body .form p {
+        color: #000000;
+        font-weight: bold;
+        text-align: left;
+        padding-top: 10px;
+      }
 
-.btn {
-  background-color: var(--custom-primary-color);
-  color: #ffffff;
-  width: 200px;
-}
+      .accordion .accordion-body .form .button {
+        padding-top: 20px;
+        width: 100%;
+        text-align: center;
+      }
 
-.btn:hover {
-  border: 1px solid var(--custom-primary-color);
-}
+        .accordion .accordion-body .form .button .btn {
+          background-color: var(--custom-primary-color);
+          color: #ffffff;
+          width: 200px;
+        }
+        
+        .accordion .accordion-body .form .button .btn:hover {
+          border: 1px solid var(--custom-primary-color);
+        }
+    
+      .accordion .accordion-body .form .question span {
+        display: block;
+        font-size: 16px;
+        text-align: center;
+        background-color: red;
+        color: white;
+        border-radius: 20px;
+        padding: 5px;
+        margin-top: 10px;
+      }
 
 .confirmedModal {
   margin: 50px;
 }
+
+  .confirmedModal .confirmed span {
+    font-family: 'Raleway';
+    color: var(--custom-primary-color);
+    font-size: 20px;
+  }
+
+  .confirmedModal .confirmed .card {
+    padding: 50px;
+  }
+
+    .confirmedModal .confirmed .card p {
+      font-family: 'Raleway';
+      color: #635959;
+    }
+
+    .confirmedModal .confirmed .card i.fa-circle-check {
+      display: block;
+      font-size: 80px;
+      margin-bottom: 1rem;
+      color: rgb(0, 182, 0);
+    }
 
 @media (min-width: 576px) and (max-width: 991px) {  
   .accordion {
@@ -133,23 +119,23 @@
     margin: 20px auto;
   }
 
+    .accordion p,
+    .accordion label,
+    .accordion .accordion-body .form .button .btn {
+      font-size: 20px;
+    }
+
+    .accordion .accordion-button {
+      font-size: 25px;
+    }
+
   .confirmedModal {
     margin: 30px;
   }
 
-  .confirmedModal .card {
-    padding: 20px;
-  }
-
-  .accordion h2 button {
-    font-size: 25px;
-  }
-
-  .accordion p,
-  .accordion label,
-  .accordion .btn {
-    font-size: 20px;
-  }
+    .confirmedModal .card {
+      padding: 20px;
+    }
 }
 
 @media (max-width: 575px) {  
@@ -161,21 +147,21 @@
     margin: 20px auto;
   }
 
+    .accordion p,
+    .accordion label,
+    .accordion .accordion-body .form .button .btn {
+      font-size: 16px;
+    }
+
+    .accordion .accordion-button {
+      font-size: 18px;
+    }
+
   .confirmedModal {
     margin: 30px;
   }
 
-  .confirmedModal .card {
-    padding: 20px;
-  }
-
-  .accordion h2 button {
-    font-size: 18px;
-  }
-
-  .accordion p,
-  .accordion label,
-  .accordion .btn {
-    font-size: 16px;
-  }
+    .confirmedModal .card {
+      padding: 20px;
+    }
 }

@@ -1,60 +1,9 @@
-.modal-body {
-  text-align: left;
-}
-
-.modal button.btn-primary {
+.modal .btn-primary {
   background-color: var(--secondary-blue);
   color: var(--grey);
   border: none;
 }
 
-.filteringBox {
-  position: relative;
-}
-
-.filteringBox ul {
-  border: var(--bs-border-width) solid var(--bs-border-color);
-  max-height: 100px;
-  padding: 0px;
-  border-radius: 0px 0px 10px 10px;
-  border-top: 0px;
-  position: absolute;
-  width: 100%;
-  bottom: auto;
-  background-color: white;
-}
-
-.filteringBox .show {
-  display: block;
-}
-
-.filteringBox .hide {
-  display: none;
-}
-
-.filteringBox ul li {
-  list-style: none;
-  padding: 5px 10px;
-}
-
-.filteringBox ul li:hover {
-  background-color: #dcdcdc;
-}
-
-.roles span {
-  display: inline-block;
-  margin-right: 10px;
-}
-
-.roles span i {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: fit-content;
-  display: none;
-}
-
-.roles span:hover i {
-  display: inline;
-  cursor: pointer;
+.modal .modal-body {
+  text-align: left;
 }

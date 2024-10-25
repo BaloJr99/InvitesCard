@@ -1,42 +1,42 @@
-th {
-  text-align: center !important;
-}
-
-table {
-  width: 100% !important;
-  text-align: center !important;
-}
-
-table i.fa-circle-check {
-  color: green;
-}
-
-table i.fa-circle-xmark {
-  color: red;
-}
-
-.accordion-body {
-  padding: 0px;
-  margin: 10px;
-  overflow-x: auto;
-  text-align: end;
-}
-
 .accordion-item {
   margin: 10px 0px;
 }
 
-.btn:nth-child(2) {
-  margin: 0px 5px;
-}
-
-@media (max-width: 575px) {
-  .btn:nth-child(2) {
-    margin: 5px 0px;
+  .accordion-item .accordion-body {
+    padding: 0px;
+    margin: 10px;
+    overflow-x: auto;
+    text-align: end;
   }
 
-  tr > td:nth-child(5) {
+  .accordion-item .accordion-body table {
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+    .accordion-item .accordion-body table i.fa-circle-check {
+      color: green;
+    }
+    
+    .accordion-item .accordion-body table i.fa-circle-xmark {
+      color: red;
+    }
+
+    .accordion-item .accordion-body table th {
+      text-align: center !important;
+    }
+
+    .accordion-item .accordion-body table td .btn:nth-child(2) {
+      margin: 0px 5px;
+    }
+
+@media (max-width: 575px) {
+  .accordion-item .accordion-body table tr > td:nth-child(5) {
     display: flex;
     flex-direction: column;
+  }
+
+  .accordion-item .accordion-body table td .btn:nth-child(2) {
+    margin: 5px 0px;
   }
 }

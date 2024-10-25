@@ -18,23 +18,23 @@
     margin-bottom: 0;
   }
 
-  .breadcrumb-header .header .breadcrumb .breadcrumb-item {
-    font-size: 15px;
-  }
-
-    .breadcrumb-header .header .breadcrumb .breadcrumb-item a {
-      text-decoration: none; 
-      color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
+    .breadcrumb-header .header .breadcrumb .breadcrumb-item {
+      font-size: 15px;
     }
 
-    .breadcrumb-header .header .breadcrumb .breadcrumb-item a:hover {
-      text-decoration: underline; 
-    }
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item a {
+        text-decoration: none; 
+        color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
+      }
 
-    .breadcrumb-header .header .breadcrumb .breadcrumb-item:first-of-type a {
-      font-weight: bold;
-      text-decoration: none;
-    }
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item a:hover {
+        text-decoration: underline; 
+      }
+
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item:first-of-type a {
+        font-weight: bold;
+        text-decoration: none;
+      }
 
 .settings {
   text-align: left;
@@ -47,7 +47,7 @@
 }
 
 @media (max-width: 768px) {
-  .header {
+  .breadcrumb-header .header {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;

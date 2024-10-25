@@ -1,63 +1,64 @@
-table {
+.modal-body .download-template {
+  display: flex;
+  gap: 10px;
+}
+
+  .modal-body .download-template span {
+    display: none;
+    position: absolute;
+  }
+
+  .modal-body .download-template i.fa-circle-info {
+    position: relative;
+  }
+
+    .modal-body .download-template i.fa-circle-info:hover span {
+      font-family: 'Raleway';
+      display: block;
+      background: white;
+      border-radius: 10px;
+      padding: 10px;
+      top: 0px;
+      left: 20px;
+      border: 1px solid black;
+      text-transform: none;
+    }
+
+.modal-body table {
   text-align: center;
 }
 
-table i.fa-circle-check,
-table i.fa-star {
-  color: green;
-}
+  .modal-body table i.fa-circle-check,
+  .modal-body table i.fa-star {
+    color: green;
+  }
 
-table i.fa-circle-xmark {
-  color: red;
-}
+  .modal-body table i.fa-circle-xmark {
+    color: red;
+  }
 
-table td.error {
-  background-color: red;
-  color: white;
-}
+  .modal-body table td.error {
+    background-color: red;
+    color: white;
+  }
 
-.progress-bar {
+.modal-body .progress-bar {
   width: 100%;
   background-color: lightgrey;
   border-radius: 10px;
 }
 
-.progress-bar #bar {
-  width: 1%;
-  height: 25px;
-  background-color: green;
-  color: #ffffff;
-  font-size: 16px;
-}
+  .modal-body .progress-bar #bar {
+    width: 1%;
+    height: 25px;
+    background-color: green;
+    color: #ffffff;
+    font-size: 16px;
+  }
 
-.btn-primary {
-  background-color: var(--secondary-blue);
-  color: var(--grey);
-  border: none;
-}
-
-.download-template {
-  display: flex;
-  gap: 10px;
-}
-
-.download-template span {
-  display: none;
-  position: absolute;
-}
-
-.download-template i.fa-circle-info {
-  position: relative;
-}
-
-.download-template i.fa-circle-info:hover span {
-  font-family: 'Raleway';
-  display: block;
-  background: white;
-  border-radius: 10px;
-  padding: 10px;
-  top: 0px;
-  left: 20px;
-  border: 1px solid black;
-  text-transform: none;
-}
+  .modal-body .btn-primary,
+  .modal-footer .btn-primary {
+    background-color: var(--secondary-blue);
+    color: var(--grey);
+    border: none;
+  }
