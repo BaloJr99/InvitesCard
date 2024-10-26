@@ -17,7 +17,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { BehaviorSubject, Observable, fromEvent, merge } from 'rxjs';
-import { IConfirmation, IUserInvite } from 'src/app/core/models/invites';
+import { IConfirmation, ISweetXvUserInvite } from 'src/app/core/models/invites';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 import { SocketService } from 'src/app/core/services/socket.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
@@ -33,7 +33,7 @@ import { EventType } from 'src/app/core/models/enum';
 export class ConfirmationComponent implements AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
-  @Input() invite!: IUserInvite;
+  @Input() invite!: ISweetXvUserInvite;
   @Input() set deadlineMet(value: boolean) {
     this.blockConfirmationForm = value;
     if (value === true) {

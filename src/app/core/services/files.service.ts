@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
-  IDeleteImage,
+  IDeleteFile,
   IDownloadFiles,
   IUpdateImage,
   IUploadImage,
@@ -29,7 +29,7 @@ export class FilesService {
     return this.http.get<IDownloadFiles>(`${this.invitesBaseUrl}/${id}`);
   }
 
-  deleteFile(deleteFile: IDeleteImage): Observable<IMessageResponse> {
+  deleteFile(deleteFile: IDeleteFile): Observable<IMessageResponse> {
     return this.http.delete<IMessageResponse>(this.invitesBaseUrl, {
       body: deleteFile,
     });

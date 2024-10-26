@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 import {
   IBaseSettings,
   ISaveTheDateSetting,
-  ISetting,
+  ISweetXvSetting,
 } from '../models/settings';
 import { IMessageResponse } from '../models/common';
 
@@ -21,7 +21,7 @@ export class SettingsService {
   }
 
   createEventSettings(
-    settings: ISetting | ISaveTheDateSetting,
+    settings: ISweetXvSetting | ISaveTheDateSetting,
     eventType: string
   ): Observable<IMessageResponse> {
     return this.http.post<IMessageResponse>(
@@ -31,7 +31,7 @@ export class SettingsService {
   }
 
   updateEventSettings(
-    settings: ISetting | ISaveTheDateSetting,
+    settings: ISweetXvSetting | ISaveTheDateSetting,
     id: string,
     eventType: string
   ): Observable<IMessageResponse> {

@@ -6,6 +6,7 @@ export const enum Roles {
 export const enum ImageUsage {
   Phone = 'P',
   Desktop = 'C',
+  Both = 'B',
 }
 
 export const enum RoleActionEvent {

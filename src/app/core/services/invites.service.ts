@@ -9,7 +9,7 @@ import {
   ISaveTheDateConfirmation,
   ISaveTheDateUserInvite,
   IUpsertInvite,
-  IUserInvite,
+  ISweetXvUserInvite,
 } from '../models/invites';
 import { IBulkMessageResponse, IMessageResponse } from '../models/common';
 
@@ -24,8 +24,8 @@ export class InvitesService {
     return this.http.get<IDashboardInvite[]>(this.invitesBaseUrl);
   }
 
-  getInvite(id: string): Observable<IUserInvite | ISaveTheDateUserInvite> {
-    return this.http.get<IUserInvite | ISaveTheDateUserInvite>(`${this.invitesBaseUrl}/invite/${id}`);
+  getInvite(id: string): Observable<ISweetXvUserInvite | ISaveTheDateUserInvite> {
+    return this.http.get<ISweetXvUserInvite | ISaveTheDateUserInvite>(`${this.invitesBaseUrl}/invite/${id}`);
   }
 
   createInvite(invite: IUpsertInvite): Observable<IMessageResponse> {

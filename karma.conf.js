@@ -1,16 +1,25 @@
 // Karma configuration file, see link for more information
 // https://karma-runner.github.io/1.0/config/configuration-file.html
 
-module.exports = function (config) {
+import karmaJasmine from 'karma-jasmine';
+import karmaChromeLauncher from 'karma-chrome-launcher';
+import karmaJasmineHtmlReporter from 'karma-jasmine-html-reporter';
+import karmaCoverage from 'karma-coverage';
+import buildAngular from '@angular-devkit/build-angular/plugins/karma.js';
+import path from 'path';
+
+export default function (config) {
+  const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
     plugins: [
-      require('karma-jasmine'),
-      require('karma-chrome-launcher'),
-      require('karma-jasmine-html-reporter'),
-      require('karma-coverage'),
-      require('@angular-devkit/build-angular/plugins/karma')
+      karmaJasmine,
+      karmaChromeLauncher,
+      karmaJasmineHtmlReporter,
+      karmaCoverage,
+      buildAngular
     ],
     client: {
       jasmine: {
@@ -26,7 +35,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/invites'),
+      dir: path.join(__dirname, './coverage/invites'),
       subdir: '.',
       reporters: [
         { type: 'html' },

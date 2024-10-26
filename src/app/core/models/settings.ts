@@ -5,7 +5,7 @@ export interface IBaseSettings {
   settings: string;
 }
 
-export interface ISetting {
+export interface ISweetXvSetting {
   eventId: string;
   primaryColor: string;
   secondaryColor: string;

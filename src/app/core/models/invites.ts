@@ -64,7 +64,7 @@ export type IConfirmation = Pick<
 
 export type ISaveTheDateConfirmation = Pick<IFullInvite, 'needsAccomodation'>;
 
-export type IUserInvite = Pick<
+export type ISweetXvUserInvite = Pick<
   IFullInvite,
   'id' | 'family' | 'entriesNumber' | 'confirmation' | 'kidsAllowed' | 'eventId'
 > & {

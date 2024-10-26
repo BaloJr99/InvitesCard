@@ -15,7 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { EventType } from 'src/app/core/models/enum';
-import { ISetting, ISettingAction } from 'src/app/core/models/settings';
+import { ISweetXvSetting, ISettingAction } from 'src/app/core/models/settings';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
@@ -236,7 +236,7 @@ export class SweetXvSettingsComponent implements AfterViewInit {
     }
   }
 
-  formatEventSetting(): ISetting {
+  formatEventSetting(): ISweetXvSetting {
     const updatedMassTime = this.createEventSettingsForm.get('massTime')
       ?.value as string;
     const updatedReceptionTime = this.createEventSettingsForm.get(
@@ -253,7 +253,7 @@ export class SweetXvSettingsComponent implements AfterViewInit {
         updatedReceptionTime.length > 5
           ? this.createEventSettingsForm.get('receptionTime')?.value
           : `${this.createEventSettingsForm.get('receptionTime')?.value}:00`,
-    } as ISetting;
+    } as ISweetXvSetting;
   }
 
   ngAfterViewInit(): void {

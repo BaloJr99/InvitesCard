@@ -16,7 +16,7 @@ export interface IDownloadFiles {
   eventImages: IDownloadImage[];
   eventAudios: IDownloadAudio[];
 };
-export type IDeleteImage = Pick<IFullFile, 'id' | 'publicId'>;
+export type IDeleteFile = Pick<IFullFile, 'id' | 'publicId'>;
 export type IUpdateImage = Pick<IFullFile, 'id' | 'imageUsage'>;
 
 export interface IUpdateImageArray {
