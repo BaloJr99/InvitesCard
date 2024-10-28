@@ -20,10 +20,7 @@ describe('Invite Groups Service', () => {
     ]);
 
     TestBed.configureTestingModule({
-      providers: [
-        InviteGroupsService,
-        { provide: InviteGroupsService, useValue: spy },
-      ],
+      providers: [{ provide: InviteGroupsService, useValue: spy }],
     });
 
     inviteGroupsServiceSpy = TestBed.inject(

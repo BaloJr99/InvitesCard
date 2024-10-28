@@ -13,7 +13,7 @@ describe('Socket Service', () => {
     ]);
 
     TestBed.configureTestingModule({
-      providers: [SocketService, { provide: SocketService, useValue: spy }],
+      providers: [{ provide: SocketService, useValue: spy }],
     });
 
     socketServiceSpy = TestBed.inject(

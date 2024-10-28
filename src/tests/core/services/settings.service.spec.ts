@@ -21,7 +21,7 @@ describe('Settings Service', () => {
     ]);
 
     TestBed.configureTestingModule({
-      providers: [SettingsService, { provide: SettingsService, useValue: spy }],
+      providers: [{ provide: SettingsService, useValue: spy }],
     });
 
     settingsServiceSpy = TestBed.inject(

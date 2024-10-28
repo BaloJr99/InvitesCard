@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { tokenMock, userMock } from 'src/tests/mocks/mocks';
 
@@ -16,10 +15,7 @@ describe('Token Storage Service', () => {
     ]);
 
     TestBed.configureTestingModule({
-      providers: [
-        TokenStorageService,
-        { provide: TokenStorageService, useValue: spy },
-      ],
+      providers: [{ provide: TokenStorageService, useValue: spy }],
     });
 
     tokenStorageServiceSpy = TestBed.inject(

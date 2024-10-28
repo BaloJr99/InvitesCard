@@ -14,10 +14,7 @@ describe('CommonModalService', () => {
     ]);
 
     TestBed.configureTestingModule({
-      providers: [
-        CommonModalService,
-        { provide: CommonModalService, useValue: spy },
-      ],
+      providers: [{ provide: CommonModalService, useValue: spy }],
     });
 
     commonModalServiceSpy = TestBed.inject(

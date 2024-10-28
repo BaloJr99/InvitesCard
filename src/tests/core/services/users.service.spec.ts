@@ -31,7 +31,7 @@ describe('Users Service', () => {
     ]);
 
     TestBed.configureTestingModule({
-      providers: [UsersService, { provide: UsersService, useValue: spy }],
+      providers: [{ provide: UsersService, useValue: spy }],
     });
 
     usersServiceSpy = TestBed.inject(

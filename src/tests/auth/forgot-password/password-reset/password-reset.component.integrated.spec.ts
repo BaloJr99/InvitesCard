@@ -1,0 +1,101 @@
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { of } from 'rxjs';
+import { PasswordResetComponent } from 'src/app/auth/forgot-password/password-reset/password-reset.component';
+import { AuthService } from 'src/app/core/services/auth.service';
+import {
+  fullUserMock,
+  loginDataMock,
+  messageResponseMock,
+} from 'src/tests/mocks/mocks';
+
+describe('Password Reset Component: Integrated Test', () => {
+  let fixture: ComponentFixture<PasswordResetComponent>;
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
+
+  const updateFormUsingEvent = (password: string, confirmPassword: string) => {
+    const passwordInput = fixture.debugElement.query(By.css('#password'));
+
+    passwordInput.nativeElement.value = password;
+    passwordInput.nativeElement.dispatchEvent(new Event('input'));
+
+    const confirmPasswordInput = fixture.debugElement.query(
+      By.css('#confirmPassword')
+    );
+
+    confirmPasswordInput.nativeElement.value = confirmPassword;
+    confirmPasswordInput.nativeElement.dispatchEvent(new Event('input'));
+  };
+
+  beforeEach(waitForAsync(() => {
+    const authSpy = jasmine.createSpyObj('AuthService', ['resetPassword']);
+
+    TestBed.configureTestingModule({
+      declarations: [PasswordResetComponent],
+      imports: [ReactiveFormsModule],
+      providers: [
+        { provide: AuthService, useValue: authSpy },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              data: { reset: true },
+              paramMap: convertToParamMap({ id: fullUserMock.id }),
+            },
+          },
+        },
+      ],
+    }).compileComponents();
+
+    authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(PasswordResetComponent);
+    fixture.detectChanges();
+  });
+
+  it('authService resetPassword() should have been called', () => {
+    authServiceSpy.resetPassword.and.returnValue(of(messageResponseMock));
+
+    updateFormUsingEvent(loginDataMock.password, loginDataMock.password);
+    fixture.detectChanges();
+
+    const button = fixture.debugElement.query(By.css('button'));
+    button.nativeElement.click();
+    fixture.detectChanges();
+
+    expect(authServiceSpy.resetPassword)
+      .withContext(
+        "resetPassword method from AuthService should have been called"
+      )
+      .toHaveBeenCalled();
+  });
+
+  it('should show password reset message when submitting the form', () => {
+    let passwordReset = fixture.debugElement.query(
+      By.css('[data-testid="passwordReset"]')
+    );
+    expect(passwordReset)
+      .withContext("Shouldn't show email sent div")
+      .toBeNull();
+
+    authServiceSpy.resetPassword.and.returnValue(of(messageResponseMock));
+    updateFormUsingEvent(loginDataMock.password, loginDataMock.password);
+    fixture.detectChanges();
+
+    const button = fixture.debugElement.query(By.css('button'));
+    button.nativeElement.click();
+    fixture.detectChanges();
+
+    passwordReset = fixture.debugElement.query(
+      By.css('[data-testid="passwordReset"]')
+    );
+
+    expect(passwordReset)
+      .withContext('Should show passwordReset sent div')
+      .not.toBeNull();
+  });
+});

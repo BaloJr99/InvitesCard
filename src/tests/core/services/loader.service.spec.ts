@@ -9,7 +9,7 @@ describe('Loader Service', () => {
     const spy = jasmine.createSpyObj('LoaderService', ['setLoading']);
 
     TestBed.configureTestingModule({
-      providers: [LoaderService, { provide: LoaderService, useValue: spy }],
+      providers: [{ provide: LoaderService, useValue: spy }],
     });
 
     loaderServiceSpy = TestBed.inject(

@@ -9,10 +9,7 @@ describe('ErrorModalService', () => {
     const spy = jasmine.createSpyObj('ErrorModalService', ['setError']);
 
     TestBed.configureTestingModule({
-      providers: [
-        ErrorModalService,
-        { provide: ErrorModalService, useValue: spy },
-      ],
+      providers: [{ provide: ErrorModalService, useValue: spy }],
     });
 
     errorServiceSpy = TestBed.inject(

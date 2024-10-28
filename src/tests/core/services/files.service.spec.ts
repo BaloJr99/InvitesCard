@@ -1,7 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { FilesService } from 'src/app/core/services/files.service';
-import { deleteFileMock, downloadFileMock, fullEventsMock, messageResponseMock, updateImageMock, uploadImageMock } from 'src/tests/mocks/mocks';
+import {
+  deleteFileMock,
+  downloadFileMock,
+  fullEventsMock,
+  messageResponseMock,
+  updateImageMock,
+  uploadImageMock,
+} from 'src/tests/mocks/mocks';
 
 describe('FilesService', () => {
   let filesService: FilesService;
@@ -17,7 +24,7 @@ describe('FilesService', () => {
     ]);
 
     TestBed.configureTestingModule({
-      providers: [FilesService, { provide: FilesService, useValue: spy }],
+      providers: [{ provide: FilesService, useValue: spy }],
     });
 
     filesServiceSpy = TestBed.inject(

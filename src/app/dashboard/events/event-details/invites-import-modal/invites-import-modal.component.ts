@@ -49,6 +49,7 @@ export class InvitesImportModalComponent implements OnInit {
       } catch (error) {
         this.loaderService.setLoading(false);
         this.processingFile = false;
+        console.error(error);
       }
     } else {
       this.errorInvites = [];

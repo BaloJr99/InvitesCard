@@ -28,7 +28,7 @@ describe('EventsService', () => {
     ]);
 
     TestBed.configureTestingModule({
-      providers: [EventsService, { provide: EventsService, useValue: spy }],
+      providers: [{ provide: EventsService, useValue: spy }],
     });
 
     eventsServiceSpy = TestBed.inject(

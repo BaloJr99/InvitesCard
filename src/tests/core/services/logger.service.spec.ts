@@ -11,7 +11,7 @@ describe('Logger Service', () => {
     const spy = jasmine.createSpyObj('LoggerService', ['getLogs']);
 
     TestBed.configureTestingModule({
-      providers: [LoggerService, { provide: LoggerService, useValue: spy }],
+      providers: [{ provide: LoggerService, useValue: spy }],
     });
 
     loggerServiceSpy = TestBed.inject(

@@ -13,10 +13,7 @@ describe('CommonInvitesService', () => {
     ]);
 
     TestBed.configureTestingModule({
-      providers: [
-        CommonInvitesService,
-        { provide: CommonInvitesService, useValue: spy },
-      ],
+      providers: [{ provide: CommonInvitesService, useValue: spy }],
     });
 
     commonInvitesServiceSpy = TestBed.inject(

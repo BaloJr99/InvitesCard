@@ -18,7 +18,7 @@ describe('Roles Service', () => {
     ]);
 
     TestBed.configureTestingModule({
-      providers: [RolesService, { provide: RolesService, useValue: spy }],
+      providers: [{ provide: RolesService, useValue: spy }],
     });
 
     rolesServiceSpy = TestBed.inject(

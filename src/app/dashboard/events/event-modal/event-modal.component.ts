@@ -164,7 +164,6 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
           this.commonModalService.commonModalResponse$
             .pipe(take(1))
             .subscribe((response) => {
-              console.log(response);
               if (response === CommonModalResponse.Confirm) {
                 this.updateEvent(true);
               } else {

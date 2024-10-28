@@ -32,7 +32,7 @@ describe('Invites Service', () => {
     ]);
 
     TestBed.configureTestingModule({
-      providers: [InvitesService, { provide: InvitesService, useValue: spy }],
+      providers: [{ provide: InvitesService, useValue: spy }],
     });
 
     invitesServiceSpy = TestBed.inject(
