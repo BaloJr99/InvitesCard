@@ -15,7 +15,7 @@ export class ErrorModalComponent implements OnInit {
   constructor(public errorService: ErrorModalService) {}
 
   ngOnInit(): void {
-    this.errorService.errorResponse.subscribe({
+    this.errorService.errorResponse$.subscribe({
       next: (information) => {
         if (information.hasError && information.serverError) {
           this.errorMessage = information.serverError.error;

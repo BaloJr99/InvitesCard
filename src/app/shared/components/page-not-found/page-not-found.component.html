@@ -4,6 +4,6 @@
     <img src="assets/pagenotfound.png" alt="Not Found Error">
     <h2 i18n>Página no encontrada</h2>
     <p i18n>Lo sentimos, la página que solicitaste no fue encontrada.</p>
-    <button class="btn btn-warning" [routerLink]="['/dashboard']" i18n>Ir al dashboard</button>
+    <button class="btn btn-warning" (click)="goToDashboard()" i18n>Ir al dashboard</button>
   </div>
 </div>

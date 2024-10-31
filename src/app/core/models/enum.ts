@@ -25,6 +25,7 @@ export const enum EventType {
 export const enum CommonModalType {
   Confirm = 'C',
   YesNo = 'YN',
+  None = ''
 }
 
 export const enum CommonModalResponse {

@@ -12,8 +12,7 @@ export class CommonModalComponent implements OnInit{
   commonModalData: ICommonModal = {
     modalTitle: '',
     modalBody: '',
-    modalType: CommonModalType.Confirm,
-    actionFunction: () => {},
+    modalType: CommonModalType.None,
   } as ICommonModal;
 
   actionButton1 = '';

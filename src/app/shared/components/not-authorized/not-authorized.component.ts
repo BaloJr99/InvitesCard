@@ -12,6 +12,7 @@ export class NotAuthorizedComponent {
     private router: Router,
     private tokenService: TokenStorageService
   ) {}
+  
   logout(): void {
     this.tokenService.signOut();
     this.router.navigate(['/auth/login']);

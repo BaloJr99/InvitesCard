@@ -26,6 +26,7 @@ import {
   IMessage,
   IMessageResponse,
   INotification,
+  ISpinner,
 } from 'src/app/core/models/common';
 import {
   IBulkInvite,
@@ -377,4 +378,16 @@ export const saveTheDateSetting: ISaveTheDateSetting = {
   copyMessage: 'Test Message',
   hotelInformation: 'Test Information',
   hotelName: 'Test Hotel',
+};
+
+export const showSpinnerMock: ISpinner = {
+  isLoading: true,
+  message: 'Test Spinner',
+  showInviteLoader: false,
+};
+
+export const showInviteLoaderMock: ISpinner = {
+  isLoading: false,
+  message: 'Test Invite',
+  showInviteLoader: true,
 };

@@ -7,7 +7,7 @@ import { LoaderService } from 'src/app/core/services/loader.service';
   styleUrls: ['./spinner.component.css'],
 })
 export class SpinnerComponent implements OnInit {
-  showSpinner = true;
+  showSpinner = false;
   text = '';
   showInviteLoader = false;
 

@@ -8,7 +8,7 @@ import { IError } from '../models/common';
 })
 export class ErrorModalService {
   private _errorResponse = new Subject<IError>();
-  errorResponse = this._errorResponse.asObservable();
+  errorResponse$ = this._errorResponse.asObservable();
 
   setError(hasError: boolean, error: HttpErrorResponse | null) {
     this._errorResponse.next({ hasError, serverError: error } as IError);
