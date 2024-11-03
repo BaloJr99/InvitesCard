@@ -5,6 +5,7 @@ import { IInviteGroups } from 'src/app/core/models/inviteGroups';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { IBulkMessageResponse, IBulkResults } from 'src/app/core/models/common';
+import { FileReaderService } from 'src/app/core/services/fileReader.service';
 
 @Component({
   selector: 'app-invites-import-dialog',
@@ -22,7 +23,8 @@ export class InvitesImportModalComponent implements OnInit {
   constructor(
     private invitesService: InvitesService,
     private toastr: ToastrService,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private fileReaderService: FileReaderService
   ) {}
 
   ngOnInit(): void {
@@ -42,10 +44,11 @@ export class InvitesImportModalComponent implements OnInit {
       try {
         this.processingFile = true;
         this.loaderService.setLoading(true, $localize`Procesando archivo`);
-        const content = await this.readFileContent(
+        this.fileReaderService.read(
           element.files.item(0) as File
-        );
-        this.processFile(content);
+        ).subscribe((content: string) => {
+          this.processFile(content);
+        });
       } catch (error) {
         this.loaderService.setLoading(false);
         this.processingFile = false;
@@ -57,24 +60,6 @@ export class InvitesImportModalComponent implements OnInit {
       this.processingFile = false;
     }
   };
-
-  readFileContent(file: File): Promise<string> {
-    return new Promise<string>((resolve) => {
-      if (!file) resolve('');
-
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        const text = reader.result;
-        if (text) {
-          resolve(text.toString());
-        }
-        resolve('');
-      };
-
-      reader.readAsText(file, 'UTF-8');
-    });
-  }
 
   sendData(): void {
     this.loaderService.setLoading(true, $localize`Procesando invitaciones`);
