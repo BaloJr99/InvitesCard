@@ -44,7 +44,20 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
   @Output() updateInviteGroups: EventEmitter<IInviteGroupsAction> =
     new EventEmitter();
 
-  createInviteForm!: FormGroup;
+  createInviteForm: FormGroup = this.fb.group({
+    id: '',
+    family: [$localize`Familia`, Validators.required],
+    entriesNumber: [1, Validators.required],
+    phoneNumber: [
+      '878',
+      [Validators.required, Validators.pattern('[0-9]{10}')],
+    ],
+    inviteGroupId: ['', Validators.required],
+    kidsAllowed: [true, Validators.required],
+    eventId: '',
+    inviteViewed: null,
+  });
+
   showNewGroupForm = false;
   groupSelected: IInviteGroups | undefined = undefined;
 
@@ -78,20 +91,6 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.createInviteForm = this.fb.group({
-      id: '',
-      family: [$localize`Familia`, Validators.required],
-      entriesNumber: [1, Validators.required],
-      phoneNumber: [
-        '878',
-        [Validators.required, Validators.pattern('[0-9]{10}')],
-      ],
-      inviteGroupId: ['', Validators.required],
-      kidsAllowed: [true, Validators.required],
-      eventId: '',
-      inviteViewed: null,
-    });
-
     $('#inviteModal').on('hidden.bs.modal', () => {
       this.clearInputs();
     });

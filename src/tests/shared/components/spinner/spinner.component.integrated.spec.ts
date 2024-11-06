@@ -36,8 +36,6 @@ describe('Spinner Component (Integrated Test)', () => {
     );
     const span = fixture.debugElement.query(By.css('span'));
 
-    console.log(fixture.debugElement)
-
     expect(spinner)
       .withContext("Shouldn't show cssload-speeding-wheel")
       .toBeNull();

@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {} from 'bootstrap';
 import { DataTableDirective } from 'angular-datatables';
-import { Subject, take } from 'rxjs';
+import { Subject } from 'rxjs';
 import { ADTSettings } from 'angular-datatables/src/models/settings';
 import {
   IFullInvite,
@@ -136,30 +136,26 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
       (original) => original.id === invite.id
     ) as IFullInvite;
 
-    this.commonModalService.setData({
+    this.commonModalService.open({
       modalTitle: $localize`Eliminar invitación`,
       modalBody: $localize`¿Estás seguro de eliminar la invitación de ${inviteFound.family}?`,
       modalType: CommonModalType.Confirm,
+    }).subscribe((response) => {
+      if (response === CommonModalResponse.Confirm) {
+        this.loaderService.setLoading(true, $localize`Eliminando invitación`);
+        this.invitesService
+          .deleteInvite(inviteFound.id)
+          .subscribe({
+            next: (response: IMessageResponse) => {
+              this.removeInvites.emit([inviteFound.id]);
+              this.toastrService.success(response.message);
+            },
+          })
+          .add(() => {
+            this.loaderService.setLoading(false);
+          });
+      }
     });
-
-    this.commonModalService.commonModalResponse$
-      .pipe(take(1))
-      .subscribe((response) => {
-        if (response === CommonModalResponse.Confirm) {
-          this.loaderService.setLoading(true, $localize`Eliminando invitación`);
-          this.invitesService
-            .deleteInvite(inviteFound.id)
-            .subscribe({
-              next: (response: IMessageResponse) => {
-                this.removeInvites.emit([inviteFound.id]);
-                this.toastrService.success(response.message);
-              },
-            })
-            .add(() => {
-              this.loaderService.setLoading(false);
-            });
-        }
-      });
   }
 
   selectAll(event: Event): void {

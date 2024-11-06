@@ -1,17 +1,17 @@
 <!-- Modal -->
-<div class="modal fade" id="commonModal" tabindex="-1" aria-labelledby="commonModalLabel" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="commonModal" tabindex="-1" aria-labelledby="commonModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="commonModalLabel">{{commonModalData.modalTitle}}</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" i18n-aria-label aria-label="Cerrar"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeAction()" i18n-aria-label aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
         <p [innerHTML]="commonModalData.modalBody"></p>
       </div>
       <div class="modal-footer">
-        <button type="button" id="closeModal" class="btn" [ngClass]="commonModalData.modalType === 'C' ? 'btn-success' : 'btn-warning'" data-bs-dismiss="modal">{{actionButton1}}</button>
-        <button type="button" id="actionButton" class="btn" [ngClass]="commonModalData.modalType === 'C' ? 'btn-danger' : 'btn-success'" (click)="action()">{{actionButton2}}</button>
+        <button type="button" id="closeModal" class="btn" [ngClass]="commonModalData.modalType === 'C' ? 'btn-success' : 'btn-warning'" data-bs-dismiss="modal" (click)="closeAction()">{{actionButton1}}</button>
+        <button type="button" id="actionButton" class="btn" [ngClass]="commonModalData.modalType === 'C' ? 'btn-danger' : 'btn-success'" data-bs-dismiss="modal" (click)="confirmAction()">{{actionButton2}}</button>
       </div>
     </div>
   </div>

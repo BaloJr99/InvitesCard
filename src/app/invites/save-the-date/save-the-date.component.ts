@@ -126,7 +126,8 @@ export class SaveTheDateComponent implements OnInit {
                 };
 
                 this.userInvite.hotelName = this.eventSettings.hotelName;
-                this.userInvite.hotelInformation = this.eventSettings.hotelInformation;
+                this.userInvite.hotelInformation =
+                  this.eventSettings.hotelInformation;
 
                 this.downloadAudio =
                   downloadFiles.eventAudios.length > 0
@@ -135,19 +136,17 @@ export class SaveTheDateComponent implements OnInit {
                 if (this.downloadAudio) {
                   this.audio = new Audio(this.downloadAudio.fileUrl);
 
-                  this.commonModalService.setData({
-                    modalTitle: $localize`Nuestra canción`,
-                    modalBody: $localize`¿Desea reproducir el audio?`,
-                    modalType: CommonModalType.YesNo,
-                  });
-
-                  this.commonModalService.commonModalResponse$.subscribe(
-                    (response) => {
+                  this.commonModalService
+                    .open({
+                      modalTitle: $localize`Nuestra canción`,
+                      modalBody: $localize`¿Desea reproducir el audio?`,
+                      modalType: CommonModalType.YesNo,
+                    })
+                    .subscribe((response) => {
                       if (response === CommonModalResponse.Confirm) {
                         this.reproduceAudio();
                       }
-                    }
-                  );
+                    });
                 }
 
                 this.downloadImages = downloadFiles.eventImages.filter(

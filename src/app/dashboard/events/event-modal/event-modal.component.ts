@@ -17,7 +17,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Observable, fromEvent, merge, take } from 'rxjs';
+import { Observable, fromEvent, merge } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { IEventAction } from 'src/app/core/models/events';
 import { IUserDropdownData } from 'src/app/core/models/users';
@@ -155,14 +155,12 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
               this.createEventForm.controls['typeOfEvent'].value
             ))
         ) {
-          this.commonModalService.setData({
-            modalTitle: $localize`Sobreescribiendo evento`,
-            modalBody: $localize`Usted esta cambiando el tipo de evento por uno que no es compatible, ¿está seguro de sobreescribir el evento ${this.createEventForm.controls['nameOfEvent'].value}? Esto causará que se borre la información capturada por los invitados y las configuraciones.`,
-            modalType: CommonModalType.Confirm,
-          });
-
-          this.commonModalService.commonModalResponse$
-            .pipe(take(1))
+          this.commonModalService
+            .open({
+              modalTitle: $localize`Sobreescribiendo evento`,
+              modalBody: $localize`Usted esta cambiando el tipo de evento por uno que no es compatible, ¿está seguro de sobreescribir el evento ${this.createEventForm.controls['nameOfEvent'].value}? Esto causará que se borre la información capturada por los invitados y las configuraciones.`,
+              modalType: CommonModalType.Confirm,
+            })
             .subscribe((response) => {
               if (response === CommonModalResponse.Confirm) {
                 this.updateEvent(true);
@@ -225,7 +223,9 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
               ...this.createEventForm.value,
               dateOfEvent: `${this.createEventForm.value.dateOfEvent}T00:00:00.000`,
               maxDateOfConfirmation: `${this.createEventForm.value.maxDateOfConfirmation}T00:00:00.000`,
-              allowCreateInvites: override ? false : this.eventAction?.event.allowCreateInvites,
+              allowCreateInvites: override
+                ? false
+                : this.eventAction?.event.allowCreateInvites,
             },
             isNew: false,
           });

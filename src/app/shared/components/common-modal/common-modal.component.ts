@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ICommonModal } from 'src/app/core/models/common';
-import { CommonModalResponse, CommonModalType } from 'src/app/core/models/enum';
+import { CommonModalType } from 'src/app/core/models/enum';
 import { CommonModalService } from 'src/app/core/services/commonModal.service';
 
 @Component({
@@ -8,42 +8,40 @@ import { CommonModalService } from 'src/app/core/services/commonModal.service';
   templateUrl: './common-modal.component.html',
   styleUrl: './common-modal.component.css',
 })
-export class CommonModalComponent implements OnInit{
+export class CommonModalComponent {
+  @Input() set options(value: ICommonModal) {
+    this.commonModalData = value;
+    if (value.modalType === CommonModalType.Confirm) {
+      this.actionButton1 = $localize`Cancelar`;
+      this.actionButton2 = $localize`Confirmar`;
+    }
+
+    if (value.modalType === CommonModalType.YesNo) {
+      this.actionButton1 = $localize`No`;
+      this.actionButton2 = $localize`Sí`;
+    }
+    $('#commonModal').modal('show');
+  }
+
+  @Output() closeModal = new EventEmitter();
+  @Output() confirmModal = new EventEmitter();
+
   commonModalData: ICommonModal = {
     modalTitle: '',
     modalBody: '',
     modalType: CommonModalType.None,
-  } as ICommonModal;
+  };
 
   actionButton1 = '';
   actionButton2 = '';
 
   constructor(public commonModalService: CommonModalService) {}
 
-  ngOnInit(): void {
-    this.commonModalService.commonModalData$.subscribe({
-      next: (data) => {
-        this.commonModalData = data;
-        if (data.modalType === CommonModalType.Confirm) {
-          this.actionButton1 = $localize`Cancelar`;
-          this.actionButton2 = $localize`Confirmar`;
-        }
-
-        if (data.modalType === CommonModalType.YesNo) {
-          this.actionButton1 = $localize`No`;
-          this.actionButton2 = $localize`Sí`;
-        }
-        $('#commonModal').modal('show');
-      },
-    });
-
-    $('#commonModal').on('hide.bs.modal', () => {
-      this.commonModalService.sendResponse(CommonModalResponse.Cancel);
-    });
+  confirmAction(): void {
+    this.confirmModal.emit();
   }
 
-  action(): void {
-    this.commonModalService.sendResponse(CommonModalResponse.Confirm);
-    $('#commonModal').modal('hide');
+  closeAction(): void {
+    this.closeModal.emit();
   }
 }

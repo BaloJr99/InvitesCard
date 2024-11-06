@@ -1,25 +1,52 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import {
+  ApplicationRef,
+  ComponentRef,
+  createComponent,
+  Injectable,
+} from '@angular/core';
 import { ICommonModal } from '../models/common';
+import { CommonModalComponent } from 'src/app/shared/components/common-modal/common-modal.component';
+import { Subject } from 'rxjs';
 import { CommonModalResponse } from '../models/enum';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommonModalService {
-  private _commonModalData = new Subject<ICommonModal>();
-  commonModalData$ = this._commonModalData.asObservable();
+  private componentRef!: ComponentRef<CommonModalComponent>;
+  private componentSubscriber!: Subject<CommonModalResponse>;
 
-  private _commonModalResponse = new Subject<CommonModalResponse>();
-  commonModalResponse$ = this._commonModalResponse.asObservable();
+  constructor(private applicationRef: ApplicationRef) {}
 
-  setData(commonModalData: ICommonModal) {
-    this._commonModalData.next({
-      ...commonModalData
+  open(options: ICommonModal) {
+    const environmentInjector = this.applicationRef.injector;
+
+    this.componentRef = createComponent(CommonModalComponent, {
+      environmentInjector,
     });
+
+    this.applicationRef.attachView(this.componentRef.hostView);
+
+    const root = document.getElementsByTagName('app-root')[0];
+    root.appendChild(this.componentRef.location.nativeElement);
+
+    this.componentRef.instance.options = options;
+    this.componentRef.instance.closeModal.subscribe(() => this.closeModal());
+    this.componentRef.instance.confirmModal.subscribe(() =>
+      this.confirmModal()
+    );
+
+    this.componentSubscriber = new Subject<CommonModalResponse>();
+    return this.componentSubscriber.asObservable();
   }
 
-  sendResponse(response: CommonModalResponse) {
-    this._commonModalResponse.next(response);
+  closeModal() {
+    this.componentSubscriber.complete();
+    this.componentRef.destroy();
+  }
+
+  confirmModal() {
+    this.componentSubscriber.next(CommonModalResponse.Confirm);
+    this.closeModal();
   }
 }

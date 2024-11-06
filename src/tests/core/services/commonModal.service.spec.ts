@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { CommonModalResponse } from 'src/app/core/models/enum';
 import { CommonModalService } from 'src/app/core/services/commonModal.service';
 import { commonModalMock } from 'src/tests/mocks/mocks';
 
@@ -9,8 +8,9 @@ describe('CommonModalService', () => {
 
   beforeEach(() => {
     const spy = jasmine.createSpyObj('CommonModalService', [
-      'setData',
-      'sendResponse',
+      'open',
+      'closeModal',
+      'confirmModal',
     ]);
 
     TestBed.configureTestingModule({
@@ -29,17 +29,18 @@ describe('CommonModalService', () => {
       .toBeTruthy();
   });
 
-  it('should call setData', () => {
-    commonModalServiceSpy.setData(commonModalMock);
-    expect(commonModalServiceSpy.setData)
-      .withContext('Expected setData to have been called')
+  it('should call open', () => {
+    commonModalServiceSpy.open(commonModalMock);
+
+    expect(commonModalServiceSpy.open)
+      .withContext('Expected open to have been called')
       .toHaveBeenCalledOnceWith(commonModalMock);
   });
 
   it('should call sendResponse', () => {
-    commonModalServiceSpy.sendResponse(CommonModalResponse.Confirm);
-    expect(commonModalServiceSpy.sendResponse)
-      .withContext('Expected sendResponse to have been called')
-      .toHaveBeenCalledOnceWith(CommonModalResponse.Confirm);
+    commonModalServiceSpy.closeModal();
+    expect(commonModalServiceSpy.closeModal)
+      .withContext('Expected closeModal to have been called')
+      .toHaveBeenCalled();
   });
 });

@@ -168,14 +168,12 @@ export class FilesComponent implements OnInit {
     const audioFound = this.audios.find((audio) => audio.id === id);
 
     if (imageFound || audioFound) {
-      this.commonModalService.setData({
-        modalTitle: $localize`Eliminando archivo`,
-        modalBody: $localize`¿Está seguro que desea eliminar el archivo?`,
-        modalType: CommonModalType.Confirm,
-      });
-
-      this.commonModalService.commonModalResponse$
-        .pipe(take(1))
+      this.commonModalService
+        .open({
+          modalTitle: $localize`Eliminando archivo`,
+          modalBody: $localize`¿Está seguro que desea eliminar el archivo?`,
+          modalType: CommonModalType.Confirm,
+        })
         .subscribe((response) => {
           if (response === CommonModalResponse.Confirm) {
             this.loaderService.setLoading(true, $localize`Eliminando archivo`);

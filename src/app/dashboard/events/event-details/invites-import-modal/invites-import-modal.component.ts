@@ -44,11 +44,11 @@ export class InvitesImportModalComponent implements OnInit {
       try {
         this.processingFile = true;
         this.loaderService.setLoading(true, $localize`Procesando archivo`);
-        this.fileReaderService.read(
-          element.files.item(0) as File
-        ).subscribe((content: string) => {
-          this.processFile(content);
-        });
+        this.fileReaderService
+          .read(element.files.item(0) as File)
+          .subscribe((content: string) => {
+            this.processFile(content);
+          });
       } catch (error) {
         this.loaderService.setLoading(false);
         this.processingFile = false;
@@ -145,7 +145,6 @@ export class InvitesImportModalComponent implements OnInit {
     const csv = $localize`Familia,Numero de pases,Telefóno,Niños permitidos,Grupo\n`;
     const blob = new Blob([csv], {
       type: 'text/csv; charset=utf-8',
-      
     });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
