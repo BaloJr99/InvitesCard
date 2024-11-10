@@ -89,7 +89,7 @@ describe('Login Component: Shallow Test', () => {
     spyOn(fixture.componentInstance, 'loginAccount');
     const form = fixture.debugElement.query(By.css('form'));
     form.triggerEventHandler('submit');
-    fixture.detectChanges();
+    
     expect(fixture.componentInstance.loginAccount)
       .withContext('LoginAccount method should have been called')
       .toHaveBeenCalled();

@@ -1,7 +1,18 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+  waitForAsync,
+} from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import {
+  ActivatedRoute,
+  convertToParamMap,
+  Router,
+  RouterLink,
+} from '@angular/router';
 import { of } from 'rxjs';
 import { PasswordResetComponent } from 'src/app/auth/forgot-password/password-reset/password-reset.component';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -14,6 +25,7 @@ import {
 describe('Password Reset Component: Integrated Test', () => {
   let fixture: ComponentFixture<PasswordResetComponent>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let router: Router;
 
   const updateFormUsingEvent = (password: string, confirmPassword: string) => {
     const passwordInput = fixture.debugElement.query(By.css('#password'));
@@ -34,7 +46,7 @@ describe('Password Reset Component: Integrated Test', () => {
 
     TestBed.configureTestingModule({
       declarations: [PasswordResetComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, RouterLink],
       providers: [
         { provide: AuthService, useValue: authSpy },
         {
@@ -50,6 +62,7 @@ describe('Password Reset Component: Integrated Test', () => {
     }).compileComponents();
 
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
+    router = TestBed.inject(Router);
   }));
 
   beforeEach(() => {
@@ -69,7 +82,7 @@ describe('Password Reset Component: Integrated Test', () => {
 
     expect(authServiceSpy.resetPassword)
       .withContext(
-        "resetPassword method from AuthService should have been called"
+        'resetPassword method from AuthService should have been called'
       )
       .toHaveBeenCalled();
   });
@@ -98,4 +111,29 @@ describe('Password Reset Component: Integrated Test', () => {
       .withContext('Should show passwordReset sent div')
       .not.toBeNull();
   });
+
+  it('can get RouterLinks from template', () => {
+    const linkDes = fixture.debugElement.queryAll(By.directive(RouterLink));
+    const routerLinks = linkDes.map((de) => de.injector.get(RouterLink));
+
+    routerLinks.forEach((link) => {
+      expect(link.href).toBe('/auth/login');
+    });
+  });
+
+  it('should route to forgotPassword page', fakeAsync(() => {
+    const linkDes = fixture.debugElement.queryAll(By.directive(RouterLink));
+    const firstEventLink = linkDes[0];
+    router.resetConfig([{ path: '**', children: [] }]);
+
+    firstEventLink.triggerEventHandler('click', { button: 0 });
+
+    tick();
+
+    fixture.detectChanges();
+
+    expect(router.url)
+      .withContext('Should redirect to event details page')
+      .toBe(`/auth/login`);
+  }));
 });

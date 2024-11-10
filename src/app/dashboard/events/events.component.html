@@ -21,9 +21,9 @@
           </button>
           <h5 class="card-title">{{ event.nameOfEvent }}</h5>
           <p class="card-text" i18n>Fecha del evento: <br> {{ event.dateOfEvent | dateFormat }}</p>
-          <button routerLink="/dashboard/events/{{event.id}}" routerLinkActive="router-link-active" class="view-event btn btn-primary" i18n [disabled]="event.allowCreateInvites === 0">
+          <a routerLink="/dashboard/events/{{event.id}}" class="view-event btn btn-primary" i18n>
             IR A LAS INVITACIONES <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-          </button>
+          </a>
         </div>
       </div>
     </div>

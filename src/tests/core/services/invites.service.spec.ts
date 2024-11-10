@@ -7,8 +7,8 @@ import {
   confirmationInviteMock,
   dashboardInvitesMock,
   fullEventsMock,
-  fullInviteMock,
   messageResponseMock,
+  newInviteMock,
   sweetXvUserInviteMock,
   upsertInviteMock,
 } from 'src/tests/mocks/mocks';
@@ -119,7 +119,7 @@ describe('Invites Service', () => {
     invitesServiceSpy
       .sendConfirmation(
         confirmationInviteMock,
-        fullInviteMock.id,
+        confirmationInviteMock.id,
         fullEventsMock.typeOfEvent
       )
       .subscribe((response) => {
@@ -130,7 +130,7 @@ describe('Invites Service', () => {
       .withContext('Expected sendConfirmation to have been called')
       .toHaveBeenCalledOnceWith(
         confirmationInviteMock,
-        fullInviteMock.id,
+        confirmationInviteMock.id,
         fullEventsMock.typeOfEvent
       );
   });
@@ -138,13 +138,13 @@ describe('Invites Service', () => {
   it('should call readMessage', () => {
     invitesServiceSpy.readMessage.and.returnValue(of(messageResponseMock));
 
-    invitesServiceSpy.readMessage(fullInviteMock.id).subscribe((response) => {
+    invitesServiceSpy.readMessage(confirmationInviteMock.id).subscribe((response) => {
       expect(response).toBe(messageResponseMock);
     });
 
     expect(invitesServiceSpy.readMessage)
       .withContext('Expected readMessage to have been called')
-      .toHaveBeenCalledOnceWith(fullInviteMock.id);
+      .toHaveBeenCalledOnceWith(confirmationInviteMock.id);
   });
 
   it('should call bulkInvites', () => {
@@ -165,14 +165,14 @@ describe('Invites Service', () => {
     );
 
     invitesServiceSpy
-      .bulkDeleteInvites([fullInviteMock.id])
+      .bulkDeleteInvites([newInviteMock.id])
       .subscribe((response) => {
         expect(response).toBe(messageResponseMock);
       });
 
     expect(invitesServiceSpy.bulkDeleteInvites)
       .withContext('Expected bulkDeleteInvites to have been called')
-      .toHaveBeenCalledOnceWith([fullInviteMock.id]);
+      .toHaveBeenCalledOnceWith([newInviteMock.id]);
   });
 
   it('should call getInviteEventType', () => {
@@ -181,13 +181,13 @@ describe('Invites Service', () => {
     );
 
     invitesServiceSpy
-      .getInviteEventType(fullInviteMock.eventId)
+      .getInviteEventType(newInviteMock.eventId)
       .subscribe((response) => {
         expect(response).toBe(fullEventsMock.typeOfEvent);
       });
 
     expect(invitesServiceSpy.getInviteEventType)
       .withContext('Expected getInviteEventType to have been called')
-      .toHaveBeenCalledOnceWith(fullInviteMock.eventId);
+      .toHaveBeenCalledOnceWith(newInviteMock.eventId);
   });
 });

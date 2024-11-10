@@ -13,7 +13,7 @@ export interface IFullInvite {
   isMessageRead: boolean;
   eventId: string;
   inviteGroupId: string;
-  inviteViewed: string;
+  inviteViewed: boolean;
   needsAccomodation: boolean | null;
 }
 
@@ -24,6 +24,8 @@ export type IUpsertInvite = Omit<
   | 'confirmation'
   | 'dateOfConfirmation'
   | 'isMessageRead'
+  | 'needsAccomodation'
+  | 'inviteViewed'
 >;
 
 export type IInviteGroup = Pick<

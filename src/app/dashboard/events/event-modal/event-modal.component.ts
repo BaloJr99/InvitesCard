@@ -45,7 +45,15 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() eventAction: IEventAction | undefined = undefined;
   @Output() updateEvents: EventEmitter<IEventAction> = new EventEmitter();
 
-  createEventForm!: FormGroup;
+  createEventForm: FormGroup = this.fb.group({
+    id: [''],
+    nameOfEvent: ['', Validators.required],
+    dateOfEvent: ['', Validators.required],
+    maxDateOfConfirmation: ['', Validators.required],
+    nameOfCelebrated: ['', Validators.required],
+    typeOfEvent: ['', Validators.required],
+    userId: ['', Validators.required],
+  });
 
   originalEventType: EventType | undefined = undefined;
   users: IUserDropdownData[] = [];
@@ -89,16 +97,6 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.createEventForm = this.fb.group({
-      id: [''],
-      nameOfEvent: ['', Validators.required],
-      dateOfEvent: ['', Validators.required],
-      maxDateOfConfirmation: ['', Validators.required],
-      nameOfCelebrated: ['', Validators.required],
-      typeOfEvent: ['', Validators.required],
-      userId: ['', Validators.required],
-    });
-
     $('#eventModal').on('hidden.bs.modal', () => {
       this.clearInputs();
     });

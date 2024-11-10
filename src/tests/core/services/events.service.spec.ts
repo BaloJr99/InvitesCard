@@ -6,8 +6,8 @@ import {
   dropdownEventsMock,
   eventInformationMock,
   fullEventsMock,
-  fullInviteMock,
   messageResponseMock,
+  newInviteMock,
 } from 'src/tests/mocks/mocks';
 
 describe('EventsService', () => {
@@ -86,13 +86,13 @@ describe('EventsService', () => {
 
   it('shoud call getEventInvites', () => {
     eventsServiceSpy.getEventInvites.and.returnValue(
-      of([{ ...fullInviteMock }])
+      of([{ ...newInviteMock }])
     );
 
     eventsServiceSpy
       .getEventInvites(fullEventsMock.id)
       .subscribe((response) => {
-        expect(response).toEqual([{ ...fullInviteMock }]);
+        expect(response).toEqual([{ ...newInviteMock }]);
         expect(response.length).toBe(1);
         expect(response[0].eventId).toEqual(fullEventsMock.id);
       });

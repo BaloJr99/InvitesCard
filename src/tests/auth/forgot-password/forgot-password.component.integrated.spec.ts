@@ -1,6 +1,13 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+  waitForAsync,
+} from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { provideRouter, Router, RouterLink } from '@angular/router';
 import { of } from 'rxjs';
 import { ForgotPasswordComponent } from 'src/app/auth/forgot-password/forgot-password.component';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -9,6 +16,7 @@ import { loginDataMock, messageResponseMock } from 'src/tests/mocks/mocks';
 describe('Forgot Password Component: Integrated Test', () => {
   let fixture: ComponentFixture<ForgotPasswordComponent>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let router: Router;
 
   const updateFormUsingEvent = (username: string) => {
     const usernameInput = fixture.debugElement.query(
@@ -24,11 +32,15 @@ describe('Forgot Password Component: Integrated Test', () => {
 
     TestBed.configureTestingModule({
       declarations: [ForgotPasswordComponent],
-      imports: [ReactiveFormsModule],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      imports: [ReactiveFormsModule, RouterLink],
+      providers: [
+        { provide: AuthService, useValue: authSpy },
+        provideRouter([]),
+      ],
     }).compileComponents();
 
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
+    router = TestBed.inject(Router);
   }));
 
   beforeEach(() => {
@@ -77,4 +89,29 @@ describe('Forgot Password Component: Integrated Test', () => {
       .withContext("Shouldn't show email sent div")
       .not.toBeNull();
   });
+
+  it('can get RouterLinks from template', () => {
+    const linkDes = fixture.debugElement.queryAll(By.directive(RouterLink));
+    const routerLinks = linkDes.map((de) => de.injector.get(RouterLink));
+
+    routerLinks.forEach((link) => {
+      expect(link.href).toBe('/auth/login');
+    });
+  });
+
+  it('should route to forgotPassword page', fakeAsync(() => {
+    const linkDes = fixture.debugElement.queryAll(By.directive(RouterLink));
+    const firstEventLink = linkDes[0];
+    router.resetConfig([{ path: '**', children: [] }]);
+
+    firstEventLink.triggerEventHandler('click', { button: 0 });
+
+    tick();
+
+    fixture.detectChanges();
+
+    expect(router.url)
+      .withContext('Should redirect to event details page')
+      .toBe(`/auth/login`);
+  }));
 });

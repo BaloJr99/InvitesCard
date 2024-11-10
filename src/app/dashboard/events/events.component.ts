@@ -38,7 +38,10 @@ export class EventsComponent implements OnInit {
             this.events = events.map((event) => {
               return {
                 ...event,
-                dateOfEvent: event.dateOfEvent.slice(0, event.dateOfEvent.length - 1),
+                dateOfEvent: event.dateOfEvent.slice(
+                  0,
+                  event.dateOfEvent.length - 1
+                ),
               };
             });
           },

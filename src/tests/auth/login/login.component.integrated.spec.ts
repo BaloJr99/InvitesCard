@@ -1,8 +1,14 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+  waitForAsync,
+} from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { provideRouter, Router } from '@angular/router';
+import { provideRouter, Router, RouterLink } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { LoginComponent } from 'src/app/auth/login/login.component';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -35,7 +41,7 @@ describe('Login Component: Integrated Test', () => {
 
     TestBed.configureTestingModule({
       declarations: [LoginComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, RouterLink],
       providers: [
         { provide: AuthService, useValue: authSpy },
         { provide: TokenStorageService, useValue: tokenSpy },
@@ -116,4 +122,27 @@ describe('Login Component: Integrated Test', () => {
       .withContext('Should display wrong credentials')
       .toContain('Credenciales Incorrectas');
   });
+
+  it('can get RouterLinks from template', () => {
+    const linkDes = fixture.debugElement.queryAll(By.directive(RouterLink));
+    const routerLinks = linkDes.map((de) => de.injector.get(RouterLink));
+
+    expect(routerLinks[0].href).toBe('/auth/forgotPassword');
+  });
+
+  it('should route to forgotPassword page', fakeAsync(() => {
+    const linkDes = fixture.debugElement.queryAll(By.directive(RouterLink));
+    const firstEventLink = linkDes[0];
+    router.resetConfig([{ path: '**', children: [] }]);
+
+    firstEventLink.triggerEventHandler('click', { button: 0 });
+
+    tick();
+
+    fixture.detectChanges();
+
+    expect(router.url)
+      .withContext('Should redirect to event details page')
+      .toBe(`/auth/forgotPassword`);
+  }));
 });

@@ -178,7 +178,7 @@ export const fullEventsMock: IFullEvent = {
   nameOfCelebrated: 'Test',
   nameOfEvent: 'Test Event',
   typeOfEvent: EventType.None,
-  userId: 'aa248c69-c5ed-40b6-8f31-5c20245c7769',
+  userId: fullUserMock.id,
 };
 
 export const dashboardEventsMock: IDashboardEvent[] = [
@@ -209,21 +209,55 @@ export const eventInformationMock: IEventInformation = {
   typeOfEvent: fullEventsMock.typeOfEvent,
 };
 
-export const fullInviteMock: IFullInvite = {
+export const fullInvitesGroupsMock: IInviteGroups = {
+  id: '4ab19b3e-53ba-4017-9c05-2d3ee285aff8',
+  eventId: fullEventsMock.id,
+  inviteGroup: 'Test Group',
+};
+
+export const upsertInviteMock: IUpsertInvite = {
   id: '6e8196c7-ce28-4658-b4f0-df7fe5a1a2d1',
-  confirmation: true,
-  dateOfConfirmation: '2021-10-01',
-  entriesConfirmed: 1,
-  entriesNumber: 2,
   eventId: fullEventsMock.id,
   family: 'Test Family',
-  inviteGroupId: '1db15d36-56ab-4131-9178-302d9d4ef638',
-  inviteViewed: '1',
-  isMessageRead: true,
   kidsAllowed: true,
+  entriesNumber: 2,
+  inviteGroupId: fullInvitesGroupsMock.id,
+  phoneNumber: '1234567890',
+};
+
+export const newInviteMock: IFullInvite = {
+  ...upsertInviteMock,
+  confirmation: null,
+  dateOfConfirmation: null,
+  entriesConfirmed: null,
+  isMessageRead: false,
+  message: null,
+  inviteViewed: false,
+  needsAccomodation: null,
+};
+
+export const confirmedInviteMock: IFullInvite = {
+  ...upsertInviteMock,
+  id: '20f13da8-2b38-45e5-907f-4ef2a93ff159',
+  confirmation: true,
+  dateOfConfirmation: '2021-07-01',
+  entriesConfirmed: 2,
+  inviteViewed: true,
+  isMessageRead: false,
   message: 'Test Message',
   needsAccomodation: true,
-  phoneNumber: '1234567890',
+};
+
+export const notConfirmedInviteMock: IFullInvite = {
+  ...upsertInviteMock,
+  id: 'dfc2dc7a-02fa-42c9-b125-fbc7e460bbf7',
+  confirmation: false,
+  dateOfConfirmation: '2021-07-01',
+  entriesConfirmed: 0,
+  inviteViewed: true,
+  isMessageRead: false,
+  message: 'Test Message',
+  needsAccomodation: true,
 };
 
 export const fullFileMock: IFullFile = {
@@ -268,63 +302,45 @@ export const downloadFileMock: IDownloadFiles = {
   eventAudios: [downloadMusicMock],
 };
 
-export const fullInvitesGroupsMock: IInviteGroups = {
-  id: '4ab19b3e-53ba-4017-9c05-2d3ee285aff8',
-  eventId: fullEventsMock.id,
-  inviteGroup: 'Test Group',
-};
-
 export const dashboardInvitesMock: IDashboardInvite = {
   eventId: fullEventsMock.id,
-  confirmation: fullInviteMock.confirmation,
-  dateOfConfirmation: fullInviteMock.dateOfConfirmation,
-  entriesConfirmed: fullInviteMock.entriesConfirmed,
-  entriesNumber: fullInviteMock.entriesNumber,
+  confirmation: confirmedInviteMock.confirmation,
+  dateOfConfirmation: confirmedInviteMock.dateOfConfirmation,
+  entriesConfirmed: confirmedInviteMock.entriesConfirmed,
+  entriesNumber: confirmedInviteMock.entriesNumber,
 };
 
 export const sweetXvUserInviteMock: ISweetXvUserInvite = {
-  id: fullInviteMock.id,
-  confirmation: fullInviteMock.confirmation,
+  id: confirmedInviteMock.id,
+  confirmation: confirmedInviteMock.confirmation,
   maxDateOfConfirmation: '2021-10-01',
-  entriesNumber: fullInviteMock.entriesNumber,
-  eventId: fullInviteMock.eventId,
-  family: fullInviteMock.family,
-  kidsAllowed: fullInviteMock.kidsAllowed,
+  entriesNumber: confirmedInviteMock.entriesNumber,
+  eventId: confirmedInviteMock.eventId,
+  family: confirmedInviteMock.family,
+  kidsAllowed: confirmedInviteMock.kidsAllowed,
   dateOfEvent: fullEventsMock.dateOfEvent,
   nameOfCelebrated: fullEventsMock.nameOfCelebrated,
   typeOfEvent: fullEventsMock.typeOfEvent,
 };
 
-export const upsertInviteMock: IUpsertInvite = {
-  id: fullInviteMock.id,
-  eventId: fullEventsMock.id,
-  family: fullInviteMock.family,
-  kidsAllowed: fullInviteMock.kidsAllowed,
-  entriesNumber: fullInviteMock.entriesNumber,
-  inviteGroupId: fullInvitesGroupsMock.id,
-  inviteViewed: fullInviteMock.inviteViewed,
-  needsAccomodation: fullInviteMock.needsAccomodation,
-  phoneNumber: fullInviteMock.phoneNumber,
-};
-
 export const confirmationInviteMock: IConfirmation = {
-  id: fullInviteMock.id,
-  entriesNumber: fullInviteMock.entriesNumber,
-  confirmation: fullInviteMock.confirmation,
-  dateOfConfirmation: fullInviteMock.dateOfConfirmation,
-  entriesConfirmed: fullInviteMock.entriesConfirmed,
-  message: fullInviteMock.message,
+  id: confirmedInviteMock.id,
+  entriesNumber: confirmedInviteMock.entriesNumber,
+  confirmation: confirmedInviteMock.confirmation,
+  dateOfConfirmation: confirmedInviteMock.dateOfConfirmation,
+  entriesConfirmed: confirmedInviteMock.entriesConfirmed,
+  message: confirmedInviteMock.message,
 };
 
 export const bulkInvitesMock: IBulkInvite = {
   eventId: fullEventsMock.id,
   inviteGroupId: fullInvitesGroupsMock.id,
-  entriesNumber: fullInviteMock.entriesNumber,
-  family: fullInviteMock.family,
+  entriesNumber: upsertInviteMock.entriesNumber,
+  family: upsertInviteMock.family,
   inviteGroupName: fullInvitesGroupsMock.inviteGroup,
   isNewInviteGroup: true,
-  kidsAllowed: fullInviteMock.kidsAllowed,
-  phoneNumber: fullInviteMock.phoneNumber,
+  kidsAllowed: upsertInviteMock.kidsAllowed,
+  phoneNumber: upsertInviteMock.phoneNumber,
 };
 
 export const bulkMessageResponseMock: IBulkMessageResponse = {
@@ -391,3 +407,17 @@ export const showInviteLoaderMock: ISpinner = {
   message: 'Test Invite',
   showInviteLoader: true,
 };
+
+export const validFileMock: File = new File(
+  [
+    `Familia,Numero de pases,Telefóno,Niños permitidos,Grupo\n${upsertInviteMock.family},${upsertInviteMock.entriesNumber},${upsertInviteMock.phoneNumber},${upsertInviteMock.kidsAllowed},${upsertInviteMock.inviteGroupId}`,
+  ],
+  'test-file.csv',
+  { type: 'text/plain' }
+);
+
+export const invalidFileMock: File = new File(
+  [`Familia,Numero de pases,Telefóno,Niños permitidos,Grupo`],
+  'test-file.csv',
+  { type: 'text/plain' }
+);
