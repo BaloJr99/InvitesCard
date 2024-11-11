@@ -23,8 +23,8 @@ export class HomeComponent implements OnInit {
   groupedByDate: { [key: string]: number } = {};
   events: IDropdownEvent[] = [];
   eventSelected: string = '';
-  lastInvitesChart: Chart<"bar", number[], string> | undefined;
-  historyChart: Chart<"pie", number[], string> | undefined;
+  lastInvitesChart: Chart<'bar', number[], string> | undefined;
+  historyChart: Chart<'pie', number[], string> | undefined;
 
   constructor(
     private invitesService: InvitesService,
@@ -60,7 +60,9 @@ export class HomeComponent implements OnInit {
   }
 
   RenderChart() {
-    const invitesByEvent = this.invites.filter((invite) => this.eventSelected !== '' ? invite.eventId === this.eventSelected : true);
+    const invitesByEvent = this.invites.filter((invite) =>
+      this.eventSelected !== '' ? invite.eventId === this.eventSelected : true
+    );
     this.statistics = createStatistics(invitesByEvent);
     this.percentajeOfConfirmation = Math.trunc(
       (this.statistics[0].value / this.statistics[3].value) * 100

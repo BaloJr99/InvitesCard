@@ -240,7 +240,7 @@ export const confirmedInviteMock: IFullInvite = {
   ...upsertInviteMock,
   id: '20f13da8-2b38-45e5-907f-4ef2a93ff159',
   confirmation: true,
-  dateOfConfirmation: '2021-07-01',
+  dateOfConfirmation: new Date().toISOString().substring(0, 10),
   entriesConfirmed: 2,
   inviteViewed: true,
   isMessageRead: false,
