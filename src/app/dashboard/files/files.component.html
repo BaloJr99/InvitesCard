@@ -15,7 +15,7 @@
         <label for="event-select" i18n>Seleccione un evento</label>
         <select id="event-select" class="form-control" (change)="searchImages()">
           <option value="" i18n>Seleccione...</option>
-          <option *ngFor="let event of events" value="{{ event.id }}">{{ event.nameOfEvent }}</option>
+          <option *ngFor="let event of events" [value]="event.id">{{ event.nameOfEvent }}</option>
         </select>
       </div>
     </div>

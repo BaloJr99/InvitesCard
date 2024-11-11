@@ -206,7 +206,6 @@ export class FilesComponent implements OnInit {
   onPhotosChange(event: Event): void {
     const element = event.currentTarget as HTMLInputElement;
     const errorFiles: string[] = [];
-
     if (element.files) {
       Array.from(element.files).forEach((file) => {
         if (file.size > 2097152) {

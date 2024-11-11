@@ -53,6 +53,7 @@ describe('Table Component (Integrated Test)', () => {
   });
 
   it('should call openModal when delete button is clicked', () => {
+    commonModalServiceSpy.open.and.returnValue(of(CommonModalResponse.Confirm));
     fixture.componentInstance.invites = {
       key: fullInvitesGroupsMock.inviteGroup,
       value: [
@@ -71,7 +72,6 @@ describe('Table Component (Integrated Test)', () => {
 
     deleteButton.nativeElement.click();
     fixture.detectChanges();
-
     expect(commonModalServiceSpy.open)
       .withContext(
         'open method from CommonModalService should have been called'
