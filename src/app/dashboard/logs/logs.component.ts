@@ -54,7 +54,6 @@ export class LogsComponent implements OnInit, AfterViewInit, OnDestroy {
       },
     ],
   };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dtTrigger: Subject<ADTSettings> = new Subject<ADTSettings>();
 
   constructor(
