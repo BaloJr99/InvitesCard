@@ -5,10 +5,8 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
   ViewChildren,
 } from '@angular/core';
 import {
@@ -38,11 +36,22 @@ import { RoleActionEvent } from 'src/app/core/models/enum';
   templateUrl: './user-modal.component.html',
   styleUrls: ['./user-modal.component.css'],
 })
-export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
+export class UserModalComponent implements OnInit, AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  @Input() userAction!: IUserAction;
+  @Input() set userActionValue(value: IUserAction | undefined) {
+    if (value) {
+      const user: IUpsertUser = value.user;
+      this.createUserForm.patchValue({
+        ...user,
+        controlIsValid: true,
+      });
+
+      this.editedUser = user;
+    }
+  }
+  
   @Output() updateUsers: EventEmitter<IUserAction> = new EventEmitter();
   @Output() selectRole: EventEmitter<ISavedUserRole> = new EventEmitter();
 
@@ -125,18 +134,6 @@ export class UserModalComponent implements OnInit, AfterViewInit, OnChanges {
           this.loaderService.setLoading(false);
         });
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['userAction'] && changes['userAction'].currentValue) {
-      const user: IUpsertUser = changes['userAction'].currentValue.user;
-      this.createUserForm.patchValue({
-        ...user,
-        controlIsValid: true,
-      });
-
-      this.editedUser = user;
-    }
   }
 
   saveUser() {

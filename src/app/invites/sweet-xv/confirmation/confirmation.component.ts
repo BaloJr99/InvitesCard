@@ -4,8 +4,6 @@ import {
   ViewChildren,
   ElementRef,
   Input,
-  OnChanges,
-  SimpleChanges,
   EventEmitter,
   Output,
 } from '@angular/core';
@@ -30,19 +28,29 @@ import { EventType } from 'src/app/core/models/enum';
   templateUrl: './confirmation.component.html',
   styleUrls: ['./confirmation.component.css'],
 })
-export class ConfirmationComponent implements AfterViewInit, OnChanges {
+export class ConfirmationComponent implements AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
-  @Input() invite!: ISweetXvUserInvite;
+
+  invite: ISweetXvUserInvite = {} as ISweetXvUserInvite;
+  @Input() set inviteValue(value: ISweetXvUserInvite) {
+    const { entriesNumber } = value;
+    this.numberOfEntries.next(
+      Array.from({ length: entriesNumber }, (k, j) => j + 1).sort(
+        (a, b) => b - a
+      )
+    );
+  }
+
+  blockConfirmationForm = false;
   @Input() set deadlineMet(value: boolean) {
     this.blockConfirmationForm = value;
     if (value === true) {
       this.confirmationForm.disable();
     }
   }
-  @Output() newInvite = new EventEmitter<FormGroup>();
 
-  blockConfirmationForm = false;
+  @Output() newInvite = new EventEmitter<FormGroup>();
 
   private numberOfEntries = new BehaviorSubject<number[]>([]);
   numberOfEntries$ = this.numberOfEntries.asObservable();
@@ -77,17 +85,6 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['invite']) {
-      const { entriesNumber } = changes['invite'].currentValue as IConfirmation;
-      this.numberOfEntries.next(
-        Array.from({ length: entriesNumber }, (k, j) => j + 1).sort(
-          (a, b) => b - a
-        )
-      );
-    }
-  }
-
   saveInformation(): void {
     if (this.confirmationForm.valid && this.confirmationForm.dirty) {
       const assist =
@@ -96,7 +93,9 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
         this.confirmationForm.controls['entriesConfirmed'].value
       );
       this.confirmationForm.get('confirmation')?.setValue(assist);
-      this.confirmationForm.get('entriesConfirmed')?.setValue(isNaN(entriesConfirmed) ? 0 : entriesConfirmed);
+      this.confirmationForm
+        .get('entriesConfirmed')
+        ?.setValue(isNaN(entriesConfirmed) ? 0 : entriesConfirmed);
       this.confirmationForm.addControl(
         'dateOfConfirmation',
         new FormControl(new Date().toISOString())
@@ -153,7 +152,9 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
       ...controlBlurs
     ).subscribe(() => {
       if (this.confirmationForm.controls['confirmation'].value === 'true') {
-        const select = document.getElementById('my-select') as HTMLSelectElement;
+        const select = document.getElementById(
+          'my-select'
+        ) as HTMLSelectElement;
         select.removeAttribute('disabled');
         if (this.confirmationForm.get('entriesConfirmed')?.value === '') {
           this.confirmationForm.patchValue({
@@ -167,7 +168,9 @@ export class ConfirmationComponent implements AfterViewInit, OnChanges {
       } else if (
         this.confirmationForm.controls['confirmation'].value === 'false'
       ) {
-        const select = document.getElementById('my-select') as HTMLSelectElement;
+        const select = document.getElementById(
+          'my-select'
+        ) as HTMLSelectElement;
         select.setAttribute('disabled', '');
         this.confirmationForm.patchValue({
           entriesConfirmed: '',

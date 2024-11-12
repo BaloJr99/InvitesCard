@@ -20,7 +20,7 @@
           <p>{{ dayOfTheWeek.toLocaleUpperCase() }}, {{ shortDate.toLocaleUpperCase() }}</p>
           <hr>
         </div>
-        <app-countdown [dateOfEvent]="userInvite.dateOfEvent"></app-countdown>
+        <app-countdown [dateOfEventValue]="userInvite.dateOfEvent"></app-countdown>
       </div>
     </div>
   </div>
@@ -118,6 +118,6 @@
     </div>
   </div>
   <div class="invitesConfirmation invite-section" id="scrollToForm">
-    <app-confirmation [invite]="userInvite" [deadlineMet]="deadlineMet"></app-confirmation>
+    <app-confirmation [inviteValue]="userInvite" [deadlineMet]="deadlineMet"></app-confirmation>
   </div>
 </div>

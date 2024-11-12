@@ -4,10 +4,8 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
   ViewChildren,
 } from '@angular/core';
 import {
@@ -33,11 +31,23 @@ import { InvitesService } from 'src/app/core/services/invites.service';
   templateUrl: './invite-modal.component.html',
   styleUrls: ['./invite-modal.component.css'],
 })
-export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
+export class InviteModalComponent implements OnInit, AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  @Input() inviteAction!: IInviteAction;
+  @Input() set inviteActionValue(inviteAction: IInviteAction) {
+    if (inviteAction) {
+      this.createInviteForm.patchValue({
+        id: inviteAction.invite.id,
+        family: inviteAction.invite.family,
+        entriesNumber: inviteAction.invite.entriesNumber,
+        phoneNumber: inviteAction.invite.phoneNumber,
+        inviteGroupId: inviteAction.invite.inviteGroupId,
+        kidsAllowed: inviteAction.invite.kidsAllowed,
+        eventId: inviteAction.invite.eventId,
+      });
+    }
+  }
   @Input() eventId!: string;
   @Input() inviteGroups!: IInviteGroups[];
   @Output() updateInvites: EventEmitter<IInviteAction> = new EventEmitter();
@@ -96,18 +106,6 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['inviteAction'] && changes['inviteAction'].currentValue) {
-      if (!changes['inviteAction'].currentValue.delete) {
-        const invite: IUpsertInvite =
-          changes['inviteAction'].currentValue.invite;
-        this.createInviteForm.patchValue({
-          ...invite,
-        });
-      }
-    }
-  }
-
   saveInvite() {
     if (this.createInviteForm.valid && this.createInviteForm.dirty) {
       if (
@@ -133,7 +131,6 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
       .subscribe({
         next: (response: IMessageResponse) => {
           this.updateInvites.emit({
-            ...this.inviteAction,
             invite: {
               ...this.formatInvite(),
               id: response.id,
@@ -159,7 +156,6 @@ export class InviteModalComponent implements OnInit, AfterViewInit, OnChanges {
       .subscribe({
         next: (response: IMessageResponse) => {
           this.updateInvites.emit({
-            ...this.inviteAction,
             invite: this.formatInvite(),
             isNew: false,
           });

@@ -23,12 +23,12 @@
 </section>
 
 <app-user-modal 
-  [userAction]="userAction" 
+  [userActionValue]="userAction" 
   (updateUsers)="updateUsers($event)"
   (selectRole)="setSelectedRole($event)">
 </app-user-modal>
 
 <app-user-role 
-  [role]="roleSelected"
+  [roleValue]="roleSelected"
   (updateRoles)="updateSavedInformation($event)">
 </app-user-role>

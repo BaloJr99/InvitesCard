@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { BehaviorSubject, Subscription, interval } from 'rxjs';
 import { ITimer } from 'src/app/core/models/invites';
 
@@ -7,31 +7,28 @@ import { ITimer } from 'src/app/core/models/invites';
   templateUrl: './countdown.component.html',
   styleUrls: ['./countdown.component.css'],
 })
-export class CountdownComponent implements OnChanges {
+export class CountdownComponent {
   time$ = new BehaviorSubject<ITimer>({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
-  @Input() dateOfEvent = '';
+
+  @Input() set dateOfEventValue(value: string) {
+    if (value) {
+      this.subscription = interval(1000).subscribe(() => {
+        this.finishDate = new Date(value.replace('Z', '').replace('T', ' '));
+        this.updateTime();
+      });
+    }
+  }
 
   finishDate: Date = new Date();
 
   eventWasMet = false;
 
   subscription!: Subscription;
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['dateOfEvent'].currentValue) {
-      this.subscription = interval(1000).subscribe(() => {
-        this.finishDate = new Date(
-          this.dateOfEvent.replace('Z', '').replace('T', ' ')
-        );
-        this.updateTime();
-      });
-    }
-  }
 
   updateTime() {
     const now = new Date();
