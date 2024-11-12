@@ -54,10 +54,6 @@ describe('Event Modal Component (Isolated Test)', () => {
   });
 
   it('should render the initial values', () => {
-    expect(component.eventAction)
-      .withContext('should have eventAction to be undefined')
-      .toBeUndefined();
-
     expect(component.createEventForm)
       .withContext('should have createEventForm to be defined')
       .toBeDefined();

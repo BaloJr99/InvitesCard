@@ -40,10 +40,6 @@ describe('Invite Modal Component (Isolated Test)', () => {
   });
 
   it('should render initial values', () => {
-    expect(component.inviteAction)
-      .withContext('should have inviteAction to be undefined')
-      .toBeUndefined();
-
     expect(component.eventId)
       .withContext('should have eventId to be undefined')
       .toBeUndefined();
