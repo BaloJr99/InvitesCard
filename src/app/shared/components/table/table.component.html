@@ -1,4 +1,4 @@
-<table class="table row-border hover text-center" *ngIf="tableConfiguration">
+<table class="table row-border hover text-center" *ngIf="containsData">
   <thead>
     <tr>
       <ng-container *ngFor="let header of tableConfiguration.headers; index as i">
@@ -32,7 +32,7 @@
       </ng-container>
     </tr>
   </tbody>
-  <tfoot *ngIf="tableConfiguration.data.length !== 0">
+  <tfoot>
     <tr class="desktop">
       <td [attr.colspan]="showColSpan" i18n>
         Showing {{ firstRecord }} to {{recordsShowing}} of {{ totalRecords }} records

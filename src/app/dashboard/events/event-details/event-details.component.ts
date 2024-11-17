@@ -443,7 +443,7 @@ export class EventDetailsComponent implements OnInit {
   actionResponse(action: IEmitAction): void {
     const data = action.data as { [key: string]: string };
     if (action.action === ButtonAction.Copy) {
-      this.copyToClipBoard(data['Actions']);
+      this.copyToClipBoard(data[$localize`Acciones`]);
     } else if (action.action === SelectAction.SelectAll) {
       const tableIndex = parseInt(data['tableIndex']);
       const checked = Boolean(JSON.parse(data['checked']));
@@ -457,9 +457,9 @@ export class EventDetailsComponent implements OnInit {
       const inviteGroup = Object.keys(this.invitesGrouped)[tableIndex];
       this.selectInvite(inviteGroup, tableIndex, checked, inviteId);
     } else if (action.action === ButtonAction.Edit) {
-      this.openEditModal(data['Actions']);
+      this.openEditModal(data[$localize`Acciones`]);
     } else if (action.action === ButtonAction.Delete) {
-      this.showModal(data['Actions']);
+      this.showModal(data[$localize`Acciones`]);
     }
   }
 

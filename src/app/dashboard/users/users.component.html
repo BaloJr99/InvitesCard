@@ -16,7 +16,9 @@
   <div class="col-12">
     <div class="table-styling">
       <div class="inner">
-        <table datatable class="row-border hover" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"></table>
+        <app-table (actionResponse)="actionResponse($event)"
+                   [tableConfigurationValue]="table">
+        </app-table>
       </div>
     </div>
   </div>

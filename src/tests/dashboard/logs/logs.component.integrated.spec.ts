@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { DataTablesModule } from 'angular-datatables';
 import { of } from 'rxjs';
 import { LoggerService } from 'src/app/core/services/logger.service';
 import { LogsModalComponent } from 'src/app/dashboard/logs/logs-modal/logs-modal.component';
@@ -15,7 +14,6 @@ describe('Logs Component (Integrated Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [LogsComponent, LogsModalComponent],
-      imports: [DataTablesModule],
       providers: [{ provide: LoggerService, useValue: loggerSpy }],
     }).compileComponents();
 

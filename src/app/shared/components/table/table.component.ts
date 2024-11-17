@@ -22,9 +22,11 @@ export class TableComponent {
 
   numberOfPages = 0;
   pageNumberArray: IPageButtons[] = [];
+  containsData = false;
 
   @Input() set tableConfigurationValue(value: ITable | undefined) {
-    if (value) {
+    if (value && Object.keys(value).length > 0) {
+      this.containsData = true;
       this.tableConfiguration = value;
       this.numberOfPages = Math.ceil(value.data.length / this.step);
       this.totalRecords = this.tableConfiguration.data.length;

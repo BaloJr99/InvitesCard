@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { RouterModule, Routes } from '@angular/router';
-import { DataTablesModule } from 'angular-datatables';
 import { EventsService } from 'src/app/core/services/events.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { UsersService } from 'src/app/core/services/users.service';
@@ -19,7 +18,7 @@ const routes: Routes = [
 
 @NgModule({
   providers: [EventsService, SettingsService, UsersService, RolesService],
-  imports: [DataTablesModule, SharedModule, RouterModule.forChild(routes)],
+  imports: [SharedModule, RouterModule.forChild(routes)],
   declarations: [UsersComponent, UserModalComponent, UserRoleComponent],
 })
 export class UsersModule {}
