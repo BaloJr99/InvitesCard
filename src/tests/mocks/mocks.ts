@@ -10,6 +10,7 @@ import {
   IUserProfilePhoto,
 } from 'src/app/core/models/users';
 import {
+  ButtonAction,
   CommonModalType,
   EventType,
   ImageUsage,
@@ -27,6 +28,7 @@ import {
   IMessageResponse,
   INotification,
   ISpinner,
+  ITable,
 } from 'src/app/core/models/common';
 import {
   IBulkInvite,
@@ -421,3 +423,47 @@ export const invalidFileMock: File = new File(
   'test-file.csv',
   { type: 'text/plain' }
 );
+
+export const tableDataMock: ITable = {
+  data: [
+    {
+      Name: 'Test Name',
+    },
+    {
+      Name: 'Test Name 2',
+    },
+  ],
+  headers: ['Name'],
+  tableIndex: 0,
+};
+
+export const tableDataWithButtonsMock: ITable = {
+  ...tableDataMock,
+  headers: [...tableDataMock.headers, 'Actions'],
+  buttons: [
+    {
+      accessibleText: 'Test Button',
+      action: ButtonAction.Copy,
+      innerHtml: 'Test',
+    },
+  ],
+};
+
+export const tableDataWithDisabledButtonsMock: ITable = {
+  ...tableDataMock,
+  headers: [...tableDataMock.headers, 'Actions'],
+  buttons: [
+    {
+      accessibleText: 'Test Button',
+      action: ButtonAction.Copy,
+      innerHtml: 'Test',
+      isDisabled: true,
+    },
+  ],
+};
+
+export const tableDataWithCheckboxMock: ITable = {
+  ...tableDataMock,
+  headers: ['', ...tableDataMock.headers],
+  useCheckbox: true,
+};

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { RouterModule, Routes } from '@angular/router';
 import { EventDetailsComponent } from './event-details.component';
-import { TableComponent } from './table/table.component';
+import { TableComponent } from '../../../shared/components/table/table.component';
 import { DataTablesModule } from 'angular-datatables';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
 import { InvitesService } from 'src/app/core/services/invites.service';

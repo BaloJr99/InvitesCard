@@ -1,11 +1,13 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { INotification } from 'src/app/core/models/common';
 import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
 import { EventsService } from 'src/app/core/services/events.service';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
+import { InvitesService } from 'src/app/core/services/invites.service';
 import { EventDetailsComponent } from 'src/app/dashboard/events/event-details/event-details.component';
 import { newInviteMock } from 'src/tests/mocks/mocks';
 
@@ -29,6 +31,8 @@ describe('Event Details Component (Shallow Test)', () => {
         notifications$: notificationsDataSubject.asObservable(),
       }
     );
+    const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
+    const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     TestBed.configureTestingModule({
       declarations: [EventDetailsComponent],
@@ -52,6 +56,8 @@ describe('Event Details Component (Shallow Test)', () => {
         { provide: InviteGroupsService, useValue: inviteGroupSpy },
         { provide: EventsService, useValue: eventSpy },
         { provide: CommonInvitesService, useValue: commonInvitesSpy },
+        { provide: InvitesService, useValue: invitesSpy },
+        { provide: ToastrService, useValue: toastrSpy },
       ],
     }).compileComponents();
   }));
@@ -116,9 +122,9 @@ describe('Event Details Component (Shallow Test)', () => {
       .withContext('Second button should be "New Invite"')
       .toContain('Nueva invitación');
 
-      expect(buttons[1].disabled)
-        .withContext('Second button should be enabled')
-        .toBeFalse();
+    expect(buttons[1].disabled)
+      .withContext('Second button should be enabled')
+      .toBeFalse();
   });
 
   it('should have import invites and new invite buttons disabled if deadline is met', () => {
