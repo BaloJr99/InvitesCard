@@ -34,7 +34,7 @@ describe('Logs Component (Shallow Test)', () => {
     const historySection = fixture.debugElement.query(By.css('.history'));
     const card = historySection.query(By.css('.card'));
     const canvas = card.query(By.css('canvas'));
-    const table = historySection.query(By.css('table'));
+    const table = historySection.query(By.css('app-table'));
     const percentageCards = historySection.queryAll(
       By.css('.percentage-history .card')
     );

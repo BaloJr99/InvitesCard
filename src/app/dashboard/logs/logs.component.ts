@@ -125,6 +125,7 @@ export class LogsComponent implements OnInit {
   }
 
   actionResponse(action: IEmitAction): void {
+    console.log('Test')
     const data = action.data as { [key: string]: string };
     if (action.action === ButtonAction.View) {
       const logId = data[$localize`Acciones`];
