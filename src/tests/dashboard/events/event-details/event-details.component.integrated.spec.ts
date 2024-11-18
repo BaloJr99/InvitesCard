@@ -302,7 +302,9 @@ describe('Event Details Component (Integrated Test)', () => {
   it('markCheckbox should set the record beingDeleted to true ', () => {
     markCheckbox(0);
 
-    expect(fixture.componentInstance.selectedIds[fullInvitesGroupsMock.inviteGroup])
+    expect(
+      fixture.componentInstance.selectedIds[fullInvitesGroupsMock.inviteGroup]
+    )
       .withContext('Record should be marked for deletion')
       .toContain(newInviteMock.id);
   });

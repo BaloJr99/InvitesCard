@@ -1,5 +1,5 @@
-import { provideRouter, Router } from '@angular/router';
 import { NavbarComponent } from 'src/app/dashboard/navbar/navbar.component';
+import { notificationsMock } from 'src/tests/mocks/mocks';
 
 describe('Navbar Component (Isolated Test)', () => {
   let component: NavbarComponent;
@@ -44,5 +44,17 @@ describe('Navbar Component (Isolated Test)', () => {
     expect(component.isAdmin)
       .withContext('The isAdmin should be initialized to false')
       .toBeFalse();
+  });
+
+  it('should populate the notifications when the input is set', () => {
+    component.notificationsValue = notificationsMock;
+
+    expect(component.notifications)
+      .withContext('The notifications should be set')
+      .toEqual(notificationsMock);
+
+    expect(component.numberOfNotifications)
+      .withContext('The number of notifications should be set')
+      .toBe(1);
   });
 });
