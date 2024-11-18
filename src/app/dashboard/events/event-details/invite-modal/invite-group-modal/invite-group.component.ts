@@ -4,9 +4,7 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnChanges,
   Output,
-  SimpleChanges,
   ViewChildren,
 } from '@angular/core';
 import { FormBuilder, FormControlName, Validators } from '@angular/forms';
@@ -27,12 +25,28 @@ import { controlIsDuplicated } from 'src/app/shared/utils/validators/controlIsDu
   templateUrl: './invite-group.component.html',
   styleUrls: ['./invite-group.component.css'],
 })
-export class InviteGroupComponent implements AfterViewInit, OnChanges {
+export class InviteGroupComponent implements AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  @Input() eventId: string = '';
-  @Input() inviteGroup: IInviteGroups | undefined = undefined;
+  private eventId: string = '';
+  @Input() set eventIdValue(value: string) {
+    this.eventId = value;
+    this.createInviteGroupForm.patchValue({
+      eventId: this.eventId,
+    });
+  }
+
+  private inviteGroup: IInviteGroups | undefined;
+  @Input() set inviteGroupValue(value: IInviteGroups | undefined) {
+    if (value) {
+      this.inviteGroup = value;
+      this.createInviteGroupForm.patchValue({
+        id: value.id,
+        inviteGroup: value.inviteGroup,
+      });
+    }
+  }
 
   @Output() updateInviteGroups: EventEmitter<IInviteGroupsAction> =
     new EventEmitter();
@@ -68,23 +82,6 @@ export class InviteGroupComponent implements AfterViewInit, OnChanges {
     };
 
     this.genericValidator = new GenericValidator(this.validationMessages);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['inviteGroup'] && changes['inviteGroup'].currentValue) {
-      if (this.inviteGroup) {
-        this.createInviteGroupForm.patchValue({
-          id: this.inviteGroup.id,
-          inviteGroup: this.inviteGroup.inviteGroup,
-        });
-      }
-    }
-
-    if (changes['eventId'] && changes['eventId'].currentValue) {
-      this.createInviteGroupForm.patchValue({
-        eventId: this.eventId,
-      });
-    }
   }
 
   ngAfterViewInit(): void {

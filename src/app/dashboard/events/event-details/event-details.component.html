@@ -46,19 +46,28 @@
     <input type="text" class="form-control" name="filterByFamily" id="filterByFamily" placeholder="Buscar familia" (keyup)="filter($event, 'family')"/>
   </div>
   <div class="col-12">
-    <div class="accordion" id="inviteAccordion" *ngFor="let inviteGroup of invitesGrouped | keyvalue">
-      <app-table 
-        [eventInformation]="copyEventInformation"
-        [invites]="inviteGroup" 
-        (setInviteAction)="fillInviteAction($event)" 
-        (removeInvites)="removeInvites($event)"
-        [isDeadlineMet]="isDeadlineMet"></app-table>
+    <div class="accordion" id="inviteAccordion" *ngFor="let inviteGroup of invitesGrouped | keyvalue; index as i">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#' + inviteGroup.key.replaceAll(' ', '')" aria-expanded="true" aria-controls="collapseOne">
+            {{ inviteGroup.key }}
+          </button>
+        </h2>
+        <div [id]="inviteGroup.key.replaceAll(' ', '')" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <app-table (actionResponse)="actionResponse($event)"
+                       [tableConfigurationValue]="tables[i]">
+            </app-table>
+            <button class="btn btn-danger mt-3" (click)="bulkDeleteInvites(inviteGroup.key)" [disabled]="!allowDeleteInvites(inviteGroup.key)" i18n>Eliminar Invitaciones</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 <app-invite-modal 
   [inviteGroups]="inviteGroups" 
-  [inviteAction]="inviteAction"  
+  [inviteActionValue]="inviteAction"  
   [eventId]="eventId"
   (updateInvites)="updateInvites($event)"
   (updateInviteGroups)="updateInviteGroups($event)">

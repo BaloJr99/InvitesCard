@@ -90,7 +90,8 @@ export class InvitesImportModalComponent implements OnInit {
     this.invites = [];
 
     rows.map((row) => {
-      progress = progress + incrementValue;
+      progress = Math.ceil(progress + incrementValue);
+      if (progress > 100) progress = 100;
       progressBar.style.width = progress + '%';
       progressBar.innerText = progress + '%';
       const columns = row.split(',');

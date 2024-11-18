@@ -5,10 +5,8 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
   ViewChildren,
 } from '@angular/core';
 import {
@@ -38,11 +36,27 @@ import {
   templateUrl: './event-modal.component.html',
   styleUrls: ['./event-modal.component.css'],
 })
-export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
+export class EventModalComponent implements OnInit, AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  @Input() eventAction: IEventAction | undefined = undefined;
+  private eventAction: IEventAction | undefined;
+  @Input() set eventActionValue(value: IEventAction | undefined) {
+    if (value) {
+      this.eventAction = value;
+
+      this.createEventForm.patchValue({
+        ...value.event,
+        dateOfEvent: value.event.dateOfEvent.split('T')[0],
+        maxDateOfConfirmation: value.event.maxDateOfConfirmation.split('T')[0],
+      });
+
+      if (!value.isNew) {
+        this.originalEventType = value.event.typeOfEvent;
+      }
+    }
+  }
+
   @Output() updateEvents: EventEmitter<IEventAction> = new EventEmitter();
 
   createEventForm: FormGroup = this.fb.group({
@@ -119,22 +133,6 @@ export class EventModalComponent implements OnInit, AfterViewInit, OnChanges {
         })
         .add(() => this.loaderService.setLoading(false));
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['eventAction'] && changes['eventAction'].currentValue) {
-      const eventAction: IEventAction = changes['eventAction'].currentValue;
-      this.createEventForm.patchValue({
-        ...eventAction.event,
-        dateOfEvent: eventAction.event.dateOfEvent.split('T')[0],
-        maxDateOfConfirmation:
-          eventAction.event.maxDateOfConfirmation.split('T')[0],
-      });
-
-      if (!eventAction.isNew) {
-        this.originalEventType = eventAction.event.typeOfEvent;
-      }
-    }
   }
 
   saveEvent() {

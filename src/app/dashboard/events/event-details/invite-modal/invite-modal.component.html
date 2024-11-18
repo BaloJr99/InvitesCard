@@ -62,8 +62,8 @@
         <div class="modal-body">
           <ng-container>
             <app-invite-group 
-              [eventId]="eventId" 
-              [inviteGroup]="groupSelected" 
+              [eventIdValue]="eventId" 
+              [inviteGroupValue]="groupSelected" 
               (isCreatingNewFormGroup)="inviteGroupAction(false, $event)"
               (updateInviteGroups)="updateCurrentInviteGroup($event)">
             </app-invite-group>

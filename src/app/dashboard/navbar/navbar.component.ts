@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NavigationStart, Router, Scroll } from '@angular/router';
 import { INotification } from 'src/app/core/models/common';
 import { Roles } from 'src/app/core/models/enum';
@@ -17,12 +11,21 @@ import { TokenStorageService } from 'src/app/core/services/token-storage.service
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
-export class NavbarComponent implements OnInit, OnChanges {
+export class NavbarComponent implements OnInit {
   email = '';
   username = '';
   profilePhoto = '';
 
-  @Input() notifications: INotification[] = [];
+  notifications: INotification[] = [];
+  @Input() set notificationsValue(value: INotification[]) {
+    if (value.length > 0) {
+      this.notifications = value;
+      this.numberOfNotifications = value.reduce(
+        (sum, { isMessageRead }) => sum + (isMessageRead ? 0 : 1),
+        0
+      );
+    }
+  }
 
   numberOfNotifications = 0;
   route = '';
@@ -55,17 +58,6 @@ export class NavbarComponent implements OnInit, OnChanges {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['notifications'].currentValue.length > 0) {
-      const notifications: INotification[] =
-        changes['notifications'].currentValue;
-      this.numberOfNotifications = notifications.reduce(
-        (sum, { isMessageRead }) => sum + (isMessageRead ? 0 : 1),
-        0
-      );
-    }
-  }
-
   toggleMenu(): void {
     const toggleNotifications = document.querySelector('.notificationMessages');
     if (
@@ -92,7 +84,7 @@ export class NavbarComponent implements OnInit, OnChanges {
       toggleNotifications.scrollTo({
         top: 0,
         behavior: 'smooth',
-      })
+      });
       toggleNotifications.classList.toggle('active');
     }
   }

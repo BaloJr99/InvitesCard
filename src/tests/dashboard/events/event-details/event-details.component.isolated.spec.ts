@@ -8,18 +8,24 @@ describe('Event Details Component (Isolated Test)', () => {
     const activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', ['']);
     const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
     const inviteGroupsSpy = jasmine.createSpyObj('InviteGroupsService', ['']);
+    const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
     const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
     const commonInvitesSpy = jasmine.createSpyObj('CommonInvitesService', ['']);
     const socketSpy = jasmine.createSpyObj('SocketService', ['']);
+    const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
+    const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['']);
     const localeId = 'en-US';
 
     component = new EventDetailsComponent(
       activatedRouteSpy,
       loaderSpy,
       inviteGroupsSpy,
+      invitesSpy,
       eventsSpy,
       commonInvitesSpy,
       socketSpy,
+      toastrSpy,
+      commonModalSpy,
       localeId
     );
   });

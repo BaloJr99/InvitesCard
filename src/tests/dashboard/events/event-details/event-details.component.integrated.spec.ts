@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
-import { DataTablesModule } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
 import { of, Subject } from 'rxjs';
 import { INotification } from 'src/app/core/models/common';
@@ -16,7 +15,7 @@ import { EventCardComponent } from 'src/app/dashboard/events/event-details/event
 import { EventDetailsComponent } from 'src/app/dashboard/events/event-details/event-details.component';
 import { InviteModalComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-modal.component';
 import { InvitesImportModalComponent } from 'src/app/dashboard/events/event-details/invites-import-modal/invites-import-modal.component';
-import { TableComponent } from 'src/app/dashboard/events/event-details/table/table.component';
+import { TableComponent } from 'src/app/shared/components/table/table.component';
 import {
   confirmedInviteMock,
   eventInformationMock,
@@ -31,6 +30,15 @@ describe('Event Details Component (Integrated Test)', () => {
   let eventsServiceSpy: jasmine.SpyObj<EventsService>;
   let commonInvitesServiceSpy: jasmine.SpyObj<CommonInvitesService>;
   let notificationsDataSubject: Subject<INotification[]>;
+
+  const markCheckbox = (rowIndex: number) => {
+    const table = fixture.debugElement.query(By.css('table'));
+    const checkboxes = table.queryAll(By.css('tbody input[type="checkbox"]'));
+    const checkbox = checkboxes[rowIndex];
+
+    checkbox.nativeElement.click();
+    fixture.detectChanges();
+  };
 
   beforeEach(waitForAsync(() => {
     notificationsDataSubject = new Subject<INotification[]>();
@@ -60,7 +68,7 @@ describe('Event Details Component (Integrated Test)', () => {
         InvitesImportModalComponent,
         InviteModalComponent,
       ],
-      imports: [ReactiveFormsModule, DataTablesModule],
+      imports: [ReactiveFormsModule],
       providers: [
         {
           provide: ActivatedRoute,
@@ -211,7 +219,91 @@ describe('Event Details Component (Integrated Test)', () => {
 
     rows = fixture.debugElement.queryAll(By.css('tbody tr'));
     expect(rows.length)
-      .withContext('Expected to have 1 rows in the table')
+      .withContext('Expected to have 1 row in the table')
       .toBe(1);
+  });
+
+  it('first button should call editInvite', () => {
+    spyOn(fixture.componentInstance, 'openEditModal');
+
+    const table = fixture.debugElement.query(By.css('table'));
+    const rows = table.query(By.css('tbody')).queryAll(By.css('tr'));
+    const buttons = rows[0].queryAll(By.css('button'));
+
+    buttons[0].nativeElement.click();
+
+    expect(fixture.componentInstance.openEditModal)
+      .withContext('Expected to call openEditModal')
+      .toHaveBeenCalled();
+  });
+
+  it('second button should call showModal', () => {
+    spyOn(fixture.componentInstance, 'showModal');
+
+    const table = fixture.debugElement.query(By.css('table'));
+    const rows = table.query(By.css('tbody')).queryAll(By.css('tr'));
+    const buttons = rows[0].queryAll(By.css('button'));
+
+    buttons[1].nativeElement.click();
+
+    expect(fixture.componentInstance.showModal)
+      .withContext('Expected to call showModal')
+      .toHaveBeenCalled();
+  });
+
+  it('third button should call copyToClipBoard', () => {
+    spyOn(fixture.componentInstance, 'copyToClipBoard');
+
+    const table = fixture.debugElement.query(By.css('table'));
+    const rows = table.query(By.css('tbody')).queryAll(By.css('tr'));
+    const buttons = rows[0].queryAll(By.css('button'));
+
+    buttons[2].nativeElement.click();
+
+    expect(fixture.componentInstance.copyToClipBoard)
+      .withContext('Expected to call copyToClipBoard')
+      .toHaveBeenCalled();
+  });
+
+  it(`bulk delete button should be disabled and shouln't call bulkDeleteInvites`, () => {
+    spyOn(fixture.componentInstance, 'bulkDeleteInvites');
+
+    const accordion = fixture.debugElement.query(By.css('.accordion'));
+    const bulkDelete = accordion.query(By.css('.accordion-body > button'));
+
+    expect(bulkDelete.nativeElement.disabled)
+      .withContext('Expected to be disabled')
+      .toBeTrue();
+
+    expect(fixture.componentInstance.bulkDeleteInvites)
+      .withContext('deleteInvites should not be called')
+      .not.toHaveBeenCalled();
+  });
+
+  it(`bulk delete button shouldn't be disabled and should call bulkDeleteInvites`, () => {
+    spyOn(fixture.componentInstance, 'bulkDeleteInvites');
+
+    markCheckbox(0);
+
+    const accordion = fixture.debugElement.query(By.css('.accordion'));
+    const bulkDelete = accordion.query(By.css('.accordion-body > button'));
+
+    bulkDelete.nativeElement.click();
+
+    expect(bulkDelete.nativeElement.disabled)
+      .withContext('Expected to not be disabled')
+      .toBeFalse();
+
+    expect(fixture.componentInstance.bulkDeleteInvites)
+      .withContext('deleteInvites should be called')
+      .toHaveBeenCalled();
+  });
+
+  it('markCheckbox should set the record beingDeleted to true ', () => {
+    markCheckbox(0);
+
+    expect(fixture.componentInstance.selectedIds[fullInvitesGroupsMock.inviteGroup])
+      .withContext('Record should be marked for deletion')
+      .toContain(newInviteMock.id);
   });
 });

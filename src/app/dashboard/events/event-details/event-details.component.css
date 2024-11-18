@@ -56,6 +56,17 @@
   overflow-y: auto;
 }
 
+  .table-accordion .accordion-item {
+    margin: 10px 0px;
+  }
+
+  .table-accordion .accordion-item .accordion-body {
+    padding: 0px;
+    margin: 10px;
+    overflow-x: auto;
+    text-align: end;
+  }
+
 @media screen and (max-width: 575px) {
   .breadcrumb-header .header {
     flex-direction: column;

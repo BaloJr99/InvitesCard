@@ -1,3 +1,4 @@
+import { ITable } from 'src/app/core/models/common';
 import { LogsComponent } from 'src/app/dashboard/logs/logs.component';
 
 describe('Logs Component (Isolated Test)', () => {
@@ -15,6 +16,14 @@ describe('Logs Component (Isolated Test)', () => {
   });
 
   it('should render the initial values', () => {
+    expect(component.logs)
+      .withContext('The logs property should be an empty array')
+      .toEqual([]);
+
+    expect(component.table)
+      .withContext('The table property should be an empty object')
+      .toEqual({} as ITable);
+
     expect(component.logSelected)
       .withContext('The logSelected property should undefined')
       .toBeUndefined();
@@ -30,15 +39,5 @@ describe('Logs Component (Isolated Test)', () => {
     expect(component.groupedByDate)
       .withContext('The groupedByDate property should be an empty object')
       .toEqual({});
-
-    expect(component.dtOptions)
-      .withContext('The dtOptions property should have the expected values')
-      .toBeDefined();
-
-    expect(component.dtTrigger)
-      .withContext('The dtTrigger property should be defined')
-      .toBeDefined();
   });
-
-  // TODO: Add tests for table rendering
 });

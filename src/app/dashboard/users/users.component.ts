@@ -1,16 +1,7 @@
-import {
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { DataTableDirective } from 'angular-datatables';
-import { ADTSettings } from 'angular-datatables/src/models/settings';
-import { Subject } from 'rxjs';
-import { RoleActionEvent } from 'src/app/core/models/enum';
+import { IEmitAction, ITable } from 'src/app/core/models/common';
+import { ButtonAction, RoleActionEvent } from 'src/app/core/models/enum';
 import { IRole, IRoleAction } from 'src/app/core/models/roles';
 import {
   ISavedUserRole,
@@ -27,51 +18,12 @@ import { UsersService } from 'src/app/core/services/users.service';
   styleUrl: './users.component.css',
   encapsulation: ViewEncapsulation.None,
 })
-export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild(DataTableDirective, { static: false })
-  dtElement!: DataTableDirective;
-
-  dtOptions: ADTSettings = {
-    searching: false,
-    destroy: true,
-    language: {
-      lengthMenu: '_MENU_',
-    },
-    columnDefs: [
-      {
-        className: 'text-center',
-        targets: '_all',
-      },
-    ],
-    columns: [
-      { title: $localize`Usuario`, data: 'username' },
-      { title: $localize`Correo`, data: 'email' },
-      { title: $localize`# Pases`, data: 'numEntries' },
-      { title: $localize`# Eventos`, data: 'numEvents' },
-      {
-        title: $localize`Activo`,
-        render(data, type, row) {
-          return `<i class="fa-solid ${
-            row.isActive ? 'fa-circle-check' : 'fa-circle-xmark'
-          }" aria-hidden="true"></i>`;
-        },
-      },
-      {
-        title: $localize`Acciones`,
-        data: 'id',
-        render(data) {
-          return `<button class="btn btn-secondary edit-btn" data-id="${data}" data-bs-toggle="modal" data-bs-target="#usersModal"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></button>
-                  <button class="btn btn-success show-btn" data-id="${data}"><i class="fa-solid fa-user" aria-hidden="true"></i></button>`;
-        },
-      },
-    ],
-  };
-
-  dtTrigger: Subject<ADTSettings> = new Subject<ADTSettings>();
-
+export class UsersComponent implements OnInit {
+  users: IUserEventsInfo[] = [];
   userAction!: IUserAction;
   roleSelected: IRole | undefined = undefined;
   savedUser: IUpsertUser | undefined = undefined;
+  table: ITable = {} as ITable;
 
   constructor(
     private usersService: UsersService,
@@ -86,32 +38,13 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       .getAllUsers()
       .subscribe({
         next: (users) => {
-          this.dtOptions.data = users;
-          this.rerender();
+          this.users = users;
+          this.table = this.getTableConfiguration(users);
         },
       })
       .add(() => {
         this.loaderService.setLoading(false);
       });
-  }
-
-  ngAfterViewInit(): void {
-    this.dtTrigger.next(this.dtOptions);
-
-    // Delegate click event for edit buttons
-    $(document).on('click', '.edit-btn', (event) => {
-      const userId = $(event.currentTarget).data('id');
-      this.editUser(userId);
-    });
-
-    $(document).on('click', '.show-btn', (event) => {
-      const userId = $(event.currentTarget).data('id');
-      this.router.navigate(['/dashboard/profile', userId]);
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
   }
 
   updateUsers(userAction: IUserAction) {
@@ -124,14 +57,13 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
     } as IUserEventsInfo;
 
     if (userAction.isNew) {
-      this.dtOptions.data = this.dtOptions.data?.concat({
+      this.users = this.users.concat({
         ...userEventsInfo,
         numEntries: 0,
         numEvents: 0,
       });
-      this.rerender();
     } else {
-      this.dtOptions.data = this.dtOptions.data?.map((originalUser) =>
+      this.users = this.users.map((originalUser) =>
         originalUser.id === userInfo.id
           ? {
               ...userEventsInfo,
@@ -140,11 +72,12 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
             }
           : originalUser
       );
-      this.rerender();
     }
-    this.dtOptions.data?.sort((a, b) =>
+    this.users.sort((a, b) =>
       a.username.toLowerCase().localeCompare(b.username.toLowerCase())
     );
+
+    this.table = this.getTableConfiguration(this.users);
   }
 
   editUser(userId: string): void {
@@ -159,19 +92,13 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
             },
             isNew: false,
           };
+
+          $('#usersModal').modal('show');
         },
       })
       .add(() => {
         this.loaderService.setLoading(false);
       });
-  }
-
-  rerender(): void {
-    this.dtElement.dtInstance.then((dtInstance) => {
-      dtInstance.destroy();
-    });
-
-    this.dtTrigger.next(this.dtOptions);
   }
 
   setSelectedRole(savedUser: ISavedUserRole): void {
@@ -195,8 +122,92 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
           roles: this.savedUser.roles,
           isActive: this.savedUser.isActive,
         },
-      }
+      };
       $('#usersModal').modal('show');
     }
+  }
+
+  actionResponse(action: IEmitAction): void {
+    const data = action.data as { [key: string]: string };
+    const userId = data[$localize`Acciones`];
+    if (action.action === ButtonAction.Edit) {
+      this.editUser(userId);
+    } else if (action.action === ButtonAction.View) {
+      this.router.navigate(['/dashboard/profile', userId]);
+    }
+  }
+
+  getTableConfiguration(users: IUserEventsInfo[]): ITable {
+    const headers = this.getHeaders();
+
+    return {
+      headers: headers,
+      data: users.map((user) => {
+        return this.getUserRow(user, headers);
+      }),
+      buttons: [
+        {
+          isDisabled: false,
+          accessibleText: $localize`Editar usuario`,
+          action: ButtonAction.Edit,
+          innerHtml: '<i class="fa-solid fa-pencil" aria-hidden="true"></i>',
+          styles: 'background-color: #FFC107;',
+        },
+        {
+          isDisabled: false,
+          accessibleText: $localize`Ver log`,
+          action: ButtonAction.View,
+          innerHtml: '<i class="fa-solid fa-eye" aria-hidden="true"></i>',
+          styles: 'background-color: #ADB5BD;',
+        },
+      ],
+      useCheckbox: false,
+      tableIndex: 0,
+    };
+  }
+
+  getHeaders(): string[] {
+    return [
+      $localize`Usuario`,
+      $localize`Correo`,
+      $localize`# Pases`,
+      $localize`# Eventos`,
+      $localize`Activo`,
+      $localize`Acciones`,
+    ];
+  }
+
+  getUserRow(
+    user: IUserEventsInfo,
+    headers: string[]
+  ): { [key: string]: string } {
+    const row: { [key: string]: string } = {};
+
+    headers.forEach((header) => {
+      switch (header) {
+        case $localize`Usuario`:
+          row[header] = user.username;
+          break;
+        case $localize`Correo`:
+          row[header] = user.email;
+          break;
+        case $localize`# Pases`:
+          row[header] = user.numEntries.toString();
+          break;
+        case $localize`# Eventos`:
+          row[header] = user.numEvents.toString();
+          break;
+        case $localize`Activo`:
+          row[header] = user.isActive
+            ? '<i class="fa-solid fa-circle-check" aria-hidden="true"></i>'
+            : '<i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>';
+          break;
+        default:
+          row[header] = user.id;
+          break;
+      }
+    });
+
+    return row;
   }
 }

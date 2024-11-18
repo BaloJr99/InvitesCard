@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { IUpsertInvite } from './invites';
 import { IInviteGroups } from './inviteGroups';
-import { CommonModalType } from './enum';
+import { ButtonAction, CommonModalType, SelectAction } from './enum';
 
 export interface IError {
   hasError: boolean;
@@ -52,4 +52,31 @@ export interface IZodErrors {
   message: string;
   code: string;
   path: string[];
+}
+
+export interface ITable {
+  tableIndex: number;
+  useCheckbox?: boolean;
+  headers: string[];
+  data: { [key: string]: string }[];
+  buttons?: ITableButtons[];
+}
+
+export interface ITableButtons {
+  innerHtml: string;
+  accessibleText: string;
+  action: ButtonAction;
+  isDisabled?: boolean;
+  styles?: string;
+}
+
+export interface IPageButtons {
+  pageNumber: number;
+  accessibleText: string;
+  isPage: boolean;
+}
+
+export interface IEmitAction {
+  action: ButtonAction | SelectAction;
+  data?: { [key: string]: string };
 }

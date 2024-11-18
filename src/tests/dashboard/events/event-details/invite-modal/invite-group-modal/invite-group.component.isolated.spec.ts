@@ -28,14 +28,6 @@ describe('Invite Group Component (Isolated Test)', () => {
   });
 
   it('should render initial values', () => {
-    expect(component.eventId)
-      .withContext('should have eventId as an empty string')
-      .toBe('');
-
-    expect(component.inviteGroup)
-      .withContext('should have inviteGroup to be undefined')
-      .toBeUndefined();
-
     expect(component.createInviteGroupForm)
       .withContext('should have createInviteGroupForm to be defined')
       .toBeDefined();

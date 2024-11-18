@@ -19,16 +19,29 @@ export const enum EventType {
   Xv = 'X',
   Wedding = 'W',
   SaveTheDate = 'S',
-  None = ''
+  None = '',
 }
 
 export const enum CommonModalType {
   Confirm = 'C',
   YesNo = 'YN',
-  None = ''
+  None = '',
 }
 
 export const enum CommonModalResponse {
   Confirm = 1,
   Cancel = 2,
+}
+
+export const enum ButtonAction {
+  Edit = 'edit',
+  Delete = 'delete',
+  Copy = 'copy',
+  View = 'view',
+  None = '',
+}
+
+export const enum SelectAction {
+  SelectAll = 'selectAll',
+  SelectRecord = 'selectRecord',
 }

@@ -11,8 +11,11 @@ import {
 } from 'src/app/core/models/inviteGroups';
 import {
   IBulkResults,
+  IEmitAction,
   IMessage,
+  IMessageResponse,
   INotification,
+  ITable,
 } from 'src/app/core/models/common';
 import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
 import {
@@ -21,7 +24,16 @@ import {
   IInviteAction,
 } from 'src/app/core/models/invites';
 import { EventsService } from 'src/app/core/services/events.service';
-import { EventType } from 'src/app/core/models/enum';
+import {
+  ButtonAction,
+  CommonModalResponse,
+  CommonModalType,
+  EventType,
+  SelectAction,
+} from 'src/app/core/models/enum';
+import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { InvitesService } from 'src/app/core/services/invites.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-event-details',
@@ -33,9 +45,12 @@ export class EventDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private loaderService: LoaderService,
     private inviteGroupsService: InviteGroupsService,
+    private invitesService: InvitesService,
     private eventsService: EventsService,
     private commonInvitesService: CommonInvitesService,
     private socket: SocketService,
+    private toastrService: ToastrService,
+    private commonModalService: CommonModalService,
     @Inject(LOCALE_ID) private localeValue: string
   ) {}
 
@@ -52,6 +67,9 @@ export class EventDetailsComponent implements OnInit {
   originalInvites: IFullInvite[] = [];
   filteredInvites: IFullInvite[] = [];
   inviteGroups: IInviteGroups[] = [];
+  selectedIds: { [key: string]: string[] } = {};
+
+  tables: ITable[] = [];
 
   filterByFamily = '';
   filterByInviteViewed: boolean | undefined = undefined;
@@ -76,10 +94,7 @@ export class EventDetailsComponent implements OnInit {
 
     combineLatest([
       this.inviteGroupsService.getAllInviteGroups(this.eventId),
-      this.eventsService.getEventInformation(this.eventId, [
-        'copyMessage',
-        'test',
-      ]),
+      this.eventsService.getEventInformation(this.eventId, ['copyMessage']),
     ])
       .subscribe({
         next: ([inviteGroups, eventInformation]) => {
@@ -201,7 +216,7 @@ export class EventDetailsComponent implements OnInit {
           });
         }
       });
-      
+
       this.commonInvitesService.updateNotifications(notifications, messages);
       this.groupEntries(this.filteredInvites);
     } else if (
@@ -253,6 +268,10 @@ export class EventDetailsComponent implements OnInit {
           (invite) => invite.inviteGroupId === inviteGroup.id
         );
       }
+    });
+
+    this.tables = Object.keys(this.invitesGrouped).map((key, index) => {
+      return this.getTableConfiguration(this.invitesGrouped[key], index, key);
     });
   }
 
@@ -351,7 +370,7 @@ export class EventDetailsComponent implements OnInit {
       this.inviteGroups.sort((a, b) =>
         a.inviteGroup.toLowerCase().localeCompare(b.inviteGroup.toLowerCase())
       );
-    }); 
+    });
 
     bulkResults.invitesGenerated.forEach((invite) => {
       this.originalInvites = this.originalInvites.concat({
@@ -419,5 +438,283 @@ export class EventDetailsComponent implements OnInit {
 
     this.filteredInvites = invitesThatMatch;
     this.buildInvitesDashboard();
+  }
+
+  actionResponse(action: IEmitAction): void {
+    const data = action.data as { [key: string]: string };
+    if (action.action === ButtonAction.Copy) {
+      this.copyToClipBoard(data[$localize`Acciones`]);
+    } else if (action.action === SelectAction.SelectAll) {
+      const tableIndex = parseInt(data['tableIndex']);
+      const checked = Boolean(JSON.parse(data['checked']));
+      const inviteGroup = Object.keys(this.invitesGrouped)[tableIndex];
+      this.selectAll(inviteGroup, tableIndex, checked);
+    } else if (action.action === SelectAction.SelectRecord) {
+      const tableIndex = parseInt(data['tableIndex']);
+      const rowIndex = parseInt(data['rowIndex']);
+      const checked = Boolean(JSON.parse(data['checked']));
+      const inviteId = this.tables[tableIndex].data[rowIndex][''];
+      const inviteGroup = Object.keys(this.invitesGrouped)[tableIndex];
+      this.selectInvite(inviteGroup, tableIndex, checked, inviteId);
+    } else if (action.action === ButtonAction.Edit) {
+      this.openEditModal(data[$localize`Acciones`]);
+    } else if (action.action === ButtonAction.Delete) {
+      this.showModal(data[$localize`Acciones`]);
+    }
+  }
+
+  getTableConfiguration(
+    invitesGroup: IFullInvite[],
+    tableIndex: number,
+    groupIndex: string
+  ): ITable {
+    const headers = this.getHeaders();
+
+    return {
+      headers: headers,
+      data: invitesGroup.map((invite) => {
+        return this.getInviteRow(invite, headers, groupIndex);
+      }),
+      buttons: [
+        {
+          isDisabled: this.isDeadlineMet,
+          accessibleText: $localize`Editar invitación`,
+          action: ButtonAction.Edit,
+          innerHtml: '<i class="fa-solid fa-pencil" aria-hidden="true"></i>',
+          styles: 'background-color: #FFC107;',
+        },
+        {
+          isDisabled: this.isDeadlineMet,
+          accessibleText: $localize`Eliminar invitación`,
+          action: ButtonAction.Delete,
+          innerHtml: '<i class="fa-solid fa-trash" aria-hidden="true"></i>',
+          styles: 'background-color: #DC3545; color: #FFFFFF;',
+        },
+        {
+          isDisabled: false,
+          accessibleText: $localize`Copiar invitación`,
+          action: ButtonAction.Copy,
+          innerHtml: '<i class="fa-solid fa-copy" aria-hidden="true"></i>',
+          styles: 'background-color: #198754; color: #FFFFFF;',
+        },
+      ],
+      useCheckbox: true,
+      tableIndex,
+    };
+  }
+
+  getHeaders(): string[] {
+    if (this.copyEventInformation.typeOfEvent === EventType.Xv) {
+      return [
+        '',
+        $localize`Familia`,
+        $localize`Numero de pases`,
+        $localize`Vista`,
+        $localize`Acciones`,
+      ];
+    }
+
+    return [
+      '',
+      $localize`Familia`,
+      $localize`Necesita Hotel`,
+      $localize`Vista`,
+      $localize`Acciones`,
+    ];
+  }
+
+  getInviteRow(
+    invite: IFullInvite,
+    headers: string[],
+    groupIndex: string
+  ): { [key: string]: string } {
+    const row: { [key: string]: string } = {};
+
+    headers.forEach((header) => {
+      switch (header) {
+        case $localize`Familia`:
+          row[header] = invite.family;
+          break;
+        case $localize`Numero de pases`:
+          row[header] =
+            invite.entriesConfirmed === null ||
+            invite.entriesConfirmed === undefined
+              ? '0'
+              : `${invite.entriesConfirmed} / ${invite.entriesNumber}`;
+          break;
+        case $localize`Vista`:
+          row[header] = invite.inviteViewed
+            ? '<i class="fa-solid fa-eye" aria-hidden="true"></i>'
+            : '';
+          break;
+        case $localize`Necesita Hotel`:
+          if (invite.needsAccomodation === false) {
+            row[header] =
+              '<i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>';
+            break;
+          } else if (invite.needsAccomodation === true) {
+            row[header] =
+              '<i class="fa-solid fa-circle-check" aria-hidden="true"></i>';
+            break;
+          } else {
+            row[header] = '';
+            break;
+          }
+        default:
+          row[header] = invite.id;
+          break;
+      }
+    });
+
+    if (!this.selectedIds[groupIndex]) {
+      row['beingDeleted'] = 'false';
+    } else {
+      row['beingDeleted'] = this.selectedIds[groupIndex].includes(invite.id)
+        ? 'true'
+        : 'false';
+    }
+
+    return row;
+  }
+
+  copyToClipBoard(id: string): void {
+    const url = `${window.location.origin}/invites/${id}`;
+
+    const inviteFound = this.originalInvites.find(
+      (f) => f.id === id
+    ) as IFullInvite;
+
+    const settings = JSON.parse(this.copyEventInformation.settings);
+
+    if (!settings.copyMessage) {
+      navigator.clipboard.writeText(url);
+    } else {
+      let message = settings.copyMessage;
+
+      if (message.includes('[family]')) {
+        message = message.replace('[family]', inviteFound.family);
+      }
+
+      if (message.includes('[invite_url]')) {
+        message = message.replace('[invite_url]', url);
+      }
+
+      navigator.clipboard.writeText(message.trim());
+    }
+  }
+
+  openEditModal(id: string): void {
+    const inviteToEdit = this.originalInvites.find(
+      (invite) => invite.id === id
+    ) as IFullInvite;
+
+    this.inviteAction = {
+      invite: {
+        ...inviteToEdit,
+      },
+      isNew: false,
+    };
+
+    $('#inviteModal').modal('show');
+  }
+
+  showModal(id: string): void {
+    const inviteFound = this.originalInvites.find(
+      (original) => original.id === id
+    ) as IFullInvite;
+
+    this.commonModalService
+      .open({
+        modalTitle: $localize`Eliminar invitación`,
+        modalBody: $localize`¿Estás seguro de eliminar la invitación de ${inviteFound.family}?`,
+        modalType: CommonModalType.Confirm,
+      })
+      .subscribe((response) => {
+        if (response === CommonModalResponse.Confirm) {
+          this.loaderService.setLoading(true, $localize`Eliminando invitación`);
+          this.invitesService
+            .deleteInvite(inviteFound.id)
+            .subscribe({
+              next: (response: IMessageResponse) => {
+                this.removeInvites([inviteFound.id]);
+                this.toastrService.success(response.message);
+              },
+            })
+            .add(() => {
+              this.loaderService.setLoading(false);
+            });
+        }
+      });
+  }
+
+  selectAll(groupIndex: string, tableIndex: number, checked: boolean): void {
+    if (checked) {
+      this.selectedIds[groupIndex] = this.invitesGrouped[groupIndex].map(
+        (invite) => invite.id
+      );
+    } else {
+      this.selectedIds[groupIndex] = [];
+    }
+
+    this.tables[tableIndex] = this.getTableConfiguration(
+      this.invitesGrouped[groupIndex],
+      tableIndex,
+      groupIndex
+    );
+  }
+
+  selectInvite(
+    groupIndex: string,
+    tableIndex: number,
+    checked: boolean,
+    inviteId: string
+  ): void {
+    if (checked) {
+      const inviteFound = this.invitesGrouped[groupIndex].find(
+        (invite) => invite.id === inviteId
+      ) as IFullInvite;
+
+      if (!this.selectedIds[groupIndex]) {
+        this.selectedIds[groupIndex] = [inviteFound.id];
+      } else {
+        this.selectedIds[groupIndex] = [
+          ...this.selectedIds[groupIndex],
+          inviteFound.id,
+        ];
+      }
+    } else {
+      this.selectedIds[groupIndex] = [
+        ...this.selectedIds[groupIndex].filter((id) => id !== inviteId),
+      ];
+    }
+
+    this.tables[tableIndex] = this.getTableConfiguration(
+      this.invitesGrouped[groupIndex],
+      tableIndex,
+      groupIndex
+    );
+  }
+
+  allowDeleteInvites(groupIndex: string): boolean {
+    if (!this.selectedIds[groupIndex]) {
+      return false;
+    }
+    return this.invitesGrouped[groupIndex].some((invite) =>
+      this.selectedIds[groupIndex].includes(invite.id)
+    );
+  }
+
+  bulkDeleteInvites(groupIndex: string): void {
+    this.loaderService.setLoading(true, $localize`Eliminando invitaciones`);
+
+    this.invitesService
+      .bulkDeleteInvites(this.selectedIds[groupIndex])
+      .subscribe({
+        next: (response: IMessageResponse) => {
+          this.removeInvites(this.selectedIds[groupIndex]);
+          this.toastrService.success(response.message);
+        },
+      })
+      .add(() => this.loaderService.setLoading(false));
   }
 }

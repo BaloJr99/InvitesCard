@@ -4,10 +4,8 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
   ViewChildren,
 } from '@angular/core';
 import { FormBuilder, FormControlName, Validators } from '@angular/forms';
@@ -26,23 +24,35 @@ import { RoleActionEvent } from 'src/app/core/models/enum';
   templateUrl: './user-role.component.html',
   styleUrls: ['./user-role.component.css'],
 })
-export class UserRoleComponent implements OnInit, AfterViewInit, OnChanges {
+export class UserRoleComponent implements OnInit, AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  @Input() role: IRole | undefined = undefined;
+  private role: IRole | undefined;
+  @Input() set roleValue(value: IRole | undefined) {
+    if (value) {
+      this.createRoleForm.patchValue({
+        id: value.id,
+        name: value.name,
+        isActive: value.isActive,
+        controlIsValid: true,
+      });
+    }
+  }
   @Output() updateRoles: EventEmitter<IRoleAction> = new EventEmitter();
   currentRoleAction = RoleActionEvent.None;
 
-  createRoleForm = this.fb.group({
-    id: '',
-    name: ['', Validators.required],
-    isActive: true,
-    controlIsValid: true
-  },
-  {
-    validators: controlIsDuplicated,
-  });
+  createRoleForm = this.fb.group(
+    {
+      id: '',
+      name: ['', Validators.required],
+      isActive: true,
+      controlIsValid: true,
+    },
+    {
+      validators: controlIsDuplicated,
+    }
+  );
 
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -82,19 +92,6 @@ export class UserRoleComponent implements OnInit, AfterViewInit, OnChanges {
         });
       }
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['role'] && changes['role'].currentValue) {
-      if (this.role) {
-        this.createRoleForm.patchValue({
-          id: this.role.id,
-          name: this.role.name,
-          isActive: this.role.isActive,
-          controlIsValid: true,
-        });
-      }
-    }
   }
 
   ngAfterViewInit(): void {
