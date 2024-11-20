@@ -8,6 +8,7 @@ describe('Files Component (Isolated Test)', () => {
     const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
     const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
     const filesSpy = jasmine.createSpyObj('FilesService', ['']);
+    const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
     const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
@@ -15,6 +16,7 @@ describe('Files Component (Isolated Test)', () => {
       loaderSpy,
       eventsSpy,
       filesSpy,
+      fileReaderSpy,
       commonModalSpy,
       new FormBuilder(),
       toastrSpy

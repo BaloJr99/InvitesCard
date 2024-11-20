@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { ImageUsage } from 'src/app/core/models/enum';
 import { EventsService } from 'src/app/core/services/events.service';
+import { FileReaderService } from 'src/app/core/services/fileReader.service';
 import { FilesService } from 'src/app/core/services/files.service';
 import { FilesComponent } from 'src/app/dashboard/files/files.component';
 import {
@@ -44,6 +45,7 @@ describe('Files Component (Shallow Test)', () => {
     ]);
     const filesSpy = jasmine.createSpyObj('FilesService', ['getFilesByEvent']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
+    const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
 
     TestBed.configureTestingModule({
       declarations: [FilesComponent],
@@ -52,6 +54,7 @@ describe('Files Component (Shallow Test)', () => {
         { provide: EventsService, useValue: eventsSpy },
         { provide: FilesService, useValue: filesSpy },
         { provide: ToastrService, useValue: toastrSpy },
+        { provide: FileReaderService, useValue: fileReaderSpy },
       ],
     });
 
@@ -275,26 +278,6 @@ describe('Files Component (Shallow Test)', () => {
 
     expect(fixture.componentInstance.saveFiles)
       .withContext('saveFiles should be called')
-      .toHaveBeenCalled();
-  });
-
-  it('should call getBase64 when saving an uploaded photo', () => {
-    spyOn(fixture.componentInstance, 'getBase64').and.returnValue(of(''));
-    fixture.componentInstance.events = dropdownEventsMock;
-    fixture.detectChanges();
-
-    selectEvent(dropdownEventsMock[0].id);
-
-    uploadFile(new File([''], 'filename', { type: 'image/png' }));
-
-    const uploadForm = fixture.debugElement.query(By.css('.upload-form'));
-    const buttons = uploadForm.queryAll(By.css('button'));
-    const saveButton = buttons[0];
-
-    saveButton.nativeElement.click();
-
-    expect(fixture.componentInstance.getBase64)
-      .withContext('getBase64 should be called')
       .toHaveBeenCalled();
   });
 

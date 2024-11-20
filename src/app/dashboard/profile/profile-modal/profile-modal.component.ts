@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Observable, take } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
+import { FileReaderService } from 'src/app/core/services/fileReader.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { UsersService } from 'src/app/core/services/users.service';
 
@@ -14,11 +14,16 @@ import { UsersService } from 'src/app/core/services/users.service';
 export class ProfileModalComponent implements OnInit {
   @Input() userId: string = '';
   @Output() updateProfilePhoto = new EventEmitter<string>();
-  showImage = false;
+
+  profilePhotoForm: FormGroup = this.fb.group({
+    photoFiles: ['', Validators.required],
+    photoFilesSource: ['', Validators.required],
+  });
 
   constructor(
     private fb: FormBuilder,
     private loaderService: LoaderService,
+    private fileReaderService: FileReaderService,
     private userService: UsersService,
     private toastr: ToastrService
   ) {}
@@ -29,15 +34,8 @@ export class ProfileModalComponent implements OnInit {
         photoFiles: '',
         photoFilesSource: '',
       });
-
-      this.showImage = false;
     });
   }
-
-  profilePhotoForm: FormGroup = this.fb.group({
-    photoFiles: ['', Validators.required],
-    photoFilesSource: ['', Validators.required],
-  });
 
   onPhotoChange(event: Event): void {
     const container = document.getElementById(
@@ -47,7 +45,6 @@ export class ProfileModalComponent implements OnInit {
       'profile-photo'
     ) as HTMLImageElement;
 
-    this.showImage = false;
     container.style.display = 'none';
     profilePhoto.src = '';
 
@@ -73,8 +70,6 @@ export class ProfileModalComponent implements OnInit {
           photoFilesSource: element.files.item(0),
         });
 
-        this.showImage = true;
-
         const reader = new FileReader();
         container.style.display = 'block';
 
@@ -89,8 +84,8 @@ export class ProfileModalComponent implements OnInit {
 
   saveProfilePhoto() {
     this.loaderService.setLoading(true, $localize`Extrayendo imagenes`);
-    this.getBase64(this.profilePhotoForm.controls['photoFilesSource'].value)
-      .pipe(take(1))
+    this.fileReaderService
+      .getBase64(this.profilePhotoForm.controls['photoFilesSource'].value)
       .subscribe({
         next: (fileBase64) => {
           this.loaderService.setLoading(true, $localize`Subiendo imagenes`);
@@ -116,16 +111,5 @@ export class ProfileModalComponent implements OnInit {
             });
         },
       });
-  }
-
-  getBase64(file: File): Observable<string> {
-    return new Observable((obs) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        obs.next(reader.result as string);
-        obs.complete();
-      };
-      reader.readAsDataURL(file);
-    });
   }
 }

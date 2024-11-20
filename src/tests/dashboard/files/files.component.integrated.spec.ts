@@ -6,6 +6,7 @@ import { of } from 'rxjs';
 import { CommonModalResponse, ImageUsage } from 'src/app/core/models/enum';
 import { CommonModalService } from 'src/app/core/services/commonModal.service';
 import { EventsService } from 'src/app/core/services/events.service';
+import { FileReaderService } from 'src/app/core/services/fileReader.service';
 import { FilesService } from 'src/app/core/services/files.service';
 import { FilesComponent } from 'src/app/dashboard/files/files.component';
 import {
@@ -19,6 +20,7 @@ describe('Files Component (Integrated Test)', () => {
   let eventsServiceSpy: jasmine.SpyObj<EventsService>;
   let filesServiceSpy: jasmine.SpyObj<FilesService>;
   let commonModalServiceSpy: jasmine.SpyObj<CommonModalService>;
+  let fileReaderServiceSpy: jasmine.SpyObj<FileReaderService>;
 
   const selectEvent = (eventId: string) => {
     const eventSelect = fixture.debugElement.query(By.css('#event-select'));
@@ -43,9 +45,22 @@ describe('Files Component (Integrated Test)', () => {
     fixture.detectChanges();
   };
 
+  const uploadFile = (file: File) => {
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(file);
+
+    const fileInput = fixture.debugElement.query(By.css('#photoFiles'));
+    fileInput.nativeElement.files = dataTransfer.files;
+    fileInput.nativeElement.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+  };
+
   beforeEach(waitForAsync(() => {
     const eventsSpy = jasmine.createSpyObj('EventsService', [
       'getDropdownEvents',
+    ]);
+    const fileReaderSpy = jasmine.createSpyObj('FileReaderService', [
+      'getBase64',
     ]);
     const filesSpy = jasmine.createSpyObj('FilesService', [
       'getFilesByEvent',
@@ -61,6 +76,7 @@ describe('Files Component (Integrated Test)', () => {
       providers: [
         { provide: EventsService, useValue: eventsSpy },
         { provide: FilesService, useValue: filesSpy },
+        { provide: FileReaderService, useValue: fileReaderSpy },
         { provide: ToastrService, useValue: toastrSpy },
         { provide: CommonModalService, useValue: commonModalSpy },
       ],
@@ -75,6 +91,9 @@ describe('Files Component (Integrated Test)', () => {
     commonModalServiceSpy = TestBed.inject(
       CommonModalService
     ) as jasmine.SpyObj<CommonModalService>;
+    fileReaderServiceSpy = TestBed.inject(
+      FileReaderService
+    ) as jasmine.SpyObj<FileReaderService>;
   }));
 
   beforeEach(() => {
@@ -95,6 +114,26 @@ describe('Files Component (Integrated Test)', () => {
 
     expect(filesServiceSpy.getFilesByEvent)
       .withContext('getFilesByEvent should be called')
+      .toHaveBeenCalled();
+  });
+
+  it('should call getBase64 when saving an uploaded photo', () => {
+    fileReaderServiceSpy.getBase64.and.returnValue(of('image'));
+    fixture.componentInstance.events = dropdownEventsMock;
+    fixture.detectChanges();
+
+    selectEvent(dropdownEventsMock[0].id);
+
+    uploadFile(new File([''], 'filename', { type: 'image/png' }));
+
+    const uploadForm = fixture.debugElement.query(By.css('.upload-form'));
+    const buttons = uploadForm.queryAll(By.css('button'));
+    const saveButton = buttons[0];
+
+    saveButton.nativeElement.click();
+
+    expect(fileReaderServiceSpy.getBase64)
+      .withContext('getBase64 should be called')
       .toHaveBeenCalled();
   });
 

@@ -37,7 +37,22 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   showChangePassword = false;
   private userInformation: IUser;
 
-  createProfileForm!: FormGroup;
+  createProfileForm: FormGroup = this.fb.group(
+    {
+      id: ['', Validators.required],
+      username: ['', Validators.required],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      phoneNumber: ['', Validators.required],
+      email: ['', Validators.required],
+      gender: ['', Validators.required],
+      profilePhoto: [''],
+      controlIsValid: [true],
+    },
+    {
+      validators: controlIsDuplicated,
+    }
+  );
 
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -81,32 +96,13 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.createProfileForm = this.fb.group(
-      {
-        id: ['', Validators.required],
-        username: ['', Validators.required],
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
-        phoneNumber: ['', Validators.required],
-        email: ['', Validators.required],
-        gender: ['', Validators.required],
-        profilePhoto: [''],
-        controlIsValid: [true],
-      },
-      {
-        validators: controlIsDuplicated,
-      }
-    );
+    this.user = this.route.snapshot.data['userProfile'];
+    this.createProfileForm.patchValue(this.user);
 
-    this.route.data.subscribe(() => {
-      this.user = this.route.snapshot.data['userProfile'];
-      this.createProfileForm.patchValue(this.user);
+    this.isMyProfile = this.userInformation.id === this.user.id;
 
-      this.isMyProfile = this.userInformation.id === this.user.id;
-
-      this.createProfileForm.markAsUntouched();
-      this.loaderService.setLoading(false);
-    });
+    this.createProfileForm.markAsUntouched();
+    this.loaderService.setLoading(false);
   }
 
   saveProfile() {
@@ -204,12 +200,18 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
   changePassword() {
     if (this.userInformation.id !== this.user.id) {
-      this.loaderService.setLoading(true, $localize`Enviando correo electrónico`);
-      this.authService.sendResetPasswordToUser(this.user.id).subscribe({
-        next: (response: IMessageResponse) => {
-          this.toastr.success(response.message);
-        }
-      }).add(() => this.loaderService.setLoading(false));
+      this.loaderService.setLoading(
+        true,
+        $localize`Enviando correo electrónico`
+      );
+      this.authService
+        .sendResetPasswordToUser(this.user.id)
+        .subscribe({
+          next: (response: IMessageResponse) => {
+            this.toastr.success(response.message);
+          },
+        })
+        .add(() => this.loaderService.setLoading(false));
     } else {
       this.showChangePassword = true;
     }

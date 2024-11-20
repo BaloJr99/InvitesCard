@@ -64,7 +64,7 @@ export const fullUserMock: IFullUser = {
   firstName: 'Test',
   lastName: 'User',
   phoneNumber: '1234567890',
-  gender: 'T',
+  gender: 'H',
   isActive: true,
   profilePhoto: 'Test.jpg',
   profilePhotoSource: 'Test.jpg',

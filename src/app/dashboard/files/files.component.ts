@@ -13,6 +13,7 @@ import {
 } from 'src/app/core/models/images';
 import { CommonModalService } from 'src/app/core/services/commonModal.service';
 import { EventsService } from 'src/app/core/services/events.service';
+import { FileReaderService } from 'src/app/core/services/fileReader.service';
 import { FilesService } from 'src/app/core/services/files.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 
@@ -46,6 +47,7 @@ export class FilesComponent implements OnInit {
     private loaderService: LoaderService,
     private eventsService: EventsService,
     private filesService: FilesService,
+    private fileReaderService: FileReaderService,
     private commonModalService: CommonModalService,
     private fb: FormBuilder,
     private toastr: ToastrService
@@ -82,7 +84,7 @@ export class FilesComponent implements OnInit {
       Array.from(
         this.saveFilesForm.controls['photoFilesSource'].value as FileList
       ).forEach((file) => {
-        const base64 = this.getBase64(file).pipe(take(1));
+        const base64 = this.fileReaderService.getBase64(file).pipe(take(1));
         filesObservable.push(base64);
       });
 
@@ -252,17 +254,6 @@ export class FilesComponent implements OnInit {
         });
       }
     }
-  }
-
-  getBase64(file: File): Observable<string> {
-    return new Observable((obs) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        obs.next(reader.result as string);
-        obs.complete();
-      };
-      reader.readAsDataURL(file);
-    });
   }
 
   clearInformation(): void {

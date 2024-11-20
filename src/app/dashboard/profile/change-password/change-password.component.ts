@@ -31,7 +31,15 @@ export class ChangePasswordComponent implements AfterViewInit {
   formInputElements!: ElementRef[];
   @Input() userId: string = '';
   @Output() showChangePasswordValue = new EventEmitter<boolean>();
-  passwordResetForm: FormGroup;
+  passwordResetForm: FormGroup = this.fb.group(
+    {
+      password: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
+    },
+    {
+      validators: matchPassword,
+    }
+  );
 
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -56,16 +64,6 @@ export class ChangePasswordComponent implements AfterViewInit {
     };
 
     this.genericValidator = new GenericValidator(this.validationMessages);
-
-    this.passwordResetForm = this.fb.group(
-      {
-        password: ['', Validators.required],
-        confirmPassword: ['', Validators.required],
-      },
-      {
-        validators: matchPassword,
-      }
-    );
   }
 
   ngAfterViewInit(): void {
