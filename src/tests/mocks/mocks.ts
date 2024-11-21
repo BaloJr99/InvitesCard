@@ -71,7 +71,7 @@ export const fullUserMock: IFullUser = {
   roles: [
     {
       id: 'c13dc4c2-4b59-457e-a9e7-97b3a2910ca0',
-      name: 'Test',
+      name: 'admin',
       isActive: true,
     },
   ],
