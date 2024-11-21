@@ -202,7 +202,12 @@ export const dropdownEventsMock: IDropdownEvent[] = [
   {
     id: fullEventsMock.id,
     nameOfEvent: fullEventsMock.nameOfEvent,
-    typeOfEvent: fullEventsMock.typeOfEvent,
+    typeOfEvent: EventType.SaveTheDate,
+  },
+  {
+    id: '18dec379-5571-4b91-87da-eef2f2f5c1b2',
+    nameOfEvent: 'Test Event 2',
+    typeOfEvent: EventType.Xv,
   },
 ];
 
@@ -365,12 +370,7 @@ export const roleMock: IRole = {
   name: 'Test Role',
 };
 
-export const baseSettingMock: IBaseSettings = {
-  eventId: fullEventsMock.id,
-  settings: 'Test Settings',
-};
-
-export const sweetXvSetting: ISweetXvSetting = {
+export const sweetXvSettingMock: ISweetXvSetting = {
   eventId: fullEventsMock.id,
   primaryColor: '#000000',
   secondaryColor: '#000000',
@@ -388,7 +388,7 @@ export const sweetXvSetting: ISweetXvSetting = {
   dressCodeColor: 'Test color',
 };
 
-export const saveTheDateSetting: ISaveTheDateSetting = {
+export const saveTheDateSettingMock: ISaveTheDateSetting = {
   eventId: fullEventsMock.id,
   primaryColor: '#000000',
   secondaryColor: '#000000',
@@ -396,6 +396,21 @@ export const saveTheDateSetting: ISaveTheDateSetting = {
   copyMessage: 'Test Message',
   hotelInformation: 'Test Information',
   hotelName: 'Test Hotel',
+};
+
+export const baseSettingMock: IBaseSettings = {
+  eventId: fullEventsMock.id,
+  settings: JSON.stringify(saveTheDateSettingMock),
+};
+
+export const sweetXvBaseSettingMock: IBaseSettings = {
+  eventId: fullEventsMock.id,
+  settings: JSON.stringify(sweetXvSettingMock),
+};
+
+export const saveTheDateBaseSettingMock: IBaseSettings = {
+  eventId: fullEventsMock.id,
+  settings: JSON.stringify(saveTheDateSettingMock),
 };
 
 export const showSpinnerMock: ISpinner = {

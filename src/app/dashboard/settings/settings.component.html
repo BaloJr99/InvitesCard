@@ -22,9 +22,9 @@
   </div>
   <ng-container [ngSwitch]="eventSettingAction.eventType">
     <app-sweet-xv-settings *ngSwitchCase="'X'" [eventSettingAction]="eventSettingAction"></app-sweet-xv-settings>
-    <app-save-the-date *ngSwitchCase="'S'" [eventSettingAction]="eventSettingAction"></app-save-the-date>
+    <app-save-the-date-settings *ngSwitchCase="'S'" [eventSettingAction]="eventSettingAction"></app-save-the-date-settings>
   </ng-container>
 </section>
-<section class="files-empty" *ngIf="!eventSettingAction">
+<section class="files-empty" *ngIf="showSelectEvent()">
   <p i18n>Porfavor, seleccione un evento</p>
 </section>

@@ -5,8 +5,8 @@ import {
   baseSettingMock,
   fullEventsMock,
   messageResponseMock,
-  saveTheDateSetting,
-  sweetXvSetting,
+  saveTheDateSettingMock,
+  sweetXvSettingMock,
 } from 'src/tests/mocks/mocks';
 
 describe('Settings Service', () => {
@@ -57,14 +57,14 @@ describe('Settings Service', () => {
     );
 
     settingsServiceSpy
-      .createEventSettings(sweetXvSetting, fullEventsMock.id)
+      .createEventSettings(sweetXvSettingMock, fullEventsMock.id)
       .subscribe((response) => {
         expect(response).toEqual(messageResponseMock);
       });
 
     expect(settingsServiceSpy.createEventSettings)
       .withContext('Expected createEventSettings to have been called')
-      .toHaveBeenCalledOnceWith(sweetXvSetting, fullEventsMock.id);
+      .toHaveBeenCalledOnceWith(sweetXvSettingMock, fullEventsMock.id);
   });
 
   it('should call createEventSettings (Save The Date)', () => {
@@ -73,14 +73,14 @@ describe('Settings Service', () => {
     );
 
     settingsServiceSpy
-      .createEventSettings(saveTheDateSetting, fullEventsMock.id)
+      .createEventSettings(saveTheDateSettingMock, fullEventsMock.id)
       .subscribe((response) => {
         expect(response).toEqual(messageResponseMock);
       });
 
     expect(settingsServiceSpy.createEventSettings)
       .withContext('Expected createEventSettings to have been called')
-      .toHaveBeenCalledOnceWith(saveTheDateSetting, fullEventsMock.id);
+      .toHaveBeenCalledOnceWith(saveTheDateSettingMock, fullEventsMock.id);
   });
 
   it('should call updateEventSettings (Sweet Xv)', () => {
@@ -90,7 +90,7 @@ describe('Settings Service', () => {
 
     settingsServiceSpy
       .updateEventSettings(
-        sweetXvSetting,
+        sweetXvSettingMock,
         fullEventsMock.id,
         fullEventsMock.typeOfEvent
       )
@@ -101,7 +101,7 @@ describe('Settings Service', () => {
     expect(settingsServiceSpy.updateEventSettings)
       .withContext('Expected updateEventSettings to have been called')
       .toHaveBeenCalledOnceWith(
-        sweetXvSetting,
+        sweetXvSettingMock,
         fullEventsMock.id,
         fullEventsMock.typeOfEvent
       );
@@ -114,7 +114,7 @@ describe('Settings Service', () => {
 
     settingsServiceSpy
       .updateEventSettings(
-        saveTheDateSetting,
+        saveTheDateSettingMock,
         fullEventsMock.id,
         fullEventsMock.typeOfEvent
       )
@@ -125,7 +125,7 @@ describe('Settings Service', () => {
     expect(settingsServiceSpy.updateEventSettings)
       .withContext('Expected updateEventSettings to have been called')
       .toHaveBeenCalledOnceWith(
-        saveTheDateSetting,
+        saveTheDateSettingMock,
         fullEventsMock.id,
         fullEventsMock.typeOfEvent
       );

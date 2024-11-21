@@ -21,11 +21,11 @@ import { SettingsService } from 'src/app/core/services/settings.service';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 
 @Component({
-  selector: 'app-save-the-date',
-  templateUrl: './save-the-date.component.html',
-  styleUrl: './save-the-date.component.css',
+  selector: 'app-save-the-date-settings',
+  templateUrl: './save-the-date-settings.component.html',
+  styleUrl: './save-the-date-settings.component.css',
 })
-export class SaveTheDateComponent implements AfterViewInit {
+export class SaveTheDateSettingsComponent implements AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
@@ -43,7 +43,7 @@ export class SaveTheDateComponent implements AfterViewInit {
   saveTheDateSettings: ISettingAction = {} as ISettingAction;
 
   createEventSettingsForm: FormGroup = this.fb.group({
-    eventId: [''],
+    eventId: ['', Validators.required],
     primaryColor: ['', Validators.required],
     secondaryColor: ['', Validators.required],
     receptionPlace: ['', Validators.required],

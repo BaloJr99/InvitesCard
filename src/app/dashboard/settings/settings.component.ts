@@ -49,4 +49,8 @@ export class SettingsComponent implements OnInit {
       this.eventSettingAction = {} as ISettingAction;
     }
   }
+
+  showSelectEvent(): boolean {
+    return Object.keys(this.eventSettingAction).length === 0;
+  }
 }

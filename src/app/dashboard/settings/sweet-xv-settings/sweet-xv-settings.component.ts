@@ -43,7 +43,7 @@ export class SweetXvSettingsComponent implements AfterViewInit {
   sweetXvSettings: ISettingAction = {} as ISettingAction;
 
   createEventSettingsForm: FormGroup = this.fb.group({
-    eventId: [''],
+    eventId: ['', Validators.required],
     primaryColor: ['', Validators.required],
     secondaryColor: ['', Validators.required],
     parents: ['', Validators.required],
