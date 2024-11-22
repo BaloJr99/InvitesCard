@@ -51,7 +51,6 @@ describe('Event Details Component (Integrated Test)', () => {
     const commonInvitesSpy = jasmine.createSpyObj(
       'CommonInvitesService',
       ['clearNotifications', 'updateNotifications'],
-
       {
         notifications$: notificationsDataSubject.asObservable(),
       }

@@ -15,7 +15,7 @@
   <div class="messages-chat">
     <div class="messages-header">
       <h2 i18n>Mensajes</h2>
-      <button class="btn" (click)="toggleMessages()"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+      <button class="btn" (click)="toggleMessages()" aria-label="Toggle Messages"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
     </div>
     <div class="messages-container">
       <div class="card" [style.display]="messagesGrouped.length === 0 ? 'block' : 'none'" i18n>
