@@ -36,8 +36,8 @@
                   <option value="" selected i18n>Seleccionar un rol</option>
                   <option *ngFor="let role of filteredRoles" [value]="role.id">{{ role.name }}</option>
                 </select>
-                <button class="btn btn-dark"  data-bs-toggle="modal" data-bs-target="#rolesModal" (click)="roleAction(true)" *ngIf="roleSelected"><i class="fa-solid fa-pen-to-square"></i></button>
-                <button class="btn btn-dark" (click)="addRole()" *ngIf="roleSelected"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                <button type="button" class="btn btn-dark"  data-bs-toggle="modal" data-bs-target="#rolesModal" (click)="roleAction(true)" *ngIf="roleSelected"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button type="button" class="btn btn-dark" (click)="addRole()" *ngIf="roleSelected"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
               </div>
               <span class="invalid-feedback" role="alert">
                 {{ displayMessage['roles'] }}

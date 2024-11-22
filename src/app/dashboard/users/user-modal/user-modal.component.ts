@@ -51,11 +51,23 @@ export class UserModalComponent implements OnInit, AfterViewInit {
       this.editedUser = user;
     }
   }
-  
+
   @Output() updateUsers: EventEmitter<IUserAction> = new EventEmitter();
   @Output() selectRole: EventEmitter<ISavedUserRole> = new EventEmitter();
 
-  createUserForm!: FormGroup;
+  createUserForm: FormGroup = this.fb.group(
+    {
+      id: [''],
+      username: ['', Validators.required],
+      email: ['', Validators.required],
+      roles: [[], [Validators.required, Validators.minLength(1)]],
+      isActive: [true],
+      controlIsValid: [false],
+    },
+    {
+      validators: controlIsDuplicated,
+    }
+  );
   roles: IRole[] = [];
   userRoles: IRole[] = [];
   filteredRoles: IRole[] = [];
@@ -93,20 +105,6 @@ export class UserModalComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.createUserForm = this.fb.group(
-      {
-        id: [''],
-        username: ['', Validators.required],
-        email: ['', Validators.required],
-        roles: [[], [Validators.required, Validators.minLength(1)]],
-        isActive: [true],
-        controlIsValid: [false],
-      },
-      {
-        validators: controlIsDuplicated,
-      }
-    );
-
     $('#usersModal').on('hidden.bs.modal', () => {
       this.clearInputs();
     });

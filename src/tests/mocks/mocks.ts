@@ -56,6 +56,12 @@ import {
   ISweetXvSetting,
 } from 'src/app/core/models/settings';
 
+export const roleMock: IRole = {
+  id: 'd2f93adc-c1ae-45a1-a688-90273a58131a',
+  isActive: true,
+  name: 'admin',
+};
+
 export const fullUserMock: IFullUser = {
   id: '2e1ba1a6-e0c2-4382-acf4-e1933a88ea77',
   username: 'Test',
@@ -68,13 +74,7 @@ export const fullUserMock: IFullUser = {
   isActive: true,
   profilePhoto: 'Test.jpg',
   profilePhotoSource: 'Test.jpg',
-  roles: [
-    {
-      id: 'c13dc4c2-4b59-457e-a9e7-97b3a2910ca0',
-      name: 'admin',
-      isActive: true,
-    },
-  ],
+  roles: [roleMock],
 };
 
 export const userMock: IUser = {
@@ -362,12 +362,6 @@ export const logMock: ILog = {
   dateOfError: '2021-07-01',
   exceptionMessage: 'Test Exception',
   userId: fullUserMock.id,
-};
-
-export const roleMock: IRole = {
-  id: 'd2f93adc-c1ae-45a1-a688-90273a58131a',
-  isActive: true,
-  name: 'Test Role',
 };
 
 export const sweetXvSettingMock: ISweetXvSetting = {
