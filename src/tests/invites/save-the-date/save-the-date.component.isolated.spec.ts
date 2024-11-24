@@ -49,7 +49,6 @@ describe('Save The Date Settings Component (Isolated Test)', () => {
         hotelName: '',
         hotelInformation: '',
       });
-
     expect(component.shortDate)
       .withContext('The shortDate should be an empty string')
       .toBe('');

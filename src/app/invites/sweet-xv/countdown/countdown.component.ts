@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { BehaviorSubject, Subscription, interval } from 'rxjs';
+import { BehaviorSubject, interval } from 'rxjs';
 import { ITimer } from 'src/app/core/models/invites';
 
 @Component({
@@ -17,7 +17,7 @@ export class CountdownComponent {
 
   @Input() set dateOfEventValue(value: string) {
     if (value) {
-      this.subscription = interval(1000).subscribe(() => {
+      interval(1000).subscribe(() => {
         this.finishDate = new Date(value.replace('Z', '').replace('T', ' '));
         this.updateTime();
       });
@@ -27,8 +27,6 @@ export class CountdownComponent {
   finishDate: Date = new Date();
 
   eventWasMet = false;
-
-  subscription!: Subscription;
 
   updateTime() {
     const now = new Date();

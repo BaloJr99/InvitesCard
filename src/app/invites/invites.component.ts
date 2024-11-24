@@ -1,7 +1,4 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoaderService } from '../core/services/loader.service';
 import { IEventTypeResolved } from '../core/models/invites';
@@ -19,9 +16,7 @@ export class InvitesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.data.subscribe(() => {
-      this.inviteResolved = this.route.snapshot.data['invite'];
-      this.loaderService.setLoading(false);
-    });
+    this.inviteResolved = this.route.snapshot.data['invite'];
+    this.loaderService.setLoading(false);
   }
 }

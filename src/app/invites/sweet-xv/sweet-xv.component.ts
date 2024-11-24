@@ -57,7 +57,7 @@ export class SweetXvComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private loaderService: LoaderService,
-    private eventSettingsService: SettingsService,
+    private settingsService: SettingsService,
     private filesService: FilesService,
     private invitesService: InvitesService,
     private elRef: ElementRef,
@@ -110,7 +110,7 @@ export class SweetXvComponent implements OnInit {
           }).format(new Date(this.userInvite.dateOfEvent));
 
           combineLatest([
-            this.eventSettingsService.getEventSettings(this.userInvite.eventId),
+            this.settingsService.getEventSettings(this.userInvite.eventId),
             this.filesService.getFilesByEvent(this.userInvite.eventId),
           ])
             .subscribe({

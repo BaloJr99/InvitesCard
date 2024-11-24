@@ -90,7 +90,7 @@ describe('User Modal Component (Isolated Test)', () => {
       .toBeTrue();
   });
 
-  it('should have username, email, roles, isActive in the loginForm', () => {
+  it('should have username, email, roles, isActive in the createUserForm', () => {
     const controls = component.createUserForm.controls;
 
     expect(controls['username'].valid)

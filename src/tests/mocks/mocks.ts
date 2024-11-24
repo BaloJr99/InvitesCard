@@ -35,6 +35,7 @@ import {
   IConfirmation,
   IDashboardInvite,
   IFullInvite,
+  ISaveTheDateUserInvite,
   ISweetXvUserInvite,
   IUpsertInvite,
 } from 'src/app/core/models/invites';
@@ -320,12 +321,12 @@ export const dashboardInvitesMock: IDashboardInvite = {
 export const sweetXvUserInviteMock: ISweetXvUserInvite = {
   id: confirmedInviteMock.id,
   confirmation: confirmedInviteMock.confirmation,
-  maxDateOfConfirmation: '2021-10-01',
+  maxDateOfConfirmation: fullEventsMock.maxDateOfConfirmation.concat('T00:00:00Z'),
   entriesNumber: confirmedInviteMock.entriesNumber,
   eventId: confirmedInviteMock.eventId,
   family: confirmedInviteMock.family,
   kidsAllowed: confirmedInviteMock.kidsAllowed,
-  dateOfEvent: fullEventsMock.dateOfEvent,
+  dateOfEvent: fullEventsMock.dateOfEvent.concat('T00:00:00Z'),
   nameOfCelebrated: fullEventsMock.nameOfCelebrated,
   typeOfEvent: fullEventsMock.typeOfEvent,
 };
@@ -368,10 +369,10 @@ export const sweetXvSettingMock: ISweetXvSetting = {
   eventId: fullEventsMock.id,
   primaryColor: '#000000',
   secondaryColor: '#000000',
-  firstSectionSentences: 'Test Sentences',
+  firstSectionSentences: 'Test Sentences;Test Sentences',
   secondSectionSentences: 'Test Sentences',
-  parents: 'Test Parents',
-  godParents: 'Test Godparents',
+  parents: 'Test Parent;Test Mother',
+  godParents: 'Test Godparent; Test Godparent',
   massAddress: 'Test Address',
   massTime: '12:00',
   massUrl: 'https://fakepath/Test',
@@ -475,4 +476,17 @@ export const tableDataWithCheckboxMock: ITable = {
   ...tableDataMock,
   headers: ['', ...tableDataMock.headers],
   useCheckbox: true,
+};
+
+export const saveTheDateUserInviteMock: ISaveTheDateUserInvite = {
+  id: newInviteMock.id,
+  dateOfEvent: fullEventsMock.dateOfEvent.concat('T00:00:00Z'),
+  eventId: newInviteMock.eventId,
+  family: newInviteMock.family,
+  nameOfCelebrated: 'Braulio;Brisa',
+  hotelInformation: saveTheDateSettingMock.hotelInformation,
+  hotelName: saveTheDateSettingMock.hotelName,
+  maxDateOfConfirmation: fullEventsMock.maxDateOfConfirmation.concat('T00:00:00Z'),
+  needsAccomodation: newInviteMock.needsAccomodation,
+  typeOfEvent: fullEventsMock.typeOfEvent,
 };

@@ -63,7 +63,7 @@ describe('User Role Modal Component (Isolated Test)', () => {
       .toBeTrue();
   });
 
-  it('should have name in the loginForm', () => {
+  it('should have name in the createRoleForm', () => {
     const controls = component.createRoleForm.controls;
 
     expect(controls['name'].valid)

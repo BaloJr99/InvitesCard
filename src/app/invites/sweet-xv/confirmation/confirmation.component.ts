@@ -34,6 +34,7 @@ export class ConfirmationComponent implements AfterViewInit {
 
   invite: ISweetXvUserInvite = {} as ISweetXvUserInvite;
   @Input() set inviteValue(value: ISweetXvUserInvite) {
+    this.invite = value;
     const { entriesNumber } = value;
     this.numberOfEntries.next(
       Array.from({ length: entriesNumber }, (k, j) => j + 1).sort(
@@ -55,7 +56,11 @@ export class ConfirmationComponent implements AfterViewInit {
   private numberOfEntries = new BehaviorSubject<number[]>([]);
   numberOfEntries$ = this.numberOfEntries.asObservable();
 
-  confirmationForm: FormGroup;
+  confirmationForm: FormGroup = this.fb.group({
+    confirmation: ['true', Validators.required],
+    entriesConfirmed: ['', Validators.required],
+    message: [''],
+  });
 
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -77,12 +82,6 @@ export class ConfirmationComponent implements AfterViewInit {
     };
 
     this.genericValidator = new GenericValidator(this.validationMessages);
-
-    this.confirmationForm = this.fb.group({
-      confirmation: ['true', Validators.required],
-      entriesConfirmed: ['', Validators.required],
-      message: [''],
-    });
   }
 
   saveInformation(): void {
@@ -153,7 +152,7 @@ export class ConfirmationComponent implements AfterViewInit {
     ).subscribe(() => {
       if (this.confirmationForm.controls['confirmation'].value === 'true') {
         const select = document.getElementById(
-          'my-select'
+          'entriesConfirmed'
         ) as HTMLSelectElement;
         select.removeAttribute('disabled');
         if (this.confirmationForm.get('entriesConfirmed')?.value === '') {
@@ -169,7 +168,7 @@ export class ConfirmationComponent implements AfterViewInit {
         this.confirmationForm.controls['confirmation'].value === 'false'
       ) {
         const select = document.getElementById(
-          'my-select'
+          'entriesConfirmed'
         ) as HTMLSelectElement;
         select.setAttribute('disabled', '');
         this.confirmationForm.patchValue({

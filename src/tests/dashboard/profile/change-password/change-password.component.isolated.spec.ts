@@ -76,7 +76,7 @@ describe('Change Password Component (Isolated Test)', () => {
       .toBeFalse();
   });
 
-  it('should have password and confirmPassword in the loginForm', () => {
+  it('should have password and confirmPassword in the passwordResetForm', () => {
     const password = component.passwordResetForm.controls['password'];
     const confirmPassword =
       component.passwordResetForm.controls['confirmPassword'];

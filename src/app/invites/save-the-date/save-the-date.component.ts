@@ -68,17 +68,13 @@ export class SaveTheDateComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private loaderService: LoaderService,
-    private eventSettingsService: SettingsService,
+    private settingsService: SettingsService,
     private filesService: FilesService,
     private invitesService: InvitesService,
     private elRef: ElementRef,
     private commonModalService: CommonModalService,
     @Inject(LOCALE_ID) private localeValue: string
-  ) {
-    setInterval(() => {
-      this.updateBackground();
-    }, 5000);
-  }
+  ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -115,7 +111,7 @@ export class SaveTheDateComponent implements OnInit {
             new Date(this.userInvite.maxDateOfConfirmation).getTime();
 
           combineLatest([
-            this.eventSettingsService.getEventSettings(this.userInvite.eventId),
+            this.settingsService.getEventSettings(this.userInvite.eventId),
             this.filesService.getFilesByEvent(this.userInvite.eventId),
           ])
             .subscribe({
@@ -153,10 +149,16 @@ export class SaveTheDateComponent implements OnInit {
                   (image) =>
                     window.innerWidth > 575
                       ? image.imageUsage === ImageUsage.Desktop ||
-                        image.imageUsage === null
+                        image.imageUsage === ImageUsage.Both
                       : image.imageUsage === ImageUsage.Phone ||
-                        image.imageUsage === null
+                        image.imageUsage === ImageUsage.Both
                 );
+
+                if (this.downloadImages.length > 0) {
+                  setInterval(() => {
+                    this.updateBackground();
+                  }, 5000);
+                }
 
                 this.elRef.nativeElement.style.setProperty(
                   '--custom-primary-color',
@@ -178,32 +180,34 @@ export class SaveTheDateComponent implements OnInit {
   }
 
   updateBackground() {
-    this.counter++;
+    if (this.downloadImages.length > 0) {
+      this.counter++;
 
-    if (this.counter > this.downloadImages.length - 1) {
-      this.counter = 0;
-    }
+      if (this.counter > this.downloadImages.length - 1) {
+        this.counter = 0;
+      }
 
-    const nextBackgroundImage: HTMLElement = document.querySelector(
-      `.backgroundImage${this.counter}`
-    ) as HTMLElement;
-    let oldBackgroundImage: HTMLElement;
-
-    if (this.counter == 0) {
-      oldBackgroundImage = document.querySelector(
-        `.backgroundImage${this.downloadImages.length - 1}`
+      const nextBackgroundImage: HTMLElement = document.querySelector(
+        `.backgroundImage${this.counter}`
       ) as HTMLElement;
-    } else {
-      oldBackgroundImage = document.querySelector(
-        `.backgroundImage${this.counter - 1}`
-      ) as HTMLElement;
-    }
+      let oldBackgroundImage: HTMLElement;
 
-    if (oldBackgroundImage) {
-      oldBackgroundImage.style.visibility = 'hidden';
-    }
+      if (this.counter == 0) {
+        oldBackgroundImage = document.querySelector(
+          `.backgroundImage${this.downloadImages.length - 1}`
+        ) as HTMLElement;
+      } else {
+        oldBackgroundImage = document.querySelector(
+          `.backgroundImage${this.counter - 1}`
+        ) as HTMLElement;
+      }
 
-    nextBackgroundImage.style.visibility = 'visible';
+      if (oldBackgroundImage) {
+        oldBackgroundImage.style.visibility = 'hidden';
+      }
+
+      nextBackgroundImage.style.visibility = 'visible';
+    }
   }
 
   generateCalendar() {
