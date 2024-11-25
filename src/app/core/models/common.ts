@@ -57,9 +57,14 @@ export interface IZodErrors {
 export interface ITable {
   tableIndex: number;
   useCheckbox?: boolean;
-  headers: string[];
+  headers: ITableHeaders[];
   data: { [key: string]: string }[];
   buttons?: ITableButtons[];
+}
+
+export interface ITableHeaders {
+  text: string;
+  sortable?: boolean;
 }
 
 export interface ITableButtons {
@@ -68,6 +73,13 @@ export interface ITableButtons {
   action: ButtonAction;
   isDisabled?: boolean;
   styles?: string;
+}
+
+export interface ITableStructure {
+  skip: number;
+  sort: string;
+  sortDirection: string;
+  take: number;
 }
 
 export interface IPageButtons {

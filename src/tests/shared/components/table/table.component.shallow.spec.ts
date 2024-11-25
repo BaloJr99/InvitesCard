@@ -52,8 +52,8 @@ describe('Table Component (Shallow Test)', () => {
     const headers = table.queryAll(By.css('thead th'));
 
     headers.forEach((header, index) => {
-      expect(header.nativeElement.textContent).toBe(
-        tableDataMock.headers[index]
+      expect(header.nativeElement.textContent).toContain(
+        tableDataMock.headers[index].text
       );
     });
   });
@@ -93,10 +93,10 @@ describe('Table Component (Shallow Test)', () => {
     expect(columns[0].nativeElement.innerHTML)
       .withContext(
         `First column should have ${
-          tableDataMock.data[0][tableDataMock.headers[0]]
+          tableDataMock.data[0][tableDataMock.headers[0].text]
         }`
       )
-      .toContain(tableDataMock.data[0][tableDataMock.headers[0]]);
+      .toContain(tableDataMock.data[0][tableDataMock.headers[0].text]);
 
     const buttons = columns[1].queryAll(By.css('button'));
     const mockedButtons = tableDataWithButtonsMock.buttons as ITableButtons[];

@@ -321,7 +321,8 @@ export const dashboardInvitesMock: IDashboardInvite = {
 export const sweetXvUserInviteMock: ISweetXvUserInvite = {
   id: confirmedInviteMock.id,
   confirmation: confirmedInviteMock.confirmation,
-  maxDateOfConfirmation: fullEventsMock.maxDateOfConfirmation.concat('T00:00:00Z'),
+  maxDateOfConfirmation:
+    fullEventsMock.maxDateOfConfirmation.concat('T00:00:00Z'),
   entriesNumber: confirmedInviteMock.entriesNumber,
   eventId: confirmedInviteMock.eventId,
   family: confirmedInviteMock.family,
@@ -443,13 +444,18 @@ export const tableDataMock: ITable = {
       Name: 'Test Name 2',
     },
   ],
-  headers: ['Name'],
+  headers: [
+    {
+      text: 'Name',
+      sortable: true,
+    },
+  ],
   tableIndex: 0,
 };
 
 export const tableDataWithButtonsMock: ITable = {
   ...tableDataMock,
-  headers: [...tableDataMock.headers, 'Actions'],
+  headers: [...tableDataMock.headers, { text: 'Actions' }],
   buttons: [
     {
       accessibleText: 'Test Button',
@@ -461,7 +467,7 @@ export const tableDataWithButtonsMock: ITable = {
 
 export const tableDataWithDisabledButtonsMock: ITable = {
   ...tableDataMock,
-  headers: [...tableDataMock.headers, 'Actions'],
+  headers: [...tableDataMock.headers, { text: 'Actions' }],
   buttons: [
     {
       accessibleText: 'Test Button',
@@ -474,7 +480,7 @@ export const tableDataWithDisabledButtonsMock: ITable = {
 
 export const tableDataWithCheckboxMock: ITable = {
   ...tableDataMock,
-  headers: ['', ...tableDataMock.headers],
+  headers: [{ text: '' }, ...tableDataMock.headers],
   useCheckbox: true,
 };
 
@@ -486,7 +492,8 @@ export const saveTheDateUserInviteMock: ISaveTheDateUserInvite = {
   nameOfCelebrated: 'Braulio;Brisa',
   hotelInformation: saveTheDateSettingMock.hotelInformation,
   hotelName: saveTheDateSettingMock.hotelName,
-  maxDateOfConfirmation: fullEventsMock.maxDateOfConfirmation.concat('T00:00:00Z'),
+  maxDateOfConfirmation:
+    fullEventsMock.maxDateOfConfirmation.concat('T00:00:00Z'),
   needsAccomodation: newInviteMock.needsAccomodation,
   typeOfEvent: fullEventsMock.typeOfEvent,
 };

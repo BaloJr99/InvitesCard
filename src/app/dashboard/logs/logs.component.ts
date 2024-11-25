@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { IEmitAction, ITable } from 'src/app/core/models/common';
+import { IEmitAction, ITable, ITableHeaders } from 'src/app/core/models/common';
 import { ButtonAction } from 'src/app/core/models/enum';
 import { ILog } from 'src/app/core/models/logs';
 import { LoaderService } from 'src/app/core/services/loader.service';
@@ -19,7 +19,10 @@ export class LogsComponent implements OnInit {
   numberOfErrorsToday = 0;
   groupedByDate: { [key: string]: number } = {};
 
-  table: ITable = {} as ITable;
+  table: ITable = {
+    headers: [] as ITableHeaders[],
+    data: [] as { [key: string]: string }[],
+  } as ITable;
 
   constructor(
     private loggerService: LoggerService,
@@ -155,31 +158,42 @@ export class LogsComponent implements OnInit {
     };
   }
 
-  getHeaders(): string[] {
+  getHeaders(): ITableHeaders[] {
     return [
-      $localize`Fecha del error`,
-      $localize`Error`,
-      $localize`Usuario`,
-      $localize`Acciones`,
+      {
+        text: $localize`Fecha del error`,
+        sortable: true,
+      },
+      {
+        text: $localize`Error`,
+        sortable: true,
+      },
+      {
+        text: $localize`Usuario`,
+        sortable: true,
+      },
+      {
+        text: $localize`Acciones`,
+      },
     ];
   }
 
-  getLogRow(log: ILog, headers: string[]): { [key: string]: string } {
+  getLogRow(log: ILog, headers: ITableHeaders[]): { [key: string]: string } {
     const row: { [key: string]: string } = {};
 
-    headers.forEach((header) => {
-      switch (header) {
+    headers.forEach(({ text }) => {
+      switch (text) {
         case $localize`Fecha del error`:
-          row[header] = log.dateOfError;
+          row[text] = log.dateOfError;
           break;
         case $localize`Error`:
-          row[header] = log.customError;
+          row[text] = log.customError;
           break;
         case $localize`Usuario`:
-          row[header] = log.userId;
+          row[text] = log.userId;
           break;
         default:
-          row[header] = log.id;
+          row[text] = log.id;
           break;
       }
     });

@@ -16,6 +16,7 @@ import {
   IMessageResponse,
   INotification,
   ITable,
+  ITableHeaders,
 } from 'src/app/core/models/common';
 import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
 import {
@@ -503,65 +504,91 @@ export class EventDetailsComponent implements OnInit {
     };
   }
 
-  getHeaders(): string[] {
+  getHeaders(): ITableHeaders[] {
     if (this.copyEventInformation.typeOfEvent === EventType.Xv) {
       return [
-        '',
-        $localize`Familia`,
-        $localize`Numero de pases`,
-        $localize`Vista`,
-        $localize`Acciones`,
+        {
+          text: '',
+        },
+        {
+          text: $localize`Familia`,
+          sortable: true,
+        },
+        {
+          text: $localize`Numero de pases`,
+          sortable: true,
+        },
+        {
+          text: $localize`Vista`,
+          sortable: true,
+        },
+        {
+          text: $localize`Acciones`,
+        },
       ];
     }
 
     return [
-      '',
-      $localize`Familia`,
-      $localize`Necesita Hotel`,
-      $localize`Vista`,
-      $localize`Acciones`,
+      {
+        text: '',
+      },
+      {
+        text: $localize`Familia`,
+        sortable: true,
+      },
+      {
+        text: $localize`Necesita Hotel`,
+        sortable: true,
+      },
+      {
+        text: $localize`Vista`,
+        sortable: true,
+      },
+      {
+        text: $localize`Acciones`,
+      },
     ];
   }
 
   getInviteRow(
     invite: IFullInvite,
-    headers: string[],
+    headers: ITableHeaders[],
     groupIndex: string
   ): { [key: string]: string } {
     const row: { [key: string]: string } = {};
 
-    headers.forEach((header) => {
-      switch (header) {
+    headers.forEach(({ text }) => {
+      switch (text) {
         case $localize`Familia`:
-          row[header] = invite.family;
+          row[text] = invite.family;
           break;
         case $localize`Numero de pases`:
-          row[header] =
+          row[text] =
             invite.entriesConfirmed === null ||
             invite.entriesConfirmed === undefined
-              ? '0'
+              ? `0 / ${invite.entriesNumber}`
               : `${invite.entriesConfirmed} / ${invite.entriesNumber}`;
           break;
         case $localize`Vista`:
-          row[header] = invite.inviteViewed
+          row[text] = invite.inviteViewed
             ? '<i class="fa-solid fa-eye" aria-hidden="true"></i>'
             : '';
           break;
         case $localize`Necesita Hotel`:
           if (invite.needsAccomodation === false) {
-            row[header] =
+            row[text] =
               '<i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>';
             break;
           } else if (invite.needsAccomodation === true) {
-            row[header] =
+            row[text] =
               '<i class="fa-solid fa-circle-check" aria-hidden="true"></i>';
             break;
           } else {
-            row[header] = '';
+            row[text] = '';
             break;
           }
         default:
-          row[header] = invite.id;
+          row[text] = invite.id;
           break;
       }
     });

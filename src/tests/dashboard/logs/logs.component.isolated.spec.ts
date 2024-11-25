@@ -1,4 +1,4 @@
-import { ITable } from 'src/app/core/models/common';
+import { ITable, ITableHeaders } from 'src/app/core/models/common';
 import { LogsComponent } from 'src/app/dashboard/logs/logs.component';
 
 describe('Logs Component (Isolated Test)', () => {
@@ -22,7 +22,10 @@ describe('Logs Component (Isolated Test)', () => {
 
     expect(component.table)
       .withContext('The table property should be an empty object')
-      .toEqual({} as ITable);
+      .toEqual({
+        headers: [] as ITableHeaders[],
+        data: [] as { [key: string]: string }[],
+      } as ITable);
 
     expect(component.logSelected)
       .withContext('The logSelected property should undefined')

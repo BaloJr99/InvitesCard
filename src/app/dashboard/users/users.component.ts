@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { IEmitAction, ITable } from 'src/app/core/models/common';
+import { IEmitAction, ITable, ITableHeaders } from 'src/app/core/models/common';
 import { ButtonAction, RoleActionEvent } from 'src/app/core/models/enum';
 import { IRole, IRoleAction } from 'src/app/core/models/roles';
 import {
@@ -23,7 +23,10 @@ export class UsersComponent implements OnInit {
   userAction!: IUserAction;
   roleSelected: IRole | undefined = undefined;
   savedUser: IUpsertUser | undefined = undefined;
-  table: ITable = {} as ITable;
+  table: ITable = {
+    headers: [] as ITableHeaders[],
+    data: [] as { [key: string]: string }[],
+  } as ITable;
 
   constructor(
     private usersService: UsersService,
@@ -166,44 +169,61 @@ export class UsersComponent implements OnInit {
     };
   }
 
-  getHeaders(): string[] {
+  getHeaders(): ITableHeaders[] {
     return [
-      $localize`Usuario`,
-      $localize`Correo`,
-      $localize`# Pases`,
-      $localize`# Eventos`,
-      $localize`Activo`,
-      $localize`Acciones`,
+      {
+        text: $localize`Usuario`,
+        sortable: true,
+      },
+      {
+        text: $localize`Correo`,
+        sortable: true,
+      },
+      {
+        text: $localize`# Pases`,
+        sortable: true,
+      },
+      {
+        text: $localize`# Eventos`,
+        sortable: true,
+      },
+      {
+        text: $localize`Activo`,
+        sortable: true,
+      },
+      {
+        text: $localize`Acciones`,
+      },
     ];
   }
 
   getUserRow(
     user: IUserEventsInfo,
-    headers: string[]
+    headers: ITableHeaders[]
   ): { [key: string]: string } {
     const row: { [key: string]: string } = {};
 
-    headers.forEach((header) => {
-      switch (header) {
+    headers.forEach(({ text }) => {
+      switch (text) {
         case $localize`Usuario`:
-          row[header] = user.username;
+          row[text] = user.username;
           break;
         case $localize`Correo`:
-          row[header] = user.email;
+          row[text] = user.email;
           break;
         case $localize`# Pases`:
-          row[header] = user.numEntries.toString();
+          row[text] = user.numEntries.toString();
           break;
         case $localize`# Eventos`:
-          row[header] = user.numEvents.toString();
+          row[text] = user.numEvents.toString();
           break;
         case $localize`Activo`:
-          row[header] = user.isActive
+          row[text] = user.isActive
             ? '<i class="fa-solid fa-circle-check" aria-hidden="true"></i>'
             : '<i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>';
           break;
         default:
-          row[header] = user.id;
+          row[text] = user.id;
           break;
       }
     });

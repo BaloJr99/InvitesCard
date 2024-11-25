@@ -1,4 +1,4 @@
-import { ITable } from 'src/app/core/models/common';
+import { ITable, ITableHeaders } from 'src/app/core/models/common';
 import { UsersComponent } from 'src/app/dashboard/users/users.component';
 
 describe('Users Component (Isolated Test)', () => {
@@ -31,6 +31,9 @@ describe('Users Component (Isolated Test)', () => {
       .toBeUndefined();
     expect(component.table)
       .withContext('table should be an empty object')
-      .toEqual({} as ITable);
+      .toEqual({
+        headers: [] as ITableHeaders[],
+        data: [] as { [key: string]: string }[],
+      } as ITable);
   });
 });
