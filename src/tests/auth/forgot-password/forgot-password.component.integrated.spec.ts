@@ -13,7 +13,7 @@ import { ForgotPasswordComponent } from 'src/app/auth/forgot-password/forgot-pas
 import { AuthService } from 'src/app/core/services/auth.service';
 import { loginDataMock, messageResponseMock } from 'src/tests/mocks/mocks';
 
-describe('Forgot Password Component: Integrated Test', () => {
+describe('Forgot Password Component (Integrated Test)', () => {
   let fixture: ComponentFixture<ForgotPasswordComponent>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let router: Router;

@@ -5,7 +5,7 @@ import { ForgotPasswordComponent } from 'src/app/auth/forgot-password/forgot-pas
 import { AuthService } from 'src/app/core/services/auth.service';
 import { loginDataMock } from 'src/tests/mocks/mocks';
 
-describe('Login Component: Shallow Test', () => {
+describe('Forgot Password (Shallow Test)', () => {
   let fixture: ComponentFixture<ForgotPasswordComponent>;
 
   const updateFormUsingEvent = (username: string) => {

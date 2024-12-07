@@ -6,7 +6,7 @@ import { PasswordResetComponent } from 'src/app/auth/forgot-password/password-re
 import { AuthService } from 'src/app/core/services/auth.service';
 import { fullUserMock, loginDataMock } from 'src/tests/mocks/mocks';
 
-describe('Login Component: Shallow Test', () => {
+describe('Password Reset Component (Shallow Test)', () => {
   let fixture: ComponentFixture<PasswordResetComponent>;
 
   const updateFormUsingEvent = (password: string, confirmPassword: string) => {

@@ -6,7 +6,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { loginDataMock } from 'src/tests/mocks/mocks';
 
-describe('Login Component: Shallow Test', () => {
+describe('Login Component (Shallow Test)', () => {
   let fixture: ComponentFixture<LoginComponent>;
 
   const updateFormUsingEvent = (username: string, password: string) => {

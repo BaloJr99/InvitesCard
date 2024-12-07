@@ -15,7 +15,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { loginDataMock, tokenMock } from 'src/tests/mocks/mocks';
 
-describe('Login Component: Integrated Test', () => {
+describe('Login Component (Integrated Test)', () => {
   let fixture: ComponentFixture<LoginComponent>;
   let router: Router;
   let authServiceSpy: jasmine.SpyObj<AuthService>;

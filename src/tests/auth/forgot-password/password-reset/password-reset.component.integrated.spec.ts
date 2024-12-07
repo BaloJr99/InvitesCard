@@ -22,7 +22,7 @@ import {
   messageResponseMock,
 } from 'src/tests/mocks/mocks';
 
-describe('Password Reset Component: Integrated Test', () => {
+describe('Password Reset Component (Integrated Test)', () => {
   let fixture: ComponentFixture<PasswordResetComponent>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let router: Router;

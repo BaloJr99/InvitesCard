@@ -10,8 +10,8 @@
         <p [innerHTML]="commonModalData.modalBody"></p>
       </div>
       <div class="modal-footer">
-        <button data-testid="cancel-button" type="button" class="btn" [ngClass]="commonModalData.modalType === 'C' ? 'btn-success' : 'btn-warning'" data-bs-dismiss="modal" (click)="closeAction()">{{actionButton1}}</button>
-        <button data-testid="confirm-button" type="button" id="actionButton" class="btn" [ngClass]="commonModalData.modalType === 'C' ? 'btn-danger' : 'btn-success'" data-bs-dismiss="modal" (click)="confirmAction()">{{actionButton2}}</button>
+        <button id="closeModal" data-testid="cancel-button" type="button" class="btn" [ngClass]="commonModalData.modalType === 'C' ? 'btn-success' : 'btn-warning'" data-bs-dismiss="modal" (click)="closeAction()">{{actionButton1}}</button>
+        <button id="actionButton" data-testid="confirm-button" type="button" class="btn" [ngClass]="commonModalData.modalType === 'C' ? 'btn-danger' : 'btn-success'" data-bs-dismiss="modal" (click)="confirmAction()">{{actionButton2}}</button>
       </div>
     </div>
   </div>

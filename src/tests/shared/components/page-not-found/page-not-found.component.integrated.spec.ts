@@ -3,7 +3,7 @@ import { By } from '@angular/platform-browser';
 import { provideRouter, Router } from '@angular/router';
 import { PageNotFoundComponent } from 'src/app/shared/components/page-not-found/page-not-found.component';
 
-describe('Page Not Found Component: Integrated Test', () => {
+describe('Page Not Found Component (Integrated Test)', () => {
   let fixture: ComponentFixture<PageNotFoundComponent>;
   let router: Router;
 

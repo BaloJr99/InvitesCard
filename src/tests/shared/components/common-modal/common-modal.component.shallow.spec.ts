@@ -5,7 +5,7 @@ import { ICommonModal } from 'src/app/core/models/common';
 import { CommonModalService } from 'src/app/core/services/commonModal.service';
 import { CommonModalComponent } from 'src/app/shared/components/common-modal/common-modal.component';
 
-describe('Login Component (Shallow Test)', () => {
+describe('Common Modal Component (Shallow Test)', () => {
   let fixture: ComponentFixture<CommonModalComponent>;
   let commonModalDataSubject: Subject<ICommonModal>;
 

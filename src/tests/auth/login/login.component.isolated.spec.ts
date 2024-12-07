@@ -2,7 +2,7 @@ import { FormBuilder } from '@angular/forms';
 import { LoginComponent } from 'src/app/auth/login/login.component';
 import { loginDataMock } from 'src/tests/mocks/mocks';
 
-describe('Login Component: Isolated Test', () => {
+describe('Login Component (Isolated Test)', () => {
   let component: LoginComponent;
   const authServiceSpy = jasmine.createSpyObj('AuthService', ['']);
   const tokenServiceSpy = jasmine.createSpyObj('TokenStorageService', ['']);

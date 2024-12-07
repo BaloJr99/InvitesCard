@@ -15,6 +15,7 @@ import { ButtonAction, SelectAction } from 'src/app/core/models/enum';
 })
 export class TableComponent {
   containsData = false;
+  dataShowing: { [key: string]: string }[] = [];
 
   @Input() set tableConfigurationValue(value: ITable | undefined) {
     if (value && Object.keys(value).length > 0) {
@@ -59,6 +60,8 @@ export class TableComponent {
         tableStructure.skip * tableStructure.take,
         tableStructure.skip * tableStructure.take + tableStructure.take
       );
+
+      this.dataShowing = recordsToDisplay;
 
       const totalRecords = tableConfiguration.data.length;
       const showColSpan = Math.floor(tableConfiguration.headers.length / 2);
@@ -182,7 +185,7 @@ export class TableComponent {
   onAction(action: string, row: number) {
     this.actionResponse.emit({
       action: action as ButtonAction,
-      data: this.tableConfiguration.getValue().data[row],
+      data: this.dataShowing[row],
     });
   }
 
@@ -231,7 +234,7 @@ export class TableComponent {
     try {
       return Boolean(
         JSON.parse(
-          this.tableConfiguration.getValue().data[index]['beingDeleted']
+          this.dataShowing[index]['beingDeleted']
         )
       );
     } catch {
