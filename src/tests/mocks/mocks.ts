@@ -390,7 +390,7 @@ export const saveTheDateSettingMock: ISaveTheDateSetting = {
   secondaryColor: '#000000',
   receptionPlace: 'Test Place',
   copyMessage: 'Test Message',
-  hotelInformation: 'Test Information',
+  hotelInformation: 'https://fakepath/Test',
   hotelName: 'Test Hotel',
 };
 

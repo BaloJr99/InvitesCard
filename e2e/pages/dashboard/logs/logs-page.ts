@@ -4,13 +4,13 @@ import { TableHelper } from 'e2e/common/table';
 import { LogModal } from './log-modal/log-modal';
 
 export class LogsPage extends DashboardPage {
-  readonly breadcrumb: Locator;
+  readonly breadcrumbHeader: Locator;
   readonly last31DaysChart: Locator;
   readonly percentageHistory: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.breadcrumb = page.locator('.breadcrumb-header li', {
+    this.breadcrumbHeader = page.locator('.breadcrumb-header li', {
       hasText: 'LOGS',
     });
     this.last31DaysChart = page.locator('canvas[id="historyChart"]');
@@ -23,7 +23,7 @@ export class LogsPage extends DashboardPage {
   }
 
   async isLogsPage() {
-    expect(this.breadcrumb, {
+    expect(this.breadcrumbHeader, {
       message: 'Logs breadcrumb should be visible',
     }).toBeVisible();
   }

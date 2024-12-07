@@ -4,7 +4,7 @@ import { DashboardPage } from '../dashboard-page';
 import { CommonModal } from 'e2e/common/common-modal';
 
 export class FilesPage extends DashboardPage {
-  readonly breadcrumb: Locator;
+  readonly breadcrumbHeader: Locator;
   readonly eventSelect: Locator;
   readonly filesEmptyMessage: Locator;
   readonly photosInput: Locator;
@@ -18,7 +18,7 @@ export class FilesPage extends DashboardPage {
 
   constructor(page: Page) {
     super(page);
-    this.breadcrumb = page.locator('.breadcrumb-header li', {
+    this.breadcrumbHeader = page.locator('.breadcrumb-header li', {
       hasText: 'FILES',
     });
 
@@ -43,7 +43,7 @@ export class FilesPage extends DashboardPage {
   }
 
   async isFilesPage() {
-    expect(this.breadcrumb, {
+    expect(this.breadcrumbHeader, {
       message: 'Files breadcrumb should be visible',
     }).toBeVisible();
   }

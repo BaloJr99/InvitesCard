@@ -41,7 +41,16 @@ export const sweetXvEventMock = {
   maxDateOfConfirmation: generateEventDate(),
   typeOfEvent: EventType.Xv,
   nameOfCelebrated: 'Test name',
-  assignedUser: 'playwright-admin',
+  assignedUser: 'playwright-invites',
+};
+
+export const saveTheDateEventMock = {
+  nameOfEvent: 'Save the date',
+  dateOfEvent: generateEventDate(),
+  maxDateOfConfirmation: generateEventDate(),
+  typeOfEvent: EventType.SaveTheDate,
+  nameOfCelebrated: 'Test name',
+  assignedUser: 'playwright-invites',
 };
 
 export const groupMock = {

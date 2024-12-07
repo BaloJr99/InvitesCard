@@ -4,12 +4,12 @@ import { DashboardPage } from 'e2e/pages/dashboard/dashboard-page';
 import { EventDetailsPage } from './event-details/event-details-page';
 
 export class EventsPage extends DashboardPage {
-  readonly breadcrumb: Locator;
+  readonly breadcrumbHeader: Locator;
   readonly newEventButton: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.breadcrumb = page.locator('.breadcrumb-header li', {
+    this.breadcrumbHeader = page.locator('.breadcrumb-header li', {
       hasText: 'EVENTOS',
     });
 
@@ -19,7 +19,7 @@ export class EventsPage extends DashboardPage {
   }
 
   async isEventsPage() {
-    expect(this.breadcrumb, {
+    expect(this.breadcrumbHeader, {
       message: 'Events breadcrumb should be visible',
     }).toBeVisible();
   }

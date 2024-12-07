@@ -3,7 +3,7 @@ import { DashboardPage } from '../dashboard-page';
 import { ProfileModal } from './profile-modal/profile-modal';
 
 export class ProfilePage extends DashboardPage {
-  readonly breadcrumb: Locator;
+  readonly breadcrumbHeader: Locator;
   readonly profileImageIcon: Locator;
   readonly profileImage: Locator;
   readonly addProfileImage: Locator;
@@ -26,7 +26,7 @@ export class ProfilePage extends DashboardPage {
 
   constructor(page: Page) {
     super(page);
-    this.breadcrumb = page.locator('.breadcrumb-header li', {
+    this.breadcrumbHeader = page.locator('.breadcrumb-header li', {
       hasText: 'PROFILE',
     });
 
@@ -59,7 +59,7 @@ export class ProfilePage extends DashboardPage {
   }
 
   async isProfilePage() {
-    expect(this.breadcrumb, {
+    expect(this.breadcrumbHeader, {
       message: 'Profile breadcrumb should be visible',
     }).toBeVisible();
   }

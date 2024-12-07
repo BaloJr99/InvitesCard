@@ -9,8 +9,10 @@ test.describe('Dashboard Profile', () => {
   test.beforeEach(async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
+
     const dashboardPage = await loginPage.loginAsAdmin();
     await dashboardPage.waitToLoad();
+
     await dashboardPage.clickToggleProfileButton();
     await dashboardPage.clickProfileButton();
     profilePage = new ProfilePage(page);
@@ -52,7 +54,8 @@ test.describe('Dashboard Profile', () => {
       ' The email is required  ',
       ' The phone number is required  ',
     ];
-    const errors = await profilePage.getValidationErrors();
-    expect(errors).toEqual(expectedValidationErrors);
+    expect(await profilePage.getValidationErrors(), {
+      message: 'Validation errors should be displayed',
+    }).toEqual(expectedValidationErrors);
   });
 });

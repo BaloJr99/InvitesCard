@@ -42,6 +42,7 @@ export class LoginPage extends BasePage {
     await this.usernameInput.fill(username);
     await this.passwordInput.fill(password);
     await this.loginButton.click();
+    await this.waitToLoad();
 
     return new DashboardPage(this.page);
   }
