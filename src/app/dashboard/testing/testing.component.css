@@ -1,0 +1,38 @@
+.breadcrumb-header .header {
+  display: flex;
+  align-items: center;
+}
+
+  .breadcrumb-header .header nav {
+    flex-grow: 1;
+  }
+
+  .breadcrumb-header .header .breadcrumb {
+    margin-bottom: 0;
+  }
+
+    .breadcrumb-header .header .breadcrumb .breadcrumb-item {
+      font-size: 15px;
+    }
+
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item a {
+        text-decoration: none; 
+        color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
+      }
+
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item a:hover {
+        text-decoration: underline; 
+      }
+
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item:first-of-type a {
+        font-weight: bold;
+        text-decoration: none;
+      }
+
+h2 {
+  font-size: 18px;
+}
+
+.card-body {
+  text-align: left;
+}

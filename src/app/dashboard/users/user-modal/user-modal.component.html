@@ -32,9 +32,9 @@
             <label for="roleFilter" class="form-label" i18n>Roles</label>
             <div class="filteringBox">
               <div class="roleActions" [ngClass]="{'is-invalid': displayMessage['roles']}">
-                <select class="form-select" id="roleFilter" (change)="selectedRole($event)" [ngClass]="{'is-invalid': displayMessage['roles']}">
-                  <option value="" selected i18n>Seleccionar un rol</option>
-                  <option *ngFor="let role of filteredRoles" [value]="role.id">{{ role.name }}</option>
+                <select #roleActions class="form-select" id="roleFilter" (change)="selectedRole($event)" [ngClass]="{'is-invalid': displayMessage['roles']}">
+                  <option value="" [attr.selected]="roleActions.value === '' ? '' : null" i18n>Seleccionar un rol</option>
+                  <option *ngFor="let role of filteredRoles" [value]="role.id" [attr.selected]="roleActions.value === role.id ? '' : null">{{ role.name }}</option>
                 </select>
                 <button type="button" class="btn btn-dark"  data-bs-toggle="modal" data-bs-target="#rolesModal" (click)="roleAction(true)" *ngIf="roleSelected"><i class="fa-solid fa-pen-to-square"></i></button>
                 <button type="button" class="btn btn-dark" (click)="addRole()" *ngIf="roleSelected"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
@@ -55,7 +55,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" id="closeModal" class="btn btn-secondary" data-bs-dismiss="modal" i18n>Cerrar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" i18n>Cerrar</button>
         <button type="button" class="btn btn-primary" (click)="saveUser()" i18n>Guardar</button>
       </div>
     </div>

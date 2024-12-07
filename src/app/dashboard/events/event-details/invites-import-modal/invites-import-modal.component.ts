@@ -49,10 +49,9 @@ export class InvitesImportModalComponent implements OnInit {
           .subscribe((content: string) => {
             this.processFile(content);
           });
-      } catch (error) {
+      } catch {
         this.loaderService.setLoading(false);
         this.processingFile = false;
-        console.error(error);
       }
     } else {
       this.errorInvites = [];

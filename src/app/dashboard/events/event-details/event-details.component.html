@@ -49,11 +49,11 @@
     <div class="accordion" id="inviteAccordion" *ngFor="let inviteGroup of invitesGrouped | keyvalue; index as i">
       <div class="accordion-item">
         <h2 class="accordion-header">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#' + inviteGroup.key.replaceAll(' ', '')" aria-expanded="true" aria-controls="collapseOne">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#accordion' + inviteGroup.key.replaceAll(' ', '')" aria-expanded="true" aria-controls="collapseOne">
             {{ inviteGroup.key }}
           </button>
         </h2>
-        <div [id]="inviteGroup.key.replaceAll(' ', '')" class="accordion-collapse collapse">
+        <div [id]="'accordion' + inviteGroup.key.replaceAll(' ', '')" class="accordion-collapse collapse">
           <div class="accordion-body">
             <app-table (actionResponse)="actionResponse($event)"
                        [tableConfigurationValue]="tables[i]">

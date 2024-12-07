@@ -14,6 +14,7 @@ describe('Sidebar Component (Shallow Test)', () => {
     ARCHIVOS: false,
     USUARIOS: true,
     LOGS: true,
+    TESTING: true,
     CONFIGURACIÓN: false,
   };
 
@@ -38,13 +39,13 @@ describe('Sidebar Component (Shallow Test)', () => {
     fixture.detectChanges();
   });
 
-  it('should have 6 items in the sidebar if is admin', () => {
+  it('should have 7 items in the sidebar if is admin', () => {
     const listGroup = fixture.debugElement.query(By.css('.list-group'));
     const listItems = listGroup.queryAll(By.css('a'));
 
     expect(listItems.length)
-      .withContext('The sidebar should have 6 items')
-      .toBe(6);
+      .withContext('The sidebar should have 7 items')
+      .toBe(7);
 
     listItems.forEach((item, index) => {
       expect(item.nativeElement.textContent.trim())

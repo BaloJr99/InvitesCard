@@ -15,6 +15,7 @@ describe('Sidebar Component (Integrated Test)', () => {
     '/dashboard/files',
     '/dashboard/users',
     '/dashboard/logs',
+    '/dashboard/testing',
     '/dashboard/settings',
   ];
 
@@ -48,8 +49,8 @@ describe('Sidebar Component (Integrated Test)', () => {
     const routerLinks = linkDes.map((de) => de.injector.get(RouterLink));
 
     expect(routerLinks.length)
-      .withContext('should have 6 router links')
-      .toBe(6);
+      .withContext('should have 7 router links')
+      .toBe(7);
 
     expect(routerLinks.map((rl) => rl.href))
       .withContext('should have correct routes')

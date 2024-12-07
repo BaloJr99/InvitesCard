@@ -58,20 +58,20 @@ import {
 } from 'src/app/core/models/settings';
 
 export const roleMock: IRole = {
-  id: 'd2f93adc-c1ae-45a1-a688-90273a58131a',
+  id: '674a68009dc087f77323d40d',
   isActive: true,
   name: 'admin',
 };
 
 export const fullUserMock: IFullUser = {
-  id: '2e1ba1a6-e0c2-4382-acf4-e1933a88ea77',
-  username: 'Test',
-  email: 'Test@gmail.com',
-  password: 'P@ssw0rd',
-  firstName: 'Test',
-  lastName: 'User',
+  id: '67453cad9303eeb77b31203d',
+  username: 'playwright-admin',
+  email: 'bchavez.testing@gmail.com',
+  password: 'P4ssw0rd',
+  firstName: 'Playwright',
+  lastName: 'Admin',
   phoneNumber: '1234567890',
-  gender: 'H',
+  gender: 'O',
   isActive: true,
   profilePhoto: 'Test.jpg',
   profilePhotoSource: 'Test.jpg',
@@ -436,6 +436,7 @@ export const invalidFileMock: File = new File(
 );
 
 export const tableDataMock: ITable = {
+  tableId: 'test-table',
   data: [
     {
       Name: 'Test Name',

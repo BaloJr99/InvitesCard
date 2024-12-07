@@ -8,9 +8,9 @@
     </nav>
     <div class="filter">
       <label for="eventId" i18n>Evento:</label>
-      <select id="eventId" class="form-control" (change)="filterInvites($event)">
-        <option value="" i18n>Todos los eventos</option>
-        <option *ngFor="let event of events" [value]="event.id">{{ event.nameOfEvent }}</option>
+      <select #eventId id="eventId" class="form-control" (change)="filterInvites($event)">
+        <option value="" [attr.selected]="eventId.value === '' ? '' : null" i18n>Todos los eventos</option>
+        <option *ngFor="let event of events" [value]="event.id" [attr.selected]="eventId.value === event.id ? '' : null">{{ event.nameOfEvent }}</option>
       </select>
     </div>
   </div>

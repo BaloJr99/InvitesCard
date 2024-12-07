@@ -71,11 +71,11 @@
               </div>
               <div class="mb-0 col-12 col-md-4">
                 <label for="gender" class="form-label" i18n>Genero</label>
-                <select id="gender" type="text" class="form-control" formControlName="gender" [ngClass]="{'is-invalid': displayMessage['gender']}">
-                  <option value="" i18n>Seleccionar...</option>
-                  <option value="H" i18n>Hombre</option>
-                  <option value="M" i18n>Mujer</option>
-                  <option value="O" i18n>Otro</option>
+                <select #gender id="gender" type="text" class="form-control" formControlName="gender" [ngClass]="{'is-invalid': displayMessage['gender']}">
+                  <option value="" [attr.selected]="gender.value === '' ? '' : null" i18n>Seleccionar...</option>
+                  <option value="H" [attr.selected]="gender.value === 'H' ? '' : null" i18n>Hombre</option>
+                  <option value="M" [attr.selected]="gender.value === 'M' ? '' : null" i18n>Mujer</option>
+                  <option value="O" [attr.selected]="gender.value === 'O' ? '' : null" i18n>Otro</option>
                 </select>
                 <span class="invalid-feedback" role="alert">
                   {{ displayMessage['gender'] }}

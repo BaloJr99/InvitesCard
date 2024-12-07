@@ -1,4 +1,4 @@
-<table class="table row-border hover text-center" *ngIf="vm$ | async as vm"> 
+<table class="table row-border hover text-center" *ngIf="vm$ | async as vm" [id]="vm.tableId"> 
   <thead>
     <tr>
       <ng-container *ngFor="let header of vm.headers; index as i">
@@ -10,7 +10,7 @@
         </th>
         <th *ngIf="(i !== 0 || !vm.useCheckbox) && header.sortable" attr.aria-sort="{{vm.sortDirection === '' ? 'none' : vm.sortDirection === 'asc' ? 'ascending' : 'descending'}}">
           <button (click)="sortColumn(header.text)">
-            {{ header.text }}
+            <span>{{ header.text }}</span>
           </button>
         </th>
       </ng-container>
@@ -30,7 +30,7 @@
                     [ngClass]="button.isDisabled ? 'btn-secondary' : ''" 
                     (click)="onAction(button.action, rowIndex)" 
                     [disabled]="button.isDisabled" 
-                    i18n-title="button.accessibleText" 
+                    [title]="button.accessibleText"
                     [style]="button.styles"
                     [innerHtml]="button.innerHtml">
             </button>

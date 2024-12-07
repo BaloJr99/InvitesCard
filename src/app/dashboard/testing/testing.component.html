@@ -1,0 +1,25 @@
+<section class="row mx-1 mt-3 breadcrumb-header">
+  <div class="col-12 header">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a>
+        </li>
+        <li class="breadcrumb-item" i18n>TESTING</li>
+      </ol>
+    </nav>
+  </div>
+</section>
+<section class="testing">
+  <div class="row g-0 mt-2">
+    <div class="col-12 gx-4">
+      <div class="card">
+        <div class="card-body">
+          <button class="btn btn-danger" (click)="cleanEnvironment()" i18n>
+            Limpiar Ambiente
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

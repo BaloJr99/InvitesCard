@@ -472,6 +472,7 @@ export class EventDetailsComponent implements OnInit {
     const headers = this.getHeaders();
 
     return {
+      tableId: groupIndex.replaceAll(' ', ''),
       headers: headers,
       data: invitesGroup.map((invite) => {
         return this.getInviteRow(invite, headers, groupIndex);

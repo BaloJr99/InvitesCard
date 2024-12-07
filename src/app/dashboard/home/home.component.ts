@@ -63,12 +63,23 @@ export class HomeComponent implements OnInit {
     const invitesByEvent = this.invites.filter((invite) =>
       this.eventSelected !== '' ? invite.eventId === this.eventSelected : true
     );
+
     this.statistics = createStatistics(invitesByEvent);
-    this.percentajeOfConfirmation = Math.trunc(
+
+    let percentaje = Math.trunc(
       (this.statistics[0].value / this.statistics[3].value) * 100
+    );
+
+    this.percentajeOfConfirmation = (
+      isNaN(percentaje) ? 0 : percentaje
     ).toString();
-    this.percentajeOfPendingResponse = Math.trunc(
+
+    percentaje = Math.trunc(
       (this.statistics[1].value / this.statistics[3].value) * 100
+    );
+    
+    this.percentajeOfPendingResponse = (
+      isNaN(percentaje) ? 0 : percentaje
     ).toString();
 
     const todayMinus31Days = new Date();

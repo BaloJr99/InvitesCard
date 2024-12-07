@@ -4,6 +4,8 @@ import { DashboardComponent } from './dashboard.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { adminGuard } from '../core/guards/admin.guard';
+import { TestingComponent } from './testing/testing.component';
+import { environmentGuard } from '../core/guards/environment.guard';
 
 const routes: Routes = [
   {
@@ -48,6 +50,11 @@ const routes: Routes = [
           import('./profile/profile.module').then((m) => m.ProfileModule),
       },
       {
+        path: 'testing',
+        component: TestingComponent,
+        canActivate: [environmentGuard],
+      },
+      {
         path: '**',
         redirectTo: 'home',
       },
@@ -60,5 +67,5 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class DashboardRoutingModule {
-  static components = [DashboardComponent, NavbarComponent, SidebarComponent];
+  static components = [DashboardComponent, NavbarComponent, SidebarComponent, TestingComponent];
 }

@@ -8,7 +8,7 @@
         <div class="backgroundImage{{i}}" style="visibility: hidden; background-image: url('{{downloadImage.fileUrl}}');" alt=""></div>
       </ng-container>
     </ng-container>
-    <button (click)="goToForm()" class="scrollFormButton"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>
+    <button (click)="goToForm()" class="scrollFormButton" i18n-title title="Deplazar hacia el formulario"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>
     <div class="container">
       <div class="header">
         <h1>15<span>Sweet</span></h1>
@@ -66,7 +66,7 @@
           <p>{{eventSettings.massAddress}}</p>
         </div>
         <div class=" col-sm-12 col-md-6">
-          <iframe [src]="eventSettings.massUrl | safe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe title="Mapa de la ceremonia" i18n-title [src]="eventSettings.massUrl | safe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
     </div>
@@ -75,7 +75,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12 col-md-6">
-          <iframe [src]="eventSettings.receptionUrl | safe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe title="Mapa de la recepción" i18n-title [src]="eventSettings.receptionUrl | safe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
         <div class="col-sm-12 col-md-6">
           <h2 i18n>Recepción</h2>

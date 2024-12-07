@@ -56,6 +56,7 @@ export interface IZodErrors {
 
 export interface ITable {
   tableIndex: number;
+  tableId: string;
   useCheckbox?: boolean;
   headers: ITableHeaders[];
   data: { [key: string]: string }[];

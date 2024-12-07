@@ -140,6 +140,7 @@ export class LogsComponent implements OnInit {
     const headers = this.getHeaders();
 
     return {
+      tableId: 'logsTable',
       headers: headers,
       data: logs.map((log) => {
         return this.getLogRow(log, headers);

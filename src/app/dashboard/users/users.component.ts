@@ -144,6 +144,7 @@ export class UsersComponent implements OnInit {
     const headers = this.getHeaders();
 
     return {
+      tableId: 'usersTable',
       headers: headers,
       data: users.map((user) => {
         return this.getUserRow(user, headers);

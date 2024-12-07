@@ -36,11 +36,11 @@ export class ConfirmationComponent implements AfterViewInit {
   @Input() set inviteValue(value: ISweetXvUserInvite) {
     this.invite = value;
     const { entriesNumber } = value;
-    this.numberOfEntries.next(
-      Array.from({ length: entriesNumber }, (k, j) => j + 1).sort(
-        (a, b) => b - a
-      )
-    );
+    const numberOfEntries = Array.from(
+      { length: entriesNumber },
+      (k, j) => j + 1
+    ).sort((a, b) => b - a);
+    this.numberOfEntries.next(numberOfEntries.map((entry) => entry.toString()));
   }
 
   blockConfirmationForm = false;
@@ -53,7 +53,7 @@ export class ConfirmationComponent implements AfterViewInit {
 
   @Output() newInvite = new EventEmitter<FormGroup>();
 
-  private numberOfEntries = new BehaviorSubject<number[]>([]);
+  private numberOfEntries = new BehaviorSubject<string[]>([]);
   numberOfEntries$ = this.numberOfEntries.asObservable();
 
   confirmationForm: FormGroup = this.fb.group({
