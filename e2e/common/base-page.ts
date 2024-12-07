@@ -23,7 +23,7 @@ export class BasePage {
     }
 
     if (await this.spinner.isVisible()) {
-      this.waitToLoad();
+      await this.waitToLoad();
     }
 
     return this.page;

@@ -26,7 +26,7 @@ const generateEventDate = (
 export const invitesAdminUser: IUserProfile = {
   username: 'playwright-invites',
   password: 'P4ssw0rd',
-  email: 'bchavez.testing@gmail.com',
+  email: 'betoben990@gmail.com',
   firstName: 'Playwright',
   lastName: 'Invites',
   gender: 'M',
@@ -63,4 +63,16 @@ export const confirmedInviteMock = {
   entriesNumber: 5,
   contactNumber: '1234567890',
   kidsAllowed: true,
+};
+
+export const testRoleMock = {
+  roleName: 'testRole',
+  isActive: true,
+};
+
+export const testUserMock = {
+  username: 'test-user',
+  email: 'test@email.com',
+  roles: [testRoleMock.roleName],
+  isActive: true,
 };

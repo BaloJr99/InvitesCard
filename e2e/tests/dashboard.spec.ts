@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { invitesAdminUser } from 'e2e/helper/mocks';
 import { LoginPage } from 'e2e/pages/auth/login-page';
 import { DashboardPage } from 'e2e/pages/dashboard/dashboard-page';
 import { fullUserMock } from 'src/tests/mocks/mocks';
 
-test.describe('Dashboard Page', () => {
+test.describe('Dashboard Page (Admin)', () => {
   let dashboardPage: DashboardPage;
 
   test.beforeEach(async ({ page }) => {
@@ -55,6 +56,68 @@ test.describe('Dashboard Page', () => {
 
     const profileEmail = await profileCard.locator('h3 span').textContent();
     expect(fullUserMock.email, {
+      message: 'Profile card should have the correct email',
+    }).toContain(profileEmail);
+
+    const profileLinks = await profileCard.locator('a').all();
+
+    const expectedProfileLinks = ['My profile', 'Settings', 'Logout'];
+    for (let i = 0; i < profileLinks.length; i++) {
+      const linkText = await profileLinks[i].textContent();
+      expect(linkText, {
+        message: 'Profile card should have the correct links',
+      }).toContain(expectedProfileLinks[i]);
+    }
+  });
+});
+
+test.describe('Dashboard Page (Invites Admin)', () => {
+  let dashboardPage: DashboardPage;
+
+  test.beforeEach(async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    await loginPage.goto();
+
+    dashboardPage = await loginPage.login(
+      invitesAdminUser.username,
+      invitesAdminUser.password
+    );
+    await dashboardPage.waitToLoad();
+    await dashboardPage.isDashboardPage();
+  });
+
+  test('invites admin should be able to see 4 navigation links', async () => {
+    const adminNavigationLinks = ['HOME', 'EVENTS', 'FILES', 'SETTINGS'];
+
+    const navigationLinks = await dashboardPage.getNavigationLinks();
+
+    expect(navigationLinks.length, {
+      message: 'Admin should see 4 navigation links',
+    }).toBe(4);
+
+    for (let i = 0; i < navigationLinks.length; i++) {
+      const linkText = await navigationLinks[i].textContent();
+      expect(linkText, {
+        message: 'Invites admin should see the correct navigation links',
+      }).toContain(adminNavigationLinks[i]);
+    }
+  });
+
+  test('should be able to see the profile card', async () => {
+    await dashboardPage.clickToggleProfileButton();
+
+    const profileCard = await dashboardPage.getProfileCard();
+    await expect(profileCard, {
+      message: 'Profile card should be visible',
+    }).toBeVisible();
+
+    const profileUsername = await profileCard.locator('h3').textContent();
+    expect(profileUsername, {
+      message: 'Profile card should have the correct username',
+    }).toContain(invitesAdminUser.username);
+
+    const profileEmail = await profileCard.locator('h3 span').textContent();
+    expect(invitesAdminUser.email, {
       message: 'Profile card should have the correct email',
     }).toContain(profileEmail);
 

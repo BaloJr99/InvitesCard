@@ -62,7 +62,7 @@ export class UserModalComponent implements OnInit, AfterViewInit {
       email: ['', Validators.required],
       roles: [[], [Validators.required, Validators.minLength(1)]],
       isActive: [true],
-      controlIsValid: [false],
+      controlIsValid: [true],
     },
     {
       validators: controlIsDuplicated,
@@ -200,7 +200,7 @@ export class UserModalComponent implements OnInit, AfterViewInit {
       email: '',
       roles: [],
       isActive: true,
-      controlIsValid: false,
+      controlIsValid: true,
     });
 
     this.userRoles = [];

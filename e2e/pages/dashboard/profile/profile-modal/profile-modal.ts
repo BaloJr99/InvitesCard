@@ -7,7 +7,7 @@ export class ProfileModal extends BaseModal {
   readonly photoFilesInput: Locator;
 
   constructor(page: Page) {
-    super(page, 'profileModal');
+    super(page, '#profileModal');
     this.imageContainer = this.modalLocator.locator('.image-container');
     this.photoFilesInput = this.modalLocator.locator('#photoFiles');
   }
