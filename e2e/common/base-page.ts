@@ -12,21 +12,14 @@ export class BasePage {
   }
 
   async waitToLoad() {
-    if (await this.spinner.isVisible()) {
-      await this.spinner.waitFor({ state: 'hidden' });
-    }
-
     try {
       await this.spinner.waitFor({ state: 'visible', timeout: 1000 });
+      if (await this.spinner.isVisible()) {
+        await this.spinner.waitFor({ state: 'hidden' });
+      }
     } catch {
-      console.log('Spinner was hidden');
+      console.log(`Spinner wasn't found`);
     }
-
-    if (await this.spinner.isVisible()) {
-      await this.waitToLoad();
-    }
-
-    return this.page;
   }
 
   async goto(path: string) {

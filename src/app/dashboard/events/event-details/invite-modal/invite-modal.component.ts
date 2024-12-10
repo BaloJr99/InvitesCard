@@ -224,10 +224,10 @@ export class InviteModalComponent implements OnInit, AfterViewInit {
   }
 
   updateCurrentInviteGroup(event: IInviteGroupsAction) {
+    this.showNewGroupForm = false;
+    this.updateInviteGroups.emit(event);
     this.createInviteForm.patchValue({
       inviteGroupId: event.inviteGroup.id,
     });
-    this.updateInviteGroups.emit(event);
-    this.showNewGroupForm = false;
   }
 }

@@ -83,7 +83,6 @@ export class EventDetailsComponent implements OnInit {
       true,
       $localize`Cargando los detalles del evento`
     );
-    this.loaderService.setLoading(false);
 
     this.isDeadlineMet = Boolean(
       this.route.snapshot.data['eventResolved']['isDeadlineMet']

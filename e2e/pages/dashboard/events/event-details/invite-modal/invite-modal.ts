@@ -70,7 +70,20 @@ export class InviteModal extends BaseModal {
     return options;
   }
 
-  async getOptionSelected(select: Locator) {
-    return select.locator('option[selected]').textContent();
+  async getOptionSelected() {
+    const options = this.groupSelect.locator('option').all();
+    const optionsLabels: string[] = [];
+    const optionValues: string[] = [];
+
+    for (const option of await options) {
+      optionsLabels.push((await option.textContent()) || '');
+      optionValues.push((await option.getAttribute('value')) || '');
+    }
+
+    const selectedValue = await this.groupSelect.inputValue();
+    const selectedOption = optionValues.findIndex(
+      (option) => option == selectedValue
+    );
+    return optionsLabels[selectedOption];
   }
 }

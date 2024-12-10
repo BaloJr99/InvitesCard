@@ -264,7 +264,7 @@ test.describe('Dashboard Events (Admin)', () => {
     expect(await inviteModal.familyInput.inputValue()).toBe(
       confirmedInviteMock.family
     );
-    expect(await inviteModal.getOptionSelected(inviteModal.groupSelect)).toBe(
+    expect(await inviteModal.getOptionSelected()).toBe(
       confirmedInviteMock.inviteGroup
     );
     expect(await inviteModal.entriesNumberInput.inputValue()).toBe(
@@ -324,7 +324,7 @@ test.describe('Dashboard Events (Admin)', () => {
     await inviteModal.waitToLoad();
 
     expect(await inviteModal.familyInput.inputValue()).toBe('New Family Name');
-    expect(await inviteModal.getOptionSelected(inviteModal.groupSelect)).toBe(
+    expect(await inviteModal.getOptionSelected()).toBe(
       confirmedInviteMock.inviteGroup
     );
     expect(await inviteModal.entriesNumberInput.inputValue()).toBe('2');
@@ -745,7 +745,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
     expect(await inviteModal.familyInput.inputValue()).toBe(
       confirmedInviteMock.family
     );
-    expect(await inviteModal.getOptionSelected(inviteModal.groupSelect)).toBe(
+    expect(await inviteModal.getOptionSelected()).toBe(
       confirmedInviteMock.inviteGroup
     );
     expect(await inviteModal.entriesNumberInput.inputValue()).toBe(
@@ -805,7 +805,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
     await inviteModal.waitToLoad();
 
     expect(await inviteModal.familyInput.inputValue()).toBe('New Family Name');
-    expect(await inviteModal.getOptionSelected(inviteModal.groupSelect)).toBe(
+    expect(await inviteModal.getOptionSelected()).toBe(
       confirmedInviteMock.inviteGroup
     );
     expect(await inviteModal.entriesNumberInput.inputValue()).toBe('2');

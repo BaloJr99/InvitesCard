@@ -28,7 +28,6 @@ test.describe('Authentication', () => {
     await loginPage.goto();
 
     await loginPage.login('admin', 'admin');
-    await loginPage.waitToLoad();
 
     await expect(loginPage.errorMessage).toHaveText('Wrong credentials');
   });

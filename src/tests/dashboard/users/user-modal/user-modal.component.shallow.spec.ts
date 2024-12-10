@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
+import { of } from 'rxjs';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { UserModalComponent } from 'src/app/dashboard/users/user-modal/user-modal.component';
@@ -10,6 +11,7 @@ import { roleMock, upsertUserMock } from 'src/tests/mocks/mocks';
 
 describe('User Modal Component (Shallow Test)', () => {
   let fixture: ComponentFixture<UserModalComponent>;
+  let usersServiceSpy: jasmine.SpyObj<UsersService>;
 
   const updateFormUsingEvent = (
     username: string,
@@ -46,7 +48,7 @@ describe('User Modal Component (Shallow Test)', () => {
   };
 
   beforeEach(waitForAsync(() => {
-    const usersSpy = jasmine.createSpyObj('UsersService', ['']);
+    const usersSpy = jasmine.createSpyObj('UsersService', ['createUser']);
     const rolesSpy = jasmine.createSpyObj('RolesService', ['getAllRoles']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
@@ -60,9 +62,14 @@ describe('User Modal Component (Shallow Test)', () => {
         { provide: ToastrService, useValue: toastrSpy },
       ],
     }).compileComponents();
+
+    usersServiceSpy = TestBed.inject(
+      UsersService
+    ) as jasmine.SpyObj<UsersService>;
   }));
 
   beforeEach(() => {
+    usersServiceSpy.createUser.and.returnValue(of());
     fixture = TestBed.createComponent(UserModalComponent);
     fixture.componentInstance.roles = [roleMock];
     fixture.componentInstance.filteredRoles = [roleMock];

@@ -10,7 +10,7 @@ export class EventModal extends BaseModal {
   readonly assignedUserInput: Locator;
 
   constructor(page: Page) {
-    super(page, 'app-event-modal');
+    super(page, '#eventModal');
 
     this.eventNameInput = this.modalLocator.locator('#nameOfEvent');
     this.eventDateInput = this.modalLocator.locator('#dateOfEvent');

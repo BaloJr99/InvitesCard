@@ -3,7 +3,6 @@ import { testRoleMock, testUserMock } from 'e2e/helper/mocks';
 import { LoginPage } from 'e2e/pages/auth/login-page';
 import { TestingPage } from 'e2e/pages/dashboard/testing/testing-page';
 import { UsersPage } from 'e2e/pages/dashboard/users/users-page';
-import { roleMock } from 'src/tests/mocks/mocks';
 
 test.describe('Dashboard users', () => {
   let environmentCleaned = false;

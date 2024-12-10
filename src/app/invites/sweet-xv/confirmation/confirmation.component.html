@@ -26,8 +26,8 @@
         <div class="form-group">
           <p i18n>Personas confirmadas</p>
           <select #entriesConfirmed id="entriesConfirmed" class="form-control" formControlName="entriesConfirmed" [ngClass]="{'is-invalid': displayMessage['entriesConfirmed']}">
-            <option value="" [attr.selected]="entriesConfirmed.value === '' ? '' : null" i18n>Selecciona el numero de pases</option>
-            <option *ngFor="let number of numberOfEntries$ | async" [value]="number" [attr.selected]="entriesConfirmed.value === number ? '' : null">{{ number }}</option>
+            <option value="" i18n>Selecciona el numero de pases</option>
+            <option *ngFor="let number of numberOfEntries$ | async" [value]="number">{{ number }}</option>
           </select>
           <span class="invalid-feedback">
             {{ displayMessage['entriesConfirmed'] }}

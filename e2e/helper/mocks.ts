@@ -49,7 +49,7 @@ export const saveTheDateEventMock = {
   dateOfEvent: generateEventDate(),
   maxDateOfConfirmation: generateEventDate(),
   typeOfEvent: EventType.SaveTheDate,
-  nameOfCelebrated: 'Test name',
+  nameOfCelebrated: 'Test wife;Test groom',
   assignedUser: 'playwright-invites',
 };
 
@@ -58,9 +58,33 @@ export const groupMock = {
 };
 
 export const confirmedInviteMock = {
-  family: 'Test family',
+  family: 'Confirm family',
   inviteGroup: 'Test group',
   entriesNumber: 5,
+  contactNumber: '1234567890',
+  kidsAllowed: true,
+};
+
+export const notConfirmedInviteMock = {
+  family: 'Not confirm family',
+  inviteGroup: 'Test group',
+  entriesNumber: 10,
+  contactNumber: '1234567890',
+  kidsAllowed: false,
+};
+
+export const partialConfirmedInviteMock = {
+  family: 'Partial confirm family',
+  inviteGroup: 'Test group',
+  entriesNumber: 15,
+  contactNumber: '1234567890',
+  kidsAllowed: true,
+};
+
+export const pendingInviteMock = {
+  family: 'Pending family',
+  inviteGroup: 'Test group',
+  entriesNumber: 4,
   contactNumber: '1234567890',
   kidsAllowed: true,
 };

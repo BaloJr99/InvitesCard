@@ -62,11 +62,7 @@ export class SweetXvComponent implements OnInit {
     private invitesService: InvitesService,
     private elRef: ElementRef,
     @Inject(LOCALE_ID) private localeValue: string
-  ) {
-    setInterval(() => {
-      this.updateBackground();
-    }, 5000);
-  }
+  ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -119,11 +115,21 @@ export class SweetXvComponent implements OnInit {
                   ...JSON.parse(eventSettings.settings),
                   eventId: eventSettings.eventId,
                 };
-                this.downloadImages = downloadFiles.eventImages.filter((image) =>
-                  window.innerWidth > 575
-                    ? image.imageUsage === ImageUsage.Desktop
-                    : image.imageUsage === ImageUsage.Phone
+                this.downloadImages = downloadFiles.eventImages.filter(
+                  (image) =>
+                    window.innerWidth > 575
+                      ? image.imageUsage === ImageUsage.Desktop ||
+                        image.imageUsage === ImageUsage.Both
+                      : image.imageUsage === ImageUsage.Phone ||
+                        image.imageUsage === ImageUsage.Both
                 );
+
+                if (this.downloadImages.length > 0) {
+                  setInterval(() => {
+                    this.updateBackground();
+                  }, 5000);
+                }
+
                 this.elRef.nativeElement.style.setProperty(
                   '--custom-primary-color',
                   this.eventSettings.primaryColor

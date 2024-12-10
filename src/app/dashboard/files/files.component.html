@@ -14,8 +14,8 @@
       <div class="form-group">
         <label for="event-select" i18n>Seleccione un evento</label>
         <select #eventSelect id="event-select" class="form-control" (change)="searchImages()">
-          <option value="" [attr.selected]="eventSelect.value === '' ? '' : null" i18n>Seleccione...</option>
-          <option *ngFor="let event of events" [value]="event.id" [attr.selected]="eventSelect.value === event.id ? '' : null">{{ event.nameOfEvent }}</option>
+          <option value="" i18n>Seleccione...</option>
+          <option *ngFor="let event of events" [value]="event.id">{{ event.nameOfEvent }}</option>
         </select>
       </div>
     </div>
@@ -49,10 +49,10 @@
               <div class="form-group">
                 <label for="my-select-{{i}}" i18n>Uso de la imagen</label>
                 <select id="my-select-{{i}}" class="form-control" (change)="insertUpdatedImage($event)">
-                  <option value="" [attr.selected]="image.imageUsage" i18n>Seleccione...</option>
-                  <option value="B" [attr.selected]="image.imageUsage === 'B' ? '' : null" i18n>Ambos</option>
-                  <option value="P"  [attr.selected]="image.imageUsage === 'P' ? '' : null" i18n>Celular</option>
-                  <option value="C"  [attr.selected]="image.imageUsage === 'C' ? '' : null" i18n>Computadora</option>
+                  <option value="" i18n>Seleccione...</option>
+                  <option value="B" i18n>Ambos</option>
+                  <option value="P" i18n>Celular</option>
+                  <option value="C" i18n>Computadora</option>
                 </select>
                 <button class="btn btn-danger" title="Eliminar imagen" i18n-title (click)="showDeleteDialog(image.id)"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
               </div>

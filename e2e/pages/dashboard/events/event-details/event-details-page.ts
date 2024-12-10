@@ -46,9 +46,6 @@ export class EventDetailsPage extends DashboardPage {
 
   async clickNewInviteButton() {
     await this.newInvite.click();
-
-    await this.waitToLoad();
-
     return new InviteModal(this.page);
   }
 
