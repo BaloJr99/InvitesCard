@@ -1,0 +1,32 @@
+.filter-dialog {
+  display: none;
+  position: absolute;
+  background: white;
+  padding: 10px;
+  width: 200px;
+  border: 1px solid gray;
+}
+
+.filter-dialog.show {
+  display: block;
+}
+
+  .filter-dialog h3 {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .filter-dialog .filter-dialog-body {
+    margin-bottom: 10px;
+  }
+
+  .filter-dialog .filter-dialog-footer {
+    display: flex;
+    justify-content: space-between;
+  }
+
+    .filter-dialog .filter-dialog-footer button {
+      border-radius: 10px;
+      background-color: var(--secondary-blue);
+      color: var(--grey);
+    }

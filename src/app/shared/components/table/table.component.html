@@ -5,13 +5,18 @@
         <th *ngIf="i === 0 && vm.showCheckbox">
           <input id="checkbox-all-{{vm.tableIndex}}" type="checkbox" (change)="selectAll($event)" [checked]="allSelected()" [attr.aria-label]="getAccessibilityMessage(header.text, true)">
         </th>
-        <th *ngIf="(i !== 0 || !vm.useCheckbox) && !header.sortable">
-          <span>{{ header.text }}</span>
-        </th>
-        <th *ngIf="(i !== 0 || !vm.useCheckbox) && header.sortable" attr.aria-sort="{{vm.sortDirection === '' ? 'none' : vm.sortDirection === 'asc' ? 'ascending' : 'descending'}}">
-          <button (click)="sortColumn(header.text)">
-            <span>{{ header.text }}</span>
-          </button>
+        <th *ngIf="(i !== 0 || !vm.useCheckbox)" attr.aria-sort="{{vm.sortDirection === '' ? 'none' : vm.sortDirection === 'asc' ? 'ascending' : 'descending'}}">
+          <div>
+            <ng-container *ngIf="!header.sortable">
+              <span>{{ header.text }}</span>
+            </ng-container>
+            <ng-container *ngIf="header.sortable">
+              <button class="sort" (click)="sortColumn(header.text)">
+                <span>{{ header.text }}</span>
+              </button>
+            </ng-container>
+            <app-filter [text]="header.text" [index]="i" (filter)="filterData($event)" *ngIf="header.filterable"></app-filter>
+          </div>
         </th>
       </ng-container>
     </tr>

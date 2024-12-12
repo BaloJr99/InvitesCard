@@ -485,6 +485,24 @@ export const tableDataWithCheckboxMock: ITable = {
   useCheckbox: true,
 };
 
+export const tableDataWithFilterableHeaders: ITable = {
+  ...tableDataMock,
+  headers: [
+    {
+      text: 'Name',
+      filterable: true,
+    },
+    { text: 'Actions' },
+  ],
+  buttons: [
+    {
+      accessibleText: 'Test Button',
+      action: ButtonAction.Copy,
+      innerHtml: 'Test',
+    },
+  ],
+};
+
 export const saveTheDateUserInviteMock: ISaveTheDateUserInvite = {
   id: newInviteMock.id,
   dateOfEvent: fullEventsMock.dateOfEvent.concat('T00:00:00Z'),

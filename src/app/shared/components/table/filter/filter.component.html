@@ -1,0 +1,17 @@
+<div class="filter-container">
+  <button class="filter" attr.aria-label="Filter by {{ text }}" (click)="onFilterClick()"><i class="fa-solid fa-filter"></i></button>
+  <div id="filter-dialog-{{index}}" class="filter-dialog" role="dialog" aria-modal="true" aria-labelledby="filter-dialog-main-header">
+    <div class="filter-dialog-content">
+      <div class="filter-dialog-header">
+        <h3 id="filter-dialog-main-header" attr.aria-label="Filter by {{text}}">{{ text }}</h3>
+      </div>
+      <div class="filter-dialog-body">
+        <input id="filter-input-{{index}}" type="text" class="form-control" placeholder="Search" (keyup.enter)="applyFilter()">
+      </div>
+      <div class="filter-dialog-footer">
+        <button class="clear" (click)="clearFilter()">Clear</button>
+        <button class="apply" (click)="applyFilter()">Apply</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -9,6 +9,7 @@ import { UsersService } from 'src/app/core/services/users.service';
 import { UserModalComponent } from 'src/app/dashboard/users/user-modal/user-modal.component';
 import { UserRoleComponent } from 'src/app/dashboard/users/user-role-modal/user-role.component';
 import { UsersComponent } from 'src/app/dashboard/users/users.component';
+import { FilterComponent } from 'src/app/shared/components/table/filter/filter.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { searchUserMock, userEventsInfoMock } from 'src/tests/mocks/mocks';
 
@@ -27,9 +28,10 @@ describe('Users Component (Integrated Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [
+        FilterComponent,
+        TableComponent,
         UserModalComponent,
         UserRoleComponent,
-        TableComponent,
         UsersComponent,
       ],
       imports: [ReactiveFormsModule],

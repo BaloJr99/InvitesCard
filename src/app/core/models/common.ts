@@ -66,6 +66,7 @@ export interface ITable {
 export interface ITableHeaders {
   text: string;
   sortable?: boolean;
+  filterable?: boolean;
 }
 
 export interface ITableButtons {
@@ -92,4 +93,9 @@ export interface IPageButtons {
 export interface IEmitAction {
   action: ButtonAction | SelectAction;
   data?: { [key: string]: string };
+}
+
+export interface IFilter {
+  value: string;
+  filter: string;
 }

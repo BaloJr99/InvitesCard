@@ -168,10 +168,12 @@ export class LogsComponent implements OnInit {
       {
         text: $localize`Error`,
         sortable: true,
+        filterable: true,
       },
       {
         text: $localize`Usuario`,
         sortable: true,
+        filterable: true,
       },
       {
         text: $localize`Acciones`,

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import {
   IEmitAction,
+  IFilter,
   IPageButtons,
   ITable,
   ITableStructure,
@@ -21,6 +22,19 @@ export class TableComponent {
     if (value && Object.keys(value).length > 0) {
       this.containsData = value.data.length > 0;
       this.tableConfiguration.next(value);
+
+      // Extract filters from the table configuration
+      const filters = value.headers
+        .filter((header) => header.filterable)
+        .map(
+          (header) =>
+            ({
+              value: '',
+              filter: header.text,
+            } as IFilter)
+        );
+
+      this.tableFilters.next(filters);
     }
   }
 
@@ -34,11 +48,18 @@ export class TableComponent {
   });
   tableStructure$ = this.tableStructure.asObservable();
 
+  private tableFilters = new BehaviorSubject<IFilter[]>([]);
+  tableFilters$ = this.tableFilters.asObservable();
+
   private tableConfiguration = new BehaviorSubject<ITable>({} as ITable);
   tableConfiguration$ = this.tableConfiguration.asObservable();
 
-  vm$ = combineLatest([this.tableConfiguration, this.tableStructure$]).pipe(
-    map(([tableConfiguration, tableStructure]) => {
+  vm$ = combineLatest([
+    this.tableConfiguration,
+    this.tableStructure$,
+    this.tableFilters$,
+  ]).pipe(
+    map(([tableConfiguration, tableStructure, tableFilters]) => {
       const currentPage = tableStructure.skip + 1;
 
       let sortedArray = [...tableConfiguration.data];
@@ -56,6 +77,17 @@ export class TableComponent {
         });
       }
 
+      // Apply filters to the array
+      const activeFilters = tableFilters.filter((x) => x.value !== '');
+
+      if (activeFilters.length > 0) {
+        sortedArray = sortedArray.filter((row) =>
+          activeFilters.every((filter) =>
+            row[filter.filter].toLowerCase().includes(filter.value.toLowerCase())
+          )
+        );
+      }
+
       const recordsToDisplay = sortedArray.slice(
         tableStructure.skip * tableStructure.take,
         tableStructure.skip * tableStructure.take + tableStructure.take
@@ -63,10 +95,10 @@ export class TableComponent {
 
       this.dataShowing = recordsToDisplay;
 
-      const totalRecords = tableConfiguration.data.length;
+      const totalRecords = sortedArray.length;
       const showColSpan = Math.floor(tableConfiguration.headers.length / 2);
       const paginationSpan = tableConfiguration.headers.length - showColSpan;
-      const numberOfPages = Math.ceil(tableConfiguration.data.length / 10);
+      const numberOfPages = Math.ceil(sortedArray.length / 10);
       const pageNumberArray: IPageButtons[] = [];
 
       const lastPage = Math.ceil(totalRecords / tableStructure.take);
@@ -232,11 +264,7 @@ export class TableComponent {
 
   rowSelected(index: number): boolean {
     try {
-      return Boolean(
-        JSON.parse(
-          this.dataShowing[index]['beingDeleted']
-        )
-      );
+      return Boolean(JSON.parse(this.dataShowing[index]['beingDeleted']));
     } catch {
       return false;
     }
@@ -322,5 +350,21 @@ export class TableComponent {
       ((showCheckbox && columnIndex !== 0) || !showCheckbox) &&
       !this.showButtons(columnIndex)
     );
+  }
+
+  filterData(filter: IFilter) {
+    const filters = this.tableFilters.getValue();
+    const filterIndex = filters.findIndex((x) => x.filter === filter.filter);
+
+    if (filterIndex !== -1) {
+      filters[filterIndex].value = filter.value;
+    }
+    // Reset the page to the first one
+    this.tableStructure.next({
+      ...this.tableStructure.getValue(),
+      skip: 0,
+    });
+
+    this.tableFilters.next(filters);
   }
 }

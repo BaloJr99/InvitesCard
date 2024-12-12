@@ -210,4 +210,23 @@ describe('Table Component (Shallow Test)', () => {
 
     expect(buttons.length).withContext('Table should have 5 buttons').toBe(5);
   });
+
+  it('should sort the table when a header is clicked', () => {
+    spyOn(fixture.componentInstance, 'sortColumn');
+    fixture.componentRef.setInput(
+      'tableConfigurationValue',
+      tableDataWithButtonsMock
+    );
+    fixture.detectChanges();
+
+    const table = fixture.debugElement.query(By.css('table'));
+    const rows = table.queryAll(By.css('thead tr'));
+    const headers = rows[0].queryAll(By.css('th'));
+    const buttonHeader = headers[0].query(By.css('button'));
+    buttonHeader.nativeElement.click();
+
+    expect(fixture.componentInstance.sortColumn)
+      .withContext('sortColumn should have been called')
+      .toHaveBeenCalledOnceWith(tableDataWithButtonsMock.headers[0].text);
+  });
 });

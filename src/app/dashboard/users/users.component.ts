@@ -175,22 +175,27 @@ export class UsersComponent implements OnInit {
       {
         text: $localize`Usuario`,
         sortable: true,
+        filterable: true,
       },
       {
         text: $localize`Correo`,
         sortable: true,
+        filterable: true,
       },
       {
         text: $localize`# Pases`,
         sortable: true,
+        filterable: true,
       },
       {
         text: $localize`# Eventos`,
         sortable: true,
+        filterable: true,
       },
       {
         text: $localize`Activo`,
         sortable: true,
+        filterable: true,
       },
       {
         text: $localize`Acciones`,

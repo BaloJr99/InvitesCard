@@ -4,6 +4,7 @@ import { of } from 'rxjs';
 import { LoggerService } from 'src/app/core/services/logger.service';
 import { LogsModalComponent } from 'src/app/dashboard/logs/logs-modal/logs-modal.component';
 import { LogsComponent } from 'src/app/dashboard/logs/logs.component';
+import { FilterComponent } from 'src/app/shared/components/table/filter/filter.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { logMock } from 'src/tests/mocks/mocks';
 
@@ -15,7 +16,12 @@ describe('Logs Component (Integrated Test)', () => {
     const loggerSpy = jasmine.createSpyObj('LoggerService', ['getLogs']);
 
     TestBed.configureTestingModule({
-      declarations: [LogsComponent, LogsModalComponent, TableComponent],
+      declarations: [
+        FilterComponent,
+        LogsComponent,
+        LogsModalComponent,
+        TableComponent,
+      ],
       providers: [{ provide: LoggerService, useValue: loggerSpy }],
     }).compileComponents();
 
