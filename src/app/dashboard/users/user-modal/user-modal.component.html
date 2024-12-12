@@ -8,6 +8,9 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="createUserForm">
+          <span data-testid="serverErrorMessage" class="bg-danger d-block text-light text-center rounded py-2 mb-2" [style.visibility]="serverErrorMessage !== '' ? 'visible' : 'hidden'" role="alert" aria-live="polite">
+            {{ serverErrorMessage }}
+          </span>
           <div class="mb-3">
             <label for="username" class="form-label" i18n>Usuario</label>
             <div class="username-validation">

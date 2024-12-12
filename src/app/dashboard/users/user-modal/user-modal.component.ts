@@ -39,6 +39,7 @@ import { RoleActionEvent } from 'src/app/core/models/enum';
 export class UserModalComponent implements OnInit, AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
+  serverErrorMessage: string = '';
 
   @Input() set userActionValue(value: IUserAction | undefined) {
     if (value) {
@@ -135,6 +136,7 @@ export class UserModalComponent implements OnInit, AfterViewInit {
   }
 
   saveUser() {
+    this.serverErrorMessage = '';
     if (this.createUserForm.valid && this.createUserForm.dirty) {
       if (this.createUserForm.controls['id'].value !== '') {
         this.updateUser();
@@ -165,6 +167,11 @@ export class UserModalComponent implements OnInit, AfterViewInit {
           this.toastr.success(response.message);
           $('#usersModal').modal('hide');
         },
+        error: (error) => {
+          if (error.status === 409) {
+            this.serverErrorMessage = error.error.message;
+          }
+        },
       })
       .add(() => {
         this.loaderService.setLoading(false);
@@ -186,6 +193,11 @@ export class UserModalComponent implements OnInit, AfterViewInit {
           });
           this.toastr.success(response.message);
           $('#usersModal').modal('hide');
+        },
+        error: (error) => {
+          if (error.status === 409) {
+            this.serverErrorMessage = error.error.message;
+          }
         },
       })
       .add(() => {
