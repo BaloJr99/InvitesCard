@@ -40,19 +40,11 @@ describe('Files Component (Isolated Test)', () => {
       .withContext('should have eventSelected to be undefined')
       .toBeUndefined();
 
-    expect(component.images)
-      .withContext('should have images to be an empty array')
-      .toEqual([]);
-
-    expect(component.audios)
-      .withContext('should have audios to be an empty array')
-      .toEqual([]);
-
     expect(component.scaleImageUrl)
       .withContext('should have scaleImageUrl to be an empty string')
       .toBe('');
 
-    expect(component.imageUpdateForm)
+    expect(component.filesUpdateForm)
       .withContext('should have imageUpdateForm to be defined')
       .toBeDefined();
 

@@ -11,15 +11,26 @@ export interface IFullFile {
 
 export type IUploadImage = Pick<IFullFile, 'image' | 'eventId'>;
 export type IDownloadImage = Omit<IFullFile, 'image' | 'eventId'>;
-export type IDownloadAudio = Omit<IFullFile, 'image' | 'eventId' | 'imageUsage'>;
+export type IDownloadAudio = Omit<
+  IFullFile,
+  'image' | 'eventId' | 'imageUsage'
+>;
 export interface IDownloadFiles {
   eventImages: IDownloadImage[];
   eventAudios: IDownloadAudio[];
-};
+}
 export type IDeleteFile = Pick<IFullFile, 'id' | 'publicId'>;
 export type IUpdateImage = Pick<IFullFile, 'id' | 'imageUsage'>;
 
 export interface IUpdateImageArray {
   id: FormControl<string>;
   imageUsage: FormControl<string>;
+  fileUrl: FormControl<string>;
+  publicId: FormControl<string>;
+}
+
+export interface IUpdateAudioArray {
+  id: FormControl<string>;
+  fileUrl: FormControl<string>;
+  publicId: FormControl<string>;
 }

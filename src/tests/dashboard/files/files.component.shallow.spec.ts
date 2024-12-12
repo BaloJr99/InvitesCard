@@ -3,7 +3,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
-import { ImageUsage } from 'src/app/core/models/enum';
 import { EventsService } from 'src/app/core/services/events.service';
 import { FileReaderService } from 'src/app/core/services/fileReader.service';
 import { FilesService } from 'src/app/core/services/files.service';
@@ -144,8 +143,10 @@ describe('Files Component (Shallow Test)', () => {
 
     selectEvent(dropdownEventsMock[0].id);
 
-    fixture.componentInstance.images = [downloadImageMock];
-    fixture.componentInstance.audios = [downloadMusicMock];
+    fixture.componentInstance.filesUpdateForm.patchValue({
+      images: [downloadImageMock],
+      audios: [downloadMusicMock],
+    });
 
     fixture.detectChanges();
 
@@ -171,7 +172,9 @@ describe('Files Component (Shallow Test)', () => {
 
     selectEvent(dropdownEventsMock[0].id);
 
-    fixture.componentInstance.images = [downloadImageMock];
+    fixture.componentInstance.filesUpdateForm.patchValue({
+      images: [downloadImageMock],
+    });
     fixture.detectChanges();
 
     const imageContainer = fixture.debugElement.query(
@@ -190,7 +193,9 @@ describe('Files Component (Shallow Test)', () => {
 
     selectEvent(dropdownEventsMock[0].id);
 
-    fixture.componentInstance.audios = [downloadMusicMock];
+    fixture.componentInstance.filesUpdateForm.patchValue({
+      audios: [downloadMusicMock],
+    });
     fixture.detectChanges();
 
     const audioContainer = fixture.debugElement.query(
@@ -210,7 +215,9 @@ describe('Files Component (Shallow Test)', () => {
 
     selectEvent(dropdownEventsMock[0].id);
 
-    fixture.componentInstance.images = [downloadImageMock];
+    fixture.componentInstance.filesUpdateForm.patchValue({
+      images: [downloadImageMock],
+    });
     fixture.detectChanges();
 
     const imageContainer = fixture.debugElement.query(
@@ -278,30 +285,6 @@ describe('Files Component (Shallow Test)', () => {
 
     expect(fixture.componentInstance.saveFiles)
       .withContext('saveFiles should be called')
-      .toHaveBeenCalled();
-  });
-
-  it('should call insertUpdatedImage when changing image usage', () => {
-    spyOn(fixture.componentInstance, 'insertUpdatedImage');
-    fixture.componentInstance.events = dropdownEventsMock;
-    fixture.detectChanges();
-
-    selectEvent(dropdownEventsMock[0].id);
-
-    fixture.componentInstance.images = [downloadImageMock];
-    fixture.detectChanges();
-
-    const imageContainer = fixture.debugElement.query(
-      By.css('.image-container')
-    );
-    const imageCards = imageContainer.queryAll(By.css('.card'));
-    const usageSelect = imageCards[0].query(By.css('select'));
-
-    usageSelect.nativeElement.value = ImageUsage.Phone;
-    usageSelect.nativeElement.dispatchEvent(new Event('change'));
-
-    expect(fixture.componentInstance.insertUpdatedImage)
-      .withContext('insertUpdatedImage should be called')
       .toHaveBeenCalled();
   });
 });

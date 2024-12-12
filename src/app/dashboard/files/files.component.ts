@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { combineLatest, Observable, take } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { CommonModalResponse, CommonModalType } from 'src/app/core/models/enum';
 import { IDropdownEvent } from 'src/app/core/models/events';
 import {
+  IDeleteFile,
   IDownloadAudio,
   IDownloadImage,
+  IUpdateAudioArray,
   IUpdateImage,
   IUpdateImageArray,
 } from 'src/app/core/models/images';
@@ -28,13 +30,12 @@ export class FilesComponent implements OnInit {
   events: IDropdownEvent[] = [];
   eventSelected: IDropdownEvent | undefined = undefined;
 
-  images: IDownloadImage[] = [];
-  audios: IDownloadAudio[] = [];
   scaleImageUrl = '';
 
-  imageUpdateForm: FormArray<FormGroup<IUpdateImageArray>> = new FormArray<
-    FormGroup<IUpdateImageArray>
-  >([]);
+  filesUpdateForm = this.fb.group({
+    images: this.fb.array<FormGroup<IUpdateImageArray>>([]),
+    audios: this.fb.array<FormGroup<IUpdateAudioArray>>([]),
+  });
 
   saveFilesForm: FormGroup = this.fb.group({
     photoFiles: '',
@@ -69,7 +70,6 @@ export class FilesComponent implements OnInit {
   }
 
   searchImages(): void {
-    this.clearInformation();
     this.eventSelected = this.events.find(
       (event) => event.id === $('#event-select').val()
     );
@@ -150,13 +150,45 @@ export class FilesComponent implements OnInit {
   }
 
   getLatestFiles(): void {
+    this.clearInformation();
     if (this.eventSelected) {
       this.filesService
         .getFilesByEvent(this.eventSelected.id)
         .subscribe({
           next: (response) => {
-            this.images = response.eventImages;
-            this.audios = response.eventAudios;
+            const images = response.eventImages;
+            const audios = response.eventAudios;
+
+            if (images.length > 0) {
+              this.filesUpdateForm.setControl(
+                'images',
+                this.fb.array<FormGroup<IUpdateImageArray>>(
+                  images.map((image) =>
+                    this.fb.group({
+                      id: new FormControl(image.id),
+                      imageUsage: new FormControl(image.imageUsage ?? ''),
+                      fileUrl: new FormControl(image.fileUrl),
+                      publicId: new FormControl(image.publicId),
+                    } as IUpdateImageArray)
+                  )
+                )
+              );
+            }
+
+            if (audios.length > 0) {
+              this.filesUpdateForm.setControl(
+                'audios',
+                this.fb.array<FormGroup<IUpdateAudioArray>>(
+                  audios.map((audio) =>
+                    this.fb.group({
+                      id: new FormControl(audio.id),
+                      fileUrl: new FormControl(audio.fileUrl),
+                      publicId: new FormControl(audio.publicId),
+                    } as IUpdateAudioArray)
+                  )
+                )
+              );
+            }
           },
         })
         .add(() => {
@@ -165,44 +197,51 @@ export class FilesComponent implements OnInit {
     }
   }
 
-  showDeleteDialog(id: string): void {
-    const imageFound = this.images.find((image) => image.id === id);
-    const audioFound = this.audios.find((audio) => audio.id === id);
+  showImageDeleteDialog(id: string): void {
+    const imageFound = this.filesUpdateForm.controls['images'].value.find(
+      (image) => image.id === id
+    ) as IDownloadImage;
 
-    if (imageFound || audioFound) {
-      this.commonModalService
-        .open({
-          modalTitle: $localize`Eliminando archivo`,
-          modalBody: $localize`¿Está seguro que desea eliminar el archivo?`,
-          modalType: CommonModalType.Confirm,
-        })
-        .subscribe((response) => {
-          if (response === CommonModalResponse.Confirm) {
-            this.loaderService.setLoading(true, $localize`Eliminando archivo`);
-            this.filesService
-              .deleteFile(imageFound ?? (audioFound as IDownloadAudio))
-              .subscribe({
-                next: (response: IMessageResponse) => {
-                  if (imageFound) {
-                    this.images = this.images.filter(
-                      (image) => image.id !== imageFound.id
-                    );
-                  }
+    this.showDeleteDialog({
+      id: imageFound.id,
+      publicId: imageFound.publicId,
+    } as IDeleteFile);
+  }
 
-                  if (audioFound) {
-                    this.audios = this.audios.filter(
-                      (audio) => audio.id !== audioFound.id
-                    );
-                  }
-                  this.toastr.success(response.message);
-                },
-              })
-              .add(() => {
-                this.loaderService.setLoading(false);
-              });
-          }
-        });
-    }
+  showAudioDeleteDialog(id: string): void {
+    const audioFound = this.filesUpdateForm.controls['audios'].value.find(
+      (audio) => audio.id === id
+    ) as IDownloadAudio;
+
+    this.showDeleteDialog({
+      id: audioFound.id,
+      publicId: audioFound.publicId,
+    } as IDeleteFile);
+  }
+
+  showDeleteDialog(file: IDeleteFile): void {
+    this.commonModalService
+      .open({
+        modalTitle: $localize`Eliminando archivo`,
+        modalBody: $localize`¿Está seguro que desea eliminar el archivo?`,
+        modalType: CommonModalType.Confirm,
+      })
+      .subscribe((response) => {
+        if (response === CommonModalResponse.Confirm) {
+          this.loaderService.setLoading(true, $localize`Eliminando archivo`);
+          this.filesService
+            .deleteFile(file)
+            .subscribe({
+              next: (response: IMessageResponse) => {
+                this.getLatestFiles();
+                this.toastr.success(response.message);
+              },
+            })
+            .add(() => {
+              this.loaderService.setLoading(false);
+            });
+        }
+      });
   }
 
   onPhotosChange(event: Event): void {
@@ -262,70 +301,36 @@ export class FilesComponent implements OnInit {
       photoFilesSource: '',
     });
 
-    this.images = [];
-    this.audios = [];
+    this.filesUpdateForm = this.fb.group({
+      images: this.fb.array<FormGroup<IUpdateImageArray>>([]),
+      audios: this.fb.array<FormGroup<IUpdateAudioArray>>([]),
+    });
   }
 
   cancelChanges(): void {
-    this.imageUpdateForm = new FormArray<FormGroup<IUpdateImageArray>>([]);
+    this.filesUpdateForm = this.fb.group({
+      images: this.fb.array<FormGroup<IUpdateImageArray>>([]),
+      audios: this.fb.array<FormGroup<IUpdateAudioArray>>([]),
+    });
     this.searchImages();
   }
 
   saveChanges(): void {
-    if (
-      this.imageUpdateForm.valid &&
-      this.imageUpdateForm.controls.length > 0
-    ) {
+    if (this.filesUpdateForm.valid && this.filesUpdateForm.dirty) {
       this.loaderService.setLoading(true, $localize`Guardando archivos`);
       this.filesService
-        .updateImage(this.imageUpdateForm.value as IUpdateImage[])
+        .updateImage(
+          this.filesUpdateForm.controls['images'].value as IUpdateImage[]
+        )
         .subscribe({
           next: (response) => {
             this.toastr.success(response.message);
-            this.imageUpdateForm = new FormArray<FormGroup<IUpdateImageArray>>(
-              []
-            );
+            this.filesUpdateForm.markAsUntouched();
           },
         })
         .add(() => {
           this.loaderService.setLoading(false);
         });
-    }
-  }
-
-  insertUpdatedImage(event: Event): void {
-    const element = event.currentTarget as HTMLSelectElement;
-
-    const elementId = element.id.split('-').pop();
-
-    if (!this.imageUpdateForm.invalid && elementId) {
-      const imageUpdated = this.images[parseInt(elementId)];
-
-      if (element.value !== (imageUpdated.imageUsage ?? '')) {
-        const findControlIfAlreadyExists =
-          this.imageUpdateForm.controls.findIndex(
-            (formGroup) => formGroup.value.id === imageUpdated.id
-          );
-
-        if (findControlIfAlreadyExists !== -1) {
-          this.imageUpdateForm.removeAt(findControlIfAlreadyExists);
-        }
-
-        this.imageUpdateForm.push(
-          this.fb.group({
-            id: new FormControl(imageUpdated.id),
-            imageUsage: new FormControl(element.value),
-          } as IUpdateImageArray)
-        );
-      } else {
-        const indexOfRolledbackValue = this.imageUpdateForm.controls.findIndex(
-          (formGroup) => formGroup.value.id === imageUpdated.id
-        );
-
-        if (indexOfRolledbackValue !== -1) {
-          this.imageUpdateForm.removeAt(indexOfRolledbackValue);
-        }
-      }
     }
   }
 }

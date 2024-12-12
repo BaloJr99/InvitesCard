@@ -37,47 +37,47 @@
   </div>
 
   <div class="row g-0">
-    <div class="col-12 gx-4">
-      <div class="image-container mb-3" *ngIf="images.length > 0">
-        <div class="card" *ngFor="let image of images; index as i">
-          <div class="card-body">
+    <div class="col-12 gx-4" [formGroup]="filesUpdateForm">
+      <div class="image-container mb-3" formArrayName="images" *ngIf="filesUpdateForm.controls['images'].length > 0">
+        <div class="card" *ngFor="let imageGroup of filesUpdateForm.controls['images'].controls; index as i">
+          <div class="card-body" [formGroup]="imageGroup"> 
             <div class="image-controls">
-              <img src="{{ image.fileUrl }}" alt="Invite Photo">
-              <button class="btn btn-light" (click)="scaleImageUrl = image.fileUrl" title="Expandir foto" i18n-title><i aria-hidden="true" class="fa-solid fa-expand"></i></button>
+              <img src="{{ imageGroup.controls.fileUrl.value }}" alt="Invite Photo">
+              <button class="btn btn-light" (click)="scaleImageUrl = imageGroup.controls.fileUrl.value" title="Expandir foto" i18n-title><i aria-hidden="true" class="fa-solid fa-expand"></i></button>
             </div>
             <div class="controls">
               <div class="form-group">
                 <label for="my-select-{{i}}" i18n>Uso de la imagen</label>
-                <select id="my-select-{{i}}" class="form-control" (change)="insertUpdatedImage($event)">
+                <select id="my-select-{{i}}" class="form-control" formControlName="imageUsage">
                   <option value="" i18n>Seleccione...</option>
                   <option value="B" i18n>Ambos</option>
                   <option value="P" i18n>Celular</option>
                   <option value="C" i18n>Computadora</option>
                 </select>
-                <button class="btn btn-danger" title="Eliminar imagen" i18n-title (click)="showDeleteDialog(image.id)"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+                <button class="btn btn-danger" title="Eliminar imagen" i18n-title (click)="showImageDeleteDialog(imageGroup.controls.id.value)"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="music-container mb-3" *ngIf="audios.length > 0">
-        <div class="card" *ngFor="let audio of audios;">
+      <div class="music-container mb-3" *ngIf="filesUpdateForm.controls['audios'].length > 0">
+        <div class="card"*ngFor="let audioControl of filesUpdateForm.controls['audios'].controls; index as i">
           <div class="card-body">
             <div class="audio-controls">
               <audio controls>
-                <source src="{{ audio.fileUrl }}" type="audio/mp3">
+                <source src="{{ audioControl.controls.fileUrl.value }}" type="audio/mp3">
                 Your browser does not support the audio element.
               </audio>
-              <button class="btn btn-danger" i18n-title title="Eliminar Audio" (click)="showDeleteDialog(audio.id)"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+              <button class="btn btn-danger" i18n-title title="Eliminar Audio" (click)="showAudioDeleteDialog(audioControl.controls.id.value)"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="footer" *ngIf="images.length > 0">
-    <button id="cancel-changes" class="btn btn-primary" (click)="cancelChanges()" [disabled]="imageUpdateForm.controls.length === 0" i18n>Cancelar Cambios</button>
-    <button id="save-changes" class="btn btn-primary" (click)="saveChanges()" [disabled]="imageUpdateForm.controls.length === 0" i18n>Guardar Cambios</button>
+  <div class="footer" *ngIf="filesUpdateForm.controls['audios'].length > 0 || filesUpdateForm.controls['images'].length > 0">
+    <button id="cancel-changes" class="btn btn-primary" (click)="cancelChanges()" [disabled]="!filesUpdateForm.dirty" i18n>Cancelar Cambios</button>
+    <button id="save-changes" class="btn btn-primary" (click)="saveChanges()" [disabled]="!filesUpdateForm.dirty" i18n>Guardar Cambios</button>
   </div>  
 </section>
 <section class="files-empty" *ngIf="!eventSelected">
