@@ -35,6 +35,7 @@ import {
   IConfirmation,
   IDashboardInvite,
   IFullInvite,
+  IInviteSection,
   ISaveTheDateUserInvite,
   ISweetXvUserInvite,
   IUpsertInvite,
@@ -516,3 +517,155 @@ export const saveTheDateUserInviteMock: ISaveTheDateUserInvite = {
   needsAccomodation: newInviteMock.needsAccomodation,
   typeOfEvent: fullEventsMock.typeOfEvent,
 };
+
+export const showCeremonySection: IInviteSection[] = [
+  {
+    sectionId: 'inviteInfo',
+    name: 'Información de la invitación',
+    disabled: true,
+    selected: true,
+    order: 0,
+  },
+  {
+    sectionId: 'ceremonyInfo',
+    name: 'Información de la ceremonia',
+    disabled: false,
+    selected: true,
+    order: 1,
+  },
+  {
+    sectionId: 'receptionInfo',
+    name: 'Información de la recepción',
+    disabled: false,
+    selected: false,
+    order: 1,
+  },
+  {
+    sectionId: 'dressCodeInfo',
+    name: 'Código de vestimenta',
+    disabled: false,
+    selected: false,
+    order: 3,
+  },
+  {
+    sectionId: 'giftsInfo',
+    name: 'Regalos',
+    disabled: false,
+    selected: false,
+    order: 4,
+  },
+];
+
+export const showReceptionSection: IInviteSection[] = [
+  {
+    sectionId: 'inviteInfo',
+    name: 'Información de la invitación',
+    disabled: true,
+    selected: true,
+    order: 0,
+  },
+  {
+    sectionId: 'ceremonyInfo',
+    name: 'Información de la ceremonia',
+    disabled: false,
+    selected: true,
+    order: 1,
+  },
+  {
+    sectionId: 'receptionInfo',
+    name: 'Información de la recepción',
+    disabled: false,
+    selected: true,
+    order: 1,
+  },
+  {
+    sectionId: 'dressCodeInfo',
+    name: 'Código de vestimenta',
+    disabled: false,
+    selected: false,
+    order: 3,
+  },
+  {
+    sectionId: 'giftsInfo',
+    name: 'Regalos',
+    disabled: false,
+    selected: false,
+    order: 4,
+  },
+];
+
+export const showDressCodeSection: IInviteSection[] = [
+  {
+    sectionId: 'inviteInfo',
+    name: 'Información de la invitación',
+    disabled: true,
+    selected: true,
+    order: 0,
+  },
+  {
+    sectionId: 'ceremonyInfo',
+    name: 'Información de la ceremonia',
+    disabled: false,
+    selected: true,
+    order: 1,
+  },
+  {
+    sectionId: 'receptionInfo',
+    name: 'Información de la recepción',
+    disabled: false,
+    selected: true,
+    order: 1,
+  },
+  {
+    sectionId: 'dressCodeInfo',
+    name: 'Código de vestimenta',
+    disabled: false,
+    selected: true,
+    order: 3,
+  },
+  {
+    sectionId: 'giftsInfo',
+    name: 'Regalos',
+    disabled: false,
+    selected: false,
+    order: 4,
+  },
+];
+
+export const showGiftsSection: IInviteSection[] = [
+  {
+    sectionId: 'inviteInfo',
+    name: 'Información de la invitación',
+    disabled: true,
+    selected: true,
+    order: 0,
+  },
+  {
+    sectionId: 'ceremonyInfo',
+    name: 'Información de la ceremonia',
+    disabled: false,
+    selected: true,
+    order: 1,
+  },
+  {
+    sectionId: 'receptionInfo',
+    name: 'Información de la recepción',
+    disabled: false,
+    selected: true,
+    order: 1,
+  },
+  {
+    sectionId: 'dressCodeInfo',
+    name: 'Código de vestimenta',
+    disabled: false,
+    selected: true,
+    order: 3,
+  },
+  {
+    sectionId: 'giftsInfo',
+    name: 'Regalos',
+    disabled: false,
+    selected: true,
+    order: 4,
+  },
+];

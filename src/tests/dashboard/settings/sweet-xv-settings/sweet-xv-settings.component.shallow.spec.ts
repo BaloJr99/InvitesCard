@@ -3,12 +3,19 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
+import { of } from 'rxjs';
+import { EventType } from 'src/app/core/models/enum';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { SweetXvSettingsComponent } from 'src/app/dashboard/settings/sweet-xv-settings/sweet-xv-settings.component';
-import { sweetXvSettingMock } from 'src/tests/mocks/mocks';
+import {
+  fullEventsMock,
+  sweetXvBaseSettingMock,
+  sweetXvSettingMock,
+} from 'src/tests/mocks/mocks';
 
 describe('Sweet Xv Settings Component (Shallow test)', () => {
   let fixture: ComponentFixture<SweetXvSettingsComponent>;
+  let settingsServiceSpy: jasmine.SpyObj<SettingsService>;
 
   const updateFormUsingEvent = (
     eventId: string,
@@ -108,8 +115,23 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
     fixture.detectChanges();
   };
 
+  const clickSection = (section: string, show: boolean) => {
+    const sectionElement = fixture.debugElement.query(By.css(`#${section}`));
+    if (show && !sectionElement.nativeElement.checked) {
+      sectionElement.nativeElement.click();
+      fixture.detectChanges();
+    }
+
+    if (!show && sectionElement.nativeElement.checked) {
+      sectionElement.nativeElement.click();
+      fixture.detectChanges();
+    }
+  };
+
   beforeEach(waitForAsync(() => {
-    const settingsSpy = jasmine.createSpyObj('SettingsService', ['']);
+    const settingsSpy = jasmine.createSpyObj('SettingsService', [
+      'getEventSettings',
+    ]);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     TestBed.configureTestingModule({
@@ -121,14 +143,26 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
         { provide: ToastrService, useValue: toastrSpy },
       ],
     }).compileComponents();
+
+    settingsServiceSpy = TestBed.inject(
+      SettingsService
+    ) as jasmine.SpyObj<SettingsService>;
   }));
 
   beforeEach(() => {
+    settingsServiceSpy.getEventSettings.and.returnValue(
+      of(sweetXvBaseSettingMock)
+    );
     fixture = TestBed.createComponent(SweetXvSettingsComponent);
+    fixture.componentRef.setInput('eventSettingAction', {
+      eventId: fullEventsMock.id,
+      eventType: EventType.Xv,
+      isNew: true,
+    });
     fixture.detectChanges();
   });
 
-  it('created a form with all the inputs, save button, cancel button', () => {
+  it('created a form with all the sections inputs, save button, cancel button', () => {
     const primaryColorInput = fixture.debugElement.query(
       By.css('#primaryColor')
     );
@@ -166,23 +200,23 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
     const saveButton = buttons[0];
     const cancelButton = buttons[1];
 
+    // Info section shouldn't be null
     expect(primaryColorInput)
       .withContext("PrimaryColorInput input shouln't be null")
       .not.toBeNull();
     expect(secondaryColorInput)
       .withContext("SecondaryColorInput input shouln't be null")
       .not.toBeNull();
-    expect(receptionPlaceInput)
-      .withContext("ReceptionPlaceInput input shouln't be null")
+    expect(firstSectionSentencesInput)
+      .withContext("FirstSectionSentencesInput input shouln't be null")
       .not.toBeNull();
+
+    // Ceremony section shouldn't be null
     expect(parentsInput)
       .withContext("ParentsInput input shouln't be null")
       .not.toBeNull();
     expect(godParentsInput)
       .withContext("GodParentsInput input shouln't be null")
-      .not.toBeNull();
-    expect(firstSectionSentencesInput)
-      .withContext("FirstSectionSentencesInput input shouln't be null")
       .not.toBeNull();
     expect(secondSectionSentencesInput)
       .withContext("SecondSectionSentencesInput input shouln't be null")
@@ -196,6 +230,11 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
     expect(massAddressInput)
       .withContext("MassAddressInput input shouln't be null")
       .not.toBeNull();
+
+    // Reception section shouldn't be null
+    expect(receptionPlaceInput)
+      .withContext('ReceptionPlaceInput input should be null')
+      .not.toBeNull();
     expect(receptionUrlInput)
       .withContext("ReceptionUrlInput input shouln't be null")
       .not.toBeNull();
@@ -205,6 +244,8 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
     expect(receptionAddressInput)
       .withContext("ReceptionAddressInput input shouln't be null")
       .not.toBeNull();
+
+    // Gifts section shouldn't be null
     expect(dressCodeColorInput)
       .withContext("DressCodeColorInput input shouln't be null")
       .not.toBeNull();
@@ -302,7 +343,7 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
       .toHaveBeenCalled();
   });
 
-  it('Display error message when fields are blank', () => {
+  it(`Shouldn't be able to save if fields are not filled`, () => {
     updateFormUsingEvent(
       '',
       '',
@@ -321,158 +362,14 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
       ''
     );
 
-    const errorSpans = fixture.debugElement.queryAll(
-      By.css('.invalid-feedback')
-    );
+    const saveButton = fixture.debugElement.queryAll(By.css('button'))[1];
 
-    const primaryColorErrorSpan = errorSpans[0];
-    const secondaryColorErrorSpan = errorSpans[1];
-    const parentsErrorSpan = errorSpans[2];
-    const godParentsErrorSpan = errorSpans[3];
-    const firstSectionSentencesErrorSpan = errorSpans[4];
-    const secondSectionSentencesErrorSpan = errorSpans[5];
-    const massUrlErrorSpan = errorSpans[6];
-    const massTimeErrorSpan = errorSpans[7];
-    const massAddressErrorSpan = errorSpans[8];
-    const receptionUrlErrorSpan = errorSpans[9];
-    const receptionTimeErrorSpan = errorSpans[10];
-    const receptionPlaceErrorSpan = errorSpans[11];
-    const receptionAddressErrorSpan = errorSpans[12];
-    const dressCodeColorErrorSpan = errorSpans[13];
-
-    expect(primaryColorErrorSpan.nativeElement.innerHTML.trim())
-      .withContext('primaryColor span error should be filled')
-      .toBe('');
-    expect(secondaryColorErrorSpan.nativeElement.innerHTML.trim())
-      .withContext('secondaryColor span error should be filled')
-      .toBe('');
-    expect(parentsErrorSpan.nativeElement.innerHTML)
-      .withContext('parents span error should be filled')
-      .toContain('Ingresar nombre de los padres');
-    expect(godParentsErrorSpan.nativeElement.innerHTML)
-      .withContext('godParents span error should be filled')
-      .toContain('Ingresar nombre de los padrinos');
-    expect(firstSectionSentencesErrorSpan.nativeElement.innerHTML)
-      .withContext('firstSectionSentences span error should be filled')
-      .toContain('Ingresar datos de la primer sección');
-    expect(secondSectionSentencesErrorSpan.nativeElement.innerHTML)
-      .withContext('secondSectionSentences span error should be filled')
-      .toContain('Ingresar datos de la segunda sección');
-    expect(massUrlErrorSpan.nativeElement.innerHTML)
-      .withContext('massUrl span error should be filled')
-      .toContain('Ingresar url de la ubicación de la misa');
-    expect(massTimeErrorSpan.nativeElement.innerHTML)
-      .withContext('massTime span error should be filled')
-      .toContain('Ingresar hora de la misa');
-    expect(massAddressErrorSpan.nativeElement.innerHTML)
-      .withContext('massAddress span error should be filled')
-      .toContain('Ingresar dirección de la misa');
-    expect(receptionUrlErrorSpan.nativeElement.innerHTML)
-      .withContext('receptionUrl span error should be filled')
-      .toContain('Ingresar url de la ubicación de recepción');
-    expect(receptionTimeErrorSpan.nativeElement.innerHTML)
-      .withContext('receptionTime span error should be filled')
-      .toContain('Ingresar hora de la recepción');
-    expect(receptionPlaceErrorSpan.nativeElement.innerHTML)
-      .withContext('receptionPlace span error should be filled')
-      .toContain('Ingresar nombre de salón de eventos');
-    expect(receptionAddressErrorSpan.nativeElement.innerHTML)
-      .withContext('receptionAddress span error should be filled')
-      .toContain('Ingresar dirección de recepción');
-    expect(dressCodeColorErrorSpan.nativeElement.innerHTML)
-      .withContext('dressCodeColor span error should be filled')
-      .toContain('Ingresar si existe restricción de color');
-
-    const displayMessages = fixture.componentInstance.displayMessage;
-
-    expect(displayMessages['primaryColor'])
-      .withContext('primaryColor displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['secondaryColor'])
-      .withContext('secondaryColor displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['parents'])
-      .withContext('parents displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['godParents'])
-      .withContext('godParents displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['firstSectionSentences'])
-      .withContext('firstSectionSentences displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['secondSectionSentences'])
-      .withContext('secondSectionSentences displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['massUrl'])
-      .withContext('massUrl displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['massTime'])
-      .withContext('massTime displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['massAddress'])
-      .withContext('massAddress displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['receptionUrl'])
-      .withContext('receptionUrl displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['receptionTime'])
-      .withContext('receptionTime displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['receptionPlace'])
-      .withContext('receptionPlace displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['receptionAddress'])
-      .withContext('receptionAddress displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['dressCodeColor'])
-      .withContext('dressCodeColor displayMessage should exist')
-      .toBeDefined();
-
-    expect(displayMessages['primaryColor'])
-      .withContext('Should displayMessage error for primaryColor')
-      .toBe('');
-    expect(displayMessages['secondaryColor'])
-      .withContext('Should displayMessage error for secondaryColor')
-      .toBe('');
-    expect(displayMessages['parents'])
-      .withContext('Should displayMessage error for parents')
-      .toContain('Ingresar nombre de los padres');
-    expect(displayMessages['godParents'])
-      .withContext('Should displayMessage error for godParents')
-      .toContain('Ingresar nombre de los padrinos');
-    expect(displayMessages['firstSectionSentences'])
-      .withContext('Should displayMessage error for firstSectionSentences')
-      .toContain('Ingresar datos de la primer sección');
-    expect(displayMessages['secondSectionSentences'])
-      .withContext('Should displayMessage error for secondSectionSentences')
-      .toContain('Ingresar datos de la segunda sección');
-    expect(displayMessages['massUrl'])
-      .withContext('Should displayMessage error for massUrl')
-      .toContain('Ingresar url de la ubicación de la misa');
-    expect(displayMessages['massTime'])
-      .withContext('Should displayMessage error for massTime')
-      .toContain('Ingresar hora de la misa');
-    expect(displayMessages['massAddress'])
-      .withContext('Should displayMessage error for massAddress')
-      .toContain('Ingresar dirección de la misa');
-    expect(displayMessages['receptionUrl'])
-      .withContext('Should displayMessage error for receptionUrl')
-      .toContain('Ingresar url de la ubicación de recepción');
-    expect(displayMessages['receptionTime'])
-      .withContext('Should displayMessage error for receptionTime')
-      .toContain('Ingresar hora de la recepción');
-    expect(displayMessages['receptionPlace'])
-      .withContext('Should displayMessage error for receptionPlace')
-      .toContain('Ingresar nombre de salón de eventos');
-    expect(displayMessages['receptionAddress'])
-      .withContext('Should displayMessage error for receptionAddress')
-      .toContain('Ingresar dirección de recepción');
-    expect(displayMessages['dressCodeColor'])
-      .withContext('Should displayMessage error for dressCodeColor')
-      .toContain('Ingresar si existe restricción de color');
+    expect(saveButton.nativeElement.disabled)
+      .withContext('Save button should be disabled')
+      .toBeTrue();
   });
 
-  it("Shouldn't display primaryColor, secondaryColor, receptionPlace, copyMessage, hotelName, hotelInformation error message when fields are filled", () => {
+  it('Should be able to save when fields are filled', () => {
     updateFormUsingEvent(
       sweetXvSettingMock.eventId,
       sweetXvSettingMock.primaryColor,
@@ -491,154 +388,34 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
       sweetXvSettingMock.dressCodeColor
     );
 
-    const errorSpans = fixture.debugElement.queryAll(
-      By.css('.invalid-feedback')
-    );
+    const saveButton = fixture.debugElement.queryAll(By.css('button'))[1];
 
-    const primaryColorErrorSpan = errorSpans[0];
-    const secondaryColorErrorSpan = errorSpans[1];
-    const parentsErrorSpan = errorSpans[2];
-    const godParentsErrorSpan = errorSpans[3];
-    const firstSectionSentencesErrorSpan = errorSpans[4];
-    const secondSectionSentencesErrorSpan = errorSpans[5];
-    const massUrlErrorSpan = errorSpans[6];
-    const massTimeErrorSpan = errorSpans[7];
-    const massAddressErrorSpan = errorSpans[8];
-    const receptionUrlErrorSpan = errorSpans[9];
-    const receptionTimeErrorSpan = errorSpans[10];
-    const receptionPlaceErrorSpan = errorSpans[11];
-    const receptionAddressErrorSpan = errorSpans[12];
-    const dressCodeColorErrorSpan = errorSpans[13];
+    expect(saveButton.nativeElement.disabled)
+      .withContext('Save button should be enabled')
+      .toBeFalse();
+  });
 
-    expect(primaryColorErrorSpan.nativeElement.innerHTML.trim())
-      .withContext("primaryColor span error shouldn't be filled")
-      .toBe('');
-    expect(secondaryColorErrorSpan.nativeElement.innerHTML.trim())
-      .withContext("secondaryColor span error shouldn't be filled")
-      .toBe('');
-    expect(parentsErrorSpan.nativeElement.innerHTML)
-      .withContext("parents span error shouldn't be filled")
-      .not.toContain('Ingresar nombre de los padres');
-    expect(godParentsErrorSpan.nativeElement.innerHTML)
-      .withContext("godParents span error shouldn't be filled")
-      .not.toContain('Ingresar nombre de los padrinos');
-    expect(firstSectionSentencesErrorSpan.nativeElement.innerHTML)
-      .withContext("firstSectionSentences span error shouldn't be filled")
-      .not.toContain('Ingresar datos de la primer sección');
-    expect(secondSectionSentencesErrorSpan.nativeElement.innerHTML)
-      .withContext("secondSectionSentences span error shouldn't be filled")
-      .not.toContain('Ingresar datos de la segunda sección');
-    expect(massUrlErrorSpan.nativeElement.innerHTML)
-      .withContext("massUrl span error shouldn't be filled")
-      .not.toContain('Ingresar url de la ubicación de la misa');
-    expect(massTimeErrorSpan.nativeElement.innerHTML)
-      .withContext("massTime span error shouldn't be filled")
-      .not.toContain('Ingresar hora de la misa');
-    expect(massAddressErrorSpan.nativeElement.innerHTML)
-      .withContext("massAddress span error shouldn't be filled")
-      .not.toContain('Ingresar dirección de la misa');
-    expect(receptionUrlErrorSpan.nativeElement.innerHTML)
-      .withContext("receptionUrl span error shouldn't be filled")
-      .not.toContain('Ingresar url de la ubicación de recepción');
-    expect(receptionTimeErrorSpan.nativeElement.innerHTML)
-      .withContext("receptionTime span error shouldn't be filled")
-      .not.toContain('Ingresar hora de la recepción');
-    expect(receptionPlaceErrorSpan.nativeElement.innerHTML)
-      .withContext("receptionPlace span error shouldn't be filled")
-      .not.toContain('Ingresar nombre de salón de eventos');
-    expect(receptionAddressErrorSpan.nativeElement.innerHTML)
-      .withContext("receptionAddress span error shouldn't be filled")
-      .not.toContain('Ingresar dirección de recepción');
-    expect(dressCodeColorErrorSpan.nativeElement.innerHTML)
-      .withContext("dressCodeColor span error shouldn't be filled")
-      .not.toContain('Ingresar si existe restricción de color');
-
-    const displayMessages = fixture.componentInstance.displayMessage;
-
-    expect(displayMessages['primaryColor'])
-      .withContext('primaryColor displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['secondaryColor'])
-      .withContext('secondaryColor displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['parents'])
-      .withContext('parents displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['godParents'])
-      .withContext('godParents displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['firstSectionSentences'])
-      .withContext('firstSectionSentences displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['secondSectionSentences'])
-      .withContext('secondSectionSentences displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['massUrl'])
-      .withContext('massUrl displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['massTime'])
-      .withContext('massTime displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['massAddress'])
-      .withContext('massAddress displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['receptionUrl'])
-      .withContext('receptionUrl displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['receptionTime'])
-      .withContext('receptionTime displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['receptionPlace'])
-      .withContext('receptionPlace displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['receptionAddress'])
-      .withContext('receptionAddress displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['dressCodeColor'])
-      .withContext('dressCodeColor displayMessage should exist')
-      .toBeDefined();
-
-    expect(displayMessages['primaryColor'])
-      .withContext("Shouldn't displayMessage error for primaryColor")
-      .toBe('');
-    expect(displayMessages['secondaryColor'])
-      .withContext("Shouldn't displayMessage error for secondaryColor")
-      .toBe('');
-    expect(displayMessages['parents'])
-      .withContext("Shouldn't displayMessage error for parents")
-      .not.toBe('Ingresar nombre de los padres');
-    expect(displayMessages['godParents'])
-      .withContext("Shouldn't displayMessage error for godParents")
-      .not.toBe('Ingresar nombre de los padrinos');
-    expect(displayMessages['firstSectionSentences'])
-      .withContext("Shouldn't displayMessage error for firstSectionSentences")
-      .not.toBe('Ingresar datos de la primer sección');
-    expect(displayMessages['secondSectionSentences'])
-      .withContext("Shouldn't displayMessage error for secondSectionSentences")
-      .not.toBe('Ingresar datos de la segunda sección');
-    expect(displayMessages['massUrl'])
-      .withContext("Shouldn't displayMessage error for massUrl")
-      .not.toBe('Ingresar url de la ubicación de la misa');
-    expect(displayMessages['massTime'])
-      .withContext("Shouldn't displayMessage error for massTime")
-      .not.toBe('Ingresar hora de la misa');
-    expect(displayMessages['massAddress'])
-      .withContext("Shouldn't displayMessage error for massAddress")
-      .not.toBe('Ingresar dirección de la misa');
-    expect(displayMessages['receptionUrl'])
-      .withContext("Shouldn't displayMessage error for receptionUrl")
-      .not.toBe('Ingresar url de la ubicación de recepción');
-    expect(displayMessages['receptionTime'])
-      .withContext("Shouldn't displayMessage error for receptionTime")
-      .not.toBe('Ingresar hora de la recepción');
-    expect(displayMessages['receptionPlace'])
-      .withContext("Shouldn't displayMessage error for receptionPlace")
-      .not.toBe('Ingresar nombre de salón de eventos');
-    expect(displayMessages['receptionAddress'])
-      .withContext("Shouldn't displayMessage error for receptionAddress")
-      .not.toBe('Ingresar dirección de recepción');
-    expect(displayMessages['dressCodeColor'])
-      .withContext("Shouldn't displayMessage error for dressCodeColor")
-      .not.toBe('Ingresar si existe restricción de color');
+  it('should hide the sections that are not selected', () => {
+    expect(fixture.debugElement.query(By.css('.ceremony')))
+      .withContext('Ceremony section should be visible')
+      .not.toBeNull();
+    expect(fixture.debugElement.query(By.css('.reception')))
+      .withContext('Reception section should be visible')
+      .not.toBeNull();
+    expect(fixture.debugElement.query(By.css('.dressCode')))
+      .withContext('DressCode section should be visible')
+      .not.toBeNull();
+    clickSection('ceremonyInfo', false);
+    expect(fixture.debugElement.query(By.css('.ceremony')))
+      .withContext('Ceremony section should be hidden')
+      .toBeNull();
+    clickSection('receptionInfo', false);
+    expect(fixture.debugElement.query(By.css('.reception')))
+      .withContext('Reception section should be hidden')
+      .toBeNull();
+    clickSection('dressCodeInfo', false);
+    expect(fixture.debugElement.query(By.css('.dressCode')))
+      .withContext('DressCode section should be hidden')
+      .toBeNull();
   });
 });

@@ -18,7 +18,7 @@ test.describe('Authentication', () => {
       'The username or email are required'
     );
     await expect(loginPage.passwordError).toHaveText(
-      'The password is required'
+      'The password is required'  
     );
   });
 
@@ -131,6 +131,6 @@ test.describe('Authentication', () => {
   }) => {
     const passwordResetPage = new PasswordResetPage(page);
     await passwordResetPage.goto();
-    await passwordResetPage.isPasswordResetPage(false);
+    await passwordResetPage.checkPasswordChangedSuccessMessage();
   });
 });

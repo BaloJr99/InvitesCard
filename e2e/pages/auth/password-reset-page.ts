@@ -29,19 +29,15 @@ export class PasswordResetPage extends BasePage {
   }
 
   override async goto() {
-    await this.page.goto(`/auth/forgotPassword/${fullUserMock.id}`);
+    await this.page.goto(`/auth/forgotPassword/${fullUserMock.id}`, {
+      waitUntil: 'domcontentloaded'
+    });
   }
 
-  async isPasswordResetPage(shouldBePasswordResetPage: boolean = true) {
-    if (shouldBePasswordResetPage) {
-      await expect(this.mainHeader, {
-        message: 'Password reset page should be visible',
-      }).toBeVisible();
-    } else {
-      await expect(this.mainHeader, {
-        message: 'Password reset page should not be visible',
-      }).not.toBeVisible();
-    }
+  async isPasswordResetPage() {
+    await expect(this.mainHeader, {
+      message: 'Password reset page should be visible',
+    }).toBeVisible();
   }
 
   async resetPassword(password: string, confirmPassword: string) {

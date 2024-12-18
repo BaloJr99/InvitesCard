@@ -1,4 +1,4 @@
-import { ISaveTheDateSetting } from "./settings";
+import { ISaveTheDateSetting } from './settings';
 
 export interface IFullInvite {
   id: string;
@@ -121,4 +121,17 @@ export interface ICalendarDays {
   day: number;
   isDateOfEvent: boolean;
   show: boolean;
+}
+
+export interface IInviteSection {
+  sectionId: string;
+  name: string;
+  disabled: boolean;
+  selected: boolean;
+  order: number;
+}
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export interface IInviteSectionsProperties {
+  validators: { [key: string]: any };
 }

@@ -14,7 +14,7 @@ import { LoaderService } from '../../core/services/loader.service';
 import { SettingsService } from '../../core/services/settings.service';
 import { FilesService } from '../../core/services/files.service';
 import { ImageUsage } from '../../core/models/enum';
-import { ISweetXvUserInvite } from '../../core/models/invites';
+import { IInviteSection, ISweetXvUserInvite } from '../../core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
 
 @Component({
@@ -52,6 +52,8 @@ export class SweetXvComponent implements OnInit {
   downloadImages: IDownloadImage[] = [];
 
   deadlineMet = false;
+
+  sections: IInviteSection[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -111,6 +113,9 @@ export class SweetXvComponent implements OnInit {
           ])
             .subscribe({
               next: ([eventSettings, downloadFiles]) => {
+                const eventSettingsParsed = JSON.parse(eventSettings.settings);
+                this.sections = eventSettingsParsed.sections;
+
                 this.eventSettings = {
                   ...JSON.parse(eventSettings.settings),
                   eventId: eventSettings.eventId,
@@ -183,5 +188,15 @@ export class SweetXvComponent implements OnInit {
     }
 
     nextBackgroundImage.style.visibility = 'visible';
+  }
+
+  sectionEnabled(sectionId: string): boolean {
+    if (this.sections) {
+      const sectionFound = this.sections.find(
+        (s) => s.sectionId === sectionId
+      ) as IInviteSection;
+      return sectionFound.selected;
+    }
+    return true;
   }
 }

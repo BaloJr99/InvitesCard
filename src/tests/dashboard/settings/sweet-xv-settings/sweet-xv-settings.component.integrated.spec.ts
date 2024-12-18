@@ -138,21 +138,20 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SweetXvSettingsComponent);
-    fixture.detectChanges();
-  });
-
-  it('should call getEventSettings() when parent component sends Input value', () => {
     settingsServiceSpy.getEventSettings.and.returnValue(
       of(sweetXvBaseSettingMock)
     );
 
+    fixture = TestBed.createComponent(SweetXvSettingsComponent);
     fixture.componentRef.setInput('eventSettingAction', {
       eventId: fullEventsMock.id,
       eventType: EventType.Xv,
       isNew: true,
     });
+    fixture.detectChanges();
+  });
 
+  it('should call getEventSettings() when parent component sends Input value', () => {
     expect(settingsServiceSpy.getEventSettings)
       .withContext(
         "getEventSettings method from SettingsService should've been called"
@@ -161,16 +160,9 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
   });
 
   it('should call createEventSettings when the event setting is new', () => {
-    settingsServiceSpy.getEventSettings.and.returnValue(of());
     settingsServiceSpy.createEventSettings.and.returnValue(
       of(messageResponseMock)
     );
-
-    fixture.componentRef.setInput('eventSettingAction', {
-      eventId: fullEventsMock.id,
-      eventType: EventType.SaveTheDate,
-      isNew: true,
-    });
 
     updateFormUsingEvent(
       sweetXvSettingMock.eventId,
@@ -204,7 +196,6 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
   });
 
   it('should call updateEventSettings when the event setting is not', () => {
-    settingsServiceSpy.getEventSettings.and.returnValue(of());
     settingsServiceSpy.updateEventSettings.and.returnValue(
       of(messageResponseMock)
     );
@@ -214,6 +205,7 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
       eventType: EventType.SaveTheDate,
       isNew: false,
     });
+    
     updateFormUsingEvent(
       sweetXvSettingMock.eventId,
       sweetXvSettingMock.primaryColor,

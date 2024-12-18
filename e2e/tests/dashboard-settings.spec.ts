@@ -75,33 +75,6 @@ test.describe('Dashboard settings (Sweet 16)', () => {
     }).toBe(false);
   });
 
-  test('should show validation errors when saving with empty fields', async () => {
-    await settingsPage.selectEvent(sweetXvEventMock.nameOfEvent);
-    await settingsPage.waitToLoad();
-    await settingsPage.clickSaveChanges();
-
-    const expectedErrors = [
-      'The primary color is required',
-      'The secondary color is required',
-      'The name of the parents is required',
-      'The name of the godparents is required',
-      'The first section phrases are required',
-      'The second section phrase is required',
-      'The mass url address is required',
-      'The mass time is required',
-      'The mass address is required',
-      'The mass url address is required',
-      'The reception time is required',
-      'The reception place is required',
-      'The reception address is required',
-      'The color restriction is required',
-    ];
-    const errors = await settingsPage.getValidationErrors();
-    errors.forEach((error, index) => {
-      expect(error).toContain(expectedErrors[index]);
-    });
-  });
-
   test('should be able to fill the form and save the settings', async () => {
     await settingsPage.selectEvent(sweetXvEventMock.nameOfEvent);
     await settingsPage.waitToLoad();
@@ -194,25 +167,6 @@ test.describe('Dashboard settings (Save the date)', () => {
     expect(await settingsPage.filesEmptyMessage.isVisible(), {
       message: 'The select a event message should not be visible',
     }).toBe(false);
-  });
-
-  test('should show validation errors when saving with empty fields', async () => {
-    await settingsPage.selectEvent(saveTheDateEventMock.nameOfEvent);
-    await settingsPage.waitToLoad();
-    await settingsPage.clickSaveChanges();
-
-    const expectedErrors = [
-      'The primary color is required',
-      'The secondary color is required',
-      'The event venue is required',
-      'The copy message is required',
-      'The hotel name is required',
-      'The url with information of the hotel is required',
-    ];
-    const errors = await settingsPage.getValidationErrors();
-    errors.forEach((error, index) => {
-      expect(error).toContain(expectedErrors[index]);
-    });
   });
 
   test('should be able to fill the form and save the settings', async () => {

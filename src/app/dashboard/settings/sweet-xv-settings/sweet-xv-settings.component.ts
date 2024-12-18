@@ -1,36 +1,34 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Input,
-  ViewChildren,
-} from '@angular/core';
+import { Component, ElementRef, Input, ViewChildren } from '@angular/core';
 import {
   FormBuilder,
+  FormControl,
   FormControlName,
   FormGroup,
   Validators,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { fromEvent, merge, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { EventType } from 'src/app/core/models/enum';
+import {
+  IInviteSection,
+  IInviteSectionsProperties,
+} from 'src/app/core/models/invites';
 import { ISweetXvSetting, ISettingAction } from 'src/app/core/models/settings';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
-import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 
 @Component({
   selector: 'app-sweet-xv-settings',
   templateUrl: './sweet-xv-settings.component.html',
   styleUrl: './sweet-xv-settings.component.css',
 })
-export class SweetXvSettingsComponent implements AfterViewInit {
+export class SweetXvSettingsComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
   @Input() set eventSettingAction(eventSettingAction: ISettingAction) {
-    const eventId = eventSettingAction?.eventId;
+    const eventId = eventSettingAction.eventId;
     this.sweetXvSettings = {
       eventId: eventId,
       isNew: true,
@@ -46,23 +44,85 @@ export class SweetXvSettingsComponent implements AfterViewInit {
     eventId: ['', Validators.required],
     primaryColor: ['', Validators.required],
     secondaryColor: ['', Validators.required],
-    parents: ['', Validators.required],
-    godParents: ['', Validators.required],
     firstSectionSentences: ['', Validators.required],
-    secondSectionSentences: ['', Validators.required],
-    massUrl: ['', Validators.required],
-    massTime: ['', Validators.required],
-    massAddress: ['', Validators.required],
-    receptionUrl: ['', Validators.required],
-    receptionTime: ['', Validators.required],
-    receptionPlace: ['', Validators.required],
-    receptionAddress: ['', Validators.required],
-    dressCodeColor: ['', Validators.required],
   });
 
-  displayMessage: { [key: string]: string } = {};
-  private validationMessages: { [key: string]: { [key: string]: string } };
-  private genericValidator: GenericValidator;
+  sectionsControls: { [key: string]: IInviteSectionsProperties } = {
+    ceremonyInfo: {
+      validators: {
+        parents: ['', Validators.required],
+        godParents: ['', Validators.required],
+        secondSectionSentences: ['', Validators.required],
+        massUrl: ['', Validators.required],
+        massTime: ['', Validators.required],
+        massAddress: ['', Validators.required],
+      },
+    },
+    receptionInfo: {
+      validators: {
+        receptionUrl: ['', Validators.required],
+        receptionTime: ['', Validators.required],
+        receptionPlace: ['', Validators.required],
+        receptionAddress: ['', Validators.required],
+      },
+    },
+    dressCodeInfo: {
+      validators: {
+        dressCodeColor: ['', Validators.required],
+      },
+    },
+  };
+
+  validationMessages: { [key: string]: string } = {};
+
+  baseSections: IInviteSection[] = [
+    {
+      sectionId: 'inviteInfo',
+      name: $localize`Información de la invitación`,
+      disabled: true,
+      selected: true,
+      order: 0,
+    },
+    {
+      sectionId: 'ceremonyInfo',
+      name: $localize`Información de la ceremonia`,
+      disabled: false,
+      selected: true,
+      order: 1,
+    },
+    {
+      sectionId: 'receptionInfo',
+      name: $localize`Información de la recepción`,
+      disabled: false,
+      selected: true,
+      order: 1,
+    },
+    {
+      sectionId: 'dressCodeInfo',
+      name: $localize`Código de vestimenta`,
+      disabled: false,
+      selected: true,
+      order: 3,
+    },
+    {
+      sectionId: 'giftsInfo',
+      name: $localize`Regalos`,
+      disabled: false,
+      selected: true,
+      order: 4,
+    },
+  ];
+
+  private sectionsConfig = new BehaviorSubject<IInviteSection[]>([]);
+  sectionsConfig$ = this.sectionsConfig.asObservable();
+
+  vm$ = combineLatest([this.sectionsConfig$]).pipe(
+    map(([sections]) => {
+      return {
+        sections,
+      };
+    })
+  );
 
   constructor(
     private loaderService: LoaderService,
@@ -71,51 +131,21 @@ export class SweetXvSettingsComponent implements AfterViewInit {
     private toastr: ToastrService
   ) {
     this.validationMessages = {
-      primaryColor: {
-        required: $localize`Ingresar color primario`,
-      },
-      secondaryColor: {
-        required: $localize`Ingresar color secundario`,
-      },
-      parents: {
-        required: $localize`Ingresar nombre de los padres`,
-      },
-      godParents: {
-        required: $localize`Ingresar nombre de los padrinos`,
-      },
-      firstSectionSentences: {
-        required: $localize`Ingresar datos de la primer sección`,
-      },
-      secondSectionSentences: {
-        required: $localize`Ingresar datos de la segunda sección`,
-      },
-      massUrl: {
-        required: $localize`Ingresar url de la ubicación de la misa`,
-      },
-      massTime: {
-        required: $localize`Ingresar hora de la misa`,
-      },
-      massAddress: {
-        required: $localize`Ingresar dirección de la misa`,
-      },
-      receptionUrl: {
-        required: $localize`Ingresar url de la ubicación de recepción`,
-      },
-      receptionTime: {
-        required: $localize`Ingresar hora de la recepción`,
-      },
-      receptionPlace: {
-        required: $localize`Ingresar nombre de salón de eventos`,
-      },
-      receptionAddress: {
-        required: $localize`Ingresar dirección de recepción`,
-      },
-      dressCodeColor: {
-        required: $localize`Ingresar si existe restricción de color`,
-      },
+      primaryColor: $localize`Ingresar color primario`,
+      secondaryColor: $localize`Ingresar color secundario`,
+      firstSectionSentences: $localize`Ingresar datos de la primer sección`,
+      parents: $localize`Ingresar nombre de los padres`,
+      godParents: $localize`Ingresar nombre de los padrinos`,
+      secondSectionSentences: $localize`Ingresar datos de la segunda sección`,
+      massUrl: $localize`Ingresar url de la ubicación de la misa`,
+      massTime: $localize`Ingresar hora de la misa`,
+      massAddress: $localize`Ingresar dirección de la misa`,
+      receptionUrl: $localize`Ingresar url de la ubicación de recepción`,
+      receptionTime: $localize`Ingresar hora de la recepción`,
+      receptionPlace: $localize`Ingresar nombre de salón de eventos`,
+      receptionAddress: $localize`Ingresar dirección de recepción`,
+      dressCodeColor: $localize`Ingresar si existe restricción de color`,
     };
-
-    this.genericValidator = new GenericValidator(this.validationMessages);
   }
 
   clearInformation(): void {
@@ -136,8 +166,6 @@ export class SweetXvSettingsComponent implements AfterViewInit {
       receptionAddress: '',
       dressCodeColor: '',
     });
-
-    this.displayMessage = {};
   }
 
   getEventSetting(): void {
@@ -146,6 +174,26 @@ export class SweetXvSettingsComponent implements AfterViewInit {
         .getEventSettings(this.sweetXvSettings.eventId)
         .subscribe({
           next: (response) => {
+            const parsedSettings = JSON.parse(response.settings);
+            if (!parsedSettings.sections) {
+              this.updateSections(this.baseSections);
+            } else {
+              const sections = parsedSettings.sections.map(
+                (section: IInviteSection) => {
+                  const baseSection = this.baseSections.find(
+                    (s) => s.sectionId === section.sectionId
+                  ) as IInviteSection;
+
+                  return {
+                    ...baseSection,
+                    selected: section.selected,
+                    order: section.order,
+                  };
+                }
+              );
+              this.updateSections(sections);
+            }
+
             this.createEventSettingsForm.patchValue({
               ...JSON.parse(response.settings),
               eventId: response.eventId,
@@ -157,6 +205,8 @@ export class SweetXvSettingsComponent implements AfterViewInit {
             };
           },
           error: () => {
+            this.updateSections(this.baseSections);
+
             this.sweetXvSettings = {
               ...this.sweetXvSettings,
               isNew: true,
@@ -189,10 +239,7 @@ export class SweetXvSettingsComponent implements AfterViewInit {
         this.updateEventSettings();
       }
     } else {
-      this.displayMessage = this.genericValidator.processMessages(
-        this.createEventSettingsForm,
-        true
-      );
+      this.createEventSettingsForm.markAllAsTouched();
     }
   }
 
@@ -237,40 +284,104 @@ export class SweetXvSettingsComponent implements AfterViewInit {
   }
 
   formatEventSetting(): ISweetXvSetting {
-    const updatedMassTime = this.createEventSettingsForm.get('massTime')
-      ?.value as string;
-    const updatedReceptionTime = this.createEventSettingsForm.get(
-      'receptionTime'
-    )?.value as string;
+    const sectionsDisplayed = this.sectionsConfig.value.filter(
+      (s) => s.selected
+    );
+    const formValue = this.createEventSettingsForm.value;
+
+    if (sectionsDisplayed.some((s) => s.sectionId === 'ceremonyInfo')) {
+      formValue['massTime'] =
+        formValue['massTime'].length > 5
+          ? formValue['massTime']
+          : `${formValue['massTime']}:00`;
+    }
+
+    if (sectionsDisplayed.some((s) => s.sectionId === 'receptionInfo')) {
+      formValue['receptionTime'] =
+        formValue['receptionTime'].length > 5
+          ? formValue['receptionTime']
+          : `${formValue['receptionTime']}:00`;
+    }
 
     return {
-      ...this.createEventSettingsForm.value,
-      massTime:
-        updatedMassTime.length > 5
-          ? this.createEventSettingsForm.get('massTime')?.value
-          : `${this.createEventSettingsForm.get('massTime')?.value}:00`,
-      receptionTime:
-        updatedReceptionTime.length > 5
-          ? this.createEventSettingsForm.get('receptionTime')?.value
-          : `${this.createEventSettingsForm.get('receptionTime')?.value}:00`,
+      sections: [
+        ...this.sectionsConfig.value.map((s) => {
+          return {
+            sectionId: s.sectionId,
+            selected: s.selected,
+            order: s.order,
+          };
+        }),
+      ],
+      ...formValue,
     } as ISweetXvSetting;
   }
 
-  ngAfterViewInit(): void {
-    // Watch for the blur event from any input element on the form.
-    // This is required because the valueChanges does not provide notification on blur
-    const controlBlurs: Observable<unknown>[] = this.formInputElements.map(
-      (formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur')
-    );
+  sectionEnabled(sectionId: string, sections: IInviteSection[]) {
+    return sections.find((s) => s.sectionId === sectionId)?.selected;
+  }
 
-    // Merge the blur event observable with the valueChanges observable
-    // so we only need to subscribe once.
-    merge(this.createEventSettingsForm.valueChanges, ...controlBlurs).subscribe(
-      () => {
-        this.displayMessage = this.genericValidator.processMessages(
-          this.createEventSettingsForm
+  updateSection(sectionId: string, event: Event) {
+    const target = event.target as HTMLInputElement;
+    const updatedSections = this.sectionsConfig.value.map((section) => {
+      if (section.sectionId === sectionId) {
+        section.selected = target.checked;
+
+        if (target.checked) {
+          Object.keys(this.sectionsControls[sectionId].validators).forEach(
+            (control) => {
+              this.createEventSettingsForm.addControl(
+                control,
+                new FormControl(
+                  '',
+                  this.sectionsControls[sectionId].validators[control][1]
+                )
+              );
+            }
+          );
+        } else {
+          Object.keys(this.sectionsControls[sectionId].validators).forEach(
+            (control) => {
+              this.createEventSettingsForm.removeControl(control);
+            }
+          );
+        }
+      }
+
+      return section;
+    });
+    this.createEventSettingsForm.updateValueAndValidity();
+    this.sectionsConfig.next(updatedSections);
+  }
+
+  formControlIsInvalid(controlName: string, errorName: string): boolean {
+    const control = this.createEventSettingsForm.get(controlName);
+    return (
+      control && control.errors && control.errors[errorName] && control.touched
+    );
+  }
+
+  updateSections(sections: IInviteSection[]) {
+    // Order the sections by order property
+    sections.sort((a, b) => a.order - b.order);
+
+    // Fill the form with default values
+    Object.keys(this.sectionsControls).forEach((section) => {
+      if (sections.some((s) => s.sectionId === section && s.selected)) {
+        Object.keys(this.sectionsControls[section].validators).forEach(
+          (control) => {
+            this.createEventSettingsForm.addControl(
+              control,
+              new FormControl(
+                '',
+                this.sectionsControls[section].validators[control][1]
+              )
+            );
+          }
         );
       }
-    );
+    });
+
+    this.sectionsConfig.next(sections);
   }
 }

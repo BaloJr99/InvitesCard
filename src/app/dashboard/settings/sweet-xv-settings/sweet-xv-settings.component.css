@@ -1,8 +1,39 @@
+.available-sections, form {
+  background-color: white;
+  margin: 10px 0px;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+  .available-sections h2 {
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .available-sections ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+    .available-sections ul li {
+      font-size: 18px;
+      padding: 10px 0px;
+    }
+
+      .available-sections ul li input {
+        margin-right: 5px;
+      }
+
 form {
   margin-bottom: 10px;
-  display: flex;
-  flex-wrap: wrap;
 }
+
+  form section {
+    display: flex;
+    flex-wrap: wrap;
+  }
 
   form .form-group {
     display: flex;
