@@ -191,12 +191,22 @@ export class SweetXvComponent implements OnInit {
   }
 
   sectionEnabled(sectionId: string): boolean {
-    if (this.sections) {
+    if (this.sections && this.sections.length > 0) {
       const sectionFound = this.sections.find(
         (s) => s.sectionId === sectionId
       ) as IInviteSection;
       return sectionFound.selected;
     }
-    return true;
+    return false;
+  }
+
+  getSectionOrder(sectionId: string) {
+    if (this.sections && this.sections.length > 0) {
+      const sectionFound = this.sections.find(
+        (s) => s.sectionId === sectionId
+      ) as IInviteSection;
+      return sectionFound.order;
+    }
+    return 0;
   }
 }

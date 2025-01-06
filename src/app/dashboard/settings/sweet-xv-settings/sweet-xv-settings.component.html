@@ -2,10 +2,11 @@
   <div class="col-md-3 col-12 gx-4">
     <div class="available-sections">
       <h2 i18n>Secciones Disponibles</h2>
-      <ul>
-        <li *ngFor="let section of sectionsConfig$ | async">
+      <ul (dragover)="dragOver($event)">
+        <li [draggable]="!section.disabled" *ngFor="let section of sectionsConfig$ | async; index as i" (dragstart)="dragStart($event)" (dragend)="dragEnd($event)" [ngClass]="{'draggable': !section.disabled}">
+          <i class="fa-solid fa-grip-vertical"></i> 
           <label>
-            <input id="{{section.sectionId}}" type="checkbox" class="form-check-input" [disabled]="section.disabled" [checked]="section.selected" (change)="updateSection(section.sectionId, $event)">{{ section.name }}
+            <input id="input-{{section.sectionId}}" type="checkbox" class="form-check-input" [disabled]="section.disabled" [checked]="section.selected" (change)="updateSection(section.sectionId, $event)">{{ section.name }}
           </label>
         </li>
       </ul>
@@ -14,14 +15,14 @@
   <div class="col-md-9 col-12 gx-4" *ngIf="vm$ | async as vm">
     <form [formGroup]="createEventSettingsForm">
       <section class="info">
-        <div class="form-group col-6 col-md-2">
+        <div class="form-group col-6 col-md-3">
           <label for="primaryColor" class="form-label" i18n>Color Primario</label>
           <input id="primaryColor" type="color" class="form-control" formControlName="primaryColor" [ngClass]="{'is-invalid': formControlIsInvalid('primaryColor', 'required')}">
           <span class="invalid-feedback" role="alert">
             {{ validationMessages['primaryColor'] }}
           </span>
         </div>
-        <div class="form-group col-6 col-md-2">
+        <div class="form-group col-6 col-md-3">
           <label for="secondaryColor" class="form-label" i18n>Color Secundario</label>
           <input id="secondaryColor" type="color" class="form-control" formControlName="secondaryColor" [ngClass]="{'is-invalid': formControlIsInvalid('secondaryColor', 'required')}">
           <span class="invalid-feedback" role="alert">
@@ -60,7 +61,7 @@
         </div>
         <div class="form-group col-12 col-md-6">
           <label for="massUrl" class="form-label" i18n>Url de la ubicación de la misa</label>
-          <input id="massUrl" type="text" class="form-control" formControlName="massUrl" [ngClass]="{'is-invalid': formControlIsInvalid('massUrl', 'required')}">
+          <input id="massUrl" type="url" class="form-control" formControlName="massUrl" [ngClass]="{'is-invalid': formControlIsInvalid('massUrl', 'required')}">
           <span class="invalid-feedback" role="alert">
             {{ validationMessages['massUrl'] }}
           </span>

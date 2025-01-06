@@ -111,6 +111,13 @@ export class SweetXvSettingsComponent {
       selected: true,
       order: 4,
     },
+    {
+      sectionId: 'confirmationInfo',
+      name: $localize`Formulario`,
+      disabled: true,
+      selected: true,
+      order: 5,
+    },
   ];
 
   private sectionsConfig = new BehaviorSubject<IInviteSection[]>([]);
@@ -190,7 +197,15 @@ export class SweetXvSettingsComponent {
                     order: section.order,
                   };
                 }
-              );
+              ) as IInviteSection[];
+
+              // Add any missing section from the baseSections
+              this.baseSections.forEach((baseSection) => {
+                if (!sections.some((s) => s.sectionId === baseSection.sectionId)) {
+                  sections.push(baseSection);
+                }
+              });
+
               this.updateSections(sections);
             }
 
@@ -362,12 +377,15 @@ export class SweetXvSettingsComponent {
   }
 
   updateSections(sections: IInviteSection[]) {
+    // Create a copy to avoid reference issues
+    const sectionsCopy = JSON.parse(JSON.stringify(sections)) as IInviteSection[];
+
     // Order the sections by order property
-    sections.sort((a, b) => a.order - b.order);
+    sectionsCopy.sort((a, b) => a.order - b.order);
 
     // Fill the form with default values
     Object.keys(this.sectionsControls).forEach((section) => {
-      if (sections.some((s) => s.sectionId === section && s.selected)) {
+      if (sectionsCopy.some((s) => s.sectionId === section && s.selected)) {
         Object.keys(this.sectionsControls[section].validators).forEach(
           (control) => {
             this.createEventSettingsForm.addControl(
@@ -382,6 +400,65 @@ export class SweetXvSettingsComponent {
       }
     });
 
-    this.sectionsConfig.next(sections);
+    this.sectionsConfig.next(sectionsCopy);
+  }
+
+  dragStart(event: Event) {
+    const target = event.target as HTMLUListElement;
+    target.classList.add('dragging');
+  }
+
+  dragEnd(event: Event) {
+    const target = event.target as HTMLUListElement;
+    target.classList.remove('dragging');
+    
+    const listIndexIds = Array.from(document.querySelectorAll('.available-sections ul li input')).map((li) => li.id.split('-')[1]);
+    const sections = this.sectionsConfig.value.map((section) => {
+      section.order = listIndexIds.indexOf(section.sectionId);
+      return section;
+    });
+    
+    this.createEventSettingsForm.markAsDirty();
+
+    this.updateSections(sections);
+  }
+
+  dragOver(event: DragEvent) {
+    event.preventDefault();
+    const container = document.querySelector('.available-sections ul') as HTMLUListElement;
+
+    const afterElement = this.getDragAfterElement(container, event.clientY);
+    const draggable = document.querySelector('.dragging') as HTMLLIElement;
+    
+    if (afterElement === null) {
+      // We need to insert it in the previous position of the last element
+      container.insertBefore(draggable, container.lastElementChild);
+    } else {
+      container.insertBefore(draggable, afterElement);
+    }
+  }
+
+  getDragAfterElement(container: HTMLUListElement, y: number) {
+    const draggableElements = [
+      ...container.querySelectorAll('.draggable:not(.dragging)'),
+    ] as HTMLLIElement[];
+
+    let element: HTMLLIElement | null = null;
+
+    draggableElements.reduce(
+      (closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+          element = child;
+          return { offset };
+        } else {
+          return closest;
+        }
+      },
+      { offset: Number.NEGATIVE_INFINITY }
+    );
+
+    return element;
   }
 }

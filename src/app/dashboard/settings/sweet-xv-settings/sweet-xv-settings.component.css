@@ -20,7 +20,29 @@
     .available-sections ul li {
       font-size: 18px;
       padding: 10px 0px;
+      display: flex;
+      align-items: center;
     }
+
+      .available-sections ul li i {
+        color: var(--primary-blue);
+        opacity: 0.4;
+        margin-right: 5px;
+        cursor: grab;
+      }
+
+      .available-sections ul li.draggable:hover i {
+        color: var(--primary-blue);
+        opacity: 0.8;
+      }
+
+      .available-sections ul li.draggable {
+        opacity: 1;
+      }
+
+      .available-sections ul li.dragging {
+        opacity: 0.5;
+      }
 
       .available-sections ul li input {
         margin-right: 5px;

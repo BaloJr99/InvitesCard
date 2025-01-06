@@ -3,6 +3,11 @@
   --custom-seconday-color: #ffffff;
 }
 
+.full-invite {
+  display: flex;
+  flex-direction: column;
+}
+
 .full-invite .invite-section:nth-child(even):not(:first-child) {
   background-color: var(--custom-secondary-color);
 }
