@@ -175,6 +175,13 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
           selected: true,
           order: 4,
         },
+        {
+          sectionId: 'confirmationInfo',
+          name: $localize`Formulario`,
+          disabled: true,
+          selected: true,
+          order: 5,
+        },
       ]);
   });
 

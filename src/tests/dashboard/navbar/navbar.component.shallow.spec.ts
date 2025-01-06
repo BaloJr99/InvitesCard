@@ -116,6 +116,6 @@ describe('Navbar Component (Shallow Test)', () => {
     const notificationText = notificationItems[0].nativeElement.textContent;
     expect(notificationText)
       .withContext('You should have a notification text inside the li tag')
-      .toContain('Test Family ha: CanceladoHace 3 años');
+      .toContain('Test Family ha: CanceladoHace 4 años');
   });
 });

@@ -1,4 +1,5 @@
 import { EventType } from './enum';
+import { IInviteSection } from './invites';
 
 export interface IBaseSettings {
   eventId: string;
@@ -6,6 +7,7 @@ export interface IBaseSettings {
 }
 
 export interface ISweetXvSetting {
+  sections: IInviteSection[];
   eventId: string;
   primaryColor: string;
   secondaryColor: string;
@@ -21,7 +23,7 @@ export interface ISweetXvSetting {
   receptionPlace: string;
   receptionAddress: string;
   dressCodeColor: string;
-}
+} 
 
 export interface ISaveTheDateSetting {
   eventId: string;

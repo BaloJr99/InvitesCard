@@ -75,50 +75,7 @@ export class SweetXvSettingsComponent {
 
   validationMessages: { [key: string]: string } = {};
 
-  baseSections: IInviteSection[] = [
-    {
-      sectionId: 'inviteInfo',
-      name: $localize`Información de la invitación`,
-      disabled: true,
-      selected: true,
-      order: 0,
-    },
-    {
-      sectionId: 'ceremonyInfo',
-      name: $localize`Información de la ceremonia`,
-      disabled: false,
-      selected: true,
-      order: 1,
-    },
-    {
-      sectionId: 'receptionInfo',
-      name: $localize`Información de la recepción`,
-      disabled: false,
-      selected: true,
-      order: 1,
-    },
-    {
-      sectionId: 'dressCodeInfo',
-      name: $localize`Código de vestimenta`,
-      disabled: false,
-      selected: true,
-      order: 3,
-    },
-    {
-      sectionId: 'giftsInfo',
-      name: $localize`Regalos`,
-      disabled: false,
-      selected: true,
-      order: 4,
-    },
-    {
-      sectionId: 'confirmationInfo',
-      name: $localize`Formulario`,
-      disabled: true,
-      selected: true,
-      order: 5,
-    },
-  ];
+  baseSections: IInviteSection[] = [];
 
   private sectionsConfig = new BehaviorSubject<IInviteSection[]>([]);
   sectionsConfig$ = this.sectionsConfig.asObservable();
@@ -137,6 +94,50 @@ export class SweetXvSettingsComponent {
     private fb: FormBuilder,
     private toastr: ToastrService
   ) {
+    this.baseSections = [
+      {
+        sectionId: 'inviteInfo',
+        name: $localize`Información de la invitación`,
+        disabled: true,
+        selected: true,
+        order: 0,
+      },
+      {
+        sectionId: 'ceremonyInfo',
+        name: $localize`Información de la ceremonia`,
+        disabled: false,
+        selected: true,
+        order: 1,
+      },
+      {
+        sectionId: 'receptionInfo',
+        name: $localize`Información de la recepción`,
+        disabled: false,
+        selected: true,
+        order: 1,
+      },
+      {
+        sectionId: 'dressCodeInfo',
+        name: $localize`Código de vestimenta`,
+        disabled: false,
+        selected: true,
+        order: 3,
+      },
+      {
+        sectionId: 'giftsInfo',
+        name: $localize`Regalos`,
+        disabled: false,
+        selected: true,
+        order: 4,
+      },
+      {
+        sectionId: 'confirmationInfo',
+        name: $localize`Formulario`,
+        disabled: true,
+        selected: true,
+        order: 5,
+      },
+    ];
     this.validationMessages = {
       primaryColor: $localize`Ingresar color primario`,
       secondaryColor: $localize`Ingresar color secundario`,
@@ -201,7 +202,9 @@ export class SweetXvSettingsComponent {
 
               // Add any missing section from the baseSections
               this.baseSections.forEach((baseSection) => {
-                if (!sections.some((s) => s.sectionId === baseSection.sectionId)) {
+                if (
+                  !sections.some((s) => s.sectionId === baseSection.sectionId)
+                ) {
                   sections.push(baseSection);
                 }
               });
@@ -378,7 +381,9 @@ export class SweetXvSettingsComponent {
 
   updateSections(sections: IInviteSection[]) {
     // Create a copy to avoid reference issues
-    const sectionsCopy = JSON.parse(JSON.stringify(sections)) as IInviteSection[];
+    const sectionsCopy = JSON.parse(
+      JSON.stringify(sections)
+    ) as IInviteSection[];
 
     // Order the sections by order property
     sectionsCopy.sort((a, b) => a.order - b.order);
@@ -411,13 +416,15 @@ export class SweetXvSettingsComponent {
   dragEnd(event: Event) {
     const target = event.target as HTMLUListElement;
     target.classList.remove('dragging');
-    
-    const listIndexIds = Array.from(document.querySelectorAll('.available-sections ul li input')).map((li) => li.id.split('-')[1]);
+
+    const listIndexIds = Array.from(
+      document.querySelectorAll('.available-sections ul li input')
+    ).map((li) => li.id.split('-')[1]);
     const sections = this.sectionsConfig.value.map((section) => {
       section.order = listIndexIds.indexOf(section.sectionId);
       return section;
     });
-    
+
     this.createEventSettingsForm.markAsDirty();
 
     this.updateSections(sections);
@@ -425,11 +432,13 @@ export class SweetXvSettingsComponent {
 
   dragOver(event: DragEvent) {
     event.preventDefault();
-    const container = document.querySelector('.available-sections ul') as HTMLUListElement;
+    const container = document.querySelector(
+      '.available-sections ul'
+    ) as HTMLUListElement;
 
     const afterElement = this.getDragAfterElement(container, event.clientY);
     const draggable = document.querySelector('.dragging') as HTMLLIElement;
-    
+
     if (afterElement === null) {
       // We need to insert it in the previous position of the last element
       container.insertBefore(draggable, container.lastElementChild);

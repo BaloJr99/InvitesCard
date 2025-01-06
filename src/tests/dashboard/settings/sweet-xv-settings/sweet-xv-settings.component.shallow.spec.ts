@@ -116,7 +116,7 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
   };
 
   const clickSection = (section: string, show: boolean) => {
-    const sectionElement = fixture.debugElement.query(By.css(`#${section}`));
+    const sectionElement = fixture.debugElement.query(By.css(`#input-${section}`));
     if (show && !sectionElement.nativeElement.checked) {
       sectionElement.nativeElement.click();
       fixture.detectChanges();

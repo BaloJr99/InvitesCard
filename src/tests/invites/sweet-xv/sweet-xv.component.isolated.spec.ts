@@ -63,6 +63,7 @@ describe('Sweet Xv Component (Isolated Test)', () => {
         receptionPlace: '',
         receptionAddress: '',
         dressCodeColor: '',
+        sections: [],
       });
     expect(component.downloadImages)
       .withContext('Download images should be empty')

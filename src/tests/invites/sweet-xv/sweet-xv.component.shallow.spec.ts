@@ -65,7 +65,10 @@ describe('Sweet Xv Component (Shallow Test)', () => {
       of(deepCopy(sweetXvUserInviteMock))
     );
     settingsServiceSpy.getEventSettings.and.returnValue(
-      of(sweetXvBaseSettingMock)
+      of({
+        ...sweetXvBaseSettingMock,
+        
+      })
     );
     filesServiceSpy.getFilesByEvent.and.returnValue(
       of({

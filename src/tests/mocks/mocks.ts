@@ -367,7 +367,53 @@ export const logMock: ILog = {
   userId: fullUserMock.id,
 };
 
+export const baseSectionsMock: IInviteSection[] = [
+  {
+    sectionId: 'inviteInfo',
+    name: 'Información de la invitación',
+    disabled: true,
+    selected: true,
+    order: 0,
+  },
+  {
+    sectionId: 'ceremonyInfo',
+    name: 'Información de la ceremonia',
+    disabled: false,
+    selected: true,
+    order: 1,
+  },
+  {
+    sectionId: 'receptionInfo',
+    name: 'Información de la recepción',
+    disabled: false,
+    selected: true,
+    order: 1,
+  },
+  {
+    sectionId: 'dressCodeInfo',
+    name: 'Código de vestimenta',
+    disabled: false,
+    selected: true,
+    order: 3,
+  },
+  {
+    sectionId: 'giftsInfo',
+    name: 'Regalos',
+    disabled: false,
+    selected: true,
+    order: 4,
+  },
+  {
+    sectionId: 'confirmationInfo',
+    name: 'Formulario',
+    disabled: true,
+    selected: true,
+    order: 5,
+  },
+];
+
 export const sweetXvSettingMock: ISweetXvSetting = {
+  sections: baseSectionsMock,
   eventId: fullEventsMock.id,
   primaryColor: '#000000',
   secondaryColor: '#000000',

@@ -32,6 +32,7 @@ export class SweetXvComponent implements OnInit {
 
   userInvite!: ISweetXvUserInvite;
   eventSettings: ISweetXvSetting = {
+    sections: [],
     eventId: '',
     primaryColor: '',
     secondaryColor: '',
