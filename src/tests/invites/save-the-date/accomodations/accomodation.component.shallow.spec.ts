@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { AccomodationComponent } from 'src/app/invites/save-the-date/accomodations/accomodation.component';
-import { saveTheDateUserInviteMock } from 'src/tests/mocks/mocks';
+import { saveTheDateSettingMock, saveTheDateUserInviteMock } from 'src/tests/mocks/mocks';
 
 describe('Accomodation Component (Shallow Test)', () => {
   let fixture: ComponentFixture<AccomodationComponent>;
@@ -89,6 +89,10 @@ describe('Accomodation Component (Shallow Test)', () => {
       needsAccomodation: true,
     });
 
+    fixture.componentRef.setInput('inviteSettings', {
+      ...saveTheDateSettingMock
+    })
+
     fixture.detectChanges();
 
     const form = fixture.debugElement.query(By.css('.confirmed'));
@@ -110,6 +114,6 @@ describe('Accomodation Component (Shallow Test)', () => {
       .toContain('Le compartimos el Flyer con información sobre el hotel');
     expect(link.nativeElement.textContent)
       .withContext('Should have the section name')
-      .toContain(saveTheDateUserInviteMock.hotelName);
+      .toContain(saveTheDateSettingMock.hotelName);
   });
 });

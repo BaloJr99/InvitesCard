@@ -121,10 +121,6 @@ export class SaveTheDateComponent implements OnInit {
                   eventId: eventSettings.eventId,
                 };
 
-                this.userInvite.hotelName = this.eventSettings.hotelName;
-                this.userInvite.hotelInformation =
-                  this.eventSettings.hotelInformation;
-
                 this.downloadAudio =
                   downloadFiles.eventAudios.length > 0
                     ? downloadFiles.eventAudios[0]

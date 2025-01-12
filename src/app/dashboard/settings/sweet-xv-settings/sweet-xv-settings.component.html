@@ -3,7 +3,7 @@
     <div class="available-sections">
       <h2 i18n>Secciones Disponibles</h2>
       <ul (dragover)="dragOver($event)">
-        <li [draggable]="!section.disabled" *ngFor="let section of sectionsConfig$ | async; index as i" (dragstart)="dragStart($event)" (dragend)="dragEnd($event)" [ngClass]="{'draggable': !section.disabled}">
+        <li [draggable]="section.draggable" *ngFor="let section of sectionsConfig$ | async; index as i" (dragstart)="dragStart($event)" (dragend)="dragEnd($event)" [ngClass]="{'draggable': section.draggable}">
           <i class="fa-solid fa-grip-vertical"></i> 
           <label>
             <input id="input-{{section.sectionId}}" type="checkbox" class="form-check-input" [disabled]="section.disabled" [checked]="section.selected" (change)="updateSection(section.sectionId, $event)">{{ section.name }}

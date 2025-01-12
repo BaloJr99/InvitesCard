@@ -15,7 +15,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { BehaviorSubject, Observable, fromEvent, merge } from 'rxjs';
-import { IConfirmation, ISweetXvUserInvite } from 'src/app/core/models/invites';
+import { IConfirmation, IUserInvite } from 'src/app/core/models/invites';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 import { SocketService } from 'src/app/core/services/socket.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
@@ -32,8 +32,8 @@ export class ConfirmationComponent implements AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  invite: ISweetXvUserInvite = {} as ISweetXvUserInvite;
-  @Input() set inviteValue(value: ISweetXvUserInvite) {
+  invite: IUserInvite = {} as IUserInvite;
+  @Input() set inviteValue(value: IUserInvite) {
     this.invite = value;
     const { entriesNumber } = value;
     const numberOfEntries = Array.from(

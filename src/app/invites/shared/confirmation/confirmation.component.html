@@ -7,11 +7,11 @@
     <div class="col-sm-12 col-md-6">
       <div class="form">
         <div class="question">
-          <h3 i18n>¿ASISTIRÁS A MI FIESTA?</h3>
+          <h3 i18n>¿ASISTIRÁS A MI EVENTO?</h3>
           <span i18n *ngIf="blockConfirmationForm">Este formulario no acepta mas respuestas</span>
         </div>
         <p i18n>
-          Selecciona una opción
+          <strong>Selecciona una opción</strong>
         </p>
         <div class="form-check form-check-inline">
           <label class="form-check-label" i18n>
@@ -24,7 +24,9 @@
           </label>
         </div>
         <div class="form-group">
-          <p i18n>Personas confirmadas</p>
+          <p i18n>
+            <strong>Personas confirmadas</strong>
+          </p>
           <select #entriesConfirmed id="entriesConfirmed" class="form-control" formControlName="entriesConfirmed" [ngClass]="{'is-invalid': displayMessage['entriesConfirmed']}">
             <option value="" i18n>Selecciona el numero de pases</option>
             <option *ngFor="let number of numberOfEntries$ | async" [value]="number">{{ number }}</option>
@@ -33,7 +35,9 @@
             {{ displayMessage['entriesConfirmed'] }}
           </span>
         </div>
-        <p i18n>¡Envía una felicitación!</p>
+        <p i18n>
+          <strong>¡Envía una felicitación!</strong>
+        </p>
         <div class="form-group">
           <textarea id="message" class="form-control" name="" rows="3" formControlName="message"></textarea>
         </div>

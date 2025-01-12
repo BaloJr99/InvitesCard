@@ -505,7 +505,10 @@ export class EventDetailsComponent implements OnInit {
   }
 
   getHeaders(): ITableHeaders[] {
-    if (this.copyEventInformation.typeOfEvent === EventType.Xv) {
+    if (
+      this.copyEventInformation.typeOfEvent === EventType.Xv ||
+      this.copyEventInformation.typeOfEvent === EventType.Wedding
+    ) {
       return [
         {
           text: '',

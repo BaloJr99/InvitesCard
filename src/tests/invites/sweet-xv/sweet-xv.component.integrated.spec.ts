@@ -5,8 +5,8 @@ import { of } from 'rxjs';
 import { FilesService } from 'src/app/core/services/files.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
-import { ConfirmationComponent } from 'src/app/invites/sweet-xv/confirmation/confirmation.component';
-import { CountdownComponent } from 'src/app/invites/sweet-xv/countdown/countdown.component';
+import { ConfirmationComponent } from 'src/app/invites/shared/confirmation/confirmation.component';
+import { CountdownComponent } from 'src/app/invites/shared/countdown/countdown.component';
 import { SweetXvComponent } from 'src/app/invites/sweet-xv/sweet-xv.component';
 import { SafePipe } from 'src/app/shared/pipes/safe.pipe';
 import {

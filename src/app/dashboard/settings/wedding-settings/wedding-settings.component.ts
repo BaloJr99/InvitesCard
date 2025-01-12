@@ -14,61 +14,72 @@ import {
   IInviteSection,
   IInviteSectionsProperties,
 } from 'src/app/core/models/invites';
-import { ISweetXvSetting, ISettingAction } from 'src/app/core/models/settings';
+import { ISettingAction, IWeddingSetting } from 'src/app/core/models/settings';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 
 @Component({
-  selector: 'app-sweet-xv-settings',
-  templateUrl: './sweet-xv-settings.component.html',
-  styleUrl: './sweet-xv-settings.component.css',
+  selector: 'app-wedding-settings',
+  templateUrl: './wedding-settings.component.html',
+  styleUrl: './wedding-settings.component.css',
 })
-export class SweetXvSettingsComponent {
+export class WeddingSettingsComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
   @Input() set eventSettingAction(eventSettingAction: ISettingAction) {
     const eventId = eventSettingAction.eventId;
-    this.sweetXvSettings = {
+    this.weddingSettings = {
       eventId: eventId,
       isNew: true,
-      eventType: EventType.Xv,
+      eventType: EventType.Wedding,
     } as ISettingAction;
 
     this.getEventSetting();
   }
 
-  sweetXvSettings: ISettingAction = {} as ISettingAction;
+  weddingSettings: ISettingAction = {} as ISettingAction;
 
   createEventSettingsForm: FormGroup = this.fb.group({
     eventId: ['', Validators.required],
     primaryColor: ['', Validators.required],
     secondaryColor: ['', Validators.required],
-    firstSectionSentences: ['', Validators.required],
+    weddingPrimaryColor: ['', Validators.required],
+    weddingSecondaryColor: ['', Validators.required],
+    receptionPlace: ['', Validators.required],
+    copyMessage: ['', Validators.required],
+    hotelName: ['', Validators.required],
+    hotelInformation: ['', Validators.required],
+    groomParents: ['', Validators.required],
+    brideParents: ['', Validators.required],
   });
 
   sectionsControls: { [key: string]: IInviteSectionsProperties } = {
-    ceremonyInfo: {
+    itineraryInfo: {
       validators: {
-        parents: ['', Validators.required],
-        godParents: ['', Validators.required],
-        secondSectionSentences: ['', Validators.required],
         massUrl: ['', Validators.required],
         massTime: ['', Validators.required],
-        massAddress: ['', Validators.required],
-      },
-    },
-    receptionInfo: {
-      validators: {
-        receptionUrl: ['', Validators.required],
-        receptionTime: ['', Validators.required],
-        receptionPlace: ['', Validators.required],
-        receptionAddress: ['', Validators.required],
+        massPlace: ['', Validators.required],
+        venueUrl: ['', Validators.required],
+        venueTime: ['', Validators.required],
+        venuePlace: ['', Validators.required],
+        civilUrl: ['', Validators.required],
+        civilTime: ['', Validators.required],
+        civilPlace: ['', Validators.required],
+        hotelUrl: ['', Validators.required],
+        hotelAddress: ['', Validators.required],
+        hotelPhone: ['', Validators.required],
       },
     },
     dressCodeInfo: {
       validators: {
         dressCodeColor: ['', Validators.required],
+      },
+    },
+    giftsInfo: {
+      validators: {
+        cardNumber: ['', Validators.required],
+        clabeBank: ['', Validators.required],
       },
     },
   };
@@ -98,95 +109,120 @@ export class SweetXvSettingsComponent {
       {
         sectionId: 'inviteInfo',
         name: $localize`Información de la invitación`,
-        disabled: true,
         draggable: false,
+        disabled: true,
         selected: true,
         order: 0,
       },
       {
-        sectionId: 'ceremonyInfo',
-        name: $localize`Información de la ceremonia`,
-        disabled: false,
+        sectionId: 'itineraryInfo',
+        name: $localize`Itinerario`,
         draggable: true,
+        disabled: false,
         selected: true,
         order: 1,
       },
       {
-        sectionId: 'receptionInfo',
-        name: $localize`Información de la recepción`,
-        disabled: false,
+        sectionId: 'dressCodeInfo',
+        name: $localize`Código de vestimenta`,
         draggable: true,
+        disabled: false,
         selected: true,
         order: 2,
       },
       {
-        sectionId: 'dressCodeInfo',
-        name: $localize`Código de vestimenta`,
-        disabled: false,
+        sectionId: 'giftsInfo',
+        name: $localize`Regalos`,
         draggable: true,
+        disabled: false,
         selected: true,
         order: 3,
       },
       {
-        sectionId: 'giftsInfo',
-        name: $localize`Regalos`,
-        disabled: false,
+        sectionId: 'confirmationInfo',
+        name: $localize`Formulario`,
         draggable: true,
+        disabled: false,
         selected: true,
         order: 4,
       },
       {
-        sectionId: 'confirmationInfo',
-        name: $localize`Formulario`,
+        sectionId: 'accomodationInfo',
+        name: $localize`Hospedaje`,
+        draggable: true,
         disabled: true,
-        draggable: false,
         selected: true,
         order: 5,
       },
+      {
+        sectionId: 'galleryInfo',
+        name: $localize`Galería`,
+        draggable: true,
+        disabled: true,
+        selected: true,
+        order: 6,
+      },
     ];
-    
+
     this.validationMessages = {
-      primaryColor: $localize`Ingresar color primario`,
-      secondaryColor: $localize`Ingresar color secundario`,
-      firstSectionSentences: $localize`Ingresar datos de la primer sección`,
-      parents: $localize`Ingresar nombre de los padres`,
-      godParents: $localize`Ingresar nombre de los padrinos`,
-      secondSectionSentences: $localize`Ingresar datos de la segunda sección`,
+      weddingPrimaryColor: $localize`Ingresar color primario`,
+      weddingSecondaryColor: $localize`Ingresar color secundario`,
+      groomParents: $localize`Ingresar nombre de los padres del novio`,
+      brideParents: $localize`Ingresar nombre de los padres de la novia`,
       massUrl: $localize`Ingresar url de la ubicación de la misa`,
       massTime: $localize`Ingresar hora de la misa`,
-      massAddress: $localize`Ingresar dirección de la misa`,
-      receptionUrl: $localize`Ingresar url de la ubicación de recepción`,
-      receptionTime: $localize`Ingresar hora de la recepción`,
-      receptionPlace: $localize`Ingresar nombre de salón de eventos`,
-      receptionAddress: $localize`Ingresar dirección de recepción`,
+      massPlace: $localize`Ingresar nombre de la iglesia`,
+      venueUrl: $localize`Ingresar url de la ubicación de recepción`,
+      venueTime: $localize`Ingresar hora de la recepción`,
+      venuePlace: $localize`Ingresar nombre de salón de eventos`,
+      civilUrl: $localize`Ingresar url de la ubicación de recepción`,
+      civilTime: $localize`Ingresar hora de la recepción`,
+      civilPlace: $localize`Ingresar nombre de salón de eventos`,
       dressCodeColor: $localize`Ingresar si existe restricción de color`,
+      copyMessage: $localize`Ingresar mensaje para copiar`,
+      hotelName: $localize`Ingresar nombre del hotel`,
+      hotelInformation: $localize`Ingresar url con información del hotel`,
+      hotelUrl: $localize`Ingresar url de la ubicación hotel`,
+      hotelAddress: $localize`Ingresar dirección del hotel`,
+      hotelPhone: $localize`Ingresar teléfono del hotel`,
+      cardNumber: $localize`Ingresar número de tarjeta`,
+      clabeBank: $localize`Ingresar clabe bancaria`,
     };
   }
 
   clearInformation(): void {
     this.createEventSettingsForm.reset({
       eventId: '',
-      primaryColor: '',
-      secondaryColor: '',
-      parents: '',
-      godParents: '',
-      firstSectionSentences: '',
-      secondSectionSentences: '',
+      weddingPrimaryColor: '',
+      weddingSecondaryColor: '',
+      groomParents: '',
+      brideParents: '',
+      receptionPlace: '',
+      copyMessage: '',
+      hotelName: '',
+      hotelInformation: '',
       massUrl: '',
       massTime: '',
-      massAddress: '',
-      receptionUrl: '',
-      receptionTime: '',
-      receptionPlace: '',
-      receptionAddress: '',
+      massPlace: '',
+      venueUrl: '',
+      venueTime: '',
+      venuePlace: '',
+      civilUrl: '',
+      civilTime: '',
+      civilPlace: '',
       dressCodeColor: '',
+      cardNumber: '',
+      clabeBank: '',
+      hotelUrl: '',
+      hotelAddress: '',
+      hotelPhone: '',
     });
   }
 
   getEventSetting(): void {
-    if (this.sweetXvSettings.eventId) {
+    if (this.weddingSettings.eventId) {
       this.settingsService
-        .getEventSettings(this.sweetXvSettings.eventId)
+        .getEventSettings(this.weddingSettings.eventId)
         .subscribe({
           next: (response) => {
             const parsedSettings = JSON.parse(response.settings);
@@ -224,21 +260,21 @@ export class SweetXvSettingsComponent {
               eventId: response.eventId,
             });
 
-            this.sweetXvSettings = {
-              ...this.sweetXvSettings,
+            this.weddingSettings = {
+              ...this.weddingSettings,
               isNew: false,
             };
           },
           error: () => {
             this.updateSections(this.baseSections);
 
-            this.sweetXvSettings = {
-              ...this.sweetXvSettings,
+            this.weddingSettings = {
+              ...this.weddingSettings,
               isNew: true,
             };
 
             this.createEventSettingsForm.patchValue({
-              eventId: this.sweetXvSettings.eventId,
+              eventId: this.weddingSettings.eventId,
             });
           },
         })
@@ -258,7 +294,7 @@ export class SweetXvSettingsComponent {
       this.createEventSettingsForm.valid &&
       this.createEventSettingsForm.dirty
     ) {
-      if (this.sweetXvSettings.isNew) {
+      if (this.weddingSettings.isNew) {
         this.createEventSettings();
       } else {
         this.updateEventSettings();
@@ -273,7 +309,7 @@ export class SweetXvSettingsComponent {
     this.settingsService
       .createEventSettings(
         this.formatEventSetting(),
-        this.sweetXvSettings.eventType
+        this.weddingSettings.eventType
       )
       .subscribe({
         next: (response: IMessageResponse) => {
@@ -290,12 +326,12 @@ export class SweetXvSettingsComponent {
       true,
       $localize`Actualizando configuraciones`
     );
-    if (this.sweetXvSettings.eventId !== '') {
+    if (this.weddingSettings.eventId !== '') {
       this.settingsService
         .updateEventSettings(
           this.formatEventSetting(),
-          this.sweetXvSettings.eventId,
-          this.sweetXvSettings.eventType
+          this.weddingSettings.eventId,
+          this.weddingSettings.eventType
         )
         .subscribe({
           next: (response: IMessageResponse) => {
@@ -308,24 +344,27 @@ export class SweetXvSettingsComponent {
     }
   }
 
-  formatEventSetting(): ISweetXvSetting {
+  formatEventSetting(): IWeddingSetting {
     const sectionsDisplayed = this.sectionsConfig.value.filter(
       (s) => s.selected
     );
     const formValue = this.createEventSettingsForm.value;
 
-    if (sectionsDisplayed.some((s) => s.sectionId === 'ceremonyInfo')) {
+    if (sectionsDisplayed.some((s) => s.sectionId === 'itineraryInfo')) {
+      formValue['venueTime'] =
+        formValue['venueTime'].length > 5
+          ? formValue['venueTime']
+          : `${formValue['venueTime']}:00`;
+
       formValue['massTime'] =
         formValue['massTime'].length > 5
           ? formValue['massTime']
           : `${formValue['massTime']}:00`;
-    }
 
-    if (sectionsDisplayed.some((s) => s.sectionId === 'receptionInfo')) {
-      formValue['receptionTime'] =
-        formValue['receptionTime'].length > 5
-          ? formValue['receptionTime']
-          : `${formValue['receptionTime']}:00`;
+      formValue['civilTime'] =
+        formValue['civilTime'].length > 5
+          ? formValue['civilTime']
+          : `${formValue['civilTime']}:00`;
     }
 
     return {
@@ -339,7 +378,7 @@ export class SweetXvSettingsComponent {
         }),
       ],
       ...formValue,
-    } as ISweetXvSetting;
+    } as IWeddingSetting;
   }
 
   sectionEnabled(sectionId: string, sections: IInviteSection[]) {

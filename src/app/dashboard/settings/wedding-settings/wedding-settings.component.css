@@ -1,0 +1,92 @@
+.available-sections, form {
+  background-color: white;
+  margin: 10px 0px;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+  .available-sections h2 {
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .available-sections ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+    .available-sections ul li {
+      font-size: 18px;
+      padding: 10px 0px;
+      display: flex;
+      align-items: center;
+    }
+
+      .available-sections ul li i {
+        color: var(--primary-blue);
+        opacity: 0.4;
+        margin-right: 5px;
+        cursor: grab;
+      }
+
+      .available-sections ul li.draggable:hover i {
+        color: var(--primary-blue);
+        opacity: 0.8;
+      }
+
+      .available-sections ul li.draggable {
+        opacity: 1;
+      }
+
+      .available-sections ul li.dragging {
+        opacity: 0.5;
+      }
+
+      .available-sections ul li input {
+        margin-right: 5px;
+      }
+
+form {
+  margin-bottom: 10px;
+}
+
+  form section {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  form .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+    form .form-group input[type="color"] {
+      flex-grow: 1;
+    }
+
+    form .form-group .form-label {
+      padding: 10px 5px 5px;
+      font-weight: bold;
+      margin: 0px;
+    }
+
+.footer {
+  text-align: end;
+  padding: 10px;
+  position: sticky;
+  bottom: 0px;
+  background: var(--light-blue);
+  border-top: 2px solid var(--teal-blue);
+}
+
+  .footer .btn-primary {
+    background-color: var(--secondary-blue);
+    color: var(--grey);
+    border: none;
+  }
+
+  .footer button#cancel-changes {
+    margin-right: 10px;
+  }

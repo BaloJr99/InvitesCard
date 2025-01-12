@@ -23,6 +23,7 @@
   <ng-container [ngSwitch]="eventSettingAction.eventType">
     <app-sweet-xv-settings *ngSwitchCase="'X'" [eventSettingAction]="eventSettingAction"></app-sweet-xv-settings>
     <app-save-the-date-settings *ngSwitchCase="'S'" [eventSettingAction]="eventSettingAction"></app-save-the-date-settings>
+    <app-wedding-settings *ngSwitchCase="'W'" [eventSettingAction]="eventSettingAction"></app-wedding-settings>
   </ng-container>
 </section>
 <section class="files-empty" *ngIf="showSelectEvent()">

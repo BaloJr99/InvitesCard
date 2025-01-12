@@ -7,6 +7,9 @@ export const enum ImageUsage {
   Phone = 'P',
   Desktop = 'C',
   Both = 'B',
+  Principal_Phone = 'M',
+  Principal_Desktop = 'D',
+  Gallery = 'G',
 }
 
 export const enum RoleActionEvent {

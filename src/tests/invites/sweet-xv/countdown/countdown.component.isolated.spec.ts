@@ -1,4 +1,4 @@
-import { CountdownComponent } from 'src/app/invites/sweet-xv/countdown/countdown.component';
+import { CountdownComponent } from 'src/app/invites/shared/countdown/countdown.component';
 
 describe('Countdown Component (Isolated Test)', () => {
   let component: CountdownComponent;

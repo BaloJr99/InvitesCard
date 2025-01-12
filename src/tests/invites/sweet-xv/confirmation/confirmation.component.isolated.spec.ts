@@ -1,7 +1,7 @@
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ISweetXvUserInvite } from 'src/app/core/models/invites';
-import { ConfirmationComponent } from 'src/app/invites/sweet-xv/confirmation/confirmation.component';
+import { IUserInvite } from 'src/app/core/models/invites';
+import { ConfirmationComponent } from 'src/app/invites/shared/confirmation/confirmation.component';
 import { confirmationInviteMock } from 'src/tests/mocks/mocks';
 
 describe('Confirmation Component (Isolated Test)', () => {
@@ -54,7 +54,7 @@ describe('Confirmation Component (Isolated Test)', () => {
   it('should render the initial values', () => {
     expect(component.invite)
       .withContext('Invite should be empty')
-      .toEqual({} as ISweetXvUserInvite);
+      .toEqual({} as IUserInvite);
     expect(component.blockConfirmationForm)
       .withContext('Block confirmation form should be false')
       .toBeFalse();

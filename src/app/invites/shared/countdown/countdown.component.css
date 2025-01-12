@@ -7,8 +7,7 @@
   .time .card {
     width: 160px;
     margin: 0px 5px;
-    background-color: var(--custom-primary-color);
-    border: var(--custom-primary-color);
+    background-color: #ffffff;
   }
 
     .time .card .card-title {
@@ -22,7 +21,7 @@
 
       .time .card .card-title, 
       .time .card .card-text {
-        color: #ffffff; 
+        color: #000000; 
       }
 
 .fireworks img {

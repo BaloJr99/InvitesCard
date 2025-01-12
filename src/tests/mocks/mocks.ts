@@ -37,7 +37,7 @@ import {
   IFullInvite,
   IInviteSection,
   ISaveTheDateUserInvite,
-  ISweetXvUserInvite,
+  IUserInvite,
   IUpsertInvite,
 } from 'src/app/core/models/invites';
 import {
@@ -319,7 +319,7 @@ export const dashboardInvitesMock: IDashboardInvite = {
   entriesNumber: confirmedInviteMock.entriesNumber,
 };
 
-export const sweetXvUserInviteMock: ISweetXvUserInvite = {
+export const sweetXvUserInviteMock: IUserInvite = {
   id: confirmedInviteMock.id,
   confirmation: confirmedInviteMock.confirmation,
   maxDateOfConfirmation:
@@ -374,6 +374,7 @@ export const baseSectionsMock: IInviteSection[] = [
     disabled: true,
     selected: true,
     order: 0,
+    draggable: false,
   },
   {
     sectionId: 'ceremonyInfo',
@@ -381,6 +382,7 @@ export const baseSectionsMock: IInviteSection[] = [
     disabled: false,
     selected: true,
     order: 1,
+    draggable: true,
   },
   {
     sectionId: 'receptionInfo',
@@ -388,6 +390,7 @@ export const baseSectionsMock: IInviteSection[] = [
     disabled: false,
     selected: true,
     order: 1,
+    draggable: true,
   },
   {
     sectionId: 'dressCodeInfo',
@@ -395,6 +398,7 @@ export const baseSectionsMock: IInviteSection[] = [
     disabled: false,
     selected: true,
     order: 3,
+    draggable: true,
   },
   {
     sectionId: 'giftsInfo',
@@ -402,6 +406,7 @@ export const baseSectionsMock: IInviteSection[] = [
     disabled: false,
     selected: true,
     order: 4,
+    draggable: true,
   },
   {
     sectionId: 'confirmationInfo',
@@ -409,6 +414,7 @@ export const baseSectionsMock: IInviteSection[] = [
     disabled: true,
     selected: true,
     order: 5,
+    draggable: true,
   },
 ];
 
@@ -556,8 +562,6 @@ export const saveTheDateUserInviteMock: ISaveTheDateUserInvite = {
   eventId: newInviteMock.eventId,
   family: newInviteMock.family,
   nameOfCelebrated: 'Braulio;Brisa',
-  hotelInformation: saveTheDateSettingMock.hotelInformation,
-  hotelName: saveTheDateSettingMock.hotelName,
   maxDateOfConfirmation:
     fullEventsMock.maxDateOfConfirmation.concat('T00:00:00Z'),
   needsAccomodation: newInviteMock.needsAccomodation,
@@ -571,6 +575,7 @@ export const showCeremonySection: IInviteSection[] = [
     disabled: true,
     selected: true,
     order: 0,
+    draggable: false,
   },
   {
     sectionId: 'ceremonyInfo',
@@ -578,13 +583,15 @@ export const showCeremonySection: IInviteSection[] = [
     disabled: false,
     selected: true,
     order: 1,
+    draggable: true,
   },
   {
     sectionId: 'receptionInfo',
     name: 'Información de la recepción',
     disabled: false,
     selected: false,
-    order: 1,
+    order: 2,
+    draggable: true,
   },
   {
     sectionId: 'dressCodeInfo',
@@ -592,6 +599,7 @@ export const showCeremonySection: IInviteSection[] = [
     disabled: false,
     selected: false,
     order: 3,
+    draggable: true,
   },
   {
     sectionId: 'giftsInfo',
@@ -599,6 +607,7 @@ export const showCeremonySection: IInviteSection[] = [
     disabled: false,
     selected: false,
     order: 4,
+    draggable: true,
   },
 ];
 
@@ -609,6 +618,7 @@ export const showReceptionSection: IInviteSection[] = [
     disabled: true,
     selected: true,
     order: 0,
+    draggable: false,
   },
   {
     sectionId: 'ceremonyInfo',
@@ -616,13 +626,15 @@ export const showReceptionSection: IInviteSection[] = [
     disabled: false,
     selected: true,
     order: 1,
+    draggable: true,
   },
   {
     sectionId: 'receptionInfo',
     name: 'Información de la recepción',
     disabled: false,
     selected: true,
-    order: 1,
+    order: 2,
+    draggable: true,
   },
   {
     sectionId: 'dressCodeInfo',
@@ -630,6 +642,7 @@ export const showReceptionSection: IInviteSection[] = [
     disabled: false,
     selected: false,
     order: 3,
+    draggable: true,
   },
   {
     sectionId: 'giftsInfo',
@@ -637,6 +650,7 @@ export const showReceptionSection: IInviteSection[] = [
     disabled: false,
     selected: false,
     order: 4,
+    draggable: true,
   },
 ];
 
@@ -647,6 +661,7 @@ export const showDressCodeSection: IInviteSection[] = [
     disabled: true,
     selected: true,
     order: 0,
+    draggable: false,
   },
   {
     sectionId: 'ceremonyInfo',
@@ -654,13 +669,15 @@ export const showDressCodeSection: IInviteSection[] = [
     disabled: false,
     selected: true,
     order: 1,
+    draggable: true,
   },
   {
     sectionId: 'receptionInfo',
     name: 'Información de la recepción',
     disabled: false,
     selected: true,
-    order: 1,
+    order: 2,
+    draggable: true,
   },
   {
     sectionId: 'dressCodeInfo',
@@ -668,6 +685,7 @@ export const showDressCodeSection: IInviteSection[] = [
     disabled: false,
     selected: true,
     order: 3,
+    draggable: true,
   },
   {
     sectionId: 'giftsInfo',
@@ -675,6 +693,7 @@ export const showDressCodeSection: IInviteSection[] = [
     disabled: false,
     selected: false,
     order: 4,
+    draggable: true,
   },
 ];
 
@@ -685,6 +704,7 @@ export const showGiftsSection: IInviteSection[] = [
     disabled: true,
     selected: true,
     order: 0,
+    draggable: false,
   },
   {
     sectionId: 'ceremonyInfo',
@@ -692,13 +712,15 @@ export const showGiftsSection: IInviteSection[] = [
     disabled: false,
     selected: true,
     order: 1,
+    draggable: true,
   },
   {
     sectionId: 'receptionInfo',
     name: 'Información de la recepción',
     disabled: false,
     selected: true,
-    order: 1,
+    order: 2,
+    draggable: true,
   },
   {
     sectionId: 'dressCodeInfo',
@@ -706,6 +728,7 @@ export const showGiftsSection: IInviteSection[] = [
     disabled: false,
     selected: true,
     order: 3,
+    draggable: true,
   },
   {
     sectionId: 'giftsInfo',
@@ -713,5 +736,6 @@ export const showGiftsSection: IInviteSection[] = [
     disabled: false,
     selected: true,
     order: 4,
+    draggable: true,
   },
 ];

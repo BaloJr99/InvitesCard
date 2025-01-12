@@ -1,0 +1,919 @@
+:host {
+  --custom-primary-color: #000000;
+  --custom-secondary-color: #ffffff;
+  --custom-light-primary-color: #000000;
+  --custom-light-secondary-color: #ffffff;
+}
+
+* {
+  --light-font-color: #ffffff;
+  --dark-font-color: #000000;
+}
+
+#invite-envelope {
+  border-radius: 20px;
+  position: relative;
+  top: 0;
+  height: 100vh;
+  scale: 0.5;
+  background-color: var(--custom-light-secondary-color);
+}
+
+#invite-envelope.open {
+  animation: open-envelope 1s forwards;
+  animation-delay: 1000ms;
+}
+
+#invite-envelope.open .top-paper {
+  animation: open-flap 1s forwards;
+  transform-origin: top;
+}
+
+#invite-envelope .top-paper {
+  border-radius: 20px;
+  border-left: 50vw solid transparent;
+  border-right: 50vw solid transparent;
+  border-top: 50vh solid var(--custom-secondary-color);
+  filter: drop-shadow(2px 4px 6px black);
+}
+
+#invite-envelope .back-top-paper {
+  border-radius: 20px;
+  position: absolute;
+  top: 0;
+  border-left: 50vw solid transparent;
+  border-right: 50vw solid transparent;
+  border-top: 50vh solid var(--custom-secondary-color);
+  filter: contrast(0.1);
+  z-index: -1;
+}
+
+#invite-envelope .invite-button {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 100px;
+  height: 100px;
+  background-color: var(--custom-primary-color);
+  border-radius: 100%;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Outfit';
+  font-size: 25px;
+  border: 3px solid brown;
+}
+
+#full-invite {
+  display: flex;
+  flex-direction: column;
+  display: none;
+  opacity: 0;
+}
+
+#full-invite.show {
+  animation: 1s showInvite linear;
+  display: flex;
+  opacity: 1;
+}
+
+#full-invite .invite-section.darkColor {
+  background-color: var(--custom-primary-color);
+}
+
+#full-invite .invite-section.lightColor {
+  background-color: var(--custom-light-primary-color);
+}
+
+.info {
+  position: relative;
+  padding-bottom: 20px;
+  overflow-x: clip;
+  height: 100vh;
+  max-height: 667px;
+}
+
+  .info .container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .info h1 {
+    text-align: left;
+    font-family: "Raleway";
+    display: inline-block;
+    font-size: 30px;
+    padding: 10px;
+    border: 2px solid #ffffff;
+    border-radius: 50px;
+    background-color: rgba(0, 0, 0, 0.5);
+    margin: 20px 0px;
+    color: #ffffff;
+  }
+
+  .info h2 {
+    text-align: start;
+    font-size: 100px;
+    color: #ffffff;
+    font-family: "Raleway";
+    -webkit-text-stroke: 5px #000000;
+    paint-order: stroke fill;
+    font-weight: bold;
+  }
+
+  .info .audioButton {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    border-radius: 100%;
+    padding: 10px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .info .audioButton i {
+    border: 2px solid black;
+    border-radius: 100%;
+    padding: 9px;
+  }
+
+  .info .scrollFormButton {
+    border-radius: 5px;
+    background-color: #515050;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    width: 40px;
+    position: fixed;
+    z-index: 1;
+    left: 5vh;
+    animation: floatingAnimation ease-in-out 2s infinite;
+    text-decoration: none;
+  }
+
+    .info .scrollFormButton i {
+      color: var(--light-font-color);
+      font-size: 1.5rem;
+    }
+
+  .info [class*="backgroundImage"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: 20% 30%;
+    padding-bottom: 20px;
+    opacity: 0.9;
+    z-index: -1;
+  }
+
+  .info .container .header {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+    padding: 20px 0px;
+  }
+
+  .info .container .datetime {
+    width: fit-content;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+    .info .container .datetime .date {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+      .info .container .datetime .date p {
+        font-size: 20px;
+        padding: 0px 10px;
+        margin: 0;
+        letter-spacing: 2px;
+        color: #ffffff;
+        font-weight: bold;
+      }
+
+      .info .container .datetime .date hr {
+        width: 10%;
+        border: none;
+        border: 2px solid #ffffff;
+        opacity: 1;
+      }
+
+.speech {
+  padding: 100px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+  .speech svg {
+    height: 50px;
+    width: 50px;
+    margin-bottom: 1rem;
+    animation: fadeIn linear;
+    animation-timeline: view();
+  }
+
+  .speech .row .col-2 {
+    display: flex;
+    align-items: center;
+  }
+
+  .speech .phrase {
+    font-family: 'Outfit';
+    font-size: 25px;
+  }
+
+  .speech p {
+    font-size: 20px;
+    font-family: 'Raleway';
+    animation: fadeIn linear;
+    animation-timeline: view();
+  }
+
+    .speech .noKids {
+      font-weight: bold;
+    }
+
+    .speech .familyName {
+      font-family: serif;
+      font-size: 60px;
+      font-weight: bold;
+    }
+
+.itinerary,
+.dressCode,
+.gifts,
+.accomodations,
+.gallery {
+  padding: 100px 0px;
+}
+
+  .itinerary h2,
+  .dressCode h2,
+  .accomodations h2,
+  .gallery h2 {
+    font-weight: bold;
+    font-family: serif;
+    font-size: 40px;
+    margin-bottom: 20px;
+    animation: fadeIn linear;
+    animation-timeline: view();
+  }
+
+  .itinerary .itinerary-box {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .itinerary .icons {
+    width: 100%;
+    padding: 20px 0px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+    .itinerary .icons .outside-box {
+      position: absolute;
+      top: 0;
+      width: 85px;
+      height: 85px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: white;
+      border-radius: 100%;
+    }
+
+    .itinerary .icons .outside-box:nth-of-type(2) {
+      left: 12%;
+    }
+
+    .itinerary .icons .outside-box:nth-of-type(3) {
+      left: 50%;
+      transform: translate(-50%, 0%);
+    }
+
+    .itinerary .icons .outside-box:nth-of-type(4) {
+      right: 12%;
+    }
+
+    .itinerary .icons .icon {
+      width: 70px;
+      height: 70px;
+      border: 3px solid var(--custom-secondary-color);
+      border-radius: 100%;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: white;
+    }
+
+    .itinerary .icons svg {
+      width: 50px;
+      height: 50px;
+      animation: fadeIn linear;
+      animation-timeline: view();
+    }
+
+  .itinerary .icons .rule {
+    border: 2px solid var(--custom-secondary-color);
+    margin: 20px 0px;
+  }
+
+  .itinerary .boxes {
+    display: flex;
+    flex-direction: row;
+    gap: 70px;
+  }
+
+    .itinerary .boxes .box {
+      flex: 1 0 0%;
+      border: 2px solid var(--custom-secondary-color);
+      box-shadow: 3px 3px 3px var(--custom-light-secondary-color);
+      padding: 10px;
+    }
+
+      .itinerary .boxes .box > * {
+        background-color: var(--custom-light-secondary-color);
+      }
+
+      .itinerary .boxes .box p {
+        margin: 0;
+        padding-bottom: 10px;
+        animation: fadeIn linear;
+        animation-timeline: view();
+      }
+
+        .itinerary .boxes .box p:first-of-type {
+          font-family: 'Outfit';
+        }
+
+        .itinerary .boxes .box p span {
+          font-size: 14px;
+        }
+
+        .itinerary .boxes .box a {
+          background-color: var(--custom-secondary-color);
+          border-radius: 10px;
+          padding: 5px 10px;
+          color: #000000;
+          text-decoration: none;
+          display: block;
+          width: 50%;
+          margin: auto;
+          font-weight: bold;
+        }
+
+      .itinerary .boxes .box .box-footer {
+        padding-bottom: 15px;
+      }
+
+      .itinerary .boxes .box h3 {
+        font-size: 24px;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        margin: 0;
+        padding: 10px 0px;
+      }
+
+.dressCode img {
+  width: 70%;
+  animation: fadeIn linear;
+  animation-timeline: view();
+}
+
+.dressCode p:first-of-type {
+  font-size: 30px;
+  font-weight: normal;
+}
+
+.dressCode p:not(:first-of-type) {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.dressCode .attribution {
+  font-size: 14px !important;
+  text-align: right;
+  margin: auto;
+  width: 70%;
+  margin-top: -20px;
+}
+
+.gifts p {
+  font-size: 20px;
+  animation: fadeIn linear;
+  animation-timeline: view();
+}
+
+.gifts svg:first-of-type {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 15px;
+}
+
+.gifts svg:last-of-type {
+  width: 70px;
+  height: 70px;
+}
+
+.gifts button {
+  font-size: 16px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.accomodations h3 {
+  font-size: 25px;
+  font-family: 'Outfit';
+}
+
+.accomodations p {
+  font-size: 18px;
+  font-family: 'Outfit';
+  animation: fadeIn linear;
+  animation-timeline: view();
+}
+
+.accomodations img {
+  width: 20%;
+  animation: fadeIn linear;
+  animation-timeline: view();
+}
+
+.accomodations .buttons {
+  width: 40%;
+  margin: auto;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.accomodations a {
+  background-color: var(--custom-secondary-color);
+  border-radius: 5px;
+  padding: 5px 10px;
+  width: 130px;
+  text-decoration: none;
+  color: #000000;
+  font-weight: bold;
+}
+
+.gallery .slider {
+  overflow-x: hidden;
+  animation: fadeIn linear;
+  animation-timeline: view();
+}
+
+.gallery .images {
+  display: flex;
+  gap: 20px;
+  overflow-x: scroll;
+  scrollbar-width: thin;
+  padding: 20px;
+}
+
+  .gallery .images .image-container {
+    padding: 20px;
+    background: url('https://res.cloudinary.com/dc9vc8b7b/image/upload/v1736613977/33699_kovd3c.jpg');
+  }
+
+    .gallery .images .image-container img {
+      height: 350px;
+      background-color: white;
+      padding: 10px;
+    }
+
+.invitesConfirmation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes floatingAnimation {
+  0% {
+    top: 80vh;
+  }
+
+  50% {
+    top: 85vh;
+  }
+
+  100% {
+    top: 80vh;
+  }
+}
+
+@media (576px <= width <= 991px) {
+  .info .container .datetime .date p,
+  .speech p,
+  .dressCode p:not(:first-of-type),
+  .gifts p {
+    font-size: 18px !important;
+  }
+
+  .itinerary .boxes .box h3 {
+    font-size: 24px !important;
+  }
+
+  .info h1,
+  .dressCode p:not(.attribution):first-of-type {
+    font-size: 25px !important;
+  }
+
+  .speech .phrase,
+  .accomodations h3 {
+    font-size: 22px !important;
+  }
+
+  .itinerary h2,
+  .dressCode h2,
+  .accomodations h2,
+  .gallery h2 {
+    font-size: 35px !important;
+  }
+
+  .speech .familyName {
+    font-size: 50px !important;
+  }
+
+  .info h2 {
+    font-size: 60px !important;
+  }
+
+  #invite-envelope {
+    scale: 0.65;
+  }
+
+  .container {
+    max-width: unset;
+  }
+
+  .info {
+    height: unset;
+  }
+
+  .info h1 {
+    margin: 10px 0px;
+  }
+
+  .info h2 {
+    -webkit-text-stroke: 4px #000000;
+  }
+
+  .info .container .header {
+    padding: 10px 0px;
+    gap: 80px;
+  }
+
+  .itinerary,
+  .speech,
+  .dressCode,
+  .gifts,
+  .accomodations,
+  .gallery {
+    padding: 50px 0px;
+  }
+
+    .itinerary h2,
+    .dressCode h2,
+    .accomodations h2,
+    .gallery h2 {
+      margin-bottom: 15px;
+    }
+
+    .itinerary .itinerary-box {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .itinerary .icons {
+      width: 150px;
+      padding: 0px;
+      margin-bottom: 0px;
+    }
+
+      .itinerary .icons .outside-box {
+        width: 85px;
+        height: 85px;
+      }
+
+      .itinerary .icons .outside-box {
+        left: 50%;
+        transform: translate(-50%, 0%);
+      }
+
+      .itinerary .icons .outside-box:nth-of-type(2) {
+        top: 9%;
+        left: 50%;
+        transform: translate(-50%, 0%);
+      }
+
+      .itinerary .icons .outside-box:nth-of-type(3) {
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .itinerary .icons .outside-box:nth-of-type(4) {
+        top: 80%;
+        left: 50%;
+        transform: translate(-50%, 0%);
+      }
+
+      .itinerary .icons .icon {
+        width: 100px;
+        height: 100px;
+        aspect-ratio: 1;
+        padding: 10px;
+      }
+
+      .itinerary .icons svg {
+        width: 60px;
+        height: 60px;
+      }
+
+    .itinerary .icons .rule {
+      height: 100%;
+      width: 0px;
+      margin: auto;
+    }
+
+    .itinerary .boxes {
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+      flex: 1 0 0%;
+    }
+
+      .itinerary .boxes .box {
+        width: 80%;
+        margin: auto;
+      }
+
+        .itinerary .boxes .box a {
+          padding: 5px 10px;
+          width: 40%;
+        }
+
+  .dressCode img {
+    width: 70%;
+  }
+
+  .accomodations img {
+    width: 30%;
+  }
+
+  .accomodations .buttons {
+    width: 60%;
+  }
+
+  .gallery .images .image-container img {
+    height: 300px;
+  }
+
+  @keyframes open-envelope {
+    100% {
+      transform: scale(1.6);
+    }
+  }
+}
+
+@media (width <= 575px) {
+  .info .container .datetime .date p,
+  .speech p,
+  .dressCode p:not(:first-of-type),
+  .gifts p {
+    font-size: 16px !important;
+  }
+
+  .itinerary .boxes .box h3 {
+    font-size: 20px !important;
+  }
+
+  .info h1 {
+    font-size: 16px !important;
+  }
+
+  .speech .phrase,
+  .accomodations h3,
+  .dressCode p:not(.attribution):first-of-type {
+    font-size: 20px !important;
+  }
+
+  .itinerary h2,
+  .dressCode h2,
+  .accomodations h2,
+  .gallery h2 {
+    font-size: 30px !important;
+  }
+
+  .speech .familyName {
+    font-size: 40px !important;
+  }
+
+  .info h2 {
+    font-size: 45px !important;
+  }
+
+  .container {
+    max-width: unset;
+  }
+
+  #invite-envelope {
+    scale: 0.8;
+  }
+
+  .info h1 {
+    margin: 10px 0px;
+  }
+
+  .info h2 {
+    -webkit-text-stroke: 4px #000000;
+  }
+
+  .info [class*="backgroundImage"] {
+    background-size: cover;
+    background-position: center !important;
+  }
+
+  .info .container .header {
+    padding: 10px 0px;
+  }
+
+  .itinerary,
+  .speech,
+  .dressCode,
+  .gifts,
+  .accomodations,
+  .invitesConfirmation,
+  .gallery {
+    padding: 30px 0px;
+  }
+
+    .itinerary h2,
+    .dressCode h2,
+    .accomodations h2,
+    .gallery h2 {
+      margin-bottom: 10px;
+    }
+
+    .itinerary .itinerary-box {
+      display: flex;
+      flex-direction: row;
+      margin-right: 10px;
+    }
+
+    .itinerary .icons {
+      width: 100px;
+      padding: 0px;
+      margin-bottom: 0px;
+    }
+
+      .itinerary .icons .outside-box {
+        left: 50%;
+        transform: translate(-50%, 0%);
+      }
+
+      .itinerary .icons .outside-box:nth-of-type(2) {
+        top: 9%;
+        left: 50%;
+        transform: translate(-50%, 0%);
+      }
+
+      .itinerary .icons .outside-box:nth-of-type(3) {
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .itinerary .icons .outside-box:nth-of-type(4) {
+        top: 80%;
+        left: 50%;
+        transform: translate(-50%, 0%);
+      }
+
+      .itinerary .icons .icon {
+        width: 80px;
+        height: 80px;
+        aspect-ratio: 1;
+        padding: 10px;
+      }
+
+      .itinerary .icons svg {
+        width: 45px;
+        height: 45px;
+      }
+
+    .itinerary .icons .rule {
+      height: 100%;
+      width: 0px;
+      margin: auto;
+    }
+
+    .itinerary .boxes {
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+      flex: 1 0 0%;
+    }
+
+      .itinerary .boxes .box {
+        width: 100%;
+        margin: auto;
+      }
+
+        .itinerary .boxes .box a {
+          padding: 5px 10px;
+          width: 50%;
+        }
+
+  .dressCode img {
+    width: 70%;
+  }
+
+  .accomodations img {
+    width: 60%;
+  }
+
+  .accomodations .buttons {
+    width: 100%;
+  }
+
+  .gallery .images .image-container img {
+    height: 300px;
+  }
+
+  @keyframes open-envelope {
+    100% {
+      transform: scale(1.3);
+    }
+  }
+}
+
+@media (width <= 768px) {
+  .info .container .datetime {
+    width: 100%;
+  }
+}
+
+@media (width > 991px) {
+  @keyframes open-envelope {
+    100% {
+      transform: scale(2);
+    }
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    transform: scale(0.5); 
+  }
+
+  50% {
+    transform: scale(1);
+  }
+}
+
+@keyframes open-flap {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotateX(180deg);
+  }
+}
+
+@keyframes showInvite {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

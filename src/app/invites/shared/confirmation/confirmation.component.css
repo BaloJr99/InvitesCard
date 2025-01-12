@@ -1,7 +1,10 @@
-.container {
-  color: var(--custom-primary-color);
+.container h2 {
+  font-weight: bold;
+  font-family: serif;
+  font-size: 40px;
+  margin-bottom: 20px;
 }
-
+  
   .container .col-md-6:first-of-type,
   .container .col-sm-12:first-of-type {
     display: flex;
@@ -17,19 +20,19 @@
 
   .container .col-md-6:first-of-type p,
   .container .col-sm-12:first-of-type p {
-    color: #635959;
+    color: #000000;
     font-size: 20px;
   }
 
 .container h1,
 .confirmedModal h1 {
-  color: var(--custom-primary-color);
+  color: #000000;
   font-family: 'Allura';
   font-size: 50px;
 }
 
 .container .form {
-  border: 1px solid #B79BA0;
+  border: 1px solid #000000;
   margin: 80px 50px;
   padding: 50px;
   background-color: #ffffff;
@@ -38,13 +41,14 @@
 
   .container .form h3 {
     font-size: 20px;
-    border-bottom: 2px solid var(--custom-primary-color);
+    border-bottom: 2px solid var(--custom-secondary-color);
     padding-bottom: 20px;
     text-align: center;
+    font-weight: bold;
   }
 
   .container .form p {
-    color: #635959;
+    color: #000000;
     text-align: left;
     padding-top: 10px;
   }
@@ -62,13 +66,14 @@
   }
 
     .container .form .button .btn {
-      background-color: var(--custom-primary-color);
-      color: #ffffff;
+      background-color: var(--custom-secondary-color);
+      color: #000000;
+      font-weight: bold;
       width: 200px;
     }
 
     .container .form .button .btn:hover {
-      border: 1px solid var(--custom-primary-color);
+      border: 1px solid var(--custom-secondary-color);
     }
 
 .confirmedModal {
@@ -84,7 +89,7 @@
 
   .confirmedModal p {
     font-family: 'Raleway';
-    color: #635959;
+    color: #000000;
   }
 
   .confirmedModal .card {
@@ -125,7 +130,7 @@
   }
 
   .container .form {
-    border: 1px solid #B79BA0;
+    border: 1px solid #000000;
     margin: 30px 0px;
     padding: 20px;
     background-color: #ffffff;

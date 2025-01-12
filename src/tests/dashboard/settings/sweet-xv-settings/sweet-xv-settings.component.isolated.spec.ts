@@ -146,6 +146,7 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
           disabled: true,
           selected: true,
           order: 0,
+          draggable: false,
         },
         {
           sectionId: 'ceremonyInfo',
@@ -153,13 +154,15 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
           disabled: false,
           selected: true,
           order: 1,
+          draggable: true,
         },
         {
           sectionId: 'receptionInfo',
           name: 'Información de la recepción',
           disabled: false,
           selected: true,
-          order: 1,
+          order: 2,
+          draggable: true,
         },
         {
           sectionId: 'dressCodeInfo',
@@ -167,6 +170,7 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
           disabled: false,
           selected: true,
           order: 3,
+          draggable: true,
         },
         {
           sectionId: 'giftsInfo',
@@ -174,6 +178,7 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
           disabled: false,
           selected: true,
           order: 4,
+          draggable: true,
         },
         {
           sectionId: 'confirmationInfo',
@@ -181,6 +186,7 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
           disabled: true,
           selected: true,
           order: 5,
+          draggable: false,
         },
       ]);
   });

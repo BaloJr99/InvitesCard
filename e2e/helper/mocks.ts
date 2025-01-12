@@ -49,7 +49,7 @@ export const saveTheDateEventMock = {
   dateOfEvent: generateEventDate(),
   maxDateOfConfirmation: generateEventDate(),
   typeOfEvent: EventType.SaveTheDate,
-  nameOfCelebrated: 'Test wife;Test groom',
+  nameOfCelebrated: 'Test bride;Test groom',
   assignedUser: 'playwright-invites',
 };
 

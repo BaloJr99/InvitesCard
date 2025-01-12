@@ -1,0 +1,166 @@
+<div class="row g-0">
+  <div class="col-md-3 col-12 gx-4">
+    <div class="available-sections">
+      <h2 i18n>Secciones Disponibles</h2>
+      <ul (dragover)="dragOver($event)">
+        <li [draggable]="section.draggable" *ngFor="let section of sectionsConfig$ | async; index as i" (dragstart)="dragStart($event)" (dragend)="dragEnd($event)" [ngClass]="{'draggable': section.draggable}">
+          <i class="fa-solid fa-grip-vertical"></i> 
+          <label>
+            <input id="input-{{section.sectionId}}" type="checkbox" class="form-check-input" [disabled]="section.disabled" [checked]="section.selected" (change)="updateSection(section.sectionId, $event)">{{ section.name }}
+          </label>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-9 col-12 gx-4" *ngIf="vm$ | async as vm">
+    <form [formGroup]="createEventSettingsForm">
+      <section class="info">
+        <div class="form-group col-6 col-md-3">
+          <label for="weddingPrimaryColor" class="form-label" i18n>Color Primario</label>
+          <input id="weddingPrimaryColor" type="color" class="form-control" formControlName="weddingPrimaryColor" [ngClass]="{'is-invalid': formControlIsInvalid('weddingPrimaryColor', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['weddingPrimaryColor'] }}
+          </span>
+        </div>
+        <div class="form-group col-6 col-md-3">
+          <label for="weddingSecondaryColor" class="form-label" i18n>Color Secundario</label>
+          <input id="weddingSecondaryColor" type="color" class="form-control" formControlName="weddingSecondaryColor" [ngClass]="{'is-invalid': formControlIsInvalid('weddingSecondaryColor', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['weddingSecondaryColor'] }}
+          </span>
+        </div>
+        <div class="form-group col-12">
+          <label for="groomParents" class="form-label" i18n>Padres del novio</label>
+          <input id="groomParents" type="text" class="form-control" formControlName="groomParents" [ngClass]="{'is-invalid': formControlIsInvalid('groomParents', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['groomParents'] }}
+          </span>
+        </div>
+        <div class="form-group col-12">
+          <label for="brideParents" class="form-label" i18n>Padres de la novia</label>
+          <input id="brideParents" type="text" class="form-control" formControlName="brideParents" [ngClass]="{'is-invalid': formControlIsInvalid('brideParents', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['brideParents'] }}
+          </span>
+        </div>
+      </section>
+      <section class="itinerary" *ngIf="sectionEnabled('itineraryInfo', vm.sections)">
+        <div class="form-group col-12 col-md-6">
+          <label for="massUrl" class="form-label" i18n>Url de la ubicación de la misa</label>
+          <input id="massUrl" type="url" class="form-control" formControlName="massUrl" [ngClass]="{'is-invalid': formControlIsInvalid('massUrl', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['massUrl'] }}
+          </span>
+        </div>
+        <div class="form-group col-6 col-md-2">
+          <label for="massTime" class="form-label" i18n>Hora de la Misa</label>
+          <input id="massTime" type="time" class="form-control" formControlName="massTime" [ngClass]="{'is-invalid': formControlIsInvalid('massTime', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['massTime'] }}
+          </span>
+        </div>
+        <div class="form-group col-6 col-md-4">
+          <label for="massPlace" class="form-label" i18n>Lugar de la Misa</label>
+          <input id="massPlace" type="text" class="form-control" formControlName="massPlace" [ngClass]="{'is-invalid': formControlIsInvalid('massPlace', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['massPlace'] }}
+          </span>
+        </div>
+        <div class="form-group col-12 col-md-6">
+          <label for="civilUrl" class="form-label" i18n>Url de la ubicación de la ceremonia civil</label>
+          <input id="civilUrl" type="text" class="form-control" formControlName="civilUrl" [ngClass]="{'is-invalid': formControlIsInvalid('civilUrl', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['civilUrl'] }}
+          </span>
+        </div>
+        <div class="form-group col-6 col-md-2">
+          <label for="civilTime" class="form-label" i18n>Hora de la ceremonia civil</label>
+          <input id="civilTime" type="time" class="form-control" formControlName="civilTime" [ngClass]="{'is-invalid': formControlIsInvalid('civilTime', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['civilTime'] }}
+          </span>
+        </div>
+        <div class="form-group col-6 col-md-4">
+          <label for="civilPlace" class="form-label" i18n>Lugar de la ceremonia civil</label>
+          <input id="civilPlace" type="text" class="form-control" formControlName="civilPlace" [ngClass]="{'is-invalid': formControlIsInvalid('civilPlace', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['civilPlace'] }}
+          </span>
+        </div>
+        <div class="form-group col-12 col-md-6">
+          <label for="venueUrl" class="form-label" i18n>Url de la ubicación de la recepción</label>
+          <input id="venueUrl" type="text" class="form-control" formControlName="venueUrl" [ngClass]="{'is-invalid': formControlIsInvalid('venueUrl', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['venueUrl'] }}
+          </span>
+        </div>
+        <div class="form-group col-6 col-md-2">
+          <label for="venueTime" class="form-label" i18n>Hora de la recepción</label>
+          <input id="venueTime" type="time" class="form-control" formControlName="venueTime" [ngClass]="{'is-invalid': formControlIsInvalid('venueTime', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['venueTime'] }}
+          </span>
+        </div>
+        <div class="form-group col-6 col-md-4">
+          <label for="venuePlace" class="form-label" i18n>Lugar de la recepción</label>
+          <input id="venuePlace" type="text" class="form-control" formControlName="venuePlace" [ngClass]="{'is-invalid': formControlIsInvalid('venuePlace', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['venuePlace'] }}
+          </span>
+        </div>
+      </section>
+      <section class="dressCode" *ngIf="sectionEnabled('dressCodeInfo', vm.sections)">
+        <div class="form-group col-12">
+          <label for="dressCodeColor" class="form-label" i18n>Código reservado para festejados</label>
+          <input id="dressCodeColor" type="text" class="form-control" formControlName="dressCodeColor" [ngClass]="{'is-invalid': formControlIsInvalid('dressCodeColor', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['dressCodeColor'] }}
+          </span>
+        </div>
+      </section>
+      <section class="gifts" *ngIf="sectionEnabled('giftsInfo', vm.sections)">
+        <div class="form-group col-6">
+          <label for="cardNumber" class="form-label" i18n>Número de Tarjeta</label>
+          <input id="cardNumber" type="text" class="form-control" formControlName="cardNumber" [ngClass]="{'is-invalid': formControlIsInvalid('cardNumber', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['cardNumber'] }}
+          </span>
+        </div>
+        <div class="form-group col-6">
+          <label for="clabeBank" class="form-label" i18n>Clabe Bancaria</label>
+          <input id="clabeBank" type="text" class="form-control" formControlName="clabeBank" [ngClass]="{'is-invalid': formControlIsInvalid('clabeBank', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['clabeBank'] }}
+          </span>
+        </div>
+      </section>
+      <section class="accomodation" *ngIf="sectionEnabled('accomodationInfo', vm.sections)">
+        <div class="form-group col-12 col-md-6">
+          <label for="hotelUrl" class="form-label" i18n>Url de la ubicación del hotel</label>
+          <input id="hotelUrl" type="url" class="form-control" formControlName="hotelUrl" [ngClass]="{'is-invalid': formControlIsInvalid('hotelUrl', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['hotelUrl'] }}
+          </span>
+        </div>
+        <div class="form-group col-12 col-md-6">
+          <label for="hotelPhone" class="form-label" i18n>Número de teléfono del hotel</label>
+          <input id="hotelPhone" type="text" class="form-control" formControlName="hotelPhone" [ngClass]="{'is-invalid': formControlIsInvalid('hotelPhone', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['hotelPhone'] }}
+          </span>
+        </div>
+        <div class="form-group col-12">
+          <label for="hotelAddress" class="form-label" i18n>Dirección del hotel</label>
+          <input id="hotelAddress" type="text" class="form-control" formControlName="hotelAddress" [ngClass]="{'is-invalid': formControlIsInvalid('hotelAddress', 'required')}">
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['hotelAddress'] }}
+          </span>
+        </div>
+      </section>
+    </form>
+  </div>
+  <div class="footer">
+    <button id="cancel-changes" class="btn btn-primary" (click)="cancelChanges()" i18n>Cancelar Cambios</button>
+    <button id="save-changes" class="btn btn-primary" (click)="saveChanges()" i18n [disabled]="!createEventSettingsForm.valid">Guardar Cambios</button>
+  </div>  
+</div>

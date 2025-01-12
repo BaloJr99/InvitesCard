@@ -1,4 +1,4 @@
-import { ISaveTheDateSetting } from './settings';
+import { IWeddingSetting } from './settings';
 
 export interface IFullInvite {
   id: string;
@@ -66,7 +66,7 @@ export type IConfirmation = Pick<
 
 export type ISaveTheDateConfirmation = Pick<IFullInvite, 'needsAccomodation'>;
 
-export type ISweetXvUserInvite = Pick<
+export type IUserInvite = Pick<
   IFullInvite,
   'id' | 'family' | 'entriesNumber' | 'confirmation' | 'kidsAllowed' | 'eventId'
 > & {
@@ -84,7 +84,17 @@ export type ISaveTheDateUserInvite = Pick<
   maxDateOfConfirmation: string;
   nameOfCelebrated: string;
   typeOfEvent: string;
-} & Pick<ISaveTheDateSetting, 'hotelName' | 'hotelInformation'>;
+};
+
+export type IWeddingUserInvite = Pick<
+  IFullInvite,
+  'id' | 'family' | 'entriesNumber' | 'confirmation' | 'kidsAllowed' | 'eventId'
+> & {
+  dateOfEvent: string;
+  maxDateOfConfirmation: string;
+  nameOfCelebrated: string;
+  typeOfEvent: string;
+} & Pick<IWeddingSetting, 'hotelName' | 'hotelInformation'>;;
 
 export type IDashboardInvite = Pick<
   IFullInvite,
@@ -127,6 +137,7 @@ export interface IInviteSection {
   sectionId: string;
   name: string;
   disabled: boolean;
+  draggable: boolean;
   selected: boolean;
   order: number;
 }

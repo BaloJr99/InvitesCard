@@ -18,6 +18,7 @@ import { LoaderService } from 'src/app/core/services/loader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { ActivatedRoute } from '@angular/router';
 import { EventType } from 'src/app/core/models/enum';
+import { ISaveTheDateSetting } from 'src/app/core/models/settings';
 
 @Component({
   selector: 'app-accomodation',
@@ -28,6 +29,7 @@ export class AccomodationComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
   @Input() invite!: ISaveTheDateUserInvite;
+  @Input() inviteSettings!: ISaveTheDateSetting;
   @Input() set deadlineMet(value: boolean) {
     this.blockAccomodationForm = value;
     if (value === true) {

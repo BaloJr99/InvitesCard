@@ -838,7 +838,7 @@ test.describe('Invites (Save The Date)', () => {
     }).toBe(true);
 
     expect(await invitePage.namesOfCelebrated.textContent(), {
-      message: 'Name of celebrated (wife) should be correct',
+      message: 'Name of celebrated (bride) should be correct',
     }).toContain(saveTheDateEventMock.nameOfCelebrated.split(';')[0]);
 
     expect(await invitePage.namesOfCelebrated.textContent(), {

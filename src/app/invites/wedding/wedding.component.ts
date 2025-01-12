@@ -8,49 +8,67 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
-import { ISweetXvSetting } from '../../core/models/settings';
-import { IDownloadImage } from '../../core/models/images';
+import { IDownloadAudio, IDownloadImage } from '../../core/models/images';
 import { LoaderService } from '../../core/services/loader.service';
 import { SettingsService } from '../../core/services/settings.service';
 import { FilesService } from '../../core/services/files.service';
 import { ImageUsage } from '../../core/models/enum';
 import { IInviteSection, IUserInvite } from '../../core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
+import { IWeddingSetting } from 'src/app/core/models/settings';
 
 @Component({
-  selector: 'app-sweet-xv',
-  templateUrl: './sweet-xv.component.html',
-  styleUrls: ['./sweet-xv.component.css'],
+  selector: 'app-wedding',
+  templateUrl: './wedding.component.html',
+  styleUrls: ['./wedding.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
-export class SweetXvComponent implements OnInit {
+export class WeddingComponent implements OnInit {
   counter = 0;
 
   dayOfTheWeek = '';
   shortDate = '';
   longDate = '';
 
+  inviteOpened = false;
+
   userInvite!: IUserInvite;
-  eventSettings: ISweetXvSetting = {
+  eventSettings: IWeddingSetting = {
     sections: [],
     eventId: '',
     primaryColor: '',
     secondaryColor: '',
-    parents: '',
-    godParents: '',
-    firstSectionSentences: '',
-    secondSectionSentences: '',
+    weddingPrimaryColor: '',
+    weddingSecondaryColor: '',
+    receptionPlace: '',
+    groomParents: '',
+    brideParents: '',
     massUrl: '',
     massTime: '',
-    massAddress: '',
-    receptionUrl: '',
-    receptionTime: '',
-    receptionPlace: '',
-    receptionAddress: '',
+    massPlace: '',
+    venueUrl: '',
+    venueTime: '',
+    venuePlace: '',
+    civilPlace: '',
+    civilTime: '',
+    civilUrl: '',
     dressCodeColor: '',
+    copyMessage: '',
+    hotelInformation: '',
+    hotelName: '',
+    hotelAddress: '',
+    hotelPhone: '',
+    hotelUrl: '',
+    cardNumber: '',
+    clabeBank: '',
   };
 
-  downloadImages: IDownloadImage[] = [];
+  gallery: IDownloadImage[] = [];
+  mainImage: IDownloadImage | undefined;
+
+  downloadAudio: IDownloadAudio | undefined = undefined;
+  audio = new Audio();
+  playAudio = false;
 
   deadlineMet = false;
 
@@ -121,28 +139,47 @@ export class SweetXvComponent implements OnInit {
                   ...JSON.parse(eventSettings.settings),
                   eventId: eventSettings.eventId,
                 };
-                this.downloadImages = downloadFiles.eventImages.filter(
-                  (image) =>
-                    window.innerWidth > 575
-                      ? image.imageUsage === ImageUsage.Desktop ||
-                        image.imageUsage === ImageUsage.Both
-                      : image.imageUsage === ImageUsage.Phone ||
-                        image.imageUsage === ImageUsage.Both
-                );
 
-                if (this.downloadImages.length > 0) {
-                  setInterval(() => {
-                    this.updateBackground();
-                  }, 5000);
+                this.downloadAudio =
+                  downloadFiles.eventAudios.length > 0
+                    ? downloadFiles.eventAudios[0]
+                    : undefined;
+
+                if (this.downloadAudio) {
+                  this.audio = new Audio(this.downloadAudio.fileUrl);
+                  this.audio.volume = 0.5;
                 }
+
+                this.mainImage =
+                  window.innerWidth > 575
+                    ? (downloadFiles.eventImages.find(
+                        (image) =>
+                          image.imageUsage === ImageUsage.Principal_Desktop
+                      ) as IDownloadImage)
+                    : (downloadFiles.eventImages.find(
+                        (image) =>
+                          image.imageUsage === ImageUsage.Principal_Phone
+                      ) as IDownloadImage);
+
+                this.gallery = downloadFiles.eventImages.filter(
+                  (image) => image.imageUsage === ImageUsage.Gallery
+                );
 
                 this.elRef.nativeElement.style.setProperty(
                   '--custom-primary-color',
-                  this.eventSettings.primaryColor
+                  this.eventSettings.weddingPrimaryColor
                 );
                 this.elRef.nativeElement.style.setProperty(
                   '--custom-secondary-color',
-                  this.eventSettings.secondaryColor
+                  this.eventSettings.weddingSecondaryColor
+                );
+                this.elRef.nativeElement.style.setProperty(
+                  '--custom-light-primary-color',
+                  `${this.eventSettings.weddingPrimaryColor}80`
+                );
+                this.elRef.nativeElement.style.setProperty(
+                  '--custom-light-secondary-color',
+                  `${this.eventSettings.weddingSecondaryColor}80`
                 );
               },
             })
@@ -162,41 +199,15 @@ export class SweetXvComponent implements OnInit {
     });
   }
 
-  updateBackground() {
-    this.counter++;
-
-    if (this.counter > this.downloadImages.length - 1) {
-      this.counter = 0;
-    }
-
-    const nextBackgroundImage: HTMLElement = document.querySelector(
-      `.backgroundImage${this.counter}`
-    ) as HTMLElement;
-    let oldBackgroundImage: HTMLElement;
-
-    if (this.counter == 0) {
-      oldBackgroundImage = document.querySelector(
-        `.backgroundImage${this.downloadImages.length - 1}`
-      ) as HTMLElement;
-    } else {
-      oldBackgroundImage = document.querySelector(
-        `.backgroundImage${this.counter - 1}`
-      ) as HTMLElement;
-    }
-
-    if (oldBackgroundImage) {
-      oldBackgroundImage.style.visibility = 'hidden';
-    }
-
-    nextBackgroundImage.style.visibility = 'visible';
-  }
-
   sectionEnabled(sectionId: string): boolean {
     if (this.sections && this.sections.length > 0) {
       const sectionFound = this.sections.find(
         (s) => s.sectionId === sectionId
       ) as IInviteSection;
-      return sectionFound.selected;
+      if (sectionFound) {
+        return sectionFound.selected;
+      }
+      return false;
     }
     return false;
   }
@@ -209,5 +220,34 @@ export class SweetXvComponent implements OnInit {
       return sectionFound.order;
     }
     return 0;
+  }
+
+  copyText(text: string) {
+    navigator.clipboard.writeText(text.replaceAll('-', ''));
+  }
+
+  openInvite() {
+    const envelope = document.getElementById('invite-envelope') as HTMLElement;
+    const fullInvite = document.getElementById('full-invite') as HTMLElement;
+    envelope.classList.toggle('open');
+
+    setTimeout(() => {
+      this.inviteOpened = true;
+      envelope.classList.add('d-none');
+      fullInvite.classList.toggle('show');
+      
+      if (this.downloadAudio) {
+        this.reproduceAudio();
+      }
+    }, 2000);
+  }
+
+  reproduceAudio() {
+    this.playAudio = !this.playAudio;
+    if (this.playAudio) {
+      this.audio.play();
+    } else {
+      this.audio.pause();
+    }
   }
 }

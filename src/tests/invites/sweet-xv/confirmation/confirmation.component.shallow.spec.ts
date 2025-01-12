@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
 import { InvitesService } from 'src/app/core/services/invites.service';
-import { ConfirmationComponent } from 'src/app/invites/sweet-xv/confirmation/confirmation.component';
+import { ConfirmationComponent } from 'src/app/invites/shared/confirmation/confirmation.component';
 import {
   confirmationInviteMock,
   messageResponseMock,
@@ -101,7 +101,7 @@ describe('Confirmation Component (Shallow Test)', () => {
 
     expect(assistHeader.nativeElement.textContent)
       .withContext('The assist header should be displayed')
-      .toContain('¿ASISTIRÁS A MI FIESTA?');
+      .toContain('¿ASISTIRÁS A MI EVENTO?');
 
     expect(paragraphs[0].nativeElement.textContent)
       .withContext('The first paragraph should be displayed')

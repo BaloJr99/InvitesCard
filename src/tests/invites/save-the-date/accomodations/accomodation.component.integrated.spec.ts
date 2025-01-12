@@ -7,6 +7,7 @@ import { InvitesService } from 'src/app/core/services/invites.service';
 import { AccomodationComponent } from 'src/app/invites/save-the-date/accomodations/accomodation.component';
 import {
   messageResponseMock,
+  saveTheDateSettingMock,
   saveTheDateUserInviteMock,
 } from 'src/tests/mocks/mocks';
 
@@ -49,6 +50,7 @@ describe('Accomodation Component (Integrated Test)', () => {
 
   it('should call sendConfirmation when sendUserResponse is called', () => {
     fixture.componentRef.setInput('invite', saveTheDateUserInviteMock);
+    fixture.componentRef.setInput('inviteSettings', saveTheDateSettingMock);
     fixture.detectChanges();
 
     const form = fixture.debugElement.query(By.css('form'));

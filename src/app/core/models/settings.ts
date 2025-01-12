@@ -23,7 +23,7 @@ export interface ISweetXvSetting {
   receptionPlace: string;
   receptionAddress: string;
   dressCodeColor: string;
-} 
+}
 
 export interface ISaveTheDateSetting {
   eventId: string;
@@ -33,6 +33,36 @@ export interface ISaveTheDateSetting {
   copyMessage: string;
   hotelName: string;
   hotelInformation: string;
+}
+
+export interface IWeddingSetting {
+  sections: IInviteSection[];
+  eventId: string;
+  primaryColor: string;
+  secondaryColor: string;
+  weddingPrimaryColor: string;
+  weddingSecondaryColor: string;
+  groomParents: string;
+  brideParents: string;
+  receptionPlace: string;
+  copyMessage: string;
+  hotelName: string;
+  hotelAddress: string;	
+  hotelPhone: string;
+  hotelUrl: string;
+  hotelInformation: string;
+  massUrl: string;
+  massTime: string;
+  massPlace: string;
+  venueUrl: string;
+  venueTime: string;
+  venuePlace: string;
+  civilUrl: string;
+  civilTime: string;
+  civilPlace: string;
+  dressCodeColor: string;
+  cardNumber: string;
+  clabeBank: string;
 }
 
 export interface ISettingAction {
