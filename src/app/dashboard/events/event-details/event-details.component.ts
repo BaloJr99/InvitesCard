@@ -748,4 +748,10 @@ export class EventDetailsComponent implements OnInit {
       })
       .add(() => this.loaderService.setLoading(false));
   }
+
+  findTableConfiguration(groupIndex: string): ITable {
+    return this.tables.find(
+      (table) => table.tableId === groupIndex.replaceAll(' ', '')
+    ) as ITable;
+  }
 }

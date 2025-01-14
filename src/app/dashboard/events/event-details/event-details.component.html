@@ -56,7 +56,7 @@
         <div [id]="'accordion' + inviteGroup.key.replaceAll(' ', '')" class="accordion-collapse collapse">
           <div class="accordion-body">
             <app-table (actionResponse)="actionResponse($event)"
-                       [tableConfigurationValue]="tables[i]">
+                       [tableConfigurationValue]="findTableConfiguration(inviteGroup.key)">
             </app-table>
             <button class="btn btn-danger mt-3" (click)="bulkDeleteInvites(inviteGroup.key)" [disabled]="!allowDeleteInvites(inviteGroup.key)" i18n>Eliminar Invitaciones</button>
           </div>
