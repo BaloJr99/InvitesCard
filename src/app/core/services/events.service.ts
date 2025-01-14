@@ -2,7 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { IDropdownEvent, IDashboardEvent, IFullEvent, IEventInformation } from '../models/events';
+import {
+  IDropdownEvent,
+  IDashboardEvent,
+  IFullEvent,
+  IEventInformation,
+} from '../models/events';
 import { IMessageResponse } from '../models/common';
 import { IFullInvite } from '../models/invites';
 
@@ -21,12 +26,18 @@ export class EventsService {
     return this.http.get<IDropdownEvent[]>(`${this.invitesBaseUrl}/dropdown`);
   }
 
-  getEventInformation(eventId: string, eventSettings: string[]): Observable<IEventInformation> {
-    return this.http.get<IEventInformation>(`${this.invitesBaseUrl}/${eventId}/eventInformation`, {
-      params: {
-        eventSettings,
+  getEventInformation(
+    eventId: string,
+    eventSettings: string[]
+  ): Observable<IEventInformation> {
+    return this.http.get<IEventInformation>(
+      `${this.invitesBaseUrl}/${eventId}/eventInformation`,
+      {
+        params: {
+          eventSettings,
+        },
       }
-    });
+    );
   }
 
   getEventInvites(eventId: string): Observable<IFullInvite[]> {
@@ -49,14 +60,20 @@ export class EventsService {
     return this.http.post<IMessageResponse>(`${this.invitesBaseUrl}`, event);
   }
 
-  updateEvent(event: IFullEvent, id: string, override: boolean): Observable<IMessageResponse> {
+  updateEvent(
+    event: IFullEvent,
+    id: string,
+    override: boolean,
+    overrideViewed: boolean
+  ): Observable<IMessageResponse> {
     return this.http.put<IMessageResponse>(
       `${this.invitesBaseUrl}/${id}`,
       event,
       {
         params: {
           override,
-        }
+          overrideViewed
+        },
       }
     );
   }

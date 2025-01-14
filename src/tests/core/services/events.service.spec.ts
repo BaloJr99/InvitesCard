@@ -143,7 +143,7 @@ describe('EventsService', () => {
     eventsServiceSpy.updateEvent.and.returnValue(of(messageResponseMock));
 
     eventsServiceSpy
-      .updateEvent(fullEventsMock, fullEventsMock.id, true)
+      .updateEvent(fullEventsMock, fullEventsMock.id, true, false)
       .subscribe((response) => {
         expect(response).toBe(messageResponseMock);
       });
@@ -151,7 +151,8 @@ describe('EventsService', () => {
     expect(eventsServiceSpy.updateEvent).toHaveBeenCalledOnceWith(
       fullEventsMock,
       fullEventsMock.id,
-      true
+      true,
+      false
     );
   });
 

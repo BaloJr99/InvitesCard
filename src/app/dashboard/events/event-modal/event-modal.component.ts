@@ -167,7 +167,7 @@ export class EventModalComponent implements OnInit, AfterViewInit {
               }
             });
         } else {
-          this.updateEvent();
+          this.updateEvent(false, this.originalEventType === EventType.SaveTheDate && this.createEventForm.controls['typeOfEvent'].value === EventType.Wedding);
         }
       } else {
         this.createEvent();
@@ -204,13 +204,14 @@ export class EventModalComponent implements OnInit, AfterViewInit {
       });
   }
 
-  updateEvent(override: boolean = false) {
+  updateEvent(override: boolean = false, overrideViewed: boolean = false) {
     this.loaderService.setLoading(true, $localize`Actualizando evento`);
     this.eventsService
       .updateEvent(
         this.createEventForm.value,
         this.createEventForm.controls['id'].value,
-        override
+        override,
+        overrideViewed
       )
       .subscribe({
         next: (response: IMessageResponse) => {

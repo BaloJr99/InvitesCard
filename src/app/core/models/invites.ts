@@ -1,5 +1,3 @@
-import { IWeddingSetting } from './settings';
-
 export interface IFullInvite {
   id: string;
   family: string;
@@ -94,7 +92,7 @@ export type IWeddingUserInvite = Pick<
   maxDateOfConfirmation: string;
   nameOfCelebrated: string;
   typeOfEvent: string;
-} & Pick<IWeddingSetting, 'hotelName' | 'hotelInformation'>;;
+};
 
 export type IDashboardInvite = Pick<
   IFullInvite,

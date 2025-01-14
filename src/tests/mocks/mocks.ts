@@ -39,6 +39,7 @@ import {
   ISaveTheDateUserInvite,
   IUserInvite,
   IUpsertInvite,
+  IWeddingUserInvite,
 } from 'src/app/core/models/invites';
 import {
   IDeleteFile,
@@ -56,6 +57,7 @@ import {
   IBaseSettings,
   ISaveTheDateSetting,
   ISweetXvSetting,
+  IWeddingSetting,
 } from 'src/app/core/models/settings';
 
 export const roleMock: IRole = {
@@ -377,22 +379,6 @@ export const baseSectionsMock: IInviteSection[] = [
     draggable: false,
   },
   {
-    sectionId: 'ceremonyInfo',
-    name: 'Información de la ceremonia',
-    disabled: false,
-    selected: true,
-    order: 1,
-    draggable: true,
-  },
-  {
-    sectionId: 'receptionInfo',
-    name: 'Información de la recepción',
-    disabled: false,
-    selected: true,
-    order: 1,
-    draggable: true,
-  },
-  {
     sectionId: 'dressCodeInfo',
     name: 'Código de vestimenta',
     disabled: false,
@@ -418,8 +404,71 @@ export const baseSectionsMock: IInviteSection[] = [
   },
 ];
 
+export const sweetXvSectionsMock: IInviteSection[] = [
+  baseSectionsMock[0],
+  {
+    sectionId: 'ceremonyInfo',
+    name: 'Información de la ceremonia',
+    disabled: false,
+    selected: true,
+    order: 1,
+    draggable: true,
+  },
+  {
+    sectionId: 'receptionInfo',
+    name: 'Información de la recepción',
+    disabled: false,
+    selected: true,
+    order: 1,
+    draggable: true,
+  },
+  baseSectionsMock[1],
+  baseSectionsMock[2],
+  baseSectionsMock[3],
+];
+
+export const weddingSectionsMock: IInviteSection[] = [
+  baseSectionsMock[0],
+  {
+    sectionId: 'itineraryInfo',
+    name: $localize`Itinerario`,
+    draggable: true,
+    disabled: false,
+    selected: true,
+    order: 1,
+  },
+  {
+    ...baseSectionsMock[1],
+    order: 2,
+  },
+  {
+    ...baseSectionsMock[2],
+    order: 3,
+  },
+  {
+    ...baseSectionsMock[3],
+    order: 4,
+  },
+  {
+    sectionId: 'accomodationInfo',
+    name: $localize`Hospedaje`,
+    draggable: true,
+    disabled: true,
+    selected: true,
+    order: 5,
+  },
+  {
+    sectionId: 'galleryInfo',
+    name: $localize`Galería`,
+    draggable: true,
+    disabled: true,
+    selected: true,
+    order: 6,
+  },
+];
+
 export const sweetXvSettingMock: ISweetXvSetting = {
-  sections: baseSectionsMock,
+  sections: sweetXvSectionsMock,
   eventId: fullEventsMock.id,
   primaryColor: '#000000',
   secondaryColor: '#000000',
@@ -447,6 +496,36 @@ export const saveTheDateSettingMock: ISaveTheDateSetting = {
   hotelName: 'Test Hotel',
 };
 
+export const weddingSettingMock: IWeddingSetting = {
+  sections: weddingSectionsMock,
+  eventId: fullEventsMock.id,
+  primaryColor: '#000000',
+  secondaryColor: '#FFFFFF',
+  weddingPrimaryColor: '#000000',
+  weddingSecondaryColor: '#FFFFFF',
+  receptionPlace: 'Test Reception Place',
+  groomParents: 'Test Father;Test Mother',
+  brideParents: 'Test Father;Test Mother',
+  massUrl: 'https://fakepath.com',
+  massTime: '18:30',
+  massPlace: 'Test Mass Place',
+  venueUrl: 'https://fakepath.com',
+  venueTime: '20:00',
+  venuePlace: 'Test Venue Place',
+  civilPlace: 'Test Civil Place',
+  civilTime: '19:00',
+  civilUrl: 'https://fakepath.com',
+  dressCodeColor: 'White',
+  copyMessage: 'Test Copy Message',
+  hotelInformation: 'Test Hotel Information',
+  hotelName: 'Test Hotel Name',
+  hotelAddress: 'Test Hotel Address',
+  hotelPhone: '1234567890',
+  hotelUrl: 'https://fakepath.com',
+  cardNumber: '1111222233334444',
+  clabeBank: '123456789012345678',
+};
+
 export const baseSettingMock: IBaseSettings = {
   eventId: fullEventsMock.id,
   settings: JSON.stringify(saveTheDateSettingMock),
@@ -460,6 +539,11 @@ export const sweetXvBaseSettingMock: IBaseSettings = {
 export const saveTheDateBaseSettingMock: IBaseSettings = {
   eventId: fullEventsMock.id,
   settings: JSON.stringify(saveTheDateSettingMock),
+};
+
+export const weddingBaseSettingMock: IBaseSettings = {
+  eventId: fullEventsMock.id,
+  settings: JSON.stringify(weddingSettingMock),
 };
 
 export const showSpinnerMock: ISpinner = {
@@ -566,6 +650,20 @@ export const saveTheDateUserInviteMock: ISaveTheDateUserInvite = {
     fullEventsMock.maxDateOfConfirmation.concat('T00:00:00Z'),
   needsAccomodation: newInviteMock.needsAccomodation,
   typeOfEvent: fullEventsMock.typeOfEvent,
+};
+
+export const weddingUserInviteMock: IWeddingUserInvite = {
+  id: newInviteMock.id,
+  dateOfEvent: fullEventsMock.dateOfEvent.concat('T00:00:00Z'),
+  eventId: newInviteMock.eventId,
+  family: newInviteMock.family,
+  nameOfCelebrated: 'Braulio;Brisa',
+  maxDateOfConfirmation:
+    fullEventsMock.maxDateOfConfirmation.concat('T00:00:00Z'),
+  typeOfEvent: fullEventsMock.typeOfEvent,
+  confirmation: confirmedInviteMock.confirmation,
+  entriesNumber: confirmedInviteMock.entriesNumber,
+  kidsAllowed: confirmedInviteMock.kidsAllowed,
 };
 
 export const showCeremonySection: IInviteSection[] = [

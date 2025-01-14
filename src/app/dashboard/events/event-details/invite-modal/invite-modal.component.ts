@@ -43,7 +43,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit {
         entriesNumber: inviteAction.invite.entriesNumber,
         phoneNumber: inviteAction.invite.phoneNumber,
         inviteGroupId: inviteAction.invite.inviteGroupId,
-        kidsAllowed: inviteAction.invite.kidsAllowed,
+        kidsAllowed: !!inviteAction.invite.kidsAllowed,
         eventId: inviteAction.invite.eventId,
       });
     }

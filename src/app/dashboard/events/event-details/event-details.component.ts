@@ -559,6 +559,7 @@ export class EventDetailsComponent implements OnInit {
     groupIndex: string
   ): { [key: string]: string } {
     const row: { [key: string]: string } = {};
+    const inviteNeedsAccomodation = !!invite.needsAccomodation;
 
     headers.forEach(({ text }) => {
       switch (text) {
@@ -578,16 +579,16 @@ export class EventDetailsComponent implements OnInit {
             : '';
           break;
         case $localize`Necesita Hotel`:
-          if (invite.needsAccomodation === false) {
+          if (invite.needsAccomodation === null) {
+            row[text] = '';
+            break;
+          } else if (!inviteNeedsAccomodation) {
             row[text] =
               '<i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>';
             break;
-          } else if (invite.needsAccomodation === true) {
+          } else {
             row[text] =
               '<i class="fa-solid fa-circle-check" aria-hidden="true"></i>';
-            break;
-          } else {
-            row[text] = '';
             break;
           }
         default:

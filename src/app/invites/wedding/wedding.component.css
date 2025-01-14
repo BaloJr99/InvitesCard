@@ -349,6 +349,8 @@
   }
 
     .itinerary .boxes .box {
+      display: flex;
+      flex-direction: column;
       flex: 1 0 0%;
       border: 2px solid var(--custom-secondary-color);
       box-shadow: 3px 3px 3px var(--custom-light-secondary-color);
@@ -385,6 +387,10 @@
           margin: auto;
           font-weight: bold;
         }
+
+      .itinerary .boxes .box .box-body {
+        flex: 1 0 0%;
+      }
 
       .itinerary .boxes .box .box-footer {
         padding-bottom: 15px;
