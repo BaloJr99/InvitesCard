@@ -5,6 +5,12 @@
   height: 100%;
 }
 
+label {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 .breadcrumb-header .header {
   display: flex;
   align-items: center;

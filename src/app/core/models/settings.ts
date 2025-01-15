@@ -42,6 +42,7 @@ export interface IWeddingSetting {
   secondaryColor: string;
   weddingPrimaryColor: string;
   weddingSecondaryColor: string;
+  weddingCopyMessage: string;
   groomParents: string;
   brideParents: string;
   receptionPlace: string;

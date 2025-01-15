@@ -54,6 +54,7 @@ describe('Wedding Component (Isolated Test)', () => {
         secondaryColor: '',
         weddingPrimaryColor: '',
         weddingSecondaryColor: '',
+        weddingCopyMessage: '',
         receptionPlace: '',
         groomParents: '',
         brideParents: '',

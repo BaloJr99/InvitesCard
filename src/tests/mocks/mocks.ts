@@ -503,6 +503,7 @@ export const weddingSettingMock: IWeddingSetting = {
   secondaryColor: '#FFFFFF',
   weddingPrimaryColor: '#000000',
   weddingSecondaryColor: '#FFFFFF',
+  weddingCopyMessage: 'Test Copy Message',
   receptionPlace: 'Test Reception Place',
   groomParents: 'Test Father;Test Mother',
   brideParents: 'Test Father;Test Mother',

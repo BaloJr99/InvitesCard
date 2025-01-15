@@ -40,6 +40,7 @@ export class WeddingComponent implements OnInit {
     secondaryColor: '',
     weddingPrimaryColor: '',
     weddingSecondaryColor: '',
+    weddingCopyMessage: '',
     receptionPlace: '',
     groomParents: '',
     brideParents: '',
@@ -235,7 +236,7 @@ export class WeddingComponent implements OnInit {
       this.inviteOpened = true;
       envelope.classList.add('d-none');
       fullInvite.classList.toggle('show');
-      
+
       if (this.downloadAudio) {
         this.reproduceAudio();
       }

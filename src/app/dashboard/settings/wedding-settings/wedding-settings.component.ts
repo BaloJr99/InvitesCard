@@ -38,6 +38,8 @@ export class WeddingSettingsComponent {
     this.getEventSetting();
   }
 
+  autoCompleteOptions: string[] = ['[invite_url]', '[family]'];
+
   weddingSettings: ISettingAction = {} as ISettingAction;
 
   createEventSettingsForm: FormGroup = this.fb.group({
@@ -46,6 +48,7 @@ export class WeddingSettingsComponent {
     secondaryColor: ['', Validators.required],
     weddingPrimaryColor: ['', Validators.required],
     weddingSecondaryColor: ['', Validators.required],
+    weddingCopyMessage: ['', Validators.required],
     receptionPlace: ['', Validators.required],
     copyMessage: ['', Validators.required],
     hotelName: ['', Validators.required],
@@ -68,7 +71,7 @@ export class WeddingSettingsComponent {
         civilPlace: ['', Validators.required],
         hotelUrl: ['', Validators.required],
         hotelAddress: ['', Validators.required],
-        hotelPhone: ['', Validators.required],
+        hotelPhone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       },
     },
     dressCodeInfo: {
@@ -78,8 +81,8 @@ export class WeddingSettingsComponent {
     },
     giftsInfo: {
       validators: {
-        cardNumber: ['', Validators.required],
-        clabeBank: ['', Validators.required],
+        cardNumber: ['', [Validators.required, Validators.pattern(/^\d{4}-\d{4}-\d{4}-\d{4}$/)]],
+        clabeBank: ['', [Validators.required, Validators.pattern(/^\d{18}$/)]],
       },
     },
   };
@@ -165,6 +168,7 @@ export class WeddingSettingsComponent {
     ];
 
     this.validationMessages = {
+      weddingCopyMessage: $localize`Ingresar mensaje para copiar`,
       weddingPrimaryColor: $localize`Ingresar color primario`,
       weddingSecondaryColor: $localize`Ingresar color secundario`,
       groomParents: $localize`Ingresar nombre de los padres del novio`,
@@ -184,9 +188,9 @@ export class WeddingSettingsComponent {
       hotelInformation: $localize`Ingresar url con información del hotel`,
       hotelUrl: $localize`Ingresar url de la ubicación hotel`,
       hotelAddress: $localize`Ingresar dirección del hotel`,
-      hotelPhone: $localize`Ingresar teléfono del hotel`,
-      cardNumber: $localize`Ingresar número de tarjeta`,
-      clabeBank: $localize`Ingresar clabe bancaria`,
+      hotelPhone: $localize`El teléfono del hotel debe tener 10 dígitos`,
+      cardNumber: $localize`El número de tarjeta debe tener el formato XXXX-XXXX-XXXX-XXXX`,
+      clabeBank: $localize`La CLABE debe tener 18 dígitos`,
     };
   }
 
@@ -195,6 +199,7 @@ export class WeddingSettingsComponent {
       eventId: '',
       weddingPrimaryColor: '',
       weddingSecondaryColor: '',
+      weddingCopyMessage: '',
       groomParents: '',
       brideParents: '',
       receptionPlace: '',
@@ -515,5 +520,12 @@ export class WeddingSettingsComponent {
     );
 
     return element;
+  }
+
+  selectAutoCompleteItem(autoCompleteSelected: string): void {
+    const textArea = document.querySelector('textarea') as HTMLTextAreaElement;
+    textArea.value += autoCompleteSelected;
+
+    textArea.focus();
   }
 }

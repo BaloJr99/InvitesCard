@@ -29,6 +29,21 @@
             {{ validationMessages['weddingSecondaryColor'] }}
           </span>
         </div>
+        <div class="form-group col-12 col-md-9">
+          <label for="weddingCopyMessage" class="form-label" i18n>Mensaje para copiar</label>
+          <textarea id="weddingCopyMessage" class="form-control" formControlName="weddingCopyMessage" [ngClass]="{'is-invalid': formControlIsInvalid('weddingCopyMessage', 'required')}"></textarea>
+          <span class="invalid-feedback" role="alert">
+            {{ validationMessages['weddingCopyMessage'] }}
+          </span>
+        </div>
+        <div class="col-12 col-md-3 d-flex flex-column">
+          <p class="autocomplete-label">Variables</p>
+          <div class="autocomplete">
+            <ul>
+              <li *ngFor="let item of autoCompleteOptions"><button type="button" (click)="selectAutoCompleteItem(item)">{{ item }}</button></li>
+            </ul>
+          </div>
+        </div>
         <div class="form-group col-12">
           <label for="groomParents" class="form-label" i18n>Padres del novio</label>
           <input id="groomParents" type="text" class="form-control" formControlName="groomParents" [ngClass]="{'is-invalid': formControlIsInvalid('groomParents', 'required')}">
@@ -121,14 +136,14 @@
       <section class="gifts" *ngIf="sectionEnabled('giftsInfo', vm.sections)">
         <div class="form-group col-6">
           <label for="cardNumber" class="form-label" i18n>Número de Tarjeta</label>
-          <input id="cardNumber" type="text" class="form-control" formControlName="cardNumber" [ngClass]="{'is-invalid': formControlIsInvalid('cardNumber', 'required')}">
+          <input id="cardNumber" type="text" class="form-control" formControlName="cardNumber" [ngClass]="{'is-invalid': formControlIsInvalid('cardNumber', 'required') || formControlIsInvalid('cardNumber', 'pattern')}">
           <span class="invalid-feedback" role="alert">
             {{ validationMessages['cardNumber'] }}
           </span>
         </div>
         <div class="form-group col-6">
           <label for="clabeBank" class="form-label" i18n>Clabe Bancaria</label>
-          <input id="clabeBank" type="text" class="form-control" formControlName="clabeBank" [ngClass]="{'is-invalid': formControlIsInvalid('clabeBank', 'required')}">
+          <input id="clabeBank" type="text" class="form-control" formControlName="clabeBank" [ngClass]="{'is-invalid': formControlIsInvalid('clabeBank', 'required') || formControlIsInvalid('clabeBank', 'pattern')}">
           <span class="invalid-feedback" role="alert">
             {{ validationMessages['clabeBank'] }}
           </span>
@@ -144,7 +159,7 @@
         </div>
         <div class="form-group col-12 col-md-6">
           <label for="hotelPhone" class="form-label" i18n>Número de teléfono del hotel</label>
-          <input id="hotelPhone" type="text" class="form-control" formControlName="hotelPhone" [ngClass]="{'is-invalid': formControlIsInvalid('hotelPhone', 'required')}">
+          <input id="hotelPhone" type="text" class="form-control" formControlName="hotelPhone" [ngClass]="{'is-invalid': formControlIsInvalid('hotelPhone', 'required') || formControlIsInvalid('hotelPhone', 'pattern')}">
           <span class="invalid-feedback" role="alert">
             {{ validationMessages['hotelPhone'] }}
           </span>

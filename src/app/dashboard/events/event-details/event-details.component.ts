@@ -94,7 +94,7 @@ export class EventDetailsComponent implements OnInit {
 
     combineLatest([
       this.inviteGroupsService.getAllInviteGroups(this.eventId),
-      this.eventsService.getEventInformation(this.eventId, ['copyMessage']),
+      this.eventsService.getEventInformation(this.eventId, ['copyMessage', 'weddingCopyMessage']),
     ])
       .subscribe({
         next: ([inviteGroups, eventInformation]) => {
@@ -617,10 +617,10 @@ export class EventDetailsComponent implements OnInit {
 
     const settings = JSON.parse(this.copyEventInformation.settings);
 
-    if (!settings.copyMessage) {
+    if (!settings.copyMessage && !settings.weddingCopyMessage) {
       navigator.clipboard.writeText(url);
     } else {
-      let message = settings.copyMessage;
+      let message = this.copyEventInformation.typeOfEvent === EventType.Wedding ? settings.weddingCopyMessage : settings.copyMessage;
 
       if (message.includes('[family]')) {
         message = message.replace('[family]', inviteFound.family);

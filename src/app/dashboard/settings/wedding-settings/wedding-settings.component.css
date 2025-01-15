@@ -72,6 +72,43 @@ form {
       margin: 0px;
     }
 
+    form .form-group textarea {
+      flex: 1 0 0%;
+    }
+
+.autocomplete-label {
+  padding: 10px 5px 5px;
+  font-weight: bold;
+  margin: 0px;
+}
+
+.autocomplete {
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  padding: 5px;
+  width: 100%;
+  flex-grow: 1;
+}
+
+  .autocomplete ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    height: 100%;
+  }
+
+    .autocomplete ul button {
+      border: none;
+      background: none;
+    }
+
+    .autocomplete ul button:hover,
+    .autocomplete ul button:focus {
+      background-color: lightskyblue;
+    }
+
 .footer {
   text-align: end;
   padding: 10px;
