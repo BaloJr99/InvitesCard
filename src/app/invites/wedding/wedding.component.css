@@ -10,12 +10,27 @@
   --dark-font-color: #000000;
 }
 
+.wood-background {
+  background-image: url('https://res.cloudinary.com/dc9vc8b7b/image/upload/v1736613977/33699_kovd3c.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 #invite-envelope {
   border-radius: 20px;
   position: relative;
   top: 0;
   height: 100vh;
   scale: 0.5;
+  background-color: #ffffff;
+  box-shadow: 10px 10px 10px #000000;
+}
+
+#invite-envelope .invite-background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  border-radius: 20px;
   background-color: var(--custom-light-secondary-color);
 }
 
@@ -66,6 +81,10 @@
   font-family: 'Outfit';
   font-size: 25px;
   border: 3px solid brown;
+}
+
+#invite-envelope:not(.open) .invite-button {
+  animation: shrinkSmall ease 2s infinite;
 }
 
 #full-invite {
@@ -499,10 +518,15 @@
 .gallery .images {
   display: flex;
   gap: 20px;
-  overflow-x: scroll;
+  overflow-x: auto;
   scrollbar-width: thin;
-  padding: 20px;
+  padding: 20px 0px;
 }
+
+  .gallery .container {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
 
   .gallery .images .image-container {
     padding: 20px;
@@ -752,6 +776,15 @@
 
   #invite-envelope {
     scale: 0.8;
+    border-radius: 10px;
+  }
+
+  #invite-envelope .invite-background {
+    border-radius: 10px;
+  }
+
+  #invite-envelope .top-paper {
+    border-radius: 10px;
   }
 
   .info h1 {
@@ -921,5 +954,17 @@
 
   100% {
     opacity: 1;
+  }
+}
+
+@keyframes shrinkSmall {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
   }
 }

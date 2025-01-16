@@ -229,12 +229,13 @@ export class WeddingComponent implements OnInit {
 
   openInvite() {
     const envelope = document.getElementById('invite-envelope') as HTMLElement;
+    const woodBackground = document.getElementsByClassName('wood-background')[0];
     const fullInvite = document.getElementById('full-invite') as HTMLElement;
     envelope.classList.toggle('open');
 
     setTimeout(() => {
       this.inviteOpened = true;
-      envelope.classList.add('d-none');
+      woodBackground.classList.add('d-none');
       fullInvite.classList.toggle('show');
 
       if (this.downloadAudio) {
