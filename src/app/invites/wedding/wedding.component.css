@@ -450,6 +450,10 @@
   margin-top: -20px;
 }
 
+  .dressCode .attribution a {
+    color: #000000;
+  }
+
 .gifts p {
   font-size: 20px;
   animation: fadeIn linear;

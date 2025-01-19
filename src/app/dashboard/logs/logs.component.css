@@ -10,8 +10,10 @@
     margin-bottom: 0;
   }
 
-    .breadcrumb-header .breadcrumb .breadcrumb-item {
+    .breadcrumb-header .breadcrumb .breadcrumb-item,
+    .breadcrumb-header .breadcrumb .breadcrumb-item h2 {
       font-size: 15px;
+      display: inline;
     }
 
       .breadcrumb-header .breadcrumb .breadcrumb-item a {
@@ -26,6 +28,7 @@
       .breadcrumb-header .breadcrumb .breadcrumb-item:first-of-type a {
         font-weight: bold;
         text-decoration: none;
+        color: #01337E;
       }
 
 .history {
@@ -52,7 +55,8 @@
         flex-direction: column;
       }
 
-        .history .percentage-history .card .card-body .card-title {
+        .history .percentage-history .card .card-body .card-title,
+        .full-history .card .card-body .card-title {
           font-size: 25px;
           font-weight: bold;
           font-family: 'Outfit';

@@ -3,7 +3,7 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
-        <li class="breadcrumb-item" i18n>EVENTOS</li>
+        <li class="breadcrumb-item"><h2 i18n>EVENTOS</h2></li>
       </ol>
     </nav>
     <div class="buttons">
@@ -19,7 +19,7 @@
           <button (click)="editEvent(event.id)" class="edit-event btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal" *ngIf="isAdmin" [attr.aria-label]="getAccessibilityMessage(event.nameOfEvent)">
             <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
           </button>
-          <h5 class="card-title">{{ event.nameOfEvent }}</h5>
+          <h3 class="card-title">{{ event.nameOfEvent }}</h3>
           <p class="card-text" i18n>Fecha del evento: <br> {{ event.dateOfEvent | dateFormat }}</p>
           <a routerLink="/dashboard/events/{{event.id}}" class="view-event btn btn-primary" i18n>
             IR A LAS INVITACIONES <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>

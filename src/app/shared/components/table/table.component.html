@@ -2,9 +2,9 @@
   <thead>
     <tr>
       <ng-container *ngFor="let header of vm.headers; index as i">
-        <th *ngIf="i === 0 && vm.showCheckbox">
+        <td *ngIf="i === 0 && vm.showCheckbox">
           <input id="checkbox-all-{{vm.tableIndex}}" type="checkbox" (change)="selectAll($event)" [checked]="allSelected()" [attr.aria-label]="getAccessibilityMessage(header.text, true)">
-        </th>
+        </td>
         <th *ngIf="(i !== 0 || !vm.useCheckbox)" attr.aria-sort="{{vm.sortDirection === '' ? 'none' : vm.sortDirection === 'asc' ? 'ascending' : 'descending'}}">
           <div>
             <ng-container *ngIf="!header.sortable">
@@ -25,7 +25,7 @@
     <tr *ngFor="let row of vm.recordsToDisplay; index as rowIndex">
       <ng-container *ngFor="let column of vm.headers; index as columnIndex">
         <td *ngIf="columnIndex === 0 && vm.showCheckbox">
-          <input id="checkbox-individual-{{vm.tableIndex}}" (change)="selectRecord($event, rowIndex)" [checked]="rowSelected(rowIndex)" type="checkbox" [attr.aria-label]="getAccessibilityMessage(row[column.text], false)">
+          <input id="checkbox-individual-{{vm.tableIndex}}" (change)="selectRecord($event, rowIndex)" [checked]="rowSelected(rowIndex)" type="checkbox" [attr.aria-label]="getAccessibilityMessage(row[vm.checkboxHeader ?? ''], false)">
         </td>
         <td *ngIf="showColumn(vm.showCheckbox, columnIndex)" [innerHTML]="row[column.text]"></td>
         <ng-container *ngIf="showButtons(columnIndex)">

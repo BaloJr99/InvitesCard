@@ -29,10 +29,10 @@ export class HomePage extends DashboardPage {
 
   async getAllEntriesStatistics(): Promise<IStatistics> {
     const rows = await this.page.locator('table tr').all();
-    const confirmedEntries = await rows[0].locator('td').nth(1).innerText();
-    const pendingEntries = await rows[1].locator('td').nth(1).innerText();
-    const cancelledEntries = await rows[2].locator('td').nth(1).innerText();
-    const totalEntries = await rows[3].locator('td').nth(1).innerText();
+    const confirmedEntries = await rows[1].locator('td').nth(1).innerText();
+    const pendingEntries = await rows[2].locator('td').nth(1).innerText();
+    const cancelledEntries = await rows[3].locator('td').nth(1).innerText();
+    const totalEntries = await rows[4].locator('td').nth(1).innerText();
 
     return {
       confirmedEntries: parseInt(confirmedEntries),

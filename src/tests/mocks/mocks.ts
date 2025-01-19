@@ -431,7 +431,7 @@ export const weddingSectionsMock: IInviteSection[] = [
   baseSectionsMock[0],
   {
     sectionId: 'itineraryInfo',
-    name: $localize`Itinerario`,
+    name: 'Itinerario',
     draggable: true,
     disabled: false,
     selected: true,
@@ -451,7 +451,7 @@ export const weddingSectionsMock: IInviteSection[] = [
   },
   {
     sectionId: 'accomodationInfo',
-    name: $localize`Hospedaje`,
+    name: 'Hospedaje',
     draggable: true,
     disabled: true,
     selected: true,
@@ -459,7 +459,7 @@ export const weddingSectionsMock: IInviteSection[] = [
   },
   {
     sectionId: 'galleryInfo',
-    name: $localize`Galería`,
+    name: 'Galería',
     draggable: true,
     disabled: true,
     selected: true,

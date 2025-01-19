@@ -38,13 +38,10 @@
     </div>
     <div class="base-menu menu">
       <div class="arrow-up"></div>
-      <h3>{{ username }}<br /><span>{{ email }}</span></h3>
+      <p>{{ username }}<br /><span>{{ email }}</span></p>
       <ul>
         <li>
           <i class="fa-solid fa-user" aria-hidden="true"></i><a routerLink="/dashboard/profile" i18n>Mi perfil</a>
-        </li>
-        <li>
-          <i class="fa-solid fa-gear" aria-hidden="true"></i><a href="#" i18n>Configuración</a>
         </li>
         <li>
           <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i><button (click)="logout()" i18n>Cerrar sesión</button>

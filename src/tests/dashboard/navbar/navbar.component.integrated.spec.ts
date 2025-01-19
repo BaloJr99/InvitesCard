@@ -81,7 +81,7 @@ describe('Navbar Component (Shallow Test)', () => {
     spyOn(fixture.componentInstance, 'logout');
     const baseMenu = fixture.debugElement.query(By.css('.base-menu.menu'));
     const menuItems = baseMenu.queryAll(By.css('ul li'));
-    const logoutButton = menuItems[2].query(By.css('button'));
+    const logoutButton = menuItems[1].query(By.css('button'));
     logoutButton.nativeElement.click();
 
     expect(fixture.componentInstance.logout)
@@ -95,7 +95,7 @@ describe('Navbar Component (Shallow Test)', () => {
     spyOn(router, 'navigate');
     const baseMenu = fixture.debugElement.query(By.css('.base-menu.menu'));
     const menuItems = baseMenu.queryAll(By.css('ul li'));
-    const logoutButton = menuItems[2].query(By.css('button'));
+    const logoutButton = menuItems[1].query(By.css('button'));
 
     logoutButton.nativeElement.click();
     fixture.detectChanges();

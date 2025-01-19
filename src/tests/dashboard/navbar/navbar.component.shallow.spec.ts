@@ -69,27 +69,27 @@ describe('Navbar Component (Shallow Test)', () => {
       .withContext('You should have a base-menu class')
       .toBeTruthy();
 
-    const userHeading = baseMenu.query(By.css('h3'));
+    const userHeading = baseMenu.query(By.css('p'));
 
     expect(userHeading)
-      .withContext('You should have a h3 tag inside the base-menu')
+      .withContext('You should have a p tag inside the base-menu')
       .toBeTruthy();
 
     expect(userHeading.nativeElement.textContent)
-      .withContext('You should have the username inside the h3 tag')
+      .withContext('You should have the username inside the p tag')
       .toContain(userMock.username);
 
     expect(userHeading.nativeElement.textContent)
-      .withContext('You should have the email inside the h3 tag')
+      .withContext('You should have the email inside the p tag')
       .toContain(userMock.email);
 
     const menuItems = baseMenu.queryAll(By.css('ul li'));
 
     expect(menuItems.length)
-      .withContext('You should have 3 items inside the menu')
-      .toBe(3);
+      .withContext('You should have 2 items inside the menu')
+      .toBe(2);
 
-    const textToMatch = ['Mi perfil', 'Configuración', 'Cerrar sesión'];
+    const textToMatch = ['Mi perfil','Cerrar sesión'];
     menuItems.map(
       (item, index) => item.nativeElement.textContent === textToMatch[index]
     );

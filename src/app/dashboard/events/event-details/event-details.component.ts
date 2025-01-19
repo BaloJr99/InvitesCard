@@ -500,6 +500,7 @@ export class EventDetailsComponent implements OnInit {
         },
       ],
       useCheckbox: true,
+      checkboxHeader: $localize`Familia`,
       tableIndex,
     };
   }

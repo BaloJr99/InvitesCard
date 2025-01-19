@@ -15,21 +15,21 @@
       margin-bottom: 0;
     }
 
-      .breadcrumb-header .header .breadcrumb .breadcrumb-item {
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item,
+      .breadcrumb-header .header .breadcrumb .breadcrumb-item h2 {
         font-size: 15px;
+        display: inline;
       }
 
         .breadcrumb-header .header .breadcrumb .breadcrumb-item a {
           text-decoration: none; 
+          font-weight: bold;
+          text-decoration: none;
+          color: #01337E;
         }
 
         .breadcrumb-header .header .breadcrumb .breadcrumb-item a:hover {
           text-decoration: underline; 
-        }
-
-        .breadcrumb-header .header .breadcrumb .breadcrumb-item:first-of-type a {
-          font-weight: bold;
-          text-decoration: none;
         }
 
     .breadcrumb-header .header .buttons .btn-primary {
@@ -58,6 +58,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         padding-right: 50px;
+        font-size: 20px;
       }
 
       .events-container .card .card-body .view-event {

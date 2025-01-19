@@ -4,7 +4,7 @@
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
         <li class="breadcrumb-item"><a routerLink="/dashboard/events" routerLinkActive="active" i18n>EVENTOS</a></li>
-        <li class="breadcrumb-item" i18n>INVITACIONES</li>
+        <li class="breadcrumb-item"><h2 i18n>INVITACIONES</h2></li>
       </ol>
     </nav>
     <div class="buttons">
@@ -48,11 +48,11 @@
   <div class="col-12">
     <div class="accordion" id="inviteAccordion" *ngFor="let inviteGroup of invitesGrouped | keyvalue; index as i">
       <div class="accordion-item">
-        <h2 class="accordion-header">
+        <h3 class="accordion-header">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#accordion' + inviteGroup.key.replaceAll(' ', '')" aria-expanded="true" aria-controls="collapseOne">
             {{ inviteGroup.key }}
           </button>
-        </h2>
+        </h3>
         <div [id]="'accordion' + inviteGroup.key.replaceAll(' ', '')" class="accordion-collapse collapse">
           <div class="accordion-body">
             <app-table (actionResponse)="actionResponse($event)"

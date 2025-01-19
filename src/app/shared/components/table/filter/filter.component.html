@@ -6,7 +6,7 @@
         <h3 id="filter-dialog-main-header" attr.aria-label="Filter by {{text}}">{{ text }}</h3>
       </div>
       <div class="filter-dialog-body">
-        <input id="filter-input-{{index}}" type="text" class="form-control" placeholder="Search" (keyup.enter)="applyFilter()">
+        <input attr.aria-label="{{text}}" id="filter-input-{{index}}" type="text" class="form-control" (keyup.enter)="applyFilter()">
       </div>
       <div class="filter-dialog-footer">
         <button class="clear" (click)="clearFilter()">Clear</button>

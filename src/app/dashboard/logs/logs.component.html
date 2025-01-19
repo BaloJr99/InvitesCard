@@ -3,7 +3,7 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
-        <li class="breadcrumb-item" i18n>LOGS</li>
+        <li class="breadcrumb-item"><h2 i18n>LOGS</h2></li>
       </ol>
     </nav>
   </div>
@@ -13,7 +13,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title" i18n>Logs de los ultimos 31 días</h5>
+          <h3 class="card-title" i18n>Logs de los ultimos 31 días</h3>
           <canvas id="historyChart"></canvas>
         </div>
       </div>
@@ -32,14 +32,14 @@
     <div class="percentage-history col-md-12 col-lg-4">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title" i18n>Total de errores <br> últimos 31 días</h5>
-          <span style="color: #ff5d6d;">{{ numberOfErrorsLast31Days }}</span>
+          <h3 class="card-title" i18n>Total de errores <br> últimos 31 días</h3>
+          <span style="color: #B50012;">{{ numberOfErrorsLast31Days }}</span>
         </div>
       </div>
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title" i18n>Total de errores <br> el día de hoy</h5>
-          <span style="color: #ff5d6d;">{{ numberOfErrorsToday }}</span>
+          <h3 class="card-title" i18n>Total de errores <br> el día de hoy</h3>
+          <span style="color: #B50012;">{{ numberOfErrorsToday }}</span>
         </div>
       </div>
     </div>

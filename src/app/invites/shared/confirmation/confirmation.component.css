@@ -83,7 +83,6 @@
   .confirmedModal .confirmed span,
   .confirmedModal .not-confirmed span {
     font-family: 'Raleway';
-    color: var(--custom-primary-color);
     font-size: 20px;
   }
 

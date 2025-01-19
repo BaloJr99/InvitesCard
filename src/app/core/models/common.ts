@@ -58,6 +58,7 @@ export interface ITable {
   tableIndex: number;
   tableId: string;
   useCheckbox?: boolean;
+  checkboxHeader?: string;
   headers: ITableHeaders[];
   data: { [key: string]: string }[];
   buttons?: ITableButtons[];

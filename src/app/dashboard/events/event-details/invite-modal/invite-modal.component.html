@@ -23,8 +23,8 @@
                   <option value="" i18n>Selecciona el grupo</option>
                   <option *ngFor="let inviteGroup of inviteGroups" [value]="inviteGroup.id">{{ inviteGroup.inviteGroup }}</option>
                 </select>
-                <button type="button" class="btn btn-dark" (click)="inviteGroupAction(true, true)" *ngIf="createInviteForm.get('inviteGroupId')?.value"><i class="fa-solid fa-pen-to-square"></i></button>
-                <button type="button" class="btn btn-dark" (click)="inviteGroupAction(false, true)"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                <button aria-label="Edit Group" type="button" class="btn btn-dark" (click)="inviteGroupAction(true, true)" *ngIf="createInviteForm.get('inviteGroupId')?.value"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button aria-label="Create Group" type="button" class="btn btn-dark" (click)="inviteGroupAction(false, true)"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
               </div>
               <span class="invalid-feedback" role="alert">
                 {{ displayMessage['inviteGroupId'] }}

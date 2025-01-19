@@ -49,12 +49,12 @@ test.describe('Dashboard Page (Admin)', () => {
       message: 'Profile card should be visible',
     }).toBeVisible();
 
-    const profileUsername = await profileCard.locator('h3').textContent();
+    const profileUsername = await profileCard.locator('p').textContent();
     expect(profileUsername, {
       message: 'Profile card should have the correct username',
     }).toContain(fullUserMock.username);
 
-    const profileEmail = await profileCard.locator('h3 span').textContent();
+    const profileEmail = await profileCard.locator('p span').textContent();
     expect(fullUserMock.email, {
       message: 'Profile card should have the correct email',
     }).toContain(profileEmail);
@@ -111,12 +111,12 @@ test.describe('Dashboard Page (Invites Admin)', () => {
       message: 'Profile card should be visible',
     }).toBeVisible();
 
-    const profileUsername = await profileCard.locator('h3').textContent();
+    const profileUsername = await profileCard.locator('p').textContent();
     expect(profileUsername, {
       message: 'Profile card should have the correct username',
     }).toContain(invitesAdminUser.username);
 
-    const profileEmail = await profileCard.locator('h3 span').textContent();
+    const profileEmail = await profileCard.locator('p span').textContent();
     expect(invitesAdminUser.email, {
       message: 'Profile card should have the correct email',
     }).toContain(profileEmail);

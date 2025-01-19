@@ -96,7 +96,7 @@ test.describe('Dashboard Events (Admin)', () => {
 
     const eventCard = eventsPage.getEventCard(0);
 
-    expect(await eventCard.locator('h5').textContent()).toContain(
+    expect(await eventCard.locator('h3').textContent()).toContain(
       sweetXvEventMock.nameOfEvent
     );
 
@@ -126,7 +126,7 @@ test.describe('Dashboard Events (Admin)', () => {
 
     const eventCard = eventsPage.getEventCard(0);
 
-    expect(await eventCard.locator('h5').textContent()).toContain(
+    expect(await eventCard.locator('h3').textContent()).toContain(
       'New Event Name'
     );
   });
@@ -189,14 +189,14 @@ test.describe('Dashboard Events (Admin)', () => {
 
     // Check if the confirmed invites statistics are correct
     let eventCardStatistics = await eventDetailsPage.getEventCardStatistic(0);
-    expect(await eventCardStatistics.locator('h5').textContent()).toContain(
+    expect(await eventCardStatistics.locator('h3').textContent()).toContain(
       'Confirmed entries'
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain('0');
 
     // Check if the pending invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(1);
-    expect(await eventCardStatistics.locator('h5').textContent()).toContain(
+    expect(await eventCardStatistics.locator('h3').textContent()).toContain(
       'Pending entries'
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain(
@@ -205,14 +205,14 @@ test.describe('Dashboard Events (Admin)', () => {
 
     // Check if the cancelled invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(2);
-    expect(await eventCardStatistics.locator('h5').textContent()).toContain(
+    expect(await eventCardStatistics.locator('h3').textContent()).toContain(
       'Canceled entries'
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain('0');
 
     // Check if the total invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(3);
-    expect(await eventCardStatistics.locator('h5').textContent()).toContain(
+    expect(await eventCardStatistics.locator('h3').textContent()).toContain(
       'Total entries'
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain(
@@ -600,7 +600,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
     }).toBe(1);
 
     const eventCard = eventsPage.getEventCard(0);
-    expect(await eventCard.locator('h5').textContent()).toContain(
+    expect(await eventCard.locator('h3').textContent()).toContain(
       sweetXvEventMock.nameOfEvent
     );
     expect(await eventCard.locator('p').textContent()).toContain(
@@ -670,14 +670,14 @@ test.describe('Dashboard Events (Invites Admin)', () => {
 
     // Check if the confirmed invites statistics are correct
     let eventCardStatistics = await eventDetailsPage.getEventCardStatistic(0);
-    expect(await eventCardStatistics.locator('h5').textContent()).toContain(
+    expect(await eventCardStatistics.locator('h3').textContent()).toContain(
       'Confirmed entries'
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain('0');
 
     // Check if the pending invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(1);
-    expect(await eventCardStatistics.locator('h5').textContent()).toContain(
+    expect(await eventCardStatistics.locator('h3').textContent()).toContain(
       'Pending entries'
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain(
@@ -686,14 +686,14 @@ test.describe('Dashboard Events (Invites Admin)', () => {
 
     // Check if the cancelled invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(2);
-    expect(await eventCardStatistics.locator('h5').textContent()).toContain(
+    expect(await eventCardStatistics.locator('h3').textContent()).toContain(
       'Canceled entries'
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain('0');
 
     // Check if the total invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(3);
-    expect(await eventCardStatistics.locator('h5').textContent()).toContain(
+    expect(await eventCardStatistics.locator('h3').textContent()).toContain(
       'Total entries'
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain(

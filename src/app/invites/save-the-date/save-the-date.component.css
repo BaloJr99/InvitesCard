@@ -144,11 +144,13 @@
       .reception table tr td.dateOfEvent i {
         position: absolute;
         z-index: -1;
-        color: red;
+        color: #B50012;
         font-size: 50px;
-        top: 55%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        left: 0;
+        right: 0;
+        top: 5%;
+        bottom: 0;
+        margin: auto;
         animation: shake 1s infinite;
       }
 
@@ -201,28 +203,29 @@
   }
 
   .reception p span {
-    font-size: 35px;
+    font-size: 35px !important;
   }
 
   .reception table th, 
   .reception table td {
-    font-size: 30px;
+    font-size: 30px !important;
   }
 
   .reception table tr td.dateOfEvent i {
-    font-size: 60px;
+    font-size: 60px !important;
+    top: 7%;
   }
 
   .reception .phrase {
-    font-size: 45px;
+    font-size: 45px !important;
   }
 
   .reception .banner {
-    font-size: 25px;
+    font-size: 25px !important;
   }
 }
 
-@media (max-width: 991px) {
+@media (max-width: 575px) {
   :host {
     height: auto;
   }
@@ -269,12 +272,12 @@
     }
 
     .reception p span {
-      font-size: 18px;
+      font-size: 18px !important;
     }
 
     .reception table th, 
     .reception table td {
-      font-size: 15px;
+      font-size: 15px !important;
     }
 
     .reception table {
@@ -282,15 +285,16 @@
     }
 
       .reception table tr td.dateOfEvent i {
-        font-size: 35px;
+        font-size: 35px !important;
+        top: 14%;
       }
 
     .reception .phrase {
-      font-size: 25px;
+      font-size: 25px !important;
     }
 
     .reception .banner {
-      font-size: 15px;
+      font-size: 15px !important;
     }
 }
 
@@ -306,18 +310,18 @@
 
 @keyframes shake {
   0% {
-    transform: translate(-50%, -50%) rotate(0deg);
+    transform: rotate(0deg);
   }
 
   25% {
-    transform: translate(-50%, -50%) rotate(5deg);
+    transform: rotate(5deg);
   }
 
   50% {
-    transform: translate(-50%, -50%) rotate(-5deg);
+    transform: rotate(-5deg);
   }
 
   75% {
-    transform: translate(-50%, -50%) rotate(5deg);
+    transform: rotate(5deg);
   }
 }

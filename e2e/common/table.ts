@@ -16,7 +16,7 @@ export class TableHelper {
   }
 
   async getTableHeadersCount() {
-    return this.table.locator('thead tr th').count();
+    return this.table.locator('thead tr th').or(this.table.locator('thead tr td')).count();
   }
 
   async getRowsCount() {

@@ -26,6 +26,7 @@
       .breadcrumb-header .breadcrumb .breadcrumb-item:first-of-type a {
         font-weight: bold;
         text-decoration: none;
+        color: #01337E;
       }
 
 .btn-primary {
