@@ -778,9 +778,17 @@
     max-width: unset;
   }
 
+  .wood-background {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   #invite-envelope {
     scale: 0.8;
     border-radius: 10px;
+    max-height: 600px;
   }
 
   #invite-envelope .invite-background {
