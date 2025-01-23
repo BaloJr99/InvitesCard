@@ -418,14 +418,4 @@
       <app-confirmation [inviteValue]="userInvite" [deadlineMet]="deadlineMet"></app-confirmation>
     </div>
   </div>
-  <div class="wood-background" *ngIf="userInvite">
-    <div id="invite-envelope">
-      <div class="invite-background"></div>
-      <div class="top-paper"></div>
-      <div class="back-top-paper"></div>
-      <button class="invite-button" (click)="openInvite()">
-        {{ userInvite.nameOfCelebrated.split(';')[0].substring(0, 1) }} & {{ userInvite.nameOfCelebrated.split(';')[1].substring(0, 1) }}
-      </button>
-    </div>
-  </div>
 </main>
