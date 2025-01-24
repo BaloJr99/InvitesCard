@@ -227,23 +227,6 @@ export class WeddingComponent implements OnInit {
     navigator.clipboard.writeText(text.replaceAll('-', ''));
   }
 
-  openInvite() {
-    const envelope = document.getElementById('invite-envelope') as HTMLElement;
-    const woodBackground = document.getElementsByClassName('wood-background')[0];
-    const fullInvite = document.getElementById('full-invite') as HTMLElement;
-    envelope.classList.toggle('open');
-
-    setTimeout(() => {
-      this.inviteOpened = true;
-      woodBackground.classList.add('d-none');
-      fullInvite.classList.toggle('show');
-
-      if (this.downloadAudio) {
-        this.reproduceAudio();
-      }
-    }, 2000);
-  }
-
   reproduceAudio() {
     this.playAudio = !this.playAudio;
     if (this.playAudio) {

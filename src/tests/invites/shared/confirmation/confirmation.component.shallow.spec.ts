@@ -293,7 +293,7 @@ describe('Confirmation Component (Shallow Test)', () => {
     const confirmedModal = fixture.debugElement.query(
       By.css('.confirmedModal')
     );
-    const cardTitle = confirmedModal.query(By.css('h1'));
+    const cardTitle = confirmedModal.query(By.css('h3'));
     const confirmedParagraph = confirmedModal.query(By.css('span'));
     const closePageMessage = confirmedModal.query(By.css('p'));
 
@@ -326,7 +326,7 @@ describe('Confirmation Component (Shallow Test)', () => {
     const confirmedModal = fixture.debugElement.query(
       By.css('.confirmedModal')
     );
-    const cardTitle = confirmedModal.query(By.css('h1'));
+    const cardTitle = confirmedModal.query(By.css('h3'));
     const confirmedParagraph = confirmedModal.query(By.css('span'));
     const closePageMessage = confirmedModal.query(By.css('p'));
 

@@ -1,8 +1,5 @@
 .container h2 {
   font-weight: bold;
-  font-family: serif;
-  font-size: 40px;
-  margin-bottom: 20px;
 }
   
   .container .col-md-6:first-of-type,
@@ -24,8 +21,7 @@
     font-size: 20px;
   }
 
-.container h1,
-.confirmedModal h1 {
+.confirmedModal h3 {
   color: #000000;
   font-family: 'Allura';
   font-size: 50px;
@@ -33,7 +29,7 @@
 
 .container .form {
   border: 1px solid #000000;
-  margin: 80px 50px;
+  margin: 0px 50px;
   padding: 50px;
   background-color: #ffffff;
   text-align: left;
@@ -109,9 +105,28 @@
         color: rgb(0, 182, 0);
       }
 
-@media (min-width: 768px) and (max-width: 992px) {
-  .container {
-    max-width: 960px;
+@media (min-width: 768px) and (max-width: 991px) {
+  .confirmedModal .confirmed span,
+  .confirmedModal .not-confirmed span,
+  .container .form h3,
+  .container .col-md-6:first-of-type p,
+  .container .col-sm-12:first-of-type p {
+    font-size: 18px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .container .col-sm-12 {
+    text-align: center !important;
+    align-items: center !important;
+  }
+
+  .confirmedModal .confirmed span,
+  .confirmedModal .not-confirmed span,
+  .container .form h3,
+  .container .col-md-6:first-of-type p,
+  .container .col-sm-12:first-of-type p {
+    font-size: 18px !important;
   }
 }
 
@@ -123,9 +138,12 @@
 }
 
 @media (max-width: 575px) {  
-  .container .col-sm-12 {
-    text-align: center !important;
-    align-items: center !important;
+  .confirmedModal .confirmed span,
+  .confirmedModal .not-confirmed span,
+  .container .form h3,
+  .container .col-md-6:first-of-type p,
+  .container .col-sm-12:first-of-type p {
+    font-size: 18px !important;
   }
 
   .container .form {
