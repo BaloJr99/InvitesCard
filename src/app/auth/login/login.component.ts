@@ -85,7 +85,7 @@ export class LoginComponent implements AfterViewInit {
           next: (authInfo) => {
             this.authErrorMessage = '';
             if (authInfo) {
-              this.tokenService.saveToken(authInfo.token);
+              this.tokenService.saveToken(authInfo.access_token);
               this.router.navigate(['/dashboard']);
             }
           },

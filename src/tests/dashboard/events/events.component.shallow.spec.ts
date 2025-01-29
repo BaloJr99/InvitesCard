@@ -2,6 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
+import { of } from 'rxjs';
 import { EventsService } from 'src/app/core/services/events.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { EventsComponent } from 'src/app/dashboard/events/events.component';
@@ -11,8 +12,10 @@ import { dashboardEventsMock } from 'src/tests/mocks/mocks';
 describe('Events Component (Shallow Test)', () => {
   let fixture: ComponentFixture<EventsComponent>;
 
+  let eventsServiceSpy: jasmine.SpyObj<EventsService>;
+
   beforeEach(waitForAsync(() => {
-    const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
+    const eventsSpy = jasmine.createSpyObj('EventsService', ['getEvents']);
     const tokenStorageSpy = jasmine.createSpyObj('TokenStorageService', [
       'getTokenValues',
     ]);
@@ -27,9 +30,14 @@ describe('Events Component (Shallow Test)', () => {
         provideRouter([]),
       ],
     });
+
+    eventsServiceSpy = TestBed.inject(
+      EventsService
+    ) as jasmine.SpyObj<EventsService>;
   }));
 
   beforeEach(() => {
+    eventsServiceSpy.getEvents.and.returnValue(of([]));
     fixture = TestBed.createComponent(EventsComponent);
     fixture.detectChanges();
   });

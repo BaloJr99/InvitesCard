@@ -12,7 +12,7 @@ import { EventsService } from 'src/app/core/services/events.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { EventsComponent } from 'src/app/dashboard/events/events.component';
 import { DateFormatPipe } from 'src/app/shared/pipes/date-format.pipe';
-import { dashboardEventsMock, userMock } from 'src/tests/mocks/mocks';
+import { dashboardEventsMock } from 'src/tests/mocks/mocks';
 import { By } from '@angular/platform-browser';
 
 describe('Events Component (Integrated Test)', () => {
@@ -52,31 +52,19 @@ describe('Events Component (Integrated Test)', () => {
   }));
 
   beforeEach(() => {
+    eventsServiceSpy.getEvents.and.returnValue(of([]));
+
     fixture = TestBed.createComponent(EventsComponent);
     fixture.detectChanges();
   });
 
-  it("shouldn't call getEvents on init if token storage values are empty", () => {
+  it("should call getEvents and getTokenValues on init", () => {
     expect(tokenStorageServiceSpy.getTokenValues)
       .withContext('getTokenValues should have been called')
       .toHaveBeenCalled();
 
     expect(eventsServiceSpy.getEvents)
-      .withContext("getEvents shouldn't have been called yet")
-      .not.toHaveBeenCalled();
-  });
-
-  it('should call getEvents on init if token storage values are not empty', () => {
-    tokenStorageServiceSpy.getTokenValues.and.returnValue({
-      ...userMock,
-    });
-
-    eventsServiceSpy.getEvents.and.returnValue(of([]));
-
-    fixture.componentInstance.ngOnInit();
-
-    expect(eventsServiceSpy.getEvents)
-      .withContext('getEvents should have been called')
+      .withContext("getEvents should have been called")
       .toHaveBeenCalled();
   });
 

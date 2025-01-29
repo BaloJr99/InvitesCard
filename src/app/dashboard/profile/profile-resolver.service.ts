@@ -20,6 +20,7 @@ export const profileResolver: ResolveFn<IUserProfile> = (
   const userInformation = tokenService.getTokenValues();
 
   if (!userInformation) {
+    loaderService.setLoading(false);
     router.navigate(['/auth/login']);
     return EMPTY;
   }

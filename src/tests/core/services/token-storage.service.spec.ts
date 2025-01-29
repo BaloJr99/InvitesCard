@@ -31,17 +31,17 @@ describe('Token Storage Service', () => {
   });
 
   it('should call saveToken', () => {
-    tokenStorageServiceSpy.saveToken(tokenMock.token);
+    tokenStorageServiceSpy.saveToken(tokenMock.access_token);
 
     expect(tokenStorageServiceSpy.saveToken)
       .withContext('Expected saveToken to have been called')
-      .toHaveBeenCalledOnceWith(tokenMock.token);
+      .toHaveBeenCalledOnceWith(tokenMock.access_token);
   });
 
   it('should call getToken', () => {
-    tokenStorageServiceSpy.getToken.and.returnValue(tokenMock.token);
+    tokenStorageServiceSpy.getToken.and.returnValue(tokenMock.access_token);
 
-    expect(tokenStorageServiceSpy.getToken()).toBe(tokenMock.token);
+    expect(tokenStorageServiceSpy.getToken()).toBe(tokenMock.access_token);
 
     expect(tokenStorageServiceSpy.getToken)
       .withContext('Expected getToken to have been called')

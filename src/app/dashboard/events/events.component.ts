@@ -26,30 +26,29 @@ export class EventsComponent implements OnInit {
   ngOnInit(): void {
     this.loaderService.setLoading(true, $localize`Cargando eventos`);
 
+    this.eventsService
+      .getEvents()
+      .subscribe({
+        next: (events) => {
+          this.events = events.map((event) => {
+            return {
+              ...event,
+              dateOfEvent: event.dateOfEvent.slice(
+                0,
+                event.dateOfEvent.length - 1
+              ),
+            };
+          });
+        },
+      })
+      .add(() => {
+        this.loaderService.setLoading(false);
+      });
+
     const userInformation = this.tokenService.getTokenValues();
-
-    if (userInformation) {
-      this.isAdmin = userInformation.roles.some((r) => r.name == Roles.Admin);
-
-      this.eventsService
-        .getEvents()
-        .subscribe({
-          next: (events) => {
-            this.events = events.map((event) => {
-              return {
-                ...event,
-                dateOfEvent: event.dateOfEvent.slice(
-                  0,
-                  event.dateOfEvent.length - 1
-                ),
-              };
-            });
-          },
-        })
-        .add(() => {
-          this.loaderService.setLoading(false);
-        });
-    }
+    this.isAdmin = userInformation
+      ? userInformation.roles.some((r) => r.name == Roles.Admin)
+      : false;
   }
 
   updateEvents(eventAction: IEventAction) {

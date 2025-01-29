@@ -14,7 +14,9 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   loginAccount(user: IAuthUser): Observable<IToken> {
-    return this.http.post<IToken>(`${this.invitesBaseUrl}/signin`, user);
+    return this.http.post<IToken>(`${this.invitesBaseUrl}/signin`, user, {
+      withCredentials: true,
+    });
   }
 
   sendResetPassword(usernameOrEmail: string): Observable<IMessageResponse> {
@@ -28,7 +30,7 @@ export class AuthService {
     return this.http.post<IMessageResponse>(
       `${this.invitesBaseUrl}/forgotPasswordToUser`,
       {
-        id
+        id,
       }
     );
   }
@@ -47,5 +49,11 @@ export class AuthService {
       `${this.invitesBaseUrl}/resetPassword/${userId}`,
       password
     );
+  }
+
+  refreshToken(): Observable<IToken> {
+    return this.http.get<IToken>(`${this.invitesBaseUrl}/refreshToken`, {
+      withCredentials: true,
+    });
   }
 }

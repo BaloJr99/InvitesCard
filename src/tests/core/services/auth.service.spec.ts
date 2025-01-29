@@ -41,7 +41,7 @@ describe('AuthService', () => {
 
     authServiceSpy.loginAccount.and.returnValue(of(response));
     authServiceSpy.loginAccount(loginDataMock).subscribe((response) => {
-      expect(response.token).toBe(tokenMock.token);
+      expect(response.access_token).toBe(tokenMock.access_token);
     });
 
     expect(authServiceSpy.loginAccount)

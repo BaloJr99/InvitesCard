@@ -14,8 +14,8 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     const userInformation = this.tokenService.getTokenValues();
-    if (userInformation) {
-      this.isAdmin = userInformation.roles.some((r) => r.name == Roles.Admin);
-    }
+    this.isAdmin = userInformation
+      ? userInformation.roles.some((r) => r.name == Roles.Admin)
+      : false;
   }
 }
