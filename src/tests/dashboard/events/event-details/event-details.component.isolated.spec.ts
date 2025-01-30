@@ -43,8 +43,8 @@ describe('Event Details Component (Isolated Test)', () => {
       .withContext('should have eventId to be an empty array')
       .toBe('');
 
-    expect(component.copyEventInformation)
-      .withContext('should have copyEventInformation to be an object')
+    expect(component.copyEventSettings)
+      .withContext('should have copyEventSettings to be an object')
       .toEqual({
         typeOfEvent: EventType.None,
         settings: '',

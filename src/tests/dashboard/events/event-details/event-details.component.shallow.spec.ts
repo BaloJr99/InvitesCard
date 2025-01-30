@@ -22,7 +22,8 @@ describe('Event Details Component (Shallow Test)', () => {
       'getAllInviteGroups',
     ]);
     const eventSpy = jasmine.createSpyObj('EventsService', [
-      'getEventInformation',
+      'getEventSettings',
+      'getEventById',
     ]);
     const commonInvitesSpy = jasmine.createSpyObj(
       'CommonInvitesService',

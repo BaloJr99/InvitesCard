@@ -19,6 +19,7 @@ import { TableComponent } from 'src/app/shared/components/table/table.component'
 import {
   confirmedInviteMock,
   eventInformationMock,
+  fullEventsMock,
   fullInvitesGroupsMock,
   newInviteMock,
   notConfirmedInviteMock,
@@ -46,7 +47,8 @@ describe('Event Details Component (Integrated Test)', () => {
       'getAllInviteGroups',
     ]);
     const eventsSpy = jasmine.createSpyObj('EventsService', [
-      'getEventInformation',
+      'getEventSettings',
+      'getEventById',
     ]);
     const commonInvitesSpy = jasmine.createSpyObj(
       'CommonInvitesService',
@@ -114,9 +116,10 @@ describe('Event Details Component (Integrated Test)', () => {
     inviteGroupsServiceSpy.getAllInviteGroups.and.returnValue(
       of([{ ...fullInvitesGroupsMock }])
     );
-    eventsServiceSpy.getEventInformation.and.returnValue(
+    eventsServiceSpy.getEventSettings.and.returnValue(
       of({ ...eventInformationMock, typeOfEvent: EventType.Xv })
     );
+    eventsServiceSpy.getEventById.and.returnValue(of({ ...fullEventsMock }));
 
     fixture = TestBed.createComponent(EventDetailsComponent);
     fixture.detectChanges();

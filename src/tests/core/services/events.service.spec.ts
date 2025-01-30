@@ -18,7 +18,7 @@ describe('EventsService', () => {
     const spy = jasmine.createSpyObj('EventsService', [
       'getEvents',
       'getDropdownEvents',
-      'getEventInformation',
+      'getEventSettings',
       'getEventInvites',
       'isDeadlineMet',
       'getEventById',
@@ -67,18 +67,18 @@ describe('EventsService', () => {
       .toHaveBeenCalledTimes(1);
   });
 
-  it('should call getEventInformation', () => {
-    eventsServiceSpy.getEventInformation.and.returnValue(
+  it('should call getEventSettings', () => {
+    eventsServiceSpy.getEventSettings.and.returnValue(
       of(eventInformationMock)
     );
 
     eventsServiceSpy
-      .getEventInformation(fullEventsMock.id, [])
+      .getEventSettings(fullEventsMock.id, [])
       .subscribe((response) => {
         expect(response).toBe(eventInformationMock);
       });
 
-    expect(eventsServiceSpy.getEventInformation).toHaveBeenCalledOnceWith(
+    expect(eventsServiceSpy.getEventSettings).toHaveBeenCalledOnceWith(
       fullEventsMock.id,
       []
     );
