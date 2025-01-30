@@ -38,7 +38,11 @@ export class WeddingSettingsComponent {
     this.getEventSetting();
   }
 
-  autoCompleteOptions: string[] = ['[invite_url]', '[family]'];
+  autoCompleteOptions: string[] = [
+    '[invite_url]',
+    '[family]',
+    '[max_deadline]',
+  ];
 
   weddingSettings: ISettingAction = {} as ISettingAction;
 
@@ -81,7 +85,13 @@ export class WeddingSettingsComponent {
     },
     giftsInfo: {
       validators: {
-        cardNumber: ['', [Validators.required, Validators.pattern(/^\d{4}-\d{4}-\d{4}-\d{4}$/)]],
+        cardNumber: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern(/^\d{4}-\d{4}-\d{4}-\d{4}$/),
+          ],
+        ],
         clabeBank: ['', [Validators.required, Validators.pattern(/^\d{18}$/)]],
       },
     },

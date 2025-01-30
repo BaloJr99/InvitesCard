@@ -4,7 +4,11 @@ import { combineLatest } from 'rxjs';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
 import { SocketService } from 'src/app/core/services/socket.service';
-import { IEventInformation, IStatistic } from 'src/app/core/models/events';
+import {
+  IEventSettings,
+  IFullEvent,
+  IStatistic,
+} from 'src/app/core/models/events';
 import {
   IInviteGroups,
   IInviteGroupsAction,
@@ -58,10 +62,12 @@ export class EventDetailsComponent implements OnInit {
   statistics: IStatistic[] = [];
 
   eventId = '';
-  copyEventInformation: IEventInformation = {
+  copyEventSettings: IEventSettings = {
     typeOfEvent: EventType.None,
     settings: '',
   };
+
+  eventInformation: IFullEvent = {} as IFullEvent;
 
   inviteAction!: IInviteAction;
   invitesGrouped: { [key: string]: IFullInvite[] } = {};
@@ -94,12 +100,17 @@ export class EventDetailsComponent implements OnInit {
 
     combineLatest([
       this.inviteGroupsService.getAllInviteGroups(this.eventId),
-      this.eventsService.getEventInformation(this.eventId, ['copyMessage', 'weddingCopyMessage']),
+      this.eventsService.getEventById(this.eventId),
+      this.eventsService.getEventSettings(this.eventId, [
+        'copyMessage',
+        'weddingCopyMessage',
+      ]),
     ])
       .subscribe({
-        next: ([inviteGroups, eventInformation]) => {
+        next: ([inviteGroups, eventInformation, eventSettings]) => {
+          this.eventInformation = eventInformation;
           this.inviteGroups = inviteGroups;
-          this.copyEventInformation = eventInformation;
+          this.copyEventSettings = eventSettings;
           this.buildInvitesDashboard();
         },
       })
@@ -147,8 +158,8 @@ export class EventDetailsComponent implements OnInit {
     this.statistics = [];
 
     if (
-      this.copyEventInformation.typeOfEvent === EventType.Xv ||
-      this.copyEventInformation.typeOfEvent === EventType.Wedding
+      this.copyEventSettings.typeOfEvent === EventType.Xv ||
+      this.copyEventSettings.typeOfEvent === EventType.Wedding
     ) {
       this.statistics = [
         {
@@ -219,9 +230,7 @@ export class EventDetailsComponent implements OnInit {
 
       this.commonInvitesService.updateNotifications(notifications, messages);
       this.groupEntries(this.filteredInvites);
-    } else if (
-      this.copyEventInformation.typeOfEvent === EventType.SaveTheDate
-    ) {
+    } else if (this.copyEventSettings.typeOfEvent === EventType.SaveTheDate) {
       this.statistics = [
         {
           name: $localize`Invitaciones Respondidas`,
@@ -507,8 +516,8 @@ export class EventDetailsComponent implements OnInit {
 
   getHeaders(): ITableHeaders[] {
     if (
-      this.copyEventInformation.typeOfEvent === EventType.Xv ||
-      this.copyEventInformation.typeOfEvent === EventType.Wedding
+      this.copyEventSettings.typeOfEvent === EventType.Xv ||
+      this.copyEventSettings.typeOfEvent === EventType.Wedding
     ) {
       return [
         {
@@ -616,12 +625,15 @@ export class EventDetailsComponent implements OnInit {
       (f) => f.id === id
     ) as IFullInvite;
 
-    const settings = JSON.parse(this.copyEventInformation.settings);
+    const settings = JSON.parse(this.copyEventSettings.settings);
 
     if (!settings.copyMessage && !settings.weddingCopyMessage) {
       navigator.clipboard.writeText(url);
     } else {
-      let message = this.copyEventInformation.typeOfEvent === EventType.Wedding ? settings.weddingCopyMessage : settings.copyMessage;
+      let message =
+        this.copyEventSettings.typeOfEvent === EventType.Wedding
+          ? settings.weddingCopyMessage
+          : settings.copyMessage;
 
       if (message.includes('[family]')) {
         message = message.replace('[family]', inviteFound.family);
@@ -629,6 +641,19 @@ export class EventDetailsComponent implements OnInit {
 
       if (message.includes('[invite_url]')) {
         message = message.replace('[invite_url]', url);
+      }
+
+      if (message.includes('[max_deadline]')) {
+        message = message.replace(
+          '[max_deadline]',
+          new Date(
+            this.eventInformation.maxDateOfConfirmation.split('T')[0]
+          ).toLocaleDateString(this.localeValue, {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          })
+        );
       }
 
       navigator.clipboard.writeText(message.trim());

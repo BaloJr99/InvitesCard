@@ -11,7 +11,6 @@ export const eventResolver: ResolveFn<IEventResolved> = (
   const router = inject(Router);
 
   const id = route.paramMap.get('id') ?? '';
-  console.log('Entro');
 
   const eventFound = combineLatest([
     eventsService.getEventInvites(id),
@@ -24,8 +23,7 @@ export const eventResolver: ResolveFn<IEventResolved> = (
         isDeadlineMet,
       };
     }),
-    catchError((error) => {
-      console.log(error);
+    catchError(() => {
       router.navigate(['/dashboard/events']);
       return EMPTY;
     })

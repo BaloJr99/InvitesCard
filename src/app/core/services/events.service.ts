@@ -6,7 +6,7 @@ import {
   IDropdownEvent,
   IDashboardEvent,
   IFullEvent,
-  IEventInformation,
+  IEventSettings,
 } from '../models/events';
 import { IMessageResponse } from '../models/common';
 import { IFullInvite } from '../models/invites';
@@ -26,11 +26,11 @@ export class EventsService {
     return this.http.get<IDropdownEvent[]>(`${this.invitesBaseUrl}/dropdown`);
   }
 
-  getEventInformation(
+  getEventSettings(
     eventId: string,
     eventSettings: string[]
-  ): Observable<IEventInformation> {
-    return this.http.get<IEventInformation>(
+  ): Observable<IEventSettings> {
+    return this.http.get<IEventSettings>(
       `${this.invitesBaseUrl}/${eventId}/eventInformation`,
       {
         params: {

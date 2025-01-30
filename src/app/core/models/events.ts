@@ -22,7 +22,7 @@ export type IDropdownEvent = Pick<IFullEvent, 'id' | 'nameOfEvent' | 'typeOfEven
 
 export type IEvent = Omit<IFullEvent, 'allowCreateInvites'>;
 
-export type IEventInformation = Pick<IBaseSettings, 'settings'> & Pick<IFullEvent, 'typeOfEvent'>;
+export type IEventSettings = Pick<IBaseSettings, 'settings'> & Pick<IFullEvent, 'typeOfEvent'>;
 
 export interface IEventAction {
   event: IFullEvent;

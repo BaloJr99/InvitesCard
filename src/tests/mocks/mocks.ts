@@ -18,7 +18,7 @@ import {
 import {
   IDashboardEvent,
   IDropdownEvent,
-  IEventInformation,
+  IEventSettings,
   IFullEvent,
 } from 'src/app/core/models/events';
 import {
@@ -215,7 +215,7 @@ export const dropdownEventsMock: IDropdownEvent[] = [
   },
 ];
 
-export const eventInformationMock: IEventInformation = {
+export const eventInformationMock: IEventSettings = {
   settings: '',
   typeOfEvent: fullEventsMock.typeOfEvent,
 };
