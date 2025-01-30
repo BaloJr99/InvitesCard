@@ -185,7 +185,8 @@
           </div>
           <div class="col-12">
             <br>
-            <p class="noKids" *ngIf="!userInvite?.kidsAllowed" i18n>* No niños *</p>
+            <p class="noKids" *ngIf="!userInvite.kidsAllowed" i18n>* No niños *</p>
+            <p *ngIf="!userInvite.kidsAllowed" i18n>Para una mejor experiencia para todos los presentes, hemos decidido celebrar este momento sin niños. Deseamos que esta decisión no les impida asistir a nuestra celebración. </p>
           </div>
         </div>
       </div>
