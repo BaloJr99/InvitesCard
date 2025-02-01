@@ -22,6 +22,7 @@ import { LoaderService } from 'src/app/core/services/loader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { ActivatedRoute } from '@angular/router';
 import { EventType } from 'src/app/core/models/enum';
+import { dateTimeToUTCDate } from 'src/app/shared/utils/tools';
 
 @Component({
   selector: 'app-confirmation',
@@ -97,7 +98,7 @@ export class ConfirmationComponent implements AfterViewInit {
         ?.setValue(isNaN(entriesConfirmed) ? 0 : entriesConfirmed);
       this.confirmationForm.addControl(
         'dateOfConfirmation',
-        new FormControl(new Date().toISOString())
+        new FormControl(dateTimeToUTCDate(new Date().toString()))
       );
       this.addnewInvite();
     } else {

@@ -12,7 +12,7 @@ setup('clean localhost', async ({ request }) => {
     }
   );
 
-  const authToken = JSON.parse(await loginResponse.text()).token;
+  const authToken = JSON.parse(await loginResponse.text()).access_token;
 
   const cleanLocalhostResponse = await request.post(
     'http://localhost:3000/api/environment/reset',

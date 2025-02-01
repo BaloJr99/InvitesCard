@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { NavigationStart, Router, Scroll } from '@angular/router';
 import { TokenStorageService } from '../core/services/token-storage.service';
 import { SocketService } from '../core/services/socket.service';
@@ -6,6 +6,7 @@ import { LoaderService } from '../core/services/loader.service';
 import { IMessage, INotification } from '../core/models/common';
 import { CommonInvitesService } from '../core/services/commonInvites.service';
 import { KeyValue } from '@angular/common';
+import { toLocalDate } from '../shared/utils/tools';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +19,8 @@ export class DashboardComponent implements OnInit {
     private socket: SocketService,
     private loaderService: LoaderService,
     private commonInvitesService: CommonInvitesService,
-    private router: Router
+    private router: Router,
+    @Inject(LOCALE_ID) private localeValue: string
   ) {}
 
   notifications: INotification[] = [];
@@ -77,8 +79,12 @@ export class DashboardComponent implements OnInit {
       next: (notifications) => {
         this.notifications = notifications.sort(
           (a, b) =>
-            new Date(b.dateOfConfirmation).getTime() -
-            new Date(a.dateOfConfirmation).getTime()
+            new Date(
+              toLocalDate(this.localeValue, b.dateOfConfirmation)
+            ).getTime() -
+            new Date(
+              toLocalDate(this.localeValue, a.dateOfConfirmation)
+            ).getTime()
         );
       },
     });

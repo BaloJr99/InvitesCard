@@ -7,8 +7,9 @@ describe('Home Component (Isolated Test)', () => {
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
     const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
     const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
+    const localeId = 'en-US';
 
-    component = new HomeComponent(invitesSpy, loaderSpy, eventsSpy);
+    component = new HomeComponent(invitesSpy, loaderSpy, eventsSpy, localeId);
   });
 
   it('should create', () => {

@@ -25,6 +25,7 @@ import { FilesService } from 'src/app/core/services/files.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
+import { toLocalDate } from 'src/app/shared/utils/tools';
 
 @Component({
   selector: 'app-save-the-date',
@@ -86,12 +87,10 @@ export class SaveTheDateComponent implements OnInit {
 
       this.invitesService.getInvite(inviteId).subscribe({
         next: (userInvite) => {
-          this.userInvite = userInvite as ISaveTheDateUserInvite;
-
-          this.userInvite.dateOfEvent = this.userInvite.dateOfEvent.slice(
-            0,
-            this.userInvite.dateOfEvent.length - 1
-          );
+          this.userInvite = {
+            ...userInvite,
+            dateOfEvent: toLocalDate(this.localeValue, userInvite.dateOfEvent),
+          } as ISaveTheDateUserInvite;
 
           this.generateCalendar();
 

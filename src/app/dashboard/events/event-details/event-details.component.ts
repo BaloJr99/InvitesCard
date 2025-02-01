@@ -647,7 +647,7 @@ export class EventDetailsComponent implements OnInit {
         message = message.replace(
           '[max_deadline]',
           new Date(
-            this.eventInformation.maxDateOfConfirmation.split('T')[0]
+            this.eventInformation.maxDateOfConfirmation
           ).toLocaleDateString(this.localeValue, {
             day: 'numeric',
             month: 'long',

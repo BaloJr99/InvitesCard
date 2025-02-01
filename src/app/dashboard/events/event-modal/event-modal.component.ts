@@ -17,7 +17,7 @@ import {
 } from '@angular/forms';
 import { Observable, fromEvent, merge } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { IEventAction } from 'src/app/core/models/events';
+import { IEventAction, IFullEvent } from 'src/app/core/models/events';
 import { IUserDropdownData } from 'src/app/core/models/users';
 import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 import { EventsService } from 'src/app/core/services/events.service';
@@ -30,6 +30,7 @@ import {
   CommonModalType,
   EventType,
 } from 'src/app/core/models/enum';
+import { dateToUTCDate } from 'src/app/shared/utils/tools';
 
 @Component({
   selector: 'app-event-modal',
@@ -167,7 +168,12 @@ export class EventModalComponent implements OnInit, AfterViewInit {
               }
             });
         } else {
-          this.updateEvent(false, this.originalEventType === EventType.SaveTheDate && this.createEventForm.controls['typeOfEvent'].value === EventType.Wedding);
+          this.updateEvent(
+            false,
+            this.originalEventType === EventType.SaveTheDate &&
+              this.createEventForm.controls['typeOfEvent'].value ===
+                EventType.Wedding
+          );
         }
       } else {
         this.createEvent();
@@ -183,14 +189,14 @@ export class EventModalComponent implements OnInit, AfterViewInit {
   createEvent() {
     this.loaderService.setLoading(true, $localize`Creando evento`);
     this.eventsService
-      .createEvent(this.createEventForm.value)
+      .createEvent(this.formatEvent(this.createEventForm.value))
       .subscribe({
         next: (response: IMessageResponse) => {
           this.updateEvents.emit({
             event: {
               ...this.createEventForm.value,
-              dateOfEvent: `${this.createEventForm.value.dateOfEvent}T00:00:00.000`,
-              maxDateOfConfirmation: `${this.createEventForm.value.maxDateOfConfirmation}T00:00:00.000`,
+              dateOfEvent: `${this.createEventForm.value.dateOfEvent}T00:00:00`,
+              maxDateOfConfirmation: `${this.createEventForm.value.maxDateOfConfirmation}T00:00:00`,
               id: response.id,
             },
             isNew: true,
@@ -204,11 +210,19 @@ export class EventModalComponent implements OnInit, AfterViewInit {
       });
   }
 
+  formatEvent(event: IFullEvent): IFullEvent {
+    return {
+      ...event,
+      dateOfEvent: dateToUTCDate(event.dateOfEvent),
+      maxDateOfConfirmation: dateToUTCDate(event.maxDateOfConfirmation),
+    };
+  }
+
   updateEvent(override: boolean = false, overrideViewed: boolean = false) {
     this.loaderService.setLoading(true, $localize`Actualizando evento`);
     this.eventsService
       .updateEvent(
-        this.createEventForm.value,
+        this.formatEvent(this.createEventForm.value),
         this.createEventForm.controls['id'].value,
         override,
         overrideViewed
@@ -218,8 +232,8 @@ export class EventModalComponent implements OnInit, AfterViewInit {
           this.updateEvents.emit({
             event: {
               ...this.createEventForm.value,
-              dateOfEvent: `${this.createEventForm.value.dateOfEvent}T00:00:00.000`,
-              maxDateOfConfirmation: `${this.createEventForm.value.maxDateOfConfirmation}T00:00:00.000`,
+              dateOfEvent: `${this.createEventForm.value.dateOfEvent}T00:00:00`,
+              maxDateOfConfirmation: `${this.createEventForm.value.maxDateOfConfirmation}T00:00:00`,
               allowCreateInvites: override
                 ? false
                 : this.eventAction?.event.allowCreateInvites,

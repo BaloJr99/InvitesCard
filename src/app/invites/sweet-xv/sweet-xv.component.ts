@@ -16,6 +16,7 @@ import { FilesService } from '../../core/services/files.service';
 import { ImageUsage } from '../../core/models/enum';
 import { IInviteSection, IUserInvite } from '../../core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
+import { toLocalDate } from 'src/app/shared/utils/tools';
 
 @Component({
   selector: 'app-sweet-xv',
@@ -77,17 +78,13 @@ export class SweetXvComponent implements OnInit {
 
       this.invitesService.getInvite(inviteId).subscribe({
         next: (userInvite) => {
-          this.userInvite = userInvite as IUserInvite;
-
-          this.userInvite.dateOfEvent = this.userInvite.dateOfEvent.slice(
-            0,
-            this.userInvite.dateOfEvent.length - 1
-          );
-          this.userInvite.maxDateOfConfirmation =
-            this.userInvite.maxDateOfConfirmation.slice(
-              0,
-              this.userInvite.maxDateOfConfirmation.length - 1
-            );
+          this.userInvite = {
+            ...userInvite,
+            maxDateOfConfirmation: toLocalDate(
+              this.localeValue,
+              userInvite.maxDateOfConfirmation
+            ),
+          } as IUserInvite;
 
           this.deadlineMet =
             new Date().getTime() >

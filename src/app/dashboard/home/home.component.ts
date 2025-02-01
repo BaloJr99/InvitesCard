@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { combineLatest } from 'rxjs';
+import { combineLatest, map } from 'rxjs';
 import { EventType } from 'src/app/core/models/enum';
 import { IDropdownEvent, IStatistic } from 'src/app/core/models/events';
 import { IDashboardInvite } from 'src/app/core/models/invites';
@@ -8,6 +8,7 @@ import { EventsService } from 'src/app/core/services/events.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { createStatistics } from 'src/app/shared/utils/statistics/statistics';
+import { toLocalDate } from 'src/app/shared/utils/tools';
 Chart.register(...registerables);
 
 @Component({
@@ -29,14 +30,26 @@ export class HomeComponent implements OnInit {
   constructor(
     private invitesService: InvitesService,
     private loaderService: LoaderService,
-    private eventsService: EventsService
+    private eventsService: EventsService,
+    @Inject(LOCALE_ID) private localeValue: string
   ) {}
 
   ngOnInit(): void {
     this.loaderService.setLoading(true, $localize`Cargando página principal`);
 
     combineLatest([
-      this.invitesService.getAllInvites(),
+      this.invitesService.getAllInvites().pipe(
+        map((invites) => {
+          return invites.map((invite) => {
+            return {
+              ...invite,
+              dateOfConfirmation: invite.dateOfConfirmation
+                ? toLocalDate(this.localeValue, invite.dateOfConfirmation)
+                : null,
+            };
+          });
+        })
+      ),
       this.eventsService.getDropdownEvents(),
     ])
       .subscribe({
@@ -77,7 +90,7 @@ export class HomeComponent implements OnInit {
     percentaje = Math.trunc(
       (this.statistics[1].value / this.statistics[3].value) * 100
     );
-    
+
     this.percentajeOfPendingResponse = (
       isNaN(percentaje) ? 0 : percentaje
     ).toString();
@@ -103,9 +116,7 @@ export class HomeComponent implements OnInit {
       ...new Set(
         validInvites.reduce((result: string[], invite) => {
           if (invite.dateOfConfirmation) {
-            result.push(
-              new Date(invite.dateOfConfirmation).toISOString().substring(0, 10)
-            );
+            result.push(invite.dateOfConfirmation.substring(0, 10));
           }
           return result;
         }, [])
@@ -118,9 +129,7 @@ export class HomeComponent implements OnInit {
           `rgb(${this.randomNum()}, ${this.randomNum()}, ${this.randomNum()})`
         );
         if (invite.dateOfConfirmation) {
-          const inviteDate = new Date(invite.dateOfConfirmation)
-            .toISOString()
-            .substring(0, 10);
+          const inviteDate = invite.dateOfConfirmation.substring(0, 10);
 
           if (inviteDate === date) {
             return true;

@@ -18,7 +18,7 @@ export class CountdownComponent {
   @Input() set dateOfEventValue(value: string) {
     if (value) {
       interval(1000).subscribe(() => {
-        this.finishDate = new Date(value.replace('Z', '').replace('T', ' '));
+        this.finishDate = new Date(value);
         this.updateTime();
       });
     }

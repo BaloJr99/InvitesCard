@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { map } from 'rxjs';
 import { Roles } from 'src/app/core/models/enum';
 import { IDashboardEvent, IEventAction } from 'src/app/core/models/events';
 import { EventsService } from 'src/app/core/services/events.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
+import { toLocalDate } from 'src/app/shared/utils/tools';
 
 @Component({
   selector: 'app-events',
@@ -17,7 +18,8 @@ export class EventsComponent implements OnInit {
   constructor(
     private eventsService: EventsService,
     private loaderService: LoaderService,
-    private tokenService: TokenStorageService
+    private tokenService: TokenStorageService,
+    @Inject(LOCALE_ID) private localeValue: string
   ) {}
 
   events: IDashboardEvent[] = [];
@@ -33,9 +35,9 @@ export class EventsComponent implements OnInit {
           this.events = events.map((event) => {
             return {
               ...event,
-              dateOfEvent: event.dateOfEvent.slice(
-                0,
-                event.dateOfEvent.length - 1
+              dateOfEvent: toLocalDate(
+                this.localeValue,
+                event.dateOfEvent
               ),
             };
           });
@@ -83,6 +85,11 @@ export class EventsComponent implements OnInit {
         map((event) => {
           return {
             ...event,
+            dateOfEvent: toLocalDate(this.localeValue, event.dateOfEvent),
+            maxDateOfConfirmation: toLocalDate(
+              this.localeValue,
+              event.maxDateOfConfirmation
+            ),
             userId: event.userId,
           };
         })

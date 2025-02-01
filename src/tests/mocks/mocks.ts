@@ -251,7 +251,7 @@ export const confirmedInviteMock: IFullInvite = {
   ...upsertInviteMock,
   id: '20f13da8-2b38-45e5-907f-4ef2a93ff159',
   confirmation: true,
-  dateOfConfirmation: new Date().toISOString().substring(0, 10),
+  dateOfConfirmation: new Date().toISOString(),
   entriesConfirmed: 2,
   inviteViewed: true,
   isMessageRead: false,
@@ -325,12 +325,12 @@ export const sweetXvUserInviteMock: IUserInvite = {
   id: confirmedInviteMock.id,
   confirmation: confirmedInviteMock.confirmation,
   maxDateOfConfirmation:
-    fullEventsMock.maxDateOfConfirmation.concat('T00:00:00Z'),
+    fullEventsMock.maxDateOfConfirmation.concat('T06:00:00Z'),
   entriesNumber: confirmedInviteMock.entriesNumber,
   eventId: confirmedInviteMock.eventId,
   family: confirmedInviteMock.family,
   kidsAllowed: confirmedInviteMock.kidsAllowed,
-  dateOfEvent: fullEventsMock.dateOfEvent.concat('T00:00:00Z'),
+  dateOfEvent: fullEventsMock.dateOfEvent.concat('T06:00:00Z'),
   nameOfCelebrated: fullEventsMock.nameOfCelebrated,
   typeOfEvent: fullEventsMock.typeOfEvent,
 };
@@ -364,7 +364,7 @@ export const bulkMessageResponseMock: IBulkMessageResponse = {
 export const logMock: ILog = {
   id: 'c6e03960-5939-4411-8b46-e68a55f9d6af',
   customError: 'Test Error',
-  dateOfError: '2021-07-01',
+  dateOfError: '2021-07-01T06:00:00Z',
   exceptionMessage: 'Test Exception',
   userId: fullUserMock.id,
 };
@@ -643,24 +643,24 @@ export const tableDataWithFilterableHeaders: ITable = {
 
 export const saveTheDateUserInviteMock: ISaveTheDateUserInvite = {
   id: newInviteMock.id,
-  dateOfEvent: fullEventsMock.dateOfEvent.concat('T00:00:00Z'),
+  dateOfEvent: fullEventsMock.dateOfEvent.concat('T06:00:00Z'),
   eventId: newInviteMock.eventId,
   family: newInviteMock.family,
   nameOfCelebrated: 'Braulio;Brisa',
   maxDateOfConfirmation:
-    fullEventsMock.maxDateOfConfirmation.concat('T00:00:00Z'),
+    fullEventsMock.maxDateOfConfirmation.concat('T06:00:00Z'),
   needsAccomodation: newInviteMock.needsAccomodation,
   typeOfEvent: fullEventsMock.typeOfEvent,
 };
 
 export const weddingUserInviteMock: IWeddingUserInvite = {
   id: newInviteMock.id,
-  dateOfEvent: fullEventsMock.dateOfEvent.concat('T00:00:00Z'),
+  dateOfEvent: fullEventsMock.dateOfEvent.concat('T06:00:00Z'),
   eventId: newInviteMock.eventId,
   family: newInviteMock.family,
   nameOfCelebrated: 'Braulio;Brisa',
   maxDateOfConfirmation:
-    fullEventsMock.maxDateOfConfirmation.concat('T00:00:00Z'),
+    fullEventsMock.maxDateOfConfirmation.concat('T06:00:00Z'),
   typeOfEvent: fullEventsMock.typeOfEvent,
   confirmation: confirmedInviteMock.confirmation,
   entriesNumber: confirmedInviteMock.entriesNumber,

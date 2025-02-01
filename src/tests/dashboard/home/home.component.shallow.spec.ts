@@ -5,6 +5,7 @@ import { EventsService } from 'src/app/core/services/events.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { HomeComponent } from 'src/app/dashboard/home/home.component';
+import { toLocalDate } from 'src/app/shared/utils/tools';
 import {
   dashboardInvitesMock,
   dropdownEventsMock,
@@ -128,7 +129,13 @@ describe('HomeComponent (Shallow Test)', () => {
       .toEqual('0');
 
     const groupedByDateMock: { [key: string]: number } = {};
-    groupedByDateMock[`${dashboardInvitesMock.dateOfConfirmation}`] = 1;
+    console.log(dashboardInvitesMock.dateOfConfirmation);
+    groupedByDateMock[
+      toLocalDate(
+        'en-US',
+        dashboardInvitesMock.dateOfConfirmation as string
+      ).substring(0, 10)
+    ] = 1;
 
     expect(fixture.componentInstance.groupedByDate)
       .withContext('Grouped by date should have been updated')

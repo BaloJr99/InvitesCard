@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { map } from 'rxjs';
 import { IEmitAction, ITable, ITableHeaders } from 'src/app/core/models/common';
 import { ButtonAction } from 'src/app/core/models/enum';
 import { ILog } from 'src/app/core/models/logs';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { LoggerService } from 'src/app/core/services/logger.service';
+import { toLocalDate } from 'src/app/shared/utils/tools';
 Chart.register(...registerables);
 
 @Component({
@@ -26,13 +28,24 @@ export class LogsComponent implements OnInit {
 
   constructor(
     private loggerService: LoggerService,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    @Inject(LOCALE_ID) private localeValue: string
   ) {}
 
   ngOnInit(): void {
     this.loaderService.setLoading(true, $localize`Cargando Logs`);
     this.loggerService
       .getLogs()
+      .pipe(
+        map((logs) => {
+          return logs.map((log) => {
+            return {
+              ...log,
+              dateOfError: toLocalDate(this.localeValue, log.dateOfError),
+            };
+          });
+        })
+      )
       .subscribe({
         next: (logs) => {
           this.logs = logs;
@@ -46,7 +59,7 @@ export class LogsComponent implements OnInit {
   RenderChart() {
     this.numberOfErrorsLast31Days = this.logs.length;
     this.numberOfErrorsToday = this.logs.filter(
-      (log) => new Date().getDay() === new Date(log.dateOfError).getDate()
+      (log) => new Date().getDay() === new Date(log.dateOfError).getDay()
     ).length;
 
     const randomColors: string[] = [];
@@ -65,7 +78,7 @@ export class LogsComponent implements OnInit {
         randomColors.push(
           `rgb(${this.randomNum()}, ${this.randomNum()}, ${this.randomNum()})`
         );
-        const errorDate = new Date(log.dateOfError).toLocaleDateString();
+        const errorDate = toLocalDate(this.localeValue, log.dateOfError);
 
         if (errorDate === date) {
           return true;

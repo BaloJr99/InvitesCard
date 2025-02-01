@@ -6,6 +6,7 @@ import { LogsModalComponent } from 'src/app/dashboard/logs/logs-modal/logs-modal
 import { LogsComponent } from 'src/app/dashboard/logs/logs.component';
 import { FilterComponent } from 'src/app/shared/components/table/filter/filter.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
+import { toLocalDate } from 'src/app/shared/utils/tools';
 import { logMock } from 'src/tests/mocks/mocks';
 
 describe('Logs Component (Integrated Test)', () => {
@@ -60,7 +61,7 @@ describe('Logs Component (Integrated Test)', () => {
 
     expect(cells[0].nativeElement.innerHTML)
       .withContext('date should match')
-      .toBe(logMock.dateOfError);
+      .toBe(toLocalDate('en-US', logMock.dateOfError));
 
     expect(cells[1].nativeElement.innerHTML)
       .withContext('custom error should match')
