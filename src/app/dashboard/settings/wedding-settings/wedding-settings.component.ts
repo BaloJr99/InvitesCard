@@ -15,8 +15,10 @@ import {
   IInviteSectionsProperties,
 } from 'src/app/core/models/invites';
 import { ISettingAction, IWeddingSetting } from 'src/app/core/models/settings';
+import { EventsService } from 'src/app/core/services/events.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
+import { dateTimeToUTCDate, toLocalDate } from 'src/app/shared/utils/tools';
 
 @Component({
   selector: 'app-wedding-settings',
@@ -45,6 +47,7 @@ export class WeddingSettingsComponent {
   ];
 
   weddingSettings: ISettingAction = {} as ISettingAction;
+  eventDate: string = '';
 
   createEventSettingsForm: FormGroup = this.fb.group({
     eventId: ['', Validators.required],
@@ -113,6 +116,7 @@ export class WeddingSettingsComponent {
   );
 
   constructor(
+    private eventsService: EventsService,
     private loaderService: LoaderService,
     private settingsService: SettingsService,
     private fb: FormBuilder,
@@ -236,11 +240,15 @@ export class WeddingSettingsComponent {
 
   getEventSetting(): void {
     if (this.weddingSettings.eventId) {
-      this.settingsService
-        .getEventSettings(this.weddingSettings.eventId)
+      combineLatest([
+        this.settingsService.getEventSettings(this.weddingSettings.eventId),
+        this.eventsService.getEventById(this.weddingSettings.eventId),
+      ])
         .subscribe({
-          next: (response) => {
-            const parsedSettings = JSON.parse(response.settings);
+          next: ([eventSettings, eventInfo]) => {
+            this.eventDate = toLocalDate(eventInfo.dateOfEvent).split('T')[0];
+
+            const parsedSettings = JSON.parse(eventSettings.settings);
             if (!parsedSettings.sections) {
               this.updateSections(this.baseSections);
             } else {
@@ -270,9 +278,36 @@ export class WeddingSettingsComponent {
               this.updateSections(sections);
             }
 
+            if (parsedSettings.massTime) {
+              const dateOfMassTime = parsedSettings.massTime.split(' ')[0];
+              const timeOfMassTime = parsedSettings.massTime.split(' ')[1];
+
+              parsedSettings.massTime = toLocalDate(
+                `${dateOfMassTime}T${timeOfMassTime}.000Z`
+              ).split('T')[1];
+            }
+
+            if (parsedSettings.venueTime) {
+              const dateOfVenueTime = parsedSettings.venueTime.split(' ')[0];
+              const timeOfVenueTime = parsedSettings.venueTime.split(' ')[1];
+
+              parsedSettings.venueTime = toLocalDate(
+                `${dateOfVenueTime}T${timeOfVenueTime}.000Z`
+              ).split('T')[1];
+            }
+
+            if (parsedSettings.civilTime) {
+              const dateOfCivilTime = parsedSettings.civilTime.split(' ')[0];
+              const timeOfCivilTime = parsedSettings.civilTime.split(' ')[1];
+
+              parsedSettings.civilTime = toLocalDate(
+                `${dateOfCivilTime}T${timeOfCivilTime}.000Z`
+              ).split('T')[1];
+            }
+
             this.createEventSettingsForm.patchValue({
-              ...JSON.parse(response.settings),
-              eventId: response.eventId,
+              ...parsedSettings,
+              eventId: this.weddingSettings.eventId,
             });
 
             this.weddingSettings = {
@@ -366,20 +401,17 @@ export class WeddingSettingsComponent {
     const formValue = this.createEventSettingsForm.value;
 
     if (sectionsDisplayed.some((s) => s.sectionId === 'itineraryInfo')) {
-      formValue['venueTime'] =
-        formValue['venueTime'].length > 5
-          ? formValue['venueTime']
-          : `${formValue['venueTime']}:00`;
+      formValue['venueTime'] = dateTimeToUTCDate(
+        `${this.eventDate}T${formValue['venueTime']}`
+      );
 
-      formValue['massTime'] =
-        formValue['massTime'].length > 5
-          ? formValue['massTime']
-          : `${formValue['massTime']}:00`;
+      formValue['massTime'] = dateTimeToUTCDate(
+        `${this.eventDate}T${formValue['massTime']}`
+      );
 
-      formValue['civilTime'] =
-        formValue['civilTime'].length > 5
-          ? formValue['civilTime']
-          : `${formValue['civilTime']}:00`;
+      formValue['civilTime'] = dateTimeToUTCDate(
+        `${this.eventDate}T${formValue['civilTime']}`
+      );
     }
 
     return {

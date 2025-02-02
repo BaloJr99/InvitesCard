@@ -89,7 +89,7 @@ export class SaveTheDateComponent implements OnInit {
         next: (userInvite) => {
           this.userInvite = {
             ...userInvite,
-            dateOfEvent: toLocalDate(this.localeValue, userInvite.dateOfEvent),
+            dateOfEvent: toLocalDate(userInvite.dateOfEvent),
           } as ISaveTheDateUserInvite;
 
           this.generateCalendar();

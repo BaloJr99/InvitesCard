@@ -81,7 +81,6 @@ export class SweetXvComponent implements OnInit {
           this.userInvite = {
             ...userInvite,
             maxDateOfConfirmation: toLocalDate(
-              this.localeValue,
               userInvite.maxDateOfConfirmation
             ),
           } as IUserInvite;
@@ -118,6 +117,31 @@ export class SweetXvComponent implements OnInit {
                   ...JSON.parse(eventSettings.settings),
                   eventId: eventSettings.eventId,
                 };
+
+                if (this.eventSettings.massTime) {
+                  const dateOfMassTime =
+                    this.eventSettings.massTime.split(' ')[0];
+                  const timeOfMassTime =
+                    this.eventSettings.massTime.split(' ')[1];
+                  this.eventSettings.massTime = toLocalDate(
+                    `${dateOfMassTime}T${timeOfMassTime}.000Z`
+                  )
+                    .split('T')[1]
+                    .substring(0, 5);
+                }
+
+                if (this.eventSettings.receptionTime) {
+                  const dateOfReceptionTime =
+                    this.eventSettings.receptionTime.split(' ')[0];
+                  const timeOfReceptionTime =
+                    this.eventSettings.receptionTime.split(' ')[1];
+                  this.eventSettings.receptionTime = toLocalDate(
+                    `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`
+                  )
+                    .split('T')[1]
+                    .substring(0, 5);
+                }
+
                 this.downloadImages = downloadFiles.eventImages.filter(
                   (image) =>
                     window.innerWidth > 575

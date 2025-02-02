@@ -15,8 +15,10 @@ import {
   IInviteSectionsProperties,
 } from 'src/app/core/models/invites';
 import { ISweetXvSetting, ISettingAction } from 'src/app/core/models/settings';
+import { EventsService } from 'src/app/core/services/events.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
+import { dateTimeToUTCDate, toLocalDate } from 'src/app/shared/utils/tools';
 
 @Component({
   selector: 'app-sweet-xv-settings',
@@ -39,6 +41,7 @@ export class SweetXvSettingsComponent {
   }
 
   sweetXvSettings: ISettingAction = {} as ISettingAction;
+  eventDate: string = '';
 
   createEventSettingsForm: FormGroup = this.fb.group({
     eventId: ['', Validators.required],
@@ -90,6 +93,7 @@ export class SweetXvSettingsComponent {
 
   constructor(
     private loaderService: LoaderService,
+    private eventsService: EventsService,
     private settingsService: SettingsService,
     private fb: FormBuilder,
     private toastr: ToastrService
@@ -144,7 +148,7 @@ export class SweetXvSettingsComponent {
         order: 5,
       },
     ];
-    
+
     this.validationMessages = {
       primaryColor: $localize`Ingresar color primario`,
       secondaryColor: $localize`Ingresar color secundario`,
@@ -185,11 +189,14 @@ export class SweetXvSettingsComponent {
 
   getEventSetting(): void {
     if (this.sweetXvSettings.eventId) {
-      this.settingsService
-        .getEventSettings(this.sweetXvSettings.eventId)
+      combineLatest([
+        this.settingsService.getEventSettings(this.sweetXvSettings.eventId),
+        this.eventsService.getEventById(this.sweetXvSettings.eventId),
+      ])
         .subscribe({
-          next: (response) => {
-            const parsedSettings = JSON.parse(response.settings);
+          next: ([eventSettings, eventInfo]) => {
+            this.eventDate = toLocalDate(eventInfo.dateOfEvent).split('T')[0];
+            const parsedSettings = JSON.parse(eventSettings.settings);
             if (!parsedSettings.sections) {
               this.updateSections(this.baseSections);
             } else {
@@ -219,9 +226,29 @@ export class SweetXvSettingsComponent {
               this.updateSections(sections);
             }
 
+            if (parsedSettings.massTime) {
+              const dateOfMassTime = parsedSettings.massTime.split(' ')[0];
+              const timeOfMassTime = parsedSettings.massTime.split(' ')[1];
+
+              parsedSettings.massTime = toLocalDate(
+                `${dateOfMassTime}T${timeOfMassTime}.000Z`
+              ).split('T')[1];
+            }
+
+            if (parsedSettings.receptionTime) {
+              const dateOfReceptionTime =
+                parsedSettings.receptionTime.split(' ')[0];
+              const timeOfReceptionTime =
+                parsedSettings.receptionTime.split(' ')[1];
+
+              parsedSettings.receptionTime = toLocalDate(
+                `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`
+              ).split('T')[1];
+            }
+
             this.createEventSettingsForm.patchValue({
-              ...JSON.parse(response.settings),
-              eventId: response.eventId,
+              ...parsedSettings,
+              eventId: this.sweetXvSettings.eventId,
             });
 
             this.sweetXvSettings = {
@@ -315,17 +342,15 @@ export class SweetXvSettingsComponent {
     const formValue = this.createEventSettingsForm.value;
 
     if (sectionsDisplayed.some((s) => s.sectionId === 'ceremonyInfo')) {
-      formValue['massTime'] =
-        formValue['massTime'].length > 5
-          ? formValue['massTime']
-          : `${formValue['massTime']}:00`;
+      formValue['massTime'] = dateTimeToUTCDate(
+        `${this.eventDate}T${formValue['massTime']}`
+      );
     }
 
     if (sectionsDisplayed.some((s) => s.sectionId === 'receptionInfo')) {
-      formValue['receptionTime'] =
-        formValue['receptionTime'].length > 5
-          ? formValue['receptionTime']
-          : `${formValue['receptionTime']}:00`;
+      formValue['receptionTime'] = dateTimeToUTCDate(
+        `${this.eventDate}T${formValue['receptionTime']}`
+      );
     }
 
     return {

@@ -1,4 +1,4 @@
-import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { combineLatest, map } from 'rxjs';
 import { EventType } from 'src/app/core/models/enum';
@@ -30,8 +30,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private invitesService: InvitesService,
     private loaderService: LoaderService,
-    private eventsService: EventsService,
-    @Inject(LOCALE_ID) private localeValue: string
+    private eventsService: EventsService
   ) {}
 
   ngOnInit(): void {
@@ -44,7 +43,7 @@ export class HomeComponent implements OnInit {
             return {
               ...invite,
               dateOfConfirmation: invite.dateOfConfirmation
-                ? toLocalDate(this.localeValue, invite.dateOfConfirmation)
+                ? toLocalDate(invite.dateOfConfirmation)
                 : null,
             };
           });

@@ -16,7 +16,7 @@ export const dateToUTCDate = (date: string): string => {
 };
 
 /**
- * Converts a local date to UTC date format.
+ * Converts a local date with time to UTC date format.
  * @param date The date in YYYY-MM-DD format.
  */
 export const dateTimeToUTCDate = (date: string): string => {
@@ -27,7 +27,11 @@ export const dateTimeToUTCDate = (date: string): string => {
   return utcDate.slice(0, 19).replace('T', ' ').replace('Z', '');
 };
 
-export const toLocalDate = (locale: string, date: string): string => {
+/**
+ * Converts an UTC date without time to a date with time in UTC format.
+ * @param date The date in YYYY-MM-DD format.
+ */
+export const toLocalDate = (date: string): string => {
   // Convert date string to date
   const utcDate = new Date(date);
 
@@ -39,3 +43,11 @@ export const toLocalDate = (locale: string, date: string): string => {
   // Format local date to ISO format (YYYY-MM-DDTHH:mm:ss)
   return localDate.toISOString().slice(0, 19);
 };
+
+/**
+ * Utility function to create a deep copy of the mock object
+ * @param obj The we are copying
+ */
+export function deepCopy<T>(obj: T): T {
+  return JSON.parse(JSON.stringify(obj));
+}

@@ -99,9 +99,8 @@ export class WeddingComponent implements OnInit {
         next: (userInvite) => {
           this.userInvite = {
             ...userInvite,
-            dateOfEvent: toLocalDate(this.localeValue, userInvite.dateOfEvent),
+            dateOfEvent: toLocalDate(userInvite.dateOfEvent),
             maxDateOfConfirmation: toLocalDate(
-              this.localeValue,
               userInvite.maxDateOfConfirmation
             ),
           } as IUserInvite;
@@ -138,6 +137,42 @@ export class WeddingComponent implements OnInit {
                   ...JSON.parse(eventSettings.settings),
                   eventId: eventSettings.eventId,
                 };
+
+                if (this.eventSettings.massTime) {
+                  const dateOfMassTime =
+                    this.eventSettings.massTime.split(' ')[0];
+                  const timeOfReceptionTime =
+                    this.eventSettings.massTime.split(' ')[1];
+                  this.eventSettings.massTime = toLocalDate(
+                    `${dateOfMassTime}T${timeOfReceptionTime}.000Z`
+                  )
+                    .split('T')[1]
+                    .substring(0, 5);
+                }
+
+                if (this.eventSettings.venueTime) {
+                  const dateOfVenueTime =
+                    this.eventSettings.venueTime.split(' ')[0];
+                  const timeOfVenueTime =
+                    this.eventSettings.venueTime.split(' ')[1];
+                  this.eventSettings.venueTime = toLocalDate(
+                    `${dateOfVenueTime}T${timeOfVenueTime}.000Z`
+                  )
+                    .split('T')[1]
+                    .substring(0, 5);
+                }
+
+                if (this.eventSettings.civilTime) {
+                  const dateOfCivilTime =
+                    this.eventSettings.civilTime.split(' ')[0];
+                  const timeOfCivilTime =
+                    this.eventSettings.civilTime.split(' ')[1];
+                  this.eventSettings.civilTime = toLocalDate(
+                    `${dateOfCivilTime}T${timeOfCivilTime}.000Z`
+                  )
+                    .split('T')[1]
+                    .substring(0, 5);
+                }
 
                 this.downloadAudio =
                   downloadFiles.eventAudios.length > 0

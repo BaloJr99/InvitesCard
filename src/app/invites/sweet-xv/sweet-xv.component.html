@@ -60,7 +60,7 @@
       </div>
       <p class="pt-5" i18n>{{eventSettings.secondSectionSentences}} <br><br>¡Mis XV Años! </p>
       <br>
-      <p class="pinkLetter">{{ dayOfTheWeek.substring(0, 1).toUpperCase() + dayOfTheWeek.slice(1) }} <br> {{ longDate }} <br> <i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{ eventSettings.massTime.substring(0,5) }} horas</p>
+      <p class="pinkLetter" i18n>{{ dayOfTheWeek.substring(0, 1).toUpperCase() + dayOfTheWeek.slice(1) }} <br> {{ longDate }} <br> <i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{ eventSettings.massTime }} horas</p>
       <div class="row">
         <div class="col-sm-12 col-md-6">
           <p>{{eventSettings.massAddress}}</p>
@@ -81,7 +81,7 @@
           <h2 i18n>Recepción</h2>
           <h3>{{eventSettings.receptionPlace}}</h3>
           <p>{{eventSettings.receptionAddress}}</p>
-          <span i18n><i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{eventSettings.receptionTime.substring(0, 5)}} horas</span>
+          <span i18n><i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{eventSettings.receptionTime}} horas</span>
         </div>
       </div>
     </div>

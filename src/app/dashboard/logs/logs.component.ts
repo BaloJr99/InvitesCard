@@ -1,4 +1,4 @@
-import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { map } from 'rxjs';
 import { IEmitAction, ITable, ITableHeaders } from 'src/app/core/models/common';
@@ -28,8 +28,7 @@ export class LogsComponent implements OnInit {
 
   constructor(
     private loggerService: LoggerService,
-    private loaderService: LoaderService,
-    @Inject(LOCALE_ID) private localeValue: string
+    private loaderService: LoaderService
   ) {}
 
   ngOnInit(): void {
@@ -41,7 +40,7 @@ export class LogsComponent implements OnInit {
           return logs.map((log) => {
             return {
               ...log,
-              dateOfError: toLocalDate(this.localeValue, log.dateOfError),
+              dateOfError: toLocalDate(log.dateOfError),
             };
           });
         })
@@ -78,7 +77,7 @@ export class LogsComponent implements OnInit {
         randomColors.push(
           `rgb(${this.randomNum()}, ${this.randomNum()}, ${this.randomNum()})`
         );
-        const errorDate = toLocalDate(this.localeValue, log.dateOfError);
+        const errorDate = toLocalDate(log.dateOfError);
 
         if (errorDate === date) {
           return true;
