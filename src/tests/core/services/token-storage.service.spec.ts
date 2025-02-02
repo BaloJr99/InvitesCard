@@ -1,6 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { tokenMock, userMock } from 'src/tests/mocks/mocks';
+
+const tokenMockCopy = deepCopy(tokenMock);
+const userMockCopy = deepCopy(userMock);
 
 describe('Token Storage Service', () => {
   let tokenStorageService: TokenStorageService;
@@ -31,17 +35,17 @@ describe('Token Storage Service', () => {
   });
 
   it('should call saveToken', () => {
-    tokenStorageServiceSpy.saveToken(tokenMock.access_token);
+    tokenStorageServiceSpy.saveToken(tokenMockCopy.access_token);
 
     expect(tokenStorageServiceSpy.saveToken)
       .withContext('Expected saveToken to have been called')
-      .toHaveBeenCalledOnceWith(tokenMock.access_token);
+      .toHaveBeenCalledOnceWith(tokenMockCopy.access_token);
   });
 
   it('should call getToken', () => {
-    tokenStorageServiceSpy.getToken.and.returnValue(tokenMock.access_token);
+    tokenStorageServiceSpy.getToken.and.returnValue(tokenMockCopy.access_token);
 
-    expect(tokenStorageServiceSpy.getToken()).toBe(tokenMock.access_token);
+    expect(tokenStorageServiceSpy.getToken()).toBe(tokenMockCopy.access_token);
 
     expect(tokenStorageServiceSpy.getToken)
       .withContext('Expected getToken to have been called')
@@ -49,9 +53,9 @@ describe('Token Storage Service', () => {
   });
 
   it('should call getTokenValues', () => {
-    tokenStorageServiceSpy.getTokenValues.and.returnValue(userMock);
+    tokenStorageServiceSpy.getTokenValues.and.returnValue(userMockCopy);
 
-    expect(tokenStorageServiceSpy.getTokenValues()).toEqual(userMock);
+    expect(tokenStorageServiceSpy.getTokenValues()).toEqual(userMockCopy);
 
     expect(tokenStorageServiceSpy.getTokenValues)
       .withContext('Expected getUser to have been called')

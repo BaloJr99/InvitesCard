@@ -5,7 +5,11 @@ import { ToastrService } from 'ngx-toastr';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InviteModalComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-modal.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { newInviteMock, fullInvitesGroupsMock } from 'src/tests/mocks/mocks';
+
+const fullInvitesGroupsMockCopy = deepCopy(fullInvitesGroupsMock);
+const newInviteMockCopy = deepCopy(newInviteMock);
 
 describe('Invite Modal Component (Shallow Test)', () => {
   let fixture: ComponentFixture<InviteModalComponent>;
@@ -63,7 +67,7 @@ describe('Invite Modal Component (Shallow Test)', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(InviteModalComponent);
-    fixture.componentInstance.inviteGroups = [fullInvitesGroupsMock];
+    fixture.componentInstance.inviteGroups = [fullInvitesGroupsMockCopy];
     fixture.detectChanges();
   });
 
@@ -101,44 +105,44 @@ describe('Invite Modal Component (Shallow Test)', () => {
 
   it('Expect form controls to be filled when user fills inputs', () => {
     // We need to populate the inviteGroupId select with options
-    fixture.componentInstance.inviteGroups = [fullInvitesGroupsMock];
+    fixture.componentInstance.inviteGroups = [fullInvitesGroupsMockCopy];
 
     fixture.detectChanges();
 
     updateFormUsingEvent(
-      newInviteMock.family,
-      newInviteMock.entriesNumber,
-      newInviteMock.phoneNumber,
-      newInviteMock.inviteGroupId,
-      newInviteMock.kidsAllowed
+      newInviteMockCopy.family,
+      newInviteMockCopy.entriesNumber,
+      newInviteMockCopy.phoneNumber,
+      newInviteMockCopy.inviteGroupId,
+      newInviteMockCopy.kidsAllowed
     );
     expect(fixture.componentInstance.createInviteForm.controls['family'].value)
       .withContext('Family control should be filled when input changes')
-      .toBe(newInviteMock.family);
+      .toBe(newInviteMockCopy.family);
 
     expect(
       fixture.componentInstance.createInviteForm.controls['entriesNumber'].value
     )
       .withContext('EntriesNumber control should be filled when input changes')
-      .toBe(newInviteMock.entriesNumber);
+      .toBe(newInviteMockCopy.entriesNumber);
 
     expect(
       fixture.componentInstance.createInviteForm.controls['phoneNumber'].value
     )
       .withContext('PhoneNumber control should be filled when input changes')
-      .toBe(newInviteMock.phoneNumber);
+      .toBe(newInviteMockCopy.phoneNumber);
 
     expect(
       fixture.componentInstance.createInviteForm.controls['inviteGroupId'].value
     )
       .withContext('InviteGroupId control should be filled when input changes')
-      .toBe(newInviteMock.inviteGroupId);
+      .toBe(newInviteMockCopy.inviteGroupId);
 
     expect(
       fixture.componentInstance.createInviteForm.controls['kidsAllowed'].value
     )
       .withContext('KidsAllowed control should be filled when input changes')
-      .toBe(newInviteMock.kidsAllowed);
+      .toBe(newInviteMockCopy.kidsAllowed);
   });
 
   it('Expect save button to trigger saveInvite', () => {
@@ -155,11 +159,11 @@ describe('Invite Modal Component (Shallow Test)', () => {
     spyOn(fixture.componentInstance, 'createInvite');
 
     updateFormUsingEvent(
-      newInviteMock.family,
-      newInviteMock.entriesNumber,
-      newInviteMock.phoneNumber,
-      newInviteMock.inviteGroupId,
-      newInviteMock.kidsAllowed
+      newInviteMockCopy.family,
+      newInviteMockCopy.entriesNumber,
+      newInviteMockCopy.phoneNumber,
+      newInviteMockCopy.inviteGroupId,
+      newInviteMockCopy.kidsAllowed
     );
     fixture.detectChanges();
 
@@ -172,17 +176,17 @@ describe('Invite Modal Component (Shallow Test)', () => {
 
   it('Expect save button to trigger updateInvite', () => {
     spyOn(fixture.componentInstance, 'updateInvite');
-    
+
     fixture.componentInstance.createInviteForm.patchValue({
-      id: newInviteMock.id,
+      id: newInviteMockCopy.id,
     });
 
     updateFormUsingEvent(
-      newInviteMock.family,
-      newInviteMock.entriesNumber,
-      newInviteMock.phoneNumber,
-      newInviteMock.inviteGroupId,
-      newInviteMock.kidsAllowed
+      newInviteMockCopy.family,
+      newInviteMockCopy.entriesNumber,
+      newInviteMockCopy.phoneNumber,
+      newInviteMockCopy.inviteGroupId,
+      newInviteMockCopy.kidsAllowed
     );
     fixture.detectChanges();
 

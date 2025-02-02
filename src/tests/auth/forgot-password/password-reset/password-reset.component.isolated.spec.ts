@@ -1,7 +1,10 @@
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { PasswordResetComponent } from 'src/app/auth/forgot-password/password-reset/password-reset.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock } from 'src/tests/mocks/mocks';
+
+const loginDataMockCopy = deepCopy(loginDataMock);
 
 describe('PasswordResetComponent Isolated', () => {
   let component: PasswordResetComponent;
@@ -43,19 +46,19 @@ describe('PasswordResetComponent Isolated', () => {
   });
 
   it('form value should be invalid if one input is invalid', () => {
-    updateForm('', loginDataMock.password);
+    updateForm('', loginDataMockCopy.password);
     expect(component.passwordResetForm.invalid)
       .withContext('Form should be invalid when password is not valid')
       .toBeTrue();
 
-    updateForm(loginDataMock.password, '');
+    updateForm(loginDataMockCopy.password, '');
     expect(component.passwordResetForm.invalid)
       .withContext('Form should be invalid when confirmPassword is not valid')
       .toBeTrue();
   });
 
   it('form should be valid when fields are filled', () => {
-    updateForm(loginDataMock.password, loginDataMock.password);
+    updateForm(loginDataMockCopy.password, loginDataMockCopy.password);
     expect(component.passwordResetForm.valid)
       .withContext('Form should be valid')
       .toBeTruthy();
@@ -82,17 +85,17 @@ describe('PasswordResetComponent Isolated', () => {
       .toBeTruthy();
   });
 
-  it('should have the passwordMatchError error if the password and confirmPassword doesn\'t match', () => {
-    updateForm(loginDataMock.password, loginDataMock.password + '1');
+  it("should have the passwordMatchError error if the password and confirmPassword doesn't match", () => {
+    updateForm(loginDataMockCopy.password, loginDataMockCopy.password + '1');
     expect(component.passwordResetForm.errors?.['passwordMatchError'])
       .withContext('passwordMatchError error should exist')
       .toBeTruthy();
   });
 
-  it('shouldn\'t have the passwordMatchError error if the password and confirmPassword doesn\'t match', () => {
-    updateForm(loginDataMock.password, loginDataMock.password);
+  it("shouldn't have the passwordMatchError error if the password and confirmPassword doesn't match", () => {
+    updateForm(loginDataMockCopy.password, loginDataMockCopy.password);
     expect(component.passwordResetForm.errors?.['passwordMatchError'])
-      .withContext('passwordMatchError error shouldn\'t exist')
+      .withContext("passwordMatchError error shouldn't exist")
       .toBeFalsy();
   });
 });

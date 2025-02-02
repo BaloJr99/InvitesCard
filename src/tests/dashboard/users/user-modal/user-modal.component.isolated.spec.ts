@@ -1,6 +1,9 @@
 import { FormBuilder } from '@angular/forms';
 import { UserModalComponent } from 'src/app/dashboard/users/user-modal/user-modal.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { upsertUserMock } from 'src/tests/mocks/mocks';
+
+const upsertUserMockCopy = deepCopy(upsertUserMock);
 
 describe('User Modal Component (Isolated Test)', () => {
   let component: UserModalComponent;
@@ -79,9 +82,9 @@ describe('User Modal Component (Isolated Test)', () => {
 
   it('form should be valid when fields are filled', () => {
     updateForm(
-      upsertUserMock.username,
-      upsertUserMock.email,
-      upsertUserMock.roles,
+      upsertUserMockCopy.username,
+      upsertUserMockCopy.email,
+      upsertUserMockCopy.roles,
       true,
       true
     );

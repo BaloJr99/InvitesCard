@@ -1,6 +1,9 @@
 import { FormBuilder } from '@angular/forms';
 import { InviteGroupComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-group-modal/invite-group.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { fullInvitesGroupsMock } from 'src/tests/mocks/mocks';
+
+const fullInvitesGroupsMockCopy = deepCopy(fullInvitesGroupsMock);
 
 describe('Invite Group Component (Isolated Test)', () => {
   let component: InviteGroupComponent;
@@ -45,7 +48,7 @@ describe('Invite Group Component (Isolated Test)', () => {
   });
 
   it('form should be valid when fields are filled', () => {
-    updateForm(fullInvitesGroupsMock.inviteGroup);
+    updateForm(fullInvitesGroupsMockCopy.inviteGroup);
     expect(component.createInviteGroupForm.valid)
       .withContext('Form should be valid')
       .toBeTruthy();

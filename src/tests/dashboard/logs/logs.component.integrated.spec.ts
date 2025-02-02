@@ -6,8 +6,10 @@ import { LogsModalComponent } from 'src/app/dashboard/logs/logs-modal/logs-modal
 import { LogsComponent } from 'src/app/dashboard/logs/logs.component';
 import { FilterComponent } from 'src/app/shared/components/table/filter/filter.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
-import { toLocalDate } from 'src/app/shared/utils/tools';
+import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
 import { logMock } from 'src/tests/mocks/mocks';
+
+const logMockCopy = deepCopy(logMock);
 
 describe('Logs Component (Integrated Test)', () => {
   let fixture: ComponentFixture<LogsComponent>;
@@ -32,7 +34,7 @@ describe('Logs Component (Integrated Test)', () => {
   }));
 
   beforeEach(() => {
-    loggerServiceSpy.getLogs.and.returnValue(of([{ ...logMock }]));
+    loggerServiceSpy.getLogs.and.returnValue(of([{ ...logMockCopy }]));
     fixture = TestBed.createComponent(LogsComponent);
     fixture.detectChanges();
   });
@@ -61,15 +63,15 @@ describe('Logs Component (Integrated Test)', () => {
 
     expect(cells[0].nativeElement.innerHTML)
       .withContext('date should match')
-      .toBe(toLocalDate('en-US', logMock.dateOfError));
+      .toBe(toLocalDate(logMockCopy.dateOfError));
 
     expect(cells[1].nativeElement.innerHTML)
       .withContext('custom error should match')
-      .toBe(logMock.customError);
+      .toBe(logMockCopy.customError);
 
     expect(cells[2].nativeElement.innerHTML)
       .withContext('userId should match')
-      .toBe(logMock.userId);
+      .toBe(logMockCopy.userId);
 
     const button = cells[3].query(By.css('button'));
     expect(button).withContext('button should be rendered').toBeTruthy();

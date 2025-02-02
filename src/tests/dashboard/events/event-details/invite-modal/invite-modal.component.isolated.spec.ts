@@ -1,6 +1,9 @@
 import { FormBuilder } from '@angular/forms';
 import { InviteModalComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-modal.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { newInviteMock } from 'src/tests/mocks/mocks';
+
+const newInviteMockCopy = deepCopy(newInviteMock);
 
 describe('Invite Modal Component (Isolated Test)', () => {
   let component: InviteModalComponent;
@@ -74,11 +77,11 @@ describe('Invite Modal Component (Isolated Test)', () => {
 
   it('form should be valid when fields are filled', () => {
     updateForm(
-      newInviteMock.family,
-      newInviteMock.entriesNumber,
-      newInviteMock.phoneNumber,
-      newInviteMock.inviteGroupId,
-      newInviteMock.kidsAllowed
+      newInviteMockCopy.family,
+      newInviteMockCopy.entriesNumber,
+      newInviteMockCopy.phoneNumber,
+      newInviteMockCopy.inviteGroupId,
+      newInviteMockCopy.kidsAllowed
     );
     expect(component.createInviteForm.valid)
       .withContext('Form should be valid')

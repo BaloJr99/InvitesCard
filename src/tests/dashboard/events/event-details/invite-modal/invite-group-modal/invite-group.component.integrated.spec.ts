@@ -6,10 +6,14 @@ import { of } from 'rxjs';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InviteGroupComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-group-modal/invite-group.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   fullInvitesGroupsMock,
   messageResponseMock,
 } from 'src/tests/mocks/mocks';
+
+const fullInvitesGroupsMockCopy = deepCopy(fullInvitesGroupsMock);
+const messageResponseMockCopy = deepCopy(messageResponseMock);
 
 describe('Invite Group Component (Integrated Test)', () => {
   let fixture: ComponentFixture<InviteGroupComponent>;
@@ -52,10 +56,10 @@ describe('Invite Group Component (Integrated Test)', () => {
 
   it('inviteGroupsService createInviteGroup() should called', () => {
     inviteGroupsServiceSpy.createInviteGroup.and.returnValue(
-      of(messageResponseMock)
+      of(messageResponseMockCopy)
     );
 
-    updateFormUsingEvent(fullInvitesGroupsMock.inviteGroup);
+    updateFormUsingEvent(fullInvitesGroupsMockCopy.inviteGroup);
     fixture.detectChanges();
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));
@@ -72,14 +76,14 @@ describe('Invite Group Component (Integrated Test)', () => {
 
   it('inviteGroupsService updateInviteGroup() should called', () => {
     fixture.componentInstance.createInviteGroupForm.patchValue({
-      id: fullInvitesGroupsMock.id,
+      id: fullInvitesGroupsMockCopy.id,
     });
 
     inviteGroupsServiceSpy.updateInviteGroup.and.returnValue(
-      of(messageResponseMock)
+      of(messageResponseMockCopy)
     );
 
-    updateFormUsingEvent(fullInvitesGroupsMock.inviteGroup);
+    updateFormUsingEvent(fullInvitesGroupsMockCopy.inviteGroup);
     fixture.detectChanges();
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));

@@ -8,13 +8,26 @@ import { CommonModalService } from 'src/app/core/services/commonModal.service';
 import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { EventModalComponent } from 'src/app/dashboard/events/event-modal/event-modal.component';
+import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
 import {
   fullEventsMock,
   messageResponseMock,
   userDropdownDataMock,
 } from 'src/tests/mocks/mocks';
 
+let fullEventsMockCopy = deepCopy(fullEventsMock);
+const messageResponseMockCopy = deepCopy(messageResponseMock);
+const userDropdownDataMockCopy = deepCopy(userDropdownDataMock);
+
 describe('Event Modal Component (Integrated Test)', () => {
+  fullEventsMockCopy = {
+    ...fullEventsMockCopy,
+    dateOfEvent: toLocalDate(fullEventsMockCopy.dateOfEvent).substring(0, 10),
+    maxDateOfConfirmation: toLocalDate(
+      fullEventsMockCopy.maxDateOfConfirmation
+    ).substring(0, 10),
+  };
+
   let fixture: ComponentFixture<EventModalComponent>;
   let eventsServiceSpy: jasmine.SpyObj<EventsService>;
   let commonModalServiceSpy: jasmine.SpyObj<CommonModalService>;
@@ -87,21 +100,21 @@ describe('Event Modal Component (Integrated Test)', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EventModalComponent);
-    fixture.componentInstance.users = [{ ...userDropdownDataMock }];
+    fixture.componentInstance.users = [{ ...userDropdownDataMockCopy }];
     fixture.detectChanges();
   });
 
   it('saving new event should call createEvent', () => {
-    eventsServiceSpy.createEvent.and.returnValue(of(messageResponseMock));
+    eventsServiceSpy.createEvent.and.returnValue(of(messageResponseMockCopy));
     spyOn(fixture.componentInstance.updateEvents, 'emit');
 
     updateFormUsingEvent(
-      fullEventsMock.nameOfEvent,
-      fullEventsMock.dateOfEvent,
-      fullEventsMock.maxDateOfConfirmation,
-      fullEventsMock.nameOfCelebrated,
+      fullEventsMockCopy.nameOfEvent,
+      fullEventsMockCopy.dateOfEvent,
+      fullEventsMockCopy.maxDateOfConfirmation,
+      fullEventsMockCopy.nameOfCelebrated,
       EventType.Xv,
-      fullEventsMock.userId
+      fullEventsMockCopy.userId
     );
     fixture.detectChanges();
 
@@ -123,20 +136,20 @@ describe('Event Modal Component (Integrated Test)', () => {
   });
 
   it('updating event should call updateEvent', () => {
-    eventsServiceSpy.updateEvent.and.returnValue(of(messageResponseMock));
+    eventsServiceSpy.updateEvent.and.returnValue(of(messageResponseMockCopy));
     spyOn(fixture.componentInstance.updateEvents, 'emit');
     fixture.componentInstance.originalEventType = EventType.Xv;
     fixture.componentInstance.createEventForm.patchValue({
-      id: fullEventsMock.id,
+      id: fullEventsMockCopy.id,
     });
 
     updateFormUsingEvent(
-      fullEventsMock.nameOfEvent,
-      fullEventsMock.dateOfEvent,
-      fullEventsMock.maxDateOfConfirmation,
-      fullEventsMock.nameOfCelebrated,
+      fullEventsMockCopy.nameOfEvent,
+      fullEventsMockCopy.dateOfEvent,
+      fullEventsMockCopy.maxDateOfConfirmation,
+      fullEventsMockCopy.nameOfCelebrated,
       EventType.Xv,
-      fullEventsMock.userId
+      fullEventsMockCopy.userId
     );
 
     fixture.detectChanges();
@@ -160,20 +173,20 @@ describe('Event Modal Component (Integrated Test)', () => {
 
   it('updating type of event with one incompatible should call open modal', () => {
     commonModalServiceSpy.open.and.returnValue(of(CommonModalResponse.Confirm));
-    eventsServiceSpy.updateEvent.and.returnValue(of(messageResponseMock));
+    eventsServiceSpy.updateEvent.and.returnValue(of(messageResponseMockCopy));
     spyOn(fixture.componentInstance.updateEvents, 'emit');
     fixture.componentInstance.originalEventType = EventType.Xv;
     fixture.componentInstance.createEventForm.patchValue({
-      id: fullEventsMock.id,
+      id: fullEventsMockCopy.id,
     });
 
     updateFormUsingEvent(
-      fullEventsMock.nameOfEvent,
-      fullEventsMock.dateOfEvent,
-      fullEventsMock.maxDateOfConfirmation,
-      fullEventsMock.nameOfCelebrated,
+      fullEventsMockCopy.nameOfEvent,
+      fullEventsMockCopy.dateOfEvent,
+      fullEventsMockCopy.maxDateOfConfirmation,
+      fullEventsMockCopy.nameOfCelebrated,
       EventType.SaveTheDate,
-      fullEventsMock.userId
+      fullEventsMockCopy.userId
     );
 
     fixture.detectChanges();
@@ -205,16 +218,16 @@ describe('Event Modal Component (Integrated Test)', () => {
     commonModalServiceSpy.open.and.returnValue(of(CommonModalResponse.Cancel));
     fixture.componentInstance.originalEventType = EventType.Xv;
     fixture.componentInstance.createEventForm.patchValue({
-      id: fullEventsMock.id,
+      id: fullEventsMockCopy.id,
     });
 
     updateFormUsingEvent(
-      fullEventsMock.nameOfEvent,
-      fullEventsMock.dateOfEvent,
-      fullEventsMock.maxDateOfConfirmation,
-      fullEventsMock.nameOfCelebrated,
+      fullEventsMockCopy.nameOfEvent,
+      fullEventsMockCopy.dateOfEvent,
+      fullEventsMockCopy.maxDateOfConfirmation,
+      fullEventsMockCopy.nameOfCelebrated,
       EventType.SaveTheDate,
-      fullEventsMock.userId
+      fullEventsMockCopy.userId
     );
 
     fixture.detectChanges();

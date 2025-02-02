@@ -5,12 +5,18 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { ConfirmationComponent } from 'src/app/invites/shared/confirmation/confirmation.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   confirmationInviteMock,
   messageResponseMock,
   saveTheDateUserInviteMock,
   sweetXvUserInviteMock,
 } from 'src/tests/mocks/mocks';
+
+const confirmationInviteMockCopy = deepCopy(confirmationInviteMock);
+const messageResponseMockCopy = deepCopy(messageResponseMock);
+const saveTheDateUserInviteMockCopy = deepCopy(saveTheDateUserInviteMock);
+const sweetXvUserInviteMockCopy = deepCopy(sweetXvUserInviteMock);
 
 describe('Confirmation Component (Shallow Test)', () => {
   let fixture: ComponentFixture<ConfirmationComponent>;
@@ -49,7 +55,9 @@ describe('Confirmation Component (Shallow Test)', () => {
           useValue: {
             snapshot: {
               data: {
-                paramMap: convertToParamMap({ id: sweetXvUserInviteMock.id }),
+                paramMap: convertToParamMap({
+                  id: sweetXvUserInviteMockCopy.id,
+                }),
               },
             },
           },
@@ -63,7 +71,9 @@ describe('Confirmation Component (Shallow Test)', () => {
   }));
 
   beforeEach(() => {
-    invitesServiceSpy.sendConfirmation.and.returnValue(of(messageResponseMock));
+    invitesServiceSpy.sendConfirmation.and.returnValue(
+      of(messageResponseMockCopy)
+    );
 
     fixture = TestBed.createComponent(ConfirmationComponent);
     fixture.detectChanges();
@@ -71,7 +81,7 @@ describe('Confirmation Component (Shallow Test)', () => {
 
   it('should render the confirmation information', () => {
     fixture.componentRef.setInput('inviteValue', {
-      ...sweetXvUserInviteMock,
+      ...sweetXvUserInviteMockCopy,
       confirmation: null,
     });
     fixture.componentRef.setInput('deadlineMet', false);
@@ -142,7 +152,7 @@ describe('Confirmation Component (Shallow Test)', () => {
 
   it('Expect form controls to be filled when user fills inputs', () => {
     fixture.componentRef.setInput('inviteValue', {
-      ...sweetXvUserInviteMock,
+      ...sweetXvUserInviteMockCopy,
       confirmation: null,
       entriesConfirmed: null,
       message: null,
@@ -151,28 +161,28 @@ describe('Confirmation Component (Shallow Test)', () => {
     fixture.detectChanges();
 
     updateFormUsingEvent(
-      confirmationInviteMock.confirmation as boolean,
-      confirmationInviteMock.entriesConfirmed as number,
-      confirmationInviteMock.message as string
+      confirmationInviteMockCopy.confirmation as boolean,
+      confirmationInviteMockCopy.entriesConfirmed as number,
+      confirmationInviteMockCopy.message as string
     );
 
     const controls = fixture.componentInstance.confirmationForm.controls;
     expect(controls['confirmation'].value)
       .withContext('Confirmation control should be filled')
-      .toBe(confirmationInviteMock.confirmation?.toString());
+      .toBe(confirmationInviteMockCopy.confirmation?.toString());
 
     expect(controls['entriesConfirmed'].value)
       .withContext('EntriesConfirmed control should be filled')
-      .toBe(confirmationInviteMock.entriesConfirmed?.toString());
+      .toBe(confirmationInviteMockCopy.entriesConfirmed?.toString());
 
     expect(controls['message'].value)
       .withContext('Message control should be filled')
-      .toEqual(confirmationInviteMock.message);
+      .toEqual(confirmationInviteMockCopy.message);
   });
 
   it('Expect save button to trigger saveInformation', () => {
     fixture.componentRef.setInput('inviteValue', {
-      ...sweetXvUserInviteMock,
+      ...sweetXvUserInviteMockCopy,
       confirmation: null,
       entriesConfirmed: null,
       message: null,
@@ -191,7 +201,7 @@ describe('Confirmation Component (Shallow Test)', () => {
 
   it('Display entriesConfirmed error message when field is blank', () => {
     fixture.componentRef.setInput('inviteValue', {
-      ...sweetXvUserInviteMock,
+      ...sweetXvUserInviteMockCopy,
       confirmation: null,
       entriesConfirmed: null,
       message: null,
@@ -224,7 +234,7 @@ describe('Confirmation Component (Shallow Test)', () => {
 
   it("Shouldn't display entriesConfirmed error message when field is filled and should display confirmationModal", () => {
     fixture.componentRef.setInput('inviteValue', {
-      ...sweetXvUserInviteMock,
+      ...sweetXvUserInviteMockCopy,
       confirmation: null,
       entriesConfirmed: null,
       message: null,
@@ -234,9 +244,9 @@ describe('Confirmation Component (Shallow Test)', () => {
     fixture.detectChanges();
 
     updateFormUsingEvent(
-      confirmationInviteMock.confirmation as boolean,
-      confirmationInviteMock.entriesConfirmed as number,
-      confirmationInviteMock.message as string
+      confirmationInviteMockCopy.confirmation as boolean,
+      confirmationInviteMockCopy.entriesConfirmed as number,
+      confirmationInviteMockCopy.message as string
     );
 
     const saveButton = fixture.debugElement.query(By.css('button'));
@@ -263,7 +273,7 @@ describe('Confirmation Component (Shallow Test)', () => {
 
   it('Should display warning message when deadline is met', () => {
     fixture.componentRef.setInput('inviteValue', {
-      ...sweetXvUserInviteMock,
+      ...sweetXvUserInviteMockCopy,
       confirmation: null,
       entriesConfirmed: null,
       message: null,
@@ -284,7 +294,7 @@ describe('Confirmation Component (Shallow Test)', () => {
 
   it('Should display confirmationModal with confirmation message when invite is confirmed', () => {
     fixture.componentRef.setInput('inviteValue', {
-      ...sweetXvUserInviteMock,
+      ...sweetXvUserInviteMockCopy,
     });
 
     fixture.componentRef.setInput('deadlineMet', false);
@@ -303,7 +313,7 @@ describe('Confirmation Component (Shallow Test)', () => {
 
     expect(cardTitle.nativeElement.textContent)
       .withContext('Card title should be displayed')
-      .toContain(saveTheDateUserInviteMock.family);
+      .toContain(saveTheDateUserInviteMockCopy.family);
 
     expect(confirmedParagraph.nativeElement.textContent)
       .withContext('Confirmation message should be displayed')
@@ -316,7 +326,7 @@ describe('Confirmation Component (Shallow Test)', () => {
 
   it('Should display confirmationModal with confirmation message when invite is canceled', () => {
     fixture.componentRef.setInput('inviteValue', {
-      ...sweetXvUserInviteMock,
+      ...sweetXvUserInviteMockCopy,
       confirmation: false,
     });
 
@@ -336,7 +346,7 @@ describe('Confirmation Component (Shallow Test)', () => {
 
     expect(cardTitle.nativeElement.textContent)
       .withContext('Card title should be displayed')
-      .toContain(saveTheDateUserInviteMock.family);
+      .toContain(saveTheDateUserInviteMockCopy.family);
 
     expect(confirmedParagraph.nativeElement.textContent)
       .withContext('Confirmation message should be displayed')
@@ -349,7 +359,7 @@ describe('Confirmation Component (Shallow Test)', () => {
 
   it('Expect save button to call sendConfirmation from InvitesService', () => {
     fixture.componentRef.setInput('inviteValue', {
-      ...sweetXvUserInviteMock,
+      ...sweetXvUserInviteMockCopy,
       confirmation: null,
       entriesConfirmed: null,
       message: null,
@@ -358,9 +368,9 @@ describe('Confirmation Component (Shallow Test)', () => {
     fixture.detectChanges();
 
     updateFormUsingEvent(
-      confirmationInviteMock.confirmation,
-      confirmationInviteMock.entriesConfirmed,
-      confirmationInviteMock.message as string
+      confirmationInviteMockCopy.confirmation,
+      confirmationInviteMockCopy.entriesConfirmed,
+      confirmationInviteMockCopy.message as string
     );
 
     const saveButton = fixture.debugElement.query(By.css('.button button'));

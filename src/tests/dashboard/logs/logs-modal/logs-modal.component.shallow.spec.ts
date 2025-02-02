@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { LogsModalComponent } from 'src/app/dashboard/logs/logs-modal/logs-modal.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { logMock } from 'src/tests/mocks/mocks';
+
+const logMockCopy = deepCopy(logMock);
 
 describe('Logs Modal Component (Isolated Test)', () => {
   let fixture: ComponentFixture<LogsModalComponent>;
@@ -18,7 +21,7 @@ describe('Logs Modal Component (Isolated Test)', () => {
   });
 
   it('should create a modal with 4 labels and one close button', () => {
-    fixture.componentInstance.log = logMock;
+    fixture.componentInstance.log = logMockCopy;
     fixture.detectChanges();
 
     const labels = fixture.debugElement.queryAll(By.css('label'));

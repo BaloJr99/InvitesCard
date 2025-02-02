@@ -7,6 +7,12 @@ import {
   messageResponseMock,
   tokenMock,
 } from 'src/tests/mocks/mocks';
+import { deepCopy } from 'src/app/shared/utils/tools';
+
+const fullUserMockCopy = deepCopy(fullUserMock)
+const loginDataMockCopy = deepCopy(loginDataMock)
+const messageResponseMockCopy = deepCopy(messageResponseMock)
+const tokenMockCopy = deepCopy(tokenMock)
 
 // Create a test suite for the AuthService
 describe('AuthService', () => {
@@ -37,67 +43,67 @@ describe('AuthService', () => {
   });
 
   it('should call loginAccount', () => {
-    const response = tokenMock;
+    const response = tokenMockCopy;
 
     authServiceSpy.loginAccount.and.returnValue(of(response));
-    authServiceSpy.loginAccount(loginDataMock).subscribe((response) => {
-      expect(response.access_token).toBe(tokenMock.access_token);
+    authServiceSpy.loginAccount(loginDataMockCopy).subscribe((response) => {
+      expect(response.access_token).toBe(tokenMockCopy.access_token);
     });
 
     expect(authServiceSpy.loginAccount)
       .withContext('Expected loginAccount to have been called')
-      .toHaveBeenCalledOnceWith(loginDataMock);
+      .toHaveBeenCalledOnceWith(loginDataMockCopy);
   });
 
   it('should call sendResetPassword', () => {
-    authServiceSpy.sendResetPassword.and.returnValue(of(messageResponseMock));
+    authServiceSpy.sendResetPassword.and.returnValue(of(messageResponseMockCopy));
 
     authServiceSpy
-      .sendResetPassword(loginDataMock.usernameOrEmail)
+      .sendResetPassword(loginDataMockCopy.usernameOrEmail)
       .subscribe((response) => {
-        expect(response).toBe(messageResponseMock);
+        expect(response).toBe(messageResponseMockCopy);
       });
 
     expect(authServiceSpy.sendResetPassword)
       .withContext('Expected sendResetPassword to have been called')
-      .toHaveBeenCalledOnceWith(loginDataMock.usernameOrEmail);
+      .toHaveBeenCalledOnceWith(loginDataMockCopy.usernameOrEmail);
   });
 
   it('should call sendResetPasswordToUser', () => {
     authServiceSpy.sendResetPasswordToUser.and.returnValue(
-      of(messageResponseMock)
+      of(messageResponseMockCopy)
     );
 
     authServiceSpy
-      .sendResetPasswordToUser(fullUserMock.id)
+      .sendResetPasswordToUser(fullUserMockCopy.id)
       .subscribe((response) => {
-        expect(response).toBe(messageResponseMock);
+        expect(response).toBe(messageResponseMockCopy);
       });
 
     expect(authServiceSpy.sendResetPasswordToUser)
       .withContext('Expected sendResetPasswordToUser to have been called')
-      .toHaveBeenCalledOnceWith(fullUserMock.id);
+      .toHaveBeenCalledOnceWith(fullUserMockCopy.id);
   });
 
   it('should call isUserResettingPassword', () => {
     authServiceSpy.isUserResettingPassword.and.returnValue(of(true));
 
     authServiceSpy
-      .isUserResettingPassword(fullUserMock.id)
+      .isUserResettingPassword(fullUserMockCopy.id)
       .subscribe((response) => {
         expect(response).toBe(true);
       });
 
     expect(authServiceSpy.isUserResettingPassword)
       .withContext('Expected isUserResettingPassword to have been called')
-      .toHaveBeenCalledOnceWith(fullUserMock.id);
+      .toHaveBeenCalledOnceWith(fullUserMockCopy.id);
   });
 
   it('should call resetPassword', () => {
-    authServiceSpy.resetPassword.and.returnValue(of(messageResponseMock));
+    authServiceSpy.resetPassword.and.returnValue(of(messageResponseMockCopy));
 
     authServiceSpy.resetPassword('test', 'password').subscribe((response) => {
-      expect(response).toBe(messageResponseMock);
+      expect(response).toBe(messageResponseMockCopy);
     });
 
     expect(authServiceSpy.resetPassword)

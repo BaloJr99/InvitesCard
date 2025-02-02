@@ -4,7 +4,10 @@ import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ChangePasswordComponent } from 'src/app/dashboard/profile/change-password/change-password.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock } from 'src/tests/mocks/mocks';
+
+const loginDataMockCopy = deepCopy(loginDataMock);
 
 describe('Change Password Component (Shallow test)', () => {
   let fixture: ComponentFixture<ChangePasswordComponent>;
@@ -65,12 +68,12 @@ describe('Change Password Component (Shallow test)', () => {
   });
 
   it('Expect form controls to be filled when user fills inputs', () => {
-    updateFormUsingEvent(loginDataMock.password, loginDataMock.password);
+    updateFormUsingEvent(loginDataMockCopy.password, loginDataMockCopy.password);
     expect(
       fixture.componentInstance.passwordResetForm.controls['password'].value
     )
       .withContext('Password control should be filled when input changes')
-      .toBe(loginDataMock.password);
+      .toBe(loginDataMockCopy.password);
     expect(
       fixture.componentInstance.passwordResetForm.controls['confirmPassword']
         .value
@@ -78,7 +81,7 @@ describe('Change Password Component (Shallow test)', () => {
       .withContext(
         'ConfirmPassword control should be filled when input changes'
       )
-      .toBe(loginDataMock.password);
+      .toBe(loginDataMockCopy.password);
   });
 
   it('Expect form on submit to trigger resetPassword', () => {
@@ -126,7 +129,7 @@ describe('Change Password Component (Shallow test)', () => {
   });
 
   it('Display match password error message when fields are different', () => {
-    updateFormUsingEvent(loginDataMock.password, 'differentPassword');
+    updateFormUsingEvent(loginDataMockCopy.password, 'differentPassword');
     fixture.detectChanges();
 
     const errorSpans = fixture.debugElement.queryAll(
@@ -147,7 +150,7 @@ describe('Change Password Component (Shallow test)', () => {
   });
 
   it("Shouldn't display password and confirmPassword error message when fields are filled", () => {
-    updateFormUsingEvent(loginDataMock.password, loginDataMock.password);
+    updateFormUsingEvent(loginDataMockCopy.password, loginDataMockCopy.password);
     fixture.detectChanges();
 
     const errorSpans = fixture.debugElement.queryAll(

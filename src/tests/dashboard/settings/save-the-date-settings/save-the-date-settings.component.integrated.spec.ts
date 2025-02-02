@@ -6,12 +6,18 @@ import { of } from 'rxjs';
 import { EventType } from 'src/app/core/models/enum';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { SaveTheDateSettingsComponent } from 'src/app/dashboard/settings/save-the-date-settings/save-the-date-settings.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   fullEventsMock,
   messageResponseMock,
   saveTheDateBaseSettingMock,
   saveTheDateSettingMock,
 } from 'src/tests/mocks/mocks';
+
+const fullEventsMockCopy = deepCopy(fullEventsMock);
+const messageResponseMockCopy = deepCopy(messageResponseMock);
+const saveTheDateBaseSettingMockCopy = deepCopy(saveTheDateBaseSettingMock);
+const saveTheDateSettingMockCopy = deepCopy(saveTheDateSettingMock);
 
 describe('Save The Date Settings (Integrated Test)', () => {
   let fixture: ComponentFixture<SaveTheDateSettingsComponent>;
@@ -94,11 +100,11 @@ describe('Save The Date Settings (Integrated Test)', () => {
 
   it('should call getEventSettings() when parent component sends Input value', () => {
     settingsServiceSpy.getEventSettings.and.returnValue(
-      of(saveTheDateBaseSettingMock)
+      of(saveTheDateBaseSettingMockCopy)
     );
 
     fixture.componentRef.setInput('eventSettingAction', {
-      eventId: fullEventsMock.id,
+      eventId: fullEventsMockCopy.id,
       eventType: EventType.SaveTheDate,
       isNew: true,
     });
@@ -113,23 +119,23 @@ describe('Save The Date Settings (Integrated Test)', () => {
   it('should call createEventSettings when the event setting is new', () => {
     settingsServiceSpy.getEventSettings.and.returnValue(of());
     settingsServiceSpy.createEventSettings.and.returnValue(
-      of(messageResponseMock)
+      of(messageResponseMockCopy)
     );
 
     fixture.componentRef.setInput('eventSettingAction', {
-      eventId: fullEventsMock.id,
+      eventId: fullEventsMockCopy.id,
       eventType: EventType.SaveTheDate,
       isNew: true,
     });
 
     updateFormUsingEvent(
-      saveTheDateSettingMock.eventId,
-      saveTheDateSettingMock.primaryColor,
-      saveTheDateSettingMock.secondaryColor,
-      saveTheDateSettingMock.receptionPlace,
-      saveTheDateSettingMock.copyMessage,
-      saveTheDateSettingMock.hotelName,
-      saveTheDateSettingMock.hotelInformation
+      saveTheDateSettingMockCopy.eventId,
+      saveTheDateSettingMockCopy.primaryColor,
+      saveTheDateSettingMockCopy.secondaryColor,
+      saveTheDateSettingMockCopy.receptionPlace,
+      saveTheDateSettingMockCopy.copyMessage,
+      saveTheDateSettingMockCopy.hotelName,
+      saveTheDateSettingMockCopy.hotelInformation
     );
 
     fixture.componentInstance.saveTheDateSettings.isNew = true;
@@ -148,23 +154,23 @@ describe('Save The Date Settings (Integrated Test)', () => {
   it('should call updateEventSettings when the event setting is not', () => {
     settingsServiceSpy.getEventSettings.and.returnValue(of());
     settingsServiceSpy.updateEventSettings.and.returnValue(
-      of(messageResponseMock)
+      of(messageResponseMockCopy)
     );
 
     fixture.componentRef.setInput('eventSettingAction', {
-      eventId: fullEventsMock.id,
+      eventId: fullEventsMockCopy.id,
       eventType: EventType.SaveTheDate,
       isNew: false,
     });
 
     updateFormUsingEvent(
-      saveTheDateSettingMock.eventId,
-      saveTheDateSettingMock.primaryColor,
-      saveTheDateSettingMock.secondaryColor,
-      saveTheDateSettingMock.receptionPlace,
-      saveTheDateSettingMock.copyMessage,
-      saveTheDateSettingMock.hotelName,
-      saveTheDateSettingMock.hotelInformation
+      saveTheDateSettingMockCopy.eventId,
+      saveTheDateSettingMockCopy.primaryColor,
+      saveTheDateSettingMockCopy.secondaryColor,
+      saveTheDateSettingMockCopy.receptionPlace,
+      saveTheDateSettingMockCopy.copyMessage,
+      saveTheDateSettingMockCopy.hotelName,
+      saveTheDateSettingMockCopy.hotelInformation
     );
 
     fixture.componentInstance.saveTheDateSettings.isNew = false;

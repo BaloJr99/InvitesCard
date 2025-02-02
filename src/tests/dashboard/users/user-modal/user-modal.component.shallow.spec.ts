@@ -7,7 +7,11 @@ import { of } from 'rxjs';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { UserModalComponent } from 'src/app/dashboard/users/user-modal/user-modal.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { roleMock, upsertUserMock } from 'src/tests/mocks/mocks';
+
+const roleMockCopy = deepCopy(roleMock);
+const upsertUserMockCopy = deepCopy(upsertUserMock);
 
 describe('User Modal Component (Shallow Test)', () => {
   let fixture: ComponentFixture<UserModalComponent>;
@@ -71,8 +75,8 @@ describe('User Modal Component (Shallow Test)', () => {
   beforeEach(() => {
     usersServiceSpy.createUser.and.returnValue(of());
     fixture = TestBed.createComponent(UserModalComponent);
-    fixture.componentInstance.roles = [roleMock];
-    fixture.componentInstance.filteredRoles = [roleMock];
+    fixture.componentInstance.roles = [roleMockCopy];
+    fixture.componentInstance.filteredRoles = [roleMockCopy];
     fixture.detectChanges();
   });
 
@@ -112,28 +116,28 @@ describe('User Modal Component (Shallow Test)', () => {
 
   it('Expect form controls to be filled when user fills inputs', () => {
     updateFormUsingEvent(
-      upsertUserMock.username,
-      upsertUserMock.email,
-      upsertUserMock.roles[0],
-      upsertUserMock.isActive
+      upsertUserMockCopy.username,
+      upsertUserMockCopy.email,
+      upsertUserMockCopy.roles[0],
+      upsertUserMockCopy.isActive
     );
 
     const controls = fixture.componentInstance.createUserForm.controls;
     expect(controls['username'].value)
       .withContext('Username control should be filled')
-      .toBe(upsertUserMock.username);
+      .toBe(upsertUserMockCopy.username);
 
     expect(controls['email'].value)
       .withContext('Email control should be filled')
-      .toBe(upsertUserMock.email);
+      .toBe(upsertUserMockCopy.email);
 
     expect(controls['roles'].value)
       .withContext('Roles control should be filled')
-      .toEqual(upsertUserMock.roles);
+      .toEqual(upsertUserMockCopy.roles);
 
     expect(controls['isActive'].value)
       .withContext('IsActive control should be filled')
-      .toBe(upsertUserMock.isActive);
+      .toBe(upsertUserMockCopy.isActive);
   });
 
   it('Expect save button to trigger saveUser', () => {
@@ -202,10 +206,10 @@ describe('User Modal Component (Shallow Test)', () => {
 
   it("Shouldn't display password and confirmPassword error message when fields are filled", () => {
     updateFormUsingEvent(
-      upsertUserMock.username,
-      upsertUserMock.email,
-      upsertUserMock.roles[0],
-      upsertUserMock.isActive
+      upsertUserMockCopy.username,
+      upsertUserMockCopy.email,
+      upsertUserMockCopy.roles[0],
+      upsertUserMockCopy.isActive
     );
 
     // Need to click save button to show role error
@@ -258,10 +262,10 @@ describe('User Modal Component (Shallow Test)', () => {
 
   it('Should display role badge when role is added', () => {
     updateFormUsingEvent(
-      upsertUserMock.username,
-      upsertUserMock.email,
-      upsertUserMock.roles[0],
-      upsertUserMock.isActive
+      upsertUserMockCopy.username,
+      upsertUserMockCopy.email,
+      upsertUserMockCopy.roles[0],
+      upsertUserMockCopy.isActive
     );
 
     const userRoles = fixture.debugElement.queryAll(By.css('.roles .badge'));
@@ -272,17 +276,17 @@ describe('User Modal Component (Shallow Test)', () => {
       .withContext('Role badge should be filled')
       .toContain(
         fixture.componentInstance.roles.find(
-          (r) => r.id === upsertUserMock.roles[0]
+          (r) => r.id === upsertUserMockCopy.roles[0]
         )?.name
       );
   });
 
   it('Should remove role badge when role is deleted', () => {
     updateFormUsingEvent(
-      upsertUserMock.username,
-      upsertUserMock.email,
-      upsertUserMock.roles[0],
-      upsertUserMock.isActive
+      upsertUserMockCopy.username,
+      upsertUserMockCopy.email,
+      upsertUserMockCopy.roles[0],
+      upsertUserMockCopy.isActive
     );
 
     let userRoles = fixture.debugElement.queryAll(By.css('.roles .badge'));

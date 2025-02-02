@@ -8,16 +8,16 @@ import { InvitesService } from 'src/app/core/services/invites.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { SweetXvComponent } from 'src/app/invites/sweet-xv/sweet-xv.component';
 import { SafePipe } from 'src/app/shared/pipes/safe.pipe';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   sweetXvBaseSettingMock,
   sweetXvSettingMock,
   sweetXvUserInviteMock,
 } from 'src/tests/mocks/mocks';
 
-// Utility function to create a deep copy of the mock object
-function deepCopy<T>(obj: T): T {
-  return JSON.parse(JSON.stringify(obj));
-}
+const sweetXvBaseSettingMockCopy = deepCopy(sweetXvBaseSettingMock);
+const sweetXvSettingMockCopy = deepCopy(sweetXvSettingMock);
+const sweetXvUserInviteMockCopy = deepCopy(sweetXvUserInviteMock);
 
 describe('Sweet Xv Component (Shallow Test)', () => {
   let fixture: ComponentFixture<SweetXvComponent>;
@@ -40,7 +40,7 @@ describe('Sweet Xv Component (Shallow Test)', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            params: of({ id: sweetXvUserInviteMock.id }),
+            params: of({ id: sweetXvUserInviteMockCopy.id }),
           },
         },
         { provide: SettingsService, useValue: settingsSpy },
@@ -61,14 +61,9 @@ describe('Sweet Xv Component (Shallow Test)', () => {
   }));
 
   beforeEach(() => {
-    invitesServiceSpy.getInvite.and.returnValue(
-      of(deepCopy(sweetXvUserInviteMock))
-    );
+    invitesServiceSpy.getInvite.and.returnValue(of(sweetXvUserInviteMockCopy));
     settingsServiceSpy.getEventSettings.and.returnValue(
-      of({
-        ...sweetXvBaseSettingMock,
-        
-      })
+      of(sweetXvBaseSettingMockCopy)
     );
     filesServiceSpy.getFilesByEvent.and.returnValue(
       of({
@@ -98,10 +93,10 @@ describe('Sweet Xv Component (Shallow Test)', () => {
 
     expect(nameOfCelebrated.nativeElement.textContent)
       .withContext('Name of celebrated should exist')
-      .toContain(sweetXvUserInviteMock.nameOfCelebrated);
+      .toContain(sweetXvUserInviteMockCopy.nameOfCelebrated);
     expect(dateOfEvent.nativeElement.textContent)
       .withContext('Date of event should exist')
-      .toContain('THURSDAY, JULY 1');
+      .toContain('FRIDAY, FEBRUARY 28');
   });
 
   it('should have the speech section', () => {
@@ -117,16 +112,16 @@ describe('Sweet Xv Component (Shallow Test)', () => {
       .toBeTruthy();
     expect(firstSectionSentence1.nativeElement.textContent)
       .withContext('First section sentence 1 should exist')
-      .toContain(sweetXvSettingMock.firstSectionSentences.split(';')[0]);
+      .toContain(sweetXvSettingMockCopy.firstSectionSentences.split(';')[0]);
     expect(inviteFamiliy.nativeElement.textContent)
       .withContext('Invite family should exist')
-      .toContain(sweetXvUserInviteMock.family);
+      .toContain(sweetXvUserInviteMockCopy.family);
     expect(numberOfEntries.nativeElement.textContent)
       .withContext('Number of entries should exist')
-      .toContain(sweetXvUserInviteMock.entriesNumber);
+      .toContain(sweetXvUserInviteMockCopy.entriesNumber);
     expect(firstSectionSentence2.nativeElement.textContent)
       .withContext('First section sentence 2 should exist')
-      .toContain(sweetXvSettingMock.firstSectionSentences.split(';')[1]);
+      .toContain(sweetXvSettingMockCopy.firstSectionSentences.split(';')[1]);
   });
 
   it('should have the ceremony section', () => {
@@ -145,25 +140,25 @@ describe('Sweet Xv Component (Shallow Test)', () => {
       .toBeTruthy();
     expect(father.nativeElement.textContent)
       .withContext('Father should exist')
-      .toContain(sweetXvSettingMock.parents.split(';')[0]);
+      .toContain(sweetXvSettingMockCopy.parents.split(';')[0]);
     expect(mother.nativeElement.textContent)
       .withContext('Mother should exist')
-      .toContain(sweetXvSettingMock.parents.split(';')[1]);
+      .toContain(sweetXvSettingMockCopy.parents.split(';')[1]);
     expect(godParents1.nativeElement.textContent)
       .withContext('God parents should exist')
-      .toContain(sweetXvSettingMock.godParents.split(';')[0]);
+      .toContain(sweetXvSettingMockCopy.godParents.split(';')[0]);
     expect(godParents2.nativeElement.textContent)
       .withContext('God parents should exist')
-      .toContain(sweetXvSettingMock.godParents.split(';')[1]);
+      .toContain(sweetXvSettingMockCopy.godParents.split(';')[1]);
     expect(secondSectionSentences.nativeElement.textContent)
       .withContext('Second section sentences should exist')
-      .toContain(sweetXvSettingMock.secondSectionSentences.split(';')[0]);
+      .toContain(sweetXvSettingMockCopy.secondSectionSentences.split(';')[0]);
     expect(ceremonyDate.nativeElement.textContent)
       .withContext('Ceremony date should exist')
-      .toContain('Thursday  July 1, 2021  12:00 horas');
+      .toContain('Friday  February 28, 2025  17:00 horas');
     expect(ceremonyAddress.nativeElement.textContent)
       .withContext('Ceremony address should exist')
-      .toContain(sweetXvSettingMock.massAddress);
+      .toContain(sweetXvSettingMockCopy.massAddress);
   });
 
   it('should have the reception section', () => {
@@ -177,13 +172,13 @@ describe('Sweet Xv Component (Shallow Test)', () => {
       .toBeTruthy();
     expect(receptionPlace.nativeElement.textContent)
       .withContext('Reception place should exist')
-      .toContain(sweetXvSettingMock.receptionPlace);
+      .toContain(sweetXvSettingMockCopy.receptionPlace);
     expect(receptionAddress.nativeElement.textContent)
       .withContext('Reception address should exist')
-      .toContain(sweetXvSettingMock.receptionAddress);
+      .toContain(sweetXvSettingMockCopy.receptionAddress);
     expect(receptionTime.nativeElement.textContent)
       .withContext('Reception time should exist')
-      .toContain('12:00 horas');
+      .toContain('18:00 horas');
   });
 
   it('should have the dressCode section', () => {
@@ -196,7 +191,7 @@ describe('Sweet Xv Component (Shallow Test)', () => {
       .toBeTruthy();
     expect(dressCode.nativeElement.textContent)
       .withContext('Dress Code should exist')
-      .toContain(sweetXvSettingMock.dressCodeColor);
+      .toContain(sweetXvSettingMockCopy.dressCodeColor);
   });
 
   it('should have the gifts section', () => {

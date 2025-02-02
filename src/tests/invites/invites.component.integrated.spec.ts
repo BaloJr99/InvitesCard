@@ -10,6 +10,9 @@ import { SaveTheDateComponent } from 'src/app/invites/save-the-date/save-the-dat
 import { SweetXvComponent } from 'src/app/invites/sweet-xv/sweet-xv.component';
 import { newInviteMock } from '../mocks/mocks';
 import { of } from 'rxjs';
+import { deepCopy } from 'src/app/shared/utils/tools';
+
+const newInviteMockCopy = deepCopy(newInviteMock);
 
 describe('Invites Component (Shallow Test)', () => {
   let fixture: ComponentFixture<InvitesComponent>;
@@ -28,7 +31,7 @@ describe('Invites Component (Shallow Test)', () => {
             snapshot: {
               data: { invite: { eventType: EventType.Xv } },
             },
-            params: of({ id: newInviteMock.id }),
+            params: of({ id: newInviteMockCopy.id }),
           },
         },
         { provide: SettingsService, useValue: settingsSpy },

@@ -7,14 +7,8 @@ describe('Events Component (Isolated Test)', () => {
     const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
     const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
     const tokenStorageSpy = jasmine.createSpyObj('TokenStorageService', ['']);
-    const localeId = 'en-US';
 
-    component = new EventsComponent(
-      eventsSpy,
-      loaderSpy,
-      tokenStorageSpy,
-      localeId
-    );
+    component = new EventsComponent(eventsSpy, loaderSpy, tokenStorageSpy);
   });
 
   it('should create', () => {

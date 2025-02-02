@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { SettingsService } from 'src/app/core/services/settings.service';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   baseSettingMock,
   fullEventsMock,
@@ -8,6 +9,12 @@ import {
   saveTheDateSettingMock,
   sweetXvSettingMock,
 } from 'src/tests/mocks/mocks';
+
+const baseSettingMockCopy = deepCopy(baseSettingMock);
+const fullEventsMockCopy = deepCopy(fullEventsMock);
+const messageResponseMockCopy = deepCopy(messageResponseMock);
+const saveTheDateSettingMockCopy = deepCopy(saveTheDateSettingMock);
+const sweetXvSettingMockCopy = deepCopy(sweetXvSettingMock);
 
 describe('Settings Service', () => {
   let settingsService: SettingsService;
@@ -37,97 +44,102 @@ describe('Settings Service', () => {
   });
 
   it('should call getEventSettings', () => {
-    settingsServiceSpy.getEventSettings.and.returnValue(of(baseSettingMock));
+    settingsServiceSpy.getEventSettings.and.returnValue(
+      of(baseSettingMockCopy)
+    );
 
     settingsServiceSpy
-      .getEventSettings(fullEventsMock.id)
+      .getEventSettings(fullEventsMockCopy.id)
       .subscribe((response) => {
-        expect(response).toEqual(baseSettingMock);
-        expect(response.eventId).toEqual(fullEventsMock.id);
+        expect(response).toEqual(baseSettingMockCopy);
+        expect(response.eventId).toEqual(fullEventsMockCopy.id);
       });
 
     expect(settingsServiceSpy.getEventSettings)
       .withContext('Expected getEventSettings to have been called')
-      .toHaveBeenCalledOnceWith(fullEventsMock.id);
+      .toHaveBeenCalledOnceWith(fullEventsMockCopy.id);
   });
 
   it('should call createEventSettings (Sweet Xv)', () => {
     settingsServiceSpy.createEventSettings.and.returnValue(
-      of(messageResponseMock)
+      of(messageResponseMockCopy)
     );
 
     settingsServiceSpy
-      .createEventSettings(sweetXvSettingMock, fullEventsMock.id)
+      .createEventSettings(sweetXvSettingMockCopy, fullEventsMockCopy.id)
       .subscribe((response) => {
-        expect(response).toEqual(messageResponseMock);
+        expect(response).toEqual(messageResponseMockCopy);
       });
 
     expect(settingsServiceSpy.createEventSettings)
       .withContext('Expected createEventSettings to have been called')
-      .toHaveBeenCalledOnceWith(sweetXvSettingMock, fullEventsMock.id);
+      .toHaveBeenCalledOnceWith(sweetXvSettingMockCopy, fullEventsMockCopy.id);
   });
 
   it('should call createEventSettings (Save The Date)', () => {
     settingsServiceSpy.createEventSettings.and.returnValue(
-      of(messageResponseMock)
+      of(messageResponseMockCopy)
     );
 
     settingsServiceSpy
-      .createEventSettings(saveTheDateSettingMock, fullEventsMock.id)
+      .createEventSettings(saveTheDateSettingMockCopy, fullEventsMockCopy.id)
       .subscribe((response) => {
-        expect(response).toEqual(messageResponseMock);
+        expect(response).toEqual(messageResponseMockCopy);
       });
 
     expect(settingsServiceSpy.createEventSettings)
       .withContext('Expected createEventSettings to have been called')
-      .toHaveBeenCalledOnceWith(saveTheDateSettingMock, fullEventsMock.id);
+      .toHaveBeenCalledOnceWith(
+        saveTheDateSettingMockCopy,
+        fullEventsMockCopy.id
+      );
   });
 
   it('should call updateEventSettings (Sweet Xv)', () => {
     settingsServiceSpy.updateEventSettings.and.returnValue(
-      of(messageResponseMock)
+      of(messageResponseMockCopy)
     );
 
     settingsServiceSpy
       .updateEventSettings(
-        sweetXvSettingMock,
-        fullEventsMock.id,
-        fullEventsMock.typeOfEvent
+        sweetXvSettingMockCopy,
+        fullEventsMockCopy.id,
+        fullEventsMockCopy.typeOfEvent
       )
       .subscribe((response) => {
-        expect(response).toEqual(messageResponseMock);
+        expect(response).toEqual(messageResponseMockCopy);
       });
 
     expect(settingsServiceSpy.updateEventSettings)
       .withContext('Expected updateEventSettings to have been called')
       .toHaveBeenCalledOnceWith(
-        sweetXvSettingMock,
-        fullEventsMock.id,
-        fullEventsMock.typeOfEvent
+        sweetXvSettingMockCopy,
+        fullEventsMockCopy.id,
+        fullEventsMockCopy.typeOfEvent
       );
   });
 
   it('should call updateEventSettings (Save The Date)', () => {
     settingsServiceSpy.updateEventSettings.and.returnValue(
-      of(messageResponseMock)
+      of(messageResponseMockCopy)
     );
 
     settingsServiceSpy
       .updateEventSettings(
-        saveTheDateSettingMock,
-        fullEventsMock.id,
-        fullEventsMock.typeOfEvent
+        saveTheDateSettingMockCopy,
+        fullEventsMockCopy.id,
+        fullEventsMockCopy.typeOfEvent
       )
       .subscribe((response) => {
-        expect(response).toEqual(messageResponseMock);
+        expect(response).toEqual(messageResponseMockCopy);
       });
 
     expect(settingsServiceSpy.updateEventSettings)
       .withContext('Expected updateEventSettings to have been called')
       .toHaveBeenCalledOnceWith(
-        saveTheDateSettingMock,
-        fullEventsMock.id,
-        fullEventsMock.typeOfEvent
+        saveTheDateSettingMockCopy,
+        fullEventsMockCopy.id,
+        fullEventsMockCopy.typeOfEvent
       );
   });
 });

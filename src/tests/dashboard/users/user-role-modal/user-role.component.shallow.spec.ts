@@ -5,7 +5,10 @@ import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { UserRoleComponent } from 'src/app/dashboard/users/user-role-modal/user-role.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { roleMock } from 'src/tests/mocks/mocks';
+
+const roleMockCopy = deepCopy(roleMock);
 
 describe('User Role Component (Shallow Test)', () => {
   let fixture: ComponentFixture<UserRoleComponent>;
@@ -72,16 +75,16 @@ describe('User Role Component (Shallow Test)', () => {
   });
 
   it('Expect form controls to be filled when user fills inputs', () => {
-    updateFormUsingEvent(roleMock.name, roleMock.isActive);
+    updateFormUsingEvent(roleMockCopy.name, roleMockCopy.isActive);
 
     const controls = fixture.componentInstance.createRoleForm.controls;
     expect(controls['name'].value)
       .withContext('Name control should be filled')
-      .toBe(roleMock.name);
+      .toBe(roleMockCopy.name);
 
     expect(controls['isActive'].value)
       .withContext('IsActive control should be filled')
-      .toBe(roleMock.isActive);
+      .toBe(roleMockCopy.isActive);
   });
 
   it('Expect save button to trigger saveRole', () => {
@@ -98,7 +101,7 @@ describe('User Role Component (Shallow Test)', () => {
   });
 
   it('Display name error message when fields are blank', () => {
-    updateFormUsingEvent('', roleMock.isActive);
+    updateFormUsingEvent('', roleMockCopy.isActive);
 
     const errorSpans = fixture.debugElement.queryAll(
       By.css('.invalid-feedback')
@@ -120,7 +123,7 @@ describe('User Role Component (Shallow Test)', () => {
   });
 
   it("Shouldn't display name error message when fields are filled", () => {
-    updateFormUsingEvent(roleMock.name, roleMock.isActive);
+    updateFormUsingEvent(roleMockCopy.name, roleMockCopy.isActive);
     const errorSpans = fixture.debugElement.queryAll(
       By.css('.invalid-feedback')
     );

@@ -1,6 +1,7 @@
 import { FormBuilder, Validators } from '@angular/forms';
 import { ISettingAction } from 'src/app/core/models/settings';
 import { SweetXvSettingsComponent } from 'src/app/dashboard/settings/sweet-xv-settings/sweet-xv-settings.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   showCeremonySection,
   showDressCodeSection,
@@ -8,6 +9,12 @@ import {
   showReceptionSection,
   sweetXvSettingMock,
 } from 'src/tests/mocks/mocks';
+
+const showCeremonySectionCopy = deepCopy(showCeremonySection);
+const showDressCodeSectionCopy = deepCopy(showDressCodeSection);
+const showGiftsSectionCopy = deepCopy(showGiftsSection);
+const showReceptionSectionCopy = deepCopy(showReceptionSection);
+const sweetXvSettingMockCopy = deepCopy(sweetXvSettingMock);
 
 describe('Sweet Xv Settings Component (Isolated Test)', () => {
   let component: SweetXvSettingsComponent;
@@ -69,12 +76,14 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
   };
 
   beforeEach(() => {
+    const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
     const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
     const settingsSpy = jasmine.createSpyObj('SettingsService', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     component = new SweetXvSettingsComponent(
       loaderSpy,
+      eventsSpy,
       settingsSpy,
       new FormBuilder(),
       toastrSpy
@@ -192,7 +201,7 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
   });
 
   it('form value should be invalid if one input is invalid', () => {
-    component.updateSections(showGiftsSection);
+    component.updateSections(showGiftsSectionCopy);
     updateForm('', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
     expect(component.createEventSettingsForm.invalid)
       .withContext('Form should be invalid when fields are empty')
@@ -200,23 +209,23 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
   });
 
   it('form should be valid when fields are filled', () => {
-    component.updateSections(showGiftsSection);
+    component.updateSections(showGiftsSectionCopy);
     updateForm(
-      sweetXvSettingMock.eventId,
-      sweetXvSettingMock.primaryColor,
-      sweetXvSettingMock.secondaryColor,
-      sweetXvSettingMock.parents,
-      sweetXvSettingMock.godParents,
-      sweetXvSettingMock.firstSectionSentences,
-      sweetXvSettingMock.secondSectionSentences,
-      sweetXvSettingMock.massUrl,
-      sweetXvSettingMock.massTime,
-      sweetXvSettingMock.massAddress,
-      sweetXvSettingMock.receptionUrl,
-      sweetXvSettingMock.receptionTime,
-      sweetXvSettingMock.receptionPlace,
-      sweetXvSettingMock.receptionAddress,
-      sweetXvSettingMock.dressCodeColor
+      sweetXvSettingMockCopy.eventId,
+      sweetXvSettingMockCopy.primaryColor,
+      sweetXvSettingMockCopy.secondaryColor,
+      sweetXvSettingMockCopy.parents,
+      sweetXvSettingMockCopy.godParents,
+      sweetXvSettingMockCopy.firstSectionSentences,
+      sweetXvSettingMockCopy.secondSectionSentences,
+      sweetXvSettingMockCopy.massUrl,
+      sweetXvSettingMockCopy.massTime,
+      sweetXvSettingMockCopy.massAddress,
+      sweetXvSettingMockCopy.receptionUrl,
+      sweetXvSettingMockCopy.receptionTime,
+      sweetXvSettingMockCopy.receptionPlace,
+      sweetXvSettingMockCopy.receptionAddress,
+      sweetXvSettingMockCopy.dressCodeColor
     );
 
     expect(component.createEventSettingsForm.valid)
@@ -263,7 +272,7 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
   });
 
   it('should have the controls for the ceremony section in the createEventSettingsForm', () => {
-    component.updateSections(showCeremonySection);
+    component.updateSections(showCeremonySectionCopy);
     const controls = component.createEventSettingsForm.controls;
     const eventId = controls['eventId'];
     const primaryColor = controls['primaryColor'];
@@ -346,7 +355,7 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
   });
 
   it('should have the controls for the reception section in the createEventSettingsForm', () => {
-    component.updateSections(showReceptionSection);
+    component.updateSections(showReceptionSectionCopy);
     const controls = component.createEventSettingsForm.controls;
     const eventId = controls['eventId'];
     const primaryColor = controls['primaryColor'];
@@ -461,7 +470,7 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
   });
 
   it('should have the controls for the dressCode section in the createEventSettingsForm', () => {
-    component.updateSections(showDressCodeSection);
+    component.updateSections(showDressCodeSectionCopy);
     const controls = component.createEventSettingsForm.controls;
     const eventId = controls['eventId'];
     const primaryColor = controls['primaryColor'];

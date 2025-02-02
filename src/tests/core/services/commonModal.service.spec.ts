@@ -1,6 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { commonModalMock } from 'src/tests/mocks/mocks';
+
+const commonModalMockCopy = deepCopy(commonModalMock);
 
 describe('CommonModalService', () => {
   let commonModalService: CommonModalService;
@@ -30,11 +33,11 @@ describe('CommonModalService', () => {
   });
 
   it('should call open', () => {
-    commonModalServiceSpy.open(commonModalMock);
+    commonModalServiceSpy.open(commonModalMockCopy);
 
     expect(commonModalServiceSpy.open)
       .withContext('Expected open to have been called')
-      .toHaveBeenCalledOnceWith(commonModalMock);
+      .toHaveBeenCalledOnceWith(commonModalMockCopy);
   });
 
   it('should call sendResponse', () => {

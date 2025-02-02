@@ -6,11 +6,16 @@ import { of } from 'rxjs';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { UserModalComponent } from 'src/app/dashboard/users/user-modal/user-modal.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   messageResponseMock,
   roleMock,
   upsertUserMock,
 } from 'src/tests/mocks/mocks';
+
+const messageResponseMockCopy = deepCopy(messageResponseMock);
+const roleMockCopy = deepCopy(roleMock);
+const upsertUserMockCopy = deepCopy(upsertUserMock);
 
 describe('User Modal Component (Integrated Test)', () => {
   let fixture: ComponentFixture<UserModalComponent>;
@@ -81,23 +86,23 @@ describe('User Modal Component (Integrated Test)', () => {
   }));
 
   beforeEach(() => {
-    usersServiceSpy.createUser.and.returnValue(of(messageResponseMock));
-    usersServiceSpy.updateUser.and.returnValue(of(messageResponseMock));
+    usersServiceSpy.createUser.and.returnValue(of(messageResponseMockCopy));
+    usersServiceSpy.updateUser.and.returnValue(of(messageResponseMockCopy));
     usersServiceSpy.checkUsername.and.returnValue(of(false));
 
     fixture = TestBed.createComponent(UserModalComponent);
-    fixture.componentInstance.roles = [roleMock];
-    fixture.componentInstance.filteredRoles = [roleMock];
+    fixture.componentInstance.roles = [roleMockCopy];
+    fixture.componentInstance.filteredRoles = [roleMockCopy];
     fixture.detectChanges();
   });
 
   it('should call createUser()', () => {
     updateFormUsingEvent(
       '',
-      upsertUserMock.username,
-      upsertUserMock.email,
-      upsertUserMock.roles[0],
-      upsertUserMock.isActive
+      upsertUserMockCopy.username,
+      upsertUserMockCopy.email,
+      upsertUserMockCopy.roles[0],
+      upsertUserMockCopy.isActive
     );
 
     const buttons = fixture.debugElement.queryAll(
@@ -114,11 +119,11 @@ describe('User Modal Component (Integrated Test)', () => {
 
   it('should call updateUser()', () => {
     updateFormUsingEvent(
-      upsertUserMock.id,
-      upsertUserMock.username,
-      upsertUserMock.email,
-      upsertUserMock.roles[0],
-      upsertUserMock.isActive
+      upsertUserMockCopy.id,
+      upsertUserMockCopy.username,
+      upsertUserMockCopy.email,
+      upsertUserMockCopy.roles[0],
+      upsertUserMockCopy.isActive
     );
 
     const buttons = fixture.debugElement.queryAll(

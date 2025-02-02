@@ -9,11 +9,16 @@ import { EventsService } from 'src/app/core/services/events.service';
 import { FileReaderService } from 'src/app/core/services/fileReader.service';
 import { FilesService } from 'src/app/core/services/files.service';
 import { FilesComponent } from 'src/app/dashboard/files/files.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   downloadFileMock,
   dropdownEventsMock,
   messageResponseMock,
 } from 'src/tests/mocks/mocks';
+
+const downloadFileMockCopy = deepCopy(downloadFileMock);
+const dropdownEventsMockCopy = deepCopy(dropdownEventsMock);
+const messageResponseMockCopy = deepCopy(messageResponseMock);
 
 describe('Files Component (Integrated Test)', () => {
   let fixture: ComponentFixture<FilesComponent>;
@@ -97,8 +102,8 @@ describe('Files Component (Integrated Test)', () => {
   }));
 
   beforeEach(() => {
-    filesServiceSpy.getFilesByEvent.and.returnValue(of(downloadFileMock));
-    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMock));
+    filesServiceSpy.getFilesByEvent.and.returnValue(of(downloadFileMockCopy));
+    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMockCopy));
     fixture = TestBed.createComponent(FilesComponent);
     fixture.detectChanges();
   });
@@ -110,7 +115,7 @@ describe('Files Component (Integrated Test)', () => {
   });
 
   it('should call getFilesByEvent when event selected', () => {
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     expect(filesServiceSpy.getFilesByEvent)
       .withContext('getFilesByEvent should be called')
@@ -119,10 +124,10 @@ describe('Files Component (Integrated Test)', () => {
 
   it('should call getBase64 when saving an uploaded photo', () => {
     fileReaderServiceSpy.getBase64.and.returnValue(of('image'));
-    fixture.componentInstance.events = dropdownEventsMock;
+    fixture.componentInstance.events = dropdownEventsMockCopy;
     fixture.detectChanges();
 
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     uploadFile(new File([''], 'filename', { type: 'image/png' }));
 
@@ -138,10 +143,10 @@ describe('Files Component (Integrated Test)', () => {
   });
 
   it('should call updateImage when file is being updated and saved', () => {
-    filesServiceSpy.getFilesByEvent.and.returnValue(of(downloadFileMock));
-    filesServiceSpy.updateImage.and.returnValue(of(messageResponseMock));
+    filesServiceSpy.getFilesByEvent.and.returnValue(of(downloadFileMockCopy));
+    filesServiceSpy.updateImage.and.returnValue(of(messageResponseMockCopy));
 
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     selectImageUsage(ImageUsage.Phone, 0);
 
@@ -155,10 +160,10 @@ describe('Files Component (Integrated Test)', () => {
 
   it('should call open and call delete file when file is being deleted and user confirms', () => {
     commonModalServiceSpy.open.and.returnValue(of(CommonModalResponse.Confirm));
-    filesServiceSpy.getFilesByEvent.and.returnValue(of(downloadFileMock));
-    filesServiceSpy.deleteFile.and.returnValue(of(messageResponseMock));
+    filesServiceSpy.getFilesByEvent.and.returnValue(of(downloadFileMockCopy));
+    filesServiceSpy.deleteFile.and.returnValue(of(messageResponseMockCopy));
 
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     const imageContainer = fixture.debugElement.query(
       By.css('.image-container')
@@ -180,10 +185,10 @@ describe('Files Component (Integrated Test)', () => {
 
   it("should call open but shouldn't call delete file when file is being deleted and user cancel", () => {
     commonModalServiceSpy.open.and.returnValue(of(CommonModalResponse.Cancel));
-    filesServiceSpy.getFilesByEvent.and.returnValue(of(downloadFileMock));
-    filesServiceSpy.deleteFile.and.returnValue(of(messageResponseMock));
+    filesServiceSpy.getFilesByEvent.and.returnValue(of(downloadFileMockCopy));
+    filesServiceSpy.deleteFile.and.returnValue(of(messageResponseMockCopy));
 
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     const imageContainer = fixture.debugElement.query(
       By.css('.image-container')

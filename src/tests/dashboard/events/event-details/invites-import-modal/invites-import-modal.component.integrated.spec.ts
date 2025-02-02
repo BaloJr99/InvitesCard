@@ -7,11 +7,15 @@ import { FileReaderService } from 'src/app/core/services/fileReader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InvitesImportModalComponent } from 'src/app/dashboard/events/event-details/invites-import-modal/invites-import-modal.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   bulkInvitesMock,
   bulkMessageResponseMock,
   validFileMock,
 } from 'src/tests/mocks/mocks';
+
+const bulkInvitesMockCopy = deepCopy(bulkInvitesMock);
+const bulkMessageResponseMockCopy = deepCopy(bulkMessageResponseMock);
 
 describe('Invites Import Modal Component (Integrated Test)', () => {
   let fixture: ComponentFixture<InvitesImportModalComponent>;
@@ -84,8 +88,10 @@ describe('Invites Import Modal Component (Integrated Test)', () => {
   });
 
   it('should call invitesService bulkInvites() method when sendData() is called', () => {
-    fixture.componentInstance.invites = [bulkInvitesMock];
-    invitesServiceSpy.bulkInvites.and.returnValue(of(bulkMessageResponseMock));
+    fixture.componentInstance.invites = [bulkInvitesMockCopy];
+    invitesServiceSpy.bulkInvites.and.returnValue(
+      of(bulkMessageResponseMockCopy)
+    );
 
     fixture.detectChanges();
 

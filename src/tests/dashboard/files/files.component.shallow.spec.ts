@@ -7,12 +7,18 @@ import { EventsService } from 'src/app/core/services/events.service';
 import { FileReaderService } from 'src/app/core/services/fileReader.service';
 import { FilesService } from 'src/app/core/services/files.service';
 import { FilesComponent } from 'src/app/dashboard/files/files.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   downloadFileMock,
   downloadImageMock,
   downloadMusicMock,
   dropdownEventsMock,
 } from 'src/tests/mocks/mocks';
+
+const downloadFileMockCopy = deepCopy(downloadFileMock);
+const downloadImageMockCopy = deepCopy(downloadImageMock);
+const downloadMusicMockCopy = deepCopy(downloadMusicMock);
+const dropdownEventsMockCopy = deepCopy(dropdownEventsMock);
 
 describe('Files Component (Shallow Test)', () => {
   let fixture: ComponentFixture<FilesComponent>;
@@ -66,7 +72,7 @@ describe('Files Component (Shallow Test)', () => {
   }));
 
   beforeEach(() => {
-    filesServiceSpy.getFilesByEvent.and.returnValue(of(downloadFileMock));
+    filesServiceSpy.getFilesByEvent.and.returnValue(of(downloadFileMockCopy));
     eventsServiceSpy.getDropdownEvents.and.returnValue(of([]));
     fixture = TestBed.createComponent(FilesComponent);
     fixture.detectChanges();
@@ -78,10 +84,10 @@ describe('Files Component (Shallow Test)', () => {
   });
 
   it('should change select value to display uploadForm with two inputs and one button', () => {
-    fixture.componentInstance.events = dropdownEventsMock;
+    fixture.componentInstance.events = dropdownEventsMockCopy;
     fixture.detectChanges();
 
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     const uploadForm = fixture.debugElement.query(By.css('.upload-form'));
     const fileInputs = uploadForm.queryAll(By.css('input[type="file"]'));
@@ -101,10 +107,10 @@ describe('Files Component (Shallow Test)', () => {
   it('should change select value to trigger searchImages', () => {
     spyOn(fixture.componentInstance, 'searchImages');
 
-    fixture.componentInstance.events = dropdownEventsMock;
+    fixture.componentInstance.events = dropdownEventsMockCopy;
     fixture.detectChanges();
 
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     expect(fixture.componentInstance.searchImages)
       .withContext('searchImages should be called')
@@ -114,10 +120,10 @@ describe('Files Component (Shallow Test)', () => {
   it('should change select value to trigger getLatestFiles', () => {
     spyOn(fixture.componentInstance, 'getLatestFiles');
 
-    fixture.componentInstance.events = dropdownEventsMock;
+    fixture.componentInstance.events = dropdownEventsMockCopy;
     fixture.detectChanges();
 
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     expect(fixture.componentInstance.getLatestFiles)
       .withContext('getLatestFiles should be called')
@@ -127,10 +133,10 @@ describe('Files Component (Shallow Test)', () => {
   it('should change select value to trigger clearInformation', () => {
     spyOn(fixture.componentInstance, 'clearInformation');
 
-    fixture.componentInstance.events = dropdownEventsMock;
+    fixture.componentInstance.events = dropdownEventsMockCopy;
     fixture.detectChanges();
 
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     expect(fixture.componentInstance.clearInformation)
       .withContext('clearInformation should be called')
@@ -138,14 +144,14 @@ describe('Files Component (Shallow Test)', () => {
   });
 
   it('should display an image-container and a music container if there are any audios or images', () => {
-    fixture.componentInstance.events = dropdownEventsMock;
+    fixture.componentInstance.events = dropdownEventsMockCopy;
     fixture.detectChanges();
 
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     fixture.componentInstance.filesUpdateForm.patchValue({
-      images: [downloadImageMock],
-      audios: [downloadMusicMock],
+      images: [downloadImageMockCopy],
+      audios: [downloadMusicMockCopy],
     });
 
     fixture.detectChanges();
@@ -167,13 +173,13 @@ describe('Files Component (Shallow Test)', () => {
   });
 
   it('should display an image-container with one card', () => {
-    fixture.componentInstance.events = dropdownEventsMock;
+    fixture.componentInstance.events = dropdownEventsMockCopy;
     fixture.detectChanges();
 
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     fixture.componentInstance.filesUpdateForm.patchValue({
-      images: [downloadImageMock],
+      images: [downloadImageMockCopy],
     });
     fixture.detectChanges();
 
@@ -188,13 +194,13 @@ describe('Files Component (Shallow Test)', () => {
   });
 
   it('should display an audio-container with one card', () => {
-    fixture.componentInstance.events = dropdownEventsMock;
+    fixture.componentInstance.events = dropdownEventsMockCopy;
     fixture.detectChanges();
 
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     fixture.componentInstance.filesUpdateForm.patchValue({
-      audios: [downloadMusicMock],
+      audios: [downloadMusicMockCopy],
     });
     fixture.detectChanges();
 
@@ -210,13 +216,13 @@ describe('Files Component (Shallow Test)', () => {
 
   it('should call showDeleteDialog when deleting one card', () => {
     spyOn(fixture.componentInstance, 'showDeleteDialog');
-    fixture.componentInstance.events = dropdownEventsMock;
+    fixture.componentInstance.events = dropdownEventsMockCopy;
     fixture.detectChanges();
 
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     fixture.componentInstance.filesUpdateForm.patchValue({
-      images: [downloadImageMock],
+      images: [downloadImageMockCopy],
     });
     fixture.detectChanges();
 
@@ -236,10 +242,10 @@ describe('Files Component (Shallow Test)', () => {
 
   it('should call onPhotosChange when uploading a photo', () => {
     spyOn(fixture.componentInstance, 'onPhotosChange');
-    fixture.componentInstance.events = dropdownEventsMock;
+    fixture.componentInstance.events = dropdownEventsMockCopy;
     fixture.detectChanges();
 
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     const uploadForm = fixture.debugElement.query(By.css('.upload-form'));
     const fileInput = uploadForm.query(By.css('#photoFiles'));
@@ -253,10 +259,10 @@ describe('Files Component (Shallow Test)', () => {
 
   it('should call onMusicChange when uploading a photo', () => {
     spyOn(fixture.componentInstance, 'onMusicChange');
-    fixture.componentInstance.events = dropdownEventsMock;
+    fixture.componentInstance.events = dropdownEventsMockCopy;
     fixture.detectChanges();
 
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     const uploadForm = fixture.debugElement.query(By.css('.upload-form'));
     const fileInput = uploadForm.query(By.css('#musicFiles'));
@@ -270,10 +276,10 @@ describe('Files Component (Shallow Test)', () => {
 
   it('should call saveFiles when saving an uploaded photo', () => {
     spyOn(fixture.componentInstance, 'saveFiles');
-    fixture.componentInstance.events = dropdownEventsMock;
+    fixture.componentInstance.events = dropdownEventsMockCopy;
     fixture.detectChanges();
 
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     uploadFile(new File([''], 'filename', { type: 'image/png' }));
 

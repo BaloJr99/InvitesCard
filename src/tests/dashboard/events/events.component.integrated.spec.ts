@@ -14,6 +14,9 @@ import { EventsComponent } from 'src/app/dashboard/events/events.component';
 import { DateFormatPipe } from 'src/app/shared/pipes/date-format.pipe';
 import { dashboardEventsMock } from 'src/tests/mocks/mocks';
 import { By } from '@angular/platform-browser';
+import { deepCopy } from 'src/app/shared/utils/tools';
+
+const dashboardEventsMockCopy = deepCopy(dashboardEventsMock);
 
 describe('Events Component (Integrated Test)', () => {
   let fixture: ComponentFixture<EventsComponent>;
@@ -69,22 +72,22 @@ describe('Events Component (Integrated Test)', () => {
   });
 
   it('can get RouterLinks from template', () => {
-    fixture.componentInstance.events = [...dashboardEventsMock];
+    fixture.componentInstance.events = [...dashboardEventsMockCopy];
     fixture.detectChanges();
 
     const linkDes = fixture.debugElement.queryAll(By.directive(RouterLink));
     const routerLinks = linkDes.map((de) => de.injector.get(RouterLink));
 
     expect(routerLinks[1].href).toBe(
-      `/dashboard/events/${dashboardEventsMock[0].id}`
+      `/dashboard/events/${dashboardEventsMockCopy[0].id}`
     );
     expect(routerLinks[2].href).toBe(
-      `/dashboard/events/${dashboardEventsMock[1].id}`
+      `/dashboard/events/${dashboardEventsMockCopy[1].id}`
     );
   });
 
   it('should route to event details page', fakeAsync(() => {
-    fixture.componentInstance.events = [...dashboardEventsMock];
+    fixture.componentInstance.events = [...dashboardEventsMockCopy];
     fixture.detectChanges();
 
     const linkDes = fixture.debugElement.queryAll(By.directive(RouterLink));
@@ -99,6 +102,6 @@ describe('Events Component (Integrated Test)', () => {
 
     expect(router.url)
       .withContext('Should redirect to event details page')
-      .toBe(`/dashboard/events/${dashboardEventsMock[0].id}`);
+      .toBe(`/dashboard/events/${dashboardEventsMockCopy[0].id}`);
   }));
 });

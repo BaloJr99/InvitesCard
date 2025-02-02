@@ -8,16 +8,16 @@ import { InvitesService } from 'src/app/core/services/invites.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { WeddingComponent } from 'src/app/invites/wedding/wedding.component';
 import { SafePipe } from 'src/app/shared/pipes/safe.pipe';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   weddingBaseSettingMock,
   weddingSettingMock,
   weddingUserInviteMock,
 } from 'src/tests/mocks/mocks';
 
-// Utility function to create a deep copy of the mock object
-function deepCopy<T>(obj: T): T {
-  return JSON.parse(JSON.stringify(obj));
-}
+const weddingBaseSettingMockCopy = deepCopy(weddingBaseSettingMock);
+const weddingSettingMockCopy = deepCopy(weddingSettingMock);
+const weddingUserInviteMockCopy = deepCopy(weddingUserInviteMock);
 
 describe('Wedding Component (Shallow Test)', () => {
   let fixture: ComponentFixture<WeddingComponent>;
@@ -40,7 +40,7 @@ describe('Wedding Component (Shallow Test)', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            params: of({ id: weddingUserInviteMock.id }),
+            params: of({ id: weddingUserInviteMockCopy.id }),
           },
         },
         { provide: SettingsService, useValue: settingsSpy },
@@ -61,12 +61,10 @@ describe('Wedding Component (Shallow Test)', () => {
   }));
 
   beforeEach(() => {
-    invitesServiceSpy.getInvite.and.returnValue(
-      of(deepCopy(weddingUserInviteMock))
-    );
+    invitesServiceSpy.getInvite.and.returnValue(of(weddingUserInviteMockCopy));
     settingsServiceSpy.getEventSettings.and.returnValue(
       of({
-        ...weddingBaseSettingMock,
+        ...weddingBaseSettingMockCopy,
       })
     );
     filesServiceSpy.getFilesByEvent.and.returnValue(
@@ -98,13 +96,13 @@ describe('Wedding Component (Shallow Test)', () => {
     expect(nameOfCelebrated.nativeElement.textContent)
       .withContext('Name of celebrated should exist')
       .toContain(
-        `${weddingUserInviteMock.nameOfCelebrated.split(';')[0]} & ${
-          weddingUserInviteMock.nameOfCelebrated.split(';')[1]
+        `${weddingUserInviteMockCopy.nameOfCelebrated.split(';')[0]} & ${
+          weddingUserInviteMockCopy.nameOfCelebrated.split(';')[1]
         }`
       );
     expect(dateOfEvent.nativeElement.textContent)
       .withContext('Date of event should exist')
-      .toContain('THURSDAY, JULY 1');
+      .toContain('FRIDAY, FEBRUARY 28');
   });
 
   it('should have the speech section', () => {
@@ -121,19 +119,19 @@ describe('Wedding Component (Shallow Test)', () => {
       .toBeTruthy();
     expect(familyName.nativeElement.textContent)
       .withContext('Family name should exist')
-      .toContain(weddingUserInviteMock.family);
+      .toContain(weddingUserInviteMockCopy.family);
     expect(brideParentsFather.nativeElement.textContent)
       .withContext('Bride parents father should exist')
-      .toContain(weddingSettingMock.brideParents.split(';')[0]);
+      .toContain(weddingSettingMockCopy.brideParents.split(';')[0]);
     expect(brideParentsMother.nativeElement.textContent)
       .withContext('Bride parents mother should exist')
-      .toContain(weddingSettingMock.brideParents.split(';')[1]);
+      .toContain(weddingSettingMockCopy.brideParents.split(';')[1]);
     expect(groomParentsFather.nativeElement.textContent)
       .withContext('Groom parents father should exist')
-      .toContain(weddingSettingMock.groomParents.split(';')[0]);
+      .toContain(weddingSettingMockCopy.groomParents.split(';')[0]);
     expect(groomParentsMother.nativeElement.textContent)
       .withContext('Groom parents mother should exist')
-      .toContain(weddingSettingMock.groomParents.split(';')[1]);
+      .toContain(weddingSettingMockCopy.groomParents.split(';')[1]);
   });
 
   it('should have the itinerary section', () => {
@@ -157,22 +155,22 @@ describe('Wedding Component (Shallow Test)', () => {
       .toBeTruthy();
     expect(massTime.nativeElement.textContent)
       .withContext('Mass time should exist')
-      .toContain(weddingSettingMock.massTime);
+      .toContain(weddingSettingMockCopy.massTime);
     expect(massAddress.nativeElement.textContent)
       .withContext('Mass address should exist')
-      .toContain(weddingSettingMock.massPlace);
+      .toContain(weddingSettingMockCopy.massPlace);
     expect(civilTime.nativeElement.textContent)
       .withContext('Civil time should exist')
-      .toContain(weddingSettingMock.civilTime);
+      .toContain(weddingSettingMockCopy.civilTime);
     expect(civilAddress.nativeElement.textContent)
       .withContext('Civil address should exist')
-      .toContain(weddingSettingMock.civilPlace);
+      .toContain(weddingSettingMockCopy.civilPlace);
     expect(venueTime.nativeElement.textContent)
       .withContext('Venue time should exist')
-      .toContain(weddingSettingMock.venueTime);
+      .toContain(weddingSettingMockCopy.venueTime);
     expect(venueAddress.nativeElement.textContent)
       .withContext('Venue address should exist')
-      .toContain(weddingSettingMock.venuePlace);
+      .toContain(weddingSettingMockCopy.venuePlace);
   });
 
   it('should have the dressCode section', () => {
@@ -185,7 +183,7 @@ describe('Wedding Component (Shallow Test)', () => {
       .toBeTruthy();
     expect(dressCode.nativeElement.textContent)
       .withContext('Dress Code should exist')
-      .toContain(weddingSettingMock.dressCodeColor);
+      .toContain(weddingSettingMockCopy.dressCodeColor);
   });
 
   it('should have the gifts section', () => {
@@ -197,10 +195,10 @@ describe('Wedding Component (Shallow Test)', () => {
     expect(giftsSection).withContext('Gifts section should exist').toBeTruthy();
     expect(clabeBank.nativeElement.textContent)
       .withContext('Clabe bank should exist')
-      .toContain(weddingSettingMock.clabeBank);
+      .toContain(weddingSettingMockCopy.clabeBank);
     expect(cardNumber.nativeElement.textContent)
       .withContext('Card number should exist')
-      .toContain(weddingSettingMock.cardNumber);
+      .toContain(weddingSettingMockCopy.cardNumber);
   });
 
   it('should have the confirmation section', () => {
@@ -227,13 +225,13 @@ describe('Wedding Component (Shallow Test)', () => {
       .toBeTruthy();
     expect(hotelName.nativeElement.textContent)
       .withContext('Hotel name should exist')
-      .toContain(weddingSettingMock.hotelName);
+      .toContain(weddingSettingMockCopy.hotelName);
     expect(hotelAddress.nativeElement.textContent)
       .withContext('Hotel address should exist')
-      .toContain(weddingSettingMock.hotelAddress);
+      .toContain(weddingSettingMockCopy.hotelAddress);
     expect(hotelPhone.nativeElement.textContent)
       .withContext('Hotel phone should exist')
-      .toContain(weddingSettingMock.hotelPhone);
+      .toContain(weddingSettingMockCopy.hotelPhone);
   });
 
   it('should have the gallery section', () => {

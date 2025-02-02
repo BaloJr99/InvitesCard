@@ -10,15 +10,14 @@ import { InvitesService } from 'src/app/core/services/invites.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { AccomodationComponent } from 'src/app/invites/save-the-date/accomodations/accomodation.component';
 import { SaveTheDateComponent } from 'src/app/invites/save-the-date/save-the-date.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   saveTheDateBaseSettingMock,
   saveTheDateUserInviteMock,
 } from 'src/tests/mocks/mocks';
 
-// Utility function to create a deep copy of the mock object
-function deepCopy<T>(obj: T): T {
-  return JSON.parse(JSON.stringify(obj));
-}
+const saveTheDateBaseSettingMockCopy = deepCopy(saveTheDateBaseSettingMock);
+const saveTheDateUserInviteMockCopy = deepCopy(saveTheDateUserInviteMock);
 
 describe('Save The Date Component (Integrated Test)', () => {
   let fixture: ComponentFixture<SaveTheDateComponent>;
@@ -42,7 +41,7 @@ describe('Save The Date Component (Integrated Test)', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            params: of({ id: saveTheDateUserInviteMock.id }),
+            params: of({ id: saveTheDateUserInviteMockCopy.id }),
           },
         },
         { provide: SettingsService, useValue: settingsSpy },
@@ -65,7 +64,7 @@ describe('Save The Date Component (Integrated Test)', () => {
       CommonModalService
     ) as jasmine.SpyObj<CommonModalService>;
     settingsServiceSpy.getEventSettings.and.returnValue(
-      of(saveTheDateBaseSettingMock)
+      of(saveTheDateBaseSettingMockCopy)
     );
   }));
 
@@ -77,11 +76,11 @@ describe('Save The Date Component (Integrated Test)', () => {
       })
     );
     settingsServiceSpy.getEventSettings.and.returnValue(
-      of(saveTheDateBaseSettingMock)
+      of(saveTheDateBaseSettingMockCopy)
     );
     commonModalServiceSpy.open.and.returnValue(of(CommonModalResponse.Cancel));
     invitesServiceSpy.getInvite.and.returnValue(
-      of(deepCopy(saveTheDateUserInviteMock))
+      of(saveTheDateUserInviteMockCopy)
     );
 
     fixture = TestBed.createComponent(SaveTheDateComponent);

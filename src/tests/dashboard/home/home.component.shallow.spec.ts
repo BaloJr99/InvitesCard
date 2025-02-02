@@ -5,11 +5,14 @@ import { EventsService } from 'src/app/core/services/events.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { HomeComponent } from 'src/app/dashboard/home/home.component';
-import { toLocalDate } from 'src/app/shared/utils/tools';
+import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
 import {
   dashboardInvitesMock,
   dropdownEventsMock,
 } from 'src/tests/mocks/mocks';
+
+const dashboardInvitesMockCopy = deepCopy(dashboardInvitesMock);
+const dropdownEventsMockCopy = deepCopy(dropdownEventsMock);
 
 describe('HomeComponent (Shallow Test)', () => {
   let fixture: ComponentFixture<HomeComponent>;
@@ -52,9 +55,9 @@ describe('HomeComponent (Shallow Test)', () => {
   }));
 
   beforeEach(() => {
-    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMock));
+    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMockCopy));
     invitesServiceSpy.getAllInvites.and.returnValue(
-      of([{ ...dashboardInvitesMock }])
+      of([{ ...dashboardInvitesMockCopy }])
     );
 
     fixture = TestBed.createComponent(HomeComponent);
@@ -92,7 +95,7 @@ describe('HomeComponent (Shallow Test)', () => {
   it('should filter the invites by event', () => {
     spyOn(fixture.componentInstance, 'filterInvites');
 
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     expect(fixture.componentInstance.filterInvites)
       .withContext('filterInvites should have been called')
@@ -101,7 +104,7 @@ describe('HomeComponent (Shallow Test)', () => {
 
   it('should render the charts when event', () => {
     spyOn(fixture.componentInstance, 'RenderChart');
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     const charts = fixture.debugElement.queryAll(By.css('canvas'));
 
@@ -128,18 +131,17 @@ describe('HomeComponent (Shallow Test)', () => {
       .withContext('Percentage of pending response should have been updated')
       .toEqual('0');
 
-    const groupedByDateMock: { [key: string]: number } = {};
-    console.log(dashboardInvitesMock.dateOfConfirmation);
-    groupedByDateMock[
-      toLocalDate(
-        'en-US',
-        dashboardInvitesMock.dateOfConfirmation as string
-      ).substring(0, 10)
+    const groupedByDateMockCopy: { [key: string]: number } = {};
+    groupedByDateMockCopy[
+      toLocalDate(dashboardInvitesMockCopy.dateOfConfirmation as string).substring(
+        0,
+        10
+      )
     ] = 1;
 
     expect(fixture.componentInstance.groupedByDate)
       .withContext('Grouped by date should have been updated')
-      .toEqual(groupedByDateMock);
+      .toEqual(groupedByDateMockCopy);
 
     expect(fixture.componentInstance.lastInvitesChart)
       .withContext('Last invites chart have been created')

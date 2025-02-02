@@ -6,11 +6,16 @@ import { CommonInvitesService } from 'src/app/core/services/commonInvites.servic
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { NavbarComponent } from 'src/app/dashboard/navbar/navbar.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   messageResponseMock,
   notificationsMock,
   userMock,
 } from 'src/tests/mocks/mocks';
+
+const messageResponseMockCopy = deepCopy(messageResponseMock);
+const notificationsMockCopy = deepCopy(notificationsMock);
+const userMockCopy = deepCopy(userMock);
 
 describe('Navbar Component (Shallow Test)', () => {
   let fixture: ComponentFixture<NavbarComponent>;
@@ -55,8 +60,8 @@ describe('Navbar Component (Shallow Test)', () => {
   }));
 
   beforeEach(() => {
-    invitesServiceSpy.readMessage.and.returnValue(of(messageResponseMock));
-    tokenStorageServiceSpy.getTokenValues.and.returnValue(userMock);
+    invitesServiceSpy.readMessage.and.returnValue(of(messageResponseMockCopy));
+    tokenStorageServiceSpy.getTokenValues.and.returnValue(userMockCopy);
 
     fixture = TestBed.createComponent(NavbarComponent);
     fixture.detectChanges();
@@ -112,7 +117,7 @@ describe('Navbar Component (Shallow Test)', () => {
   it('should maskAsRead when the notification is clicked', () => {
     spyOn(fixture.componentInstance, 'maskAsRead');
 
-    fixture.componentRef.setInput('notificationsValue', notificationsMock);
+    fixture.componentRef.setInput('notificationsValue', notificationsMockCopy);
     fixture.detectChanges();
 
     const notificationMessages = fixture.debugElement.query(
@@ -130,7 +135,7 @@ describe('Navbar Component (Shallow Test)', () => {
   });
 
   it('should call readMessage and updateNotifications when the notification is clicked', () => {
-    fixture.componentRef.setInput('notificationsValue', notificationsMock);
+    fixture.componentRef.setInput('notificationsValue', notificationsMockCopy);
     fixture.detectChanges();
 
     expect(fixture.componentInstance.notifications[0].isMessageRead)

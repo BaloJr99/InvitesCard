@@ -11,7 +11,11 @@ import { UserRoleComponent } from 'src/app/dashboard/users/user-role-modal/user-
 import { UsersComponent } from 'src/app/dashboard/users/users.component';
 import { FilterComponent } from 'src/app/shared/components/table/filter/filter.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { searchUserMock, userEventsInfoMock } from 'src/tests/mocks/mocks';
+
+const searchUserMockCopy = deepCopy(searchUserMock);
+const userEventsInfoMockCopy = deepCopy(userEventsInfoMock);
 
 describe('Users Component (Integrated Test)', () => {
   let fixture: ComponentFixture<UsersComponent>;
@@ -49,8 +53,8 @@ describe('Users Component (Integrated Test)', () => {
   }));
 
   beforeEach(() => {
-    usersServiceSpy.getAllUsers.and.returnValue(of([userEventsInfoMock]));
-    usersServiceSpy.getUserById.and.returnValue(of(searchUserMock));
+    usersServiceSpy.getAllUsers.and.returnValue(of([userEventsInfoMockCopy]));
+    usersServiceSpy.getUserById.and.returnValue(of(searchUserMockCopy));
     fixture = TestBed.createComponent(UsersComponent);
     fixture.detectChanges();
   });
@@ -64,19 +68,19 @@ describe('Users Component (Integrated Test)', () => {
 
     expect(columns[0].nativeElement.textContent)
       .withContext('first column should be the user name')
-      .toBe(userEventsInfoMock.username);
+      .toBe(userEventsInfoMockCopy.username);
 
     expect(columns[1].nativeElement.textContent)
       .withContext('second column should be the user email')
-      .toBe(userEventsInfoMock.email);
+      .toBe(userEventsInfoMockCopy.email);
 
     expect(columns[2].nativeElement.textContent)
       .withContext('third column should be the user role')
-      .toBe(userEventsInfoMock.numEntries.toString());
+      .toBe(userEventsInfoMockCopy.numEntries.toString());
 
     expect(columns[3].nativeElement.textContent)
       .withContext('fourth column should be the user status')
-      .toBe(userEventsInfoMock.numEvents.toString());
+      .toBe(userEventsInfoMockCopy.numEvents.toString());
 
     expect(columns[4].nativeElement.innerHTML)
       .withContext('fifth column should be the user actions')
@@ -120,6 +124,6 @@ describe('Users Component (Integrated Test)', () => {
 
     expect(router.navigate)
       .withContext('getUserById should have been called')
-      .toHaveBeenCalledWith(['/dashboard/profile', userEventsInfoMock.id]);
+      .toHaveBeenCalledWith(['/dashboard/profile', userEventsInfoMockCopy.id]);
   });
 });

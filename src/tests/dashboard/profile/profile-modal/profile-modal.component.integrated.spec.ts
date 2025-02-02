@@ -6,7 +6,10 @@ import { of } from 'rxjs';
 import { FileReaderService } from 'src/app/core/services/fileReader.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { ProfileModalComponent } from 'src/app/dashboard/profile/profile-modal/profile-modal.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { messageResponseMock } from 'src/tests/mocks/mocks';
+
+const messageResponseMockCopy = deepCopy(messageResponseMock);
 
 describe('Profile Modal Component (Integrated Test)', () => {
   let fixture: ComponentFixture<ProfileModalComponent>;
@@ -49,7 +52,9 @@ describe('Profile Modal Component (Integrated Test)', () => {
   }));
 
   beforeEach(() => {
-    userServiceSpy.uploadProfilePhoto.and.returnValue(of(messageResponseMock));
+    userServiceSpy.uploadProfilePhoto.and.returnValue(
+      of(messageResponseMockCopy)
+    );
     fileReaderServiceSpy.getBase64.and.returnValue(of('image'));
     fixture = TestBed.createComponent(ProfileModalComponent);
     fixture.detectChanges();

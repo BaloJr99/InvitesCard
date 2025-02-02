@@ -9,7 +9,10 @@ import { EventsService } from 'src/app/core/services/events.service';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { EventDetailsComponent } from 'src/app/dashboard/events/event-details/event-details.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { newInviteMock } from 'src/tests/mocks/mocks';
+
+const newInviteMockCopy = deepCopy(newInviteMock);
 
 describe('Event Details Component (Shallow Test)', () => {
   let fixture: ComponentFixture<EventDetailsComponent>;
@@ -46,11 +49,11 @@ describe('Event Details Component (Shallow Test)', () => {
               data: {
                 eventResolved: {
                   isDeadlineMet: false,
-                  invites: [{ ...newInviteMock }],
-                  id: newInviteMock.eventId,
+                  invites: [{ ...newInviteMockCopy }],
+                  id: newInviteMockCopy.eventId,
                 },
               },
-              paramMap: convertToParamMap({ id: newInviteMock.id }),
+              paramMap: convertToParamMap({ id: newInviteMockCopy.id }),
             },
           },
         },
@@ -65,7 +68,7 @@ describe('Event Details Component (Shallow Test)', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EventDetailsComponent);
-    fixture.componentInstance.originalInvites = [{ ...newInviteMock }];
+    fixture.componentInstance.originalInvites = [{ ...newInviteMockCopy }];
     fixture.detectChanges();
   });
 

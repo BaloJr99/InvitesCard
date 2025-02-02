@@ -10,11 +10,16 @@ import { TokenStorageService } from 'src/app/core/services/token-storage.service
 import { UsersService } from 'src/app/core/services/users.service';
 import { ProfileModalComponent } from 'src/app/dashboard/profile/profile-modal/profile-modal.component';
 import { ProfileComponent } from 'src/app/dashboard/profile/profile.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   messageResponseMock,
   userMock,
   userProfileMock,
 } from 'src/tests/mocks/mocks';
+
+const messageResponseMockCopy = deepCopy(messageResponseMock);
+const userMockCopy = deepCopy(userMock);
+const userProfileMockCopy = deepCopy(userProfileMock);
 
 describe('Profile Component (Integrated Test)', () => {
   let fixture: ComponentFixture<ProfileComponent>;
@@ -87,16 +92,16 @@ describe('Profile Component (Integrated Test)', () => {
             snapshot: {
               data: {
                 userProfile: {
-                  id: userProfileMock.id,
-                  username: userProfileMock.username,
+                  id: userProfileMockCopy.id,
+                  username: userProfileMockCopy.username,
                   firstName: '',
                   lastName: '',
                   phoneNumber: '',
-                  email: userProfileMock.email,
+                  email: userProfileMockCopy.email,
                   gender: '',
                 },
               },
-              paramMap: convertToParamMap({ id: userProfileMock.id }),
+              paramMap: convertToParamMap({ id: userProfileMockCopy.id }),
             },
           },
         },
@@ -118,11 +123,11 @@ describe('Profile Component (Integrated Test)', () => {
   }));
 
   beforeEach(() => {
-    tokenStorageServiceSpy.getTokenValues.and.returnValue(userMock);
-    usersServiceSpy.updateProfile.and.returnValue(of(messageResponseMock));
+    tokenStorageServiceSpy.getTokenValues.and.returnValue(userMockCopy);
+    usersServiceSpy.updateProfile.and.returnValue(of(messageResponseMockCopy));
     usersServiceSpy.checkUsername.and.returnValue(of(true));
     authServiceSpy.sendResetPasswordToUser.and.returnValue(
-      of(messageResponseMock)
+      of(messageResponseMockCopy)
     );
 
     fixture = TestBed.createComponent(ProfileComponent);
@@ -139,13 +144,13 @@ describe('Profile Component (Integrated Test)', () => {
 
   it('should call saveProfile on save button click', () => {
     updateFormUsingEvent(
-      userProfileMock.id,
-      userProfileMock.username,
-      userProfileMock.firstName,
-      userProfileMock.lastName,
-      userProfileMock.phoneNumber,
-      userProfileMock.email,
-      userProfileMock.gender
+      userProfileMockCopy.id,
+      userProfileMockCopy.username,
+      userProfileMockCopy.firstName,
+      userProfileMockCopy.lastName,
+      userProfileMockCopy.phoneNumber,
+      userProfileMockCopy.email,
+      userProfileMockCopy.gender
     );
 
     const form = fixture.debugElement.query(By.css('form'));
@@ -178,16 +183,16 @@ describe('Profile Component (Integrated Test)', () => {
     // Generate new guid id
     fixture.componentInstance.user = {
       id: '2b43d9c1-4e71-415c-a602-e00128a72b4a',
-      email: userProfileMock.email,
-      firstName: userProfileMock.firstName,
-      lastName: userProfileMock.lastName,
-      gender: userProfileMock.gender,
-      phoneNumber: userProfileMock.phoneNumber,
+      email: userProfileMockCopy.email,
+      firstName: userProfileMockCopy.firstName,
+      lastName: userProfileMockCopy.lastName,
+      gender: userProfileMockCopy.gender,
+      phoneNumber: userProfileMockCopy.phoneNumber,
       password: '',
       profilePhoto: '',
-      username: userProfileMock.username,
+      username: userProfileMockCopy.username,
     };
-    
+
     resetPasswordButton.nativeElement.click();
 
     expect(authServiceSpy.sendResetPasswordToUser)

@@ -3,7 +3,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ForgotPasswordComponent } from 'src/app/auth/forgot-password/forgot-password.component';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock } from 'src/tests/mocks/mocks';
+
+const loginDataMockCopy = deepCopy(loginDataMock);
 
 describe('Forgot Password (Shallow Test)', () => {
   let fixture: ComponentFixture<ForgotPasswordComponent>;
@@ -54,7 +57,7 @@ describe('Forgot Password (Shallow Test)', () => {
   });
 
   it('Expect form controls to be filled when user fills inputs', () => {
-    updateFormUsingEvent(loginDataMock.usernameOrEmail);
+    updateFormUsingEvent(loginDataMockCopy.usernameOrEmail);
     expect(
       fixture.componentInstance.forgotPasswordForm.controls['usernameOrEmail']
         .value
@@ -62,7 +65,7 @@ describe('Forgot Password (Shallow Test)', () => {
       .withContext(
         'UsernameOrEmail control should be filled when input changes'
       )
-      .toBe(loginDataMock.usernameOrEmail);
+      .toBe(loginDataMockCopy.usernameOrEmail);
   });
 
   it('Expect form on submit to trigger sendResetPassword', () => {
@@ -98,7 +101,7 @@ describe('Forgot Password (Shallow Test)', () => {
   });
 
   it("Shouldn't display username error message when fields are filled", () => {
-    updateFormUsingEvent(loginDataMock.usernameOrEmail);
+    updateFormUsingEvent(loginDataMockCopy.usernameOrEmail);
     fixture.detectChanges();
     const errorSpans = fixture.debugElement.queryAll(
       By.css('.invalid-feedback')

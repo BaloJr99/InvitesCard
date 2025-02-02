@@ -1,7 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { LoggerService } from 'src/app/core/services/logger.service';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { logMock } from 'src/tests/mocks/mocks';
+
+const logMockCopy = deepCopy(logMock);
 
 describe('Logger Service', () => {
   let loggerService: LoggerService;
@@ -27,10 +30,10 @@ describe('Logger Service', () => {
   });
 
   it('should call getLogs', () => {
-    loggerServiceSpy.getLogs.and.returnValue(of([logMock]));
+    loggerServiceSpy.getLogs.and.returnValue(of([logMockCopy]));
 
     loggerServiceSpy.getLogs().subscribe((response) => {
-      expect(response).toEqual([logMock]);
+      expect(response).toEqual([logMockCopy]);
     });
 
     expect(loggerServiceSpy.getLogs)

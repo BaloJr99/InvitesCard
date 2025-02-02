@@ -4,7 +4,11 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { PasswordResetComponent } from 'src/app/auth/forgot-password/password-reset/password-reset.component';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { fullUserMock, loginDataMock } from 'src/tests/mocks/mocks';
+
+const fullUserMockCopy = deepCopy(fullUserMock)
+const loginDataMockCopy = deepCopy(loginDataMock)
 
 describe('Password Reset Component (Shallow Test)', () => {
   let fixture: ComponentFixture<PasswordResetComponent>;
@@ -36,7 +40,7 @@ describe('Password Reset Component (Shallow Test)', () => {
           useValue: {
             snapshot: {
               data: { reset: true },
-              paramMap: convertToParamMap({ id: fullUserMock.id }),
+              paramMap: convertToParamMap({ id: fullUserMockCopy.id }),
             },
           },
         },
@@ -75,12 +79,12 @@ describe('Password Reset Component (Shallow Test)', () => {
   });
 
   it('Expect form controls to be filled when user fills inputs', () => {
-    updateFormUsingEvent(loginDataMock.password, loginDataMock.password);
+    updateFormUsingEvent(loginDataMockCopy.password, loginDataMockCopy.password);
     expect(
       fixture.componentInstance.passwordResetForm.controls['password'].value
     )
       .withContext('Password control should be filled when input changes')
-      .toBe(loginDataMock.password);
+      .toBe(loginDataMockCopy.password);
 
     expect(
       fixture.componentInstance.passwordResetForm.controls['confirmPassword']
@@ -89,7 +93,7 @@ describe('Password Reset Component (Shallow Test)', () => {
       .withContext(
         'Confirm Password control should be filled when input changes'
       )
-      .toBe(loginDataMock.password);
+      .toBe(loginDataMockCopy.password);
   });
 
   it('Expect form on submit to trigger resetPassword', () => {
@@ -138,7 +142,7 @@ describe('Password Reset Component (Shallow Test)', () => {
   });
 
   it("Display match error when passwords doesn't match", () => {
-    updateFormUsingEvent(loginDataMock.password, loginDataMock.password + '1');
+    updateFormUsingEvent(loginDataMockCopy.password, loginDataMockCopy.password + '1');
     fixture.detectChanges();
     const errorSpans = fixture.debugElement.queryAll(
       By.css('.invalid-feedback')
@@ -160,7 +164,7 @@ describe('Password Reset Component (Shallow Test)', () => {
   });
 
   it("Shouldn't display username error message when fields are filled", () => {
-    updateFormUsingEvent(loginDataMock.password, loginDataMock.password);
+    updateFormUsingEvent(loginDataMockCopy.password, loginDataMockCopy.password);
     fixture.detectChanges();
     const errorSpans = fixture.debugElement.queryAll(
       By.css('.invalid-feedback')

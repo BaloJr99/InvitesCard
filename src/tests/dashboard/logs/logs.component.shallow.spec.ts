@@ -4,7 +4,10 @@ import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 import { LoggerService } from 'src/app/core/services/logger.service';
 import { LogsComponent } from 'src/app/dashboard/logs/logs.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { logMock } from 'src/tests/mocks/mocks';
+
+const logMockCopy = deepCopy(logMock);
 
 describe('Logs Component (Shallow Test)', () => {
   let fixture: ComponentFixture<LogsComponent>;
@@ -25,7 +28,7 @@ describe('Logs Component (Shallow Test)', () => {
   }));
 
   beforeEach(() => {
-    loggerServiceSpy.getLogs.and.returnValue(of([{ ...logMock }]));
+    loggerServiceSpy.getLogs.and.returnValue(of([{ ...logMockCopy }]));
     fixture = TestBed.createComponent(LogsComponent);
     fixture.detectChanges();
   });

@@ -3,16 +3,17 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { UsersService } from 'src/app/core/services/users.service';
 import { UsersComponent } from 'src/app/dashboard/users/users.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { userEventsInfoMock } from 'src/tests/mocks/mocks';
+
+const userEventsInfoMockCopy = deepCopy(userEventsInfoMock);
 
 describe('Users Component (Shallow Test)', () => {
   let fixture: ComponentFixture<UsersComponent>;
   let usersServiceSpy: jasmine.SpyObj<UsersService>;
 
   beforeEach(waitForAsync(() => {
-    const usersSpy = jasmine.createSpyObj('UsersService', [
-      'getAllUsers',
-    ]);
+    const usersSpy = jasmine.createSpyObj('UsersService', ['getAllUsers']);
 
     TestBed.configureTestingModule({
       declarations: [UsersComponent],
@@ -26,7 +27,7 @@ describe('Users Component (Shallow Test)', () => {
   }));
 
   beforeEach(() => {
-    usersServiceSpy.getAllUsers.and.returnValue(of([userEventsInfoMock]));
+    usersServiceSpy.getAllUsers.and.returnValue(of([userEventsInfoMockCopy]));
     fixture = TestBed.createComponent(UsersComponent);
     fixture.detectChanges();
   });

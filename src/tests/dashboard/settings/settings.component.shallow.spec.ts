@@ -4,7 +4,11 @@ import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 import { EventsService } from 'src/app/core/services/events.service';
 import { SettingsComponent } from 'src/app/dashboard/settings/settings.component';
-import { dropdownEventsMock } from 'src/tests/mocks/mocks';
+import { deepCopy } from 'src/app/shared/utils/tools';
+import { dropdownEventsMock, fullEventsMock } from 'src/tests/mocks/mocks';
+
+const dropdownEventsMockCopy = deepCopy(dropdownEventsMock);
+const fullEventsMockCopy = deepCopy(fullEventsMock);
 
 describe('Settings Component (Shallow Test)', () => {
   let fixture: ComponentFixture<SettingsComponent>;
@@ -21,6 +25,7 @@ describe('Settings Component (Shallow Test)', () => {
   beforeEach(waitForAsync(() => {
     const eventsSpy = jasmine.createSpyObj('EventsService', [
       'getDropdownEvents',
+      'getEventById',
     ]);
 
     TestBed.configureTestingModule({
@@ -35,7 +40,8 @@ describe('Settings Component (Shallow Test)', () => {
   }));
 
   beforeEach(() => {
-    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMock));
+    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMockCopy));
+    eventsServiceSpy.getEventById.and.returnValue(of(fullEventsMockCopy));
     fixture = TestBed.createComponent(SettingsComponent);
     fixture.detectChanges();
   });
@@ -50,16 +56,16 @@ describe('Settings Component (Shallow Test)', () => {
   });
 
   it(`shouldn't show no event selected when no event is selected`, () => {
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     const filesEmpty = fixture.debugElement.query(By.css('.files-empty'));
 
     expect(fixture.componentInstance.eventSettingAction)
       .withContext('should set eventSettingAction')
       .toEqual({
-        eventId: dropdownEventsMock[0].id,
+        eventId: dropdownEventsMockCopy[0].id,
         isNew: false,
-        eventType: dropdownEventsMock[0].typeOfEvent,
+        eventType: dropdownEventsMockCopy[0].typeOfEvent,
       });
 
     expect(filesEmpty)
@@ -70,7 +76,7 @@ describe('Settings Component (Shallow Test)', () => {
   it('should call loadEventSettings', () => {
     spyOn(fixture.componentInstance, 'loadEventSettings');
 
-    selectEvent(dropdownEventsMock[0].id);
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     expect(fixture.componentInstance.loadEventSettings)
       .withContext('should call loadEventSettings')

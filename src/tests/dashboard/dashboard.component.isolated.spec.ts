@@ -9,15 +9,13 @@ describe('Dashboard Component (Isolated Test)', () => {
     const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
     const commonInvitesSpy = jasmine.createSpyObj('CommonInvitesService', ['']);
     const router = jasmine.createSpyObj('Router', ['']);
-    const localeId = 'en-US';
 
     component = new DashboardComponent(
       tokenSpy,
       socketSpy,
       loaderSpy,
       commonInvitesSpy,
-      router,
-      localeId
+      router
     );
   });
 

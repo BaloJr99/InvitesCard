@@ -4,10 +4,14 @@ import { EventsService } from 'src/app/core/services/events.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { HomeComponent } from 'src/app/dashboard/home/home.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   dashboardInvitesMock,
   dropdownEventsMock,
 } from 'src/tests/mocks/mocks';
+
+const dashboardInvitesMockCopy = deepCopy(dashboardInvitesMock);
+const dropdownEventsMockCopy = deepCopy(dropdownEventsMock);
 
 describe('HomeComponent (Shallow Test)', () => {
   let fixture: ComponentFixture<HomeComponent>;
@@ -41,9 +45,9 @@ describe('HomeComponent (Shallow Test)', () => {
   }));
 
   beforeEach(() => {
-    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMock));
+    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMockCopy));
     invitesServiceSpy.getAllInvites.and.returnValue(
-      of([{ ...dashboardInvitesMock }])
+      of([{ ...dashboardInvitesMockCopy }])
     );
 
     fixture = TestBed.createComponent(HomeComponent);

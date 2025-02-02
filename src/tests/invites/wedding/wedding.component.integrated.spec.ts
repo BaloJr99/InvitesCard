@@ -9,15 +9,14 @@ import { ConfirmationComponent } from 'src/app/invites/shared/confirmation/confi
 import { CountdownComponent } from 'src/app/invites/shared/countdown/countdown.component';
 import { WeddingComponent } from 'src/app/invites/wedding/wedding.component';
 import { SafePipe } from 'src/app/shared/pipes/safe.pipe';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   weddingBaseSettingMock,
   weddingUserInviteMock,
 } from 'src/tests/mocks/mocks';
 
-// Utility function to create a deep copy of the mock object
-function deepCopy<T>(obj: T): T {
-  return JSON.parse(JSON.stringify(obj));
-}
+const weddingBaseSettingMockCopy = deepCopy(weddingBaseSettingMock);
+const weddingUserInviteMockCopy = deepCopy(weddingUserInviteMock);
 
 describe('Wedding Component (Integrated Test)', () => {
   let fixture: ComponentFixture<WeddingComponent>;
@@ -43,7 +42,7 @@ describe('Wedding Component (Integrated Test)', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            params: of({ id: weddingUserInviteMock.id }),
+            params: of({ id: weddingUserInviteMockCopy.id }),
           },
         },
         { provide: SettingsService, useValue: settingsSpy },
@@ -64,11 +63,9 @@ describe('Wedding Component (Integrated Test)', () => {
   }));
 
   beforeEach(() => {
-    invitesServiceSpy.getInvite.and.returnValue(
-      of(deepCopy(weddingUserInviteMock))
-    );
+    invitesServiceSpy.getInvite.and.returnValue(of(weddingUserInviteMockCopy));
     settingsServiceSpy.getEventSettings.and.returnValue(
-      of(weddingBaseSettingMock)
+      of(weddingBaseSettingMockCopy)
     );
     filesServiceSpy.getFilesByEvent.and.returnValue(
       of({

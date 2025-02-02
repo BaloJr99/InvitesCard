@@ -1,7 +1,10 @@
 import { FormBuilder } from '@angular/forms';
 import { RoleActionEvent } from 'src/app/core/models/enum';
 import { UserRoleComponent } from 'src/app/dashboard/users/user-role-modal/user-role.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { roleMock } from 'src/tests/mocks/mocks';
+
+const roleMockCopy = deepCopy(roleMock);
 
 describe('User Role Modal Component (Isolated Test)', () => {
   let component: UserRoleComponent;
@@ -57,7 +60,7 @@ describe('User Role Modal Component (Isolated Test)', () => {
   });
 
   it('form should be valid when fields are filled', () => {
-    updateForm(roleMock.name, roleMock.isActive, true);
+    updateForm(roleMockCopy.name, roleMockCopy.isActive, true);
     expect(component.createRoleForm.valid)
       .withContext('Form should be valid')
       .toBeTrue();

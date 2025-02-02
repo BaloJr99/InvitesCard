@@ -11,7 +11,11 @@ import { provideRouter, Router, RouterLink } from '@angular/router';
 import { of } from 'rxjs';
 import { ForgotPasswordComponent } from 'src/app/auth/forgot-password/forgot-password.component';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock, messageResponseMock } from 'src/tests/mocks/mocks';
+
+const loginDataMockCopy = deepCopy(loginDataMock);
+const messageResponseMockCopy = deepCopy(messageResponseMock);
 
 describe('Forgot Password Component (Integrated Test)', () => {
   let fixture: ComponentFixture<ForgotPasswordComponent>;
@@ -49,9 +53,9 @@ describe('Forgot Password Component (Integrated Test)', () => {
   });
 
   it('authService sendResetPassword() should called', () => {
-    authServiceSpy.sendResetPassword.and.returnValue(of(messageResponseMock));
+    authServiceSpy.sendResetPassword.and.returnValue(of(messageResponseMockCopy));
 
-    updateFormUsingEvent(loginDataMock.usernameOrEmail);
+    updateFormUsingEvent(loginDataMockCopy.usernameOrEmail);
     fixture.detectChanges();
 
     const button = fixture.debugElement.query(By.css('button'));
@@ -73,8 +77,8 @@ describe('Forgot Password Component (Integrated Test)', () => {
       .withContext("Shouldn't show email sent div")
       .toBeNull();
 
-    authServiceSpy.sendResetPassword.and.returnValue(of(messageResponseMock));
-    updateFormUsingEvent(loginDataMock.usernameOrEmail);
+    authServiceSpy.sendResetPassword.and.returnValue(of(messageResponseMockCopy));
+    updateFormUsingEvent(loginDataMockCopy.usernameOrEmail);
     fixture.detectChanges();
 
     const button = fixture.debugElement.query(By.css('button'));

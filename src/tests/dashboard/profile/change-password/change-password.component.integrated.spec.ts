@@ -5,7 +5,11 @@ import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ChangePasswordComponent } from 'src/app/dashboard/profile/change-password/change-password.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock, messageResponseMock } from 'src/tests/mocks/mocks';
+
+const loginDataMockCopy = deepCopy(loginDataMock);
+const messageResponseMockCopy = deepCopy(messageResponseMock);
 
 describe('Change Password Component (Integrated Test)', () => {
   let fixture: ComponentFixture<ChangePasswordComponent>;
@@ -46,9 +50,9 @@ describe('Change Password Component (Integrated Test)', () => {
   });
 
   it('authService resetPassword() should called', () => {
-    authServiceSpy.resetPassword.and.returnValue(of(messageResponseMock));
+    authServiceSpy.resetPassword.and.returnValue(of(messageResponseMockCopy));
 
-    updateFormUsingEvent(loginDataMock.password, loginDataMock.password);
+    updateFormUsingEvent(loginDataMockCopy.password, loginDataMockCopy.password);
     fixture.detectChanges();
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));

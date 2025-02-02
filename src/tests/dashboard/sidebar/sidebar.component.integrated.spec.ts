@@ -3,7 +3,10 @@ import { By } from '@angular/platform-browser';
 import { provideRouter, RouterLink } from '@angular/router';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { SidebarComponent } from 'src/app/dashboard/sidebar/sidebar.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { userMock } from 'src/tests/mocks/mocks';
+
+const userMockCopy = deepCopy(userMock);
 
 describe('Sidebar Component (Integrated Test)', () => {
   let fixture: ComponentFixture<SidebarComponent>;
@@ -39,7 +42,7 @@ describe('Sidebar Component (Integrated Test)', () => {
   }));
 
   beforeEach(() => {
-    tokenStorageServiceSpy.getTokenValues.and.returnValue(userMock);
+    tokenStorageServiceSpy.getTokenValues.and.returnValue(userMockCopy);
     fixture = TestBed.createComponent(SidebarComponent);
     fixture.detectChanges();
   });

@@ -6,10 +6,22 @@ import { EventType } from 'src/app/core/models/enum';
 import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { EventModalComponent } from 'src/app/dashboard/events/event-modal/event-modal.component';
+import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
 import { fullEventsMock, userDropdownDataMock } from 'src/tests/mocks/mocks';
+
+let fullEventsMockCopy = deepCopy(fullEventsMock);
+const userDropdownDataMockCopy = deepCopy(userDropdownDataMock);
 
 describe('Event Modal Component (Shallow Test)', () => {
   let fixture: ComponentFixture<EventModalComponent>;
+
+  fullEventsMockCopy = {
+    ...fullEventsMockCopy,
+    dateOfEvent: toLocalDate(fullEventsMockCopy.dateOfEvent).substring(0, 10),
+    maxDateOfConfirmation: toLocalDate(
+      fullEventsMockCopy.maxDateOfConfirmation
+    ).substring(0, 10),
+  };
 
   const updateFormUsingEvent = (
     nameOfEvent: string,
@@ -67,7 +79,7 @@ describe('Event Modal Component (Shallow Test)', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EventModalComponent);
-    fixture.componentInstance.users = [{ ...userDropdownDataMock }];
+    fixture.componentInstance.users = [{ ...userDropdownDataMockCopy }];
     fixture.detectChanges();
   });
 
@@ -122,24 +134,24 @@ describe('Event Modal Component (Shallow Test)', () => {
 
   it('Expect form controls to be filled when user fills inputs', () => {
     updateFormUsingEvent(
-      fullEventsMock.nameOfEvent,
-      fullEventsMock.dateOfEvent,
-      fullEventsMock.maxDateOfConfirmation,
-      fullEventsMock.nameOfCelebrated,
-      fullEventsMock.typeOfEvent,
-      fullEventsMock.userId
+      fullEventsMockCopy.nameOfEvent,
+      fullEventsMockCopy.dateOfEvent,
+      fullEventsMockCopy.maxDateOfConfirmation,
+      fullEventsMockCopy.nameOfCelebrated,
+      fullEventsMockCopy.typeOfEvent,
+      fullEventsMockCopy.userId
     );
     expect(
       fixture.componentInstance.createEventForm.controls['nameOfEvent'].value
     )
       .withContext('NameOfEvent control should be filled when input changes')
-      .toBe(fullEventsMock.nameOfEvent);
+      .toBe(fullEventsMockCopy.nameOfEvent);
 
     expect(
       fixture.componentInstance.createEventForm.controls['dateOfEvent'].value
     )
       .withContext('DateOfEvent control should be filled when input changes')
-      .toBe(fullEventsMock.dateOfEvent);
+      .toBe(fullEventsMockCopy.dateOfEvent);
 
     expect(
       fixture.componentInstance.createEventForm.controls[
@@ -149,7 +161,7 @@ describe('Event Modal Component (Shallow Test)', () => {
       .withContext(
         'MaxDateOfConfirmation control should be filled when input changes'
       )
-      .toBe(fullEventsMock.maxDateOfConfirmation);
+      .toBe(fullEventsMockCopy.maxDateOfConfirmation);
 
     expect(
       fixture.componentInstance.createEventForm.controls['nameOfCelebrated']
@@ -158,17 +170,17 @@ describe('Event Modal Component (Shallow Test)', () => {
       .withContext(
         'NameOfCelebrated control should be filled when input changes'
       )
-      .toBe(fullEventsMock.nameOfCelebrated);
+      .toBe(fullEventsMockCopy.nameOfCelebrated);
 
     expect(
       fixture.componentInstance.createEventForm.controls['typeOfEvent'].value
     )
       .withContext('TypeOfEvent control should be filled when input changes')
-      .toBe(fullEventsMock.typeOfEvent);
+      .toBe(fullEventsMockCopy.typeOfEvent);
 
     expect(fixture.componentInstance.createEventForm.controls['userId'].value)
       .withContext('UserId control should be filled when input changes')
-      .toBe(fullEventsMock.userId);
+      .toBe(fullEventsMockCopy.userId);
   });
 
   it('Expect save button to trigger saveEvent', () => {
@@ -251,12 +263,12 @@ describe('Event Modal Component (Shallow Test)', () => {
 
   it("Shouldn't display username and password error message when fields are filled", () => {
     updateFormUsingEvent(
-      fullEventsMock.dateOfEvent,
-      fullEventsMock.dateOfEvent,
-      fullEventsMock.dateOfEvent,
-      fullEventsMock.dateOfEvent,
+      fullEventsMockCopy.dateOfEvent,
+      fullEventsMockCopy.dateOfEvent,
+      fullEventsMockCopy.dateOfEvent,
+      fullEventsMockCopy.dateOfEvent,
       EventType.Xv,
-      fullEventsMock.userId
+      fullEventsMockCopy.userId
     );
     fixture.detectChanges();
 

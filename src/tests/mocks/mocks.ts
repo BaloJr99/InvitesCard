@@ -179,8 +179,8 @@ export const commonModalMock: ICommonModal = {
 export const fullEventsMock: IFullEvent = {
   id: 'dc7b4321-1379-4be5-8070-91e28ae8fd5d',
   allowCreateInvites: 1,
-  dateOfEvent: '2021-07-01',
-  maxDateOfConfirmation: '2021-09-01',
+  dateOfEvent: '2025-02-28T06:00:00.000Z',
+  maxDateOfConfirmation: '2025-02-14T06:00:00.000Z',
   nameOfCelebrated: 'Test',
   nameOfEvent: 'Test Event',
   typeOfEvent: EventType.None,
@@ -325,12 +325,12 @@ export const sweetXvUserInviteMock: IUserInvite = {
   id: confirmedInviteMock.id,
   confirmation: confirmedInviteMock.confirmation,
   maxDateOfConfirmation:
-    fullEventsMock.maxDateOfConfirmation.concat('T06:00:00Z'),
+    fullEventsMock.maxDateOfConfirmation,
   entriesNumber: confirmedInviteMock.entriesNumber,
   eventId: confirmedInviteMock.eventId,
   family: confirmedInviteMock.family,
   kidsAllowed: confirmedInviteMock.kidsAllowed,
-  dateOfEvent: fullEventsMock.dateOfEvent.concat('T06:00:00Z'),
+  dateOfEvent: fullEventsMock.dateOfEvent,
   nameOfCelebrated: fullEventsMock.nameOfCelebrated,
   typeOfEvent: fullEventsMock.typeOfEvent,
 };
@@ -364,7 +364,7 @@ export const bulkMessageResponseMock: IBulkMessageResponse = {
 export const logMock: ILog = {
   id: 'c6e03960-5939-4411-8b46-e68a55f9d6af',
   customError: 'Test Error',
-  dateOfError: '2021-07-01T06:00:00Z',
+  dateOfError: '2021-07-01T06:00:00.000Z',
   exceptionMessage: 'Test Exception',
   userId: fullUserMock.id,
 };
@@ -477,11 +477,11 @@ export const sweetXvSettingMock: ISweetXvSetting = {
   parents: 'Test Parent;Test Mother',
   godParents: 'Test Godparent; Test Godparent',
   massAddress: 'Test Address',
-  massTime: '12:00',
+  massTime: '2025-02-28 23:00:00',
   massUrl: 'https://fakepath/Test',
   receptionAddress: 'Test Address',
   receptionPlace: 'Test Place',
-  receptionTime: '12:00',
+  receptionTime: '2025-03-01 00:00:00',
   receptionUrl: 'https://fakepath/Test',
   dressCodeColor: 'Test color',
 };
@@ -643,24 +643,24 @@ export const tableDataWithFilterableHeaders: ITable = {
 
 export const saveTheDateUserInviteMock: ISaveTheDateUserInvite = {
   id: newInviteMock.id,
-  dateOfEvent: fullEventsMock.dateOfEvent.concat('T06:00:00Z'),
+  dateOfEvent: fullEventsMock.dateOfEvent,
   eventId: newInviteMock.eventId,
   family: newInviteMock.family,
   nameOfCelebrated: 'Braulio;Brisa',
   maxDateOfConfirmation:
-    fullEventsMock.maxDateOfConfirmation.concat('T06:00:00Z'),
+    fullEventsMock.maxDateOfConfirmation,
   needsAccomodation: newInviteMock.needsAccomodation,
   typeOfEvent: fullEventsMock.typeOfEvent,
 };
 
 export const weddingUserInviteMock: IWeddingUserInvite = {
   id: newInviteMock.id,
-  dateOfEvent: fullEventsMock.dateOfEvent.concat('T06:00:00Z'),
+  dateOfEvent: fullEventsMock.dateOfEvent,
   eventId: newInviteMock.eventId,
   family: newInviteMock.family,
   nameOfCelebrated: 'Braulio;Brisa',
   maxDateOfConfirmation:
-    fullEventsMock.maxDateOfConfirmation.concat('T06:00:00Z'),
+    fullEventsMock.maxDateOfConfirmation,
   typeOfEvent: fullEventsMock.typeOfEvent,
   confirmation: confirmedInviteMock.confirmation,
   entriesNumber: confirmedInviteMock.entriesNumber,

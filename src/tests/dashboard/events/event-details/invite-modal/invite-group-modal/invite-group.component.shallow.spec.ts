@@ -5,7 +5,10 @@ import { ToastrService } from 'ngx-toastr';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InviteGroupComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-group-modal/invite-group.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { fullInvitesGroupsMock } from 'src/tests/mocks/mocks';
+
+const fullInvitesGroupsMockCopy = deepCopy(fullInvitesGroupsMock);
 
 describe('Invite Group Component (Shallow Test)', () => {
   let fixture: ComponentFixture<InviteGroupComponent>;
@@ -56,13 +59,13 @@ describe('Invite Group Component (Shallow Test)', () => {
   });
 
   it('Expect form controls to be filled when user fills inputs', () => {
-    updateFormUsingEvent(fullInvitesGroupsMock.inviteGroup);
+    updateFormUsingEvent(fullInvitesGroupsMockCopy.inviteGroup);
     expect(
       fixture.componentInstance.createInviteGroupForm.controls['inviteGroup']
         .value
     )
       .withContext('InviteGroup control should be filled when input changes')
-      .toBe(fullInvitesGroupsMock.inviteGroup);
+      .toBe(fullInvitesGroupsMockCopy.inviteGroup);
   });
 
   it('Expect save button to trigger saveInviteGroup', () => {
@@ -125,7 +128,7 @@ describe('Invite Group Component (Shallow Test)', () => {
   });
 
   it("Shouldn't display inviteGroup error message when field is filled", () => {
-    updateFormUsingEvent(fullInvitesGroupsMock.inviteGroup);
+    updateFormUsingEvent(fullInvitesGroupsMockCopy.inviteGroup);
     fixture.detectChanges();
 
     const errorSpans = fixture.debugElement.queryAll(
@@ -146,8 +149,10 @@ describe('Invite Group Component (Shallow Test)', () => {
       .not.toContain('El nombre del grupo es requerido');
   });
 
-  it("Should display inviteGroup error message when controlIsValid = false", () => {
-    fixture.componentInstance.createInviteGroupForm.controls['controlIsValid'].patchValue(false);
+  it('Should display inviteGroup error message when controlIsValid = false', () => {
+    fixture.componentInstance.createInviteGroupForm.controls[
+      'controlIsValid'
+    ].patchValue(false);
     fixture.detectChanges();
 
     const errorSpans = fixture.debugElement.queryAll(

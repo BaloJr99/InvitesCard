@@ -16,6 +16,7 @@ import { EventDetailsComponent } from 'src/app/dashboard/events/event-details/ev
 import { InviteModalComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-modal.component';
 import { InvitesImportModalComponent } from 'src/app/dashboard/events/event-details/invites-import-modal/invites-import-modal.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   confirmedInviteMock,
   eventInformationMock,
@@ -24,6 +25,13 @@ import {
   newInviteMock,
   notConfirmedInviteMock,
 } from 'src/tests/mocks/mocks';
+
+const confirmedInviteMockCopy = deepCopy(confirmedInviteMock);
+const eventInformationMockCopy = deepCopy(eventInformationMock);
+const fullEventsMockCopy = deepCopy(fullEventsMock);
+const fullInvitesGroupsMockCopy = deepCopy(fullInvitesGroupsMock);
+const newInviteMockCopy = deepCopy(newInviteMock);
+const notConfirmedInviteMockCopy = deepCopy(notConfirmedInviteMock);
 
 describe('Event Details Component (Integrated Test)', () => {
   let fixture: ComponentFixture<EventDetailsComponent>;
@@ -79,14 +87,14 @@ describe('Event Details Component (Integrated Test)', () => {
                 eventResolved: {
                   isDeadlineMet: false,
                   invites: [
-                    { ...newInviteMock },
-                    { ...confirmedInviteMock },
-                    { ...notConfirmedInviteMock },
+                    { ...newInviteMockCopy },
+                    { ...confirmedInviteMockCopy },
+                    { ...notConfirmedInviteMockCopy },
                   ],
-                  id: newInviteMock.eventId,
+                  id: newInviteMockCopy.eventId,
                 },
               },
-              paramMap: convertToParamMap({ id: newInviteMock.id }),
+              paramMap: convertToParamMap({ id: newInviteMockCopy.id }),
             },
           },
         },
@@ -114,12 +122,14 @@ describe('Event Details Component (Integrated Test)', () => {
 
   beforeEach(() => {
     inviteGroupsServiceSpy.getAllInviteGroups.and.returnValue(
-      of([{ ...fullInvitesGroupsMock }])
+      of([{ ...fullInvitesGroupsMockCopy }])
     );
     eventsServiceSpy.getEventSettings.and.returnValue(
-      of({ ...eventInformationMock, typeOfEvent: EventType.Xv })
+      of({ ...eventInformationMockCopy, typeOfEvent: EventType.Xv })
     );
-    eventsServiceSpy.getEventById.and.returnValue(of({ ...fullEventsMock }));
+    eventsServiceSpy.getEventById.and.returnValue(
+      of({ ...fullEventsMockCopy })
+    );
 
     fixture = TestBed.createComponent(EventDetailsComponent);
     fixture.detectChanges();
@@ -305,9 +315,11 @@ describe('Event Details Component (Integrated Test)', () => {
     markCheckbox(0);
 
     expect(
-      fixture.componentInstance.selectedIds[fullInvitesGroupsMock.inviteGroup]
+      fixture.componentInstance.selectedIds[
+        fullInvitesGroupsMockCopy.inviteGroup
+      ]
     )
       .withContext('Record should be marked for deletion')
-      .toContain(newInviteMock.id);
+      .toContain(newInviteMockCopy.id);
   });
 });

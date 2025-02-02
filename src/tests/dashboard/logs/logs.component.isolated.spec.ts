@@ -7,9 +7,8 @@ describe('Logs Component (Isolated Test)', () => {
   beforeEach(() => {
     const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
     const loggerSpy = jasmine.createSpyObj('LoggerService', ['']);
-    const localeId = 'en-US';
 
-    component = new LogsComponent(loggerSpy, loaderSpy, localeId);
+    component = new LogsComponent(loggerSpy, loaderSpy);
   });
 
   it('should create', () => {

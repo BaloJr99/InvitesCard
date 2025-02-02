@@ -1,7 +1,10 @@
 import { FormBuilder } from '@angular/forms';
 import { ISettingAction } from 'src/app/core/models/settings';
 import { SaveTheDateSettingsComponent } from 'src/app/dashboard/settings/save-the-date-settings/save-the-date-settings.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { saveTheDateSettingMock } from 'src/tests/mocks/mocks';
+
+const saveTheDateSettingMockCopy = deepCopy(saveTheDateSettingMock);
 
 describe('Save The Date Settings Component (Isolated Test)', () => {
   let component: SaveTheDateSettingsComponent;
@@ -72,13 +75,13 @@ describe('Save The Date Settings Component (Isolated Test)', () => {
 
   it('form should be valid when fields are filled', () => {
     updateForm(
-      saveTheDateSettingMock.eventId,
-      saveTheDateSettingMock.primaryColor,
-      saveTheDateSettingMock.secondaryColor,
-      saveTheDateSettingMock.receptionPlace,
-      saveTheDateSettingMock.copyMessage,
-      saveTheDateSettingMock.hotelName,
-      saveTheDateSettingMock.hotelInformation
+      saveTheDateSettingMockCopy.eventId,
+      saveTheDateSettingMockCopy.primaryColor,
+      saveTheDateSettingMockCopy.secondaryColor,
+      saveTheDateSettingMockCopy.receptionPlace,
+      saveTheDateSettingMockCopy.copyMessage,
+      saveTheDateSettingMockCopy.hotelName,
+      saveTheDateSettingMockCopy.hotelInformation
     );
 
     expect(component.createEventSettingsForm.valid)

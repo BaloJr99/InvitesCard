@@ -8,7 +8,10 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { ProfileComponent } from 'src/app/dashboard/profile/profile.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { userProfileMock } from 'src/tests/mocks/mocks';
+
+const userProfileMockCopy = deepCopy(userProfileMock);
 
 describe('Profile Component (Shallow Test)', () => {
   let fixture: ComponentFixture<ProfileComponent>;
@@ -56,7 +59,7 @@ describe('Profile Component (Shallow Test)', () => {
     const authSpy = jasmine.createSpyObj('AuthService', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const tokenStorageSpy = jasmine.createSpyObj('TokenStorageService', {
-      getTokenValues: userProfileMock,
+      getTokenValues: userProfileMockCopy,
     });
 
     TestBed.configureTestingModule({
@@ -70,16 +73,16 @@ describe('Profile Component (Shallow Test)', () => {
             snapshot: {
               data: {
                 userProfile: {
-                  id: userProfileMock.id,
-                  username: userProfileMock.username,
+                  id: userProfileMockCopy.id,
+                  username: userProfileMockCopy.username,
                   firstName: '',
                   lastName: '',
                   phoneNumber: '',
-                  email: userProfileMock.email,
+                  email: userProfileMockCopy.email,
                   gender: '',
                 },
               },
-              paramMap: convertToParamMap({ id: userProfileMock.id }),
+              paramMap: convertToParamMap({ id: userProfileMockCopy.id }),
             },
           },
         },
@@ -128,7 +131,7 @@ describe('Profile Component (Shallow Test)', () => {
       .not.toBeNull();
     expect(profileEmail.nativeElement.textContent)
       .withContext('ProfileEmail should contain email')
-      .toBe(userProfileMock.email);
+      .toBe(userProfileMockCopy.email);
 
     expect(button).withContext('Button should exist').not.toBeNull();
     expect(buttonText.nativeElement.textContent)
@@ -211,36 +214,36 @@ describe('Profile Component (Shallow Test)', () => {
 
   it('Expect form controls to be filled when user fills inputs', () => {
     updateFormUsingEvent(
-      userProfileMock.id,
-      userProfileMock.username,
-      userProfileMock.firstName,
-      userProfileMock.lastName,
-      userProfileMock.phoneNumber,
-      userProfileMock.email,
-      userProfileMock.gender
+      userProfileMockCopy.id,
+      userProfileMockCopy.username,
+      userProfileMockCopy.firstName,
+      userProfileMockCopy.lastName,
+      userProfileMockCopy.phoneNumber,
+      userProfileMockCopy.email,
+      userProfileMockCopy.gender
     );
 
     const controls = fixture.componentInstance.createProfileForm.controls;
 
     expect(controls['username'].value)
       .withContext('username control should be filled when input changes')
-      .toBe(userProfileMock.username);
+      .toBe(userProfileMockCopy.username);
     expect(controls['firstName'].value)
       .withContext('firstName control should be filled when input changes')
-      .toBe(userProfileMock.firstName);
+      .toBe(userProfileMockCopy.firstName);
     expect(controls['lastName'].value)
       .withContext('lastName control should be filled when input changes')
-      .toBe(userProfileMock.lastName);
+      .toBe(userProfileMockCopy.lastName);
     expect(controls['phoneNumber'].value)
       .withContext('phoneNumber control should be filled when input changes')
-      .toBe(userProfileMock.phoneNumber);
+      .toBe(userProfileMockCopy.phoneNumber);
     expect(controls['email'].value)
       .withContext('email control should be filled when input changes')
-      .toBe(userProfileMock.email);
+      .toBe(userProfileMockCopy.email);
 
     expect(controls['gender'].value)
       .withContext('gender control should be filled when select changes')
-      .toBe(userProfileMock.gender);
+      .toBe(userProfileMockCopy.gender);
   });
 
   it('Expect save changes to trigger saveProfile', () => {
@@ -333,13 +336,13 @@ describe('Profile Component (Shallow Test)', () => {
 
   it("Shouldn't display password and confirmPassword error message when fields are filled", () => {
     updateFormUsingEvent(
-      userProfileMock.id,
-      userProfileMock.username,
-      userProfileMock.firstName,
-      userProfileMock.lastName,
-      userProfileMock.phoneNumber,
-      userProfileMock.email,
-      userProfileMock.gender
+      userProfileMockCopy.id,
+      userProfileMockCopy.username,
+      userProfileMockCopy.firstName,
+      userProfileMockCopy.lastName,
+      userProfileMockCopy.phoneNumber,
+      userProfileMockCopy.email,
+      userProfileMockCopy.gender
     );
     fixture.detectChanges();
 
@@ -419,9 +422,7 @@ describe('Profile Component (Shallow Test)', () => {
 
   it('should call changePassword method when button is clicked', () => {
     spyOn(fixture.componentInstance, 'changePassword');
-    const profileInfo = fixture.debugElement.query(
-      By.css('.profile-info')
-    );
+    const profileInfo = fixture.debugElement.query(By.css('.profile-info'));
     const button = profileInfo.query(By.css('button'));
     button.nativeElement.click();
 

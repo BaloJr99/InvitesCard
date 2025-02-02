@@ -1,9 +1,20 @@
 import { FormBuilder } from '@angular/forms';
 import { EventType } from 'src/app/core/models/enum';
 import { EventModalComponent } from 'src/app/dashboard/events/event-modal/event-modal.component';
+import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
 import { fullEventsMock } from 'src/tests/mocks/mocks';
 
+let fullEventsMockCopy = deepCopy(fullEventsMock);
+
 describe('Event Modal Component (Isolated Test)', () => {
+  fullEventsMockCopy = {
+    ...fullEventsMockCopy,
+    dateOfEvent: toLocalDate(fullEventsMockCopy.dateOfEvent).substring(0, 10),
+    maxDateOfConfirmation: toLocalDate(
+      fullEventsMockCopy.maxDateOfConfirmation
+    ).substring(0, 10),
+  };
+
   let component: EventModalComponent;
 
   const updateForm = (
@@ -84,12 +95,12 @@ describe('Event Modal Component (Isolated Test)', () => {
 
   it('form should be valid when fields are filled', () => {
     updateForm(
-      fullEventsMock.nameOfEvent,
-      fullEventsMock.dateOfEvent,
-      fullEventsMock.maxDateOfConfirmation,
-      fullEventsMock.nameOfCelebrated,
+      fullEventsMockCopy.nameOfEvent,
+      fullEventsMockCopy.dateOfEvent,
+      fullEventsMockCopy.maxDateOfConfirmation,
+      fullEventsMockCopy.nameOfCelebrated,
       EventType.Xv,
-      fullEventsMock.userId
+      fullEventsMockCopy.userId
     );
 
     expect(component.createEventForm.valid)

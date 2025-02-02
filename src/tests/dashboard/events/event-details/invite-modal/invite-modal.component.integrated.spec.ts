@@ -6,11 +6,16 @@ import { of } from 'rxjs';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InviteModalComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-modal.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   fullInvitesGroupsMock,
   messageResponseMock,
   newInviteMock,
 } from 'src/tests/mocks/mocks';
+
+const fullInvitesGroupsMockCopy = deepCopy(fullInvitesGroupsMock);
+const messageResponseMockCopy = deepCopy(messageResponseMock);
+const newInviteMockCopy = deepCopy(newInviteMock);
 
 describe('Invite Modal Component (Shallow Test)', () => {
   let fixture: ComponentFixture<InviteModalComponent>;
@@ -77,20 +82,20 @@ describe('Invite Modal Component (Shallow Test)', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(InviteModalComponent);
     // We need to populate the inviteGroupId select with options
-    fixture.componentInstance.inviteGroups = [fullInvitesGroupsMock];
-    fixture.componentInstance.eventId = newInviteMock.eventId;
+    fixture.componentInstance.inviteGroups = [fullInvitesGroupsMockCopy];
+    fixture.componentInstance.eventId = newInviteMockCopy.eventId;
     fixture.detectChanges();
   });
 
   it('inviteService createInvite() should called', () => {
-    invitesServiceSpy.createInvite.and.returnValue(of(messageResponseMock));
+    invitesServiceSpy.createInvite.and.returnValue(of(messageResponseMockCopy));
 
     updateFormUsingEvent(
-      newInviteMock.family,
-      newInviteMock.entriesNumber,
-      newInviteMock.phoneNumber,
-      newInviteMock.inviteGroupId,
-      newInviteMock.kidsAllowed
+      newInviteMockCopy.family,
+      newInviteMockCopy.entriesNumber,
+      newInviteMockCopy.phoneNumber,
+      newInviteMockCopy.inviteGroupId,
+      newInviteMockCopy.kidsAllowed
     );
     fixture.detectChanges();
 
@@ -108,17 +113,17 @@ describe('Invite Modal Component (Shallow Test)', () => {
 
   it('invitesService updateInvite() should called', () => {
     fixture.componentInstance.createInviteForm.patchValue({
-      id: newInviteMock.id,
+      id: newInviteMockCopy.id,
     });
 
-    invitesServiceSpy.updateInvite.and.returnValue(of(messageResponseMock));
+    invitesServiceSpy.updateInvite.and.returnValue(of(messageResponseMockCopy));
 
     updateFormUsingEvent(
-      newInviteMock.family,
-      newInviteMock.entriesNumber,
-      newInviteMock.phoneNumber,
-      newInviteMock.inviteGroupId,
-      newInviteMock.kidsAllowed
+      newInviteMockCopy.family,
+      newInviteMockCopy.entriesNumber,
+      newInviteMockCopy.phoneNumber,
+      newInviteMockCopy.inviteGroupId,
+      newInviteMockCopy.kidsAllowed
     );
     fixture.detectChanges();
 

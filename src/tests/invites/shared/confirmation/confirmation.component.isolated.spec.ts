@@ -2,7 +2,10 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { IUserInvite } from 'src/app/core/models/invites';
 import { ConfirmationComponent } from 'src/app/invites/shared/confirmation/confirmation.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { confirmationInviteMock } from 'src/tests/mocks/mocks';
+
+const confirmationInviteMockCopy = deepCopy(confirmationInviteMock);
 
 describe('Confirmation Component (Isolated Test)', () => {
   let component: ConfirmationComponent;
@@ -75,9 +78,9 @@ describe('Confirmation Component (Isolated Test)', () => {
 
   it('form should be valid when fields are filled', () => {
     updateForm(
-      confirmationInviteMock.confirmation,
-      confirmationInviteMock.entriesConfirmed,
-      confirmationInviteMock.message
+      confirmationInviteMockCopy.confirmation,
+      confirmationInviteMockCopy.entriesConfirmed,
+      confirmationInviteMockCopy.message
     );
     expect(component.confirmationForm.valid)
       .withContext('Form should be valid')

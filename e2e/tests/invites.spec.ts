@@ -19,12 +19,29 @@ import { TestingPage } from 'e2e/pages/dashboard/testing/testing-page';
 import { SaveTheDatePage } from 'e2e/pages/invites/save-the-date-page';
 import { SweetXvPage } from 'e2e/pages/invites/sweet-xv-page';
 import { ImageUsage } from 'src/app/core/models/enum';
+import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
 import {
   saveTheDateSettingMock,
   sweetXvSettingMock,
 } from 'src/tests/mocks/mocks';
 
+let sweetXvSettingMockCopy = deepCopy(sweetXvSettingMock);
+
 test.describe('Invites (Sweet Xv)', () => {
+  sweetXvSettingMockCopy = {
+    ...sweetXvSettingMockCopy,
+    massTime: toLocalDate(
+      sweetXvSettingMockCopy.massTime.replace(' ', 'T').concat('.000Z')
+    )
+      .split('T')[1]
+      .substring(0, 5),
+    receptionTime: toLocalDate(
+      sweetXvSettingMockCopy.receptionTime.replace(' ', 'T').concat('.000Z')
+    )
+      .split('T')[1]
+      .substring(0, 5),
+  };
+
   let confirmedMessageLink: string;
   let notConfirmedMessageLink: string;
   let partialMessageLink: string;
@@ -83,20 +100,20 @@ test.describe('Invites (Sweet Xv)', () => {
       await settingsPage.waitToLoad();
 
       await settingsPage.fillSweet16Settings(
-        sweetXvSettingMock.primaryColor,
-        sweetXvSettingMock.secondaryColor,
-        sweetXvSettingMock.parents,
-        sweetXvSettingMock.godParents,
-        sweetXvSettingMock.firstSectionSentences,
-        sweetXvSettingMock.secondSectionSentences,
-        sweetXvSettingMock.massUrl,
-        sweetXvSettingMock.massTime,
-        sweetXvSettingMock.massAddress,
-        sweetXvSettingMock.receptionUrl,
-        sweetXvSettingMock.receptionTime,
-        sweetXvSettingMock.receptionPlace,
-        sweetXvSettingMock.receptionAddress,
-        sweetXvSettingMock.dressCodeColor
+        sweetXvSettingMockCopy.primaryColor,
+        sweetXvSettingMockCopy.secondaryColor,
+        sweetXvSettingMockCopy.parents,
+        sweetXvSettingMockCopy.godParents,
+        sweetXvSettingMockCopy.firstSectionSentences,
+        sweetXvSettingMockCopy.secondSectionSentences,
+        sweetXvSettingMockCopy.massUrl,
+        sweetXvSettingMockCopy.massTime,
+        sweetXvSettingMockCopy.massAddress,
+        sweetXvSettingMockCopy.receptionUrl,
+        sweetXvSettingMockCopy.receptionTime,
+        sweetXvSettingMockCopy.receptionPlace,
+        sweetXvSettingMockCopy.receptionAddress,
+        sweetXvSettingMockCopy.dressCodeColor
       );
 
       await settingsPage.clickSaveChanges();
@@ -281,7 +298,7 @@ test.describe('Invites (Sweet Xv)', () => {
 
     expect(await invitePage.firstSectionSentence_1.textContent(), {
       message: 'First section sentence 1 should be correct',
-    }).toBe(sweetXvSettingMock.firstSectionSentences.split(';')[0]);
+    }).toBe(sweetXvSettingMockCopy.firstSectionSentences.split(';')[0]);
 
     expect(await invitePage.family.textContent(), {
       message: 'Family should be correct',
@@ -297,35 +314,35 @@ test.describe('Invites (Sweet Xv)', () => {
 
     expect(await invitePage.firstSectionSentence_2.textContent(), {
       message: 'First section sentence 2 should be correct',
-    }).toBe(sweetXvSettingMock.firstSectionSentences.split(';')[1]);
+    }).toBe(sweetXvSettingMockCopy.firstSectionSentences.split(';')[1]);
 
     expect(await invitePage.father.textContent(), {
       message: 'Father should be correct',
-    }).toBe(sweetXvSettingMock.parents.split(';')[0]);
+    }).toBe(sweetXvSettingMockCopy.parents.split(';')[0]);
 
     expect(await invitePage.mother.textContent(), {
       message: 'Mother should be correct',
-    }).toBe(sweetXvSettingMock.parents.split(';')[1]);
+    }).toBe(sweetXvSettingMockCopy.parents.split(';')[1]);
 
     expect(await invitePage.godFather.textContent(), {
       message: 'God father should be correct',
-    }).toBe(sweetXvSettingMock.godParents.split(';')[0]);
+    }).toBe(sweetXvSettingMockCopy.godParents.split(';')[0]);
 
     expect(await invitePage.godMother.textContent(), {
       message: 'God mother should be correct',
-    }).toBe(sweetXvSettingMock.godParents.split(';')[1]);
+    }).toBe(sweetXvSettingMockCopy.godParents.split(';')[1]);
 
     expect(await invitePage.secondSectionSentence.textContent(), {
       message: 'Second section sentence should be correct',
-    }).toContain(sweetXvSettingMock.secondSectionSentences);
+    }).toContain(sweetXvSettingMockCopy.secondSectionSentences);
 
     expect(await invitePage.massTime.textContent(), {
       message: 'Mass time should be correct',
-    }).toContain(sweetXvSettingMock.massTime);
+    }).toContain(sweetXvSettingMockCopy.massTime);
 
     expect(await invitePage.massAddress.textContent(), {
       message: 'Mass address should be correct',
-    }).toBe(sweetXvSettingMock.massAddress);
+    }).toBe(sweetXvSettingMockCopy.massAddress);
 
     expect(await invitePage.massIframe.isVisible(), {
       message: 'Mass iframe should be visible',
@@ -337,19 +354,19 @@ test.describe('Invites (Sweet Xv)', () => {
 
     expect(await invitePage.receptionPlace.textContent(), {
       message: 'Reception place should be correct',
-    }).toBe(sweetXvSettingMock.receptionPlace);
+    }).toBe(sweetXvSettingMockCopy.receptionPlace);
 
     expect(await invitePage.receptionAddress.textContent(), {
       message: 'Reception address should be correct',
-    }).toBe(sweetXvSettingMock.receptionAddress);
+    }).toBe(sweetXvSettingMockCopy.receptionAddress);
 
     expect(await invitePage.receptionTime.textContent(), {
       message: 'Reception time should be correct',
-    }).toContain(sweetXvSettingMock.receptionTime);
+    }).toContain(sweetXvSettingMockCopy.receptionTime);
 
     expect(await invitePage.dressCodeColor.textContent(), {
       message: 'Dress code color should be correct',
-    }).toContain(sweetXvSettingMock.dressCodeColor);
+    }).toContain(sweetXvSettingMockCopy.dressCodeColor);
 
     expect(await invitePage.giftsSection.isVisible(), {
       message: 'Gifts section should be visible',
@@ -402,7 +419,7 @@ test.describe('Invites (Sweet Xv)', () => {
 
     expect(await invitePage.firstSectionSentence_1.textContent(), {
       message: 'First section sentence 1 should be correct',
-    }).toBe(sweetXvSettingMock.firstSectionSentences.split(';')[0]);
+    }).toBe(sweetXvSettingMockCopy.firstSectionSentences.split(';')[0]);
 
     expect(await invitePage.family.textContent(), {
       message: 'Family should be correct',
@@ -418,35 +435,35 @@ test.describe('Invites (Sweet Xv)', () => {
 
     expect(await invitePage.firstSectionSentence_2.textContent(), {
       message: 'First section sentence 2 should be correct',
-    }).toBe(sweetXvSettingMock.firstSectionSentences.split(';')[1]);
+    }).toBe(sweetXvSettingMockCopy.firstSectionSentences.split(';')[1]);
 
     expect(await invitePage.father.textContent(), {
       message: 'Father should be correct',
-    }).toBe(sweetXvSettingMock.parents.split(';')[0]);
+    }).toBe(sweetXvSettingMockCopy.parents.split(';')[0]);
 
     expect(await invitePage.mother.textContent(), {
       message: 'Mother should be correct',
-    }).toBe(sweetXvSettingMock.parents.split(';')[1]);
+    }).toBe(sweetXvSettingMockCopy.parents.split(';')[1]);
 
     expect(await invitePage.godFather.textContent(), {
       message: 'God father should be correct',
-    }).toBe(sweetXvSettingMock.godParents.split(';')[0]);
+    }).toBe(sweetXvSettingMockCopy.godParents.split(';')[0]);
 
     expect(await invitePage.godMother.textContent(), {
       message: 'God mother should be correct',
-    }).toBe(sweetXvSettingMock.godParents.split(';')[1]);
+    }).toBe(sweetXvSettingMockCopy.godParents.split(';')[1]);
 
     expect(await invitePage.secondSectionSentence.textContent(), {
       message: 'Second section sentence should be correct',
-    }).toContain(sweetXvSettingMock.secondSectionSentences);
+    }).toContain(sweetXvSettingMockCopy.secondSectionSentences);
 
     expect(await invitePage.massTime.textContent(), {
       message: 'Mass time should be correct',
-    }).toContain(sweetXvSettingMock.massTime);
+    }).toContain(sweetXvSettingMockCopy.massTime);
 
     expect(await invitePage.massAddress.textContent(), {
       message: 'Mass address should be correct',
-    }).toBe(sweetXvSettingMock.massAddress);
+    }).toBe(sweetXvSettingMockCopy.massAddress);
 
     expect(await invitePage.massIframe.isVisible(), {
       message: 'Mass iframe should be visible',
@@ -458,19 +475,19 @@ test.describe('Invites (Sweet Xv)', () => {
 
     expect(await invitePage.receptionPlace.textContent(), {
       message: 'Reception place should be correct',
-    }).toBe(sweetXvSettingMock.receptionPlace);
+    }).toBe(sweetXvSettingMockCopy.receptionPlace);
 
     expect(await invitePage.receptionAddress.textContent(), {
       message: 'Reception address should be correct',
-    }).toBe(sweetXvSettingMock.receptionAddress);
+    }).toBe(sweetXvSettingMockCopy.receptionAddress);
 
     expect(await invitePage.receptionTime.textContent(), {
       message: 'Reception time should be correct',
-    }).toContain(sweetXvSettingMock.receptionTime);
+    }).toContain(sweetXvSettingMockCopy.receptionTime);
 
     expect(await invitePage.dressCodeColor.textContent(), {
       message: 'Dress code color should be correct',
-    }).toContain(sweetXvSettingMock.dressCodeColor);
+    }).toContain(sweetXvSettingMockCopy.dressCodeColor);
 
     expect(await invitePage.giftsSection.isVisible(), {
       message: 'Gifts section should be visible',
@@ -519,7 +536,7 @@ test.describe('Invites (Sweet Xv)', () => {
 
     expect(await invitePage.firstSectionSentence_1.textContent(), {
       message: 'First section sentence 1 should be correct',
-    }).toBe(sweetXvSettingMock.firstSectionSentences.split(';')[0]);
+    }).toBe(sweetXvSettingMockCopy.firstSectionSentences.split(';')[0]);
 
     expect(await invitePage.family.textContent(), {
       message: 'Family should be correct',
@@ -535,35 +552,35 @@ test.describe('Invites (Sweet Xv)', () => {
 
     expect(await invitePage.firstSectionSentence_2.textContent(), {
       message: 'First section sentence 2 should be correct',
-    }).toBe(sweetXvSettingMock.firstSectionSentences.split(';')[1]);
+    }).toBe(sweetXvSettingMockCopy.firstSectionSentences.split(';')[1]);
 
     expect(await invitePage.father.textContent(), {
       message: 'Father should be correct',
-    }).toBe(sweetXvSettingMock.parents.split(';')[0]);
+    }).toBe(sweetXvSettingMockCopy.parents.split(';')[0]);
 
     expect(await invitePage.mother.textContent(), {
       message: 'Mother should be correct',
-    }).toBe(sweetXvSettingMock.parents.split(';')[1]);
+    }).toBe(sweetXvSettingMockCopy.parents.split(';')[1]);
 
     expect(await invitePage.godFather.textContent(), {
       message: 'God father should be correct',
-    }).toBe(sweetXvSettingMock.godParents.split(';')[0]);
+    }).toBe(sweetXvSettingMockCopy.godParents.split(';')[0]);
 
     expect(await invitePage.godMother.textContent(), {
       message: 'God mother should be correct',
-    }).toBe(sweetXvSettingMock.godParents.split(';')[1]);
+    }).toBe(sweetXvSettingMockCopy.godParents.split(';')[1]);
 
     expect(await invitePage.secondSectionSentence.textContent(), {
       message: 'Second section sentence should be correct',
-    }).toContain(sweetXvSettingMock.secondSectionSentences);
+    }).toContain(sweetXvSettingMockCopy.secondSectionSentences);
 
     expect(await invitePage.massTime.textContent(), {
       message: 'Mass time should be correct',
-    }).toContain(sweetXvSettingMock.massTime);
+    }).toContain(sweetXvSettingMockCopy.massTime);
 
     expect(await invitePage.massAddress.textContent(), {
       message: 'Mass address should be correct',
-    }).toBe(sweetXvSettingMock.massAddress);
+    }).toBe(sweetXvSettingMockCopy.massAddress);
 
     expect(await invitePage.massIframe.isVisible(), {
       message: 'Mass iframe should be visible',
@@ -575,19 +592,19 @@ test.describe('Invites (Sweet Xv)', () => {
 
     expect(await invitePage.receptionPlace.textContent(), {
       message: 'Reception place should be correct',
-    }).toBe(sweetXvSettingMock.receptionPlace);
+    }).toBe(sweetXvSettingMockCopy.receptionPlace);
 
     expect(await invitePage.receptionAddress.textContent(), {
       message: 'Reception address should be correct',
-    }).toBe(sweetXvSettingMock.receptionAddress);
+    }).toBe(sweetXvSettingMockCopy.receptionAddress);
 
     expect(await invitePage.receptionTime.textContent(), {
       message: 'Reception time should be correct',
-    }).toContain(sweetXvSettingMock.receptionTime);
+    }).toContain(sweetXvSettingMockCopy.receptionTime);
 
     expect(await invitePage.dressCodeColor.textContent(), {
       message: 'Dress code color should be correct',
-    }).toContain(sweetXvSettingMock.dressCodeColor);
+    }).toContain(sweetXvSettingMockCopy.dressCodeColor);
 
     expect(await invitePage.giftsSection.isVisible(), {
       message: 'Gifts section should be visible',

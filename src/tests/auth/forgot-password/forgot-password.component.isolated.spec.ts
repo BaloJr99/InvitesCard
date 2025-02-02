@@ -1,6 +1,9 @@
 import { FormBuilder } from '@angular/forms';
 import { ForgotPasswordComponent } from 'src/app/auth/forgot-password/forgot-password.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock } from 'src/tests/mocks/mocks';
+
+const loginDataMockCopy = deepCopy(loginDataMock);
 
 describe('ForgotPasswordComponent Isolated', () => {
   let component: ForgotPasswordComponent;
@@ -48,7 +51,7 @@ describe('ForgotPasswordComponent Isolated', () => {
   });
 
   it('form should be valid when fields are filled', () => {
-    updateForm(loginDataMock.usernameOrEmail);
+    updateForm(loginDataMockCopy.usernameOrEmail);
     expect(component.forgotPasswordForm.valid)
       .withContext('Form should be valid')
       .toBeTruthy();

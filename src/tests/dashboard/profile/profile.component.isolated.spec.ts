@@ -1,7 +1,10 @@
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ProfileComponent } from 'src/app/dashboard/profile/profile.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { userProfileMock } from 'src/tests/mocks/mocks';
+
+const userProfileMockCopy = deepCopy(userProfileMock);
 
 describe('Profile Component (Isolated Test)', () => {
   let component: ProfileComponent;
@@ -79,13 +82,13 @@ describe('Profile Component (Isolated Test)', () => {
 
   it('form should be valid when fields are filled', () => {
     updateForm(
-      userProfileMock.id,
-      userProfileMock.username,
-      userProfileMock.firstName,
-      userProfileMock.lastName,
-      userProfileMock.phoneNumber,
-      userProfileMock.email,
-      userProfileMock.gender
+      userProfileMockCopy.id,
+      userProfileMockCopy.username,
+      userProfileMockCopy.firstName,
+      userProfileMockCopy.lastName,
+      userProfileMockCopy.phoneNumber,
+      userProfileMockCopy.email,
+      userProfileMockCopy.gender
     );
 
     expect(component.createProfileForm.valid)

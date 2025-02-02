@@ -1,6 +1,9 @@
 import { FormBuilder } from '@angular/forms';
 import { LoginComponent } from 'src/app/auth/login/login.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock } from 'src/tests/mocks/mocks';
+
+const loginDataMockCopy = deepCopy(loginDataMock);
 
 describe('Login Component (Isolated Test)', () => {
   let component: LoginComponent;
@@ -58,7 +61,7 @@ describe('Login Component (Isolated Test)', () => {
   });
 
   it('form should be valid when fields are filled', () => {
-    updateForm(loginDataMock.usernameOrEmail, loginDataMock.password);
+    updateForm(loginDataMockCopy.usernameOrEmail, loginDataMockCopy.password);
     expect(component.loginForm.valid)
       .withContext('Form should be valid')
       .toBeTruthy();

@@ -1,7 +1,10 @@
 import { EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ChangePasswordComponent } from 'src/app/dashboard/profile/change-password/change-password.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock } from 'src/tests/mocks/mocks';
+
+const loginDataMockCopy = deepCopy(loginDataMock);
 
 describe('Change Password Component (Isolated Test)', () => {
   let component: ChangePasswordComponent;
@@ -63,14 +66,14 @@ describe('Change Password Component (Isolated Test)', () => {
   });
 
   it('form should be valid when fields are filled', () => {
-    updateForm(loginDataMock.password, loginDataMock.password);
+    updateForm(loginDataMockCopy.password, loginDataMockCopy.password);
     expect(component.passwordResetForm.valid)
       .withContext('Form should be valid')
       .toBeTrue();
   });
 
   it('form should be invalid when fields are not the same', () => {
-    updateForm(loginDataMock.password, 'differentPassword');
+    updateForm(loginDataMockCopy.password, 'differentPassword');
     expect(component.passwordResetForm.valid)
       .withContext('Form should be valid')
       .toBeFalse();

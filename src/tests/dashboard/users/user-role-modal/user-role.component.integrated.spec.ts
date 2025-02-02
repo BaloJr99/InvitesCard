@@ -5,7 +5,11 @@ import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { UserRoleComponent } from 'src/app/dashboard/users/user-role-modal/user-role.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { messageResponseMock, roleMock } from 'src/tests/mocks/mocks';
+
+const messageResponseMockCopy = deepCopy(messageResponseMock);
+const roleMockCopy = deepCopy(roleMock);
 
 describe('User Role Component (Integrated Test)', () => {
   let fixture: ComponentFixture<UserRoleComponent>;
@@ -55,8 +59,8 @@ describe('User Role Component (Integrated Test)', () => {
   }));
 
   beforeEach(() => {
-    rolesServiceSpy.createRole.and.returnValue(of(messageResponseMock));
-    rolesServiceSpy.updateRole.and.returnValue(of(messageResponseMock));
+    rolesServiceSpy.createRole.and.returnValue(of(messageResponseMockCopy));
+    rolesServiceSpy.updateRole.and.returnValue(of(messageResponseMockCopy));
     rolesServiceSpy.checkRoleName.and.returnValue(of(false));
 
     fixture = TestBed.createComponent(UserRoleComponent);
@@ -64,7 +68,7 @@ describe('User Role Component (Integrated Test)', () => {
   });
 
   it('should call createRole()', () => {
-    updateFormUsingEvent('', roleMock.name, roleMock.isActive);
+    updateFormUsingEvent('', roleMockCopy.name, roleMockCopy.isActive);
 
     const buttons = fixture.debugElement.queryAll(
       By.css('.modal-footer button')
@@ -79,7 +83,11 @@ describe('User Role Component (Integrated Test)', () => {
   });
 
   it('should call updateRole()', () => {
-    updateFormUsingEvent(roleMock.id, roleMock.name, roleMock.isActive);
+    updateFormUsingEvent(
+      roleMockCopy.id,
+      roleMockCopy.name,
+      roleMockCopy.isActive
+    );
 
     const buttons = fixture.debugElement.queryAll(
       By.css('.modal-footer button')

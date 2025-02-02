@@ -8,6 +8,7 @@ import { LoginPage } from 'e2e/pages/auth/login-page';
 import { EventsPage } from 'e2e/pages/dashboard/events/events-page';
 import { SettingsPage } from 'e2e/pages/dashboard/settings/settings-page';
 import { TestingPage } from 'e2e/pages/dashboard/testing/testing-page';
+import { toLocalDate } from 'src/app/shared/utils/tools';
 import {
   saveTheDateSettingMock,
   sweetXvSettingMock,
@@ -79,6 +80,22 @@ test.describe('Dashboard settings (Sweet 16)', () => {
     await settingsPage.selectEvent(sweetXvEventMock.nameOfEvent);
     await settingsPage.waitToLoad();
 
+    const dateOfMass = sweetXvSettingMock.massTime.split(' ');
+    const dateOfMassTime = dateOfMass[0];
+    const timeOfMassTime = dateOfMass[1];
+    const massTime = toLocalDate(`${dateOfMassTime}T${timeOfMassTime}.000Z`)
+      .split('T')[1]
+      .substring(0, 5);
+
+    const dateOfReception = sweetXvSettingMock.receptionTime.split(' ');
+    const dateOfReceptionTime = dateOfReception[0];
+    const timeOfReceptionTime = dateOfReception[1];
+    const receptionTime = toLocalDate(
+      `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`
+    )
+      .split('T')[1]
+      .substring(0, 5);
+
     await settingsPage.fillSweet16Settings(
       sweetXvSettingMock.primaryColor,
       sweetXvSettingMock.secondaryColor,
@@ -87,10 +104,10 @@ test.describe('Dashboard settings (Sweet 16)', () => {
       sweetXvSettingMock.firstSectionSentences,
       sweetXvSettingMock.secondSectionSentences,
       sweetXvSettingMock.massUrl,
-      sweetXvSettingMock.massTime,
+      massTime,
       sweetXvSettingMock.massAddress,
       sweetXvSettingMock.receptionUrl,
-      sweetXvSettingMock.receptionTime,
+      receptionTime,
       sweetXvSettingMock.receptionPlace,
       sweetXvSettingMock.receptionAddress,
       sweetXvSettingMock.dressCodeColor

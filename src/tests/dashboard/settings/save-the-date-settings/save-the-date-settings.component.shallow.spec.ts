@@ -5,7 +5,10 @@ import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { SaveTheDateSettingsComponent } from 'src/app/dashboard/settings/save-the-date-settings/save-the-date-settings.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { saveTheDateSettingMock } from 'src/tests/mocks/mocks';
+
+const saveTheDateSettingMockCopy = deepCopy(saveTheDateSettingMock);
 
 describe('Save The Date Settings Component (Shallow test)', () => {
   let fixture: ComponentFixture<SaveTheDateSettingsComponent>;
@@ -127,40 +130,40 @@ describe('Save The Date Settings Component (Shallow test)', () => {
 
   it('Expect form controls to be filled when user fills inputs', () => {
     updateFormUsingEvent(
-      saveTheDateSettingMock.eventId,
-      saveTheDateSettingMock.primaryColor,
-      saveTheDateSettingMock.secondaryColor,
-      saveTheDateSettingMock.receptionPlace,
-      saveTheDateSettingMock.copyMessage,
-      saveTheDateSettingMock.hotelName,
-      saveTheDateSettingMock.hotelInformation
+      saveTheDateSettingMockCopy.eventId,
+      saveTheDateSettingMockCopy.primaryColor,
+      saveTheDateSettingMockCopy.secondaryColor,
+      saveTheDateSettingMockCopy.receptionPlace,
+      saveTheDateSettingMockCopy.copyMessage,
+      saveTheDateSettingMockCopy.hotelName,
+      saveTheDateSettingMockCopy.hotelInformation
     );
 
     const controls = fixture.componentInstance.createEventSettingsForm.controls;
 
     expect(controls['eventId'].value)
       .withContext('eventId control should be filled when input changes')
-      .toBe(saveTheDateSettingMock.eventId);
+      .toBe(saveTheDateSettingMockCopy.eventId);
     expect(controls['primaryColor'].value)
       .withContext('primaryColor control should be filled when input changes')
-      .toBe(saveTheDateSettingMock.primaryColor);
+      .toBe(saveTheDateSettingMockCopy.primaryColor);
     expect(controls['secondaryColor'].value)
       .withContext('secondaryColor control should be filled when input changes')
-      .toBe(saveTheDateSettingMock.secondaryColor);
+      .toBe(saveTheDateSettingMockCopy.secondaryColor);
     expect(controls['receptionPlace'].value)
       .withContext('receptionPlace control should be filled when input changes')
-      .toBe(saveTheDateSettingMock.receptionPlace);
+      .toBe(saveTheDateSettingMockCopy.receptionPlace);
     expect(controls['copyMessage'].value)
       .withContext('copyMessage control should be filled when input changes')
-      .toBe(saveTheDateSettingMock.copyMessage);
+      .toBe(saveTheDateSettingMockCopy.copyMessage);
     expect(controls['hotelName'].value)
       .withContext('hotelName control should be filled when input changes')
-      .toBe(saveTheDateSettingMock.hotelName);
+      .toBe(saveTheDateSettingMockCopy.hotelName);
     expect(controls['hotelInformation'].value)
       .withContext(
         'hotelInformation control should be filled when input changes'
       )
-      .toBe(saveTheDateSettingMock.hotelInformation);
+      .toBe(saveTheDateSettingMockCopy.hotelInformation);
   });
 
   it('Expect save button to trigger saveChanges', () => {
@@ -250,13 +253,13 @@ describe('Save The Date Settings Component (Shallow test)', () => {
 
   it("Shouldn't display primaryColor, secondaryColor, receptionPlace, copyMessage, hotelName, hotelInformation error message when fields are filled", () => {
     updateFormUsingEvent(
-      saveTheDateSettingMock.eventId,
-      saveTheDateSettingMock.primaryColor,
-      saveTheDateSettingMock.secondaryColor,
-      saveTheDateSettingMock.receptionPlace,
-      saveTheDateSettingMock.copyMessage,
-      saveTheDateSettingMock.hotelName,
-      saveTheDateSettingMock.hotelInformation
+      saveTheDateSettingMockCopy.eventId,
+      saveTheDateSettingMockCopy.primaryColor,
+      saveTheDateSettingMockCopy.secondaryColor,
+      saveTheDateSettingMockCopy.receptionPlace,
+      saveTheDateSettingMockCopy.copyMessage,
+      saveTheDateSettingMockCopy.hotelName,
+      saveTheDateSettingMockCopy.hotelInformation
     );
 
     const errorSpans = fixture.debugElement.queryAll(

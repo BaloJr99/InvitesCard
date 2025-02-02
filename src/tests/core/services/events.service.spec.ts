@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { EventsService } from 'src/app/core/services/events.service';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   dashboardEventsMock,
   dropdownEventsMock,
@@ -9,6 +10,13 @@ import {
   messageResponseMock,
   newInviteMock,
 } from 'src/tests/mocks/mocks';
+
+const dashboardEventsMockCopy = deepCopy(dashboardEventsMock);
+const dropdownEventsMockCopy = deepCopy(dropdownEventsMock);
+const eventInformationMockCopy = deepCopy(eventInformationMock);
+const fullEventsMockCopy = deepCopy(fullEventsMock);
+const messageResponseMockCopy = deepCopy(messageResponseMock);
+const newInviteMockCopy = deepCopy(newInviteMock);
 
 describe('EventsService', () => {
   let eventsService: EventsService;
@@ -44,10 +52,10 @@ describe('EventsService', () => {
   });
 
   it('should call getEvents', () => {
-    eventsServiceSpy.getEvents.and.returnValue(of(dashboardEventsMock));
+    eventsServiceSpy.getEvents.and.returnValue(of(dashboardEventsMockCopy));
 
     eventsServiceSpy.getEvents().subscribe((response) => {
-      expect(response).toBe(dashboardEventsMock);
+      expect(response).toBe(dashboardEventsMockCopy);
     });
 
     expect(eventsServiceSpy.getEvents)
@@ -56,10 +64,10 @@ describe('EventsService', () => {
   });
 
   it('should call getDropdownEvents', () => {
-    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMock));
+    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMockCopy));
 
     eventsServiceSpy.getDropdownEvents().subscribe((response) => {
-      expect(response).toBe(dropdownEventsMock);
+      expect(response).toBe(dropdownEventsMockCopy);
     });
 
     expect(eventsServiceSpy.getDropdownEvents)
@@ -68,103 +76,101 @@ describe('EventsService', () => {
   });
 
   it('should call getEventSettings', () => {
-    eventsServiceSpy.getEventSettings.and.returnValue(
-      of(eventInformationMock)
-    );
+    eventsServiceSpy.getEventSettings.and.returnValue(of(eventInformationMockCopy));
 
     eventsServiceSpy
-      .getEventSettings(fullEventsMock.id, [])
+      .getEventSettings(fullEventsMockCopy.id, [])
       .subscribe((response) => {
-        expect(response).toBe(eventInformationMock);
+        expect(response).toBe(eventInformationMockCopy);
       });
 
     expect(eventsServiceSpy.getEventSettings).toHaveBeenCalledOnceWith(
-      fullEventsMock.id,
+      fullEventsMockCopy.id,
       []
     );
   });
 
   it('shoud call getEventInvites', () => {
     eventsServiceSpy.getEventInvites.and.returnValue(
-      of([{ ...newInviteMock }])
+      of([{ ...newInviteMockCopy }])
     );
 
     eventsServiceSpy
-      .getEventInvites(fullEventsMock.id)
+      .getEventInvites(fullEventsMockCopy.id)
       .subscribe((response) => {
-        expect(response).toEqual([{ ...newInviteMock }]);
+        expect(response).toEqual([{ ...newInviteMockCopy }]);
         expect(response.length).toBe(1);
-        expect(response[0].eventId).toEqual(fullEventsMock.id);
+        expect(response[0].eventId).toEqual(fullEventsMockCopy.id);
       });
 
     expect(eventsServiceSpy.getEventInvites).toHaveBeenCalledOnceWith(
-      fullEventsMock.id
+      fullEventsMockCopy.id
     );
   });
 
   it('should call isDeadlineMet', () => {
     eventsServiceSpy.isDeadlineMet.and.returnValue(of(true));
 
-    eventsServiceSpy.isDeadlineMet(fullEventsMock.id).subscribe((response) => {
+    eventsServiceSpy.isDeadlineMet(fullEventsMockCopy.id).subscribe((response) => {
       expect(response).toBeTrue();
     });
 
     expect(eventsServiceSpy.isDeadlineMet).toHaveBeenCalledOnceWith(
-      fullEventsMock.id
+      fullEventsMockCopy.id
     );
   });
 
   it('should call getEventById', () => {
-    eventsServiceSpy.getEventById.and.returnValue(of(fullEventsMock));
+    eventsServiceSpy.getEventById.and.returnValue(of(fullEventsMockCopy));
 
-    eventsServiceSpy.getEventById(fullEventsMock.id).subscribe((response) => {
-      expect(response).toBe(fullEventsMock);
-      expect(response.id).toEqual(fullEventsMock.id);
+    eventsServiceSpy.getEventById(fullEventsMockCopy.id).subscribe((response) => {
+      expect(response).toBe(fullEventsMockCopy);
+      expect(response.id).toEqual(fullEventsMockCopy.id);
     });
 
     expect(eventsServiceSpy.getEventById).toHaveBeenCalledOnceWith(
-      fullEventsMock.id
+      fullEventsMockCopy.id
     );
   });
 
   it('should call createEvent', () => {
-    eventsServiceSpy.createEvent.and.returnValue(of(messageResponseMock));
+    eventsServiceSpy.createEvent.and.returnValue(of(messageResponseMockCopy));
 
-    eventsServiceSpy.createEvent(fullEventsMock).subscribe((response) => {
-      expect(response).toBe(messageResponseMock);
+    eventsServiceSpy.createEvent(fullEventsMockCopy).subscribe((response) => {
+      expect(response).toBe(messageResponseMockCopy);
     });
 
     expect(eventsServiceSpy.createEvent).toHaveBeenCalledOnceWith(
-      fullEventsMock
+      fullEventsMockCopy
     );
   });
 
   it('should call updateEvent', () => {
-    eventsServiceSpy.updateEvent.and.returnValue(of(messageResponseMock));
+    eventsServiceSpy.updateEvent.and.returnValue(of(messageResponseMockCopy));
 
     eventsServiceSpy
-      .updateEvent(fullEventsMock, fullEventsMock.id, true, false)
+      .updateEvent(fullEventsMockCopy, fullEventsMockCopy.id, true, false)
       .subscribe((response) => {
-        expect(response).toBe(messageResponseMock);
+        expect(response).toBe(messageResponseMockCopy);
       });
 
     expect(eventsServiceSpy.updateEvent).toHaveBeenCalledOnceWith(
-      fullEventsMock,
-      fullEventsMock.id,
+      fullEventsMockCopy,
+      fullEventsMockCopy.id,
       true,
       false
     );
   });
 
   it('should call deleteEvent', () => {
-    eventsServiceSpy.deleteEvent.and.returnValue(of(messageResponseMock));
+    eventsServiceSpy.deleteEvent.and.returnValue(of(messageResponseMockCopy));
 
-    eventsServiceSpy.deleteEvent(fullEventsMock.id).subscribe((response) => {
-      expect(response).toBe(messageResponseMock);
+    eventsServiceSpy.deleteEvent(fullEventsMockCopy.id).subscribe((response) => {
+      expect(response).toBe(messageResponseMockCopy);
     });
 
     expect(eventsServiceSpy.deleteEvent).toHaveBeenCalledOnceWith(
-      fullEventsMock.id
+      fullEventsMockCopy.id
     );
   });
 });

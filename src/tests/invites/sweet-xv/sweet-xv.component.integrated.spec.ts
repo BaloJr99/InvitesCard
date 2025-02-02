@@ -9,15 +9,14 @@ import { ConfirmationComponent } from 'src/app/invites/shared/confirmation/confi
 import { CountdownComponent } from 'src/app/invites/shared/countdown/countdown.component';
 import { SweetXvComponent } from 'src/app/invites/sweet-xv/sweet-xv.component';
 import { SafePipe } from 'src/app/shared/pipes/safe.pipe';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   sweetXvBaseSettingMock,
   sweetXvUserInviteMock,
 } from 'src/tests/mocks/mocks';
 
-// Utility function to create a deep copy of the mock object
-function deepCopy<T>(obj: T): T {
-  return JSON.parse(JSON.stringify(obj));
-}
+const sweetXvBaseSettingMockCopy = deepCopy(sweetXvBaseSettingMock);
+const sweetXvUserInviteMockCopy = deepCopy(sweetXvUserInviteMock);
 
 describe('Sweet Xv Component (Integrated Test)', () => {
   let fixture: ComponentFixture<SweetXvComponent>;
@@ -43,7 +42,7 @@ describe('Sweet Xv Component (Integrated Test)', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            params: of({ id: sweetXvUserInviteMock.id }),
+            params: of({ id: sweetXvUserInviteMockCopy.id }),
           },
         },
         { provide: SettingsService, useValue: settingsSpy },
@@ -64,11 +63,9 @@ describe('Sweet Xv Component (Integrated Test)', () => {
   }));
 
   beforeEach(() => {
-    invitesServiceSpy.getInvite.and.returnValue(
-      of(deepCopy(sweetXvUserInviteMock))
-    );
+    invitesServiceSpy.getInvite.and.returnValue(of(sweetXvUserInviteMockCopy));
     settingsServiceSpy.getEventSettings.and.returnValue(
-      of(sweetXvBaseSettingMock)
+      of(sweetXvBaseSettingMockCopy)
     );
     filesServiceSpy.getFilesByEvent.and.returnValue(
       of({

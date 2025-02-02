@@ -7,6 +7,10 @@ import { messagesMock, userMock } from '../mocks/mocks';
 import { Subject } from 'rxjs';
 import { IMessage, INotification } from 'src/app/core/models/common';
 import { By } from '@angular/platform-browser';
+import { deepCopy } from 'src/app/shared/utils/tools';
+
+const messagesMockCopy = deepCopy(messagesMock);
+const userMockCopy = deepCopy(userMock);
 
 describe('Dashboard Component (Shallow Test)', () => {
   let fixture: ComponentFixture<DashboardComponent>;
@@ -44,7 +48,7 @@ describe('Dashboard Component (Shallow Test)', () => {
   }));
 
   beforeEach(() => {
-    tokenStorageServiceSpy.getTokenValues.and.returnValue(userMock);
+    tokenStorageServiceSpy.getTokenValues.and.returnValue(userMockCopy);
     fixture = TestBed.createComponent(DashboardComponent);
     fixture.detectChanges();
   });
@@ -62,7 +66,7 @@ describe('Dashboard Component (Shallow Test)', () => {
   });
 
   it('should have 1 message in the messages-chat', () => {
-    messagesDataSubject.next(messagesMock);
+    messagesDataSubject.next(messagesMockCopy);
     fixture.detectChanges();
 
     const messagesChat = fixture.debugElement.query(By.css('.messages-chat'));
@@ -78,7 +82,7 @@ describe('Dashboard Component (Shallow Test)', () => {
       .toBe(1);
     expect(fixture.componentInstance.messagesGrouped[0].value)
       .withContext('Messages grouped should contain the message')
-      .toEqual(messagesMock);
+      .toEqual(messagesMockCopy);
 
     const messageDate = messages[0].query(By.css('.message-date'));
     const messageCard = messages[0].query(By.css('.card'));
@@ -88,15 +92,15 @@ describe('Dashboard Component (Shallow Test)', () => {
 
     expect(messageDate.nativeElement.textContent)
       .withContext('Message date should be 01/01/2021')
-      .toContain(messagesMock[0].date);
+      .toContain(messagesMockCopy[0].date);
     expect(messageTime.nativeElement.textContent)
       .withContext('Message time should be 12:00')
-      .toContain(messagesMock[0].time);
+      .toContain(messagesMockCopy[0].time);
     expect(messageFamily.nativeElement.textContent)
       .withContext('Message family should be Familia')
-      .toContain(messagesMock[0].family);
+      .toContain(messagesMockCopy[0].family);
     expect(messageContent.nativeElement.textContent)
       .withContext('Message content should be Hola')
-      .toContain(messagesMock[0].message);
+      .toContain(messagesMockCopy[0].message);
   });
 });

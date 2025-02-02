@@ -5,11 +5,16 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { AccomodationComponent } from 'src/app/invites/save-the-date/accomodations/accomodation.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   messageResponseMock,
   saveTheDateSettingMock,
   saveTheDateUserInviteMock,
 } from 'src/tests/mocks/mocks';
+
+const messageResponseMockCopy = deepCopy(messageResponseMock);
+const saveTheDateSettingMockCopy = deepCopy(saveTheDateSettingMock);
+const saveTheDateUserInviteMockCopy = deepCopy(saveTheDateUserInviteMock);
 
 describe('Accomodation Component (Integrated Test)', () => {
   let fixture: ComponentFixture<AccomodationComponent>;
@@ -30,7 +35,9 @@ describe('Accomodation Component (Integrated Test)', () => {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
-              paramMap: convertToParamMap({ id: saveTheDateUserInviteMock.id }),
+              paramMap: convertToParamMap({
+                id: saveTheDateUserInviteMockCopy.id,
+              }),
             },
           },
         },
@@ -43,14 +50,16 @@ describe('Accomodation Component (Integrated Test)', () => {
   }));
 
   beforeEach(() => {
-    invitesServiceSpy.sendConfirmation.and.returnValue(of(messageResponseMock));
+    invitesServiceSpy.sendConfirmation.and.returnValue(
+      of(messageResponseMockCopy)
+    );
     fixture = TestBed.createComponent(AccomodationComponent);
     fixture.detectChanges();
   });
 
   it('should call sendConfirmation when sendUserResponse is called', () => {
-    fixture.componentRef.setInput('invite', saveTheDateUserInviteMock);
-    fixture.componentRef.setInput('inviteSettings', saveTheDateSettingMock);
+    fixture.componentRef.setInput('invite', saveTheDateUserInviteMockCopy);
+    fixture.componentRef.setInput('inviteSettings', saveTheDateSettingMockCopy);
     fixture.detectChanges();
 
     const form = fixture.debugElement.query(By.css('form'));

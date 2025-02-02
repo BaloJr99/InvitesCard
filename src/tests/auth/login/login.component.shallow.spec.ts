@@ -4,7 +4,10 @@ import { By } from '@angular/platform-browser';
 import { LoginComponent } from 'src/app/auth/login/login.component';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock } from 'src/tests/mocks/mocks';
+
+const loginDataMockCopy = deepCopy(loginDataMock);
 
 describe('Login Component (Shallow Test)', () => {
   let fixture: ComponentFixture<LoginComponent>;
@@ -74,22 +77,22 @@ describe('Login Component (Shallow Test)', () => {
   });
 
   it('Expect form controls to be filled when user fills inputs', () => {
-    updateFormUsingEvent(loginDataMock.usernameOrEmail, loginDataMock.password);
+    updateFormUsingEvent(loginDataMockCopy.usernameOrEmail, loginDataMockCopy.password);
     expect(
       fixture.componentInstance.loginForm.controls['usernameOrEmail'].value
     )
       .withContext('Username control should be filled when input changes')
-      .toBe(loginDataMock.usernameOrEmail);
+      .toBe(loginDataMockCopy.usernameOrEmail);
     expect(fixture.componentInstance.loginForm.controls['password'].value)
       .withContext('Password control should be filled when input changes')
-      .toBe(loginDataMock.password);
+      .toBe(loginDataMockCopy.password);
   });
 
   it('Expect form on submit to trigger loginAccount', () => {
     spyOn(fixture.componentInstance, 'loginAccount');
     const form = fixture.debugElement.query(By.css('form'));
     form.triggerEventHandler('submit');
-    
+
     expect(fixture.componentInstance.loginAccount)
       .withContext('LoginAccount method should have been called')
       .toHaveBeenCalled();
@@ -127,7 +130,7 @@ describe('Login Component (Shallow Test)', () => {
   });
 
   it("Shouldn't display username and password error message when fields are filled", () => {
-    updateFormUsingEvent(loginDataMock.usernameOrEmail, loginDataMock.password);
+    updateFormUsingEvent(loginDataMockCopy.usernameOrEmail, loginDataMockCopy.password);
     fixture.detectChanges();
     const errorSpans = fixture.debugElement.queryAll(
       By.css('.invalid-feedback')

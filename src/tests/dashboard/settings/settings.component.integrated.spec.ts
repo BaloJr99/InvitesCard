@@ -8,7 +8,10 @@ import { SettingsService } from 'src/app/core/services/settings.service';
 import { SaveTheDateSettingsComponent } from 'src/app/dashboard/settings/save-the-date-settings/save-the-date-settings.component';
 import { SettingsComponent } from 'src/app/dashboard/settings/settings.component';
 import { SweetXvSettingsComponent } from 'src/app/dashboard/settings/sweet-xv-settings/sweet-xv-settings.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { dropdownEventsMock } from 'src/tests/mocks/mocks';
+
+const dropdownEventsMockCopy = deepCopy(dropdownEventsMock);
 
 describe('Settings Component (Shallow Test)', () => {
   let fixture: ComponentFixture<SettingsComponent>;
@@ -26,6 +29,7 @@ describe('Settings Component (Shallow Test)', () => {
   beforeEach(waitForAsync(() => {
     const eventsSpy = jasmine.createSpyObj('EventsService', [
       'getDropdownEvents',
+      'getEventById',
     ]);
     const settingsSpy = jasmine.createSpyObj('SettingsService', [
       'getEventSettings',
@@ -56,7 +60,7 @@ describe('Settings Component (Shallow Test)', () => {
 
   beforeEach(() => {
     settingsServiceSpy.getEventSettings.and.returnValue(of());
-    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMock));
+    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMockCopy));
     fixture = TestBed.createComponent(SettingsComponent);
     fixture.detectChanges();
   });
@@ -67,8 +71,8 @@ describe('Settings Component (Shallow Test)', () => {
       .toHaveBeenCalled();
   });
 
-  it('should display save-the-date-settings when event type is sweet xv', () => {
-    selectEvent(dropdownEventsMock[0].id);
+  it('should display save-the-date-settings when event type is save the date', () => {
+    selectEvent(dropdownEventsMockCopy[0].id);
 
     const saveTheDateSettings = fixture.debugElement.query(
       By.directive(SaveTheDateSettingsComponent)
@@ -76,13 +80,13 @@ describe('Settings Component (Shallow Test)', () => {
 
     expect(saveTheDateSettings)
       .withContext(
-        'should display save-the-date-settings when event type is sweet xv'
+        'should display save-the-date-settings when event type is save the date'
       )
       .not.toBeNull();
   });
 
   it('should display sweet-xv-settings when event type is sweet xv', () => {
-    selectEvent(dropdownEventsMock[1].id);
+    selectEvent(dropdownEventsMockCopy[1].id);
 
     const sweetXvSettings = fixture.debugElement.query(
       By.directive(SweetXvSettingsComponent)

@@ -14,15 +14,14 @@ import { FilesService } from 'src/app/core/services/files.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { SaveTheDateComponent } from 'src/app/invites/save-the-date/save-the-date.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   saveTheDateBaseSettingMock,
   saveTheDateUserInviteMock,
 } from 'src/tests/mocks/mocks';
 
-// Utility function to create a deep copy of the mock object
-function deepCopy<T>(obj: T): T {
-  return JSON.parse(JSON.stringify(obj));
-}
+const saveTheDateBaseSettingMockCopy = deepCopy(saveTheDateBaseSettingMock);
+const saveTheDateUserInviteMockCopy = deepCopy(saveTheDateUserInviteMock);
 
 describe('Save The Date Component (Shallow Test)', () => {
   let fixture: ComponentFixture<SaveTheDateComponent>;
@@ -46,7 +45,7 @@ describe('Save The Date Component (Shallow Test)', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            params: of({ id: saveTheDateUserInviteMock.id }),
+            params: of({ id: saveTheDateUserInviteMockCopy.id }),
           },
         },
         { provide: SettingsService, useValue: settingsSpy },
@@ -69,7 +68,7 @@ describe('Save The Date Component (Shallow Test)', () => {
       CommonModalService
     ) as jasmine.SpyObj<CommonModalService>;
     settingsServiceSpy.getEventSettings.and.returnValue(
-      of(saveTheDateBaseSettingMock)
+      of(saveTheDateBaseSettingMockCopy)
     );
   }));
 
@@ -81,11 +80,11 @@ describe('Save The Date Component (Shallow Test)', () => {
       })
     );
     settingsServiceSpy.getEventSettings.and.returnValue(
-      of(saveTheDateBaseSettingMock)
+      of(saveTheDateBaseSettingMockCopy)
     );
     commonModalServiceSpy.open.and.returnValue(of(CommonModalResponse.Cancel));
     invitesServiceSpy.getInvite.and.returnValue(
-      of(deepCopy(saveTheDateUserInviteMock))
+      of(saveTheDateUserInviteMockCopy)
     );
 
     fixture = TestBed.createComponent(SaveTheDateComponent);
@@ -114,7 +113,7 @@ describe('Save The Date Component (Shallow Test)', () => {
       .withContext('Main header should be rendered')
       .toBe('SAVE The DATE');
 
-    const namesOfCouple = saveTheDateUserInviteMock.nameOfCelebrated.split(';');
+    const namesOfCouple = saveTheDateUserInviteMockCopy.nameOfCelebrated.split(';');
     expect(names.nativeElement.textContent)
       .withContext('Names should be rendered')
       .toContain(namesOfCouple[0]);
@@ -140,7 +139,7 @@ describe('Save The Date Component (Shallow Test)', () => {
       .toBeTruthy();
     expect(receptionDate.nativeElement.textContent)
       .withContext('Reception Date should be rendered')
-      .toBe('JULY 2021');
+      .toBe('FEBRUARY 2025');
     expect(receptionPlace.nativeElement.textContent)
       .withContext('Reception Place should be rendered')
       .toBe('Test Place');

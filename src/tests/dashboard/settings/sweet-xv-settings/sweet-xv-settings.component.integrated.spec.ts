@@ -4,8 +4,10 @@ import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { EventType } from 'src/app/core/models/enum';
+import { EventsService } from 'src/app/core/services/events.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { SweetXvSettingsComponent } from 'src/app/dashboard/settings/sweet-xv-settings/sweet-xv-settings.component';
+import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
 import {
   fullEventsMock,
   messageResponseMock,
@@ -13,9 +15,15 @@ import {
   sweetXvSettingMock,
 } from 'src/tests/mocks/mocks';
 
+const fullEventsMockCopy = deepCopy(fullEventsMock);
+const messageResponseMockCopy = deepCopy(messageResponseMock);
+const sweetXvBaseSettingMockCopy = deepCopy(sweetXvBaseSettingMock);
+const sweetXvSettingMockCopy = deepCopy(sweetXvSettingMock);
+
 describe('Sweet Xv Settings (Integrated Test)', () => {
   let fixture: ComponentFixture<SweetXvSettingsComponent>;
   let settingsServiceSpy: jasmine.SpyObj<SettingsService>;
+  let eventsServiceSpy: jasmine.SpyObj<EventsService>;
 
   const updateFormUsingEvent = (
     eventId: string,
@@ -122,6 +130,7 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
       'updateEventSettings',
     ]);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
+    const eventsSpy = jasmine.createSpyObj('EventsService', ['getEventById']);
 
     TestBed.configureTestingModule({
       declarations: [SweetXvSettingsComponent],
@@ -129,22 +138,28 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
       providers: [
         { provide: SettingsService, useValue: settingsSpy },
         { provide: ToastrService, useValue: toastrSpy },
+        { provide: EventsService, useValue: eventsSpy },
       ],
     }).compileComponents();
 
     settingsServiceSpy = TestBed.inject(
       SettingsService
     ) as jasmine.SpyObj<SettingsService>;
+
+    eventsServiceSpy = TestBed.inject(
+      EventsService
+    ) as jasmine.SpyObj<EventsService>;
   }));
 
   beforeEach(() => {
     settingsServiceSpy.getEventSettings.and.returnValue(
-      of(sweetXvBaseSettingMock)
+      of(sweetXvBaseSettingMockCopy)
     );
+    eventsServiceSpy.getEventById.and.returnValue(of(fullEventsMockCopy));
 
     fixture = TestBed.createComponent(SweetXvSettingsComponent);
     fixture.componentRef.setInput('eventSettingAction', {
-      eventId: fullEventsMock.id,
+      eventId: fullEventsMockCopy.id,
       eventType: EventType.Xv,
       isNew: true,
     });
@@ -161,25 +176,39 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
 
   it('should call createEventSettings when the event setting is new', () => {
     settingsServiceSpy.createEventSettings.and.returnValue(
-      of(messageResponseMock)
+      of(messageResponseMockCopy)
     );
 
+    const dateOfReceptionTime =
+      sweetXvSettingMockCopy.receptionTime.split(' ')[0];
+    const timeOfReceptionTime =
+      sweetXvSettingMockCopy.receptionTime.split(' ')[1];
+    const receptionTime = (sweetXvSettingMockCopy.receptionTime = toLocalDate(
+      `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`
+    ).split('T')[1]).substring(0, 5);
+
+    const dateOfMassTime = sweetXvSettingMockCopy.massTime.split(' ')[0];
+    const timeOfMassTime = sweetXvSettingMockCopy.massTime.split(' ')[1];
+    const massTime = (sweetXvSettingMockCopy.massTime = toLocalDate(
+      `${dateOfMassTime}T${timeOfMassTime}.000Z`
+    ).split('T')[1]).substring(0, 5);
+
     updateFormUsingEvent(
-      sweetXvSettingMock.eventId,
-      sweetXvSettingMock.primaryColor,
-      sweetXvSettingMock.secondaryColor,
-      sweetXvSettingMock.parents,
-      sweetXvSettingMock.godParents,
-      sweetXvSettingMock.firstSectionSentences,
-      sweetXvSettingMock.secondSectionSentences,
-      sweetXvSettingMock.massUrl,
-      sweetXvSettingMock.massTime,
-      sweetXvSettingMock.massAddress,
-      sweetXvSettingMock.receptionUrl,
-      sweetXvSettingMock.receptionTime,
-      sweetXvSettingMock.receptionPlace,
-      sweetXvSettingMock.receptionAddress,
-      sweetXvSettingMock.dressCodeColor
+      sweetXvSettingMockCopy.eventId,
+      sweetXvSettingMockCopy.primaryColor,
+      sweetXvSettingMockCopy.secondaryColor,
+      sweetXvSettingMockCopy.parents,
+      sweetXvSettingMockCopy.godParents,
+      sweetXvSettingMockCopy.firstSectionSentences,
+      sweetXvSettingMockCopy.secondSectionSentences,
+      sweetXvSettingMockCopy.massUrl,
+      massTime,
+      sweetXvSettingMockCopy.massAddress,
+      sweetXvSettingMockCopy.receptionUrl,
+      receptionTime,
+      sweetXvSettingMockCopy.receptionPlace,
+      sweetXvSettingMockCopy.receptionAddress,
+      sweetXvSettingMockCopy.dressCodeColor
     );
 
     fixture.componentInstance.sweetXvSettings.isNew = true;
@@ -197,31 +226,48 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
 
   it('should call updateEventSettings when the event setting is not', () => {
     settingsServiceSpy.updateEventSettings.and.returnValue(
-      of(messageResponseMock)
+      of(messageResponseMockCopy)
     );
 
+    const dateOfReception = sweetXvSettingMockCopy.receptionTime.split(' ');
+    
+    const dateOfReceptionTime = dateOfReception[0];
+    const timeOfReceptionTime = dateOfReception[1];
+    const receptionTime = toLocalDate(
+      `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`
+    )
+      .split('T')[1]
+      .substring(0, 5);
+
+    const dateOfMass = sweetXvSettingMockCopy.massTime.split(' ');
+    const dateOfMassTime = dateOfMass[0];
+    const timeOfMassTime = dateOfMass[1];
+    const massTime = toLocalDate(`${dateOfMassTime}T${timeOfMassTime}.000Z`)
+      .split('T')[1]
+      .substring(0, 5);
+
     fixture.componentRef.setInput('eventSettingAction', {
-      eventId: fullEventsMock.id,
+      eventId: fullEventsMockCopy.id,
       eventType: EventType.SaveTheDate,
       isNew: false,
     });
-    
+
     updateFormUsingEvent(
-      sweetXvSettingMock.eventId,
-      sweetXvSettingMock.primaryColor,
-      sweetXvSettingMock.secondaryColor,
-      sweetXvSettingMock.parents,
-      sweetXvSettingMock.godParents,
-      sweetXvSettingMock.firstSectionSentences,
-      sweetXvSettingMock.secondSectionSentences,
-      sweetXvSettingMock.massUrl,
-      sweetXvSettingMock.massTime,
-      sweetXvSettingMock.massAddress,
-      sweetXvSettingMock.receptionUrl,
-      sweetXvSettingMock.receptionTime,
-      sweetXvSettingMock.receptionPlace,
-      sweetXvSettingMock.receptionAddress,
-      sweetXvSettingMock.dressCodeColor
+      sweetXvSettingMockCopy.eventId,
+      sweetXvSettingMockCopy.primaryColor,
+      sweetXvSettingMockCopy.secondaryColor,
+      sweetXvSettingMockCopy.parents,
+      sweetXvSettingMockCopy.godParents,
+      sweetXvSettingMockCopy.firstSectionSentences,
+      sweetXvSettingMockCopy.secondSectionSentences,
+      sweetXvSettingMockCopy.massUrl,
+      massTime,
+      sweetXvSettingMockCopy.massAddress,
+      sweetXvSettingMockCopy.receptionUrl,
+      receptionTime,
+      sweetXvSettingMockCopy.receptionPlace,
+      sweetXvSettingMockCopy.receptionAddress,
+      sweetXvSettingMockCopy.dressCodeColor
     );
 
     fixture.componentInstance.sweetXvSettings.isNew = false;

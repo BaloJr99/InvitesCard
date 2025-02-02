@@ -7,6 +7,9 @@ import { userMock } from '../mocks/mocks';
 import { Subject } from 'rxjs';
 import { IMessage, INotification } from 'src/app/core/models/common';
 import { By } from '@angular/platform-browser';
+import { deepCopy } from 'src/app/shared/utils/tools';
+
+const userMockCopy = deepCopy(userMock);
 
 describe('Dashboard Component (Shallow Test)', () => {
   let fixture: ComponentFixture<DashboardComponent>;
@@ -44,7 +47,7 @@ describe('Dashboard Component (Shallow Test)', () => {
   }));
 
   beforeEach(() => {
-    tokenStorageServiceSpy.getTokenValues.and.returnValue(userMock);
+    tokenStorageServiceSpy.getTokenValues.and.returnValue(userMockCopy);
     fixture = TestBed.createComponent(DashboardComponent);
     fixture.detectChanges();
   });

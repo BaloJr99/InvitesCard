@@ -1,11 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   fullEventsMock,
   fullInvitesGroupsMock,
   messageResponseMock,
 } from 'src/tests/mocks/mocks';
+
+const fullEventsMockCopy = deepCopy(fullEventsMock);
+const fullInvitesGroupsMockCopy = deepCopy(fullInvitesGroupsMock);
+const messageResponseMockCopy = deepCopy(messageResponseMock);
 
 describe('Invite Groups Service', () => {
   let inviteGroupsService: InviteGroupsService;
@@ -37,54 +42,54 @@ describe('Invite Groups Service', () => {
 
   it('should call getAllInviteGroups', () => {
     inviteGroupsServiceSpy.getAllInviteGroups.and.returnValue(
-      of([fullInvitesGroupsMock])
+      of([fullInvitesGroupsMockCopy])
     );
 
     inviteGroupsServiceSpy
-      .getAllInviteGroups(fullEventsMock.id)
+      .getAllInviteGroups(fullEventsMockCopy.id)
       .subscribe((response) => {
-        expect(response).toEqual([fullInvitesGroupsMock]);
+        expect(response).toEqual([fullInvitesGroupsMockCopy]);
         expect(response.length).toBe(1);
-        expect(response[0].eventId).toEqual(fullEventsMock.id);
+        expect(response[0].eventId).toEqual(fullEventsMockCopy.id);
       });
 
     expect(inviteGroupsServiceSpy.getAllInviteGroups)
       .withContext('Expected getAllInviteGroups to have been called')
-      .toHaveBeenCalledOnceWith(fullEventsMock.id);
+      .toHaveBeenCalledOnceWith(fullEventsMockCopy.id);
   });
 
   it('should call createInviteGroup', () => {
     inviteGroupsServiceSpy.createInviteGroup.and.returnValue(
-      of(messageResponseMock)
+      of(messageResponseMockCopy)
     );
 
     inviteGroupsServiceSpy
-      .createInviteGroup(fullInvitesGroupsMock)
+      .createInviteGroup(fullInvitesGroupsMockCopy)
       .subscribe((response) => {
-        expect(response).toEqual(messageResponseMock);
+        expect(response).toEqual(messageResponseMockCopy);
       });
 
     expect(inviteGroupsServiceSpy.createInviteGroup)
       .withContext('Expected createInviteGroup to have been called')
-      .toHaveBeenCalledOnceWith(fullInvitesGroupsMock);
+      .toHaveBeenCalledOnceWith(fullInvitesGroupsMockCopy);
   });
 
   it('should call updateInviteGroup', () => {
     inviteGroupsServiceSpy.updateInviteGroup.and.returnValue(
-      of(messageResponseMock)
+      of(messageResponseMockCopy)
     );
 
     inviteGroupsServiceSpy
-      .updateInviteGroup(fullInvitesGroupsMock, fullInvitesGroupsMock.id)
+      .updateInviteGroup(fullInvitesGroupsMockCopy, fullInvitesGroupsMockCopy.id)
       .subscribe((response) => {
-        expect(response).toEqual(messageResponseMock);
+        expect(response).toEqual(messageResponseMockCopy);
       });
 
     expect(inviteGroupsServiceSpy.updateInviteGroup)
       .withContext('Expected updateInviteGroup to have been called')
       .toHaveBeenCalledOnceWith(
-        fullInvitesGroupsMock,
-        fullInvitesGroupsMock.id
+        fullInvitesGroupsMockCopy,
+        fullInvitesGroupsMockCopy.id
       );
   });
 
@@ -93,8 +98,8 @@ describe('Invite Groups Service', () => {
 
     inviteGroupsServiceSpy
       .checkInviteGroup(
-        fullInvitesGroupsMock.id,
-        fullInvitesGroupsMock.inviteGroup
+        fullInvitesGroupsMockCopy.id,
+        fullInvitesGroupsMockCopy.inviteGroup
       )
       .subscribe((response) => {
         expect(response).toBeTrue();
@@ -103,8 +108,8 @@ describe('Invite Groups Service', () => {
     expect(inviteGroupsServiceSpy.checkInviteGroup)
       .withContext('Expected checkInviteGroup to have been called')
       .toHaveBeenCalledOnceWith(
-        fullInvitesGroupsMock.id,
-        fullInvitesGroupsMock.inviteGroup
+        fullInvitesGroupsMockCopy.id,
+        fullInvitesGroupsMockCopy.inviteGroup
       );
   });
 });

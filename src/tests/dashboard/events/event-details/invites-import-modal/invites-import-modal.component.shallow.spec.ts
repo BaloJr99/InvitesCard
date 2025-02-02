@@ -1,18 +1,15 @@
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { FileReaderService } from 'src/app/core/services/fileReader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InvitesImportModalComponent } from 'src/app/dashboard/events/event-details/invites-import-modal/invites-import-modal.component';
-import {
-  bulkInvitesMock,
-  fullInvitesGroupsMock,
-} from 'src/tests/mocks/mocks';
+import { deepCopy } from 'src/app/shared/utils/tools';
+import { bulkInvitesMock, fullInvitesGroupsMock } from 'src/tests/mocks/mocks';
+
+const bulkInvitesMockCopy = deepCopy(bulkInvitesMock);
+const fullInvitesGroupsMockCopy = deepCopy(fullInvitesGroupsMock);
 
 describe('Invites Import Modal Component (Shallow Test)', () => {
   let fixture: ComponentFixture<InvitesImportModalComponent>;
@@ -85,7 +82,7 @@ describe('Invites Import Modal Component (Shallow Test)', () => {
   it('Expect processFile button should be enabled and should call send data if there are processed files', () => {
     spyOn(fixture.componentInstance, 'sendData');
 
-    fixture.componentInstance.invites = [bulkInvitesMock];
+    fixture.componentInstance.invites = [bulkInvitesMockCopy];
     fixture.detectChanges();
 
     const modal = fixture.debugElement.nativeElement;
@@ -142,7 +139,7 @@ describe('Invites Import Modal Component (Shallow Test)', () => {
   });
 
   it('Should show table when there are invites processed (Kids Allowed and New Invite Group)', () => {
-    fixture.componentInstance.invites = [bulkInvitesMock];
+    fixture.componentInstance.invites = [bulkInvitesMockCopy];
     fixture.detectChanges();
 
     const table = fixture.debugElement.query(By.css('table'));
@@ -159,15 +156,15 @@ describe('Invites Import Modal Component (Shallow Test)', () => {
 
     expect(table.nativeElement.rows[0].cells[0].textContent)
       .withContext('First column should have family')
-      .toBe(bulkInvitesMock.family);
+      .toBe(bulkInvitesMockCopy.family);
 
     expect(table.nativeElement.rows[0].cells[1].textContent)
       .withContext('Second column should have entriesNumber')
-      .toBe(bulkInvitesMock.entriesNumber.toString());
+      .toBe(bulkInvitesMockCopy.entriesNumber.toString());
 
     expect(table.nativeElement.rows[0].cells[2].textContent)
       .withContext('Third column should have phoneNumber')
-      .toBe(bulkInvitesMock.phoneNumber);
+      .toBe(bulkInvitesMockCopy.phoneNumber);
 
     expect(table.nativeElement.rows[0].cells[3].innerHTML)
       .withContext('Fourth column should have a circle check')
@@ -184,9 +181,9 @@ describe('Invites Import Modal Component (Shallow Test)', () => {
 
   it('Should show table there are invites processed (Kids Not Allowed and Preloaded Invite Group)', () => {
     fixture.componentInstance.invites = [
-      { ...bulkInvitesMock, kidsAllowed: false, isNewInviteGroup: false },
+      { ...bulkInvitesMockCopy, kidsAllowed: false, isNewInviteGroup: false },
     ];
-    fixture.componentInstance.inviteGroups = [fullInvitesGroupsMock];
+    fixture.componentInstance.inviteGroups = [fullInvitesGroupsMockCopy];
 
     fixture.detectChanges();
 
@@ -204,15 +201,15 @@ describe('Invites Import Modal Component (Shallow Test)', () => {
 
     expect(table.nativeElement.rows[0].cells[0].textContent)
       .withContext('First column should have family')
-      .toBe(bulkInvitesMock.family);
+      .toBe(bulkInvitesMockCopy.family);
 
     expect(table.nativeElement.rows[0].cells[1].textContent)
       .withContext('Second column should have entriesNumber')
-      .toBe(bulkInvitesMock.entriesNumber.toString());
+      .toBe(bulkInvitesMockCopy.entriesNumber.toString());
 
     expect(table.nativeElement.rows[0].cells[2].textContent)
       .withContext('Third column should have phoneNumber')
-      .toBe(bulkInvitesMock.phoneNumber);
+      .toBe(bulkInvitesMockCopy.phoneNumber);
 
     expect(table.nativeElement.rows[0].cells[3].innerHTML)
       .withContext('Fourth column should have a circle xmark')

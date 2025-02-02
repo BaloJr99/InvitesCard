@@ -4,7 +4,14 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { AccomodationComponent } from 'src/app/invites/save-the-date/accomodations/accomodation.component';
-import { saveTheDateSettingMock, saveTheDateUserInviteMock } from 'src/tests/mocks/mocks';
+import { deepCopy } from 'src/app/shared/utils/tools';
+import {
+  saveTheDateSettingMock,
+  saveTheDateUserInviteMock,
+} from 'src/tests/mocks/mocks';
+
+const saveTheDateSettingMockCopy = deepCopy(saveTheDateSettingMock);
+const saveTheDateUserInviteMockCopy = deepCopy(saveTheDateUserInviteMock);
 
 describe('Accomodation Component (Shallow Test)', () => {
   let fixture: ComponentFixture<AccomodationComponent>;
@@ -23,7 +30,9 @@ describe('Accomodation Component (Shallow Test)', () => {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
-              paramMap: convertToParamMap({ id: saveTheDateUserInviteMock.id }),
+              paramMap: convertToParamMap({
+                id: saveTheDateUserInviteMockCopy.id,
+              }),
             },
           },
         },
@@ -39,7 +48,7 @@ describe('Accomodation Component (Shallow Test)', () => {
 
   it('should have a paragraph with the section name, 2 inputs with labels and 1 send button', () => {
     fixture.componentRef.setInput('invite', {
-      ...saveTheDateUserInviteMock,
+      ...saveTheDateUserInviteMockCopy,
       needsAccomodation: null,
     });
 
@@ -69,7 +78,7 @@ describe('Accomodation Component (Shallow Test)', () => {
 
   it('should have a warning message if the deadline is met', () => {
     fixture.componentRef.setInput('invite', {
-      ...saveTheDateUserInviteMock,
+      ...saveTheDateUserInviteMockCopy,
       needsAccomodation: null,
     });
     fixture.componentRef.setInput('deadlineMet', true);
@@ -85,13 +94,13 @@ describe('Accomodation Component (Shallow Test)', () => {
 
   it('should show the confirmed modal when the form has been filled', () => {
     fixture.componentRef.setInput('invite', {
-      ...saveTheDateUserInviteMock,
+      ...saveTheDateUserInviteMockCopy,
       needsAccomodation: true,
     });
 
     fixture.componentRef.setInput('inviteSettings', {
-      ...saveTheDateSettingMock
-    })
+      ...saveTheDateSettingMockCopy,
+    });
 
     fixture.detectChanges();
 
@@ -114,6 +123,6 @@ describe('Accomodation Component (Shallow Test)', () => {
       .toContain('Le compartimos el Flyer con información sobre el hotel');
     expect(link.nativeElement.textContent)
       .withContext('Should have the section name')
-      .toContain(saveTheDateSettingMock.hotelName);
+      .toContain(saveTheDateSettingMockCopy.hotelName);
   });
 });

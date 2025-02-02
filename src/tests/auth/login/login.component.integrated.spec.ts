@@ -13,7 +13,11 @@ import { of, throwError } from 'rxjs';
 import { LoginComponent } from 'src/app/auth/login/login.component';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock, tokenMock } from 'src/tests/mocks/mocks';
+
+const loginDataMockCopy = deepCopy(loginDataMock);
+const tokenMockCopy = deepCopy(tokenMock);
 
 describe('Login Component (Integrated Test)', () => {
   let fixture: ComponentFixture<LoginComponent>;
@@ -67,9 +71,9 @@ describe('Login Component (Integrated Test)', () => {
   });
 
   it('authService loginAccount() should called', () => {
-    authServiceSpy.loginAccount.and.returnValue(of(tokenMock));
+    authServiceSpy.loginAccount.and.returnValue(of(tokenMockCopy));
 
-    updateFormUsingEvent(loginDataMock.usernameOrEmail, loginDataMock.password);
+    updateFormUsingEvent(loginDataMockCopy.usernameOrEmail, loginDataMockCopy.password);
     fixture.detectChanges();
 
     const button = fixture.debugElement.query(By.css('button'));
@@ -83,8 +87,8 @@ describe('Login Component (Integrated Test)', () => {
 
   it('should route to dashboard if login successfully', () => {
     const navigateSpy = spyOn(router, 'navigate');
-    authServiceSpy.loginAccount.and.returnValue(of(tokenMock));
-    updateFormUsingEvent(loginDataMock.usernameOrEmail, loginDataMock.password);
+    authServiceSpy.loginAccount.and.returnValue(of(tokenMockCopy));
+    updateFormUsingEvent(loginDataMockCopy.usernameOrEmail, loginDataMockCopy.password);
     fixture.detectChanges();
 
     const button = fixture.debugElement.query(By.css('button'));
@@ -107,7 +111,7 @@ describe('Login Component (Integrated Test)', () => {
       );
     });
 
-    updateFormUsingEvent(loginDataMock.usernameOrEmail, loginDataMock.password);
+    updateFormUsingEvent(loginDataMockCopy.usernameOrEmail, loginDataMockCopy.password);
     fixture.detectChanges();
 
     const button = fixture.debugElement.query(By.css('button'));

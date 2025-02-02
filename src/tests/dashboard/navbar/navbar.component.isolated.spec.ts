@@ -1,5 +1,8 @@
 import { NavbarComponent } from 'src/app/dashboard/navbar/navbar.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { notificationsMock } from 'src/tests/mocks/mocks';
+
+const notificationsMockCopy = deepCopy(notificationsMock);
 
 describe('Navbar Component (Isolated Test)', () => {
   let component: NavbarComponent;
@@ -47,11 +50,11 @@ describe('Navbar Component (Isolated Test)', () => {
   });
 
   it('should populate the notifications when the input is set', () => {
-    component.notificationsValue = notificationsMock;
+    component.notificationsValue = notificationsMockCopy;
 
     expect(component.notifications)
       .withContext('The notifications should be set')
-      .toEqual(notificationsMock);
+      .toEqual(notificationsMockCopy);
 
     expect(component.numberOfNotifications)
       .withContext('The number of notifications should be set')

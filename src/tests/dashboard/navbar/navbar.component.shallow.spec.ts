@@ -4,7 +4,11 @@ import { CommonInvitesService } from 'src/app/core/services/commonInvites.servic
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { NavbarComponent } from 'src/app/dashboard/navbar/navbar.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { notificationsMock, userMock } from 'src/tests/mocks/mocks';
+
+const notificationsMockCopy = deepCopy(notificationsMock);
+const userMockCopy = deepCopy(userMock);
 
 describe('Navbar Component (Shallow Test)', () => {
   let fixture: ComponentFixture<NavbarComponent>;
@@ -12,7 +16,7 @@ describe('Navbar Component (Shallow Test)', () => {
   beforeEach(waitForAsync(() => {
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
     const tokenStorageSpy = jasmine.createSpyObj('TokenStorageService', {
-      getTokenValues: userMock,
+      getTokenValues: userMockCopy,
     });
 
     const commonInvitesSpy = jasmine.createSpyObj('CommonInvitesService', ['']);
@@ -77,11 +81,11 @@ describe('Navbar Component (Shallow Test)', () => {
 
     expect(userHeading.nativeElement.textContent)
       .withContext('You should have the username inside the p tag')
-      .toContain(userMock.username);
+      .toContain(userMockCopy.username);
 
     expect(userHeading.nativeElement.textContent)
       .withContext('You should have the email inside the p tag')
-      .toContain(userMock.email);
+      .toContain(userMockCopy.email);
 
     const menuItems = baseMenu.queryAll(By.css('ul li'));
 
@@ -89,14 +93,14 @@ describe('Navbar Component (Shallow Test)', () => {
       .withContext('You should have 2 items inside the menu')
       .toBe(2);
 
-    const textToMatch = ['Mi perfil','Cerrar sesión'];
+    const textToMatch = ['Mi perfil', 'Cerrar sesión'];
     menuItems.map(
       (item, index) => item.nativeElement.textContent === textToMatch[index]
     );
   });
 
   it('should have a base-menu notificationMessages with 1 notification in the menu', () => {
-    fixture.componentRef.setInput('notificationsValue', notificationsMock);
+    fixture.componentRef.setInput('notificationsValue', notificationsMockCopy);
     fixture.detectChanges();
 
     const notificationMessages = fixture.debugElement.query(

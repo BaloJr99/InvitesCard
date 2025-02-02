@@ -7,14 +7,18 @@ import {
   Validators,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, map, of } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { EventType } from 'src/app/core/models/enum';
 import {
   IInviteSection,
   IInviteSectionsProperties,
 } from 'src/app/core/models/invites';
-import { ISweetXvSetting, ISettingAction } from 'src/app/core/models/settings';
+import {
+  ISweetXvSetting,
+  ISettingAction,
+  IBaseSettings,
+} from 'src/app/core/models/settings';
 import { EventsService } from 'src/app/core/services/events.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
@@ -190,7 +194,16 @@ export class SweetXvSettingsComponent {
   getEventSetting(): void {
     if (this.sweetXvSettings.eventId) {
       combineLatest([
-        this.settingsService.getEventSettings(this.sweetXvSettings.eventId),
+        this.settingsService
+          .getEventSettings(this.sweetXvSettings.eventId)
+          .pipe(
+            catchError(() => {
+              return of({
+                eventId: this.sweetXvSettings.eventId,
+                settings: JSON.stringify({}),
+              } as IBaseSettings);
+            })
+          ),
         this.eventsService.getEventById(this.sweetXvSettings.eventId),
       ])
         .subscribe({
@@ -199,6 +212,15 @@ export class SweetXvSettingsComponent {
             const parsedSettings = JSON.parse(eventSettings.settings);
             if (!parsedSettings.sections) {
               this.updateSections(this.baseSections);
+
+              this.sweetXvSettings = {
+                ...this.sweetXvSettings,
+                isNew: true,
+              };
+
+              this.createEventSettingsForm.patchValue({
+                eventId: this.sweetXvSettings.eventId,
+              });
             } else {
               const sections = parsedSettings.sections.map(
                 (section: IInviteSection) => {
@@ -224,49 +246,37 @@ export class SweetXvSettingsComponent {
               });
 
               this.updateSections(sections);
+
+              this.createEventSettingsForm.patchValue({
+                ...parsedSettings,
+                eventId: this.sweetXvSettings.eventId,
+              });
+
+              this.sweetXvSettings = {
+                ...this.sweetXvSettings,
+                isNew: false,
+              };
+
+              if (parsedSettings.massTime) {
+                const dateOfMassTime = parsedSettings.massTime.split(' ')[0];
+                const timeOfMassTime = parsedSettings.massTime.split(' ')[1];
+
+                parsedSettings.massTime = toLocalDate(
+                  `${dateOfMassTime}T${timeOfMassTime}.000Z`
+                ).split('T')[1];
+              }
+
+              if (parsedSettings.receptionTime) {
+                const dateOfReceptionTime =
+                  parsedSettings.receptionTime.split(' ')[0];
+                const timeOfReceptionTime =
+                  parsedSettings.receptionTime.split(' ')[1];
+
+                parsedSettings.receptionTime = toLocalDate(
+                  `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`
+                ).split('T')[1];
+              }
             }
-
-            if (parsedSettings.massTime) {
-              const dateOfMassTime = parsedSettings.massTime.split(' ')[0];
-              const timeOfMassTime = parsedSettings.massTime.split(' ')[1];
-
-              parsedSettings.massTime = toLocalDate(
-                `${dateOfMassTime}T${timeOfMassTime}.000Z`
-              ).split('T')[1];
-            }
-
-            if (parsedSettings.receptionTime) {
-              const dateOfReceptionTime =
-                parsedSettings.receptionTime.split(' ')[0];
-              const timeOfReceptionTime =
-                parsedSettings.receptionTime.split(' ')[1];
-
-              parsedSettings.receptionTime = toLocalDate(
-                `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`
-              ).split('T')[1];
-            }
-
-            this.createEventSettingsForm.patchValue({
-              ...parsedSettings,
-              eventId: this.sweetXvSettings.eventId,
-            });
-
-            this.sweetXvSettings = {
-              ...this.sweetXvSettings,
-              isNew: false,
-            };
-          },
-          error: () => {
-            this.updateSections(this.baseSections);
-
-            this.sweetXvSettings = {
-              ...this.sweetXvSettings,
-              isNew: true,
-            };
-
-            this.createEventSettingsForm.patchValue({
-              eventId: this.sweetXvSettings.eventId,
-            });
           },
         })
         .add(() => {
