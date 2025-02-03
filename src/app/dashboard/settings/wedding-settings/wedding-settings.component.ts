@@ -265,14 +265,26 @@ export class WeddingSettingsComponent {
             if (!parsedSettings.sections) {
               this.updateSections(this.baseSections);
 
-              this.weddingSettings = {
-                ...this.weddingSettings,
-                isNew: true,
-              };
+              if (parsedSettings) {
+                this.createEventSettingsForm.patchValue({
+                  ...parsedSettings,
+                  eventId: this.weddingSettings.eventId,
+                });
 
-              this.createEventSettingsForm.patchValue({
-                eventId: this.weddingSettings.eventId,
-              });
+                this.weddingSettings = {
+                  ...this.weddingSettings,
+                  isNew: false,
+                };
+              } else {
+                this.createEventSettingsForm.patchValue({
+                  eventId: this.weddingSettings.eventId,
+                });
+
+                this.weddingSettings = {
+                  ...this.weddingSettings,
+                  isNew: true,
+                };
+              }
             } else {
               const sections = parsedSettings.sections.map(
                 (section: IInviteSection) => {
