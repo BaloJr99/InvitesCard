@@ -55,12 +55,14 @@
     "1403893619509014007": "Filter By (Family)",
     "686645177281803052": "Delete invites",
     "7655328700978846555": "Loading event details",
-    "7311831367267996433": "Confirmed entries",
-    "4053036662090720458": "Pending entries",
-    "5118269136105267800": "Canceled entries",
-    "1116248134291777675": "Total entries",
-    "6468385722841212289": "Answered entries",
-    "9175157976004563670": "Accomodation entries",
+    "8317329248603277886": "Confirmed entries",
+    "841405062237169379": "Pending entries",
+    "3232162002199910730": "Cancelled entries",
+    "3051897245004259972": "Total entries",
+    "6468385722841212289": "Answered invites",
+    "4053036662090720458": "Pending invites",
+    "9175157976004563670": "Accomodation invites",
+    "1116248134291777675": "Total invites",
     "2656760189624669010": "Actions",
     "2518218854811910794": "Edit invite",
     "1748406807429916495": "Delete invite",
@@ -419,10 +421,6 @@
     "5091329638656814983": "Go to page 1",
     "8229410983568365665": "Go to page {$PH}",
     "1228129495033076161": "Select all {$PH}",
-    "171341326928719068": "Select {$PH}",
-    "8317329248603277886": "Confirmed entries",
-    "841405062237169379": "Pending entries",
-    "3232162002199910730": "Cancelled entries",
-    "3051897245004259972": "Total entries"
+    "171341326928719068": "Select {$PH}"
   }
 }

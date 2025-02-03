@@ -133,12 +133,20 @@ export class EventDetailsComponent implements OnInit {
     });
 
     this.socket.io.on('newNotification', (confirmation: IConfirmation) => {
+      const refactorConfirmation = {
+        ...confirmation,
+        dateOfConfirmation: `${
+          (confirmation.dateOfConfirmation as string).split(' ')[0]
+        }T${(confirmation.dateOfConfirmation as string).split(' ')[1]}`.concat(
+          '.000Z'
+        ),
+      };
       this.originalInvites = this.originalInvites.map((invite) => {
         if (invite.id === confirmation.id) {
           return {
             ...invite,
             confirmation: confirmation.confirmation,
-            dateOfConfirmation: confirmation.dateOfConfirmation,
+            dateOfConfirmation: refactorConfirmation.dateOfConfirmation,
             entriesConfirmed: confirmation.entriesConfirmed,
             message: confirmation.message,
             inviteViewed: true,
@@ -163,22 +171,22 @@ export class EventDetailsComponent implements OnInit {
     ) {
       this.statistics = [
         {
-          name: $localize`Invitaciones Confirmadas`,
+          name: $localize`Pases Confirmados`,
           value: 0,
           color: '#43CD63',
         },
         {
-          name: $localize`Invitaciones Pendientes`,
+          name: $localize`Pases Pendientes`,
           value: 0,
           color: '#FACF4F',
         },
         {
-          name: $localize`Invitaciones Canceladas`,
+          name: $localize`Pases Cancelados`,
           value: 0,
           color: '#FF5D6D',
         },
         {
-          name: $localize`Total de Invitaciones`,
+          name: $localize`Total de Pases`,
           value: 0,
           color: '#54A6FF',
         },

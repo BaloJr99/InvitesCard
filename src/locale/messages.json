@@ -41,12 +41,14 @@
     "1403893619509014007": "Filtrar (Familia)",
     "686645177281803052": "Eliminar Invitaciones",
     "7655328700978846555": "Cargando los detalles del evento",
-    "7311831367267996433": "Invitaciones Confirmadas",
-    "4053036662090720458": "Invitaciones Pendientes",
-    "5118269136105267800": "Invitaciones Canceladas",
-    "1116248134291777675": "Total de Invitaciones",
+    "8317329248603277886": "Pases Confirmados",
+    "841405062237169379": "Pases Pendientes",
+    "3232162002199910730": "Pases Cancelados",
+    "3051897245004259972": "Total de Pases",
     "6468385722841212289": "Invitaciones Respondidas",
+    "4053036662090720458": "Invitaciones Pendientes",
     "9175157976004563670": "Invitaciones Hospedaje",
+    "1116248134291777675": "Total de Invitaciones",
     "2656760189624669010": "Acciones",
     "2518218854811910794": "Editar invitación",
     "1748406807429916495": "Eliminar invitación",
@@ -419,10 +421,6 @@
     "5091329638656814983": "Ir a la página 1",
     "8229410983568365665": "Ir a la página {$PH}",
     "1228129495033076161": "Seleccionar todos {$PH}",
-    "171341326928719068": "Seleccionar {$PH}",
-    "8317329248603277886": "Pases Confirmados",
-    "841405062237169379": "Pases Pendientes",
-    "3232162002199910730": "Pases Cancelados",
-    "3051897245004259972": "Total de Pases"
+    "171341326928719068": "Seleccionar {$PH}"
   }
 }

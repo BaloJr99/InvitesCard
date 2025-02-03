@@ -101,6 +101,7 @@ export class DashboardComponent implements OnInit {
     const uniqueDates = [
       ...new Set(messages.map((message) => message.date)),
     ].sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+    
     uniqueDates.forEach((date) => {
       this.messagesGrouped.push({
         key: date,
