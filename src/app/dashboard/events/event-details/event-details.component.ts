@@ -523,33 +523,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
   getHeaders(): ITableHeaders[] {
-    if (
-      this.copyEventSettings.typeOfEvent === EventType.Xv ||
-      this.copyEventSettings.typeOfEvent === EventType.Wedding
-    ) {
-      return [
-        {
-          text: '',
-        },
-        {
-          text: $localize`Familia`,
-          sortable: true,
-        },
-        {
-          text: $localize`Numero de pases`,
-          sortable: true,
-        },
-        {
-          text: $localize`Vista`,
-          sortable: true,
-        },
-        {
-          text: $localize`Acciones`,
-        },
-      ];
-    }
-
-    return [
+    let tableHeaders = [
       {
         text: '',
       },
@@ -557,10 +531,32 @@ export class EventDetailsComponent implements OnInit {
         text: $localize`Familia`,
         sortable: true,
       },
-      {
-        text: $localize`Necesita Hotel`,
-        sortable: true,
-      },
+    ];
+
+    if (
+      this.copyEventSettings.typeOfEvent === EventType.Xv ||
+      this.copyEventSettings.typeOfEvent === EventType.Wedding
+    ) {
+      tableHeaders = tableHeaders.concat([
+        {
+          text: $localize`Numero de pases`,
+          sortable: true,
+        },
+        {
+          text: $localize`Contestada`,
+          sortable: true,
+        },
+      ]);
+    } else {
+      tableHeaders = tableHeaders.concat([
+        {
+          text: $localize`Necesita Hotel`,
+          sortable: true,
+        },
+      ]);
+    }
+
+    return tableHeaders.concat([
       {
         text: $localize`Vista`,
         sortable: true,
@@ -568,7 +564,7 @@ export class EventDetailsComponent implements OnInit {
       {
         text: $localize`Acciones`,
       },
-    ];
+    ]);
   }
 
   getInviteRow(
@@ -595,6 +591,13 @@ export class EventDetailsComponent implements OnInit {
           row[text] = invite.inviteViewed
             ? '<i class="fa-solid fa-eye" aria-hidden="true"></i>'
             : '';
+          break;
+        case $localize`Contestada`:
+          row[text] =
+            invite.entriesConfirmed === null ||
+            invite.entriesConfirmed === undefined
+              ? '<i class="fa-solid fa-xmark" aria-hidden="true"></i>'
+              : '<i class="fa-solid fa-check" aria-hidden="true"></i>';
           break;
         case $localize`Necesita Hotel`:
           if (invite.needsAccomodation === null) {
