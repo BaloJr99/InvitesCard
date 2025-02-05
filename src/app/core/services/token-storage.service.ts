@@ -18,13 +18,6 @@ export class TokenStorageService {
   }
 
   public getToken(): string | null {
-    const token = window.sessionStorage.getItem(TOKEN_KEY);
-    if (token) {
-      if (this.jwtService.isTokenExpired(token)) {
-        this.signOut();
-        return null;
-      }
-    }
     return window.sessionStorage.getItem(TOKEN_KEY);
   }
 
