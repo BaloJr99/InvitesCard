@@ -1,14 +1,19 @@
+:host {
+  position: relative;
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+}
 
 table {
   width: 100% !important;
   text-align: center !important;
-  table-layout: fixed;
 }
 
   table i.fa-circle-check {
     color: green;
   }
-  
+
   table i.fa-circle-xmark {
     color: red;
   }
@@ -20,7 +25,7 @@ table {
     table th div {
       display: flex;
       flex-direction: row;
-      align-items: baseline;
+      align-items: center;
       justify-content: center;
       gap: 10px;
     }
@@ -50,6 +55,18 @@ table {
     text-wrap: nowrap;
   }
 
+  table tr th,
+  table tr td {
+    min-width: 50px;
+  }
+
+    table tr th:last-of-type,
+    table tr td:last-of-type {
+      position: -webkit-sticky;
+      position: sticky;
+      right: 0;
+    }
+
     table tbody td.buttons {
       display: flex;
       justify-content: center;
@@ -69,7 +86,7 @@ table {
     table tfoot tr.desktop {
       display: table-row;
     }
-  
+
     table tfoot tr.mobile {
       display: none;
     }
