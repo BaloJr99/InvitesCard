@@ -8,7 +8,7 @@ import { InvitesService } from 'src/app/core/services/invites.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { WeddingComponent } from 'src/app/invites/wedding/wedding.component';
 import { SafePipe } from 'src/app/shared/pipes/safe.pipe';
-import { deepCopy } from 'src/app/shared/utils/tools';
+import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
 import {
   weddingBaseSettingMock,
   weddingSettingMock,
@@ -155,19 +155,43 @@ describe('Wedding Component (Shallow Test)', () => {
       .toBeTruthy();
     expect(massTime.nativeElement.textContent)
       .withContext('Mass time should exist')
-      .toContain(weddingSettingMockCopy.massTime);
+      .toContain(
+        toLocalDate(
+          `${weddingSettingMockCopy.massTime.split(' ')[0]}T${
+            weddingSettingMockCopy.massTime.split(' ')[1]
+          }.000Z`
+        )
+          .split('T')[1]
+          .substring(0, 5)
+      );
     expect(massAddress.nativeElement.textContent)
       .withContext('Mass address should exist')
       .toContain(weddingSettingMockCopy.massPlace);
     expect(civilTime.nativeElement.textContent)
       .withContext('Civil time should exist')
-      .toContain(weddingSettingMockCopy.civilTime);
+      .toContain(
+        toLocalDate(
+          `${weddingSettingMockCopy.civilTime.split(' ')[0]}T${
+            weddingSettingMockCopy.civilTime.split(' ')[1]
+          }.000Z`
+        )
+          .split('T')[1]
+          .substring(0, 5)
+      );
     expect(civilAddress.nativeElement.textContent)
       .withContext('Civil address should exist')
       .toContain(weddingSettingMockCopy.civilPlace);
     expect(venueTime.nativeElement.textContent)
       .withContext('Venue time should exist')
-      .toContain(weddingSettingMockCopy.venueTime);
+      .toContain(
+        toLocalDate(
+          `${weddingSettingMockCopy.venueTime.split(' ')[0]}T${
+            weddingSettingMockCopy.venueTime.split(' ')[1]
+          }.000Z`
+        )
+          .split('T')[1]
+          .substring(0, 5)
+      );
     expect(venueAddress.nativeElement.textContent)
       .withContext('Venue address should exist')
       .toContain(weddingSettingMockCopy.venuePlace);

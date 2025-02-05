@@ -141,10 +141,10 @@ export class WeddingComponent implements OnInit {
                 if (this.eventSettings.massTime) {
                   const dateOfMassTime =
                     this.eventSettings.massTime.split(' ')[0];
-                  const timeOfReceptionTime =
+                  const timeOfMassTime =
                     this.eventSettings.massTime.split(' ')[1];
                   this.eventSettings.massTime = toLocalDate(
-                    `${dateOfMassTime}T${timeOfReceptionTime}.000Z`
+                    `${dateOfMassTime}T${timeOfMassTime}.000Z`
                   )
                     .split('T')[1]
                     .substring(0, 5);

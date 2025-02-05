@@ -117,9 +117,53 @@ describe('Navbar Component (Shallow Test)', () => {
       .withContext('You should have 1 notification inside the menu')
       .toBe(1);
 
+    const now = new Date();
+    const dateOfNotification = new Date(
+      notificationsMockCopy[0].dateOfConfirmation
+    );
+
+    const diff = now.getTime() - dateOfNotification.getTime();
+
+    // Cálculos para sacar lo que resta hasta ese tiempo objetivo / final
+    const years = now.getFullYear() - dateOfNotification.getFullYear();
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const mins = Math.floor(diff / (1000 * 60));
+    const secs = Math.floor(diff / 1000);
+
+    // La diferencia que se asignará para mostrarlo en la pantalla
+    const time = {
+      years,
+      days,
+      hours: hours - days * 24,
+      minutes: mins - hours * 60,
+      seconds: secs - mins * 60,
+    };
+
+    let timeSpan = '';
+    let timeSpanValue = 0;
+    if (time.years > 0) {
+      timeSpan = time.years === 1 ? $localize`año` : $localize`años`;
+      timeSpanValue = time.years;
+    } else if (time.days > 0) {
+      timeSpan = time.days === 1 ? $localize`día` : $localize`días`;
+      timeSpanValue = time.days;
+    } else if (time.hours > 0) {
+      timeSpan = time.hours === 1 ? $localize`hora` : $localize`horas`;
+      timeSpanValue = time.hours;
+    } else if (time.minutes > 0) {
+      timeSpan = time.minutes === 1 ? $localize`minuto` : $localize`minutos`;
+      timeSpanValue = time.minutes;
+    } else if (time.seconds > 0) {
+      timeSpan = time.seconds === 1 ? $localize`segundo` : $localize`segundos`;
+      timeSpanValue = time.seconds;
+    }
+
+    const calculatedNotificationText = `Hace ${timeSpanValue} ${timeSpan}`;
+
     const notificationText = notificationItems[0].nativeElement.textContent;
     expect(notificationText)
       .withContext('You should have a notification text inside the li tag')
-      .toContain('Test Family ha: CanceladoHace 4 años');
+      .toContain(`Test Family ha: Cancelado${calculatedNotificationText}`);
   });
 });

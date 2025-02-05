@@ -156,7 +156,7 @@ export const notificationsMock: INotification[] = [
     id: '2f435cdf-d3e6-45cc-a62b-15f9667e1879',
     family: 'Test Family',
     confirmation: true,
-    dateOfConfirmation: '2021-07-01',
+    dateOfConfirmation: new Date().toISOString(),
     isMessageRead: false,
   },
 ];
@@ -197,7 +197,7 @@ export const dashboardEventsMock: IDashboardEvent[] = [
   {
     id: 'd87ab8cc-fa70-4b14-b5e0-b9da10b396bf',
     allowCreateInvites: 0,
-    dateOfEvent: '2021-10-01',
+    dateOfEvent: '2025-03-01T06:00:00.000Z',
     nameOfEvent: 'Test Event 2',
   },
 ];
@@ -263,7 +263,7 @@ export const notConfirmedInviteMock: IFullInvite = {
   ...upsertInviteMock,
   id: 'dfc2dc7a-02fa-42c9-b125-fbc7e460bbf7',
   confirmation: false,
-  dateOfConfirmation: '2021-07-01',
+  dateOfConfirmation: new Date().toISOString(),
   entriesConfirmed: 0,
   inviteViewed: true,
   isMessageRead: false,
@@ -324,8 +324,7 @@ export const dashboardInvitesMock: IDashboardInvite = {
 export const sweetXvUserInviteMock: IUserInvite = {
   id: confirmedInviteMock.id,
   confirmation: confirmedInviteMock.confirmation,
-  maxDateOfConfirmation:
-    fullEventsMock.maxDateOfConfirmation,
+  maxDateOfConfirmation: fullEventsMock.maxDateOfConfirmation,
   entriesNumber: confirmedInviteMock.entriesNumber,
   eventId: confirmedInviteMock.eventId,
   family: confirmedInviteMock.family,
@@ -364,7 +363,7 @@ export const bulkMessageResponseMock: IBulkMessageResponse = {
 export const logMock: ILog = {
   id: 'c6e03960-5939-4411-8b46-e68a55f9d6af',
   customError: 'Test Error',
-  dateOfError: '2021-07-01T06:00:00.000Z',
+  dateOfError: new Date().toISOString(),
   exceptionMessage: 'Test Exception',
   userId: fullUserMock.id,
 };
@@ -508,13 +507,13 @@ export const weddingSettingMock: IWeddingSetting = {
   groomParents: 'Test Father;Test Mother',
   brideParents: 'Test Father;Test Mother',
   massUrl: 'https://fakepath.com',
-  massTime: '18:30',
+  massTime: '2025-03-01 00:30:00',
   massPlace: 'Test Mass Place',
   venueUrl: 'https://fakepath.com',
-  venueTime: '20:00',
+  venueTime: '2025-03-01 04:00:00',
   venuePlace: 'Test Venue Place',
   civilPlace: 'Test Civil Place',
-  civilTime: '19:00',
+  civilTime: '2025-03-01 03:00:00',
   civilUrl: 'https://fakepath.com',
   dressCodeColor: 'White',
   copyMessage: 'Test Copy Message',
@@ -647,8 +646,7 @@ export const saveTheDateUserInviteMock: ISaveTheDateUserInvite = {
   eventId: newInviteMock.eventId,
   family: newInviteMock.family,
   nameOfCelebrated: 'Braulio;Brisa',
-  maxDateOfConfirmation:
-    fullEventsMock.maxDateOfConfirmation,
+  maxDateOfConfirmation: fullEventsMock.maxDateOfConfirmation,
   needsAccomodation: newInviteMock.needsAccomodation,
   typeOfEvent: fullEventsMock.typeOfEvent,
 };
@@ -659,8 +657,7 @@ export const weddingUserInviteMock: IWeddingUserInvite = {
   eventId: newInviteMock.eventId,
   family: newInviteMock.family,
   nameOfCelebrated: 'Braulio;Brisa',
-  maxDateOfConfirmation:
-    fullEventsMock.maxDateOfConfirmation,
+  maxDateOfConfirmation: fullEventsMock.maxDateOfConfirmation,
   typeOfEvent: fullEventsMock.typeOfEvent,
   confirmation: confirmedInviteMock.confirmation,
   entriesNumber: confirmedInviteMock.entriesNumber,
