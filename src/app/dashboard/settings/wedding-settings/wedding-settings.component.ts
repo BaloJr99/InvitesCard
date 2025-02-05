@@ -588,8 +588,11 @@ export class WeddingSettingsComponent {
 
   selectAutoCompleteItem(autoCompleteSelected: string): void {
     const textArea = document.querySelector('textarea') as HTMLTextAreaElement;
-    textArea.value += autoCompleteSelected;
-
     textArea.focus();
+
+    const newText = `${textArea.value} ${autoCompleteSelected}`.trim();
+    this.createEventSettingsForm.patchValue({
+      weddingCopyMessage: newText,
+    });
   }
 }
