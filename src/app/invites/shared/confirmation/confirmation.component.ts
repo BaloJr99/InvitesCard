@@ -1,6 +1,5 @@
 import {
   Component,
-  AfterViewInit,
   ViewChildren,
   ElementRef,
   Input,
@@ -14,9 +13,8 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { BehaviorSubject, Observable, fromEvent, merge } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { IConfirmation, IUserInvite } from 'src/app/core/models/invites';
-import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 import { SocketService } from 'src/app/core/services/socket.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
@@ -29,7 +27,7 @@ import { dateTimeToUTCDate } from 'src/app/shared/utils/tools';
   templateUrl: './confirmation.component.html',
   styleUrls: ['./confirmation.component.css'],
 })
-export class ConfirmationComponent implements AfterViewInit {
+export class ConfirmationComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
@@ -63,27 +61,13 @@ export class ConfirmationComponent implements AfterViewInit {
     message: [''],
   });
 
-  displayMessage: { [key: string]: string } = {};
-  private validationMessages: { [key: string]: { [key: string]: string } };
-  private genericValidator: GenericValidator;
-
   constructor(
     private fb: FormBuilder,
     private invitesService: InvitesService,
     private socket: SocketService,
     private loaderService: LoaderService,
     private activatedRoute: ActivatedRoute
-  ) {
-    // Defines all of the validation messages for the form.
-    // These could instead be retrieved from a file or database.
-    this.validationMessages = {
-      entriesConfirmed: {
-        required: $localize`Favor de seleccionar`,
-      },
-    };
-
-    this.genericValidator = new GenericValidator(this.validationMessages);
-  }
+  ) {}
 
   saveInformation(): void {
     if (this.confirmationForm.valid && this.confirmationForm.dirty) {
@@ -102,10 +86,7 @@ export class ConfirmationComponent implements AfterViewInit {
       );
       this.addnewInvite();
     } else {
-      this.displayMessage = this.genericValidator.processMessages(
-        this.confirmationForm,
-        true
-      );
+      this.confirmationForm.markAllAsTouched();
     }
   }
 
@@ -138,49 +119,31 @@ export class ConfirmationComponent implements AfterViewInit {
     this.invite.confirmation = this.confirmationForm.get('confirmation')?.value;
   }
 
-  ngAfterViewInit(): void {
-    // Watch for the blur event from any input element on the form.
-    // This is required because the valueChanges does not provide notification on blur
-    const controlBlurs: Observable<unknown>[] = this.formInputElements.map(
-      (formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur')
-    );
+  enableControls(): void {
+    const select = document.getElementById(
+      'entriesConfirmed'
+    ) as HTMLSelectElement;
+    select.removeAttribute('disabled');
 
-    // Merge the blur event observable with the valueChanges observable
-    // so we only need to subscribe once.
-    merge(
-      this.confirmationForm.get('confirmation')?.valueChanges,
-      ...controlBlurs
-    ).subscribe(() => {
-      if (this.confirmationForm.controls['confirmation'].value === 'true') {
-        const select = document.getElementById(
-          'entriesConfirmed'
-        ) as HTMLSelectElement;
-        select.removeAttribute('disabled');
-        if (this.confirmationForm.get('entriesConfirmed')?.value === '') {
-          this.confirmationForm.patchValue({
-            entriesConfirmed: '',
-          });
-        }
-        this.confirmationForm
-          .get('entriesConfirmed')
-          ?.setValidators(Validators.required);
-        this.confirmationForm.updateValueAndValidity();
-      } else if (
-        this.confirmationForm.controls['confirmation'].value === 'false'
-      ) {
-        const select = document.getElementById(
-          'entriesConfirmed'
-        ) as HTMLSelectElement;
-        select.setAttribute('disabled', '');
-        this.confirmationForm.patchValue({
-          entriesConfirmed: '',
-        });
-        this.confirmationForm.get('entriesConfirmed')?.clearValidators();
-        this.confirmationForm.get('entriesConfirmed')?.updateValueAndValidity();
-      }
-      this.displayMessage = this.genericValidator.processMessages(
-        this.confirmationForm
-      );
+    this.confirmationForm.patchValue({
+      entriesConfirmed: '',
     });
+
+    this.confirmationForm
+      .get('entriesConfirmed')
+      ?.setValidators(Validators.required);
+    this.confirmationForm.markAllAsTouched();
+  }
+
+  disableControls(): void {
+    const select = document.getElementById(
+      'entriesConfirmed'
+    ) as HTMLSelectElement;
+    select.setAttribute('disabled', '');
+    this.confirmationForm.patchValue({
+      entriesConfirmed: '',
+    });
+    this.confirmationForm.get('entriesConfirmed')?.clearValidators();
+    this.confirmationForm.get('entriesConfirmed')?.updateValueAndValidity();
   }
 }

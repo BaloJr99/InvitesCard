@@ -64,9 +64,6 @@ describe('Confirmation Component (Isolated Test)', () => {
     expect(component.confirmationForm)
       .withContext('Confirmation form should be defined')
       .toBeDefined();
-    expect(component.displayMessage)
-      .withContext('Display message should be empty')
-      .toEqual({});
   });
 
   it('form value should be invalid if one input is invalid', () => {

@@ -14,6 +14,9 @@ const ERROR_MESSAGES: Record<string, Record<string, string>> = {
   custom: {
     passwordMatch: $localize`Las contraseñas no coinciden`,
   },
+  entriesConfirmed: {
+    required: $localize`Favor de seleccionar`,
+  },
 };
 
 @Pipe({

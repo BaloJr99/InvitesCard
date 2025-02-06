@@ -15,24 +15,27 @@
         </p>
         <div class="form-check form-check-inline">
           <label class="form-check-label" i18n>
-            <input class="form-check-input" type="radio" value="true" formControlName="confirmation" checked> Asistiré
+            <input class="form-check-input" type="radio" value="true" formControlName="confirmation" (change)="enableControls()"> Asistiré
           </label>
         </div>
         <div class="form-check form-check-inline">
           <label class="form-check-label" i18n>
-            <input class="form-check-input" type="radio" value="false" formControlName="confirmation"> No asistiré
+            <input class="form-check-input" type="radio" value="false" formControlName="confirmation" (change)="disableControls()"> No asistiré
           </label>
         </div>
         <div class="form-group">
           <p i18n>
             <strong>Personas confirmadas</strong>
           </p>
-          <select #entriesConfirmed id="entriesConfirmed" class="form-control" formControlName="entriesConfirmed" [ngClass]="{'is-invalid': displayMessage['entriesConfirmed']}">
+          <select id="entriesConfirmed" 
+                  class="form-control" 
+                  formControlName="entriesConfirmed" 
+                  [ngClass]="{'is-invalid': confirmationForm.get('confirmPassword') | validation }">
             <option value="" i18n>Selecciona el numero de pases</option>
             <option *ngFor="let number of numberOfEntries$ | async" [value]="number">{{ number }}</option>
           </select>
-          <span class="invalid-feedback">
-            {{ displayMessage['entriesConfirmed'] }}
+          <span class="invalid-feedback d-block" role="alert" *ngIf="confirmationForm.get('entriesConfirmed') | validation">
+            {{ confirmationForm.get('entriesConfirmed')?.errors | validationError: 'entriesConfirmed' }}
           </span>
         </div>
         <p i18n>

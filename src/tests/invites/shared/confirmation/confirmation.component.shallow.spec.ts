@@ -5,6 +5,8 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { ConfirmationComponent } from 'src/app/invites/shared/confirmation/confirmation.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   confirmationInviteMock,
@@ -47,7 +49,7 @@ describe('Confirmation Component (Shallow Test)', () => {
     ]);
     TestBed.configureTestingModule({
       declarations: [ConfirmationComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         { provide: InvitesService, useValue: invitesSpy },
         {
@@ -222,14 +224,6 @@ describe('Confirmation Component (Shallow Test)', () => {
     expect(entriesConfirmedErrorSpan.nativeElement.innerHTML)
       .withContext('EntriesConfirmed span for error should be filled')
       .toContain('Favor de seleccionar');
-
-    expect(fixture.componentInstance.displayMessage['entriesConfirmed'])
-      .withContext('EntriesConfirmed displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['entriesConfirmed'])
-      .withContext('Should displayMessage error for EntriesConfirmed')
-      .toContain('Favor de seleccionar');
   });
 
   it("Shouldn't display entriesConfirmed error message when field is filled and should display confirmationModal", () => {
@@ -261,14 +255,6 @@ describe('Confirmation Component (Shallow Test)', () => {
     expect(confirmedModal)
       .withContext('ConfirmedModal to be displayed when form is filled')
       .not.toBeNull();
-
-    expect(fixture.componentInstance.displayMessage['entriesConfirmed'])
-      .withContext('EntriesConfirmed displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['entriesConfirmed'])
-      .withContext("Shouldn't displayMessage error for EntriesConfirmed")
-      .not.toContain('Favor de seleccionar');
   });
 
   it('Should display warning message when deadline is met', () => {
