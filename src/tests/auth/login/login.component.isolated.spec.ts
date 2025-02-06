@@ -40,9 +40,6 @@ describe('Login Component (Isolated Test)', () => {
     expect(component.loginForm.invalid)
       .withContext('LoginForm initial value should be invalid')
       .toBeTrue();
-    expect(component.displayMessage)
-      .withContext('Display Messages Array should be empty')
-      .toEqual({});
     expect(component.authErrorMessage)
       .withContext('Auth Error should be empty')
       .toEqual('');

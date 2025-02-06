@@ -4,6 +4,8 @@ import { RouterModule, Routes } from "@angular/router";
 import { ForgotPasswordComponent } from "./forgot-password.component";
 import { PasswordResetComponent } from "./password-reset/password-reset.component";
 import { AuthService } from "src/app/core/services/auth.service";
+import { ValidationPipe } from "src/app/shared/pipes/validation.pipe";
+import { ValidationErrorPipe } from "src/app/shared/pipes/validation-error.pipe";
 
 const routes: Routes = [
   { 
@@ -22,7 +24,9 @@ const routes: Routes = [
   ],
   imports: [
     SharedModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    ValidationPipe,
+    ValidationErrorPipe,
   ],
   declarations: [ 
     PasswordResetComponent

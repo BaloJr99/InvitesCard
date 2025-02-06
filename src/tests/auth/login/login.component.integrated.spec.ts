@@ -13,6 +13,8 @@ import { of, throwError } from 'rxjs';
 import { LoginComponent } from 'src/app/auth/login/login.component';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock, tokenMock } from 'src/tests/mocks/mocks';
 
@@ -45,7 +47,7 @@ describe('Login Component (Integrated Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [LoginComponent],
-      imports: [ReactiveFormsModule, RouterLink],
+      imports: [ReactiveFormsModule, RouterLink, ValidationPipe, ValidationErrorPipe],
       providers: [
         { provide: AuthService, useValue: authSpy },
         { provide: TokenStorageService, useValue: tokenSpy },

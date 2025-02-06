@@ -40,9 +40,6 @@ describe('PasswordResetComponent Isolated', () => {
     expect(component.passwordResetForm.invalid)
       .withContext('PasswordResetForm initial value should be invalid')
       .toBeTrue();
-    expect(component.displayMessage)
-      .withContext('Display Messages Array should be empty')
-      .toEqual({});
   });
 
   it('form value should be invalid if one input is invalid', () => {
@@ -87,14 +84,14 @@ describe('PasswordResetComponent Isolated', () => {
 
   it("should have the passwordMatchError error if the password and confirmPassword doesn't match", () => {
     updateForm(loginDataMockCopy.password, loginDataMockCopy.password + '1');
-    expect(component.passwordResetForm.errors?.['passwordMatchError'])
+    expect(component.passwordResetForm.errors?.['passwordMatch'])
       .withContext('passwordMatchError error should exist')
       .toBeTruthy();
   });
 
   it("shouldn't have the passwordMatchError error if the password and confirmPassword doesn't match", () => {
     updateForm(loginDataMockCopy.password, loginDataMockCopy.password);
-    expect(component.passwordResetForm.errors?.['passwordMatchError'])
+    expect(component.passwordResetForm.errors?.['passwordMatch'])
       .withContext("passwordMatchError error shouldn't exist")
       .toBeFalsy();
   });

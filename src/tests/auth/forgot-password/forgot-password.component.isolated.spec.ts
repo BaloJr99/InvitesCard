@@ -35,9 +35,6 @@ describe('ForgotPasswordComponent Isolated', () => {
     expect(component.forgotPasswordForm.invalid)
       .withContext('ForgotPasswordForm initial value should be invalid')
       .toBeTrue();
-    expect(component.displayMessage)
-      .withContext('Display Messages Array should be empty')
-      .toEqual({});
     expect(component.emailSent)
       .withContext('Email sent should be false')
       .toBeFalse();

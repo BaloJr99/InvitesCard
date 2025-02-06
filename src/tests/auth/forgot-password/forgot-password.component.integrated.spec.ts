@@ -11,6 +11,8 @@ import { provideRouter, Router, RouterLink } from '@angular/router';
 import { of } from 'rxjs';
 import { ForgotPasswordComponent } from 'src/app/auth/forgot-password/forgot-password.component';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock, messageResponseMock } from 'src/tests/mocks/mocks';
 
@@ -36,7 +38,12 @@ describe('Forgot Password Component (Integrated Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [ForgotPasswordComponent],
-      imports: [ReactiveFormsModule, RouterLink],
+      imports: [
+        ReactiveFormsModule,
+        RouterLink,
+        ValidationPipe,
+        ValidationErrorPipe,
+      ],
       providers: [
         { provide: AuthService, useValue: authSpy },
         provideRouter([]),
@@ -53,7 +60,9 @@ describe('Forgot Password Component (Integrated Test)', () => {
   });
 
   it('authService sendResetPassword() should called', () => {
-    authServiceSpy.sendResetPassword.and.returnValue(of(messageResponseMockCopy));
+    authServiceSpy.sendResetPassword.and.returnValue(
+      of(messageResponseMockCopy)
+    );
 
     updateFormUsingEvent(loginDataMockCopy.usernameOrEmail);
     fixture.detectChanges();
@@ -77,7 +86,9 @@ describe('Forgot Password Component (Integrated Test)', () => {
       .withContext("Shouldn't show email sent div")
       .toBeNull();
 
-    authServiceSpy.sendResetPassword.and.returnValue(of(messageResponseMockCopy));
+    authServiceSpy.sendResetPassword.and.returnValue(
+      of(messageResponseMockCopy)
+    );
     updateFormUsingEvent(loginDataMockCopy.usernameOrEmail);
     fixture.detectChanges();
 

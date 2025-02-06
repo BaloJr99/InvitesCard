@@ -15,6 +15,9 @@ const routes: Routes = [
 
 @NgModule({
   providers: [AuthService],
-  imports: [SharedModule, RouterModule.forChild(routes)],
+  imports: [
+    SharedModule,
+    RouterModule.forChild(routes),
+  ],
 })
 export class PasswordResetModule {}

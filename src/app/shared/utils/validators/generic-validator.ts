@@ -57,7 +57,7 @@ export class GenericValidator {
       }
     }
 
-    if (container.errors && container.errors['passwordMatchError']) {
+    if (container.errors && container.errors['passwordMatch']) {
       messages['passwordMatch'] = '';
       messages['passwordMatch'] +=
         this.validationMessages['passwordMatch']['matchError'];

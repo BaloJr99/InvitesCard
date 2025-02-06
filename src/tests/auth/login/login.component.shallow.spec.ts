@@ -4,6 +4,8 @@ import { By } from '@angular/platform-browser';
 import { LoginComponent } from 'src/app/auth/login/login.component';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock } from 'src/tests/mocks/mocks';
 
@@ -33,7 +35,7 @@ describe('Login Component (Shallow Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [LoginComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         { provide: AuthService, useValue: authSpy },
         { provide: TokenStorageService, useValue: tokenSpy },
@@ -77,7 +79,10 @@ describe('Login Component (Shallow Test)', () => {
   });
 
   it('Expect form controls to be filled when user fills inputs', () => {
-    updateFormUsingEvent(loginDataMockCopy.usernameOrEmail, loginDataMockCopy.password);
+    updateFormUsingEvent(
+      loginDataMockCopy.usernameOrEmail,
+      loginDataMockCopy.password
+    );
     expect(
       fixture.componentInstance.loginForm.controls['usernameOrEmail'].value
     )
@@ -109,54 +114,24 @@ describe('Login Component (Shallow Test)', () => {
 
     expect(usernameErrorSpan.nativeElement.innerHTML)
       .withContext('Username span for error should be filled')
-      .toContain('Ingresar email o usuario');
+      .toContain('Ingresar usuario');
     expect(passwordErrorSpan.nativeElement.innerHTML)
       .withContext('Password span for error should be filled')
-      .toContain('Ingresar contraseña');
-
-    expect(fixture.componentInstance.displayMessage['usernameOrEmail'])
-      .withContext('Username displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['password'])
-      .withContext('Password displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['usernameOrEmail'])
-      .withContext('Should displayMessage error for username')
-      .toContain('Ingresar email o usuario');
-    expect(fixture.componentInstance.displayMessage['password'])
-      .withContext('Should displayMessage error for password')
       .toContain('Ingresar contraseña');
   });
 
   it("Shouldn't display username and password error message when fields are filled", () => {
-    updateFormUsingEvent(loginDataMockCopy.usernameOrEmail, loginDataMockCopy.password);
+    updateFormUsingEvent(
+      loginDataMockCopy.usernameOrEmail,
+      loginDataMockCopy.password
+    );
     fixture.detectChanges();
     const errorSpans = fixture.debugElement.queryAll(
       By.css('.invalid-feedback')
     );
-    const usernameErrorSpan = errorSpans[0];
-    const passwordErrorSpan = errorSpans[1];
 
-    expect(usernameErrorSpan.nativeElement.innerHTML)
-      .withContext("Shouldn't display error message")
-      .not.toContain('Ingresar email o usuario');
-    expect(passwordErrorSpan.nativeElement.innerHTML)
-      .withContext("Shouldn't display error message")
-      .not.toContain('Ingresar contraseña');
-
-    expect(fixture.componentInstance.displayMessage['usernameOrEmail'])
-      .withContext('Username displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['password'])
-      .withContext('Password displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['usernameOrEmail'])
-      .withContext("DisplayMessage for username shouldn't contain error")
-      .not.toContain('Ingresar email o usuario');
-    expect(fixture.componentInstance.displayMessage['password'])
-      .withContext("DisplayMessage for password shouldn't contain error")
-      .not.toContain('Ingresar contraseña');
+    expect(errorSpans.length)
+      .withContext('Should not display any error messages')
+      .toBe(0);
   });
 });

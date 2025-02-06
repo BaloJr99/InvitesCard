@@ -16,6 +16,8 @@ import {
 import { of } from 'rxjs';
 import { PasswordResetComponent } from 'src/app/auth/forgot-password/password-reset/password-reset.component';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   fullUserMock,
@@ -51,7 +53,12 @@ describe('Password Reset Component (Integrated Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [PasswordResetComponent],
-      imports: [ReactiveFormsModule, RouterLink],
+      imports: [
+        ReactiveFormsModule,
+        RouterLink,
+        ValidationPipe,
+        ValidationErrorPipe,
+      ],
       providers: [
         { provide: AuthService, useValue: authSpy },
         {

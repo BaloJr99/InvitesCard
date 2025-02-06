@@ -8,7 +8,7 @@ export const matchPassword: ValidatorFn = (
 
   if (password && confirmPassword && password.value != confirmPassword.value) {
     return {
-      passwordMatchError: true,
+      passwordMatch: true,
     };
   }
   return null;

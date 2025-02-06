@@ -13,15 +13,15 @@
             <input id="usernameOrEmail" 
               class="form-control" 
               type="text" 
-              autocomplete="email username"
+              autocomplete="username"
               placeholder="Escriba su usuario" 
               formControlName="usernameOrEmail" 
-              [ngClass]="{'is-invalid': displayMessage['usernameOrEmail']}"
+              [ngClass]="{'is-invalid': loginForm.get('usernameOrEmail') | validation }"
               i18n-placeholder>
           </div>
-              <span class="invalid-feedback d-block" role="alert">
-                {{ displayMessage['usernameOrEmail'] }}
-              </span>
+          <span class="invalid-feedback d-block" role="alert" *ngIf="loginForm.get('usernameOrEmail') | validation">
+            {{ loginForm.get('usernameOrEmail')?.errors | validationError: 'usernameOrEmail' }}
+          </span>
         </div>
         <div class="form-group">
           <label for="password" i18n>Contraseña</label>
@@ -32,11 +32,11 @@
               type="password" 
               placeholder="Escriba su contraseña"
               formControlName="password" 
-              [ngClass]="{'is-invalid': displayMessage['password']}"
+              [ngClass]="{'is-invalid': loginForm.get('password') | validation }"
               i18n-placeholder>
           </div>
-          <span class="invalid-feedback d-block" role="alert">
-            {{ displayMessage['password'] }}
+          <span class="invalid-feedback d-block" role="alert" *ngIf="loginForm.get('password') | validation">
+            {{ loginForm.get('password')?.errors | validationError: 'password' }}
           </span>
           <span class="forgotPassword" id="forgotPassword">
             <a routerLink="/auth/forgotPassword" i18n>¿Olvido su contraseña?</a>

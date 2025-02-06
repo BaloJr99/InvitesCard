@@ -3,6 +3,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ForgotPasswordComponent } from 'src/app/auth/forgot-password/forgot-password.component';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock } from 'src/tests/mocks/mocks';
 
@@ -24,7 +26,7 @@ describe('Forgot Password (Shallow Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [ForgotPasswordComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [{ provide: AuthService, useValue: authSpy }],
     }).compileComponents();
   }));
@@ -89,15 +91,7 @@ describe('Forgot Password (Shallow Test)', () => {
 
     expect(usernameErrorSpan.nativeElement.innerHTML)
       .withContext('Username span for error should be filled')
-      .toContain('Ingresar email o usuario');
-
-    expect(fixture.componentInstance.displayMessage['usernameOrEmail'])
-      .withContext('Username displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['usernameOrEmail'])
-      .withContext('Should displayMessage error for username')
-      .toContain('Ingresar email o usuario');
+      .toContain('Ingresar usuario');
   });
 
   it("Shouldn't display username error message when fields are filled", () => {
@@ -106,18 +100,9 @@ describe('Forgot Password (Shallow Test)', () => {
     const errorSpans = fixture.debugElement.queryAll(
       By.css('.invalid-feedback')
     );
-    const usernameErrorSpan = errorSpans[0];
 
-    expect(usernameErrorSpan.nativeElement.innerHTML)
-      .withContext("Shouldn't display error message")
-      .not.toContain('Ingresar email o usuario');
-
-    expect(fixture.componentInstance.displayMessage['usernameOrEmail'])
-      .withContext('Username displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['usernameOrEmail'])
-      .withContext("DisplayMessage for username shouldn't contain error")
-      .not.toContain('Ingresar email o usuario');
+    expect(errorSpans.length)
+      .withContext('Should not display any error messages')
+      .toBe(0);
   });
 });
