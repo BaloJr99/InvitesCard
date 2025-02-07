@@ -91,7 +91,7 @@ describe('Forgot Password (Shallow Test)', () => {
 
     expect(usernameErrorSpan.nativeElement.innerHTML)
       .withContext('Username span for error should be filled')
-      .toContain('Ingresar usuario');
+      .toContain('El usuario es requerido');
   });
 
   it("Shouldn't display username error message when fields are filled", () => {

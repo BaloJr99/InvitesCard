@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -15,11 +14,9 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Observable, fromEvent, merge } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { IEventAction, IFullEvent } from 'src/app/core/models/events';
 import { IUserDropdownData } from 'src/app/core/models/users';
-import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
@@ -37,7 +34,7 @@ import { dateToUTCDate } from 'src/app/shared/utils/tools';
   templateUrl: './event-modal.component.html',
   styleUrls: ['./event-modal.component.css'],
 })
-export class EventModalComponent implements OnInit, AfterViewInit {
+export class EventModalComponent implements OnInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
@@ -74,10 +71,6 @@ export class EventModalComponent implements OnInit, AfterViewInit {
   users: IUserDropdownData[] = [];
   userEmptyMessage = '';
 
-  displayMessage: { [key: string]: string } = {};
-  private validationMessages: { [key: string]: { [key: string]: string } };
-  private genericValidator: GenericValidator;
-
   constructor(
     private eventsService: EventsService,
     private usersService: UsersService,
@@ -86,30 +79,7 @@ export class EventModalComponent implements OnInit, AfterViewInit {
     private loaderService: LoaderService,
     private commonModalService: CommonModalService,
     private cd: ChangeDetectorRef
-  ) {
-    this.validationMessages = {
-      nameOfEvent: {
-        required: $localize`Ingresar nombre del evento`,
-      },
-      dateOfEvent: {
-        required: $localize`Ingresar fecha del evento`,
-      },
-      maxDateOfConfirmation: {
-        required: $localize`Ingresar fecha límite de confirmación`,
-      },
-      nameOfCelebrated: {
-        required: $localize`Ingresar nombre del festejado o festejados`,
-      },
-      typeOfEvent: {
-        required: $localize`Seleccionar tipo de evento`,
-      },
-      userId: {
-        required: $localize`Seleccionar usuario`,
-      },
-    };
-
-    this.genericValidator = new GenericValidator(this.validationMessages);
-  }
+  ) {}
 
   ngOnInit(): void {
     $('#eventModal').on('hidden.bs.modal', () => {
@@ -179,10 +149,7 @@ export class EventModalComponent implements OnInit, AfterViewInit {
         this.createEvent();
       }
     } else {
-      this.displayMessage = this.genericValidator.processMessages(
-        this.createEventForm,
-        true
-      );
+      this.createEventForm.markAllAsTouched();
     }
   }
 
@@ -262,26 +229,9 @@ export class EventModalComponent implements OnInit, AfterViewInit {
 
     this.createEventForm.enable();
 
-    this.displayMessage = {};
     this.eventAction = undefined;
     this.originalEventType = undefined;
 
     $('#eventId').val('');
-  }
-
-  ngAfterViewInit(): void {
-    // Watch for the blur event from any input element on the form.
-    // This is required because the valueChanges does not provide notification on blur
-    const controlBlurs: Observable<unknown>[] = this.formInputElements.map(
-      (formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur')
-    );
-
-    // Merge the blur event observable with the valueChanges observable
-    // so we only need to subscribe once.
-    merge(this.createEventForm.valueChanges, ...controlBlurs).subscribe(() => {
-      this.displayMessage = this.genericValidator.processMessages(
-        this.createEventForm
-      );
-    });
   }
 }

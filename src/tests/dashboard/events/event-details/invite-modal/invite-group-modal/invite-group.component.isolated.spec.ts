@@ -34,10 +34,6 @@ describe('Invite Group Component (Isolated Test)', () => {
     expect(component.createInviteGroupForm)
       .withContext('should have createInviteGroupForm to be defined')
       .toBeDefined();
-
-    expect(component.displayMessage)
-      .withContext('should have displayMessage to be an empty object')
-      .toEqual({});
   });
 
   it('form value should be invalid if one input is invalid', () => {

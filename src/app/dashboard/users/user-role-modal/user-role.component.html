@@ -11,13 +11,19 @@
           <div class="mb-3">
             <label for="name" class="form-label" i18n>Nuevo rol</label>
             <div class="roleName-validation">
-              <input id="name" type="text" min="1"  class="form-control" formControlName="name" [ngClass]="{'is-invalid': displayMessage['name'] || displayMessage['controlValueDuplicated']}" (keyup)="checkRole($event)">
+              <input id="name"
+                     type="text"
+                     min="1"
+                     class="form-control"
+                     formControlName="name"
+                     [ngClass]="{'is-invalid': (createRoleForm.get('name') | validation) || createRoleForm.errors?.['controlIsDuplicated'] }" 
+                     (keyup)="checkRole($event)">
               <i class="fa-solid" aria-hidden="true" [ngClass]="createRoleForm.get('controlIsValid')?.value ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
-              <span class="invalid-feedback" role="alert">
-                {{ displayMessage['name'] }}
+              <span class="invalid-feedback d-block" role="alert" *ngIf="createRoleForm.get('name') | validation">
+                {{ createRoleForm.get('name')?.errors | validationError: 'name' }}
               </span>
-              <span class="invalid-feedback d-block" *ngIf="!displayMessage['name']">
-                {{ displayMessage['controlValueDuplicated'] }}
+              <span class="invalid-feedback d-block" role="alert" *ngIf="!createRoleForm.get('controlIsValid')?.value">
+                {{ null | validationError: 'custom': 'controlIsDuplicated' }}
               </span>
             </div>
           </div>

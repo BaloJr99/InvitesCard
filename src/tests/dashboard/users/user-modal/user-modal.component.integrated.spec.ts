@@ -6,6 +6,8 @@ import { of } from 'rxjs';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { UserModalComponent } from 'src/app/dashboard/users/user-modal/user-modal.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   messageResponseMock,
@@ -72,7 +74,7 @@ describe('User Modal Component (Integrated Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [UserModalComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         { provide: UsersService, useValue: usersSpy },
         { provide: RolesService, useValue: rolesSpy },

@@ -7,6 +7,8 @@ import { of } from 'rxjs';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { UserModalComponent } from 'src/app/dashboard/users/user-modal/user-modal.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { roleMock, upsertUserMock } from 'src/tests/mocks/mocks';
 
@@ -58,7 +60,7 @@ describe('User Modal Component (Shallow Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [UserModalComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: UsersService, useValue: usersSpy },
@@ -175,32 +177,12 @@ describe('User Modal Component (Shallow Test)', () => {
 
     expect(usernameErrorSpan.nativeElement.innerHTML)
       .withContext('Username span for error should be filled')
-      .toContain('Ingresar nombre de usuario');
+      .toContain('El nombre de usuario es requerido');
     expect(emailErrorSpan.nativeElement.innerHTML)
       .withContext('Email span for error should be filled')
-      .toContain('Ingresar correo electronico');
+      .toContain('El correo electrónico es requerido');
     expect(roleErrorSpan.nativeElement.innerHTML)
       .withContext('Role span for error should be filled')
-      .toContain('Seleccionar un rol');
-
-    expect(fixture.componentInstance.displayMessage['username'])
-      .withContext('Username displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['email'])
-      .withContext('Email displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['roles'])
-      .withContext('Roles displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['username'])
-      .withContext('Should displayMessage error for username')
-      .toContain('Ingresar nombre de usuario');
-    expect(fixture.componentInstance.displayMessage['email'])
-      .withContext('Should displayMessage error for email')
-      .toContain('Ingresar correo electronico');
-    expect(fixture.componentInstance.displayMessage['roles'])
-      .withContext('Should displayMessage error for roles')
       .toContain('Seleccionar un rol');
   });
 
@@ -225,39 +207,9 @@ describe('User Modal Component (Shallow Test)', () => {
       By.css('.invalid-feedback')
     );
 
-    const usernameErrorSpan = errorSpans[0];
-    const emailErrorSpan = errorSpans[1];
-    const roleErrorSpan = errorSpans[2];
-
-    expect(usernameErrorSpan.nativeElement.innerHTML)
-      .withContext("Username span for error shouldn't be filled")
-      .not.toContain('Ingresar nombre de usuario');
-    expect(emailErrorSpan.nativeElement.innerHTML)
-      .withContext("Email span for error shouldn't be filled")
-      .not.toContain('Ingresar correo electronico');
-    expect(roleErrorSpan.nativeElement.innerHTML)
-      .withContext("Role span for error shouldn't be filled")
-      .not.toContain('Seleccionar un rol');
-
-    expect(fixture.componentInstance.displayMessage['username'])
-      .withContext('Username displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['email'])
-      .withContext('Email displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['roles'])
-      .withContext('Roles displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['username'])
-      .withContext("Shouldn't displayMessage error for username")
-      .not.toContain('Ingresar nombre de usuario');
-    expect(fixture.componentInstance.displayMessage['email'])
-      .withContext("Shouldn't displayMessage error for email")
-      .not.toContain('Ingresar correo electronico');
-    expect(fixture.componentInstance.displayMessage['roles'])
-      .withContext("Shouldn't displayMessage error for roles")
-      .not.toContain('Seleccionar un rol');
+    expect(errorSpans.length)
+      .withContext('Should not have any error messages')
+      .toBe(0);
   });
 
   it('Should display role badge when role is added', () => {

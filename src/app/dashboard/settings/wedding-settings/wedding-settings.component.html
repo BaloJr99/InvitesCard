@@ -17,23 +17,35 @@
       <section class="info">
         <div class="form-group col-6 col-md-3">
           <label for="weddingPrimaryColor" class="form-label" i18n>Color Primario</label>
-          <input id="weddingPrimaryColor" type="color" class="form-control" formControlName="weddingPrimaryColor" [ngClass]="{'is-invalid': formControlIsInvalid('weddingPrimaryColor', 'required')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['weddingPrimaryColor'] }}
+          <input id="weddingPrimaryColor"
+                 type="color"
+                 class="form-control"
+                 formControlName="weddingPrimaryColor"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('weddingPrimaryColor') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('weddingPrimaryColor') | validation">
+            {{ createEventSettingsForm.get('weddingPrimaryColor')?.errors | validationError: 'weddingPrimaryColor' }}
           </span>
         </div>
         <div class="form-group col-6 col-md-3">
           <label for="weddingSecondaryColor" class="form-label" i18n>Color Secundario</label>
-          <input id="weddingSecondaryColor" type="color" class="form-control" formControlName="weddingSecondaryColor" [ngClass]="{'is-invalid': formControlIsInvalid('weddingSecondaryColor', 'required')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['weddingSecondaryColor'] }}
+          <input id="weddingSecondaryColor"
+                 type="color"
+                 class="form-control"
+                 formControlName="weddingSecondaryColor"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('weddingSecondaryColor') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('weddingSecondaryColor') | validation">
+            {{ createEventSettingsForm.get('weddingSecondaryColor')?.errors | validationError: 'weddingSecondaryColor' }}
           </span>
         </div>
         <div class="form-group col-12 col-md-9">
           <label for="weddingCopyMessage" class="form-label" i18n>Mensaje para copiar</label>
-          <textarea id="weddingCopyMessage" class="form-control" formControlName="weddingCopyMessage" [ngClass]="{'is-invalid': formControlIsInvalid('weddingCopyMessage', 'required')}"></textarea>
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['weddingCopyMessage'] }}
+          <textarea id="weddingCopyMessage"
+                    class="form-control"
+                    formControlName="weddingCopyMessage"
+                    [ngClass]="{'is-invalid': createEventSettingsForm.get('weddingCopyMessage') | validation }">
+          </textarea>
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('weddingCopyMessage') | validation">
+            {{ createEventSettingsForm.get('weddingCopyMessage')?.errors | validationError: 'weddingCopyMessage' }}
           </span>
         </div>
         <div class="col-12 col-md-3 d-flex flex-column">
@@ -46,129 +58,197 @@
         </div>
         <div class="form-group col-12">
           <label for="groomParents" class="form-label" i18n>Padres del novio</label>
-          <input id="groomParents" type="text" class="form-control" formControlName="groomParents" [ngClass]="{'is-invalid': formControlIsInvalid('groomParents', 'required')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['groomParents'] }}
+          <input id="groomParents"
+                 type="text"
+                 class="form-control"
+                 formControlName="groomParents"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('groomParents') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('groomParents') | validation">
+            {{ createEventSettingsForm.get('groomParents')?.errors | validationError: 'groomParents' }}
           </span>
         </div>
         <div class="form-group col-12">
           <label for="brideParents" class="form-label" i18n>Padres de la novia</label>
-          <input id="brideParents" type="text" class="form-control" formControlName="brideParents" [ngClass]="{'is-invalid': formControlIsInvalid('brideParents', 'required')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['brideParents'] }}
+          <input id="brideParents"
+                 type="text"
+                 class="form-control"
+                 formControlName="brideParents"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('brideParents') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('brideParents') | validation">
+            {{ createEventSettingsForm.get('brideParents')?.errors | validationError: 'brideParents' }}
           </span>
         </div>
       </section>
       <section class="itinerary" *ngIf="sectionEnabled('itineraryInfo', vm.sections)">
         <div class="form-group col-12 col-md-6">
           <label for="massUrl" class="form-label" i18n>Url de la ubicación de la misa</label>
-          <input id="massUrl" type="url" class="form-control" formControlName="massUrl" [ngClass]="{'is-invalid': formControlIsInvalid('massUrl', 'required')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['massUrl'] }}
+          <input id="massUrl"
+                 type="url"
+                 class="form-control"
+                 formControlName="massUrl"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('massUrl') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('massUrl') | validation">
+            {{ createEventSettingsForm.get('massUrl')?.errors | validationError: 'massUrl' }}
           </span>
         </div>
         <div class="form-group col-6 col-md-2">
           <label for="massTime" class="form-label" i18n>Hora de la Misa</label>
-          <input id="massTime" type="time" class="form-control" formControlName="massTime" [ngClass]="{'is-invalid': formControlIsInvalid('massTime', 'required')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['massTime'] }}
+          <input id="massTime"
+                 type="time"
+                 class="form-control"
+                 formControlName="massTime"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('massTime') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('massTime') | validation">
+            {{ createEventSettingsForm.get('massTime')?.errors | validationError: 'massTime' }}
           </span>
         </div>
         <div class="form-group col-6 col-md-4">
           <label for="massPlace" class="form-label" i18n>Lugar de la Misa</label>
-          <input id="massPlace" type="text" class="form-control" formControlName="massPlace" [ngClass]="{'is-invalid': formControlIsInvalid('massPlace', 'required')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['massPlace'] }}
+          <input id="massPlace"
+                 type="text"
+                 class="form-control"
+                 formControlName="massPlace"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('massPlace') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('massPlace') | validation">
+            {{ createEventSettingsForm.get('massPlace')?.errors | validationError: 'massPlace' }}
           </span>
         </div>
         <div class="form-group col-12 col-md-6">
           <label for="civilUrl" class="form-label" i18n>Url de la ubicación de la ceremonia civil</label>
-          <input id="civilUrl" type="text" class="form-control" formControlName="civilUrl" [ngClass]="{'is-invalid': formControlIsInvalid('civilUrl', 'required')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['civilUrl'] }}
+          <input id="civilUrl"
+                 type="text"
+                 class="form-control"
+                 formControlName="civilUrl"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('civilUrl') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('civilUrl') | validation">
+            {{ createEventSettingsForm.get('civilUrl')?.errors | validationError: 'civilUrl' }}
           </span>
         </div>
         <div class="form-group col-6 col-md-2">
           <label for="civilTime" class="form-label" i18n>Hora de la ceremonia civil</label>
-          <input id="civilTime" type="time" class="form-control" formControlName="civilTime" [ngClass]="{'is-invalid': formControlIsInvalid('civilTime', 'required')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['civilTime'] }}
+          <input id="civilTime"
+                 type="time"
+                 class="form-control"
+                 formControlName="civilTime"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('civilTime') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('civilTime') | validation">
+            {{ createEventSettingsForm.get('civilTime')?.errors | validationError: 'civilTime' }}
           </span>
         </div>
         <div class="form-group col-6 col-md-4">
           <label for="civilPlace" class="form-label" i18n>Lugar de la ceremonia civil</label>
-          <input id="civilPlace" type="text" class="form-control" formControlName="civilPlace" [ngClass]="{'is-invalid': formControlIsInvalid('civilPlace', 'required')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['civilPlace'] }}
+          <input id="civilPlace"
+                 type="text"
+                 class="form-control"
+                 formControlName="civilPlace"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('civilPlace') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('civilPlace') | validation">
+            {{ createEventSettingsForm.get('civilPlace')?.errors | validationError: 'civilPlace' }}
           </span>
         </div>
         <div class="form-group col-12 col-md-6">
           <label for="venueUrl" class="form-label" i18n>Url de la ubicación de la recepción</label>
-          <input id="venueUrl" type="text" class="form-control" formControlName="venueUrl" [ngClass]="{'is-invalid': formControlIsInvalid('venueUrl', 'required')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['venueUrl'] }}
+          <input id="venueUrl"
+                 type="text"
+                 class="form-control"
+                 formControlName="venueUrl"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('venueUrl') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('venueUrl') | validation">
+            {{ createEventSettingsForm.get('venueUrl')?.errors | validationError: 'venueUrl' }}
           </span>
         </div>
         <div class="form-group col-6 col-md-2">
           <label for="venueTime" class="form-label" i18n>Hora de la recepción</label>
-          <input id="venueTime" type="time" class="form-control" formControlName="venueTime" [ngClass]="{'is-invalid': formControlIsInvalid('venueTime', 'required')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['venueTime'] }}
+          <input id="venueTime"
+                 type="time"
+                 class="form-control"
+                 formControlName="venueTime"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('venueTime') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('venueTime') | validation">
+            {{ createEventSettingsForm.get('venueTime')?.errors | validationError: 'venueTime' }}
           </span>
         </div>
         <div class="form-group col-6 col-md-4">
           <label for="venuePlace" class="form-label" i18n>Lugar de la recepción</label>
-          <input id="venuePlace" type="text" class="form-control" formControlName="venuePlace" [ngClass]="{'is-invalid': formControlIsInvalid('venuePlace', 'required')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['venuePlace'] }}
+          <input id="venuePlace"
+                 type="text"
+                 class="form-control"
+                 formControlName="venuePlace"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('venuePlace') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('venuePlace') | validation">
+            {{ createEventSettingsForm.get('venuePlace')?.errors | validationError: 'venuePlace' }}
           </span>
         </div>
       </section>
       <section class="dressCode" *ngIf="sectionEnabled('dressCodeInfo', vm.sections)">
         <div class="form-group col-12">
           <label for="dressCodeColor" class="form-label" i18n>Código reservado para festejados</label>
-          <input id="dressCodeColor" type="text" class="form-control" formControlName="dressCodeColor" [ngClass]="{'is-invalid': formControlIsInvalid('dressCodeColor', 'required')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['dressCodeColor'] }}
+          <input id="dressCodeColor"
+                 type="text"
+                 class="form-control"
+                 formControlName="dressCodeColor"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('dressCodeColor') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('dressCodeColor') | validation">
+            {{ createEventSettingsForm.get('dressCodeColor')?.errors | validationError: 'dressCodeColor' }}
           </span>
         </div>
       </section>
       <section class="gifts" *ngIf="sectionEnabled('giftsInfo', vm.sections)">
         <div class="form-group col-6">
           <label for="cardNumber" class="form-label" i18n>Número de Tarjeta</label>
-          <input id="cardNumber" type="text" class="form-control" formControlName="cardNumber" [ngClass]="{'is-invalid': formControlIsInvalid('cardNumber', 'required') || formControlIsInvalid('cardNumber', 'pattern')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['cardNumber'] }}
+          <input id="cardNumber"
+                 type="text"
+                 class="form-control"
+                 formControlName="cardNumber"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('cardNumber') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('cardNumber') | validation">
+            {{ createEventSettingsForm.get('cardNumber')?.errors | validationError: 'cardNumber' }}
           </span>
         </div>
         <div class="form-group col-6">
           <label for="clabeBank" class="form-label" i18n>Clabe Bancaria</label>
-          <input id="clabeBank" type="text" class="form-control" formControlName="clabeBank" [ngClass]="{'is-invalid': formControlIsInvalid('clabeBank', 'required') || formControlIsInvalid('clabeBank', 'pattern')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['clabeBank'] }}
+          <input id="clabeBank"
+                 type="text"
+                 class="form-control"
+                 formControlName="clabeBank"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('clabeBank') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('clabeBank') | validation">
+            {{ createEventSettingsForm.get('clabeBank')?.errors | validationError: 'clabeBank' }}
           </span>
         </div>
       </section>
       <section class="accomodation" *ngIf="sectionEnabled('accomodationInfo', vm.sections)">
         <div class="form-group col-12 col-md-6">
           <label for="hotelUrl" class="form-label" i18n>Url de la ubicación del hotel</label>
-          <input id="hotelUrl" type="url" class="form-control" formControlName="hotelUrl" [ngClass]="{'is-invalid': formControlIsInvalid('hotelUrl', 'required')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['hotelUrl'] }}
+          <input id="hotelUrl"
+                 type="url"
+                 class="form-control"
+                 formControlName="hotelUrl"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('hotelUrl') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('hotelUrl') | validation">
+            {{ createEventSettingsForm.get('hotelUrl')?.errors | validationError: 'hotelUrl' }}
           </span>
         </div>
         <div class="form-group col-12 col-md-6">
           <label for="hotelPhone" class="form-label" i18n>Número de teléfono del hotel</label>
-          <input id="hotelPhone" type="text" class="form-control" formControlName="hotelPhone" [ngClass]="{'is-invalid': formControlIsInvalid('hotelPhone', 'required') || formControlIsInvalid('hotelPhone', 'pattern')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['hotelPhone'] }}
+          <input id="hotelPhone"
+                 type="text"
+                 class="form-control"
+                 formControlName="hotelPhone"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('hotelPhone') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('hotelPhone') | validation">
+            {{ createEventSettingsForm.get('hotelPhone')?.errors | validationError: 'hotelPhone' }}
           </span>
         </div>
         <div class="form-group col-12">
           <label for="hotelAddress" class="form-label" i18n>Dirección del hotel</label>
-          <input id="hotelAddress" type="text" class="form-control" formControlName="hotelAddress" [ngClass]="{'is-invalid': formControlIsInvalid('hotelAddress', 'required')}">
-          <span class="invalid-feedback" role="alert">
-            {{ validationMessages['hotelAddress'] }}
+          <input id="hotelAddress"
+                 type="text"
+                 class="form-control"
+                 formControlName="hotelAddress"
+                 [ngClass]="{'is-invalid': createEventSettingsForm.get('hotelAddress') | validation }">
+          <span class="invalid-feedback d-block" role="alert" *ngIf="createEventSettingsForm.get('hotelAddress') | validation">
+            {{ createEventSettingsForm.get('hotelAddress')?.errors | validationError: 'hotelAddress' }}
           </span>
         </div>
       </section>

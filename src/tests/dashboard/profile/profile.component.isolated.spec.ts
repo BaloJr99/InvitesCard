@@ -67,10 +67,6 @@ describe('Profile Component (Isolated Test)', () => {
     expect(component.createProfileForm)
       .withContext('The createProfileForm should be defined')
       .toBeDefined();
-
-    expect(component.displayMessage)
-      .withContext('The displayMessage should an empty object')
-      .toEqual({});
   });
 
   it('form value should be invalid if one input is invalid', () => {

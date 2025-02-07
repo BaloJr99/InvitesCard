@@ -8,6 +8,8 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { ProfileComponent } from 'src/app/dashboard/profile/profile.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { userProfileMock } from 'src/tests/mocks/mocks';
 
@@ -64,7 +66,7 @@ describe('Profile Component (Shallow Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [ProfileComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
@@ -293,45 +295,7 @@ describe('Profile Component (Shallow Test)', () => {
 
     expect(phoneNumberErrorSpan.nativeElement.innerHTML)
       .withContext('Phone number span for error should be filled')
-      .toContain('El número de teléfono es requerido');
-
-    expect(fixture.componentInstance.displayMessage['firstName'])
-      .withContext('FirstName displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['lastName'])
-      .withContext('LastName displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['username'])
-      .withContext('Username displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['gender'])
-      .withContext('Gender displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['email'])
-      .withContext('Email displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['phoneNumber'])
-      .withContext('PhoneNumber displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['firstName'])
-      .withContext('Should displayMessage error for firstName')
-      .toContain('El nombre es requerido');
-    expect(fixture.componentInstance.displayMessage['lastName'])
-      .withContext('Should displayMessage error for lastName')
-      .toContain('El apellido es requerido');
-    expect(fixture.componentInstance.displayMessage['username'])
-      .withContext('Should displayMessage error for username')
-      .toContain('El nombre de usuario es requerido');
-    expect(fixture.componentInstance.displayMessage['gender'])
-      .withContext('Should displayMessage error for gender')
-      .toContain('El género es requerido');
-    expect(fixture.componentInstance.displayMessage['email'])
-      .withContext('Should displayMessage error for email')
-      .toContain('El correo electrónico es requerido');
-    expect(fixture.componentInstance.displayMessage['phoneNumber'])
-      .withContext('Should displayMessage error for phoneNumber')
-      .toContain('El número de teléfono es requerido');
+      .toContain('El número de telefono es requerido');
   });
 
   it("Shouldn't display password and confirmPassword error message when fields are filled", () => {
@@ -350,74 +314,9 @@ describe('Profile Component (Shallow Test)', () => {
       By.css('.invalid-feedback')
     );
 
-    const firstNameErrorSpan = errorSpans[0];
-    const lastNameErrorSpan = errorSpans[1];
-    const usernameErrorSpan = errorSpans[2];
-    const genderErrorSpan = errorSpans[3];
-    const emailErrorSpan = errorSpans[4];
-    const phoneNumberErrorSpan = errorSpans[5];
-
-    expect(firstNameErrorSpan.nativeElement.innerHTML)
-      .withContext(`First name span for error shouldn't be filled`)
-      .not.toContain('El nombre es requerido');
-
-    expect(lastNameErrorSpan.nativeElement.innerHTML)
-      .withContext(`Last name span for error shouldn't be filled`)
-      .not.toContain('El apellido es requerido');
-
-    expect(usernameErrorSpan.nativeElement.innerHTML)
-      .withContext(`Username span for error shouldn't be filled`)
-      .not.toContain('El nombre de usuario es requerido');
-
-    expect(genderErrorSpan.nativeElement.innerHTML)
-      .withContext(`Gender span for error shouldn't be filled`)
-      .not.toContain('El género es requerido');
-
-    expect(emailErrorSpan.nativeElement.innerHTML)
-      .withContext(`Email span for error shouldn't be filled`)
-      .not.toContain('El correo electrónico es requerido');
-
-    expect(phoneNumberErrorSpan.nativeElement.innerHTML)
-      .withContext(`Phone number span for error shouldn't be filled`)
-      .not.toContain('El número de teléfono es requerido');
-
-    expect(fixture.componentInstance.displayMessage['firstName'])
-      .withContext('FirstName displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['lastName'])
-      .withContext('LastName displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['username'])
-      .withContext('Username displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['gender'])
-      .withContext('Gender displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['email'])
-      .withContext('Email displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['phoneNumber'])
-      .withContext('PhoneNumber displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['firstName'])
-      .withContext(`Shouldn't displayMessage error for firstName`)
-      .not.toContain('El nombre es requerido');
-    expect(fixture.componentInstance.displayMessage['lastName'])
-      .withContext(`Shouldn't displayMessage error for lastName`)
-      .not.toContain('El apellido es requerido');
-    expect(fixture.componentInstance.displayMessage['username'])
-      .withContext(`Shouldn't displayMessage error for username`)
-      .not.toContain('El nombre de usuario es requerido');
-    expect(fixture.componentInstance.displayMessage['gender'])
-      .withContext(`Shouldn't displayMessage error for gender`)
-      .not.toContain('El género es requerido');
-    expect(fixture.componentInstance.displayMessage['email'])
-      .withContext(`Shouldn't displayMessage error for email`)
-      .not.toContain('El correo electrónico es requerido');
-    expect(fixture.componentInstance.displayMessage['phoneNumber'])
-      .withContext(`Shouldn't displayMessage error for phoneNumber`)
-      .not.toContain('El número de teléfono es requerido');
+    expect(errorSpans.length)
+      .withContext('Should not display any error messages')
+      .toBe(0);
   });
 
   it('should call changePassword method when button is clicked', () => {

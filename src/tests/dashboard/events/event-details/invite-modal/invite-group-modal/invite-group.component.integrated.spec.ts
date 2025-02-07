@@ -6,6 +6,8 @@ import { of } from 'rxjs';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InviteGroupComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-group-modal/invite-group.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   fullInvitesGroupsMock,
@@ -36,7 +38,7 @@ describe('Invite Group Component (Integrated Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [InviteGroupComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         { provide: ToastrService, useValue: toastrSpy },
         { provide: LoaderService, useValue: loaderSpy },

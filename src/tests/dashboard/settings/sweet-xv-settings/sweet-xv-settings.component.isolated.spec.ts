@@ -128,24 +128,6 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
           },
         },
       });
-    expect(component.validationMessages)
-      .withContext('The validationMessages should be defined')
-      .toEqual({
-        primaryColor: $localize`Ingresar color primario`,
-        secondaryColor: $localize`Ingresar color secundario`,
-        firstSectionSentences: $localize`Ingresar datos de la primer sección`,
-        parents: $localize`Ingresar nombre de los padres`,
-        godParents: $localize`Ingresar nombre de los padrinos`,
-        secondSectionSentences: $localize`Ingresar datos de la segunda sección`,
-        massUrl: $localize`Ingresar url de la ubicación de la misa`,
-        massTime: $localize`Ingresar hora de la misa`,
-        massAddress: $localize`Ingresar dirección de la misa`,
-        receptionUrl: $localize`Ingresar url de la ubicación de recepción`,
-        receptionTime: $localize`Ingresar hora de la recepción`,
-        receptionPlace: $localize`Ingresar nombre de salón de eventos`,
-        receptionAddress: $localize`Ingresar dirección de recepción`,
-        dressCodeColor: $localize`Ingresar si existe restricción de color`,
-      });
     expect(component.baseSections)
       .withContext('The baseSections should be defined')
       .toEqual([
@@ -586,52 +568,5 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
     expect(dressCodeColor.errors?.['required'])
       .withContext('DressCodeColor should be required')
       .toBeTruthy();
-  });
-
-  it('should have the validation errors', () => {
-    const validationMessages = component.validationMessages;
-
-    expect(validationMessages['primaryColor'])
-      .withContext('primaryColor displayMessage should exist')
-      .toBeDefined();
-    expect(validationMessages['secondaryColor'])
-      .withContext('secondaryColor displayMessage should exist')
-      .toBeDefined();
-    expect(validationMessages['parents'])
-      .withContext('parents displayMessage should exist')
-      .toBeDefined();
-    expect(validationMessages['godParents'])
-      .withContext('godParents displayMessage should exist')
-      .toBeDefined();
-    expect(validationMessages['firstSectionSentences'])
-      .withContext('firstSectionSentences displayMessage should exist')
-      .toBeDefined();
-    expect(validationMessages['secondSectionSentences'])
-      .withContext('secondSectionSentences displayMessage should exist')
-      .toBeDefined();
-    expect(validationMessages['massUrl'])
-      .withContext('massUrl displayMessage should exist')
-      .toBeDefined();
-    expect(validationMessages['massTime'])
-      .withContext('massTime displayMessage should exist')
-      .toBeDefined();
-    expect(validationMessages['massAddress'])
-      .withContext('massAddress displayMessage should exist')
-      .toBeDefined();
-    expect(validationMessages['receptionUrl'])
-      .withContext('receptionUrl displayMessage should exist')
-      .toBeDefined();
-    expect(validationMessages['receptionTime'])
-      .withContext('receptionTime displayMessage should exist')
-      .toBeDefined();
-    expect(validationMessages['receptionPlace'])
-      .withContext('receptionPlace displayMessage should exist')
-      .toBeDefined();
-    expect(validationMessages['receptionAddress'])
-      .withContext('receptionAddress displayMessage should exist')
-      .toBeDefined();
-    expect(validationMessages['dressCodeColor'])
-      .withContext('dressCodeColor displayMessage should exist')
-      .toBeDefined();
   });
 });

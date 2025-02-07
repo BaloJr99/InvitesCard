@@ -6,6 +6,8 @@ import { of } from 'rxjs';
 import { EventType } from 'src/app/core/models/enum';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { SaveTheDateSettingsComponent } from 'src/app/dashboard/settings/save-the-date-settings/save-the-date-settings.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   fullEventsMock,
@@ -81,7 +83,7 @@ describe('Save The Date Settings (Integrated Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [SaveTheDateSettingsComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         { provide: SettingsService, useValue: settingsSpy },
         { provide: ToastrService, useValue: toastrSpy },

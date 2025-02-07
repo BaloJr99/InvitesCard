@@ -123,11 +123,11 @@ describe('Password Reset Component (Shallow Test)', () => {
 
     expect(passwordErrorSpan.nativeElement.innerHTML)
       .withContext('Password span for error should be filled')
-      .toContain('Ingresar contraseña');
+      .toContain('La contraseña es requerida');
 
     expect(confirmPasswordErrorSpan.nativeElement.innerHTML)
       .withContext('Confirm Password span for error should be filled')
-      .toContain('Confirmar contraseña');
+      .toContain('Repetir contraseña');
   });
 
   it("Display match error when passwords doesn't match", () => {

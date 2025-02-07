@@ -1,14 +1,20 @@
 <form [formGroup]="createInviteGroupForm">
   <div class="mb-3">
     <label for="inviteGroup" class="form-label" i18n>Nuevo grupo</label>
-    <div class="inviteGroup-validation" [ngClass]="{'is-invalid': displayMessage['inviteGroup'] || displayMessage['controlValueDuplicated']}">
-      <input id="inviteGroup" type="text" min="1"  class="form-control" formControlName="inviteGroup" [ngClass]="{'is-invalid': displayMessage['inviteGroup'] || displayMessage['controlValueDuplicated']}" (keyup)="checkInviteGroup($event)">
+    <div class="inviteGroup-validation">
+      <input id="inviteGroup"
+             type="text"
+             min="1"
+             class="form-control"
+             formControlName="inviteGroup" 
+             [ngClass]="{'is-invalid': (createInviteGroupForm.get('inviteGroup') | validation) || createInviteGroupForm.errors?.['controlIsDuplicated'] }" 
+             (keyup)="checkInviteGroup($event)">
       <i class="fa-solid" aria-hidden="true" [ngClass]="createInviteGroupForm.get('controlIsValid')?.value ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
-      <span class="invalid-feedback d-block">
-        {{ displayMessage['inviteGroup'] }}
+      <span class="invalid-feedback d-block" role="alert" *ngIf="createInviteGroupForm.get('inviteGroup') | validation">
+        {{ createInviteGroupForm.get('inviteGroup')?.errors | validationError: 'inviteGroup' }}
       </span>
-      <span class="invalid-feedback d-block" *ngIf="!displayMessage['inviteGroup']">
-        {{ displayMessage['controlValueDuplicated'] }}
+      <span class="invalid-feedback d-block" role="alert" *ngIf="!createInviteGroupForm.get('controlIsValid')?.value">
+        {{ null | validationError: 'custom': 'controlIsDuplicated' }}
       </span>
     </div>
   </div>

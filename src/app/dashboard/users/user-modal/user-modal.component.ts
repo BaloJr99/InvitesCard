@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -15,7 +14,6 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Observable, fromEvent, merge } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import {
   ISavedUserRole,
@@ -23,7 +21,6 @@ import {
   IUserAction,
 } from 'src/app/core/models/users';
 import { IRole, IRoleAction } from 'src/app/core/models/roles';
-import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 import { UsersService } from 'src/app/core/services/users.service';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
@@ -36,7 +33,7 @@ import { RoleActionEvent } from 'src/app/core/models/enum';
   templateUrl: './user-modal.component.html',
   styleUrls: ['./user-modal.component.css'],
 })
-export class UserModalComponent implements OnInit, AfterViewInit {
+export class UserModalComponent implements OnInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
   serverErrorMessage: string = '';
@@ -75,10 +72,6 @@ export class UserModalComponent implements OnInit, AfterViewInit {
   roleSelected: IRole | undefined = undefined;
   editedUser: IUpsertUser | undefined = undefined;
 
-  displayMessage: { [key: string]: string } = {};
-  private validationMessages: { [key: string]: { [key: string]: string } };
-  private genericValidator: GenericValidator;
-
   constructor(
     private usersService: UsersService,
     private rolesService: RolesService,
@@ -86,24 +79,7 @@ export class UserModalComponent implements OnInit, AfterViewInit {
     private toastr: ToastrService,
     private loaderService: LoaderService,
     private cd: ChangeDetectorRef
-  ) {
-    this.validationMessages = {
-      username: {
-        required: $localize`Ingresar nombre de usuario`,
-      },
-      email: {
-        required: $localize`Ingresar correo electronico`,
-      },
-      roles: {
-        required: $localize`Seleccionar un rol`,
-      },
-      controlValueDuplicated: {
-        duplicated: $localize`Ya existe un usuario con este nombre de usuario`,
-      },
-    };
-
-    this.genericValidator = new GenericValidator(this.validationMessages);
-  }
+  ) {}
 
   ngOnInit(): void {
     $('#usersModal').on('hidden.bs.modal', () => {
@@ -144,10 +120,7 @@ export class UserModalComponent implements OnInit, AfterViewInit {
         this.createUser();
       }
     } else {
-      this.displayMessage = this.genericValidator.processMessages(
-        this.createUserForm,
-        true
-      );
+      this.createUserForm.markAllAsTouched();
     }
   }
 
@@ -217,7 +190,6 @@ export class UserModalComponent implements OnInit, AfterViewInit {
 
     this.userRoles = [];
     this.filteredRoles = [];
-    this.displayMessage = {};
     this.roleSelected = undefined;
 
     const selectFilter = document.getElementById(
@@ -269,25 +241,7 @@ export class UserModalComponent implements OnInit, AfterViewInit {
     });
 
     this.createUserForm.controls['roles'].markAsDirty();
-    this.displayMessage = this.genericValidator.processMessages(
-      this.createUserForm
-    );
-  }
-
-  ngAfterViewInit(): void {
-    // Watch for the blur event from any input element on the form.
-    // This is required because the valueChanges does not provide notification on blur
-    const controlBlurs: Observable<unknown>[] = this.formInputElements.map(
-      (formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur')
-    );
-
-    // Merge the blur event observable with the valueChanges observable
-    // so we only need to subscribe once.
-    merge(this.createUserForm.valueChanges, ...controlBlurs).subscribe(() => {
-      this.displayMessage = this.genericValidator.processMessages(
-        this.createUserForm
-      );
-    });
+    this.createUserForm.markAllAsTouched();
   }
 
   checkUsername(event: Event) {
@@ -300,9 +254,7 @@ export class UserModalComponent implements OnInit, AfterViewInit {
     this.usersService.checkUsername(username).subscribe({
       next: (response: boolean) => {
         this.createUserForm.patchValue({ controlIsValid: !response });
-        this.displayMessage = this.genericValidator.processMessages(
-          this.createUserForm
-        );
+        this.createUserForm.updateValueAndValidity();
       },
     });
   }

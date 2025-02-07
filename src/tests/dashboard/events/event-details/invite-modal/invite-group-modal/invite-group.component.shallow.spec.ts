@@ -5,6 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InviteGroupComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-group-modal/invite-group.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { fullInvitesGroupsMock } from 'src/tests/mocks/mocks';
 
@@ -27,7 +29,7 @@ describe('Invite Group Component (Shallow Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [InviteGroupComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         { provide: LoaderService, useValue: loaderSpy },
         { provide: ToastrService, useValue: toastrSpy },
@@ -117,14 +119,6 @@ describe('Invite Group Component (Shallow Test)', () => {
     expect(inviteGroupErrorSpan.nativeElement.innerHTML)
       .withContext('Invite Group span for error should be filled')
       .toContain('El nombre del grupo es requerido');
-
-    expect(fixture.componentInstance.displayMessage['inviteGroup'])
-      .withContext('Invite Group displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['inviteGroup'])
-      .withContext('Should displayMessage error for inviteGroup')
-      .toContain('El nombre del grupo es requerido');
   });
 
   it("Shouldn't display inviteGroup error message when field is filled", () => {
@@ -134,19 +128,10 @@ describe('Invite Group Component (Shallow Test)', () => {
     const errorSpans = fixture.debugElement.queryAll(
       By.css('.invalid-feedback')
     );
-    const inviteGroupErrorSpan = errorSpans[0];
 
-    expect(inviteGroupErrorSpan.nativeElement.innerHTML)
-      .withContext('Invite Group span for error should be filled')
-      .not.toContain('El nombre del grupo es requerido');
-
-    expect(fixture.componentInstance.displayMessage['inviteGroup'])
-      .withContext('Invite Group displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['inviteGroup'])
-      .withContext('Should displayMessage error for inviteGroup')
-      .not.toContain('El nombre del grupo es requerido');
+    expect(errorSpans.length)
+      .withContext('Should not display any error messages')
+      .toBe(0);
   });
 
   it('Should display inviteGroup error message when controlIsValid = false', () => {
@@ -158,18 +143,10 @@ describe('Invite Group Component (Shallow Test)', () => {
     const errorSpans = fixture.debugElement.queryAll(
       By.css('.invalid-feedback')
     );
-    const inviteGroupErrorSpan = errorSpans[1];
+    const inviteGroupErrorSpan = errorSpans[0];
 
     expect(inviteGroupErrorSpan.nativeElement.innerHTML)
       .withContext('Invite Group span for error should be filled')
-      .toContain('Ya existe un grupo con este nombre');
-
-    expect(fixture.componentInstance.displayMessage['inviteGroup'])
-      .withContext('Invite Group displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['controlValueDuplicated'])
-      .withContext('Should displayMessage error for inviteGroup')
-      .toContain('Ya existe un grupo con este nombre');
+      .toContain('Ya existe un registro con este nombre');
   });
 });

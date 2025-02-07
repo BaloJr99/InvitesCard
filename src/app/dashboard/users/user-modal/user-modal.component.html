@@ -14,36 +14,49 @@
           <div class="mb-3">
             <label for="username" class="form-label" i18n>Usuario</label>
             <div class="username-validation">
-              <input id="username" type="text" autocomplete="username" class="form-control" formControlName="username" [ngClass]="{'is-invalid': displayMessage['username'] || displayMessage['controlValueDuplicated']}" (keyup)="checkUsername($event)">
+              <input id="username" 
+                     type="text" 
+                     autocomplete="username" 
+                     class="form-control" 
+                     formControlName="username" 
+                     [ngClass]="{'is-invalid': (createUserForm.get('username') | validation) || createUserForm.errors?.['controlIsDuplicated'] }" 
+                     (keyup)="checkUsername($event)">
               <i class="fa-solid" aria-hidden="true" [ngClass]="createUserForm.get('controlIsValid')?.value ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
-              <span class="invalid-feedback d-block">
-                {{ displayMessage['username'] }}
+              <span class="invalid-feedback d-block" role="alert" *ngIf="createUserForm.get('username') | validation">
+                {{ createUserForm.get('username')?.errors | validationError: 'username' }}
               </span>
-              <span class="invalid-feedback d-block" *ngIf="!displayMessage['username']">
-                {{ displayMessage['controlValueDuplicated'] }}
+              <span class="invalid-feedback d-block" role="alert" *ngIf="!createUserForm.get('controlIsValid')?.value">
+                {{ null | validationError: 'custom': 'controlIsDuplicated' }}
               </span>
             </div>
           </div>
           <div class="mb-3">
             <label for="email" class="form-label" i18n>Correo electrónico</label>
-            <input id="email" type="email" class="form-control" formControlName="email" [ngClass]="{'is-invalid': displayMessage['email']}">
-            <span class="invalid-feedback" role="alert">
-              {{ displayMessage['email'] }}
+            <input id="email" 
+                   type="email"
+                   class="form-control"
+                   formControlName="email"
+                   [ngClass]="{'is-invalid': createUserForm.get('email') | validation}">
+            <span class="invalid-feedback d-block" role="alert" *ngIf="createUserForm.get('email') | validation">
+              {{ createUserForm.get('email')?.errors | validationError: 'email' }}
             </span>
           </div>
           <div class="mb-3">
             <label for="roleFilter" class="form-label" i18n>Roles</label>
             <div class="filteringBox">
-              <div class="roleActions" [ngClass]="{'is-invalid': displayMessage['roles']}">
-                <select #roleActions class="form-select" id="roleFilter" (change)="selectedRole($event)" [ngClass]="{'is-invalid': displayMessage['roles']}">
+              <div class="roleActions">
+                <select class="form-select"
+                        id="roleFilter"
+                        (change)="selectedRole($event)"
+                        [ngClass]="{'is-invalid': createUserForm.get('roles') | validation}">
                   <option value="" i18n>Seleccionar un rol</option>
                   <option *ngFor="let role of filteredRoles" [value]="role.id">{{ role.name }}</option>
                 </select>
                 <button type="button" class="btn btn-dark"  data-bs-toggle="modal" data-bs-target="#rolesModal" (click)="roleAction(true)" *ngIf="roleSelected"><i class="fa-solid fa-pen-to-square"></i></button>
                 <button type="button" class="btn btn-dark" (click)="addRole()" *ngIf="roleSelected"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
               </div>
-              <span class="invalid-feedback" role="alert">
-                {{ displayMessage['roles'] }}
+              <span class="invalid-feedback d-block" role="alert" *ngIf="createUserForm.get('roles') | validation">
+                {{ createUserForm.get('roles')?.errors | validationError: 'roles' }}
               </span>
             </div>
             <div class="roles">

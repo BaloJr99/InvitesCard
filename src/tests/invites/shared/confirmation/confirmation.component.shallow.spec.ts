@@ -223,7 +223,7 @@ describe('Confirmation Component (Shallow Test)', () => {
 
     expect(entriesConfirmedErrorSpan.nativeElement.innerHTML)
       .withContext('EntriesConfirmed span for error should be filled')
-      .toContain('Favor de seleccionar');
+      .toContain('El número de pases es requerido');
   });
 
   it("Shouldn't display entriesConfirmed error message when field is filled and should display confirmationModal", () => {

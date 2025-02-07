@@ -114,10 +114,10 @@ describe('Login Component (Shallow Test)', () => {
 
     expect(usernameErrorSpan.nativeElement.innerHTML)
       .withContext('Username span for error should be filled')
-      .toContain('Ingresar usuario');
+      .toContain('El usuario es requerido');
     expect(passwordErrorSpan.nativeElement.innerHTML)
       .withContext('Password span for error should be filled')
-      .toContain('Ingresar contraseña');
+      .toContain('La contraseña es requerida');
   });
 
   it("Shouldn't display username and password error message when fields are filled", () => {

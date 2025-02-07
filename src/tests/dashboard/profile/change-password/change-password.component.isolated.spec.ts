@@ -52,10 +52,6 @@ describe('Change Password Component (Isolated Test)', () => {
     expect(component.passwordResetForm)
       .withContext('passwordResetForm should be defined')
       .toBeDefined();
-
-    expect(component.displayMessage)
-      .withContext('displayMessage should be an empty object')
-      .toEqual({});
   });
 
   it('form value should be invalid if one input is invalid', () => {

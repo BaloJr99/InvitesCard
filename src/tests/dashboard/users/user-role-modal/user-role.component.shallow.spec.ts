@@ -5,6 +5,8 @@ import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { UserRoleComponent } from 'src/app/dashboard/users/user-role-modal/user-role.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { roleMock } from 'src/tests/mocks/mocks';
 
@@ -34,7 +36,7 @@ describe('User Role Component (Shallow Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [UserRoleComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: RolesService, useValue: rolesSpy },
@@ -112,14 +114,6 @@ describe('User Role Component (Shallow Test)', () => {
     expect(nameErrorSpan.nativeElement.innerHTML)
       .withContext('Name span for error should be filled')
       .toContain('El nombre del rol es requerido');
-
-    expect(fixture.componentInstance.displayMessage['name'])
-      .withContext('Name displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['name'])
-      .withContext('Should displayMessage error for name')
-      .toContain('El nombre del rol es requerido');
   });
 
   it("Shouldn't display name error message when fields are filled", () => {
@@ -128,18 +122,8 @@ describe('User Role Component (Shallow Test)', () => {
       By.css('.invalid-feedback')
     );
 
-    const nameErrorSpan = errorSpans[0];
-
-    expect(nameErrorSpan.nativeElement.innerHTML)
-      .withContext("Name span for error shouldn't be filled")
-      .not.toContain('El nombre del rol es requerido');
-
-    expect(fixture.componentInstance.displayMessage['name'])
-      .withContext('Name displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['name'])
-      .withContext("Shouldn't displayMessage error for name")
-      .not.toContain('El nombre del rol es requerido');
+    expect(errorSpans.length)
+      .withContext('There should be no error messages')
+      .toBe(0);
   });
 });

@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
@@ -9,9 +8,7 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { FormBuilder, FormControlName, Validators } from '@angular/forms';
-import { Observable, fromEvent, merge } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
@@ -24,7 +21,7 @@ import { RoleActionEvent } from 'src/app/core/models/enum';
   templateUrl: './user-role.component.html',
   styleUrls: ['./user-role.component.css'],
 })
-export class UserRoleComponent implements OnInit, AfterViewInit {
+export class UserRoleComponent implements OnInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
@@ -54,27 +51,12 @@ export class UserRoleComponent implements OnInit, AfterViewInit {
     }
   );
 
-  displayMessage: { [key: string]: string } = {};
-  private validationMessages: { [key: string]: { [key: string]: string } };
-  private genericValidator: GenericValidator;
-
   constructor(
     private rolesService: RolesService,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private loaderService: LoaderService
-  ) {
-    this.validationMessages = {
-      name: {
-        required: $localize`El nombre del rol es requerido`,
-      },
-      controlValueDuplicated: {
-        duplicated: $localize`Ya existe un rol con este nombre`,
-      },
-    };
-
-    this.genericValidator = new GenericValidator(this.validationMessages);
-  }
+  ) {}
 
   ngOnInit(): void {
     $('#rolesModal').on('show.bs.modal', () => {
@@ -84,29 +66,12 @@ export class UserRoleComponent implements OnInit, AfterViewInit {
     $('#rolesModal').on('hidden.bs.modal', () => {
       this.createRoleForm.reset();
       this.createRoleForm.patchValue({ isActive: true, controlIsValid: true });
-      this.displayMessage = {};
       if (this.currentRoleAction === RoleActionEvent.None) {
         this.updateRoles.emit({
           role: undefined,
           action: this.currentRoleAction,
         });
       }
-    });
-  }
-
-  ngAfterViewInit(): void {
-    // Watch for the blur event from any input element on the form.
-    // This is required because the valueChanges does not provide notification on blur
-    const controlBlurs: Observable<unknown>[] = this.formInputElements.map(
-      (formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur')
-    );
-
-    // Merge the blur event observable with the valueChanges observable
-    // so we only need to subscribe once.
-    merge(this.createRoleForm.valueChanges, ...controlBlurs).subscribe(() => {
-      this.displayMessage = this.genericValidator.processMessages(
-        this.createRoleForm
-      );
     });
   }
 
@@ -118,10 +83,7 @@ export class UserRoleComponent implements OnInit, AfterViewInit {
         this.createRole();
       }
     } else {
-      this.displayMessage = this.genericValidator.processMessages(
-        this.createRoleForm,
-        true
-      );
+      this.createRoleForm.markAllAsTouched();
     }
   }
 
@@ -190,9 +152,7 @@ export class UserRoleComponent implements OnInit, AfterViewInit {
     this.rolesService.checkRoleName(roleName).subscribe({
       next: (response: boolean) => {
         this.createRoleForm.patchValue({ controlIsValid: !response });
-        this.displayMessage = this.genericValidator.processMessages(
-          this.createRoleForm
-        );
+        this.createRoleForm.updateValueAndValidity();
       },
     });
   }

@@ -5,6 +5,8 @@ import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { SaveTheDateSettingsComponent } from 'src/app/dashboard/settings/save-the-date-settings/save-the-date-settings.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { saveTheDateSettingMock } from 'src/tests/mocks/mocks';
 
@@ -67,7 +69,7 @@ describe('Save The Date Settings Component (Shallow test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [SaveTheDateSettingsComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: SettingsService, useValue: settingsSpy },
@@ -178,7 +180,11 @@ describe('Save The Date Settings Component (Shallow test)', () => {
   });
 
   it('Display primaryColor, secondaryColor, receptionPlace, copyMessage, hotelName, hotelInformation error message when fields are blank', () => {
-    updateFormUsingEvent('', '', '', '', '', '', '');
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
+    const saveButton = buttons[1];
+    saveButton.nativeElement.click();
+
+    fixture.detectChanges();
 
     const errorSpans = fixture.debugElement.queryAll(
       By.css('.invalid-feedback')
@@ -193,62 +199,22 @@ describe('Save The Date Settings Component (Shallow test)', () => {
 
     expect(primaryColorErrorSpan.nativeElement.innerHTML.trim())
       .withContext('primaryColor span error should be filled')
-      .toBe('');
+      .toContain('El color primario es requerido');
     expect(secondaryColorErrorSpan.nativeElement.innerHTML.trim())
       .withContext('secondaryColor span error should be filled')
-      .toBe('');
+      .toContain('El color secundario es requerido');
     expect(receptionPlaceErrorSpan.nativeElement.innerHTML)
       .withContext('receptionPlace span error should be filled')
-      .toContain('Ingresar lugar del evento');
+      .toContain('El lugar del evento es requerido');
     expect(copyMessageErrorSpan.nativeElement.innerHTML)
       .withContext('copyMessage span error should be filled')
-      .toContain('Ingresar mensaje para copiar');
+      .toContain('El mensaje es requerido');
     expect(hotelNameErrorSpan.nativeElement.innerHTML)
       .withContext('hotelName span error should be filled')
-      .toContain('Ingresar nombre del hotel');
+      .toContain('El nombre del hotel es requerido');
     expect(hotelInformationErrorSpan.nativeElement.innerHTML)
       .withContext('hotelInformation span error should be filled')
-      .toContain('Ingresar url con información del hotel');
-
-    const displayMessages = fixture.componentInstance.displayMessage;
-
-    expect(displayMessages['primaryColor'])
-      .withContext('primaryColor displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['secondaryColor'])
-      .withContext('secondaryColor displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['receptionPlace'])
-      .withContext('receptionPlace displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['copyMessage'])
-      .withContext('copyMessage displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['hotelName'])
-      .withContext('hotelName displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['hotelInformation'])
-      .withContext('hotelInformation displayMessage should exist')
-      .toBeDefined();
-
-    expect(displayMessages['primaryColor'])
-      .withContext('Should displayMessage error for primaryColor')
-      .toBe('');
-    expect(displayMessages['secondaryColor'])
-      .withContext('Should displayMessage error for secondaryColor')
-      .toBe('');
-    expect(displayMessages['receptionPlace'])
-      .withContext('Should displayMessage error for receptionPlace')
-      .toContain('Ingresar lugar del evento');
-    expect(displayMessages['copyMessage'])
-      .withContext('Should displayMessage error for copyMessage')
-      .toContain('Ingresar mensaje para copiar');
-    expect(displayMessages['hotelName'])
-      .withContext('Should displayMessage error for hotelName')
-      .toContain('Ingresar nombre del hotel');
-    expect(displayMessages['hotelInformation'])
-      .withContext('Should displayMessage error for hotelInformation')
-      .toContain('Ingresar url con información del hotel');
+      .toContain('La información del hotel es requerida');
   });
 
   it("Shouldn't display primaryColor, secondaryColor, receptionPlace, copyMessage, hotelName, hotelInformation error message when fields are filled", () => {
@@ -266,70 +232,8 @@ describe('Save The Date Settings Component (Shallow test)', () => {
       By.css('.invalid-feedback')
     );
 
-    const primaryColorErrorSpan = errorSpans[0];
-    const secondaryColorErrorSpan = errorSpans[1];
-    const receptionPlaceErrorSpan = errorSpans[2];
-    const copyMessageErrorSpan = errorSpans[3];
-    const hotelNameErrorSpan = errorSpans[4];
-    const hotelInformationErrorSpan = errorSpans[5];
-
-    expect(primaryColorErrorSpan.nativeElement.innerHTML.trim())
-      .withContext("primaryColor span error shouldn't be filled")
-      .toBe('');
-    expect(secondaryColorErrorSpan.nativeElement.innerHTML.trim())
-      .withContext("secondaryColor span error shouldn't be filled")
-      .toBe('');
-    expect(receptionPlaceErrorSpan.nativeElement.innerHTML)
-      .withContext("receptionPlace span error shouldn't be filled")
-      .not.toContain('Ingresar lugar del evento');
-    expect(copyMessageErrorSpan.nativeElement.innerHTML)
-      .withContext("copyMessage span error shouldn't be filled")
-      .not.toContain('Ingresar mensaje para copiar');
-    expect(hotelNameErrorSpan.nativeElement.innerHTML)
-      .withContext("hotelName span error shouldn't be filled")
-      .not.toContain('Ingresar nombre del hotel');
-    expect(hotelInformationErrorSpan.nativeElement.innerHTML)
-      .withContext("hotelInformation span error shouldn't be filled")
-      .not.toContain('Ingresar url con información del hotel');
-
-    const displayMessages = fixture.componentInstance.displayMessage;
-
-    expect(displayMessages['primaryColor'])
-      .withContext('primaryColor displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['secondaryColor'])
-      .withContext('secondaryColor displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['receptionPlace'])
-      .withContext('receptionPlace displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['copyMessage'])
-      .withContext('copyMessage displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['hotelName'])
-      .withContext('hotelName displayMessage should exist')
-      .toBeDefined();
-    expect(displayMessages['hotelInformation'])
-      .withContext('hotelInformation displayMessage should exist')
-      .toBeDefined();
-
-    expect(displayMessages['primaryColor'])
-      .withContext("Shouldn't displayMessage error for primaryColor")
-      .toBe('');
-    expect(displayMessages['secondaryColor'])
-      .withContext("Shouldn't displayMessage error for secondaryColor")
-      .toBe('');
-    expect(displayMessages['receptionPlace'])
-      .withContext("Shouldn't displayMessage error for receptionPlace")
-      .not.toContain('Ingresar lugar del evento');
-    expect(displayMessages['copyMessage'])
-      .withContext("Shouldn't displayMessage error for copyMessage")
-      .not.toContain('Ingresar mensaje para copiar');
-    expect(displayMessages['hotelName'])
-      .withContext("Shouldn't displayMessage error for hotelName")
-      .not.toContain('Ingresar nombre del hotel');
-    expect(displayMessages['hotelInformation'])
-      .withContext("Shouldn't displayMessage error for hotelInformation")
-      .not.toContain('Ingresar url con información del hotel');
+    expect(errorSpans.length)
+      .withContext('There should be no error messages')
+      .toBe(0);
   });
 });

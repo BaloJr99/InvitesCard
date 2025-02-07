@@ -6,6 +6,8 @@ import { ProfileComponent } from './profile.component';
 import { profileResolver } from './profile-resolver.service';
 import { ProfileModalComponent } from './profile-modal/profile-modal.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
 
 const routes: Routes = [
   {
@@ -22,7 +24,12 @@ const routes: Routes = [
 
 @NgModule({
   providers: [UsersService],
-  imports: [SharedModule, RouterModule.forChild(routes)],
+  imports: [
+    SharedModule,
+    RouterModule.forChild(routes),
+    ValidationPipe,
+    ValidationErrorPipe,
+  ],
   declarations: [
     ProfileComponent,
     ProfileModalComponent,

@@ -5,6 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { UserRoleComponent } from 'src/app/dashboard/users/user-role-modal/user-role.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { messageResponseMock, roleMock } from 'src/tests/mocks/mocks';
 
@@ -46,7 +48,7 @@ describe('User Role Component (Integrated Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [UserRoleComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         { provide: RolesService, useValue: rolesSpy },
         { provide: ToastrService, useValue: toastrSpy },

@@ -80,8 +80,6 @@ export class SweetXvSettingsComponent {
     },
   };
 
-  validationMessages: { [key: string]: string } = {};
-
   baseSections: IInviteSection[] = [];
 
   private sectionsConfig = new BehaviorSubject<IInviteSection[]>([]);
@@ -152,23 +150,6 @@ export class SweetXvSettingsComponent {
         order: 5,
       },
     ];
-
-    this.validationMessages = {
-      primaryColor: $localize`Ingresar color primario`,
-      secondaryColor: $localize`Ingresar color secundario`,
-      firstSectionSentences: $localize`Ingresar datos de la primer sección`,
-      parents: $localize`Ingresar nombre de los padres`,
-      godParents: $localize`Ingresar nombre de los padrinos`,
-      secondSectionSentences: $localize`Ingresar datos de la segunda sección`,
-      massUrl: $localize`Ingresar url de la ubicación de la misa`,
-      massTime: $localize`Ingresar hora de la misa`,
-      massAddress: $localize`Ingresar dirección de la misa`,
-      receptionUrl: $localize`Ingresar url de la ubicación de recepción`,
-      receptionTime: $localize`Ingresar hora de la recepción`,
-      receptionPlace: $localize`Ingresar nombre de salón de eventos`,
-      receptionAddress: $localize`Ingresar dirección de recepción`,
-      dressCodeColor: $localize`Ingresar si existe restricción de color`,
-    };
   }
 
   clearInformation(): void {
@@ -412,13 +393,6 @@ export class SweetXvSettingsComponent {
     });
     this.createEventSettingsForm.updateValueAndValidity();
     this.sectionsConfig.next(updatedSections);
-  }
-
-  formControlIsInvalid(controlName: string, errorName: string): boolean {
-    const control = this.createEventSettingsForm.get(controlName);
-    return (
-      control && control.errors && control.errors[errorName] && control.touched
-    );
   }
 
   updateSections(sections: IInviteSection[]) {

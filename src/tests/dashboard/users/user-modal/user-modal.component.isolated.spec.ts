@@ -68,9 +68,6 @@ describe('User Modal Component (Isolated Test)', () => {
     expect(component.editedUser)
       .withContext('editedUser should be undefined')
       .toBeUndefined();
-    expect(component.displayMessage)
-      .withContext('displayMessage should be an empty object')
-      .toEqual({});
   });
 
   it('form value should be invalid if one input is invalid', () => {

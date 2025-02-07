@@ -47,9 +47,6 @@ describe('User Role Modal Component (Isolated Test)', () => {
     expect(component.currentRoleAction)
       .withContext('roles should be an empty array')
       .toEqual(RoleActionEvent.None);
-    expect(component.displayMessage)
-      .withContext('displayMessage should be an empty object')
-      .toEqual({});
   });
 
   it('form value should be invalid if one input is invalid', () => {

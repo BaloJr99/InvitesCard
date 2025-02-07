@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   OnInit,
@@ -13,14 +12,12 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { fromEvent, merge, Observable } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { IUser, IUserProfile } from 'src/app/core/models/users';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { UsersService } from 'src/app/core/services/users.service';
-import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 import { controlIsDuplicated } from 'src/app/shared/utils/validators/controlIsDuplicated';
 
 @Component({
@@ -28,7 +25,7 @@ import { controlIsDuplicated } from 'src/app/shared/utils/validators/controlIsDu
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
-export class ProfileComponent implements OnInit, AfterViewInit {
+export class ProfileComponent implements OnInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
@@ -54,10 +51,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     }
   );
 
-  displayMessage: { [key: string]: string } = {};
-  private validationMessages: { [key: string]: { [key: string]: string } };
-  private genericValidator: GenericValidator;
-
   constructor(
     private route: ActivatedRoute,
     private usersService: UsersService,
@@ -67,31 +60,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     private loaderService: LoaderService,
     private tokenService: TokenStorageService
   ) {
-    this.validationMessages = {
-      username: {
-        required: $localize`El nombre de usuario es requerido`,
-      },
-      firstName: {
-        required: $localize`El nombre es requerido`,
-      },
-      lastName: {
-        required: $localize`El apellido es requerido`,
-      },
-      phoneNumber: {
-        required: $localize`El número de teléfono es requerido`,
-      },
-      email: {
-        required: $localize`El correo electrónico es requerido`,
-      },
-      gender: {
-        required: $localize`El género es requerido`,
-      },
-      controlValueDuplicated: {
-        duplicated: $localize`Ya existe un usuario con este nombre de usuario`,
-      },
-    };
-
-    this.genericValidator = new GenericValidator(this.validationMessages);
     this.userInformation = this.tokenService.getTokenValues() as IUser;
   }
 
@@ -109,10 +77,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     if (this.createProfileForm.valid && this.createProfileForm.dirty) {
       this.updateProfile();
     } else {
-      this.displayMessage = this.genericValidator.processMessages(
-        this.createProfileForm,
-        true
-      );
+      this.createProfileForm.markAllAsTouched();
     }
   }
 
@@ -144,26 +109,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       profilePhoto: '',
       controlIsValid: true,
     });
-
-    this.displayMessage = {};
-  }
-
-  ngAfterViewInit(): void {
-    // Watch for the blur event from any input element on the form.
-    // This is required because the valueChanges does not provide notification on blur
-    const controlBlurs: Observable<unknown>[] = this.formInputElements.map(
-      (formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur')
-    );
-
-    // Merge the blur event observable with the valueChanges observable
-    // so we only need to subscribe once.
-    merge(this.createProfileForm.valueChanges, ...controlBlurs).subscribe(
-      () => {
-        this.displayMessage = this.genericValidator.processMessages(
-          this.createProfileForm
-        );
-      }
-    );
   }
 
   cancelChanges() {
@@ -186,9 +131,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.usersService.checkUsername(username).subscribe({
       next: (response: boolean) => {
         this.createProfileForm.patchValue({ controlIsValid: !response });
-        this.displayMessage = this.genericValidator.processMessages(
-          this.createProfileForm
-        );
+        this.createProfileForm.updateValueAndValidity();
       },
     });
   }

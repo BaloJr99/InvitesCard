@@ -16,6 +16,8 @@ import { EventDetailsComponent } from 'src/app/dashboard/events/event-details/ev
 import { InviteModalComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-modal.component';
 import { InvitesImportModalComponent } from 'src/app/dashboard/events/event-details/invites-import-modal/invites-import-modal.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   confirmedInviteMock,
@@ -77,7 +79,7 @@ describe('Event Details Component (Integrated Test)', () => {
         InvitesImportModalComponent,
         InviteModalComponent,
       ],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         {
           provide: ActivatedRoute,

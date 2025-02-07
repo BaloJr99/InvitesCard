@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
@@ -8,13 +7,11 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { FormBuilder, FormControlName, Validators } from '@angular/forms';
-import { Observable, fromEvent, merge } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import {
   IInviteGroups,
   IInviteGroupsAction,
 } from 'src/app/core/models/inviteGroups';
-import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
@@ -25,7 +22,7 @@ import { controlIsDuplicated } from 'src/app/shared/utils/validators/controlIsDu
   templateUrl: './invite-group.component.html',
   styleUrls: ['./invite-group.component.css'],
 })
-export class InviteGroupComponent implements AfterViewInit {
+export class InviteGroupComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
@@ -62,45 +59,12 @@ export class InviteGroupComponent implements AfterViewInit {
     { validators: controlIsDuplicated }
   );
 
-  displayMessage: { [key: string]: string } = {};
-  private validationMessages: { [key: string]: { [key: string]: string } };
-  private genericValidator: GenericValidator;
-
   constructor(
     private inviteGroupsService: InviteGroupsService,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private loaderService: LoaderService
-  ) {
-    this.validationMessages = {
-      inviteGroup: {
-        required: $localize`El nombre del grupo es requerido`,
-      },
-      controlValueDuplicated: {
-        duplicated: $localize`Ya existe un grupo con este nombre`,
-      },
-    };
-
-    this.genericValidator = new GenericValidator(this.validationMessages);
-  }
-
-  ngAfterViewInit(): void {
-    // Watch for the blur event from any input element on the form.
-    // This is required because the valueChanges does not provide notification on blur
-    const controlBlurs: Observable<unknown>[] = this.formInputElements.map(
-      (formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur')
-    );
-
-    // Merge the blur event observable with the valueChanges observable
-    // so we only need to subscribe once.
-    merge(this.createInviteGroupForm.valueChanges, ...controlBlurs).subscribe(
-      () => {
-        this.displayMessage = this.genericValidator.processMessages(
-          this.createInviteGroupForm
-        );
-      }
-    );
-  }
+  ) {}
 
   toggleIsCreatingNewFormGroup(): void {
     this.isCreatingNewFormGroup.emit(false);
@@ -114,10 +78,7 @@ export class InviteGroupComponent implements AfterViewInit {
         this.createInviteGroup();
       }
     } else {
-      this.displayMessage = this.genericValidator.processMessages(
-        this.createInviteGroupForm,
-        true
-      );
+      this.createInviteGroupForm.markAllAsTouched();
     }
   }
 
@@ -176,7 +137,7 @@ export class InviteGroupComponent implements AfterViewInit {
     }
 
     if (inviteGroup === '') {
-      this.createInviteGroupForm.patchValue({ controlIsValid: false });
+      this.createInviteGroupForm.patchValue({ controlIsValid: true });
       return;
     }
 
@@ -185,9 +146,7 @@ export class InviteGroupComponent implements AfterViewInit {
       .subscribe({
         next: (response: boolean) => {
           this.createInviteGroupForm.patchValue({ controlIsValid: !response });
-          this.displayMessage = this.genericValidator.processMessages(
-            this.createInviteGroupForm
-          );
+          this.createInviteGroupForm.updateValueAndValidity();
         },
       });
   }

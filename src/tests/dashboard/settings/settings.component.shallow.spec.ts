@@ -4,6 +4,8 @@ import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 import { EventsService } from 'src/app/core/services/events.service';
 import { SettingsComponent } from 'src/app/dashboard/settings/settings.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { dropdownEventsMock, fullEventsMock } from 'src/tests/mocks/mocks';
 
@@ -31,6 +33,7 @@ describe('Settings Component (Shallow Test)', () => {
     TestBed.configureTestingModule({
       declarations: [SettingsComponent],
       schemas: [NO_ERRORS_SCHEMA],
+      imports: [ValidationPipe, ValidationErrorPipe],
       providers: [{ provide: EventsService, useValue: eventsSpy }],
     }).compileComponents();
 
@@ -40,7 +43,9 @@ describe('Settings Component (Shallow Test)', () => {
   }));
 
   beforeEach(() => {
-    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMockCopy));
+    eventsServiceSpy.getDropdownEvents.and.returnValue(
+      of(dropdownEventsMockCopy)
+    );
     eventsServiceSpy.getEventById.and.returnValue(of(fullEventsMockCopy));
     fixture = TestBed.createComponent(SettingsComponent);
     fixture.detectChanges();

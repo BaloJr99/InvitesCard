@@ -8,6 +8,8 @@ import { CommonModalService } from 'src/app/core/services/commonModal.service';
 import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { EventModalComponent } from 'src/app/dashboard/events/event-modal/event-modal.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
 import {
   fullEventsMock,
@@ -81,7 +83,7 @@ describe('Event Modal Component (Integrated Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [EventModalComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         { provide: EventsService, useValue: eventsSpy },
         { provide: UsersService, useValue: usersSpy },

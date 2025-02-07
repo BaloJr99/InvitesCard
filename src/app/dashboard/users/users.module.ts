@@ -8,6 +8,8 @@ import { RolesService } from 'src/app/core/services/roles.service';
 import { UserModalComponent } from './user-modal/user-modal.component';
 import { UsersComponent } from './users.component';
 import { UserRoleComponent } from './user-role-modal/user-role.component';
+import { ValidationErrorPipe } from '../../shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 
 const routes: Routes = [
   {
@@ -18,7 +20,12 @@ const routes: Routes = [
 
 @NgModule({
   providers: [EventsService, SettingsService, UsersService, RolesService],
-  imports: [SharedModule, RouterModule.forChild(routes)],
+  imports: [
+    SharedModule,
+    RouterModule.forChild(routes),
+    ValidationPipe,
+    ValidationErrorPipe,
+  ],
   declarations: [UsersComponent, UserModalComponent, UserRoleComponent],
 })
 export class UsersModule {}

@@ -6,7 +6,7 @@ export const controlIsDuplicated: ValidatorFn = (
   const controlIsValid = control.get('controlIsValid')?.value as boolean;
   if (!controlIsValid) {
     return {
-      controlDuplicatedError: true,
+      controlIsDuplicated: true,
     };
   }
   return null;

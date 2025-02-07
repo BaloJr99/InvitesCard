@@ -10,6 +10,8 @@ import { TokenStorageService } from 'src/app/core/services/token-storage.service
 import { UsersService } from 'src/app/core/services/users.service';
 import { ProfileModalComponent } from 'src/app/dashboard/profile/profile-modal/profile-modal.component';
 import { ProfileComponent } from 'src/app/dashboard/profile/profile.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   messageResponseMock,
@@ -84,7 +86,7 @@ describe('Profile Component (Integrated Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [ProfileComponent, ProfileModalComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         {
           provide: ActivatedRoute,

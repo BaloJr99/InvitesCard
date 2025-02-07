@@ -4,6 +4,8 @@ import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ChangePasswordComponent } from 'src/app/dashboard/profile/change-password/change-password.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock } from 'src/tests/mocks/mocks';
 
@@ -31,7 +33,7 @@ describe('Change Password Component (Shallow test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [ChangePasswordComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         { provide: ToastrService, useValue: toastrSpy },
         { provide: AuthService, useValue: authSpy },
@@ -68,7 +70,10 @@ describe('Change Password Component (Shallow test)', () => {
   });
 
   it('Expect form controls to be filled when user fills inputs', () => {
-    updateFormUsingEvent(loginDataMockCopy.password, loginDataMockCopy.password);
+    updateFormUsingEvent(
+      loginDataMockCopy.password,
+      loginDataMockCopy.password
+    );
     expect(
       fixture.componentInstance.passwordResetForm.controls['password'].value
     )
@@ -107,25 +112,11 @@ describe('Change Password Component (Shallow test)', () => {
 
     expect(passwordErrorSpan.nativeElement.innerHTML)
       .withContext('Password span for error should be filled')
-      .toContain('Ingresar contraseña');
+      .toContain('La contraseña es requerida');
 
     expect(confirmPasswordErrorSpan.nativeElement.innerHTML)
       .withContext('ConfirmPasswordErrorSpan span for error should be filled')
-      .toContain('Confirmar contraseña');
-
-    expect(fixture.componentInstance.displayMessage['password'])
-      .withContext('Password displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['confirmPassword'])
-      .withContext('ConfirmPassword displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['password'])
-      .withContext('Should displayMessage error for password')
-      .toContain('Ingresar contraseña');
-    expect(fixture.componentInstance.displayMessage['confirmPassword'])
-      .withContext('Should displayMessage error for confirmPassword')
-      .toContain('Confirmar contraseña');
+      .toContain('Repetir contraseña');
   });
 
   it('Display match password error message when fields are different', () => {
@@ -136,48 +127,26 @@ describe('Change Password Component (Shallow test)', () => {
       By.css('.invalid-feedback')
     );
 
-    const matchPasswordErrorSpan = errorSpans[2];
+    const matchPasswordErrorSpan = errorSpans[0];
 
     expect(matchPasswordErrorSpan.nativeElement.innerHTML)
       .withContext('Password span for error should be filled')
       .toContain('Las contraseñas no coinciden');
-    expect(fixture.componentInstance.displayMessage['passwordMatch'])
-      .withContext('passwordMatch displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['passwordMatch'])
-      .withContext('Should displayMessage error for passwordMatch')
-      .toContain('Las contraseñas no coinciden');
   });
 
   it("Shouldn't display password and confirmPassword error message when fields are filled", () => {
-    updateFormUsingEvent(loginDataMockCopy.password, loginDataMockCopy.password);
+    updateFormUsingEvent(
+      loginDataMockCopy.password,
+      loginDataMockCopy.password
+    );
     fixture.detectChanges();
 
     const errorSpans = fixture.debugElement.queryAll(
       By.css('.invalid-feedback')
     );
-    const passwordErrorSpan = errorSpans[0];
-    const confirmPasswordErrorSpan = errorSpans[1];
 
-    expect(passwordErrorSpan.nativeElement.innerHTML)
-      .withContext("Shouldn't display error message")
-      .not.toContain('Ingresar contraseña');
-    expect(confirmPasswordErrorSpan.nativeElement.innerHTML)
-      .withContext("Shouldn't display error message")
-      .not.toContain('Confirmar contraseña');
-
-    expect(fixture.componentInstance.displayMessage['password'])
-      .withContext('Password displayMessage should exist')
-      .toBeDefined();
-    expect(fixture.componentInstance.displayMessage['confirmPassword'])
-      .withContext('ConfirmPassword displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['password'])
-      .withContext("DisplayMessage for password shouldn't contain error")
-      .not.toContain('Ingresar contraseña');
-    expect(fixture.componentInstance.displayMessage['confirmPassword'])
-      .withContext("DisplayMessage for confirmPassword shouldn't contain error")
-      .not.toContain('Confirmar contraseña');
+    expect(errorSpans.length)
+      .withContext('There should be no error spans')
+      .toBe(0);
   });
 });

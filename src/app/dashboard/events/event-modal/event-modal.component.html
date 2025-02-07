@@ -13,54 +13,75 @@
         <form [formGroup]="createEventForm">
           <div class="mb-3">
             <label for="nameOfEvent" class="form-label" i18n>Nombre del evento</label>
-            <input id="nameOfEvent" type="text" class="form-control" formControlName="nameOfEvent" [ngClass]="{ 'is-invalid': displayMessage['nameOfEvent'] }"/>
-            <span class="invalid-feedback" role="alert">
-              {{ displayMessage["nameOfEvent"] }}
+            <input id="nameOfEvent" 
+                   type="text" 
+                   class="form-control" 
+                   formControlName="nameOfEvent" 
+                   [ngClass]="{'is-invalid': createEventForm.get('nameOfEvent') | validation }"/>
+            <span class="invalid-feedback d-block" role="alert" *ngIf="createEventForm.get('nameOfEvent') | validation">
+              {{ createEventForm.get('nameOfEvent')?.errors | validationError: 'nameOfEvent' }}
             </span>
           </div>
           <div class="mb-3">
             <label for="dateOfEvent" class="form-label" i18n>Fecha del evento</label>
-            <input id="dateOfEvent" type="date" class="form-control" formControlName="dateOfEvent" [ngClass]="{ 'is-invalid': displayMessage['dateOfEvent'] }"/>
-            <span class="invalid-feedback" role="alert">
-              {{ displayMessage["dateOfEvent"] }}
+            <input id="dateOfEvent" 
+                   type="date" 
+                   class="form-control" 
+                   formControlName="dateOfEvent" 
+                   [ngClass]="{'is-invalid': createEventForm.get('dateOfEvent') | validation }"/>
+            <span class="invalid-feedback d-block" role="alert" *ngIf="createEventForm.get('dateOfEvent') | validation">
+              {{ createEventForm.get('dateOfEvent')?.errors | validationError: 'dateOfEvent' }}
             </span>
           </div>
           <div class="mb-3">
             <label for="maxDateOfConfirmation" class="form-label" i18n>Fecha límite de confirmación de invitaciones</label>
-            <input id="maxDateOfConfirmation" type="date" class="form-control" formControlName="maxDateOfConfirmation" [ngClass]="{ 'is-invalid': displayMessage['maxDateOfConfirmation'] }"/>
-            <span class="invalid-feedback" role="alert">
-              {{ displayMessage["maxDateOfConfirmation"] }}
+            <input id="maxDateOfConfirmation" 
+                   type="date" 
+                   class="form-control" 
+                   formControlName="maxDateOfConfirmation" 
+                   [ngClass]="{'is-invalid': createEventForm.get('maxDateOfConfirmation') | validation }"/>
+            <span class="invalid-feedback d-block" role="alert" *ngIf="createEventForm.get('maxDateOfConfirmation') | validation">
+              {{ createEventForm.get('maxDateOfConfirmation')?.errors | validationError: 'maxDateOfConfirmation' }}
             </span>
           </div>
           <div class="mb-3">
             <label for="typeOfEvent" class="form-label" i18n>Tipo de evento</label>
-            <select #typeOfEvent id="typeOfEvent" class="form-control" formControlName="typeOfEvent" [ngClass]="{ 'is-invalid': displayMessage['typeOfEvent'] }">
+            <select id="typeOfEvent" 
+                    class="form-control" 
+                    formControlName="typeOfEvent" 
+                    [ngClass]="{'is-invalid': createEventForm.get('typeOfEvent') | validation }">
               <option value="" i18n>Seleccione...</option>
               <option value="X" i18n>Quinceañera</option>
               <option value="W" i18n>Boda</option>
               <option value="S">Save the date</option>
             </select>
-            <span class="invalid-feedback" role="alert">
-              {{ displayMessage["typeOfEvent"] }}
+            <span class="invalid-feedback d-block" role="alert" *ngIf="createEventForm.get('typeOfEvent') | validation">
+              {{ createEventForm.get('typeOfEvent')?.errors | validationError: 'typeOfEvent' }}
             </span>
           </div>
           <div class="mb-3">
             <label for="nameOfCelebrated" class="form-label" i18n>Nombre del festejado o festejados</label>
-            <input id="nameOfCelebrated" class="form-control" formControlName="nameOfCelebrated" [ngClass]="{ 'is-invalid': displayMessage['nameOfCelebrated'] }"/>
-            <span class="invalid-feedback" role="alert">
-              {{ displayMessage["nameOfCelebrated"] }}
+            <input id="nameOfCelebrated" 
+                   class="form-control" 
+                   formControlName="nameOfCelebrated" 
+                   [ngClass]="{'is-invalid': createEventForm.get('nameOfCelebrated') | validation }"/>
+            <span class="invalid-feedback d-block" role="alert" *ngIf="createEventForm.get('nameOfCelebrated') | validation">
+              {{ createEventForm.get('nameOfCelebrated')?.errors | validationError: 'nameOfCelebrated' }}
             </span>
           </div>
           <div class="mb-3">
             <label for="userId" class="form-label" i18n>Usuario Asignado</label>
-            <select #userId id="userId" class="form-control" formControlName="userId" [ngClass]="{ 'is-invalid': displayMessage['userId'] }">
+            <select id="userId" 
+                    class="form-control" 
+                    formControlName="userId" 
+                    [ngClass]="{'is-invalid': createEventForm.get('userId') | validation }">
               <option value="" i18n>Seleccione...</option>
               <option *ngFor="let user of users" [value]="user.id">
                 {{ user.username }}
               </option>
             </select>
-            <span class="invalid-feedback" role="alert">
-              {{ displayMessage["userId"] }}
+            <span class="invalid-feedback d-block" role="alert" *ngIf="createEventForm.get('userId') | validation">
+              {{ createEventForm.get('userId')?.errors | validationError: 'userId' }}
             </span>
           </div>
         </form>

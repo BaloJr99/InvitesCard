@@ -11,44 +11,65 @@
           <form [formGroup]="createInviteForm">
             <div class="mb-3">
               <label for="family" class="form-label" i18n>Familia</label>
-              <input id="family" type="text" class="form-control" formControlName="family" [ngClass]="{'is-invalid': displayMessage['family']}">
-              <span class="invalid-feedback" role="alert">
-                {{ displayMessage['family'] }}
+              <input id="family" 
+                     type="text" 
+                     class="form-control" 
+                     formControlName="family" 
+                     [ngClass]="{'is-invalid': createInviteForm.get('family') | validation }">
+              <span class="invalid-feedback d-block" role="alert" *ngIf="createInviteForm.get('family') | validation">
+                {{ createInviteForm.get('family')?.errors | validationError: 'family' }}
               </span>
             </div>
             <div class="mb-3">
               <label for="inviteGroupId" class="form-label" i18n>Grupo</label>
-              <div class="inviteGroupActions" [ngClass]="{'is-invalid': displayMessage['inviteGroupId']}">
-                <select #inviteGroupId id="inviteGroupId" class="form-control" formControlName="inviteGroupId" [ngClass]="{'is-invalid': displayMessage['inviteGroupId']}">
+              <div class="inviteGroupActions">
+                <select #inviteGroupId id="inviteGroupId" 
+                        class="form-control" 
+                        formControlName="inviteGroupId" 
+                        [ngClass]="{'is-invalid': createInviteForm.get('inviteGroupId') | validation }">
                   <option value="" i18n>Selecciona el grupo</option>
                   <option *ngFor="let inviteGroup of inviteGroups" [value]="inviteGroup.id">{{ inviteGroup.inviteGroup }}</option>
                 </select>
                 <button aria-label="Edit Group" type="button" class="btn btn-dark" (click)="inviteGroupAction(true, true)" *ngIf="createInviteForm.get('inviteGroupId')?.value"><i class="fa-solid fa-pen-to-square"></i></button>
                 <button aria-label="Create Group" type="button" class="btn btn-dark" (click)="inviteGroupAction(false, true)"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
               </div>
-              <span class="invalid-feedback" role="alert">
-                {{ displayMessage['inviteGroupId'] }}
+              <span class="invalid-feedback d-block" role="alert" *ngIf="createInviteForm.get('inviteGroupId') | validation">
+                {{ createInviteForm.get('inviteGroupId')?.errors | validationError: 'inviteGroupId' }}
               </span>
             </div>
             <div class="mb-3">
               <label for="entriesNumber" class="form-label" i18n>Numero de pases</label>
-              <input id="entriesNumber" type="number" min="1"  class="form-control" formControlName="entriesNumber" [ngClass]="{'is-invalid': displayMessage['entriesNumber']}">
-              <span class="invalid-feedback" role="alert">
-                {{ displayMessage['entriesNumber'] }}
+              <input id="entriesNumber" 
+                     type="number" 
+                     min="1" 
+                     class="form-control" 
+                     formControlName="entriesNumber" 
+                     [ngClass]="{'is-invalid': createInviteForm.get('entriesNumber') | validation }">
+              <span class="invalid-feedback d-block" role="alert" *ngIf="createInviteForm.get('entriesNumber') | validation">
+                {{ createInviteForm.get('entriesNumber')?.errors | validationError: 'entriesNumber' }}
               </span>
             </div>
             <div class="mb-3">
               <label for="phoneNumber" class="form-label" i18n>Telefono de contacto</label>
-              <input id="phoneNumber" type="tel" class="form-control" formControlName="phoneNumber" [ngClass]="{'is-invalid': displayMessage['phoneNumber']}" maxlength="10">
-              <span class="invalid-feedback" role="alert">
-                {{ displayMessage['phoneNumber'] }}
+              <input id="phoneNumber" 
+                     type="tel" 
+                     class="form-control" 
+                     formControlName="phoneNumber" 
+                     [ngClass]="{'is-invalid': createInviteForm.get('phoneNumber') | validation }" 
+                     maxlength="10">
+              <span class="invalid-feedback d-block" role="alert" *ngIf="createInviteForm.get('phoneNumber') | validation">
+                {{ createInviteForm.get('phoneNumber')?.errors | validationError: 'phoneNumber' }}
               </span>
             </div>
             <div class="form-check">
-              <input id="kidsAllowed" class="form-check-input" type="checkbox" formControlName="kidsAllowed" [ngClass]="{'is-invalid': displayMessage['kidsAllowed']}" checked>
+              <input id="kidsAllowed" 
+                     class="form-check-input" 
+                     type="checkbox" 
+                     formControlName="kidsAllowed" 
+                     [ngClass]="{'is-invalid': createInviteForm.get('kidsAllowed') | validation }">
               <label for="kidsAllowed" class="form-check-label" i18n>Niños permitidos</label>
-              <span class="invalid-feedback" role="alert">
-                {{ displayMessage['kidsAllowed'] }}
+              <span class="invalid-feedback d-block" role="alert" *ngIf="createInviteForm.get('kidsAllowed') | validation">
+                {{ createInviteForm.get('kidsAllowed')?.errors | validationError: 'kidsAllowed' }}
               </span>
             </div>
           </form>

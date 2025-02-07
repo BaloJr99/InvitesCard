@@ -8,6 +8,8 @@ import { EventType } from 'src/app/core/models/enum';
 import { EventsService } from 'src/app/core/services/events.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { SweetXvSettingsComponent } from 'src/app/dashboard/settings/sweet-xv-settings/sweet-xv-settings.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
 import {
   fullEventsMock,
@@ -146,7 +148,7 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [SweetXvSettingsComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: SettingsService, useValue: settingsSpy },

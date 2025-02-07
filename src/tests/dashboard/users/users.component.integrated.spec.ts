@@ -11,6 +11,8 @@ import { UserRoleComponent } from 'src/app/dashboard/users/user-role-modal/user-
 import { UsersComponent } from 'src/app/dashboard/users/users.component';
 import { FilterComponent } from 'src/app/shared/components/table/filter/filter.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { searchUserMock, userEventsInfoMock } from 'src/tests/mocks/mocks';
 
@@ -38,7 +40,7 @@ describe('Users Component (Integrated Test)', () => {
         UserRoleComponent,
         UsersComponent,
       ],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         { provide: UsersService, useValue: usersSpy },
         { provide: RolesService, useValue: rolesSpy },

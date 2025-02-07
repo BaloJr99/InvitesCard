@@ -6,6 +6,8 @@ import { EventType } from 'src/app/core/models/enum';
 import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { EventModalComponent } from 'src/app/dashboard/events/event-modal/event-modal.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
 import { fullEventsMock, userDropdownDataMock } from 'src/tests/mocks/mocks';
 
@@ -68,7 +70,7 @@ describe('Event Modal Component (Shallow Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [EventModalComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         { provide: EventsService, useValue: eventsSpy },
         { provide: UsersService, useValue: usersSpy },
@@ -214,51 +216,27 @@ describe('Event Modal Component (Shallow Test)', () => {
 
     expect(nameOfEventErrorSpan.nativeElement.innerHTML)
       .withContext('NameOfEvent span for error should be filled')
-      .toContain('Ingresar nombre del evento');
+      .toContain('El nombre del evento es requerido');
 
     expect(dateOfEventErrorSpan.nativeElement.innerHTML)
       .withContext('DateOfEvent span for error should be filled')
-      .toContain('Ingresar fecha del evento');
+      .toContain('La fecha del evento es requerida');
 
     expect(maxDateOfConfirmationErrorSpan.nativeElement.innerHTML)
       .withContext('MaxDateOfConfirmation span for error should be filled')
-      .toContain('Ingresar fecha límite de confirmación');
+      .toContain('La fecha de limite de confirmación es requerida');
 
     expect(typeOfEventErrorSpan.nativeElement.innerHTML)
       .withContext('TypeOfEvent span for error should be filled')
-      .toContain('Seleccionar tipo de evento');
+      .toContain('El tipo de evento es requerido');
 
     expect(nameOfCelebratedErrorSpan.nativeElement.innerHTML)
       .withContext('NameOfCelebrated span for error should be filled')
-      .toContain('Ingresar nombre del festejado o festejados');
+      .toContain('El nombre del festejado es requerido');
 
     expect(userIdErrorSpan.nativeElement.innerHTML)
       .withContext('UserId span for error should be filled')
-      .toContain('Seleccionar usuario');
-
-    expect(fixture.componentInstance.displayMessage['nameOfEvent'])
-      .withContext('NameOfEvent displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['dateOfEvent'])
-      .withContext('DateOfEvent displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['maxDateOfConfirmation'])
-      .withContext('MaxDateOfConfirmation displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['typeOfEvent'])
-      .withContext('TypeOfEvent displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['nameOfCelebrated'])
-      .withContext('NameOfCelebrated displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['userId'])
-      .withContext('UserId displayMessage should exist')
-      .toBeDefined();
+      .toContain('El usuario es requerido');
   });
 
   it("Shouldn't display username and password error message when fields are filled", () => {
@@ -276,59 +254,8 @@ describe('Event Modal Component (Shallow Test)', () => {
       By.css('.invalid-feedback')
     );
 
-    const nameOfEventErrorSpan = errorSpans[0];
-    const dateOfEventErrorSpan = errorSpans[1];
-    const maxDateOfConfirmationErrorSpan = errorSpans[2];
-    const typeOfEventErrorSpan = errorSpans[3];
-    const nameOfCelebratedErrorSpan = errorSpans[4];
-    const userIdErrorSpan = errorSpans[5];
-
-    expect(nameOfEventErrorSpan.nativeElement.innerHTML)
-      .withContext("NameOfEvent span for error should't be filled")
-      .not.toContain('Ingresar nombre del evento');
-
-    expect(dateOfEventErrorSpan.nativeElement.innerHTML)
-      .withContext("DateOfEvent span for error should't be filled")
-      .not.toContain('Ingresar fecha del evento');
-
-    expect(maxDateOfConfirmationErrorSpan.nativeElement.innerHTML)
-      .withContext("MaxDateOfConfirmation span for error should't be filled")
-      .not.toContain('Ingresar fecha límite de confirmación');
-
-    expect(typeOfEventErrorSpan.nativeElement.innerHTML)
-      .withContext("TypeOfEvent span for error should't be filled")
-      .not.toContain('Seleccionar tipo de evento');
-
-    expect(nameOfCelebratedErrorSpan.nativeElement.innerHTML)
-      .withContext("NameOfCelebrated span for error should't be filled")
-      .not.toContain('Ingresar nombre del festejado o festejados');
-
-    expect(userIdErrorSpan.nativeElement.innerHTML)
-      .withContext("UserId span for error should't be filled")
-      .not.toContain('Seleccionar usuario');
-
-    expect(fixture.componentInstance.displayMessage['nameOfEvent'])
-      .withContext('NameOfEvent displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['dateOfEvent'])
-      .withContext('DateOfEvent displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['maxDateOfConfirmation'])
-      .withContext('MaxDateOfConfirmation displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['typeOfEvent'])
-      .withContext('TypeOfEvent displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['nameOfCelebrated'])
-      .withContext('NameOfCelebrated displayMessage should exist')
-      .toBeDefined();
-
-    expect(fixture.componentInstance.displayMessage['userId'])
-      .withContext('UserId displayMessage should exist')
-      .toBeDefined();
+    expect(errorSpans.length)
+      .withContext('Should not display any error messages')
+      .toBe(0);
   });
 });

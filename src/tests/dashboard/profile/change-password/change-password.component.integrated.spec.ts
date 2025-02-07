@@ -5,6 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ChangePasswordComponent } from 'src/app/dashboard/profile/change-password/change-password.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock, messageResponseMock } from 'src/tests/mocks/mocks';
 
@@ -34,7 +36,7 @@ describe('Change Password Component (Integrated Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [ChangePasswordComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         { provide: ToastrService, useValue: toastrSpy },
         { provide: AuthService, useValue: authSpy },
@@ -52,7 +54,10 @@ describe('Change Password Component (Integrated Test)', () => {
   it('authService resetPassword() should called', () => {
     authServiceSpy.resetPassword.and.returnValue(of(messageResponseMockCopy));
 
-    updateFormUsingEvent(loginDataMockCopy.password, loginDataMockCopy.password);
+    updateFormUsingEvent(
+      loginDataMockCopy.password,
+      loginDataMockCopy.password
+    );
     fixture.detectChanges();
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));

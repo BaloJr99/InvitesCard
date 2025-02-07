@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
@@ -14,13 +13,11 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Observable, fromEvent, merge } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import {
   IInviteGroups,
   IInviteGroupsAction,
 } from 'src/app/core/models/inviteGroups';
-import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { IUpsertInvite, IInviteAction } from 'src/app/core/models/invites';
@@ -31,7 +28,7 @@ import { InvitesService } from 'src/app/core/services/invites.service';
   templateUrl: './invite-modal.component.html',
   styleUrls: ['./invite-modal.component.css'],
 })
-export class InviteModalComponent implements OnInit, AfterViewInit {
+export class InviteModalComponent implements OnInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
@@ -71,34 +68,12 @@ export class InviteModalComponent implements OnInit, AfterViewInit {
   showNewGroupForm = false;
   groupSelected: IInviteGroups | undefined = undefined;
 
-  displayMessage: { [key: string]: string } = {};
-  private validationMessages: { [key: string]: { [key: string]: string } };
-  private genericValidator: GenericValidator;
-
   constructor(
     private invitesService: InvitesService,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private loaderService: LoaderService
-  ) {
-    this.validationMessages = {
-      family: {
-        required: $localize`Ingresar familia`,
-      },
-      entriesNumber: {
-        required: $localize`Ingresar numero de invitaciones`,
-      },
-      phoneNumber: {
-        required: $localize`Ingresar numero de telefono`,
-        pattern: $localize`Numero de telefono invalido`,
-      },
-      inviteGroupId: {
-        required: $localize`Seleccionar grupo`,
-      },
-    };
-
-    this.genericValidator = new GenericValidator(this.validationMessages);
-  }
+  ) {}
 
   ngOnInit(): void {
     $('#inviteModal').on('hidden.bs.modal', () => {
@@ -117,10 +92,7 @@ export class InviteModalComponent implements OnInit, AfterViewInit {
         this.createInvite();
       }
     } else {
-      this.displayMessage = this.genericValidator.processMessages(
-        this.createInviteForm,
-        true
-      );
+      this.createInviteForm.markAllAsTouched();
     }
   }
 
@@ -177,8 +149,6 @@ export class InviteModalComponent implements OnInit, AfterViewInit {
       kidsAllowed: true,
     });
 
-    this.displayMessage = {};
-
     this.showNewGroupForm = false;
   }
 
@@ -190,22 +160,6 @@ export class InviteModalComponent implements OnInit, AfterViewInit {
       ),
       eventId: this.eventId,
     } as IUpsertInvite;
-  }
-
-  ngAfterViewInit(): void {
-    // Watch for the blur event from any input element on the form.
-    // This is required because the valueChanges does not provide notification on blur
-    const controlBlurs: Observable<unknown>[] = this.formInputElements.map(
-      (formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur')
-    );
-
-    // Merge the blur event observable with the valueChanges observable
-    // so we only need to subscribe once.
-    merge(this.createInviteForm.valueChanges, ...controlBlurs).subscribe(() => {
-      this.displayMessage = this.genericValidator.processMessages(
-        this.createInviteForm
-      );
-    });
   }
 
   inviteGroupAction(isEditing: boolean, showNewGroupForm: boolean) {

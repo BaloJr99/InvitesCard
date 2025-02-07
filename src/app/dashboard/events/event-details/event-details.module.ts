@@ -9,6 +9,8 @@ import { EventCardComponent } from './event-card/event-card.component';
 import { InviteModalComponent } from './invite-modal/invite-modal.component';
 import { InviteGroupComponent } from './invite-modal/invite-group-modal/invite-group.component';
 import { eventResolver } from './event-resolver.service';
+import { ValidationPipe } from '../../../shared/pipes/validation.pipe';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
 
 const routes: Routes = [
   {
@@ -20,7 +22,12 @@ const routes: Routes = [
 
 @NgModule({
   providers: [InvitesService, InviteGroupsService],
-  imports: [SharedModule, RouterModule.forChild(routes)],
+  imports: [
+    SharedModule,
+    RouterModule.forChild(routes),
+    ValidationPipe,
+    ValidationErrorPipe,
+  ],
   declarations: [
     EventDetailsComponent,
     EventCardComponent,

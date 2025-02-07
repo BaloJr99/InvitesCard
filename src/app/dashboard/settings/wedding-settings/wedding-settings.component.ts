@@ -104,8 +104,6 @@ export class WeddingSettingsComponent {
     },
   };
 
-  validationMessages: { [key: string]: string } = {};
-
   baseSections: IInviteSection[] = [];
 
   private sectionsConfig = new BehaviorSubject<IInviteSection[]>([]);
@@ -184,32 +182,6 @@ export class WeddingSettingsComponent {
         order: 6,
       },
     ];
-
-    this.validationMessages = {
-      weddingCopyMessage: $localize`Ingresar mensaje para copiar`,
-      weddingPrimaryColor: $localize`Ingresar color primario`,
-      weddingSecondaryColor: $localize`Ingresar color secundario`,
-      groomParents: $localize`Ingresar nombre de los padres del novio`,
-      brideParents: $localize`Ingresar nombre de los padres de la novia`,
-      massUrl: $localize`Ingresar url de la ubicación de la misa`,
-      massTime: $localize`Ingresar hora de la misa`,
-      massPlace: $localize`Ingresar nombre de la iglesia`,
-      venueUrl: $localize`Ingresar url de la ubicación de recepción`,
-      venueTime: $localize`Ingresar hora de la recepción`,
-      venuePlace: $localize`Ingresar nombre de salón de eventos`,
-      civilUrl: $localize`Ingresar url de la ubicación de recepción`,
-      civilTime: $localize`Ingresar hora de la recepción`,
-      civilPlace: $localize`Ingresar nombre de salón de eventos`,
-      dressCodeColor: $localize`Ingresar si existe restricción de color`,
-      copyMessage: $localize`Ingresar mensaje para copiar`,
-      hotelName: $localize`Ingresar nombre del hotel`,
-      hotelInformation: $localize`Ingresar url con información del hotel`,
-      hotelUrl: $localize`Ingresar url de la ubicación hotel`,
-      hotelAddress: $localize`Ingresar dirección del hotel`,
-      hotelPhone: $localize`El teléfono del hotel debe tener 10 dígitos`,
-      cardNumber: $localize`El número de tarjeta debe tener el formato XXXX-XXXX-XXXX-XXXX`,
-      clabeBank: $localize`La CLABE debe tener 18 dígitos`,
-    };
   }
 
   clearInformation(): void {
@@ -485,13 +457,6 @@ export class WeddingSettingsComponent {
     });
     this.createEventSettingsForm.updateValueAndValidity();
     this.sectionsConfig.next(updatedSections);
-  }
-
-  formControlIsInvalid(controlName: string, errorName: string): boolean {
-    const control = this.createEventSettingsForm.get(controlName);
-    return (
-      control && control.errors && control.errors[errorName] && control.touched
-    );
   }
 
   updateSections(sections: IInviteSection[]) {

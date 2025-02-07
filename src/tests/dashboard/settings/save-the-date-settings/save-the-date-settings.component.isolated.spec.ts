@@ -61,9 +61,6 @@ describe('Save The Date Settings Component (Isolated Test)', () => {
     expect(component.createEventSettingsForm)
       .withContext('The createEventSettingsForm should be defined')
       .toBeDefined();
-    expect(component.displayMessage)
-      .withContext('The displayMessage should be an empty array')
-      .toEqual({});
   });
 
   it('form value should be invalid if one input is invalid', () => {

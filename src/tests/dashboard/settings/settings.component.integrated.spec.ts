@@ -8,12 +8,14 @@ import { SettingsService } from 'src/app/core/services/settings.service';
 import { SaveTheDateSettingsComponent } from 'src/app/dashboard/settings/save-the-date-settings/save-the-date-settings.component';
 import { SettingsComponent } from 'src/app/dashboard/settings/settings.component';
 import { SweetXvSettingsComponent } from 'src/app/dashboard/settings/sweet-xv-settings/sweet-xv-settings.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { dropdownEventsMock } from 'src/tests/mocks/mocks';
 
 const dropdownEventsMockCopy = deepCopy(dropdownEventsMock);
 
-describe('Settings Component (Shallow Test)', () => {
+describe('Settings Component (Integrated Test)', () => {
   let fixture: ComponentFixture<SettingsComponent>;
   let eventsServiceSpy: jasmine.SpyObj<EventsService>;
   let settingsServiceSpy: jasmine.SpyObj<SettingsService>;
@@ -47,7 +49,7 @@ describe('Settings Component (Shallow Test)', () => {
         { provide: SettingsService, useValue: settingsSpy },
         { provide: ToastrService, useValue: toastrSpy },
       ],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
     }).compileComponents();
 
     eventsServiceSpy = TestBed.inject(
@@ -60,7 +62,9 @@ describe('Settings Component (Shallow Test)', () => {
 
   beforeEach(() => {
     settingsServiceSpy.getEventSettings.and.returnValue(of());
-    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMockCopy));
+    eventsServiceSpy.getDropdownEvents.and.returnValue(
+      of(dropdownEventsMockCopy)
+    );
     fixture = TestBed.createComponent(SettingsComponent);
     fixture.detectChanges();
   });

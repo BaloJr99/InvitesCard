@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   Input,
@@ -12,20 +11,18 @@ import {
   Validators,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { fromEvent, merge, Observable } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { EventType } from 'src/app/core/models/enum';
 import { ISettingAction } from 'src/app/core/models/settings';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
-import { GenericValidator } from 'src/app/shared/utils/validators/generic-validator';
 
 @Component({
   selector: 'app-save-the-date-settings',
   templateUrl: './save-the-date-settings.component.html',
   styleUrl: './save-the-date-settings.component.css',
 })
-export class SaveTheDateSettingsComponent implements AfterViewInit {
+export class SaveTheDateSettingsComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
@@ -52,39 +49,12 @@ export class SaveTheDateSettingsComponent implements AfterViewInit {
     hotelInformation: ['', Validators.required],
   });
 
-  displayMessage: { [key: string]: string } = {};
-  private validationMessages: { [key: string]: { [key: string]: string } };
-  private genericValidator: GenericValidator;
-
   constructor(
     private loaderService: LoaderService,
     private settingsService: SettingsService,
     private fb: FormBuilder,
     private toastr: ToastrService
-  ) {
-    this.validationMessages = {
-      primaryColor: {
-        required: $localize`Ingresar color primario`,
-      },
-      secondaryColor: {
-        required: $localize`Ingresar color secundario`,
-      },
-      receptionPlace: {
-        required: $localize`Ingresar lugar del evento`,
-      },
-      copyMessage: {
-        required: $localize`Ingresar mensaje para copiar`,
-      },
-      hotelName: {
-        required: $localize`Ingresar nombre del hotel`,
-      },
-      hotelInformation: {
-        required: $localize`Ingresar url con información del hotel`,
-      },
-    };
-
-    this.genericValidator = new GenericValidator(this.validationMessages);
-  }
+  ) {}
 
   clearInformation(): void {
     this.createEventSettingsForm.reset({
@@ -96,8 +66,6 @@ export class SaveTheDateSettingsComponent implements AfterViewInit {
       hotelName: '',
       hotelInformation: '',
     });
-
-    this.displayMessage = {};
   }
 
   getEventSetting(): void {
@@ -149,10 +117,7 @@ export class SaveTheDateSettingsComponent implements AfterViewInit {
         this.updateEventSettings();
       }
     } else {
-      this.displayMessage = this.genericValidator.processMessages(
-        this.createEventSettingsForm,
-        true
-      );
+      this.createEventSettingsForm.markAllAsTouched();
     }
   }
 
@@ -194,23 +159,5 @@ export class SaveTheDateSettingsComponent implements AfterViewInit {
           this.loaderService.setLoading(false);
         });
     }
-  }
-
-  ngAfterViewInit(): void {
-    // Watch for the blur event from any input element on the form.
-    // This is required because the valueChanges does not provide notification on blur
-    const controlBlurs: Observable<unknown>[] = this.formInputElements.map(
-      (formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur')
-    );
-
-    // Merge the blur event observable with the valueChanges observable
-    // so we only need to subscribe once.
-    merge(this.createEventSettingsForm.valueChanges, ...controlBlurs).subscribe(
-      () => {
-        this.displayMessage = this.genericValidator.processMessages(
-          this.createEventSettingsForm
-        );
-      }
-    );
   }
 }

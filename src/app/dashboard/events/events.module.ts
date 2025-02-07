@@ -6,6 +6,8 @@ import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { DateFormatPipe } from 'src/app/shared/pipes/date-format.pipe';
 import { EventModalComponent } from './event-modal/event-modal.component';
+import { ValidationPipe } from '../../shared/pipes/validation.pipe';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
 
 const routes: Routes = [
   {
@@ -23,7 +25,13 @@ const routes: Routes = [
 
 @NgModule({
   providers: [EventsService, UsersService],
-  imports: [SharedModule, DateFormatPipe, RouterModule.forChild(routes)],
+  imports: [
+    SharedModule,
+    DateFormatPipe,
+    RouterModule.forChild(routes),
+    ValidationPipe,
+    ValidationErrorPipe,
+  ],
   declarations: [EventsComponent, EventModalComponent],
 })
 export class EventsModule {}

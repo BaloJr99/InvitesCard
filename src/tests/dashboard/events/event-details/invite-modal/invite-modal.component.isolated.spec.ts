@@ -62,10 +62,6 @@ describe('Invite Modal Component (Isolated Test)', () => {
     expect(component.groupSelected)
       .withContext('should have groupSelected to be undefined')
       .toBeUndefined();
-
-    expect(component.displayMessage)
-      .withContext('should have displayMessage to be an empty object')
-      .toEqual({});
   });
 
   it('form value should be invalid if one input is invalid', () => {

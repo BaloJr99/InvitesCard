@@ -5,6 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { InviteModalComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-modal.component';
+import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
+import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { newInviteMock, fullInvitesGroupsMock } from 'src/tests/mocks/mocks';
 
@@ -56,7 +58,7 @@ describe('Invite Modal Component (Shallow Test)', () => {
 
     TestBed.configureTestingModule({
       declarations: [InviteModalComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         { provide: LoaderService, useValue: loaderSpy },
         { provide: ToastrService, useValue: toastrSpy },
