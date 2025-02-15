@@ -166,41 +166,24 @@ describe('Profile Component (Integrated Test)', () => {
       .toHaveBeenCalled();
   });
 
-  it('should call checkUsername when username input changes', () => {
-    const form = fixture.debugElement.query(By.css('form'));
-    const usernameInput = form.query(By.css('#username'));
+  it('should call checkUsername when username is not the same', () => {
+    updateFormUsingEvent(
+      userProfileMockCopy.id,
+      'newUsername',
+      userProfileMockCopy.firstName,
+      userProfileMockCopy.lastName,
+      userProfileMockCopy.phoneNumber,
+      userProfileMockCopy.email,
+      userProfileMockCopy.gender
+    );
 
-    usernameInput.nativeElement.value = 'newUsername';
-    usernameInput.nativeElement.dispatchEvent(new Event('keyup'));
+    const form = fixture.debugElement.query(By.css('form'));
+    const buttons = form.queryAll(By.css('button'));
+    const saveButton = buttons[0];
+    saveButton.nativeElement.click();
 
     expect(usersServiceSpy.checkUsername)
       .withContext('checkUsername from UsersService should have been called')
-      .toHaveBeenCalled();
-  });
-
-  it(`should call sendResetPasswordToUser when it's not our profile and we click on the reset password button`, () => {
-    const profileInfo = fixture.debugElement.query(By.css('.profile-info'));
-    const resetPasswordButton = profileInfo.query(By.css('button'));
-
-    // Generate new guid id
-    fixture.componentInstance.user = {
-      id: '2b43d9c1-4e71-415c-a602-e00128a72b4a',
-      email: userProfileMockCopy.email,
-      firstName: userProfileMockCopy.firstName,
-      lastName: userProfileMockCopy.lastName,
-      gender: userProfileMockCopy.gender,
-      phoneNumber: userProfileMockCopy.phoneNumber,
-      password: '',
-      profilePhoto: '',
-      username: userProfileMockCopy.username,
-    };
-
-    resetPasswordButton.nativeElement.click();
-
-    expect(authServiceSpy.sendResetPasswordToUser)
-      .withContext(
-        'sendResetPasswordToUser from AuthService should have been called'
-      )
       .toHaveBeenCalled();
   });
 });

@@ -27,6 +27,13 @@ describe('Spinner Component (Shallow Test)', () => {
   });
 
   it('created a span to render the text', () => {
+    loadingSubject.next({
+      isLoading: false,
+      message: '',
+      showInviteLoader: false,
+    });
+    fixture.detectChanges();
+
     const spanMessage = fixture.debugElement.query(By.css('span'));
 
     expect(spanMessage)

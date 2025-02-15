@@ -55,26 +55,23 @@ describe('Events Component (Integrated Test)', () => {
   }));
 
   beforeEach(() => {
-    eventsServiceSpy.getEvents.and.returnValue(of([]));
+    eventsServiceSpy.getEvents.and.returnValue(of(dashboardEventsMockCopy));
 
     fixture = TestBed.createComponent(EventsComponent);
     fixture.detectChanges();
   });
 
-  it("should call getEvents and getTokenValues on init", () => {
+  it('should call getEvents and getTokenValues on init', () => {
     expect(tokenStorageServiceSpy.getTokenValues)
       .withContext('getTokenValues should have been called')
       .toHaveBeenCalled();
 
     expect(eventsServiceSpy.getEvents)
-      .withContext("getEvents should have been called")
+      .withContext('getEvents should have been called')
       .toHaveBeenCalled();
   });
 
   it('can get RouterLinks from template', () => {
-    fixture.componentInstance.events = [...dashboardEventsMockCopy];
-    fixture.detectChanges();
-
     const linkDes = fixture.debugElement.queryAll(By.directive(RouterLink));
     const routerLinks = linkDes.map((de) => de.injector.get(RouterLink));
 
@@ -87,9 +84,6 @@ describe('Events Component (Integrated Test)', () => {
   });
 
   it('should route to event details page', fakeAsync(() => {
-    fixture.componentInstance.events = [...dashboardEventsMockCopy];
-    fixture.detectChanges();
-
     const linkDes = fixture.debugElement.queryAll(By.directive(RouterLink));
     const firstEventLink = linkDes[1];
     router.resetConfig([{ path: '**', children: [] }]);

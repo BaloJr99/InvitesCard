@@ -1,19 +1,21 @@
 import { FormBuilder } from '@angular/forms';
+import { of } from 'rxjs';
 import { FilesComponent } from 'src/app/dashboard/files/files.component';
 
 describe('Files Component (Isolated Test)', () => {
   let component: FilesComponent;
 
   beforeEach(() => {
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
-    const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
+    const eventsSpy = jasmine.createSpyObj('EventsService', [
+      'getDropdownEvents',
+    ]);
     const filesSpy = jasmine.createSpyObj('FilesService', ['']);
+    eventsSpy.getDropdownEvents.and.returnValue(of([]));
     const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
     const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     component = new FilesComponent(
-      loaderSpy,
       eventsSpy,
       filesSpy,
       fileReaderSpy,
@@ -28,10 +30,6 @@ describe('Files Component (Isolated Test)', () => {
   });
 
   it('should render the initial values', () => {
-    expect(component.isAdmin)
-      .withContext('should have isAdmin to be false')
-      .toBeFalse();
-
     expect(component.events)
       .withContext('should have events to be an empty array')
       .toEqual([]);

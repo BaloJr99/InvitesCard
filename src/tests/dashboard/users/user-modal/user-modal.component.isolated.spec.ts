@@ -1,9 +1,11 @@
 import { FormBuilder } from '@angular/forms';
+import { of } from 'rxjs';
 import { UserModalComponent } from 'src/app/dashboard/users/user-modal/user-modal.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
-import { upsertUserMock } from 'src/tests/mocks/mocks';
+import { roleMock, upsertUserMock } from 'src/tests/mocks/mocks';
 
 const upsertUserMockCopy = deepCopy(upsertUserMock);
+const rolesMockCopy = deepCopy(roleMock);
 
 describe('User Modal Component (Isolated Test)', () => {
   let component: UserModalComponent;
@@ -26,20 +28,15 @@ describe('User Modal Component (Isolated Test)', () => {
 
   beforeEach(() => {
     const usersSpy = jasmine.createSpyObj('UsersService', ['']);
-    const rolesSpy = jasmine.createSpyObj('RolesService', ['']);
+    const rolesSpy = jasmine.createSpyObj('RolesService', ['getAllRoles']);
+    rolesSpy.getAllRoles.and.returnValue(of([rolesMockCopy]));
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
-    const changeDetectorRefSpy = jasmine.createSpyObj('ChangeDetectorRef', [
-      '',
-    ]);
 
     component = new UserModalComponent(
       usersSpy,
       rolesSpy,
       new FormBuilder(),
-      toastrSpy,
-      loaderSpy,
-      changeDetectorRefSpy
+      toastrSpy
     );
   });
 
@@ -53,20 +50,8 @@ describe('User Modal Component (Isolated Test)', () => {
     expect(component.createUserForm)
       .withContext('createUserForm should be defined')
       .toBeDefined();
-    expect(component.roles)
-      .withContext('roles should be an empty array')
-      .toEqual([]);
-    expect(component.userRoles)
-      .withContext('userRoles should be an empty array')
-      .toEqual([]);
-    expect(component.filteredRoles)
-      .withContext('filteredRoles should be an empty array')
-      .toEqual([]);
     expect(component.roleSelected)
       .withContext('roleSelected should be undefined')
-      .toBeUndefined();
-    expect(component.editedUser)
-      .withContext('editedUser should be undefined')
       .toBeUndefined();
   });
 

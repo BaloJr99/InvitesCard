@@ -8,18 +8,13 @@ const loginDataMockCopy = deepCopy(loginDataMock);
 describe('ForgotPasswordComponent Isolated', () => {
   let component: ForgotPasswordComponent;
   const authServiceSpy = jasmine.createSpyObj('AuthService', ['']);
-  const loaderServiceSpy = jasmine.createSpyObj('LoaderService', ['']);
 
   const updateForm = (username: string) => {
     component.forgotPasswordForm.controls['usernameOrEmail'].setValue(username);
   };
 
   beforeEach(() => {
-    component = new ForgotPasswordComponent(
-      new FormBuilder(),
-      authServiceSpy,
-      loaderServiceSpy
-    );
+    component = new ForgotPasswordComponent(new FormBuilder(), authServiceSpy);
   });
 
   it('should create', () => {
@@ -55,7 +50,8 @@ describe('ForgotPasswordComponent Isolated', () => {
   });
 
   it('should have usernameOrEmail in the forgotPasswordForm', () => {
-    const usernameOrEmail = component.forgotPasswordForm.controls['usernameOrEmail'];
+    const usernameOrEmail =
+      component.forgotPasswordForm.controls['usernameOrEmail'];
     expect(usernameOrEmail.valid)
       .withContext('usernameOrEmail should be invalid')
       .toBeFalsy();

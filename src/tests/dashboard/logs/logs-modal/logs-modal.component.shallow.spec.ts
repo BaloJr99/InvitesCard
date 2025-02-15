@@ -21,7 +21,8 @@ describe('Logs Modal Component (Isolated Test)', () => {
   });
 
   it('should create a modal with 4 labels and one close button', () => {
-    fixture.componentInstance.log = logMockCopy;
+    fixture.componentRef.setInput('logValue', logMockCopy);
+    fixture.componentRef.setInput('showModalValue', true);
     fixture.detectChanges();
 
     const labels = fixture.debugElement.queryAll(By.css('label'));

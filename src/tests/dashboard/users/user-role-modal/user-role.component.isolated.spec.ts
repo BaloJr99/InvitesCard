@@ -1,5 +1,4 @@
 import { FormBuilder } from '@angular/forms';
-import { RoleActionEvent } from 'src/app/core/models/enum';
 import { UserRoleComponent } from 'src/app/dashboard/users/user-role-modal/user-role.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { roleMock } from 'src/tests/mocks/mocks';
@@ -24,14 +23,8 @@ describe('User Role Modal Component (Isolated Test)', () => {
   beforeEach(() => {
     const rolesSpy = jasmine.createSpyObj('RolesService', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
 
-    component = new UserRoleComponent(
-      rolesSpy,
-      new FormBuilder(),
-      toastrSpy,
-      loaderSpy
-    );
+    component = new UserRoleComponent(rolesSpy, new FormBuilder(), toastrSpy);
   });
 
   it('should create', () => {
@@ -44,9 +37,6 @@ describe('User Role Modal Component (Isolated Test)', () => {
     expect(component.createRoleForm)
       .withContext('createRoleForm should be defined')
       .toBeDefined();
-    expect(component.currentRoleAction)
-      .withContext('roles should be an empty array')
-      .toEqual(RoleActionEvent.None);
   });
 
   it('form value should be invalid if one input is invalid', () => {

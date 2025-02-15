@@ -1,15 +1,19 @@
-import { ITable, ITableHeaders } from 'src/app/core/models/common';
+import { of } from 'rxjs';
 import { UsersComponent } from 'src/app/dashboard/users/users.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
+import { userEventsInfoMock } from 'src/tests/mocks/mocks';
+
+const userEventsInfoMockCopy = deepCopy(userEventsInfoMock);
 
 describe('Users Component (Isolated Test)', () => {
   let component: UsersComponent;
 
   beforeEach(() => {
-    const usersSpy = jasmine.createSpyObj('UsersService', ['']);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
+    const usersSpy = jasmine.createSpyObj('UsersService', ['getAllUsers']);
+    usersSpy.getAllUsers.and.returnValue(of([userEventsInfoMockCopy]));
     const routerSpy = jasmine.createSpyObj('Router', ['']);
 
-    component = new UsersComponent(usersSpy, loaderSpy, routerSpy);
+    component = new UsersComponent(usersSpy, routerSpy);
   });
 
   it('should create', () => {
@@ -17,23 +21,11 @@ describe('Users Component (Isolated Test)', () => {
   });
 
   it('should render the initial values', () => {
-    expect(component.users)
-      .withContext('users should be an empty array')
-      .toEqual([]);
-    expect(component.userAction)
-      .withContext('userAction should be undefined')
-      .toBeUndefined();
     expect(component.roleSelected)
       .withContext('roleSelected should be undefined')
       .toBeUndefined();
     expect(component.savedUser)
       .withContext('savedUser should be undefined')
       .toBeUndefined();
-    expect(component.table)
-      .withContext('table should be an empty object')
-      .toEqual({
-        headers: [] as ITableHeaders[],
-        data: [] as { [key: string]: string }[],
-      } as ITable);
   });
 });

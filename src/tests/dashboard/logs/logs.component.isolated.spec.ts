@@ -1,14 +1,19 @@
-import { ITable, ITableHeaders } from 'src/app/core/models/common';
+import { of } from 'rxjs';
+import { ILog } from 'src/app/core/models/logs';
 import { LogsComponent } from 'src/app/dashboard/logs/logs.component';
+import { deepCopy } from 'src/app/shared/utils/tools';
+import { logMock } from 'src/tests/mocks/mocks';
+
+const logMockCopy = deepCopy(logMock);
 
 describe('Logs Component (Isolated Test)', () => {
   let component: LogsComponent;
 
   beforeEach(() => {
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
-    const loggerSpy = jasmine.createSpyObj('LoggerService', ['']);
+    const loggerSpy = jasmine.createSpyObj('LoggerService', ['getLogs']);
+    loggerSpy.getLogs.and.returnValue(of([logMockCopy]));
 
-    component = new LogsComponent(loggerSpy, loaderSpy);
+    component = new LogsComponent(loggerSpy);
   });
 
   it('should create', () => {
@@ -16,31 +21,8 @@ describe('Logs Component (Isolated Test)', () => {
   });
 
   it('should render the initial values', () => {
-    expect(component.logs)
-      .withContext('The logs property should be an empty array')
-      .toEqual([]);
-
-    expect(component.table)
-      .withContext('The table property should be an empty object')
-      .toEqual({
-        headers: [] as ITableHeaders[],
-        data: [] as { [key: string]: string }[],
-      } as ITable);
-
     expect(component.logSelected)
       .withContext('The logSelected property should undefined')
-      .toBeUndefined();
-
-    expect(component.numberOfErrorsLast31Days)
-      .withContext('The numberOfErrorsLast31Days property should be 0')
-      .toBe(0);
-
-    expect(component.numberOfErrorsToday)
-      .withContext('The numberOfErrorsToday property should be 0')
-      .toBe(0);
-
-    expect(component.groupedByDate)
-      .withContext('The groupedByDate property should be an empty object')
-      .toEqual({});
+      .toEqual({} as ILog);
   });
 });

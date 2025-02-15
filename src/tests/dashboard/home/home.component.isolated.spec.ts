@@ -1,14 +1,20 @@
+import { of } from 'rxjs';
 import { HomeComponent } from 'src/app/dashboard/home/home.component';
 
 describe('Home Component (Isolated Test)', () => {
   let component: HomeComponent;
 
   beforeEach(() => {
-    const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
-    const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
+    const invitesSpy = jasmine.createSpyObj('InvitesService', [
+      'getAllInvites',
+    ]);
+    invitesSpy.getAllInvites.and.returnValue(of([]));
+    const eventsSpy = jasmine.createSpyObj('EventsService', [
+      'getDropdownEvents',
+    ]);
+    eventsSpy.getDropdownEvents.and.returnValue(of([]));
 
-    component = new HomeComponent(invitesSpy, loaderSpy, eventsSpy);
+    component = new HomeComponent(invitesSpy, eventsSpy);
   });
 
   it('should create', () => {
@@ -16,34 +22,6 @@ describe('Home Component (Isolated Test)', () => {
   });
 
   it('should render the initial values', () => {
-    expect(component.invites)
-      .withContext('should have invites to be an empty array')
-      .toEqual([]);
-
-    expect(component.statistics)
-      .withContext('should have statistics to be an empty array')
-      .toEqual([]);
-
-    expect(component.percentajeOfConfirmation)
-      .withContext('should have percentajeOfConfirmation to be 0')
-      .toBe('0');
-
-    expect(component.percentajeOfPendingResponse)
-      .withContext('should have percentajeOfPendingResponse to be 0')
-      .toBe('0');
-
-    expect(component.groupedByDate)
-      .withContext('should have groupedByDate to be an empty object')
-      .toEqual({});
-
-    expect(component.events)
-      .withContext('should have events to be an empty array')
-      .toEqual([]);
-
-    expect(component.eventSelected)
-      .withContext('should have eventSelected to be an empty string')
-      .toBe('');
-
     expect(component.lastInvitesChart)
       .withContext('should have lastInvitesChart to be undefined')
       .toBeUndefined();

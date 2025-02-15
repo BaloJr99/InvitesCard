@@ -86,7 +86,7 @@ describe('Confirmation Component (Shallow Test)', () => {
       ...sweetXvUserInviteMockCopy,
       confirmation: null,
     });
-    fixture.componentRef.setInput('deadlineMet', false);
+    fixture.componentRef.setInput('deadlineMetValue', false);
     fixture.detectChanges();
 
     const header = fixture.debugElement.query(By.css('h2'));
@@ -159,7 +159,7 @@ describe('Confirmation Component (Shallow Test)', () => {
       entriesConfirmed: null,
       message: null,
     });
-    fixture.componentRef.setInput('deadlineMet', false);
+    fixture.componentRef.setInput('deadlineMetValue', false);
     fixture.detectChanges();
 
     updateFormUsingEvent(
@@ -189,7 +189,7 @@ describe('Confirmation Component (Shallow Test)', () => {
       entriesConfirmed: null,
       message: null,
     });
-    fixture.componentRef.setInput('deadlineMet', false);
+    fixture.componentRef.setInput('deadlineMetValue', false);
     fixture.detectChanges();
 
     spyOn(fixture.componentInstance, 'saveInformation');
@@ -209,7 +209,7 @@ describe('Confirmation Component (Shallow Test)', () => {
       message: null,
     });
 
-    fixture.componentRef.setInput('deadlineMet', false);
+    fixture.componentRef.setInput('deadlineMetValue', false);
     fixture.detectChanges();
 
     const saveButton = fixture.debugElement.query(By.css('.button button'));
@@ -234,7 +234,7 @@ describe('Confirmation Component (Shallow Test)', () => {
       message: null,
     });
 
-    fixture.componentRef.setInput('deadlineMet', false);
+    fixture.componentRef.setInput('deadlineMetValue', false);
     fixture.detectChanges();
 
     updateFormUsingEvent(
@@ -266,7 +266,7 @@ describe('Confirmation Component (Shallow Test)', () => {
     });
     fixture.detectChanges();
 
-    fixture.componentRef.setInput('deadlineMet', true);
+    fixture.componentRef.setInput('deadlineMetValue', true);
     fixture.detectChanges();
 
     const form = fixture.debugElement.query(By.css('.form'));
@@ -283,7 +283,7 @@ describe('Confirmation Component (Shallow Test)', () => {
       ...sweetXvUserInviteMockCopy,
     });
 
-    fixture.componentRef.setInput('deadlineMet', false);
+    fixture.componentRef.setInput('deadlineMetValue', false);
     fixture.detectChanges();
 
     const confirmedModal = fixture.debugElement.query(
@@ -316,7 +316,7 @@ describe('Confirmation Component (Shallow Test)', () => {
       confirmation: false,
     });
 
-    fixture.componentRef.setInput('deadlineMet', false);
+    fixture.componentRef.setInput('deadlineMetValue', false);
     fixture.detectChanges();
 
     const confirmedModal = fixture.debugElement.query(
@@ -350,7 +350,7 @@ describe('Confirmation Component (Shallow Test)', () => {
       entriesConfirmed: null,
       message: null,
     });
-    fixture.componentRef.setInput('deadlineMet', false);
+    fixture.componentRef.setInput('deadlineMetValue', false);
     fixture.detectChanges();
 
     updateFormUsingEvent(

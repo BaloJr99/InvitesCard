@@ -3,7 +3,6 @@ import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { FileReaderService } from 'src/app/core/services/fileReader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { InvitesImportModalComponent } from 'src/app/dashboard/events/event-details/invites-import-modal/invites-import-modal.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { bulkInvitesMock, fullInvitesGroupsMock } from 'src/tests/mocks/mocks';
@@ -15,7 +14,6 @@ describe('Invites Import Modal Component (Shallow Test)', () => {
   let fixture: ComponentFixture<InvitesImportModalComponent>;
 
   beforeEach(waitForAsync(() => {
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['setLoading']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const invitesSpy = jasmine.createSpyObj('InviteGroupsService', ['']);
     const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
@@ -23,7 +21,6 @@ describe('Invites Import Modal Component (Shallow Test)', () => {
     TestBed.configureTestingModule({
       declarations: [InvitesImportModalComponent],
       providers: [
-        { provide: LoaderService, useValue: loaderSpy },
         { provide: ToastrService, useValue: toastrSpy },
         { provide: InvitesService, useValue: invitesSpy },
         { provide: FileReaderService, useValue: fileReaderSpy },
@@ -179,12 +176,17 @@ describe('Invites Import Modal Component (Shallow Test)', () => {
       .toContain('fa-star');
   });
 
-  it('Should show table there are invites processed (Kids Not Allowed and Preloaded Invite Group)', () => {
+  it('Should show table when there are invites processed (Kids Not Allowed and Preloaded Invite Group)', () => {
+    fixture.componentRef.setInput('inviteGroupsValue', [
+      fullInvitesGroupsMockCopy,
+    ]);
+    fixture.componentRef.setInput('eventIdValue', bulkInvitesMockCopy.eventId);
+    fixture.componentRef.setInput('showModalValue', true);
+    fixture.detectChanges();
+
     fixture.componentInstance.invites = [
       { ...bulkInvitesMockCopy, kidsAllowed: false, isNewInviteGroup: false },
     ];
-    fixture.componentInstance.inviteGroups = [fullInvitesGroupsMockCopy];
-
     fixture.detectChanges();
 
     const table = fixture.debugElement.query(By.css('table'));

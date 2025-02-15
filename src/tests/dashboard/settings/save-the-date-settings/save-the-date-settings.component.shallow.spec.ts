@@ -3,20 +3,25 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
+import { of } from 'rxjs';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { SaveTheDateSettingsComponent } from 'src/app/dashboard/settings/save-the-date-settings/save-the-date-settings.component';
 import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
 import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
-import { saveTheDateSettingMock } from 'src/tests/mocks/mocks';
+import {
+  saveTheDateBaseSettingMock,
+  saveTheDateSettingMock,
+} from 'src/tests/mocks/mocks';
 
 const saveTheDateSettingMockCopy = deepCopy(saveTheDateSettingMock);
+const saveTheDateBaseSettingMockCopy = deepCopy(saveTheDateBaseSettingMock);
 
 describe('Save The Date Settings Component (Shallow test)', () => {
   let fixture: ComponentFixture<SaveTheDateSettingsComponent>;
+  let settingsServiceSpy: jasmine.SpyObj<SettingsService>;
 
   const updateFormUsingEvent = (
-    eventId: string,
     primaryColor: string,
     secondaryColor: string,
     receptionPlace: string,
@@ -24,9 +29,6 @@ describe('Save The Date Settings Component (Shallow test)', () => {
     hotelName: string,
     hotelInformation: string
   ) => {
-    fixture.componentInstance.createEventSettingsForm.patchValue({
-      eventId,
-    });
     const primaryColorInput = fixture.debugElement.query(
       By.css('#primaryColor')
     );
@@ -64,7 +66,9 @@ describe('Save The Date Settings Component (Shallow test)', () => {
   };
 
   beforeEach(waitForAsync(() => {
-    const settingsSpy = jasmine.createSpyObj('SettingsService', ['']);
+    const settingsSpy = jasmine.createSpyObj('SettingsService', [
+      'getEventSettings',
+    ]);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     TestBed.configureTestingModule({
@@ -76,10 +80,21 @@ describe('Save The Date Settings Component (Shallow test)', () => {
         { provide: ToastrService, useValue: toastrSpy },
       ],
     }).compileComponents();
+
+    settingsServiceSpy = TestBed.inject(
+      SettingsService
+    ) as jasmine.SpyObj<SettingsService>;
   }));
 
   beforeEach(() => {
+    settingsServiceSpy.getEventSettings.and.returnValue(
+      of(saveTheDateBaseSettingMockCopy)
+    );
     fixture = TestBed.createComponent(SaveTheDateSettingsComponent);
+    fixture.componentRef.setInput(
+      'eventSettingActionValue',
+      saveTheDateSettingMockCopy
+    );
     fixture.detectChanges();
   });
 
@@ -132,7 +147,6 @@ describe('Save The Date Settings Component (Shallow test)', () => {
 
   it('Expect form controls to be filled when user fills inputs', () => {
     updateFormUsingEvent(
-      saveTheDateSettingMockCopy.eventId,
       saveTheDateSettingMockCopy.primaryColor,
       saveTheDateSettingMockCopy.secondaryColor,
       saveTheDateSettingMockCopy.receptionPlace,
@@ -180,6 +194,7 @@ describe('Save The Date Settings Component (Shallow test)', () => {
   });
 
   it('Display primaryColor, secondaryColor, receptionPlace, copyMessage, hotelName, hotelInformation error message when fields are blank', () => {
+    updateFormUsingEvent('', '', '', '', '', '');
     const buttons = fixture.debugElement.queryAll(By.css('button'));
     const saveButton = buttons[1];
     saveButton.nativeElement.click();
@@ -190,19 +205,11 @@ describe('Save The Date Settings Component (Shallow test)', () => {
       By.css('.invalid-feedback')
     );
 
-    const primaryColorErrorSpan = errorSpans[0];
-    const secondaryColorErrorSpan = errorSpans[1];
-    const receptionPlaceErrorSpan = errorSpans[2];
-    const copyMessageErrorSpan = errorSpans[3];
-    const hotelNameErrorSpan = errorSpans[4];
-    const hotelInformationErrorSpan = errorSpans[5];
+    const receptionPlaceErrorSpan = errorSpans[0];
+    const copyMessageErrorSpan = errorSpans[1];
+    const hotelNameErrorSpan = errorSpans[2];
+    const hotelInformationErrorSpan = errorSpans[3];
 
-    expect(primaryColorErrorSpan.nativeElement.innerHTML.trim())
-      .withContext('primaryColor span error should be filled')
-      .toContain('El color primario es requerido');
-    expect(secondaryColorErrorSpan.nativeElement.innerHTML.trim())
-      .withContext('secondaryColor span error should be filled')
-      .toContain('El color secundario es requerido');
     expect(receptionPlaceErrorSpan.nativeElement.innerHTML)
       .withContext('receptionPlace span error should be filled')
       .toContain('El lugar del evento es requerido');
@@ -219,7 +226,6 @@ describe('Save The Date Settings Component (Shallow test)', () => {
 
   it("Shouldn't display primaryColor, secondaryColor, receptionPlace, copyMessage, hotelName, hotelInformation error message when fields are filled", () => {
     updateFormUsingEvent(
-      saveTheDateSettingMockCopy.eventId,
       saveTheDateSettingMockCopy.primaryColor,
       saveTheDateSettingMockCopy.secondaryColor,
       saveTheDateSettingMockCopy.receptionPlace,

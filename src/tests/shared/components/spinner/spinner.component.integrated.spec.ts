@@ -28,21 +28,24 @@ describe('Spinner Component (Integrated Test)', () => {
   });
 
   it("shouldn't show all spinners and message should be blank", () => {
+    loadingSubject.next({
+      isLoading: false,
+      message: '',
+      showInviteLoader: false,
+    });
+    fixture.detectChanges();
+
     const spinner = fixture.debugElement.query(
       By.css('.cssload-speeding-wheel')
     );
-    const inviteLoader = fixture.debugElement.query(
-      By.css('iframe')
-    );
+    const inviteLoader = fixture.debugElement.query(By.css('iframe'));
     const span = fixture.debugElement.query(By.css('span'));
 
     expect(spinner)
       .withContext("Shouldn't show cssload-speeding-wheel")
       .toBeNull();
-    
-    expect(inviteLoader)
-      .withContext("Shouldn't show iframe")
-      .toBeNull();
+
+    expect(inviteLoader).withContext("Shouldn't show iframe").toBeNull();
 
     expect(span.nativeElement.textContent)
       .withContext("Shouldn't show message")
@@ -75,9 +78,7 @@ describe('Spinner Component (Integrated Test)', () => {
     loadingSubject.next(showInviteLoaderMock);
     fixture.detectChanges();
 
-    const spinner = fixture.debugElement.query(
-      By.css('iframe')
-    );
+    const spinner = fixture.debugElement.query(By.css('iframe'));
     const span = fixture.debugElement.query(By.css('span'));
     expect(spinner)
       .withContext('Should show invite loader iframe')

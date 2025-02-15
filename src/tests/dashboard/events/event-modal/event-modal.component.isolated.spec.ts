@@ -39,22 +39,16 @@ describe('Event Modal Component (Isolated Test)', () => {
 
   beforeEach(() => {
     const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
-    const usersSpy = jasmine.createSpyObj('UsersService', ['']);
+    const usersSpy = jasmine.createSpyObj('UsersService', ['getUsersDropdownData']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
     const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['']);
-    const changeDetectorRefSpy = jasmine.createSpyObj('ChangeDetectorRef', [
-      '',
-    ]);
 
     component = new EventModalComponent(
       eventsSpy,
       usersSpy,
       new FormBuilder(),
       toastrSpy,
-      loaderSpy,
-      commonModalSpy,
-      changeDetectorRefSpy
+      commonModalSpy
     );
   });
 
@@ -72,10 +66,6 @@ describe('Event Modal Component (Isolated Test)', () => {
     expect(component.originalEventType)
       .withContext('should have originalEventType to be undefined')
       .toBeUndefined();
-
-    expect(component.users)
-      .withContext('should have users to be an empty array')
-      .toEqual([]);
 
     expect(component.userEmptyMessage)
       .withContext('should have userEmptyMessage to be an empty string')

@@ -33,6 +33,7 @@ describe('Event Modal Component (Integrated Test)', () => {
   let fixture: ComponentFixture<EventModalComponent>;
   let eventsServiceSpy: jasmine.SpyObj<EventsService>;
   let commonModalServiceSpy: jasmine.SpyObj<CommonModalService>;
+  let usersServiceSpy: jasmine.SpyObj<UsersService>;
 
   const updateFormUsingEvent = (
     nameOfEvent: string,
@@ -77,7 +78,9 @@ describe('Event Modal Component (Integrated Test)', () => {
       'createEvent',
       'updateEvent',
     ]);
-    const usersSpy = jasmine.createSpyObj('UsersService', ['']);
+    const usersSpy = jasmine.createSpyObj('UsersService', [
+      'getUsersDropdownData',
+    ]);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['open']);
 
@@ -98,11 +101,16 @@ describe('Event Modal Component (Integrated Test)', () => {
     commonModalServiceSpy = TestBed.inject(
       CommonModalService
     ) as jasmine.SpyObj<CommonModalService>;
+    usersServiceSpy = TestBed.inject(
+      UsersService
+    ) as jasmine.SpyObj<UsersService>;
   }));
 
   beforeEach(() => {
+    usersServiceSpy.getUsersDropdownData.and.returnValue(
+      of([userDropdownDataMockCopy])
+    );
     fixture = TestBed.createComponent(EventModalComponent);
-    fixture.componentInstance.users = [{ ...userDropdownDataMockCopy }];
     fixture.detectChanges();
   });
 

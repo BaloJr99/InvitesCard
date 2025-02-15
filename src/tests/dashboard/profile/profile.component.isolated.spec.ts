@@ -31,7 +31,6 @@ describe('Profile Component (Isolated Test)', () => {
     const userSpy = jasmine.createSpyObj('UserService', ['']);
     const authSpy = jasmine.createSpyObj('AuthService', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
     const tokenStorageSpy = jasmine.createSpyObj('TokenStorageService', [
       'getTokenValues',
     ]);
@@ -42,7 +41,6 @@ describe('Profile Component (Isolated Test)', () => {
       authSpy,
       new FormBuilder(),
       toastrSpy,
-      loaderSpy,
       tokenStorageSpy
     );
   });
@@ -52,14 +50,6 @@ describe('Profile Component (Isolated Test)', () => {
   });
 
   it('should render the initial values', () => {
-    expect(component.user)
-      .withContext('The user should be undefined')
-      .toBeUndefined();
-
-    expect(component.isMyProfile)
-      .withContext('The isMyProfile should be true')
-      .toBeTrue();
-
     expect(component.showChangePassword)
       .withContext('The showChangePassword should be false')
       .toBeFalse();

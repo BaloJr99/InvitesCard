@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
+import { of } from 'rxjs';
 import { EventType } from 'src/app/core/models/enum';
 import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
@@ -16,6 +17,7 @@ const userDropdownDataMockCopy = deepCopy(userDropdownDataMock);
 
 describe('Event Modal Component (Shallow Test)', () => {
   let fixture: ComponentFixture<EventModalComponent>;
+  let usersServiceSpy: jasmine.SpyObj<UsersService>;
 
   fullEventsMockCopy = {
     ...fullEventsMockCopy,
@@ -65,7 +67,7 @@ describe('Event Modal Component (Shallow Test)', () => {
 
   beforeEach(waitForAsync(() => {
     const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
-    const usersSpy = jasmine.createSpyObj('UsersService', ['']);
+    const usersSpy = jasmine.createSpyObj('UsersService', ['getUsersDropdownData']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     TestBed.configureTestingModule({
@@ -77,11 +79,17 @@ describe('Event Modal Component (Shallow Test)', () => {
         { provide: ToastrService, useValue: toastrSpy },
       ],
     }).compileComponents();
+
+    usersServiceSpy = TestBed.inject(
+      UsersService
+    ) as jasmine.SpyObj<UsersService>;
   }));
 
   beforeEach(() => {
+    usersServiceSpy.getUsersDropdownData.and.returnValue(
+      of([userDropdownDataMockCopy])
+    );
     fixture = TestBed.createComponent(EventModalComponent);
-    fixture.componentInstance.users = [{ ...userDropdownDataMockCopy }];
     fixture.detectChanges();
   });
 

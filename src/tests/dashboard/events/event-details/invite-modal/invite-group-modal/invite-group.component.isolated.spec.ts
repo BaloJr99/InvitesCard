@@ -17,12 +17,10 @@ describe('Invite Group Component (Isolated Test)', () => {
   beforeEach(() => {
     const inviteGroupSpy = jasmine.createSpyObj('InviteGroupComponent', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
     component = new InviteGroupComponent(
       inviteGroupSpy,
       new FormBuilder(),
-      toastrSpy,
-      loaderSpy
+      toastrSpy
     );
   });
 

@@ -4,7 +4,7 @@ import { CommonInvitesService } from 'src/app/core/services/commonInvites.servic
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { DashboardComponent } from 'src/app/dashboard/dashboard.component';
 import { messagesMock, userMock } from '../mocks/mocks';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { IMessage, INotification } from 'src/app/core/models/common';
 import { By } from '@angular/platform-browser';
 import { deepCopy } from 'src/app/shared/utils/tools';
@@ -15,12 +15,12 @@ const userMockCopy = deepCopy(userMock);
 describe('Dashboard Component (Shallow Test)', () => {
   let fixture: ComponentFixture<DashboardComponent>;
   let tokenStorageServiceSpy: jasmine.SpyObj<TokenStorageService>;
-  let messagesDataSubject: Subject<IMessage[]>;
-  let notificationsDataSubject: Subject<INotification[]>;
+  let messagesDataSubject: BehaviorSubject<IMessage[]>;
+  let notificationsDataSubject: BehaviorSubject<INotification[]>;
 
   beforeEach(waitForAsync(() => {
-    messagesDataSubject = new Subject<IMessage[]>();
-    notificationsDataSubject = new Subject<INotification[]>();
+    messagesDataSubject = new BehaviorSubject<IMessage[]>([]);
+    notificationsDataSubject = new BehaviorSubject<INotification[]>([]);
     const tokenStorageSpy = jasmine.createSpyObj('TokenStorageService', [
       'getTokenValues',
     ]);
@@ -73,16 +73,6 @@ describe('Dashboard Component (Shallow Test)', () => {
     const messages = messagesChat.queryAll(By.css('.message'));
 
     expect(messages.length).withContext('Messages chat should exist').toBe(1);
-
-    expect(Object.keys(fixture.componentInstance.messagesGrouped).length)
-      .withContext('Messages grouped should have one group')
-      .toBe(1);
-    expect(fixture.componentInstance.messagesGrouped[0].value.length)
-      .withContext('Messages grouped should contain 1 message')
-      .toBe(1);
-    expect(fixture.componentInstance.messagesGrouped[0].value)
-      .withContext('Messages grouped should contain the message')
-      .toEqual(messagesMockCopy);
 
     const messageDate = messages[0].query(By.css('.message-date'));
     const messageCard = messages[0].query(By.css('.card'));

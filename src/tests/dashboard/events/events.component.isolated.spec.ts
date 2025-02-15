@@ -1,14 +1,15 @@
+import { of } from 'rxjs';
 import { EventsComponent } from 'src/app/dashboard/events/events.component';
 
 describe('Events Component (Isolated Test)', () => {
   let component: EventsComponent;
 
   beforeEach(() => {
-    const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
+    const eventsSpy = jasmine.createSpyObj('EventsService', ['getEvents']);
     const tokenStorageSpy = jasmine.createSpyObj('TokenStorageService', ['']);
+    eventsSpy.getEvents.and.returnValue(of([]));
 
-    component = new EventsComponent(eventsSpy, loaderSpy, tokenStorageSpy);
+    component = new EventsComponent(eventsSpy, tokenStorageSpy);
   });
 
   it('should create', () => {
@@ -18,16 +19,23 @@ describe('Events Component (Isolated Test)', () => {
   });
 
   it('should render the initial values', () => {
-    expect(component.events)
-      .withContext('should have events to be an empty array')
-      .toEqual([]);
-
     expect(component.eventAction)
       .withContext('should have eventAction to be undefined')
-      .toBeUndefined();
+      .toEqual({
+        event: Object({
+          id: '',
+          nameOfEvent: '',
+          dateOfEvent: '',
+          maxDateOfConfirmation: '',
+          nameOfCelebrated: '',
+          typeOfEvent: '',
+          userId: '',
+        }),
+        isNew: true,
+      });
 
-    expect(component.isAdmin)
-      .withContext('should have isAdmin to be false')
+    expect(component.showEventModal)
+      .withContext('should have showEventModal to be false')
       .toBeFalse();
   });
 });

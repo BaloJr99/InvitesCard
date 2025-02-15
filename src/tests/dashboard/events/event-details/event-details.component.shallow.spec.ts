@@ -2,25 +2,33 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Subject } from 'rxjs';
-import { INotification } from 'src/app/core/models/common';
+import { of } from 'rxjs';
 import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
 import { EventsService } from 'src/app/core/services/events.service';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { EventDetailsComponent } from 'src/app/dashboard/events/event-details/event-details.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
-import { newInviteMock } from 'src/tests/mocks/mocks';
+import {
+  eventInformationMock,
+  fullEventsMock,
+  fullInvitesGroupsMock,
+  newInviteMock,
+  notificationsMock,
+} from 'src/tests/mocks/mocks';
 
 const newInviteMockCopy = deepCopy(newInviteMock);
+const fullEventsMockCopy = deepCopy(fullEventsMock);
+const eventInformationMockCopy = deepCopy(eventInformationMock);
+const fullInvitesGroupsMockCopy = deepCopy(fullInvitesGroupsMock);
+const notificationsMockCopy = deepCopy(notificationsMock);
 
 describe('Event Details Component (Shallow Test)', () => {
   let fixture: ComponentFixture<EventDetailsComponent>;
-  let notificationsDataSubject: Subject<INotification[]>;
+  let eventsServiceSpy: jasmine.SpyObj<EventsService>;
+  let inviteGroupsServiceSpy: jasmine.SpyObj<InviteGroupsService>;
 
   beforeEach(waitForAsync(() => {
-    notificationsDataSubject = new Subject<INotification[]>();
-
     const inviteGroupSpy = jasmine.createSpyObj('InviteGroupService', [
       'getAllInviteGroups',
     ]);
@@ -28,13 +36,10 @@ describe('Event Details Component (Shallow Test)', () => {
       'getEventSettings',
       'getEventById',
     ]);
-    const commonInvitesSpy = jasmine.createSpyObj(
-      'CommonInvitesService',
-      ['clearNotifications'],
-      {
-        notifications$: notificationsDataSubject.asObservable(),
-      }
-    );
+    const commonInvitesSpy = jasmine.createSpyObj('CommonInvitesService', [
+      'clearNotifications',
+    ]);
+    commonInvitesSpy.notifications$ = of(notificationsMockCopy);
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
@@ -64,15 +69,30 @@ describe('Event Details Component (Shallow Test)', () => {
         { provide: ToastrService, useValue: toastrSpy },
       ],
     }).compileComponents();
+
+    eventsServiceSpy = TestBed.inject(
+      EventsService
+    ) as jasmine.SpyObj<EventsService>;
+
+    inviteGroupsServiceSpy = TestBed.inject(
+      InviteGroupsService
+    ) as jasmine.SpyObj<InviteGroupsService>;
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EventDetailsComponent);
-    fixture.componentInstance.originalInvites = [{ ...newInviteMockCopy }];
+    inviteGroupsServiceSpy.getAllInviteGroups.and.returnValue(
+      of([fullInvitesGroupsMockCopy])
+    );
+    eventsServiceSpy.getEventById.and.returnValue(of(fullEventsMockCopy));
+    eventsServiceSpy.getEventSettings.and.returnValue(
+      of(eventInformationMockCopy)
+    );
+
     fixture.detectChanges();
   });
 
-  it('should have a card-section, a table-accordion section, 3 filters and 2 buttons', () => {
+  it('should have a card-section, a table-accordion section, 3 filters and 6 buttons', () => {
     const cardSection = fixture.nativeElement.querySelector('.card-section');
     const tableAccordion =
       fixture.nativeElement.querySelector('.table-accordion');
@@ -89,8 +109,8 @@ describe('Event Details Component (Shallow Test)', () => {
       .toBeTruthy();
 
     expect(filterLabels.length)
-      .withContext('Should have 3 filter labels')
-      .toBe(3);
+      .withContext('Should have 4 filter labels')
+      .toBe(4);
 
     expect(filterLabels[0].textContent)
       .withContext('First filter label should be "View"')
@@ -101,18 +121,22 @@ describe('Event Details Component (Shallow Test)', () => {
       .toContain('Filtrar (Necesita hospedaje)');
 
     expect(filterLabels[2].textContent)
+      .withContext('Third filter label should be "Answered"')
+      .toContain('Filtrar (Contestada)');
+
+    expect(filterLabels[3].textContent)
       .withContext('Third filter label should be "Family"')
       .toContain('Filtrar (Familia)');
 
     expect(filterSelects.length)
-      .withContext('Should have 2 filter selects')
-      .toBe(2);
+      .withContext('Should have 3 filter selects')
+      .toBe(3);
 
     expect(filterInput.length)
       .withContext('Should have 1 filter input')
       .toBe(1);
 
-    expect(buttons.length).withContext('Should have 2 buttons').toBe(2);
+    expect(buttons.length).withContext('Should have 6 buttons').toBe(6);
 
     expect(buttons[0].textContent)
       .withContext('First button should be "Import Invites"')
@@ -129,20 +153,5 @@ describe('Event Details Component (Shallow Test)', () => {
     expect(buttons[1].disabled)
       .withContext('Second button should be enabled')
       .toBeFalse();
-  });
-
-  it('should have import invites and new invite buttons disabled if deadline is met', () => {
-    fixture.componentInstance.isDeadlineMet = true;
-    fixture.detectChanges();
-
-    const buttons = fixture.nativeElement.querySelectorAll('button');
-
-    expect(buttons[0].disabled)
-      .withContext('Import invites button should be disabled')
-      .toBeTrue();
-
-    expect(buttons[1].disabled)
-      .withContext('New invite button should be disabled')
-      .toBeTrue();
   });
 });

@@ -4,7 +4,6 @@ import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { InviteGroupComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-group-modal/invite-group.component';
 import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
 import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
@@ -30,10 +29,10 @@ describe('Invite Group Component (Integrated Test)', () => {
 
   beforeEach(waitForAsync(() => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['setLoading']);
     const inviteGroupsSpy = jasmine.createSpyObj('InviteGroupsService', [
       'createInviteGroup',
       'updateInviteGroup',
+      'checkInviteGroup',
     ]);
 
     TestBed.configureTestingModule({
@@ -41,7 +40,6 @@ describe('Invite Group Component (Integrated Test)', () => {
       imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         { provide: ToastrService, useValue: toastrSpy },
-        { provide: LoaderService, useValue: loaderSpy },
         { provide: InviteGroupsService, useValue: inviteGroupsSpy },
       ],
     }).compileComponents();
@@ -60,6 +58,14 @@ describe('Invite Group Component (Integrated Test)', () => {
     inviteGroupsServiceSpy.createInviteGroup.and.returnValue(
       of(messageResponseMockCopy)
     );
+    inviteGroupsServiceSpy.checkInviteGroup.and.returnValue(of(false));
+
+    fixture.componentRef.setInput('inviteGroupValue', {
+      id: '',
+      inviteGroup: '',
+      eventId: fullInvitesGroupsMockCopy.eventId,
+    });
+    fixture.detectChanges();
 
     updateFormUsingEvent(fullInvitesGroupsMockCopy.inviteGroup);
     fixture.detectChanges();
@@ -77,13 +83,17 @@ describe('Invite Group Component (Integrated Test)', () => {
   });
 
   it('inviteGroupsService updateInviteGroup() should called', () => {
-    fixture.componentInstance.createInviteGroupForm.patchValue({
+    fixture.componentRef.setInput('inviteGroupValue', {
       id: fullInvitesGroupsMockCopy.id,
+      inviteGroup: '',
+      eventId: fullInvitesGroupsMockCopy.eventId,
     });
+    fixture.detectChanges();
 
     inviteGroupsServiceSpy.updateInviteGroup.and.returnValue(
       of(messageResponseMockCopy)
     );
+    inviteGroupsServiceSpy.checkInviteGroup.and.returnValue(of(false));
 
     updateFormUsingEvent(fullInvitesGroupsMockCopy.inviteGroup);
     fixture.detectChanges();

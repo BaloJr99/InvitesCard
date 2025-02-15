@@ -22,6 +22,7 @@ const userEventsInfoMockCopy = deepCopy(userEventsInfoMock);
 describe('Users Component (Integrated Test)', () => {
   let fixture: ComponentFixture<UsersComponent>;
   let usersServiceSpy: jasmine.SpyObj<UsersService>;
+  let rolesServiceSpy: jasmine.SpyObj<RolesService>;
   let router: Router;
 
   beforeEach(waitForAsync(() => {
@@ -29,7 +30,7 @@ describe('Users Component (Integrated Test)', () => {
       'getAllUsers',
       'getUserById',
     ]);
-    const rolesSpy = jasmine.createSpyObj('RolesService', ['']);
+    const rolesSpy = jasmine.createSpyObj('RolesService', ['getAllRoles']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     TestBed.configureTestingModule({
@@ -52,11 +53,16 @@ describe('Users Component (Integrated Test)', () => {
       UsersService
     ) as jasmine.SpyObj<UsersService>;
     router = TestBed.inject(Router);
+
+    rolesServiceSpy = TestBed.inject(
+      RolesService
+    ) as jasmine.SpyObj<RolesService>;
   }));
 
   beforeEach(() => {
     usersServiceSpy.getAllUsers.and.returnValue(of([userEventsInfoMockCopy]));
     usersServiceSpy.getUserById.and.returnValue(of(searchUserMockCopy));
+    rolesServiceSpy.getAllRoles.and.returnValue(of([]));
     fixture = TestBed.createComponent(UsersComponent);
     fixture.detectChanges();
   });

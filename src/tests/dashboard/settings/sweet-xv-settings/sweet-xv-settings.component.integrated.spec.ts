@@ -28,7 +28,6 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
   let eventsServiceSpy: jasmine.SpyObj<EventsService>;
 
   const updateFormUsingEvent = (
-    eventId: string,
     primaryColor: string,
     secondaryColor: string,
     parents: string,
@@ -44,9 +43,6 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
     receptionAddress: string,
     dressCodeColor: string
   ) => {
-    fixture.componentInstance.createEventSettingsForm.patchValue({
-      eventId,
-    });
     const primaryColorInput = fixture.debugElement.query(
       By.css('#primaryColor')
     );
@@ -160,7 +156,7 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
     eventsServiceSpy.getEventById.and.returnValue(of(fullEventsMockCopy));
 
     fixture = TestBed.createComponent(SweetXvSettingsComponent);
-    fixture.componentRef.setInput('eventSettingAction', {
+    fixture.componentRef.setInput('eventSettingActionValue', {
       eventId: fullEventsMockCopy.id,
       eventType: EventType.Xv,
       isNew: true,
@@ -185,18 +181,19 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
       sweetXvSettingMockCopy.receptionTime.split(' ')[0];
     const timeOfReceptionTime =
       sweetXvSettingMockCopy.receptionTime.split(' ')[1];
-    const receptionTime = (sweetXvSettingMockCopy.receptionTime = toLocalDate(
+    const receptionTime = toLocalDate(
       `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`
-    ).split('T')[1]).substring(0, 5);
+    )
+      .split('T')[1]
+      .substring(0, 5);
 
     const dateOfMassTime = sweetXvSettingMockCopy.massTime.split(' ')[0];
     const timeOfMassTime = sweetXvSettingMockCopy.massTime.split(' ')[1];
-    const massTime = (sweetXvSettingMockCopy.massTime = toLocalDate(
-      `${dateOfMassTime}T${timeOfMassTime}.000Z`
-    ).split('T')[1]).substring(0, 5);
+    const massTime = toLocalDate(`${dateOfMassTime}T${timeOfMassTime}.000Z`)
+      .split('T')[1]
+      .substring(0, 5);
 
     updateFormUsingEvent(
-      sweetXvSettingMockCopy.eventId,
       sweetXvSettingMockCopy.primaryColor,
       sweetXvSettingMockCopy.secondaryColor,
       sweetXvSettingMockCopy.parents,
@@ -212,8 +209,6 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
       sweetXvSettingMockCopy.receptionAddress,
       sweetXvSettingMockCopy.dressCodeColor
     );
-
-    fixture.componentInstance.sweetXvSettings.isNew = true;
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));
     const saveButton = buttons[1];
@@ -232,7 +227,7 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
     );
 
     const dateOfReception = sweetXvSettingMockCopy.receptionTime.split(' ');
-    
+
     const dateOfReceptionTime = dateOfReception[0];
     const timeOfReceptionTime = dateOfReception[1];
     const receptionTime = toLocalDate(
@@ -248,14 +243,13 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
       .split('T')[1]
       .substring(0, 5);
 
-    fixture.componentRef.setInput('eventSettingAction', {
+    fixture.componentRef.setInput('eventSettingActionValue', {
       eventId: fullEventsMockCopy.id,
       eventType: EventType.SaveTheDate,
       isNew: false,
     });
 
     updateFormUsingEvent(
-      sweetXvSettingMockCopy.eventId,
       sweetXvSettingMockCopy.primaryColor,
       sweetXvSettingMockCopy.secondaryColor,
       sweetXvSettingMockCopy.parents,
@@ -271,8 +265,6 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
       sweetXvSettingMockCopy.receptionAddress,
       sweetXvSettingMockCopy.dressCodeColor
     );
-
-    fixture.componentInstance.sweetXvSettings.isNew = false;
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));
     const saveButton = buttons[1];

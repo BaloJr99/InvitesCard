@@ -298,7 +298,7 @@ describe('Profile Component (Shallow Test)', () => {
       .toContain('El número de telefono es requerido');
   });
 
-  it("Shouldn't display password and confirmPassword error message when fields are filled", () => {
+  it("Shouldn't display error message when fields are filled", () => {
     updateFormUsingEvent(
       userProfileMockCopy.id,
       userProfileMockCopy.username,

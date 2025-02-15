@@ -5,7 +5,6 @@ import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { FileReaderService } from 'src/app/core/services/fileReader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { InvitesImportModalComponent } from 'src/app/dashboard/events/event-details/invites-import-modal/invites-import-modal.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import {
@@ -34,7 +33,6 @@ describe('Invites Import Modal Component (Integrated Test)', () => {
 
   beforeEach(waitForAsync(() => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['setLoading']);
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['bulkInvites']);
     const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['read']);
 
@@ -42,7 +40,6 @@ describe('Invites Import Modal Component (Integrated Test)', () => {
       declarations: [InvitesImportModalComponent],
       imports: [ReactiveFormsModule],
       providers: [
-        { provide: LoaderService, useValue: loaderSpy },
         { provide: ToastrService, useValue: toastrSpy },
         { provide: InvitesService, useValue: invitesSpy },
         { provide: FileReaderService, useValue: fileReaderSpy },

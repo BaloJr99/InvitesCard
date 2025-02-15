@@ -47,7 +47,7 @@ describe('Accomodation Component (Shallow Test)', () => {
   });
 
   it('should have a paragraph with the section name, 2 inputs with labels and 1 send button', () => {
-    fixture.componentRef.setInput('invite', {
+    fixture.componentRef.setInput('inviteValue', {
       ...saveTheDateUserInviteMockCopy,
       needsAccomodation: null,
     });
@@ -77,11 +77,11 @@ describe('Accomodation Component (Shallow Test)', () => {
   });
 
   it('should have a warning message if the deadline is met', () => {
-    fixture.componentRef.setInput('invite', {
+    fixture.componentRef.setInput('inviteValue', {
       ...saveTheDateUserInviteMockCopy,
       needsAccomodation: null,
     });
-    fixture.componentRef.setInput('deadlineMet', true);
+    fixture.componentRef.setInput('deadlineMetValue', true);
     fixture.detectChanges();
 
     const form = fixture.debugElement.query(By.css('form'));
@@ -93,12 +93,12 @@ describe('Accomodation Component (Shallow Test)', () => {
   });
 
   it('should show the confirmed modal when the form has been filled', () => {
-    fixture.componentRef.setInput('invite', {
+    fixture.componentRef.setInput('inviteValue', {
       ...saveTheDateUserInviteMockCopy,
       needsAccomodation: true,
     });
 
-    fixture.componentRef.setInput('inviteSettings', {
+    fixture.componentRef.setInput('inviteSettingsValue', {
       ...saveTheDateSettingMockCopy,
     });
 

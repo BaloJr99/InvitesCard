@@ -1,13 +1,12 @@
 import { ActivatedRoute } from '@angular/router';
+import { EventType } from 'src/app/core/models/enum';
 import { InvitesComponent } from 'src/app/invites/invites.component';
 
 describe('Invites Component (Isolated Test)', () => {
   let component: InvitesComponent;
 
   beforeEach(() => {
-    const loaderSpy = jasmine.createSpyObj('ComponentLoaderFactory', ['']);
-
-    component = new InvitesComponent(new ActivatedRoute(), loaderSpy);
+    component = new InvitesComponent(new ActivatedRoute());
   });
 
   it('should create', () => {
@@ -17,6 +16,8 @@ describe('Invites Component (Isolated Test)', () => {
   it('should render the initial values ', () => {
     expect(component.inviteResolved)
       .withContext('The inviteResolved should be undefined')
-      .toBeUndefined();
+      .toEqual({
+        eventType: EventType.None,
+      });
   });
 });

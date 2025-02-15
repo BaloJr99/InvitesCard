@@ -27,7 +27,6 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
   let eventsServiceSpy: jasmine.SpyObj<EventsService>;
 
   const updateFormUsingEvent = (
-    eventId: string,
     primaryColor: string,
     secondaryColor: string,
     parents: string,
@@ -43,9 +42,6 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
     receptionAddress: string,
     dressCodeColor: string
   ) => {
-    fixture.componentInstance.createEventSettingsForm.patchValue({
-      eventId,
-    });
     const primaryColorInput = fixture.debugElement.query(
       By.css('#primaryColor')
     );
@@ -172,7 +168,7 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
     );
     eventsServiceSpy.getEventById.and.returnValue(of(fullEventsMockCopy));
     fixture = TestBed.createComponent(SweetXvSettingsComponent);
-    fixture.componentRef.setInput('eventSettingAction', {
+    fixture.componentRef.setInput('eventSettingActionValue', {
       eventId: fullEventsMockCopy.id,
       eventType: EventType.Xv,
       isNew: true,
@@ -294,7 +290,6 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
       .substring(0, 5);
 
     updateFormUsingEvent(
-      sweetXvSettingMockCopy.eventId,
       sweetXvSettingMockCopy.primaryColor,
       sweetXvSettingMockCopy.secondaryColor,
       sweetXvSettingMockCopy.parents,
@@ -313,9 +308,6 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
 
     const controls = fixture.componentInstance.createEventSettingsForm.controls;
 
-    expect(controls['eventId'].value)
-      .withContext('eventId control should be filled when input changes')
-      .toBe(sweetXvSettingMockCopy.eventId);
     expect(controls['primaryColor'].value)
       .withContext('primaryColor control should be filled when input changes')
       .toBe(sweetXvSettingMockCopy.primaryColor);
@@ -392,7 +384,6 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
       '',
       '',
       '',
-      '',
       ''
     );
 
@@ -420,7 +411,6 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
       .split('T')[1]
       .substring(0, 5);
     updateFormUsingEvent(
-      sweetXvSettingMockCopy.eventId,
       sweetXvSettingMockCopy.primaryColor,
       sweetXvSettingMockCopy.secondaryColor,
       sweetXvSettingMockCopy.parents,

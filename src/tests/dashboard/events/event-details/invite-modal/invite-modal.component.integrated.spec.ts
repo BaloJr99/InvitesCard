@@ -4,7 +4,6 @@ import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { InvitesService } from 'src/app/core/services/invites.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { InviteModalComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-modal.component';
 import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
 import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
@@ -19,7 +18,7 @@ const fullInvitesGroupsMockCopy = deepCopy(fullInvitesGroupsMock);
 const messageResponseMockCopy = deepCopy(messageResponseMock);
 const newInviteMockCopy = deepCopy(newInviteMock);
 
-describe('Invite Modal Component (Shallow Test)', () => {
+describe('Invite Modal Component (Integrated Test)', () => {
   let fixture: ComponentFixture<InviteModalComponent>;
   let invitesServiceSpy: jasmine.SpyObj<InvitesService>;
 
@@ -60,7 +59,6 @@ describe('Invite Modal Component (Shallow Test)', () => {
 
   beforeEach(waitForAsync(() => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['setLoading']);
     const invitesSpy = jasmine.createSpyObj('InvitesService', [
       'createInvite',
       'updateInvite',
@@ -70,7 +68,6 @@ describe('Invite Modal Component (Shallow Test)', () => {
       declarations: [InviteModalComponent],
       imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
-        { provide: LoaderService, useValue: loaderSpy },
         { provide: ToastrService, useValue: toastrSpy },
         { provide: InvitesService, useValue: invitesSpy },
       ],
@@ -84,8 +81,9 @@ describe('Invite Modal Component (Shallow Test)', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(InviteModalComponent);
     // We need to populate the inviteGroupId select with options
-    fixture.componentInstance.inviteGroups = [fullInvitesGroupsMockCopy];
-    fixture.componentInstance.eventId = newInviteMockCopy.eventId;
+    fixture.componentRef.setInput('inviteGroupsValue', [
+      fullInvitesGroupsMockCopy,
+    ]);
     fixture.detectChanges();
   });
 

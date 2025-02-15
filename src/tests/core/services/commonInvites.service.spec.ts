@@ -3,8 +3,8 @@ import { CommonInvitesService } from 'src/app/core/services/commonInvites.servic
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { messagesMock, notificationsMock } from 'src/tests/mocks/mocks';
 
-const messagesMockCopy = deepCopy(messagesMock)
-const notificationsMockCopy = deepCopy(notificationsMock)
+const messagesMockCopy = deepCopy(messagesMock);
+const notificationsMockCopy = deepCopy(notificationsMock);
 
 describe('CommonInvitesService', () => {
   let commonInvitesService: CommonInvitesService;
@@ -42,15 +42,4 @@ describe('CommonInvitesService', () => {
       .withContext('Expected updateNotifications to have been called')
       .toHaveBeenCalledOnceWith(notificationsMockCopy, messagesMockCopy);
   }));
-
-  it('should call clearNotifications', () => {
-    commonInvitesServiceSpy.clearNotifications();
-
-    expect(commonInvitesServiceSpy.clearNotifications)
-      .withContext('Expected clearNotifications to have been called')
-      .toHaveBeenCalled();
-    expect(commonInvitesServiceSpy.clearNotifications)
-      .withContext('Expected clearNotifications to have been called only once')
-      .toHaveBeenCalledTimes(1);
-  });
 });

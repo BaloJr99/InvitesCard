@@ -14,7 +14,7 @@ import { deepCopy } from 'src/app/shared/utils/tools';
 
 const newInviteMockCopy = deepCopy(newInviteMock);
 
-describe('Invites Component (Shallow Test)', () => {
+describe('Invites Component (Integrated Test)', () => {
   let fixture: ComponentFixture<InvitesComponent>;
 
   beforeEach(waitForAsync(() => {

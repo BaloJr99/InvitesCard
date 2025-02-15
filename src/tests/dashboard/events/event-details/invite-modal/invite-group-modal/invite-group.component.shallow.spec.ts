@@ -2,8 +2,8 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
+import { of } from 'rxjs';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { InviteGroupComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-group-modal/invite-group.component';
 import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
 import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
@@ -23,7 +23,6 @@ describe('Invite Group Component (Shallow Test)', () => {
   };
 
   beforeEach(waitForAsync(() => {
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const inviteGroupsSpy = jasmine.createSpyObj('InviteGroupsService', ['']);
 
@@ -31,7 +30,6 @@ describe('Invite Group Component (Shallow Test)', () => {
       declarations: [InviteGroupComponent],
       imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
-        { provide: LoaderService, useValue: loaderSpy },
         { provide: ToastrService, useValue: toastrSpy },
         { provide: InviteGroupsService, useValue: inviteGroupsSpy },
       ],
@@ -96,14 +94,19 @@ describe('Invite Group Component (Shallow Test)', () => {
       .toHaveBeenCalled();
   });
 
-  it('Expect inviteGroup change to trigger checkInviteGroup', () => {
-    spyOn(fixture.componentInstance, 'checkInviteGroup');
+  it('Expect save button to trigger inviteGroupDuplicated', () => {
+    spyOn(fixture.componentInstance, 'inviteGroupDuplicated').and.returnValue(
+      of(false)
+    );
 
-    const inviteGroup = fixture.debugElement.query(By.css('#inviteGroup'));
-    inviteGroup.nativeElement.dispatchEvent(new Event('keyup'));
+    updateFormUsingEvent(fullInvitesGroupsMockCopy.inviteGroup);
 
-    expect(fixture.componentInstance.checkInviteGroup)
-      .withContext('checkInviteGroup method should have been called')
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
+    const saveButton = buttons[1];
+    saveButton.nativeElement.click();
+
+    expect(fixture.componentInstance.inviteGroupDuplicated)
+      .withContext('inviteGroupDuplicated method should have been called')
       .toHaveBeenCalled();
   });
 

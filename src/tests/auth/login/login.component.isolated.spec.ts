@@ -9,7 +9,6 @@ describe('Login Component (Isolated Test)', () => {
   let component: LoginComponent;
   const authServiceSpy = jasmine.createSpyObj('AuthService', ['']);
   const tokenServiceSpy = jasmine.createSpyObj('TokenStorageService', ['']);
-  const loaderServiceSpy = jasmine.createSpyObj('LoaderService', ['']);
   const routerSpy = jasmine.createSpyObj('Router', ['']);
 
   const updateForm = (username: string, password: string) => {
@@ -22,8 +21,7 @@ describe('Login Component (Isolated Test)', () => {
       new FormBuilder(),
       authServiceSpy,
       routerSpy,
-      tokenServiceSpy,
-      loaderServiceSpy
+      tokenServiceSpy
     );
   });
 

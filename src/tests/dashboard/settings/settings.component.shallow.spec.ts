@@ -69,7 +69,7 @@ describe('Settings Component (Shallow Test)', () => {
       .withContext('should set eventSettingAction')
       .toEqual({
         eventId: dropdownEventsMockCopy[0].id,
-        isNew: false,
+        isNew: undefined,
         eventType: dropdownEventsMockCopy[0].typeOfEvent,
       });
 

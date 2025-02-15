@@ -1,5 +1,4 @@
 import { FormBuilder } from '@angular/forms';
-import { ISettingAction } from 'src/app/core/models/settings';
 import { SaveTheDateSettingsComponent } from 'src/app/dashboard/settings/save-the-date-settings/save-the-date-settings.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { saveTheDateSettingMock } from 'src/tests/mocks/mocks';
@@ -38,12 +37,10 @@ describe('Save The Date Settings Component (Isolated Test)', () => {
   };
 
   beforeEach(() => {
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
     const settingsSpy = jasmine.createSpyObj('SettingsService', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     component = new SaveTheDateSettingsComponent(
-      loaderSpy,
       settingsSpy,
       new FormBuilder(),
       toastrSpy
@@ -55,9 +52,6 @@ describe('Save The Date Settings Component (Isolated Test)', () => {
   });
 
   it('should render the initial values', () => {
-    expect(component.saveTheDateSettings)
-      .withContext('The eventSettings should be an empty object')
-      .toEqual({} as ISettingAction);
     expect(component.createEventSettingsForm)
       .withContext('The createEventSettingsForm should be defined')
       .toBeDefined();

@@ -58,8 +58,8 @@ describe('Accomodation Component (Integrated Test)', () => {
   });
 
   it('should call sendConfirmation when sendUserResponse is called', () => {
-    fixture.componentRef.setInput('invite', saveTheDateUserInviteMockCopy);
-    fixture.componentRef.setInput('inviteSettings', saveTheDateSettingMockCopy);
+    fixture.componentRef.setInput('inviteValue', saveTheDateUserInviteMockCopy);
+    fixture.componentRef.setInput('inviteSettingsValue', saveTheDateSettingMockCopy);
     fixture.detectChanges();
 
     const form = fixture.debugElement.query(By.css('form'));

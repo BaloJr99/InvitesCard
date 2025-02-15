@@ -5,13 +5,11 @@ describe('Invites Import Modal Component (Isolated Test)', () => {
 
   beforeEach(() => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
     const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
     component = new InvitesImportModalComponent(
       invitesSpy,
       toastrSpy,
-      loaderSpy,
       fileReaderSpy
     );
   });
@@ -21,12 +19,6 @@ describe('Invites Import Modal Component (Isolated Test)', () => {
   });
 
   it('should render initial values', () => {
-    expect(component.eventId).withContext('should have eventId empty').toBe('');
-
-    expect(component.inviteGroups)
-      .withContext('should have inviteGroups to be an array')
-      .toEqual([]);
-
     expect(component.invites)
       .withContext('should have invites as an empty array')
       .toEqual([]);

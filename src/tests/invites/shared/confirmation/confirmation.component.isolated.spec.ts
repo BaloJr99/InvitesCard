@@ -1,6 +1,5 @@
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { IUserInvite } from 'src/app/core/models/invites';
 import { ConfirmationComponent } from 'src/app/invites/shared/confirmation/confirmation.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { confirmationInviteMock } from 'src/tests/mocks/mocks';
@@ -37,13 +36,11 @@ describe('Confirmation Component (Isolated Test)', () => {
   beforeEach(() => {
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
     const socketSpy = jasmine.createSpyObj('SocketService', ['']);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
 
     component = new ConfirmationComponent(
       new FormBuilder(),
       invitesSpy,
       socketSpy,
-      loaderSpy,
       new ActivatedRoute()
     );
   });
@@ -55,12 +52,6 @@ describe('Confirmation Component (Isolated Test)', () => {
   });
 
   it('should render the initial values', () => {
-    expect(component.invite)
-      .withContext('Invite should be empty')
-      .toEqual({} as IUserInvite);
-    expect(component.blockConfirmationForm)
-      .withContext('Block confirmation form should be false')
-      .toBeFalse();
     expect(component.confirmationForm)
       .withContext('Confirmation form should be defined')
       .toBeDefined();

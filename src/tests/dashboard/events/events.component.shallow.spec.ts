@@ -2,20 +2,23 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
-import { of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { IDashboardEvent } from 'src/app/core/models/events';
 import { EventsService } from 'src/app/core/services/events.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { EventsComponent } from 'src/app/dashboard/events/events.component';
 import { DateFormatPipe } from 'src/app/shared/pipes/date-format.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
-import { dashboardEventsMock } from 'src/tests/mocks/mocks';
+import { dashboardEventsMock, userMock } from 'src/tests/mocks/mocks';
 
 const dashboardEventsMockCopy = deepCopy(dashboardEventsMock);
+const userMockCopy = deepCopy(userMock);
 
 describe('Events Component (Shallow Test)', () => {
   let fixture: ComponentFixture<EventsComponent>;
-
+  let tokenStorageServiceSpy: jasmine.SpyObj<TokenStorageService>;
   let eventsServiceSpy: jasmine.SpyObj<EventsService>;
+  const eventsSubject = new BehaviorSubject<IDashboardEvent[]>([]);
 
   beforeEach(waitForAsync(() => {
     const eventsSpy = jasmine.createSpyObj('EventsService', ['getEvents']);
@@ -37,29 +40,56 @@ describe('Events Component (Shallow Test)', () => {
     eventsServiceSpy = TestBed.inject(
       EventsService
     ) as jasmine.SpyObj<EventsService>;
+
+    tokenStorageServiceSpy = TestBed.inject(
+      TokenStorageService
+    ) as jasmine.SpyObj<TokenStorageService>;
   }));
 
   beforeEach(() => {
-    eventsServiceSpy.getEvents.and.returnValue(of([]));
+    eventsServiceSpy.getEvents.and.returnValue(eventsSubject.asObservable());
     fixture = TestBed.createComponent(EventsComponent);
     fixture.detectChanges();
   });
 
   it('should create a page with not buttons if is not admin', () => {
+    tokenStorageServiceSpy.getTokenValues.and.returnValue({
+      ...userMockCopy,
+      roles: [
+        {
+          id: '1',
+          isActive: true,
+          name: 'notAdmin',
+        },
+      ],
+    });
+    eventsSubject.next(dashboardEventsMockCopy);
+    fixture.detectChanges();
     const buttons = fixture.nativeElement.querySelectorAll('button');
     expect(buttons.length).toBe(0);
   });
 
   it('should create a page with one button if is admin', () => {
-    fixture.componentInstance.isAdmin = true;
+    tokenStorageServiceSpy.getTokenValues.and.returnValue(userMockCopy);
+    eventsSubject.next(dashboardEventsMockCopy);
     fixture.detectChanges();
 
-    const buttons = fixture.nativeElement.querySelectorAll('button');
+    const buttons = fixture.debugElement.queryAll(By.css('.buttons button'));
     expect(buttons.length).toBe(1);
   });
 
   it('should create a page with two event cards without edit button, only go to invite button', () => {
-    fixture.componentInstance.events = [...dashboardEventsMockCopy];
+    tokenStorageServiceSpy.getTokenValues.and.returnValue({
+      ...userMockCopy,
+      roles: [
+        {
+          id: '1',
+          isActive: true,
+          name: 'notAdmin',
+        },
+      ],
+    });
+    eventsSubject.next(dashboardEventsMockCopy);
     fixture.detectChanges();
 
     const eventCards = fixture.debugElement.queryAll(By.css('.card'));
@@ -74,8 +104,8 @@ describe('Events Component (Shallow Test)', () => {
   });
 
   it("should create a page with two event cards with edit buttons, only go to invite button if it's an admin", () => {
-    fixture.componentInstance.isAdmin = true;
-    fixture.componentInstance.events = [...dashboardEventsMockCopy];
+    tokenStorageServiceSpy.getTokenValues.and.returnValue(userMockCopy);
+    eventsSubject.next(dashboardEventsMockCopy);
     fixture.detectChanges();
 
     const eventCards = fixture.debugElement.queryAll(By.css('.card'));

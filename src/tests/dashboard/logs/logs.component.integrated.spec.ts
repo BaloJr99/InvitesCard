@@ -34,7 +34,7 @@ describe('Logs Component (Integrated Test)', () => {
   }));
 
   beforeEach(() => {
-    loggerServiceSpy.getLogs.and.returnValue(of([{ ...logMockCopy }]));
+    loggerServiceSpy.getLogs.and.returnValue(of([logMockCopy]));
     fixture = TestBed.createComponent(LogsComponent);
     fixture.detectChanges();
   });

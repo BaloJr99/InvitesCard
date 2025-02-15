@@ -3,7 +3,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { InvitesService } from 'src/app/core/services/invites.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { InviteModalComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-modal.component';
 import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
 import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
@@ -52,7 +51,6 @@ describe('Invite Modal Component (Shallow Test)', () => {
   };
 
   beforeEach(waitForAsync(() => {
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const invitesSpy = jasmine.createSpyObj('InviteGroupsService', ['']);
 
@@ -60,7 +58,6 @@ describe('Invite Modal Component (Shallow Test)', () => {
       declarations: [InviteModalComponent],
       imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
-        { provide: LoaderService, useValue: loaderSpy },
         { provide: ToastrService, useValue: toastrSpy },
         { provide: InvitesService, useValue: invitesSpy },
       ],
@@ -69,7 +66,10 @@ describe('Invite Modal Component (Shallow Test)', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(InviteModalComponent);
-    fixture.componentInstance.inviteGroups = [fullInvitesGroupsMockCopy];
+    // We need to populate the inviteGroupId select with options
+    fixture.componentRef.setInput('inviteGroupsValue', [
+      fullInvitesGroupsMockCopy,
+    ]);
     fixture.detectChanges();
   });
 
@@ -106,11 +106,6 @@ describe('Invite Modal Component (Shallow Test)', () => {
   });
 
   it('Expect form controls to be filled when user fills inputs', () => {
-    // We need to populate the inviteGroupId select with options
-    fixture.componentInstance.inviteGroups = [fullInvitesGroupsMockCopy];
-
-    fixture.detectChanges();
-
     updateFormUsingEvent(
       newInviteMockCopy.family,
       newInviteMockCopy.entriesNumber,

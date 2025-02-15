@@ -10,8 +10,4 @@ describe('Logs Modal Component (Isolated Test)', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should render the initial values', () => {
-    expect(component.log).toBeUndefined();
-  });
 });

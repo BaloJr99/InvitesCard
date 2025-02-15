@@ -4,22 +4,22 @@ import { CommonInvitesService } from 'src/app/core/services/commonInvites.servic
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { DashboardComponent } from 'src/app/dashboard/dashboard.component';
 import { userMock } from '../mocks/mocks';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { IMessage, INotification } from 'src/app/core/models/common';
 import { By } from '@angular/platform-browser';
 import { deepCopy } from 'src/app/shared/utils/tools';
 
 const userMockCopy = deepCopy(userMock);
 
-describe('Dashboard Component (Shallow Test)', () => {
+describe('Dashboard Component (Integrated Test)', () => {
   let fixture: ComponentFixture<DashboardComponent>;
   let tokenStorageServiceSpy: jasmine.SpyObj<TokenStorageService>;
-  let messagesDataSubject: Subject<IMessage[]>;
-  let notificationsDataSubject: Subject<INotification[]>;
+  let messagesDataSubject: BehaviorSubject<IMessage[]>;
+  let notificationsDataSubject: BehaviorSubject<INotification[]>;
 
   beforeEach(waitForAsync(() => {
-    messagesDataSubject = new Subject<IMessage[]>();
-    notificationsDataSubject = new Subject<INotification[]>();
+    messagesDataSubject = new BehaviorSubject<IMessage[]>([]);
+    notificationsDataSubject = new BehaviorSubject<INotification[]>([]);
     const tokenStorageSpy = jasmine.createSpyObj('TokenStorageService', [
       'getTokenValues',
     ]);

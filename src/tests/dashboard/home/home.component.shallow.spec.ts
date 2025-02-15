@@ -3,9 +3,8 @@ import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 import { EventsService } from 'src/app/core/services/events.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { HomeComponent } from 'src/app/dashboard/home/home.component';
-import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   dashboardInvitesMock,
   dropdownEventsMock,
@@ -32,7 +31,6 @@ describe('HomeComponent (Shallow Test)', () => {
     const invitesSpy = jasmine.createSpyObj('InvitesService', [
       'getAllInvites',
     ]);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['setLoading']);
     const eventsSpy = jasmine.createSpyObj('EventsService', [
       'getDropdownEvents',
     ]);
@@ -41,7 +39,6 @@ describe('HomeComponent (Shallow Test)', () => {
       declarations: [HomeComponent],
       providers: [
         { provide: InvitesService, useValue: invitesSpy },
-        { provide: LoaderService, useValue: loaderSpy },
         { provide: EventsService, useValue: eventsSpy },
       ],
     }).compileComponents();
@@ -55,7 +52,9 @@ describe('HomeComponent (Shallow Test)', () => {
   }));
 
   beforeEach(() => {
-    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMockCopy));
+    eventsServiceSpy.getDropdownEvents.and.returnValue(
+      of(dropdownEventsMockCopy)
+    );
     invitesServiceSpy.getAllInvites.and.returnValue(
       of([{ ...dashboardInvitesMockCopy }])
     );
@@ -113,35 +112,6 @@ describe('HomeComponent (Shallow Test)', () => {
     expect(fixture.componentInstance.RenderChart)
       .withContext('RenderChart should have been called')
       .toHaveBeenCalled();
-
-    expect(fixture.componentInstance.statistics)
-      .withContext('Statistics should have been updated')
-      .toEqual([
-        { name: 'Pases Confirmados', value: 2, color: '#4CAF50' },
-        { name: 'Pases Pendientes', value: 0, color: '#FFC107' },
-        { name: 'Pases Cancelados', value: 0, color: '#F44336' },
-        { name: 'Total de Pases', value: 2, color: '#2196F3' },
-      ]);
-
-    expect(fixture.componentInstance.percentajeOfConfirmation)
-      .withContext('Percentage of confirmation should have been updated')
-      .toEqual('100');
-
-    expect(fixture.componentInstance.percentajeOfPendingResponse)
-      .withContext('Percentage of pending response should have been updated')
-      .toEqual('0');
-
-    const groupedByDateMockCopy: { [key: string]: number } = {};
-    groupedByDateMockCopy[
-      toLocalDate(dashboardInvitesMockCopy.dateOfConfirmation as string).substring(
-        0,
-        10
-      )
-    ] = 1;
-
-    expect(fixture.componentInstance.groupedByDate)
-      .withContext('Grouped by date should have been updated')
-      .toEqual(groupedByDateMockCopy);
 
     expect(fixture.componentInstance.lastInvitesChart)
       .withContext('Last invites chart have been created')

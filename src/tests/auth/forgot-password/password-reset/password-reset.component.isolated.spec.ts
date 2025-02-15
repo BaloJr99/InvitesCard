@@ -9,7 +9,6 @@ const loginDataMockCopy = deepCopy(loginDataMock);
 describe('PasswordResetComponent Isolated', () => {
   let component: PasswordResetComponent;
   const authServiceSpy = jasmine.createSpyObj('AuthService', ['']);
-  const loaderServiceSpy = jasmine.createSpyObj('LoaderService', ['']);
 
   const updateForm = (password: string, confirmPassword: string) => {
     component.passwordResetForm.controls['password'].setValue(password);
@@ -22,8 +21,7 @@ describe('PasswordResetComponent Isolated', () => {
     component = new PasswordResetComponent(
       new ActivatedRoute(),
       new FormBuilder(),
-      authServiceSpy,
-      loaderServiceSpy
+      authServiceSpy
     );
   });
 

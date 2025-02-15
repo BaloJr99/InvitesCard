@@ -1,5 +1,4 @@
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { AccomodationComponent } from 'src/app/invites/save-the-date/accomodations/accomodation.component';
 
 describe('Accomodation Component (Isolated Test)', () => {
@@ -7,16 +6,8 @@ describe('Accomodation Component (Isolated Test)', () => {
 
   beforeEach(() => {
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
-    const socketSpy = jasmine.createSpyObj('SocketService', ['']);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
 
-    component = new AccomodationComponent(
-      new FormBuilder(),
-      invitesSpy,
-      socketSpy,
-      loaderSpy,
-      new ActivatedRoute()
-    );
+    component = new AccomodationComponent(new FormBuilder(), invitesSpy);
   });
 
   it('should create', () => {
@@ -26,12 +17,6 @@ describe('Accomodation Component (Isolated Test)', () => {
   });
 
   it('should render the initial values', () => {
-    expect(component.invite)
-      .withContext('Invite should be undefined')
-      .toBeUndefined();
-    expect(component.blockAccomodationForm)
-      .withContext('Block accomodation form should be false')
-      .toBeFalse();
     expect(component.accomodationForm)
       .withContext('Accomodation form should be defined')
       .toBeDefined();

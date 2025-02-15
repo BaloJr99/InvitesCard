@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { NavigationStart, Router } from '@angular/router';
+import { of } from 'rxjs';
 import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
@@ -21,18 +23,23 @@ describe('Navbar Component (Shallow Test)', () => {
 
     const commonInvitesSpy = jasmine.createSpyObj('CommonInvitesService', ['']);
 
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    routerSpy.events = of(new NavigationStart(0, 'http://localhost:4200'));
+
     TestBed.configureTestingModule({
       declarations: [NavbarComponent],
       providers: [
         { provide: InvitesService, useValue: invitesSpy },
         { provide: TokenStorageService, useValue: tokenStorageSpy },
         { provide: CommonInvitesService, useValue: commonInvitesSpy },
+        { provide: Router, useValue: routerSpy },
       ],
     }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NavbarComponent);
+    fixture.componentRef.setInput('notificationsValue', notificationsMockCopy);
     fixture.detectChanges();
   });
 

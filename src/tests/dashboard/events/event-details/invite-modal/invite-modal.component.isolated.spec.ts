@@ -29,12 +29,10 @@ describe('Invite Modal Component (Isolated Test)', () => {
   beforeEach(() => {
     const inviteModalSpy = jasmine.createSpyObj('InviteModalComponent', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
     component = new InviteModalComponent(
       inviteModalSpy,
       new FormBuilder(),
-      toastrSpy,
-      loaderSpy
+      toastrSpy
     );
   });
 
@@ -43,14 +41,6 @@ describe('Invite Modal Component (Isolated Test)', () => {
   });
 
   it('should render initial values', () => {
-    expect(component.eventId)
-      .withContext('should have eventId to be undefined')
-      .toBeUndefined();
-
-    expect(component.inviteGroups)
-      .withContext('should have inviteGroups to be undefined')
-      .toBeUndefined();
-
     expect(component.createInviteForm)
       .withContext('should have createInviteForm to be defined')
       .toBeDefined();

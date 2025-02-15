@@ -22,6 +22,7 @@ const upsertUserMockCopy = deepCopy(upsertUserMock);
 describe('User Modal Component (Integrated Test)', () => {
   let fixture: ComponentFixture<UserModalComponent>;
   let usersServiceSpy: jasmine.SpyObj<UsersService>;
+  let rolesServiceSpy: jasmine.SpyObj<RolesService>;
 
   const updateFormUsingEvent = (
     id: string,
@@ -69,7 +70,7 @@ describe('User Modal Component (Integrated Test)', () => {
       'updateUser',
       'checkUsername',
     ]);
-    const rolesSpy = jasmine.createSpyObj('RolesService', ['']);
+    const rolesSpy = jasmine.createSpyObj('RolesService', ['getAllRoles']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     TestBed.configureTestingModule({
@@ -85,16 +86,31 @@ describe('User Modal Component (Integrated Test)', () => {
     usersServiceSpy = TestBed.inject(
       UsersService
     ) as jasmine.SpyObj<UsersService>;
+    rolesServiceSpy = TestBed.inject(
+      RolesService
+    ) as jasmine.SpyObj<RolesService>;
   }));
 
   beforeEach(() => {
     usersServiceSpy.createUser.and.returnValue(of(messageResponseMockCopy));
     usersServiceSpy.updateUser.and.returnValue(of(messageResponseMockCopy));
     usersServiceSpy.checkUsername.and.returnValue(of(false));
+    rolesServiceSpy.getAllRoles.and.returnValue(of([roleMockCopy]));
 
     fixture = TestBed.createComponent(UserModalComponent);
-    fixture.componentInstance.roles = [roleMockCopy];
-    fixture.componentInstance.filteredRoles = [roleMockCopy];
+    fixture.componentRef.setInput('userActionValue', {
+      user: {
+        id: '',
+        username: '',
+        email: '',
+        isActive: true,
+        roles: [],
+      },
+      isNew: true,
+      roleChanged: undefined,
+    });
+
+    fixture.componentRef.setInput('showModalValue', true);
     fixture.detectChanges();
   });
 

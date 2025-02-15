@@ -19,13 +19,11 @@ describe('Change Password Component (Isolated Test)', () => {
   beforeEach(() => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const authSpy = jasmine.createSpyObj('AuthService', ['']);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['']);
 
     component = new ChangePasswordComponent(
       new FormBuilder(),
       toastrSpy,
-      authSpy,
-      loaderSpy
+      authSpy
     );
   });
 

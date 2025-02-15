@@ -24,6 +24,7 @@ import {
 import {
   IBulkMessageResponse,
   ICommonModal,
+  IError,
   IMessage,
   IMessageResponse,
   INotification,
@@ -178,7 +179,6 @@ export const commonModalMock: ICommonModal = {
 
 export const fullEventsMock: IFullEvent = {
   id: 'dc7b4321-1379-4be5-8070-91e28ae8fd5d',
-  allowCreateInvites: 1,
   dateOfEvent: '2025-02-28T06:00:00.000Z',
   maxDateOfConfirmation: '2025-02-14T06:00:00.000Z',
   nameOfCelebrated: 'Test',
@@ -190,13 +190,11 @@ export const fullEventsMock: IFullEvent = {
 export const dashboardEventsMock: IDashboardEvent[] = [
   {
     id: fullEventsMock.id,
-    allowCreateInvites: fullEventsMock.allowCreateInvites,
     dateOfEvent: fullEventsMock.dateOfEvent,
     nameOfEvent: fullEventsMock.nameOfEvent,
   },
   {
     id: 'd87ab8cc-fa70-4b14-b5e0-b9da10b396bf',
-    allowCreateInvites: 0,
     dateOfEvent: '2025-03-01T06:00:00.000Z',
     nameOfEvent: 'Test Event 2',
   },
@@ -835,3 +833,8 @@ export const showGiftsSection: IInviteSection[] = [
     draggable: true,
   },
 ];
+
+export const errorMock: IError = {
+  hasError: true,
+  serverError: null,
+};

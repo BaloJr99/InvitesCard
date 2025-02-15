@@ -3,8 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { of, Subject } from 'rxjs';
-import { INotification } from 'src/app/core/models/common';
+import { of } from 'rxjs';
 import { EventType } from 'src/app/core/models/enum';
 import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
 import { EventsService } from 'src/app/core/services/events.service';
@@ -26,6 +25,7 @@ import {
   fullInvitesGroupsMock,
   newInviteMock,
   notConfirmedInviteMock,
+  notificationsMock,
 } from 'src/tests/mocks/mocks';
 
 const confirmedInviteMockCopy = deepCopy(confirmedInviteMock);
@@ -34,13 +34,12 @@ const fullEventsMockCopy = deepCopy(fullEventsMock);
 const fullInvitesGroupsMockCopy = deepCopy(fullInvitesGroupsMock);
 const newInviteMockCopy = deepCopy(newInviteMock);
 const notConfirmedInviteMockCopy = deepCopy(notConfirmedInviteMock);
+const notificationsMockCopy = deepCopy(notificationsMock);
 
 describe('Event Details Component (Integrated Test)', () => {
   let fixture: ComponentFixture<EventDetailsComponent>;
   let inviteGroupsServiceSpy: jasmine.SpyObj<InviteGroupsService>;
   let eventsServiceSpy: jasmine.SpyObj<EventsService>;
-  let commonInvitesServiceSpy: jasmine.SpyObj<CommonInvitesService>;
-  let notificationsDataSubject: Subject<INotification[]>;
 
   const markCheckbox = (rowIndex: number) => {
     const table = fixture.debugElement.query(By.css('table'));
@@ -52,7 +51,6 @@ describe('Event Details Component (Integrated Test)', () => {
   };
 
   beforeEach(waitForAsync(() => {
-    notificationsDataSubject = new Subject<INotification[]>();
     const inviteGroupsSpy = jasmine.createSpyObj('InviteGroupsService', [
       'getAllInviteGroups',
     ]);
@@ -60,13 +58,11 @@ describe('Event Details Component (Integrated Test)', () => {
       'getEventSettings',
       'getEventById',
     ]);
-    const commonInvitesSpy = jasmine.createSpyObj(
-      'CommonInvitesService',
-      ['clearNotifications', 'updateNotifications'],
-      {
-        notifications$: notificationsDataSubject.asObservable(),
-      }
-    );
+    const commonInvitesSpy = jasmine.createSpyObj('CommonInvitesService', [
+      'clearNotifications',
+      'updateNotifications',
+    ]);
+    commonInvitesSpy.notifications$ = of(notificationsMockCopy);
     const invitesServiceSpy = jasmine.createSpyObj('InvitesService', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
@@ -116,35 +112,22 @@ describe('Event Details Component (Integrated Test)', () => {
     eventsServiceSpy = TestBed.inject(
       EventsService
     ) as jasmine.SpyObj<EventsService>;
-
-    commonInvitesServiceSpy = TestBed.inject(
-      CommonInvitesService
-    ) as jasmine.SpyObj<CommonInvitesService>;
   }));
 
   beforeEach(() => {
     inviteGroupsServiceSpy.getAllInviteGroups.and.returnValue(
-      of([{ ...fullInvitesGroupsMockCopy }])
+      of([fullInvitesGroupsMockCopy])
     );
+    eventsServiceSpy.getEventById.and.returnValue(of(fullEventsMockCopy));
     eventsServiceSpy.getEventSettings.and.returnValue(
-      of({ ...eventInformationMockCopy, typeOfEvent: EventType.Xv })
-    );
-    eventsServiceSpy.getEventById.and.returnValue(
-      of({ ...fullEventsMockCopy })
+      of({
+        ...eventInformationMockCopy,
+        typeOfEvent: EventType.Xv,
+      })
     );
 
     fixture = TestBed.createComponent(EventDetailsComponent);
     fixture.detectChanges();
-  });
-
-  it('ngOnInit should call updateNotifications, clearNotifications', () => {
-    expect(commonInvitesServiceSpy.updateNotifications)
-      .withContext('Expected to call updateNotifications')
-      .toHaveBeenCalled();
-
-    expect(commonInvitesServiceSpy.clearNotifications)
-      .withContext('Expected to call clearNotifications')
-      .toHaveBeenCalled();
   });
 
   it('should have 4 event cards', () => {
@@ -173,7 +156,8 @@ describe('Event Details Component (Integrated Test)', () => {
   it('should filter by family name', () => {
     const filterInput = fixture.debugElement.query(By.css('#filterByFamily'));
     filterInput.nativeElement.value = 'Test Family';
-    filterInput.nativeElement.dispatchEvent(new Event('input'));
+    const searchButton = fixture.debugElement.query(By.css('#searchInvites'));
+    searchButton.nativeElement.click();
     fixture.detectChanges();
 
     let rows = fixture.debugElement.queryAll(By.css('tbody tr'));
@@ -182,7 +166,7 @@ describe('Event Details Component (Integrated Test)', () => {
       .toBe(3);
 
     filterInput.nativeElement.value = 'Familia';
-    filterInput.nativeElement.dispatchEvent(new Event('keyup'));
+    searchButton.nativeElement.click();
     fixture.detectChanges();
 
     rows = fixture.debugElement.queryAll(By.css('tbody tr'));
@@ -196,7 +180,8 @@ describe('Event Details Component (Integrated Test)', () => {
       By.css('#filterByNeedsAccomodation')
     );
     filterInput.nativeElement.value = 'true';
-    filterInput.nativeElement.dispatchEvent(new Event('change'));
+    const searchButton = fixture.debugElement.query(By.css('#searchInvites'));
+    searchButton.nativeElement.click();
     fixture.detectChanges();
 
     let rows = fixture.debugElement.queryAll(By.css('tbody tr'));
@@ -205,7 +190,7 @@ describe('Event Details Component (Integrated Test)', () => {
       .toBe(2);
 
     filterInput.nativeElement.value = 'false';
-    filterInput.nativeElement.dispatchEvent(new Event('change'));
+    searchButton.nativeElement.click();
     fixture.detectChanges();
 
     rows = fixture.debugElement.queryAll(By.css('tbody tr'));
@@ -219,7 +204,8 @@ describe('Event Details Component (Integrated Test)', () => {
       By.css('#filterByInviteViewed')
     );
     filterInput.nativeElement.value = 'true';
-    filterInput.nativeElement.dispatchEvent(new Event('change'));
+    const searchButton = fixture.debugElement.query(By.css('#searchInvites'));
+    searchButton.nativeElement.click();
     fixture.detectChanges();
 
     let rows = fixture.debugElement.queryAll(By.css('tbody tr'));
@@ -228,7 +214,7 @@ describe('Event Details Component (Integrated Test)', () => {
       .toBe(2);
 
     filterInput.nativeElement.value = 'false';
-    filterInput.nativeElement.dispatchEvent(new Event('change'));
+    searchButton.nativeElement.click();
     fixture.detectChanges();
 
     rows = fixture.debugElement.queryAll(By.css('tbody tr'));
@@ -238,7 +224,7 @@ describe('Event Details Component (Integrated Test)', () => {
   });
 
   it('first button should call editInvite', () => {
-    spyOn(fixture.componentInstance, 'openEditModal');
+    spyOn(fixture.componentInstance, 'openInviteModal');
 
     const table = fixture.debugElement.query(By.css('table'));
     const rows = table.query(By.css('tbody')).queryAll(By.css('tr'));
@@ -246,8 +232,8 @@ describe('Event Details Component (Integrated Test)', () => {
 
     buttons[0].nativeElement.click();
 
-    expect(fixture.componentInstance.openEditModal)
-      .withContext('Expected to call openEditModal')
+    expect(fixture.componentInstance.openInviteModal)
+      .withContext('Expected to call openInviteModal')
       .toHaveBeenCalled();
   });
 

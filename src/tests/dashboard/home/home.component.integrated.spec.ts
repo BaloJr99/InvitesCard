@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { EventsService } from 'src/app/core/services/events.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { HomeComponent } from 'src/app/dashboard/home/home.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import {
@@ -13,7 +12,7 @@ import {
 const dashboardInvitesMockCopy = deepCopy(dashboardInvitesMock);
 const dropdownEventsMockCopy = deepCopy(dropdownEventsMock);
 
-describe('HomeComponent (Shallow Test)', () => {
+describe('HomeComponent (Integrated Test)', () => {
   let fixture: ComponentFixture<HomeComponent>;
   let eventsServiceSpy: jasmine.SpyObj<EventsService>;
   let invitesServiceSpy: jasmine.SpyObj<InvitesService>;
@@ -22,7 +21,6 @@ describe('HomeComponent (Shallow Test)', () => {
     const invitesSpy = jasmine.createSpyObj('InvitesService', [
       'getAllInvites',
     ]);
-    const loaderSpy = jasmine.createSpyObj('LoaderService', ['setLoading']);
     const eventsSpy = jasmine.createSpyObj('EventsService', [
       'getDropdownEvents',
     ]);
@@ -31,7 +29,6 @@ describe('HomeComponent (Shallow Test)', () => {
       declarations: [HomeComponent],
       providers: [
         { provide: InvitesService, useValue: invitesSpy },
-        { provide: LoaderService, useValue: loaderSpy },
         { provide: EventsService, useValue: eventsSpy },
       ],
     }).compileComponents();
