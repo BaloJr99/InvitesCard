@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {} from 'bootstrap';
+import { map } from 'rxjs';
 import { IZodErrors } from 'src/app/core/models/common';
 import { ErrorModalService } from 'src/app/core/services/error.service';
 
@@ -8,36 +9,42 @@ import { ErrorModalService } from 'src/app/core/services/error.service';
   templateUrl: './error-modal.component.html',
   styleUrls: ['./error-modal.component.css'],
 })
-export class ErrorModalComponent implements OnInit {
-  errorTriggered = false;
-  errorMessage = '';
-
+export class ErrorModalComponent {
   constructor(public errorService: ErrorModalService) {}
 
-  ngOnInit(): void {
-    this.errorService.errorResponse$.subscribe({
-      next: (information) => {
-        if (information.hasError && information.serverError) {
-          this.errorMessage = information.serverError.error;
-          if (information.serverError.status === 422) {
-            const zodErrorMessage = information.serverError.error as IZodErrors[];
-            this.errorMessage = zodErrorMessage
-              .map((error, index) => {
-                  return `${index === 0 ? '' : '\n'}${error.path.join(' ').toLocaleUpperCase()}: ${error.message}`
-              }).join(', ');
-          }
-        }
+  vm$ = this.errorService.errorResponse$.pipe(
+    map((information) => {
+      let errorTriggered = false;
+      let errorMessage = '';
 
-        if (
-          information.serverError?.status !== undefined &&
-          information.serverError.status !== 401 &&
-          information.serverError.status !== 404 &&
-          information.serverError.status !== 409
-        ) {
-          this.errorTriggered = information.hasError;
-          $('#errorModal').modal('show');
+      if (information.hasError && information.serverError) {
+        errorMessage = information.serverError.error;
+        if (information.serverError.status === 422) {
+          const zodErrorMessage = information.serverError.error as IZodErrors[];
+          errorMessage = zodErrorMessage
+            .map((error, index) => {
+              return `${index === 0 ? '' : '\n'}${error.path
+                .join(' ')
+                .toLocaleUpperCase()}: ${error.message}`;
+            })
+            .join(', ');
         }
-      },
-    });
-  }
+      }
+
+      if (
+        information.serverError?.status !== undefined &&
+        information.serverError.status !== 401 &&
+        information.serverError.status !== 404 &&
+        information.serverError.status !== 409
+      ) {
+        errorTriggered = information.hasError;
+        $('#errorModal').modal('show');
+      }
+
+      return {
+        errorTriggered,
+        errorMessage,
+      };
+    })
+  );
 }

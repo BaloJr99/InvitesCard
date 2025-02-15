@@ -1,4 +1,4 @@
-<main class="full-invite container gx-0 gx-lg-4" *ngIf="userInvite">
+<main class="full-invite container gx-0 gx-lg-4" *ngIf="vm$ | async as vm">
   <div class="row gx-0 gx-lg-4">
     <div class="col-12 col-lg-6">
       <div class="info">
@@ -13,7 +13,7 @@
         <div class="header">
           <h1>SAVE<span> The </span>DATE</h1>
           <p class="names">
-            <ng-container *ngFor="let celebrate of userInvite.nameOfCelebrated.split(';'); index as i">
+            <ng-container *ngFor="let celebrate of vm.userInvite.nameOfCelebrated.split(';'); index as i">
               {{celebrate}} 
               <span *ngIf="i === 0">&nbsp;&&nbsp;</span>
             </ng-container>
@@ -24,11 +24,11 @@
     <div class="col-12 col-lg-6">
       <div class="reception invite-section">
         <p>
-          <span>{{shortDate.toUpperCase()}}</span> 
+          <span>{{vm.shortDate.toUpperCase()}}</span> 
           <svg width="25" height="25" viewBox="0 0 256 256">
             <path fill="currentColor" d="M136 24v208a8 8 0 0 1-16 0V24a8 8 0 0 1 16 0"/>
           </svg>
-          <span>{{eventSettings.receptionPlace}}</span>
+          <span>{{vm.parsedEventSettings.receptionPlace}}</span>
         </p>
         <hr>
         <table>
@@ -44,7 +44,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let week of dateDictionary">
+            <tr *ngFor="let week of vm.dateDictionary">
               <ng-container *ngFor="let dayOfTheWeek of week.days">
                 <td [ngClass]="{'dateOfEvent': dayOfTheWeek.isDateOfEvent}">
                   <i class="fa-solid fa-heart" *ngIf="dayOfTheWeek.isDateOfEvent"></i>
@@ -61,7 +61,7 @@
         <p class="banner" i18n><strong>Próximamente: </strong>Invitación oficial.</p>
       </div>
       <div class="invitesConfirmation invite-section">
-        <app-accomodation [invite]="userInvite" [inviteSettings]="eventSettings" [deadlineMet]="deadlineMet"></app-accomodation>
+        <app-accomodation [inviteValue]="vm.userInvite" [inviteSettingsValue]="vm.parsedEventSettings" [deadlineMetValue]="vm.deadlineMet"></app-accomodation>
       </div>
     </div>
   </div>

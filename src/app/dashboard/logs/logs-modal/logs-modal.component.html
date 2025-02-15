@@ -1,27 +1,27 @@
 <!-- Modal -->
-<div class="modal fade" id="logModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal fade" id="logModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" *ngIf="vm$ | async as vm">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="modalLabel" i18n>Log</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" i18n-aria-label aria-label="Cerrar"></button>
       </div>
-      <div class="modal-body" *ngIf="log">
+      <div class="modal-body">
         <div class="mb-3">
           <label for="dateOfError" class="form-label" i18n>Fecha del error</label>
-          <input id="dateOfError" type="text" class="form-control" value="{{ log.dateOfError | date }}" disabled>
+          <input id="dateOfError" type="text" class="form-control" value="{{ vm.dateOfError | date }}" disabled>
         </div>
         <div class="mb-3">
           <label for="customError" class="form-label" i18n>Error</label>
-          <input id="customError" type="text" class="form-control" value="{{ log.customError }}" disabled>
+          <input id="customError" type="text" class="form-control" value="{{ vm.customError }}" disabled>
         </div>
         <div class="mb-3">
           <label for="exceptionMessage" class="form-label" i18n>Excepción</label>
-          <textarea id="exceptionMessage" class="form-control" disabled>{{ log.exceptionMessage }}</textarea>
+          <textarea id="exceptionMessage" class="form-control" disabled>{{ vm.exceptionMessage }}</textarea>
         </div>
         <div class="mb-3">
           <label for="userId" class="form-label" i18n>Usuario</label>
-          <input id="userId" type="text" class="form-control" value="{{ log.userId }}" disabled>
+          <input id="userId" type="text" class="form-control" value="{{ vm.userId }}" disabled>
         </div>
       </div>
       <div class="modal-footer">

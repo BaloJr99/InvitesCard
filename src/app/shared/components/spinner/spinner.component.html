@@ -1,5 +1,7 @@
-<div class="cssload-container" [ngClass]="showSpinner || showInviteLoader ? 'show' : 'hide'">
-  <div class="cssload-speeding-wheel" *ngIf="showSpinner"></div>
-  <iframe title="Loading" *ngIf="showInviteLoader" src="https://lottie.host/embed/9d3a1db5-0d52-4b62-a801-1f5edb5dbddd/vTnaQHW4G4.json"></iframe>
-  <span>{{ text }}</span>
-</div>
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="cssload-container" [ngClass]="vm.showSpinner || vm.showInviteLoader ? 'show' : 'hide'">
+    <div class="cssload-speeding-wheel" *ngIf="vm.showSpinner"></div>
+    <iframe title="Loading" *ngIf="vm.showInviteLoader" src="https://lottie.host/embed/9d3a1db5-0d52-4b62-a801-1f5edb5dbddd/vTnaQHW4G4.json"></iframe>
+    <span>{{ vm.text }}</span>
+  </div>
+</ng-container>

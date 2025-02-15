@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
+import { BehaviorSubject, combineLatest, map, mergeMap, tap } from 'rxjs';
 import { IEmitAction, ITable, ITableHeaders } from 'src/app/core/models/common';
 import { ButtonAction, RoleActionEvent } from 'src/app/core/models/enum';
 import { IRole, IRoleAction } from 'src/app/core/models/roles';
@@ -9,7 +10,6 @@ import {
   IUserAction,
   IUserEventsInfo,
 } from 'src/app/core/models/users';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { UsersService } from 'src/app/core/services/users.service';
 
 @Component({
@@ -18,40 +18,73 @@ import { UsersService } from 'src/app/core/services/users.service';
   styleUrl: './users.component.css',
   encapsulation: ViewEncapsulation.None,
 })
-export class UsersComponent implements OnInit {
-  users: IUserEventsInfo[] = [];
-  userAction!: IUserAction;
+export class UsersComponent {
+  private users = new BehaviorSubject<IUserEventsInfo[]>([]);
+  users$ = this.users.asObservable();
+
+  private userAction = new BehaviorSubject<IUserAction>({
+    isNew: undefined,
+    user: {
+      id: '',
+      username: '',
+      email: '',
+      roles: [],
+      isActive: true,
+    },
+    roleChanged: undefined,
+  } as IUserAction);
+  userAction$ = this.userAction.asObservable();
+
+  private roleAction = new BehaviorSubject<IRoleAction>({
+    action: RoleActionEvent.None,
+    role: {
+      id: '',
+      name: '',
+      isActive: true,
+    },
+  });
+  roleAction$ = this.roleAction.asObservable();
+
+  private showUserModal = new BehaviorSubject<boolean>(false);
+  showUserModal$ = this.showUserModal.asObservable();
+  private showRoleModal = new BehaviorSubject<boolean>(false);
+  showRoleModal$ = this.showRoleModal;
+  private refreshRoles = new BehaviorSubject<boolean>(false);
+  refreshRoles$ = this.refreshRoles.asObservable();
+
   roleSelected: IRole | undefined = undefined;
   savedUser: IUpsertUser | undefined = undefined;
-  table: ITable = {
-    headers: [] as ITableHeaders[],
-    data: [] as { [key: string]: string }[],
-  } as ITable;
 
-  constructor(
-    private usersService: UsersService,
-    private loaderService: LoaderService,
-    private router: Router
-  ) {}
+  constructor(private usersService: UsersService, private router: Router) {}
 
-  ngOnInit(): void {
-    this.loaderService.setLoading(true, $localize`Cargando usuarios`);
+  vm$ = this.usersService.getAllUsers().pipe(
+    tap((allUsers) => this.users.next(allUsers)),
+    mergeMap(() =>
+      combineLatest([
+        this.users$,
+        this.userAction$,
+        this.roleAction$,
+        this.showUserModal$,
+        this.showRoleModal$,
+      ]).pipe(
+        map(([users, userAction, roleAction, showUserModal, showRoleModal]) => {
+          const table = this.getTableConfiguration(users);
 
-    this.usersService
-      .getAllUsers()
-      .subscribe({
-        next: (users) => {
-          this.users = users;
-          this.table = this.getTableConfiguration(users);
-        },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
-      });
-  }
+          return {
+            table,
+            userAction,
+            roleAction,
+            showUserModal,
+            showRoleModal,
+          };
+        })
+      )
+    )
+  );
 
   updateUsers(userAction: IUserAction) {
     const userInfo = userAction.user;
+
     const userEventsInfo = {
       id: userInfo.id,
       username: userInfo.username,
@@ -59,64 +92,102 @@ export class UsersComponent implements OnInit {
       isActive: userAction.isNew ? true : userInfo.isActive,
     } as IUserEventsInfo;
 
+    const oldUsers = this.users.getValue();
+
     if (userAction.isNew) {
-      this.users = this.users.concat({
+      oldUsers.push({
         ...userEventsInfo,
         numEntries: 0,
         numEvents: 0,
       });
     } else {
-      this.users = this.users.map((originalUser) =>
-        originalUser.id === userInfo.id
-          ? {
-              ...userEventsInfo,
-              numEntries: originalUser.numEntries,
-              numEvents: originalUser.numEvents,
-            }
-          : originalUser
-      );
+      const userIndex = oldUsers.findIndex((u) => u.id === userInfo.id);
+      oldUsers[userIndex] = {
+        ...userEventsInfo,
+        numEntries: oldUsers[userIndex].numEntries,
+        numEvents: oldUsers[userIndex].numEvents,
+      };
     }
-    this.users.sort((a, b) =>
+
+    oldUsers.sort((a, b) =>
       a.username.toLowerCase().localeCompare(b.username.toLowerCase())
     );
 
-    this.table = this.getTableConfiguration(this.users);
+    this.users.next(oldUsers);
+    this.showUserModal.next(false);
   }
 
-  editUser(userId: string): void {
-    this.usersService
-      .getUserById(userId)
-      .subscribe({
+  openUserModal(userId: string): void {
+    if (userId === '') {
+      this.savedUser = undefined;
+      this.userAction.next({
+        user: {
+          id: '',
+          username: '',
+          email: '',
+          isActive: true,
+          roles: [],
+        },
+        isNew: true,
+        roleChanged: undefined,
+      });
+    } else {
+      this.usersService.getUserById(userId).subscribe({
         next: (user) => {
-          this.userAction = {
+          this.userAction.next({
             user: {
               ...user,
               roles: user.roles.map((r) => r.id),
             },
             isNew: false,
-          };
-
-          $('#usersModal').modal('show');
+            roleChanged: undefined,
+          });
         },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
       });
+    }
+
+    this.showUserModal.next(true);
+  }
+
+  openRoleModal(role: IRole | undefined): void {
+    if (role) {
+      this.roleAction.next({
+        action: RoleActionEvent.Update,
+        role: role,
+      });
+    } else {
+      this.roleAction.next({
+        action: RoleActionEvent.Create,
+        role: {
+          id: '',
+          name: '',
+          isActive: true,
+        },
+      });
+    }
+
+    this.showRoleModal.next(true);
+  }
+
+  closeUserModal(): void {
+    this.showUserModal.next(false);
+  }
+
+  closeRoleModal(): void {
+    this.showRoleModal.next(false);
   }
 
   setSelectedRole(savedUser: ISavedUserRole): void {
-    this.roleSelected = savedUser.role;
     this.savedUser = savedUser.savedUser;
+    this.closeUserModal();
+    this.openRoleModal(savedUser.role);
   }
 
   updateSavedInformation(roleAction: IRoleAction): void {
-    // This means that the we are updating an active user
-    if (
-      (roleAction.action === RoleActionEvent.Update ||
-        roleAction.action === RoleActionEvent.None) &&
-      this.savedUser
-    ) {
-      this.userAction = {
+    this.showRoleModal.next(false);
+
+    if (this.savedUser && roleAction.action === RoleActionEvent.Update) {
+      this.userAction.next({
         isNew: false,
         user: {
           id: this.savedUser.id,
@@ -125,8 +196,9 @@ export class UsersComponent implements OnInit {
           roles: this.savedUser.roles,
           isActive: this.savedUser.isActive,
         },
-      };
-      $('#usersModal').modal('show');
+        roleChanged: roleAction.role,
+      });
+      this.showUserModal.next(true);
     }
   }
 
@@ -134,7 +206,7 @@ export class UsersComponent implements OnInit {
     const data = action.data as { [key: string]: string };
     const userId = data[$localize`Acciones`];
     if (action.action === ButtonAction.Edit) {
-      this.editUser(userId);
+      this.openUserModal(userId);
     } else if (action.action === ButtonAction.View) {
       this.router.navigate(['/dashboard/profile', userId]);
     }

@@ -3,43 +3,57 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnInit,
   Output,
   ViewChildren,
 } from '@angular/core';
-import { FormBuilder, FormControlName, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControlName,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { RolesService } from 'src/app/core/services/roles.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { IRole, IRoleAction } from 'src/app/core/models/roles';
 import { controlIsDuplicated } from 'src/app/shared/utils/validators/controlIsDuplicated';
 import { RoleActionEvent } from 'src/app/core/models/enum';
+import { BehaviorSubject, combineLatest, map, Observable, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-user-role',
   templateUrl: './user-role.component.html',
   styleUrls: ['./user-role.component.css'],
 })
-export class UserRoleComponent implements OnInit {
+export class UserRoleComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  private role: IRole | undefined;
-  @Input() set roleValue(value: IRole | undefined) {
-    if (value) {
-      this.createRoleForm.patchValue({
-        id: value.id,
-        name: value.name,
-        isActive: value.isActive,
-        controlIsValid: true,
-      });
-    }
-  }
-  @Output() updateRoles: EventEmitter<IRoleAction> = new EventEmitter();
-  currentRoleAction = RoleActionEvent.None;
+  private roleAction = new BehaviorSubject<IRoleAction>({
+    action: RoleActionEvent.None,
+    role: {
+      id: '',
+      name: '',
+      isActive: true,
+    },
+  });
+  roleAction$ = this.roleAction.asObservable();
 
-  createRoleForm = this.fb.group(
+  private showModal = new BehaviorSubject<boolean>(false);
+  showModal$ = this.showModal.asObservable();
+
+  @Input() set roleActionValue(value: IRoleAction) {
+    this.roleAction.next(value);
+  }
+
+  @Input() set showModalValue(value: boolean) {
+    this.showModal.next(value);
+  }
+
+  @Output() updateRoles: EventEmitter<IRoleAction> = new EventEmitter();
+  @Output() closeModal: EventEmitter<void> = new EventEmitter();
+
+  createRoleForm: FormGroup = this.fb.group(
     {
       id: '',
       name: ['', Validators.required],
@@ -54,63 +68,59 @@ export class UserRoleComponent implements OnInit {
   constructor(
     private rolesService: RolesService,
     private fb: FormBuilder,
-    private toastr: ToastrService,
-    private loaderService: LoaderService
+    private toastr: ToastrService
   ) {}
 
-  ngOnInit(): void {
-    $('#rolesModal').on('show.bs.modal', () => {
-      this.currentRoleAction = RoleActionEvent.None;
-    });
+  vm$ = combineLatest([this.roleAction$, this.showModal]).pipe(
+    tap(([roleAction, showModal]) => {
+      this.createRoleForm.patchValue({
+        ...roleAction.role,
+      });
 
-    $('#rolesModal').on('hidden.bs.modal', () => {
-      this.createRoleForm.reset();
-      this.createRoleForm.patchValue({ isActive: true, controlIsValid: true });
-      if (this.currentRoleAction === RoleActionEvent.None) {
-        this.updateRoles.emit({
-          role: undefined,
-          action: this.currentRoleAction,
+      if (showModal) {
+        $('#rolesModal').modal('show');
+        $('#rolesModal').on('hidden.bs.modal', () => {
+          this.closeModal.emit();
         });
+      } else {
+        $('#rolesModal').modal('hide');
       }
-    });
-  }
+    })
+  );
 
   saveRole(): void {
     if (this.createRoleForm.valid && this.createRoleForm.dirty) {
-      if (this.createRoleForm.controls['id'].value !== '') {
-        this.updateRole();
-      } else {
-        this.createRole();
-      }
+      this.roleDuplicated(this.createRoleForm.controls['name'].value).subscribe(
+        {
+          next: (isDuplicated: boolean) => {
+            if (!isDuplicated) {
+              if (this.createRoleForm.controls['id'].value !== '') {
+                this.updateRole();
+              } else {
+                this.createRole();
+              }
+            }
+          },
+        }
+      );
     } else {
       this.createRoleForm.markAllAsTouched();
     }
   }
 
   createRole() {
-    this.loaderService.setLoading(true, $localize`Creando rol`);
-    this.rolesService
-      .createRole(this.createRoleForm.value as IRole)
-      .subscribe({
-        next: (response: IMessageResponse) => {
-          this.currentRoleAction = RoleActionEvent.Create;
-          this.updateRoles.emit({
-            role: {
-              ...(this.createRoleForm.value as IRole),
-            },
-            action: this.currentRoleAction,
-          });
-          this.toastr.success(response.message);
-          $('#rolesModal').modal('hide');
-        },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
-      });
+    this.rolesService.createRole(this.createRoleForm.value as IRole).subscribe({
+      next: (response: IMessageResponse) => {
+        this.updateRoles.emit({
+          action: RoleActionEvent.Create,
+          role: this.createRoleForm.value as IRole,
+        });
+        this.toastr.success(response.message);
+      },
+    });
   }
 
   updateRole() {
-    this.loaderService.setLoading(true, $localize`Actualizando rol`);
     this.rolesService
       .updateRole(
         this.createRoleForm.value as IRole,
@@ -118,42 +128,35 @@ export class UserRoleComponent implements OnInit {
       )
       .subscribe({
         next: (response: IMessageResponse) => {
-          this.currentRoleAction = RoleActionEvent.Update;
           this.updateRoles.emit({
-            role: {
-              ...(this.createRoleForm.value as IRole),
-            },
-            action: this.currentRoleAction,
+            action: RoleActionEvent.Update,
+            role: this.createRoleForm.value as IRole,
           });
           this.toastr.success(response.message);
-          $('#rolesModal').modal('hide');
         },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
       });
   }
 
-  checkRole(event: Event) {
-    const roleName = (event.target as HTMLInputElement).value;
-    if (this.role && roleName === this.role.name) {
+  roleDuplicated(newRole: string): Observable<boolean> {
+    if (newRole === this.roleAction.value.role.name) {
       this.createRoleForm.patchValue({ controlIsValid: true });
-      if (this.createRoleForm.valid) {
-        this.createRoleForm.markAsPristine();
-      }
-      return;
+      this.createRoleForm.updateValueAndValidity();
+      return of(false);
+    } else {
+      return this.rolesService.checkRoleName(newRole).pipe(
+        map((response: boolean) => {
+          this.createRoleForm.patchValue({
+            controlIsValid: !response,
+          });
+          this.createRoleForm.updateValueAndValidity();
+          return response;
+        })
+      );
     }
+  }
 
-    if (roleName === '') {
-      this.createRoleForm.patchValue({ controlIsValid: false });
-      return;
-    }
-
-    this.rolesService.checkRoleName(roleName).subscribe({
-      next: (response: boolean) => {
-        this.createRoleForm.patchValue({ controlIsValid: !response });
-        this.createRoleForm.updateValueAndValidity();
-      },
-    });
+  removeValidation(): void {
+    this.createRoleForm.patchValue({ controlIsValid: true });
+    this.createRoleForm.updateValueAndValidity();
   }
 }

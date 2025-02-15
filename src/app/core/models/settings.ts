@@ -68,6 +68,6 @@ export interface IWeddingSetting {
 
 export interface ISettingAction {
   eventId: string;
-  isNew: boolean;
+  isNew: boolean | undefined;
   eventType: EventType;
 }

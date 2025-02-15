@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg" *ngIf="vm$ | async as vm">
   <div class="container-fluid">
     <a class="navbar-brand" routerLink="/dashboard">
       <h1>
@@ -6,9 +6,9 @@
       </h1>
     </a>
     <div class="navbarWithSearchAndForm">
-      <button *ngIf="route.includes('/dashboard/events/')" class="btn notifications" (click)="toggleNotifications()" i18n-title="Toggle notifications"><i class="fa-solid fa-bell" aria-hidden="true"></i><span [style.visibility]="numberOfNotifications > 0 ? 'visible' : 'hidden'" aria-live="polite" [attr.aria-label]="getAccessibilityMessage(numberOfNotifications)">{{ numberOfNotifications }}</span></button> 
-      <button class="btn account" (click)="toggleMenu()" aria-label="Toggle User Menu" title="Toggle User Menu" [ngStyle]="{'background-image': 'url(' + profilePhoto + ')'}">
-        <i class="fa-solid fa-user" aria-hidden="true" *ngIf="!profilePhoto"></i>
+      <button *ngIf="vm.route.includes('/dashboard/events/')" class="btn notifications" (click)="toggleNotifications()" i18n-title="Toggle notifications"><i class="fa-solid fa-bell" aria-hidden="true"></i><span [style.visibility]="vm.numberOfNotifications > 0 ? 'visible' : 'hidden'" aria-live="polite" [attr.aria-label]="getAccessibilityMessage(vm.numberOfNotifications)">{{ vm.numberOfNotifications }}</span></button> 
+      <button class="btn account" (click)="toggleMenu()" aria-label="Toggle User Menu" title="Toggle User Menu" [ngStyle]="{'background-image': 'url(' + vm.profilePhoto + ')'}">
+        <i class="fa-solid fa-user" aria-hidden="true" *ngIf="!vm.profilePhoto"></i>
       </button>  
       <button aria-label="Toggle Navigation" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" i18n-title="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -26,10 +26,10 @@
           <a routerLink="/dashboard/files" routerLinkActive="active" i18n>ARCHIVOS</a>
         </li>
         <li class="nav-item">
-          <a routerLink="/dashboard/users" routerLinkActive="active" i18n *ngIf="isAdmin">USUARIOS</a>
+          <a routerLink="/dashboard/users" routerLinkActive="active" i18n *ngIf="vm.isAdmin">USUARIOS</a>
         </li>
         <li class="nav-item">
-          <a routerLink="/dashboard/logs" routerLinkActive="active" i18n *ngIf="isAdmin">LOGS</a>
+          <a routerLink="/dashboard/logs" routerLinkActive="active" i18n *ngIf="vm.isAdmin">LOGS</a>
         </li>
         <li class="nav-item">
           <a routerLink="/dashboard/settings" routerLinkActive="active" i18n>CONFIGURACIÓN</a>
@@ -38,7 +38,7 @@
     </div>
     <div class="base-menu menu">
       <div class="arrow-up"></div>
-      <p>{{ username }}<br /><span>{{ email }}</span></p>
+      <p>{{ vm.username }}<br /><span>{{ vm.email }}</span></p>
       <ul>
         <li>
           <i class="fa-solid fa-user" aria-hidden="true"></i><a routerLink="/dashboard/profile" i18n>Mi perfil</a>
@@ -49,8 +49,7 @@
       </ul>
     </div>
     <div class="base-menu notificationMessages">
-      <ng-container *ngIf="notifications.length > 0">
-        <ng-container *ngFor="let notification of notifications; index as i">
+        <ng-container *ngFor="let notification of vm.notifications; index as i">
           <button [ngClass]="{'isMessageNotRead': !notification.isMessageRead}" (click)="maskAsRead(notification.id)">
             <strong i18n>{{ notification.family }} ha</strong>: <i class="fa-solid fa-circle" [ngClass]="{'hideActiveNotification': notification.isMessageRead}"></i>
             <br>
@@ -58,10 +57,9 @@
             <br>
             <small *ngIf="notification.dateOfConfirmation !== '1000-01-01T00:00:00.000Z'">{{ getTime(notification.dateOfConfirmation) }}</small>
           </button>
-          <hr *ngIf="i !== notifications.length - 1">
-        </ng-container>
+          <hr *ngIf="i !== vm.notifications.length - 1">
       </ng-container>
-      <p *ngIf="notifications.length <= 0" i18n>Sin notificationes por el momento</p>
+      <p *ngIf="vm.notifications.length <= 0" i18n>Sin notificationes por el momento</p>
     </div>
   </div>
 </nav>

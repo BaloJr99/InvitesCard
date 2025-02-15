@@ -23,6 +23,7 @@ export const eventResolver: ResolveFn<IEventResolved> = (
           return {
             ...invite,
             dateOfConfirmation: newDateOfConfirmation,
+            isMessageRead: Boolean(invite.isMessageRead),
           };
         });
       })

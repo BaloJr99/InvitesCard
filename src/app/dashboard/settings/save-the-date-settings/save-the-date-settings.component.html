@@ -1,4 +1,4 @@
-<div class="row g-0">
+<div class="row g-0" *ngIf="vm$ | async">
   <div class="col-12 gx-4">
     <form [formGroup]="createEventSettingsForm">
       <input type="text" formControlName="eventId" hidden>

@@ -1,19 +1,21 @@
-<div [style.visibility]="errorTriggered ? 'visible' : 'hidden'">
-  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="btn-close" data-bs-dismiss="modal" i18n-aria-label aria-label="Cerrar"></button>
-        </div>
-        <div class="modal-body">
-          <i class="fa-solid fa-ban" aria-hidden="true"></i>
-          <h1 id="errorModalLabel">Error</h1>
-          <p>{{ errorMessage }}</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">OK</button>
+<ng-container *ngIf="vm$ | async as vm">
+  <div [style.visibility]="vm.errorTriggered ? 'visible' : 'hidden'">
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" i18n-aria-label aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+            <h1 id="errorModalLabel">Error</h1>
+            <p>{{ vm.errorMessage }}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">OK</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</ng-container>

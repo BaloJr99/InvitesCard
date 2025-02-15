@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { combineLatest, map } from 'rxjs';
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { EventType } from 'src/app/core/models/enum';
-import { IDropdownEvent, IStatistic } from 'src/app/core/models/events';
 import { IDashboardInvite } from 'src/app/core/models/invites';
 import { EventsService } from 'src/app/core/services/events.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { createStatistics } from 'src/app/shared/utils/statistics/statistics';
 import { toLocalDate } from 'src/app/shared/utils/tools';
 Chart.register(...registerables);
@@ -16,91 +14,86 @@ Chart.register(...registerables);
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
-export class HomeComponent implements OnInit {
-  invites: IDashboardInvite[] = [];
-  statistics: IStatistic[] = [];
-  percentajeOfConfirmation: string = '0';
-  percentajeOfPendingResponse: string = '0';
-  groupedByDate: { [key: string]: number } = {};
-  events: IDropdownEvent[] = [];
-  eventSelected: string = '';
+export class HomeComponent {
+  private eventSelected = new BehaviorSubject<string>('');
+  eventSelected$ = this.eventSelected.asObservable();
+  private invites = new BehaviorSubject<IDashboardInvite[]>([]);
+  invites$ = this.invites.asObservable();
   lastInvitesChart: Chart<'bar', number[], string> | undefined;
   historyChart: Chart<'pie', number[], string> | undefined;
 
   constructor(
     private invitesService: InvitesService,
-    private loaderService: LoaderService,
     private eventsService: EventsService
   ) {}
 
-  ngOnInit(): void {
-    this.loaderService.setLoading(true, $localize`Cargando página principal`);
+  history$ = this.invites$.pipe(
+    map((invites) => {
+      return this.RenderChart(invites);
+    })
+  );
 
-    combineLatest([
-      this.invitesService.getAllInvites().pipe(
-        map((invites) => {
-          return invites.map((invite) => {
-            return {
-              ...invite,
-              dateOfConfirmation: invite.dateOfConfirmation
-                ? toLocalDate(invite.dateOfConfirmation)
-                : null,
-            };
-          });
-        })
-      ),
-      this.eventsService.getDropdownEvents(),
-    ])
-      .subscribe({
-        next: ([invites, events]) => {
-          this.invites = invites;
-          this.events = events.filter(
-            (event) => event.typeOfEvent !== EventType.SaveTheDate
-          );
-          this.RenderChart();
-        },
+  vm$ = combineLatest([
+    this.invitesService.getAllInvites().pipe(
+      map((invites) => {
+        return invites.map((invite) => {
+          return {
+            ...invite,
+            dateOfConfirmation: invite.dateOfConfirmation
+              ? toLocalDate(invite.dateOfConfirmation)
+              : null,
+          } as IDashboardInvite;
+        });
       })
-      .add(() => {
-        this.loaderService.setLoading(false);
-      });
-  }
+    ),
+    this.eventsService.getDropdownEvents(),
+    this.eventSelected$,
+  ]).pipe(
+    map(([invites, events, eventSelected]) => {
+      events = events.filter(
+        (event) => event.typeOfEvent !== EventType.SaveTheDate
+      );
+
+      const invitesByEvent = invites.filter((invite) =>
+        eventSelected === '' ? true : invite.eventId === eventSelected
+      );
+
+      this.invites.next(invitesByEvent);
+      return {
+        events,
+      };
+    })
+  );
 
   filterInvites(event: Event) {
     const target = event.target as HTMLSelectElement;
-    this.eventSelected = target.value;
-    this.RenderChart();
+    this.eventSelected.next(target.value);
   }
 
-  RenderChart() {
-    const invitesByEvent = this.invites.filter((invite) =>
-      this.eventSelected !== '' ? invite.eventId === this.eventSelected : true
-    );
-
-    this.statistics = createStatistics(invitesByEvent);
+  RenderChart(invites: IDashboardInvite[]) {
+    const statistics = createStatistics(invites);
 
     let percentaje = Math.trunc(
-      (this.statistics[0].value / this.statistics[3].value) * 100
+      (statistics[0].value / statistics[3].value) * 100
     );
 
-    this.percentajeOfConfirmation = (
+    const percentajeOfConfirmation = (
       isNaN(percentaje) ? 0 : percentaje
     ).toString();
 
-    percentaje = Math.trunc(
-      (this.statistics[1].value / this.statistics[3].value) * 100
-    );
+    percentaje = Math.trunc((statistics[1].value / statistics[3].value) * 100);
 
-    this.percentajeOfPendingResponse = (
+    const percentajeOfPendingResponse = (
       isNaN(percentaje) ? 0 : percentaje
     ).toString();
 
     const todayMinus31Days = new Date();
     todayMinus31Days.setDate(todayMinus31Days.getDate() - 31);
 
-    this.groupedByDate = {};
+    const groupedByDate: { [key: string]: number } = {};
     const randomColors: string[] = [];
 
-    const validInvites = invitesByEvent.filter((invite) => {
+    const validInvites = invites.filter((invite) => {
       if (
         invite.dateOfConfirmation != null &&
         new Date(invite.dateOfConfirmation).getTime() >=
@@ -123,7 +116,7 @@ export class HomeComponent implements OnInit {
     ];
 
     uniqueValidDates.forEach((date) => {
-      this.groupedByDate[date] = validInvites.filter((invite) => {
+      groupedByDate[date] = validInvites.filter((invite) => {
         randomColors.push(
           `rgb(${this.randomNum()}, ${this.randomNum()}, ${this.randomNum()})`
         );
@@ -145,10 +138,10 @@ export class HomeComponent implements OnInit {
     this.lastInvitesChart = new Chart('lastInvitesData', {
       type: 'bar',
       data: {
-        labels: Object.keys(this.groupedByDate),
+        labels: Object.keys(groupedByDate),
         datasets: [
           {
-            data: Object.values(this.groupedByDate),
+            data: Object.values(groupedByDate),
             backgroundColor: randomColors,
           },
         ],
@@ -201,9 +194,9 @@ export class HomeComponent implements OnInit {
           {
             label: $localize`# de pases`,
             data: [
-              this.statistics[0].value,
-              this.statistics[1].value,
-              this.statistics[2].value,
+              statistics[0].value,
+              statistics[1].value,
+              statistics[2].value,
             ],
             backgroundColor: ['#43cd63', '#facf4f', '#ff5d6d'],
             borderWidth: 1,
@@ -219,6 +212,12 @@ export class HomeComponent implements OnInit {
         responsive: true,
       },
     });
+
+    return {
+      statistics,
+      percentajeOfConfirmation,
+      percentajeOfPendingResponse,
+    };
   }
 
   randomNum() {

@@ -144,3 +144,10 @@ export interface IInviteSection {
 export interface IInviteSectionsProperties {
   validators: { [key: string]: any };
 }
+
+export interface IInvitesFilters {
+  filterByFamily: string;
+  filterByInviteViewed: boolean | undefined;
+  filterByNeedsAccomodation: boolean | undefined;
+  filterByAnswered: boolean | undefined;
+}

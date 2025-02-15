@@ -1,4 +1,4 @@
-<form [formGroup]="createInviteGroupForm">
+<form [formGroup]="createInviteGroupForm" id="inviteGroupForm">
   <div class="mb-3">
     <label for="inviteGroup" class="form-label" i18n>Nuevo grupo</label>
     <div class="inviteGroup-validation">
@@ -7,8 +7,8 @@
              min="1"
              class="form-control"
              formControlName="inviteGroup" 
-             [ngClass]="{'is-invalid': (createInviteGroupForm.get('inviteGroup') | validation) || createInviteGroupForm.errors?.['controlIsDuplicated'] }" 
-             (keyup)="checkInviteGroup($event)">
+             [ngClass]="{'is-invalid': (createInviteGroupForm.get('inviteGroup') | validation) || createInviteGroupForm.errors?.['controlIsDuplicated'] }"
+             (keyup)="removeValidation()">
       <i class="fa-solid" aria-hidden="true" [ngClass]="createInviteGroupForm.get('controlIsValid')?.value ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
       <span class="invalid-feedback d-block" role="alert" *ngIf="createInviteGroupForm.get('inviteGroup') | validation">
         {{ createInviteGroupForm.get('inviteGroup')?.errors | validationError: 'inviteGroup' }}

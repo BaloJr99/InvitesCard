@@ -7,6 +7,6 @@ export interface IRole {
 }
 
 export interface IRoleAction {
-  role: IRole | undefined;
+  role: IRole;
   action: RoleActionEvent;
 }

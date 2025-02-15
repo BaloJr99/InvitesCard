@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true" *ngIf="vm$ | async as vm">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -76,7 +76,7 @@
                     formControlName="userId" 
                     [ngClass]="{'is-invalid': createEventForm.get('userId') | validation }">
               <option value="" i18n>Seleccione...</option>
-              <option *ngFor="let user of users" [value]="user.id">
+              <option *ngFor="let user of vm.users" [value]="user.id">
                 {{ user.username }}
               </option>
             </select>

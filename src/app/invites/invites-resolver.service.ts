@@ -12,7 +12,7 @@ export const invitesResolver: ResolveFn<IEventTypeResolved> = (
   const invitesService = inject(InvitesService);
   const router = inject(Router);
   const loaderService = inject(LoaderService);
-  
+
   loaderService.setLoading(false, $localize`Cargando invitación`, true);
 
   const id = route.paramMap.get('id') ?? '';

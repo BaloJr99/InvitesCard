@@ -1,9 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  Input,
-  ViewChildren,
-} from '@angular/core';
+import { Component, ElementRef, Input, ViewChildren } from '@angular/core';
 import {
   FormBuilder,
   FormControlName,
@@ -11,10 +6,17 @@ import {
   Validators,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import {
+  BehaviorSubject,
+  catchError,
+  combineLatest,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { EventType } from 'src/app/core/models/enum';
-import { ISettingAction } from 'src/app/core/models/settings';
-import { LoaderService } from 'src/app/core/services/loader.service';
+import { IBaseSettings, ISettingAction } from 'src/app/core/models/settings';
 import { SettingsService } from 'src/app/core/services/settings.service';
 
 @Component({
@@ -26,18 +28,19 @@ export class SaveTheDateSettingsComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  @Input() set eventSettingAction(eventSettingAction: ISettingAction) {
-    const eventId = eventSettingAction.eventId;
-    this.saveTheDateSettings = {
-      eventId: eventId,
-      isNew: true,
-      eventType: EventType.SaveTheDate,
-    } as ISettingAction;
-
-    this.getEventSetting();
+  @Input() set eventSettingActionValue(eventSettingAction: ISettingAction) {
+    this.saveTheDateSettings.next(eventSettingAction);
   }
 
-  saveTheDateSettings: ISettingAction = {} as ISettingAction;
+  private saveTheDateSettings = new BehaviorSubject<ISettingAction>({
+    isNew: undefined,
+    eventType: EventType.SaveTheDate,
+    eventId: '',
+  });
+  saveTheDateSettings$ = this.saveTheDateSettings.asObservable();
+
+  private reloadSettings = new BehaviorSubject<boolean>(false);
+  reloadSettings$ = this.reloadSettings.asObservable();
 
   createEventSettingsForm: FormGroup = this.fb.group({
     eventId: ['', Validators.required],
@@ -50,7 +53,6 @@ export class SaveTheDateSettingsComponent {
   });
 
   constructor(
-    private loaderService: LoaderService,
     private settingsService: SettingsService,
     private fb: FormBuilder,
     private toastr: ToastrService
@@ -68,42 +70,38 @@ export class SaveTheDateSettingsComponent {
     });
   }
 
-  getEventSetting(): void {
-    if (this.saveTheDateSettings.eventId) {
+  vm$ = combineLatest([this.saveTheDateSettings$, this.reloadSettings$]).pipe(
+    switchMap(([saveTheDateSettings]) =>
       this.settingsService
-        .getEventSettings(this.saveTheDateSettings.eventId)
-        .subscribe({
-          next: (response) => {
+        .getEventSettings(saveTheDateSettings.eventId)
+        .pipe(
+          catchError(() => {
+            if (saveTheDateSettings.isNew === undefined) {
+              this.saveTheDateSettings.next({
+                ...saveTheDateSettings,
+                isNew: true,
+              });
+            }
+            return of({
+              eventId: saveTheDateSettings.eventId,
+              settings: JSON.stringify({}),
+            } as IBaseSettings);
+          })
+        )
+        .pipe(
+          tap((eventSettings) => {
             this.createEventSettingsForm.patchValue({
-              ...JSON.parse(response.settings),
-              eventId: response.eventId,
+              ...JSON.parse(eventSettings.settings),
+              eventId: eventSettings.eventId,
             });
-
-            this.saveTheDateSettings = {
-              ...this.saveTheDateSettings,
-              isNew: false,
-            };
-          },
-          error: () => {
-            this.saveTheDateSettings = {
-              ...this.saveTheDateSettings,
-              isNew: true,
-            };
-
-            this.createEventSettingsForm.patchValue({
-              eventId: this.saveTheDateSettings.eventId,
-            });
-          },
-        })
-        .add(() => {
-          this.loaderService.setLoading(false);
-        });
-    }
-  }
+          })
+        )
+    )
+  );
 
   cancelChanges(): void {
     this.clearInformation();
-    this.getEventSetting();
+    this.reloadSettings.next(true);
   }
 
   saveChanges(): void {
@@ -111,7 +109,7 @@ export class SaveTheDateSettingsComponent {
       this.createEventSettingsForm.valid &&
       this.createEventSettingsForm.dirty
     ) {
-      if (this.saveTheDateSettings.isNew) {
+      if (this.saveTheDateSettings.value.isNew) {
         this.createEventSettings();
       } else {
         this.updateEventSettings();
@@ -122,41 +120,30 @@ export class SaveTheDateSettingsComponent {
   }
 
   createEventSettings() {
-    this.loaderService.setLoading(true, $localize`Creando configuraciones`);
     this.settingsService
       .createEventSettings(
         this.createEventSettingsForm.value,
-        this.saveTheDateSettings.eventType
+        this.saveTheDateSettings.value.eventType
       )
       .subscribe({
         next: (response: IMessageResponse) => {
           this.toastr.success(response.message);
         },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
       });
   }
 
   updateEventSettings() {
-    this.loaderService.setLoading(
-      true,
-      $localize`Actualizando configuraciones`
-    );
-    if (this.saveTheDateSettings.eventId !== '') {
+    if (this.saveTheDateSettings.value.eventId !== '') {
       this.settingsService
         .updateEventSettings(
           this.createEventSettingsForm.value,
-          this.saveTheDateSettings.eventId,
-          this.saveTheDateSettings.eventType
+          this.saveTheDateSettings.value.eventId,
+          this.saveTheDateSettings.value.eventType
         )
         .subscribe({
           next: (response: IMessageResponse) => {
             this.toastr.success(response.message);
           },
-        })
-        .add(() => {
-          this.loaderService.setLoading(false);
         });
     }
   }

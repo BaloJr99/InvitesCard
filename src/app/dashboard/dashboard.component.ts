@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationStart, Router, Scroll } from '@angular/router';
 import { TokenStorageService } from '../core/services/token-storage.service';
 import { SocketService } from '../core/services/socket.service';
-import { LoaderService } from '../core/services/loader.service';
-import { IMessage, INotification } from '../core/models/common';
+import { IMessage } from '../core/models/common';
 import { CommonInvitesService } from '../core/services/commonInvites.service';
-import { KeyValue } from '@angular/common';
 import { toLocalDate } from '../shared/utils/tools';
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,26 +13,66 @@ import { toLocalDate } from '../shared/utils/tools';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
+  private route = new BehaviorSubject<string>('');
+  route$ = this.route.asObservable();
+
   constructor(
     private tokenService: TokenStorageService,
     private socket: SocketService,
-    private loaderService: LoaderService,
     private commonInvitesService: CommonInvitesService,
     private router: Router
   ) {}
 
-  notifications: INotification[] = [];
+  vm$ = combineLatest([
+    this.route$,
+    this.commonInvitesService.messages$,
+    this.commonInvitesService.notifications$,
+  ]).pipe(
+    map(([route, messages, notifications]) => {
+      const messagesGrouped: { key: string; value: IMessage[] }[] = [];
 
-  messagesGrouped: KeyValue<string, IMessage[]>[] = [];
+      const uniqueDates = [
+        ...new Set(messages.map((message) => message.date)),
+      ].sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
 
-  route = '';
+      uniqueDates.forEach((date) => {
+        messagesGrouped.push({
+          key: date,
+          value: messages
+            .filter((message) => message.date === date)
+            .sort((a, b) => b.time.localeCompare(a.time)),
+        });
+      });
+
+      const sortedNotifications = notifications.sort(
+        (a, b) =>
+          new Date(toLocalDate(b.dateOfConfirmation)).getTime() -
+          new Date(toLocalDate(a.dateOfConfirmation)).getTime()
+      );
+
+      return {
+        messagesGrouped,
+        route,
+        notifications: sortedNotifications,
+      };
+    })
+  );
 
   ngOnInit(): void {
-    this.loaderService.setLoading(true, $localize`Cargando dashboard`);
     const userInformation = this.tokenService.getTokenValues();
     if (userInformation) {
       this.socket.joinRoom(userInformation.username);
     }
+
+    this.router.events.subscribe((events) => {
+      if (events instanceof Scroll) {
+        this.route.next(events.routerEvent.url);
+      }
+
+      if (events instanceof NavigationStart) {
+        this.route.next(events.url);
+      }
+    });
 
     window.addEventListener('click', ({ target }) => {
       const toggleMenu = document.querySelector('.menu');
@@ -64,51 +103,6 @@ export class DashboardComponent implements OnInit {
           }
         }
       }
-    });
-
-    this.loaderService.setLoading(false);
-
-    this.commonInvitesService.messages$.subscribe({
-      next: (messages) => {
-        this.groupMessages(Object.values(messages));
-      },
-    });
-
-    this.commonInvitesService.notifications$.subscribe({
-      next: (notifications) => {
-        this.notifications = notifications.sort(
-          (a, b) =>
-            new Date(toLocalDate(b.dateOfConfirmation)).getTime() -
-            new Date(toLocalDate(a.dateOfConfirmation)).getTime()
-        );
-      },
-    });
-
-    this.router.events.subscribe((events) => {
-      if (events instanceof Scroll) {
-        this.route = events.routerEvent.url;
-      }
-
-      if (events instanceof NavigationStart) {
-        this.route = events.url;
-      }
-    });
-  }
-
-  groupMessages(messages: IMessage[]): void {
-    this.messagesGrouped = [];
-
-    const uniqueDates = [
-      ...new Set(messages.map((message) => message.date)),
-    ].sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
-    
-    uniqueDates.forEach((date) => {
-      this.messagesGrouped.push({
-        key: date,
-        value: messages
-          .filter((message) => message.date === date)
-          .sort((a, b) => b.time.localeCompare(a.time)),
-      });
     });
   }
 

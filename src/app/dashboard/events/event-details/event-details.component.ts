@@ -1,10 +1,10 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest } from 'rxjs';
-import { LoaderService } from 'src/app/core/services/loader.service';
+import { BehaviorSubject, combineLatest, map, mergeMap } from 'rxjs';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
 import { SocketService } from 'src/app/core/services/socket.service';
 import {
+  IEventResolved,
   IEventSettings,
   IFullEvent,
   IStatistic,
@@ -27,6 +27,7 @@ import {
   IConfirmation,
   IFullInvite,
   IInviteAction,
+  IInvitesFilters,
 } from 'src/app/core/models/invites';
 import { EventsService } from 'src/app/core/services/events.service';
 import {
@@ -48,7 +49,6 @@ import { ToastrService } from 'ngx-toastr';
 export class EventDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
-    private loaderService: LoaderService,
     private inviteGroupsService: InviteGroupsService,
     private invitesService: InvitesService,
     private eventsService: EventsService,
@@ -59,77 +59,277 @@ export class EventDetailsComponent implements OnInit {
     @Inject(LOCALE_ID) private localeValue: string
   ) {}
 
-  statistics: IStatistic[] = [];
+  showInviteModal = false;
+  showImportInvitesModal = false;
 
-  eventId = '';
   copyEventSettings: IEventSettings = {
     typeOfEvent: EventType.None,
     settings: '',
   };
 
   eventInformation: IFullEvent = {} as IFullEvent;
-
-  inviteAction!: IInviteAction;
   invitesGrouped: { [key: string]: IFullInvite[] } = {};
-  originalInvites: IFullInvite[] = [];
-  filteredInvites: IFullInvite[] = [];
   inviteGroups: IInviteGroups[] = [];
   selectedIds: { [key: string]: string[] } = {};
-
   tables: ITable[] = [];
 
-  filterByFamily = '';
-  filterByInviteViewed: boolean | undefined = undefined;
-  filterByNeedsAccomodation: boolean | undefined = undefined;
+  private inviteFilters = new BehaviorSubject<IInvitesFilters>({
+    filterByFamily: '',
+    filterByAnswered: undefined,
+    filterByInviteViewed: undefined,
+    filterByNeedsAccomodation: undefined,
+  });
+  inviteFilters$ = this.inviteFilters.asObservable();
 
-  isDeadlineMet = false;
+  private eventResolved = new BehaviorSubject<IEventResolved>(
+    {} as IEventResolved
+  );
+  eventResolved$ = this.eventResolved.asObservable();
+  private originalInvites = new BehaviorSubject<IFullInvite[]>([]);
+  originalInvites$ = this.originalInvites.asObservable();
 
-  ngOnInit(): void {
-    this.loaderService.setLoading(
-      true,
-      $localize`Cargando los detalles del evento`
-    );
+  private filteredInvites: IFullInvite[] = [];
 
-    this.isDeadlineMet = Boolean(
-      this.route.snapshot.data['eventResolved']['isDeadlineMet']
-    );
-    this.originalInvites = this.route.snapshot.data['eventResolved']['invites'];
-    this.filteredInvites = this.originalInvites;
-    this.eventId = this.route.snapshot.data['eventResolved']['id'];
-    this.commonInvitesService.clearNotifications();
+  inviteAction = {
+    invite: {
+      id: '',
+      family: '',
+      entriesNumber: 1,
+      phoneNumber: '',
+      inviteGroupId: '',
+      kidsAllowed: true,
+      eventId: '',
+    },
+    isNew: false,
+  };
 
-    combineLatest([
-      this.inviteGroupsService.getAllInviteGroups(this.eventId),
-      this.eventsService.getEventById(this.eventId),
-      this.eventsService.getEventSettings(this.eventId, [
-        'copyMessage',
-        'weddingCopyMessage',
-      ]),
-    ])
-      .subscribe({
-        next: ([inviteGroups, eventInformation, eventSettings]) => {
+  eventDetails$ = this.eventResolved$.pipe(
+    mergeMap((eventResolved) =>
+      combineLatest([
+        this.inviteGroupsService.getAllInviteGroups(eventResolved.id),
+        this.eventsService.getEventById(eventResolved.id),
+        this.eventsService.getEventSettings(eventResolved.id, [
+          'copyMessage',
+          'weddingCopyMessage',
+        ]),
+      ]).pipe(
+        map(([inviteGroups, eventInformation, eventSettings]) => {
+          this.originalInvites.next(eventResolved.invites);
+          this.copyEventSettings = eventSettings;
           this.eventInformation = eventInformation;
           this.inviteGroups = inviteGroups;
-          this.copyEventSettings = eventSettings;
-          this.buildInvitesDashboard();
-        },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
-      });
 
-    this.commonInvitesService.notifications$.subscribe({
-      next: (notifications) => {
-        notifications
-          .filter((n) => n.isMessageRead)
-          .forEach((notification) => {
-            const index = this.originalInvites.findIndex(
-              (i) => i.id === notification.id
-            );
-            (this.originalInvites.at(index) as IFullInvite).isMessageRead =
-              true;
+          return {
+            eventId: eventResolved.id,
+            invites: eventResolved.invites,
+            isDeadlineMet: eventResolved.isDeadlineMet,
+            eventSettings,
+          };
+        })
+      )
+    )
+  );
+
+  vm$ = combineLatest([
+    this.eventDetails$,
+    this.originalInvites$,
+    this.commonInvitesService.notifications$,
+    this.inviteFilters$,
+  ]).pipe(
+    map(
+      ([eventDetails, originalInvites, commonNotification, inviteFilters]) => {
+        const statistics: IStatistic[] = [];
+        const notifications: INotification[] = [];
+        const messages: IMessage[] = [];
+        const newOriginalInvites: IFullInvite[] = [];
+
+        const readNotifications = commonNotification.filter(
+          (n) => n.isMessageRead
+        );
+
+        readNotifications.forEach((notification) => {
+          const originalInvite = originalInvites.find(
+            (invite) => invite.id === notification.id
+          );
+
+          if (originalInvite && originalInvite.isMessageRead === false) {
+            newOriginalInvites.push({
+              ...originalInvite,
+              isMessageRead: true,
+            });
+          }
+        });
+
+        if (newOriginalInvites.length > 0) {
+          this.originalInvites.next(newOriginalInvites);
+        }
+
+        this.filteredInvites = originalInvites.filter(
+          (invite) =>
+            invite.family
+              .toLocaleLowerCase()
+              .includes(inviteFilters.filterByFamily.toLocaleLowerCase()) &&
+            (inviteFilters.filterByInviteViewed === undefined
+              ? true
+              : inviteFilters.filterByInviteViewed
+              ? invite.inviteViewed
+              : !invite.inviteViewed) &&
+            (inviteFilters.filterByAnswered === undefined
+              ? true
+              : inviteFilters.filterByAnswered
+              ? invite.confirmation !== null &&
+                invite.confirmation !== undefined
+              : invite.confirmation === null ||
+                invite.confirmation === undefined) &&
+            (inviteFilters.filterByNeedsAccomodation === undefined
+              ? true
+              : inviteFilters.filterByNeedsAccomodation
+              ? invite.needsAccomodation
+              : invite.needsAccomodation == false)
+        );
+
+        if (
+          eventDetails.eventSettings.typeOfEvent === EventType.Xv ||
+          eventDetails.eventSettings.typeOfEvent === EventType.Wedding
+        ) {
+          statistics.push(
+            {
+              name: $localize`Pases Confirmados`,
+              value: 0,
+              color: '#43CD63',
+            },
+            {
+              name: $localize`Pases Pendientes`,
+              value: 0,
+              color: '#FACF4F',
+            },
+            {
+              name: $localize`Pases Cancelados`,
+              value: 0,
+              color: '#FF5D6D',
+            },
+            {
+              name: $localize`Total de Pases`,
+              value: 0,
+              color: '#54A6FF',
+            }
+          );
+
+          this.filteredInvites.forEach((value) => {
+            if (value.confirmation) {
+              statistics[0].value += value.entriesConfirmed ?? 0;
+              statistics[2].value +=
+                value.entriesNumber - (value.entriesConfirmed ?? 0);
+            } else {
+              if (
+                value.confirmation === null ||
+                value.confirmation === undefined
+              ) {
+                statistics[1].value += value.entriesNumber;
+              } else {
+                statistics[2].value += value.entriesNumber;
+              }
+            }
+            statistics[3].value += value.entriesNumber;
+            if (value.message) {
+              messages.push({
+                family: value.family,
+                message: value.message,
+                date: new Date(
+                  value.dateOfConfirmation as string
+                ).toLocaleDateString(this.localeValue, {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                }),
+                time: new Date(
+                  value.dateOfConfirmation as string
+                ).toLocaleTimeString(this.localeValue, {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                }),
+              });
+            }
+
+            if (
+              value.confirmation !== null &&
+              value.confirmation !== undefined
+            ) {
+              notifications.push({
+                id: value.id,
+                confirmation: value.confirmation,
+                dateOfConfirmation: value.dateOfConfirmation ?? '',
+                family: value.family,
+                isMessageRead: value.isMessageRead,
+              });
+            }
           });
-      },
+
+          this.commonInvitesService.updateNotifications(
+            notifications,
+            messages
+          );
+          this.groupEntries(this.filteredInvites);
+        } else if (
+          eventDetails.eventSettings.typeOfEvent === EventType.SaveTheDate
+        ) {
+          statistics.push(
+            {
+              name: $localize`Invitaciones Respondidas`,
+              value: 0,
+              color: '#43CD63',
+            },
+            {
+              name: $localize`Invitaciones Pendientes`,
+              value: 0,
+              color: '#FACF4F',
+            },
+            {
+              name: $localize`Invitaciones Hospedaje`,
+              value: 0,
+              color: '#FF5D6D',
+            },
+            {
+              name: $localize`Total de Invitaciones`,
+              value: 0,
+              color: '#54A6FF',
+            }
+          );
+
+          this.filteredInvites.forEach((value) => {
+            if (value.needsAccomodation !== null) {
+              statistics[0].value += 1;
+              statistics[2].value += value.needsAccomodation ? 1 : 0;
+            } else {
+              statistics[1].value += 1;
+            }
+            statistics[3].value += 1;
+          });
+        }
+
+        this.groupEntries(this.filteredInvites);
+
+        this.tables = Object.keys(this.invitesGrouped).map((key, index) => {
+          return this.getTableConfiguration(
+            this.invitesGrouped[key],
+            index,
+            key
+          );
+        });
+
+        return {
+          ...eventDetails,
+          statistics,
+        };
+      }
+    )
+  );
+
+  ngOnInit(): void {
+    this.eventResolved.next({
+      id: this.route.snapshot.data['eventResolved']['id'],
+      invites: this.route.snapshot.data['eventResolved']['invites'],
+      isDeadlineMet: this.route.snapshot.data['eventResolved']['isDeadlineMet'],
     });
 
     this.socket.io.on('newNotification', (confirmation: IConfirmation) => {
@@ -141,142 +341,26 @@ export class EventDetailsComponent implements OnInit {
           '.000Z'
         ),
       };
-      this.originalInvites = this.originalInvites.map((invite) => {
-        if (invite.id === confirmation.id) {
-          return {
-            ...invite,
-            confirmation: confirmation.confirmation,
-            dateOfConfirmation: refactorConfirmation.dateOfConfirmation,
-            entriesConfirmed: confirmation.entriesConfirmed,
-            message: confirmation.message,
-            inviteViewed: true,
-          };
-        }
-        return invite;
-      });
 
-      this.buildInvitesDashboard();
+      const originalInvitesCopy = this.originalInvites.value;
+      // Find the invite and update the confirmation
+      const indexOfInvite = originalInvitesCopy.findIndex(
+        (invite) => invite.id === confirmation.id
+      );
+      originalInvitesCopy[indexOfInvite] = {
+        ...originalInvitesCopy[indexOfInvite],
+        confirmation: confirmation.confirmation,
+        dateOfConfirmation: refactorConfirmation.dateOfConfirmation,
+        entriesConfirmed: confirmation.entriesConfirmed,
+        message: confirmation.message,
+        inviteViewed: true,
+      };
+
+      this.originalInvites.next(originalInvitesCopy);
     });
   }
 
-  buildInvitesDashboard() {
-    const notifications: INotification[] = [];
-    const messages: IMessage[] = [];
-
-    this.statistics = [];
-
-    if (
-      this.copyEventSettings.typeOfEvent === EventType.Xv ||
-      this.copyEventSettings.typeOfEvent === EventType.Wedding
-    ) {
-      this.statistics = [
-        {
-          name: $localize`Pases Confirmados`,
-          value: 0,
-          color: '#43CD63',
-        },
-        {
-          name: $localize`Pases Pendientes`,
-          value: 0,
-          color: '#FACF4F',
-        },
-        {
-          name: $localize`Pases Cancelados`,
-          value: 0,
-          color: '#FF5D6D',
-        },
-        {
-          name: $localize`Total de Pases`,
-          value: 0,
-          color: '#54A6FF',
-        },
-      ];
-
-      this.filteredInvites.forEach((value) => {
-        if (value.confirmation) {
-          this.statistics[0].value += value.entriesConfirmed ?? 0;
-          this.statistics[2].value +=
-            value.entriesNumber - (value.entriesConfirmed ?? 0);
-        } else {
-          if (value.confirmation === null || value.confirmation === undefined) {
-            this.statistics[1].value += value.entriesNumber;
-          } else {
-            this.statistics[2].value += value.entriesNumber;
-          }
-        }
-        this.statistics[3].value += value.entriesNumber;
-        if (value.message) {
-          messages.push({
-            family: value.family,
-            message: value.message,
-            date: new Date(
-              value.dateOfConfirmation as string
-            ).toLocaleDateString(this.localeValue, {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-            }),
-            time: new Date(
-              value.dateOfConfirmation as string
-            ).toLocaleTimeString(this.localeValue, {
-              hour: '2-digit',
-              minute: '2-digit',
-            }),
-          });
-        }
-
-        if (value.confirmation !== null && value.confirmation !== undefined) {
-          notifications.push({
-            id: value.id,
-            confirmation: value.confirmation,
-            dateOfConfirmation: value.dateOfConfirmation ?? '',
-            family: value.family,
-            isMessageRead: value.isMessageRead,
-          });
-        }
-      });
-
-      this.commonInvitesService.updateNotifications(notifications, messages);
-      this.groupEntries(this.filteredInvites);
-    } else if (this.copyEventSettings.typeOfEvent === EventType.SaveTheDate) {
-      this.statistics = [
-        {
-          name: $localize`Invitaciones Respondidas`,
-          value: 0,
-          color: '#43CD63',
-        },
-        {
-          name: $localize`Invitaciones Pendientes`,
-          value: 0,
-          color: '#FACF4F',
-        },
-        {
-          name: $localize`Invitaciones Hospedaje`,
-          value: 0,
-          color: '#FF5D6D',
-        },
-        {
-          name: $localize`Total de Invitaciones`,
-          value: 0,
-          color: '#54A6FF',
-        },
-      ];
-
-      this.filteredInvites.forEach((value) => {
-        if (value.needsAccomodation !== null) {
-          this.statistics[0].value += 1;
-          this.statistics[2].value += value.needsAccomodation ? 1 : 0;
-        } else {
-          this.statistics[1].value += 1;
-        }
-        this.statistics[3].value += 1;
-      });
-
-      this.groupEntries(this.filteredInvites);
-    }
-  }
-
-  groupEntries(invites: IFullInvite[]): void {
+  groupEntries(invites: IFullInvite[]) {
     this.invitesGrouped = {};
 
     this.inviteGroups.forEach((inviteGroup) => {
@@ -286,28 +370,15 @@ export class EventDetailsComponent implements OnInit {
         );
       }
     });
-
-    this.tables = Object.keys(this.invitesGrouped).map((key, index) => {
-      return this.getTableConfiguration(this.invitesGrouped[key], index, key);
-    });
-  }
-
-  fillInviteAction(inviteAction: IInviteAction): void {
-    this.inviteAction = {
-      ...inviteAction,
-      invite: {
-        ...inviteAction.invite,
-        kidsAllowed: Boolean(inviteAction.invite.kidsAllowed),
-      },
-    };
   }
 
   removeInvites(invitesIds: string[]): void {
-    this.originalInvites = this.originalInvites.filter(
+    let originalInvitesCopy = this.originalInvites.value;
+    originalInvitesCopy = originalInvitesCopy.filter(
       (invite) => !invitesIds.includes(invite.id)
     );
 
-    this.filterInvites();
+    this.originalInvites.next(originalInvitesCopy);
   }
 
   toggleMessages(): void {
@@ -317,20 +388,10 @@ export class EventDetailsComponent implements OnInit {
     }
   }
 
-  filterEntries(family: string): void {
-    if (family) {
-      const filteredEntries = this.originalInvites.filter((invite) =>
-        invite.family.toLocaleLowerCase().includes(family.toLocaleLowerCase())
-      );
-      this.groupEntries(filteredEntries);
-    } else {
-      this.groupEntries(this.originalInvites);
-    }
-  }
-
   updateInvites(inviteAction: IInviteAction) {
+    const originalInvitesCopy = this.originalInvites.value;
     if (inviteAction.isNew) {
-      this.originalInvites = this.originalInvites.concat({
+      originalInvitesCopy.push({
         ...inviteAction.invite,
         entriesConfirmed: null,
         message: null,
@@ -340,45 +401,39 @@ export class EventDetailsComponent implements OnInit {
         needsAccomodation: null,
         inviteViewed: false,
       });
-
-      this.filterInvites();
     } else {
-      this.originalInvites = this.originalInvites.map((originalInvite) => {
-        if (originalInvite.id === inviteAction.invite.id) {
-          return {
-            ...inviteAction.invite,
-            entriesConfirmed: originalInvite.entriesConfirmed,
-            message: originalInvite.message,
-            confirmation: originalInvite.confirmation,
-            dateOfConfirmation: originalInvite.dateOfConfirmation,
-            isMessageRead: originalInvite.isMessageRead,
-            needsAccomodation: originalInvite.needsAccomodation,
-            inviteViewed: originalInvite.inviteViewed,
-          };
-        }
-        return originalInvite;
-      });
+      const indexOfInvite = this.originalInvites.value.findIndex(
+        (invite) => invite.id === inviteAction.invite.id
+      );
+      const originalInvite = originalInvitesCopy[indexOfInvite];
 
-      this.filterInvites();
+      originalInvitesCopy[indexOfInvite] = {
+        ...inviteAction.invite,
+        entriesConfirmed: originalInvite.entriesConfirmed,
+        message: originalInvite.message,
+        confirmation: originalInvite.confirmation,
+        dateOfConfirmation: originalInvite.dateOfConfirmation,
+        isMessageRead: originalInvite.isMessageRead,
+        needsAccomodation: originalInvite.needsAccomodation,
+        inviteViewed: originalInvite.inviteViewed,
+      };
     }
+
+    this.originalInvites.next(originalInvitesCopy);
   }
 
   updateInviteGroups(inviteGroupsAction: IInviteGroupsAction) {
     if (inviteGroupsAction.isNew) {
       this.inviteGroups.push(inviteGroupsAction.inviteGroup);
-      this.inviteGroups.sort((a, b) =>
-        a.inviteGroup.toLowerCase().localeCompare(b.inviteGroup.toLowerCase())
-      );
     } else {
-      this.inviteGroups = this.inviteGroups.map((originalInviteGroup) =>
-        originalInviteGroup.id === inviteGroupsAction.inviteGroup.id
-          ? inviteGroupsAction.inviteGroup
-          : originalInviteGroup
+      const indexOfInviteGroup = this.inviteGroups.findIndex(
+        (inviteGroup) => inviteGroup.id === inviteGroupsAction.inviteGroup.id
       );
-      this.inviteGroups.sort((a, b) =>
-        a.inviteGroup.toLowerCase().localeCompare(b.inviteGroup.toLowerCase())
-      );
+      this.inviteGroups[indexOfInviteGroup] = inviteGroupsAction.inviteGroup;
     }
+    this.inviteGroups.sort((a, b) =>
+      a.inviteGroup.toLowerCase().localeCompare(b.inviteGroup.toLowerCase())
+    );
   }
 
   updateBulkResults(bulkResults: IBulkResults): void {
@@ -389,8 +444,9 @@ export class EventDetailsComponent implements OnInit {
       );
     });
 
+    const newInvites = this.originalInvites.value;
     bulkResults.invitesGenerated.forEach((invite) => {
-      this.originalInvites = this.originalInvites.concat({
+      newInvites.push({
         ...invite,
         entriesConfirmed: null,
         message: null,
@@ -400,61 +456,72 @@ export class EventDetailsComponent implements OnInit {
         needsAccomodation: null,
         inviteViewed: false,
       });
+    });
 
-      this.filterInvites();
+    this.originalInvites.next(newInvites);
+  }
+
+  filter() {
+    const familyFilter = document.getElementById(
+      'filterByFamily'
+    ) as HTMLInputElement;
+    const inviteViewedFilter = document.getElementById(
+      'filterByInviteViewed'
+    ) as HTMLSelectElement;
+    const answeredFilter = document.getElementById(
+      'filterByAnswered'
+    ) as HTMLSelectElement;
+    const needsAccomodationFilter = document.getElementById(
+      'filterByNeedsAccomodation'
+    ) as HTMLSelectElement;
+
+    const familyFilterValue = familyFilter.value.trim().toLocaleLowerCase();
+    const inviteViewedFilterValue = inviteViewedFilter.value;
+    const answeredFilterValue = answeredFilter.value;
+    const needsAccomodationFilterValue = needsAccomodationFilter.value;
+
+    this.inviteFilters.next({
+      filterByFamily: familyFilterValue,
+      filterByAnswered:
+        answeredFilterValue === 'all'
+          ? undefined
+          : answeredFilterValue === 'true',
+      filterByInviteViewed:
+        inviteViewedFilterValue === 'all'
+          ? undefined
+          : inviteViewedFilterValue === 'true',
+      filterByNeedsAccomodation:
+        needsAccomodationFilterValue === 'all'
+          ? undefined
+          : needsAccomodationFilterValue === 'true',
     });
   }
 
-  filter(event: Event, filterType: string) {
-    if (filterType === 'family') {
-      const target = event.target as HTMLInputElement;
-      this.filterByFamily = target.value.trim().toLocaleLowerCase();
-    }
+  clearFilter() {
+    const familyFilter = document.getElementById(
+      'filterByFamily'
+    ) as HTMLInputElement;
+    const inviteViewedFilter = document.getElementById(
+      'filterByInviteViewed'
+    ) as HTMLSelectElement;
+    const answeredFilter = document.getElementById(
+      'filterByAnswered'
+    ) as HTMLSelectElement;
+    const needsAccomodationFilter = document.getElementById(
+      'filterByNeedsAccomodation'
+    ) as HTMLSelectElement;
 
-    if (filterType === 'inviteViewed') {
-      const target = event.target as HTMLSelectElement;
+    familyFilter.value = '';
+    inviteViewedFilter.value = 'all';
+    answeredFilter.value = 'all';
+    needsAccomodationFilter.value = 'all';
 
-      if (target.value === 'all') {
-        this.filterByInviteViewed = undefined;
-      } else {
-        this.filterByInviteViewed = target.value === 'true' ? true : false;
-      }
-    }
-
-    if (filterType === 'needsAccomodation') {
-      const target = event.target as HTMLSelectElement;
-
-      if (target.value === 'all') {
-        this.filterByNeedsAccomodation = undefined;
-      } else {
-        this.filterByNeedsAccomodation = target.value === 'true' ? true : false;
-      }
-    }
-
-    this.filterInvites();
-  }
-
-  filterInvites() {
-    const invitesThatMatch = this.originalInvites.filter(
-      (invite) =>
-        (invite.family.toLocaleLowerCase().includes(this.filterByFamily) ||
-          invite.phoneNumber
-            .toLocaleLowerCase()
-            .includes(this.filterByFamily)) &&
-        (this.filterByInviteViewed === undefined
-          ? true
-          : this.filterByInviteViewed
-          ? invite.inviteViewed
-          : !invite.inviteViewed) &&
-        (this.filterByNeedsAccomodation === undefined
-          ? true
-          : this.filterByNeedsAccomodation
-          ? invite.needsAccomodation
-          : invite.needsAccomodation == false)
-    );
-
-    this.filteredInvites = invitesThatMatch;
-    this.buildInvitesDashboard();
+    this.inviteFilters.next({
+      filterByFamily: '',
+      filterByAnswered: undefined,
+      filterByInviteViewed: undefined,
+      filterByNeedsAccomodation: undefined,
+    });
   }
 
   actionResponse(action: IEmitAction): void {
@@ -474,7 +541,7 @@ export class EventDetailsComponent implements OnInit {
       const inviteGroup = Object.keys(this.invitesGrouped)[tableIndex];
       this.selectInvite(inviteGroup, tableIndex, checked, inviteId);
     } else if (action.action === ButtonAction.Edit) {
-      this.openEditModal(data[$localize`Acciones`]);
+      this.openInviteModal(data[$localize`Acciones`]);
     } else if (action.action === ButtonAction.Delete) {
       this.showModal(data[$localize`Acciones`]);
     }
@@ -486,6 +553,7 @@ export class EventDetailsComponent implements OnInit {
     groupIndex: string
   ): ITable {
     const headers = this.getHeaders();
+    const isDeadlineMet = this.eventResolved.value.isDeadlineMet;
 
     return {
       tableId: groupIndex.replaceAll(' ', ''),
@@ -495,14 +563,14 @@ export class EventDetailsComponent implements OnInit {
       }),
       buttons: [
         {
-          isDisabled: this.isDeadlineMet,
+          isDisabled: isDeadlineMet,
           accessibleText: $localize`Editar invitación`,
           action: ButtonAction.Edit,
           innerHtml: '<i class="fa-solid fa-pencil" aria-hidden="true"></i>',
           styles: 'background-color: #FFC107;',
         },
         {
-          isDisabled: this.isDeadlineMet,
+          isDisabled: isDeadlineMet,
           accessibleText: $localize`Eliminar invitación`,
           action: ButtonAction.Delete,
           innerHtml: '<i class="fa-solid fa-trash" aria-hidden="true"></i>',
@@ -632,7 +700,7 @@ export class EventDetailsComponent implements OnInit {
   copyToClipBoard(id: string): void {
     const url = `${window.location.origin}/invites/${id}`;
 
-    const inviteFound = this.originalInvites.find(
+    const inviteFound = this.originalInvites.value.find(
       (f) => f.id === id
     ) as IFullInvite;
 
@@ -671,23 +739,41 @@ export class EventDetailsComponent implements OnInit {
     }
   }
 
-  openEditModal(id: string): void {
-    const inviteToEdit = this.originalInvites.find(
-      (invite) => invite.id === id
-    ) as IFullInvite;
+  openInviteModal(id: string): void {
+    if (id !== '') {
+      const inviteToEdit = this.originalInvites.value.find(
+        (invite) => invite.id === id
+      ) as IFullInvite;
 
-    this.inviteAction = {
-      invite: {
-        ...inviteToEdit,
-      },
-      isNew: false,
-    };
+      this.inviteAction = {
+        invite: {
+          ...inviteToEdit,
+        },
+        isNew: false,
+      };
+    } else {
+      this.inviteAction = {
+        invite: {
+          family: $localize`Familia`,
+          entriesNumber: 1,
+          phoneNumber: '878',
+          inviteGroupId: '',
+          kidsAllowed: true,
+          eventId: this.eventResolved.value.id,
+          id: '',
+        },
+        isNew: true,
+      };
+    }
+    this.showInviteModal = true;
+  }
 
-    $('#inviteModal').modal('show');
+  openImportInvitesModal() {
+    this.showImportInvitesModal = true;
   }
 
   showModal(id: string): void {
-    const inviteFound = this.originalInvites.find(
+    const inviteFound = this.originalInvites.value.find(
       (original) => original.id === id
     ) as IFullInvite;
 
@@ -699,18 +785,12 @@ export class EventDetailsComponent implements OnInit {
       })
       .subscribe((response) => {
         if (response === CommonModalResponse.Confirm) {
-          this.loaderService.setLoading(true, $localize`Eliminando invitación`);
-          this.invitesService
-            .deleteInvite(inviteFound.id)
-            .subscribe({
-              next: (response: IMessageResponse) => {
-                this.removeInvites([inviteFound.id]);
-                this.toastrService.success(response.message);
-              },
-            })
-            .add(() => {
-              this.loaderService.setLoading(false);
-            });
+          this.invitesService.deleteInvite(inviteFound.id).subscribe({
+            next: (response: IMessageResponse) => {
+              this.removeInvites([inviteFound.id]);
+              this.toastrService.success(response.message);
+            },
+          });
         }
       });
   }
@@ -773,8 +853,6 @@ export class EventDetailsComponent implements OnInit {
   }
 
   bulkDeleteInvites(groupIndex: string): void {
-    this.loaderService.setLoading(true, $localize`Eliminando invitaciones`);
-
     this.invitesService
       .bulkDeleteInvites(this.selectedIds[groupIndex])
       .subscribe({
@@ -782,13 +860,20 @@ export class EventDetailsComponent implements OnInit {
           this.removeInvites(this.selectedIds[groupIndex]);
           this.toastrService.success(response.message);
         },
-      })
-      .add(() => this.loaderService.setLoading(false));
+      });
   }
 
   findTableConfiguration(groupIndex: string): ITable {
     return this.tables.find(
       (table) => table.tableId === groupIndex.replaceAll(' ', '')
     ) as ITable;
+  }
+
+  closeInviteModal() {
+    this.showInviteModal = false;
+  }
+
+  closeImportInvitesModal() {
+    this.showImportInvitesModal = false;
   }
 }

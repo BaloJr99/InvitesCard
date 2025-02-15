@@ -7,7 +7,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, catchError, combineLatest, map, of } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  combineLatest,
+  mergeMap,
+  of,
+  tap,
+} from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { EventType } from 'src/app/core/models/enum';
 import {
@@ -20,7 +27,6 @@ import {
   IWeddingSetting,
 } from 'src/app/core/models/settings';
 import { EventsService } from 'src/app/core/services/events.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { dateTimeToUTCDate, toLocalDate } from 'src/app/shared/utils/tools';
 
@@ -33,15 +39,14 @@ export class WeddingSettingsComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
+  private weddingSettings = new BehaviorSubject<ISettingAction>({
+    isNew: undefined,
+    eventType: EventType.Wedding,
+    eventId: '',
+  });
+  weddingSettings$ = this.weddingSettings.asObservable();
   @Input() set eventSettingAction(eventSettingAction: ISettingAction) {
-    const eventId = eventSettingAction.eventId;
-    this.weddingSettings = {
-      eventId: eventId,
-      isNew: true,
-      eventType: EventType.Wedding,
-    } as ISettingAction;
-
-    this.getEventSetting();
+    this.weddingSettings.next(eventSettingAction);
   }
 
   autoCompleteOptions: string[] = [
@@ -50,7 +55,6 @@ export class WeddingSettingsComponent {
     '[max_deadline]',
   ];
 
-  weddingSettings: ISettingAction = {} as ISettingAction;
   eventDate: string = '';
 
   createEventSettingsForm: FormGroup = this.fb.group({
@@ -66,6 +70,9 @@ export class WeddingSettingsComponent {
     hotelInformation: ['', Validators.required],
     groomParents: ['', Validators.required],
     brideParents: ['', Validators.required],
+    hotelUrl: ['', Validators.required],
+    hotelAddress: ['', Validators.required],
+    hotelPhone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
   });
 
   sectionsControls: { [key: string]: IInviteSectionsProperties } = {
@@ -80,9 +87,6 @@ export class WeddingSettingsComponent {
         civilUrl: ['', Validators.required],
         civilTime: ['', Validators.required],
         civilPlace: ['', Validators.required],
-        hotelUrl: ['', Validators.required],
-        hotelAddress: ['', Validators.required],
-        hotelPhone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       },
     },
     dressCodeInfo: {
@@ -109,17 +113,106 @@ export class WeddingSettingsComponent {
   private sectionsConfig = new BehaviorSubject<IInviteSection[]>([]);
   sectionsConfig$ = this.sectionsConfig.asObservable();
 
-  vm$ = combineLatest([this.sectionsConfig$]).pipe(
-    map(([sections]) => {
-      return {
-        sections,
-      };
-    })
+  private reloadSettings = new BehaviorSubject<boolean>(false);
+  reloadSettings$ = this.reloadSettings.asObservable();
+
+  vm$ = combineLatest([this.weddingSettings$, this.reloadSettings$]).pipe(
+    mergeMap(([weddingSettings]) =>
+      combineLatest([
+        this.settingsService.getEventSettings(weddingSettings.eventId).pipe(
+          catchError(() => {
+            if (this.weddingSettings.value.isNew === undefined) {
+              this.weddingSettings.next({
+                ...weddingSettings,
+                isNew: true,
+              });
+            }
+
+            return of({
+              eventId: weddingSettings.eventId,
+              settings: JSON.stringify({}),
+            } as IBaseSettings);
+          })
+        ),
+        this.eventsService.getEventById(weddingSettings.eventId),
+      ]).pipe(
+        tap(([eventSettings, eventInfo]) => {
+          this.eventDate = toLocalDate(eventInfo.dateOfEvent).split('T')[0];
+          const parsedSettings = JSON.parse(eventSettings.settings);
+
+          this.createEventSettingsForm.patchValue({
+            eventId: weddingSettings.eventId,
+          });
+
+          let sections = [] as IInviteSection[];
+          if (!parsedSettings.sections) {
+            sections = this.updateSections(this.baseSections);
+          } else {
+            sections = parsedSettings.sections.map(
+              (section: IInviteSection) => {
+                const baseSection = this.baseSections.find(
+                  (s) => s.sectionId === section.sectionId
+                ) as IInviteSection;
+
+                return {
+                  ...baseSection,
+                  selected: section.selected,
+                  order: section.order,
+                };
+              }
+            ) as IInviteSection[];
+
+            // Add any missing section from the baseSections
+            this.baseSections.forEach((baseSection) => {
+              if (
+                !sections.some((s) => s.sectionId === baseSection.sectionId)
+              ) {
+                sections.push(baseSection);
+              }
+            });
+
+            sections = this.updateSections(sections);
+
+            if (parsedSettings.massTime) {
+              const dateOfMassTime = parsedSettings.massTime.split(' ')[0];
+              const timeOfMassTime = parsedSettings.massTime.split(' ')[1];
+
+              parsedSettings.massTime = toLocalDate(
+                `${dateOfMassTime}T${timeOfMassTime}.000Z`
+              ).split('T')[1];
+            }
+
+            if (parsedSettings.venueTime) {
+              const dateOfVenueTime = parsedSettings.venueTime.split(' ')[0];
+              const timeOfVenueTime = parsedSettings.venueTime.split(' ')[1];
+
+              parsedSettings.venueTime = toLocalDate(
+                `${dateOfVenueTime}T${timeOfVenueTime}.000Z`
+              ).split('T')[1];
+            }
+
+            if (parsedSettings.civilTime) {
+              const dateOfCivilTime = parsedSettings.civilTime.split(' ')[0];
+              const timeOfCivilTime = parsedSettings.civilTime.split(' ')[1];
+
+              parsedSettings.civilTime = toLocalDate(
+                `${dateOfCivilTime}T${timeOfCivilTime}.000Z`
+              ).split('T')[1];
+            }
+          }
+
+          this.createEventSettingsForm.patchValue({
+            ...parsedSettings,
+          });
+
+          this.sectionsConfig.next(sections);
+        })
+      )
+    )
   );
 
   constructor(
     private eventsService: EventsService,
-    private loaderService: LoaderService,
     private settingsService: SettingsService,
     private fb: FormBuilder,
     private toastr: ToastrService
@@ -161,7 +254,7 @@ export class WeddingSettingsComponent {
         sectionId: 'confirmationInfo',
         name: $localize`Formulario`,
         draggable: true,
-        disabled: false,
+        disabled: true,
         selected: true,
         order: 4,
       },
@@ -214,123 +307,9 @@ export class WeddingSettingsComponent {
     });
   }
 
-  getEventSetting(): void {
-    if (this.weddingSettings.eventId) {
-      combineLatest([
-        this.settingsService
-          .getEventSettings(this.weddingSettings.eventId)
-          .pipe(
-            catchError(() => {
-              return of({
-                eventId: this.weddingSettings.eventId,
-                settings: JSON.stringify({}),
-              } as IBaseSettings);
-            })
-          ),
-        this.eventsService.getEventById(this.weddingSettings.eventId),
-      ])
-        .subscribe({
-          next: ([eventSettings, eventInfo]) => {
-            this.eventDate = toLocalDate(eventInfo.dateOfEvent).split('T')[0];
-
-            const parsedSettings = JSON.parse(eventSettings.settings);
-            if (!parsedSettings.sections) {
-              this.updateSections(this.baseSections);
-
-              if (parsedSettings) {
-                this.createEventSettingsForm.patchValue({
-                  ...parsedSettings,
-                  eventId: this.weddingSettings.eventId,
-                });
-
-                this.weddingSettings = {
-                  ...this.weddingSettings,
-                  isNew: false,
-                };
-              } else {
-                this.createEventSettingsForm.patchValue({
-                  eventId: this.weddingSettings.eventId,
-                });
-
-                this.weddingSettings = {
-                  ...this.weddingSettings,
-                  isNew: true,
-                };
-              }
-            } else {
-              const sections = parsedSettings.sections.map(
-                (section: IInviteSection) => {
-                  const baseSection = this.baseSections.find(
-                    (s) => s.sectionId === section.sectionId
-                  ) as IInviteSection;
-
-                  return {
-                    ...baseSection,
-                    selected: section.selected,
-                    order: section.order,
-                  };
-                }
-              ) as IInviteSection[];
-
-              // Add any missing section from the baseSections
-              this.baseSections.forEach((baseSection) => {
-                if (
-                  !sections.some((s) => s.sectionId === baseSection.sectionId)
-                ) {
-                  sections.push(baseSection);
-                }
-              });
-
-              this.updateSections(sections);
-
-              if (parsedSettings.massTime) {
-                const dateOfMassTime = parsedSettings.massTime.split(' ')[0];
-                const timeOfMassTime = parsedSettings.massTime.split(' ')[1];
-
-                parsedSettings.massTime = toLocalDate(
-                  `${dateOfMassTime}T${timeOfMassTime}.000Z`
-                ).split('T')[1];
-              }
-
-              if (parsedSettings.venueTime) {
-                const dateOfVenueTime = parsedSettings.venueTime.split(' ')[0];
-                const timeOfVenueTime = parsedSettings.venueTime.split(' ')[1];
-
-                parsedSettings.venueTime = toLocalDate(
-                  `${dateOfVenueTime}T${timeOfVenueTime}.000Z`
-                ).split('T')[1];
-              }
-
-              if (parsedSettings.civilTime) {
-                const dateOfCivilTime = parsedSettings.civilTime.split(' ')[0];
-                const timeOfCivilTime = parsedSettings.civilTime.split(' ')[1];
-
-                parsedSettings.civilTime = toLocalDate(
-                  `${dateOfCivilTime}T${timeOfCivilTime}.000Z`
-                ).split('T')[1];
-              }
-
-              this.createEventSettingsForm.patchValue({
-                ...parsedSettings,
-                eventId: this.weddingSettings.eventId,
-              });
-
-              this.weddingSettings = {
-                ...this.weddingSettings,
-                isNew: false,
-              };
-            }
-          },
-        })
-        .add(() => {
-          this.loaderService.setLoading(false);
-        });
-    }
-  }
-
   cancelChanges(): void {
     this.clearInformation();
-    this.getEventSetting();
+    this.reloadSettings.next(true);
   }
 
   saveChanges(): void {
@@ -338,7 +317,7 @@ export class WeddingSettingsComponent {
       this.createEventSettingsForm.valid &&
       this.createEventSettingsForm.dirty
     ) {
-      if (this.weddingSettings.isNew) {
+      if (this.weddingSettings.value.isNew) {
         this.createEventSettings();
       } else {
         this.updateEventSettings();
@@ -349,43 +328,30 @@ export class WeddingSettingsComponent {
   }
 
   createEventSettings() {
-    this.loaderService.setLoading(true, $localize`Creando configuraciones`);
     this.settingsService
       .createEventSettings(
         this.formatEventSetting(),
-        this.weddingSettings.eventType
+        this.weddingSettings.value.eventType
       )
       .subscribe({
         next: (response: IMessageResponse) => {
           this.toastr.success(response.message);
         },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
       });
   }
 
   updateEventSettings() {
-    this.loaderService.setLoading(
-      true,
-      $localize`Actualizando configuraciones`
-    );
-    if (this.weddingSettings.eventId !== '') {
-      this.settingsService
-        .updateEventSettings(
-          this.formatEventSetting(),
-          this.weddingSettings.eventId,
-          this.weddingSettings.eventType
-        )
-        .subscribe({
-          next: (response: IMessageResponse) => {
-            this.toastr.success(response.message);
-          },
-        })
-        .add(() => {
-          this.loaderService.setLoading(false);
-        });
-    }
+    this.settingsService
+      .updateEventSettings(
+        this.formatEventSetting(),
+        this.weddingSettings.value.eventId,
+        this.weddingSettings.value.eventType
+      )
+      .subscribe({
+        next: (response: IMessageResponse) => {
+          this.toastr.success(response.message);
+        },
+      });
   }
 
   formatEventSetting(): IWeddingSetting {
@@ -422,41 +388,43 @@ export class WeddingSettingsComponent {
     } as IWeddingSetting;
   }
 
-  sectionEnabled(sectionId: string, sections: IInviteSection[]) {
-    return sections.find((s) => s.sectionId === sectionId)?.selected;
+  sectionEnabled(sectionId: string) {
+    return this.sectionsConfig.value.find((s) => s.sectionId === sectionId)
+      ?.selected;
   }
 
   updateSection(sectionId: string, event: Event) {
     const target = event.target as HTMLInputElement;
-    const updatedSections = this.sectionsConfig.value.map((section) => {
-      if (section.sectionId === sectionId) {
-        section.selected = target.checked;
+    const oldSections = this.sectionsConfig.value;
 
-        if (target.checked) {
-          Object.keys(this.sectionsControls[sectionId].validators).forEach(
-            (control) => {
-              this.createEventSettingsForm.addControl(
-                control,
-                new FormControl(
-                  '',
-                  this.sectionsControls[sectionId].validators[control][1]
-                )
-              );
-            }
-          );
-        } else {
-          Object.keys(this.sectionsControls[sectionId].validators).forEach(
-            (control) => {
-              this.createEventSettingsForm.removeControl(control);
-            }
+    const sectionIndex = oldSections.findIndex(
+      (section) => section.sectionId === sectionId
+    );
+
+    oldSections[sectionIndex].selected = target.checked;
+
+    if (target.checked) {
+      Object.keys(this.sectionsControls[sectionId].validators).forEach(
+        (control) => {
+          this.createEventSettingsForm.addControl(
+            control,
+            new FormControl(
+              '',
+              this.sectionsControls[sectionId].validators[control][1]
+            )
           );
         }
-      }
-
-      return section;
-    });
+      );
+    } else {
+      Object.keys(this.sectionsControls[sectionId].validators).forEach(
+        (control) => {
+          this.createEventSettingsForm.removeControl(control);
+        }
+      );
+    }
     this.createEventSettingsForm.updateValueAndValidity();
-    this.sectionsConfig.next(updatedSections);
+    this.createEventSettingsForm.markAsDirty();
+    this.sectionsConfig.next(oldSections);
   }
 
   updateSections(sections: IInviteSection[]) {
@@ -485,7 +453,7 @@ export class WeddingSettingsComponent {
       }
     });
 
-    this.sectionsConfig.next(sectionsCopy);
+    return sectionsCopy;
   }
 
   dragStart(event: Event) {

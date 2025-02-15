@@ -13,9 +13,9 @@ import {
   IInviteGroupsAction,
 } from 'src/app/core/models/inviteGroups';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { controlIsDuplicated } from 'src/app/shared/utils/validators/controlIsDuplicated';
+import { map, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-invite-group',
@@ -26,23 +26,14 @@ export class InviteGroupComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  private eventId: string = '';
-  @Input() set eventIdValue(value: string) {
-    this.eventId = value;
+  private inviteGroup!: IInviteGroups;
+  @Input() set inviteGroupValue(value: IInviteGroups) {
+    this.inviteGroup = value;
     this.createInviteGroupForm.patchValue({
-      eventId: this.eventId,
+      id: value.id,
+      inviteGroup: value.inviteGroup,
+      eventId: value.eventId,
     });
-  }
-
-  private inviteGroup: IInviteGroups | undefined;
-  @Input() set inviteGroupValue(value: IInviteGroups | undefined) {
-    if (value) {
-      this.inviteGroup = value;
-      this.createInviteGroupForm.patchValue({
-        id: value.id,
-        inviteGroup: value.inviteGroup,
-      });
-    }
   }
 
   @Output() updateInviteGroups: EventEmitter<IInviteGroupsAction> =
@@ -62,8 +53,7 @@ export class InviteGroupComponent {
   constructor(
     private inviteGroupsService: InviteGroupsService,
     private fb: FormBuilder,
-    private toastr: ToastrService,
-    private loaderService: LoaderService
+    private toastr: ToastrService
   ) {}
 
   toggleIsCreatingNewFormGroup(): void {
@@ -72,21 +62,25 @@ export class InviteGroupComponent {
 
   saveInviteGroup(): void {
     if (this.createInviteGroupForm.valid && this.createInviteGroupForm.dirty) {
-      if (this.createInviteGroupForm.controls['id'].value !== '') {
-        this.updateInviteGroup();
-      } else {
-        this.createInviteGroup();
-      }
+      this.inviteGroupDuplicated(
+        this.createInviteGroupForm.controls['inviteGroup'].value as string
+      ).subscribe({
+        next: (isDuplicated: boolean) => {
+          if (!isDuplicated) {
+            if (this.createInviteGroupForm.controls['id'].value !== '') {
+              this.updateInviteGroup();
+            } else {
+              this.createInviteGroup();
+            }
+          }
+        },
+      });
     } else {
       this.createInviteGroupForm.markAllAsTouched();
     }
   }
 
   createInviteGroup() {
-    this.loaderService.setLoading(true, $localize`Creando grupo`);
-    this.createInviteGroupForm.patchValue({
-      eventId: this.eventId,
-    });
     this.inviteGroupsService
       .createInviteGroup(this.createInviteGroupForm.value as IInviteGroups)
       .subscribe({
@@ -100,14 +94,10 @@ export class InviteGroupComponent {
           });
           this.toastr.success(response.message);
         },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
       });
   }
 
   updateInviteGroup() {
-    this.loaderService.setLoading(true, $localize`Actualizando grupo`);
     this.inviteGroupsService
       .updateInviteGroup(
         this.createInviteGroupForm.value as IInviteGroups,
@@ -123,31 +113,30 @@ export class InviteGroupComponent {
           });
           this.toastr.success(response.message);
         },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
       });
   }
 
-  checkInviteGroup(event: Event) {
-    const inviteGroup = (event.target as HTMLInputElement).value;
-    if (inviteGroup === this.inviteGroup?.inviteGroup) {
+  inviteGroupDuplicated(newInviteGroup: string): Observable<boolean> {
+    if (newInviteGroup === this.inviteGroup.inviteGroup) {
       this.createInviteGroupForm.patchValue({ controlIsValid: true });
-      return;
+      this.createInviteGroupForm.updateValueAndValidity();
+      return of(false);
+    } else {
+      return this.inviteGroupsService
+        .checkInviteGroup(this.inviteGroup.eventId, newInviteGroup)
+        .pipe(
+          map((response: boolean) => {
+            this.createInviteGroupForm.patchValue({
+              controlIsValid: !response,
+            });
+            this.createInviteGroupForm.updateValueAndValidity();
+            return response;
+          })
+        );
     }
+  }
 
-    if (inviteGroup === '') {
-      this.createInviteGroupForm.patchValue({ controlIsValid: true });
-      return;
-    }
-
-    this.inviteGroupsService
-      .checkInviteGroup(this.eventId, inviteGroup)
-      .subscribe({
-        next: (response: boolean) => {
-          this.createInviteGroupForm.patchValue({ controlIsValid: !response });
-          this.createInviteGroupForm.updateValueAndValidity();
-        },
-      });
+  removeValidation(): void {
+    this.createInviteGroupForm.patchValue({ controlIsValid: true });
   }
 }

@@ -45,7 +45,8 @@ export type IUserProfilePhoto = Pick<IFullUser, 'id' | 'profilePhotoSource'>;
 
 export interface IUserAction {
   user: IUpsertUser;
-  isNew: boolean;
+  isNew: boolean | undefined;
+  roleChanged: IRole | undefined;
 }
 
 export interface ISavedUserRole {

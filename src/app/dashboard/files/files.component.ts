@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { combineLatest, Observable, take } from 'rxjs';
+import { combineLatest, Observable, take, tap } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { CommonModalResponse, CommonModalType } from 'src/app/core/models/enum';
 import { IDropdownEvent } from 'src/app/core/models/events';
@@ -17,16 +17,13 @@ import { CommonModalService } from 'src/app/core/services/commonModal.service';
 import { EventsService } from 'src/app/core/services/events.service';
 import { FileReaderService } from 'src/app/core/services/fileReader.service';
 import { FilesService } from 'src/app/core/services/files.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 
 @Component({
   selector: 'app-files',
   templateUrl: './files.component.html',
   styleUrl: './files.component.css',
 })
-export class FilesComponent implements OnInit {
-  isAdmin = false;
-
+export class FilesComponent {
   events: IDropdownEvent[] = [];
   eventSelected: IDropdownEvent | undefined = undefined;
 
@@ -45,7 +42,6 @@ export class FilesComponent implements OnInit {
   });
 
   constructor(
-    private loaderService: LoaderService,
     private eventsService: EventsService,
     private filesService: FilesService,
     private fileReaderService: FileReaderService,
@@ -54,20 +50,11 @@ export class FilesComponent implements OnInit {
     private toastr: ToastrService
   ) {}
 
-  ngOnInit(): void {
-    this.loaderService.setLoading(true, $localize`Cargando archivos`);
-
-    this.eventsService
-      .getDropdownEvents()
-      .subscribe({
-        next: (events) => {
-          this.events = events;
-        },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
-      });
-  }
+  vm$ = this.eventsService.getDropdownEvents().pipe(
+    tap((events) => {
+      this.events = events;
+    })
+  );
 
   searchImages(): void {
     this.eventSelected = this.events.find(
@@ -78,7 +65,6 @@ export class FilesComponent implements OnInit {
 
   saveFiles(): void {
     if (this.saveFilesForm.controls['photoFilesSource'].value !== '') {
-      this.loaderService.setLoading(true, $localize`Subiendo archivos`);
       const filesObservable: Observable<string>[] = [];
 
       Array.from(
@@ -101,27 +87,21 @@ export class FilesComponent implements OnInit {
             );
           });
 
-          combineLatest(apiCalls)
-            .subscribe({
-              next: (response) => {
-                this.saveFilesForm.patchValue({
-                  photoFiles: '',
-                  photoFilesSource: '',
-                });
-                this.getLatestFiles();
-                this.toastr.success(response[0].message);
-              },
-            })
-            .add(() => {
-              this.loaderService.setLoading(false);
-            });
+          combineLatest(apiCalls).subscribe({
+            next: (response) => {
+              this.saveFilesForm.patchValue({
+                photoFiles: '',
+                photoFilesSource: '',
+              });
+              this.getLatestFiles();
+              this.toastr.success(response[0].message);
+            },
+          });
         },
       });
     }
 
     if (this.saveFilesForm.controls['musicFilesSource'].value !== '') {
-      this.loaderService.setLoading(true, $localize`Subiendo archivos`);
-
       const musicFile = Array.from(
         this.saveFilesForm.controls['musicFilesSource'].value as FileList
       )[0];
@@ -130,70 +110,60 @@ export class FilesComponent implements OnInit {
       formData.append('music', musicFile, musicFile.name);
       formData.append('eventId', this.eventSelected?.id ?? '');
 
-      this.filesService
-        .uploadMusic(formData)
-        .subscribe({
-          next: (response) => {
-            this.saveFilesForm.patchValue({
-              musicFiles: '',
-              musicFilesSource: '',
-            });
+      this.filesService.uploadMusic(formData).subscribe({
+        next: (response) => {
+          this.saveFilesForm.patchValue({
+            musicFiles: '',
+            musicFilesSource: '',
+          });
 
-            this.getLatestFiles();
-            this.toastr.success(response.message);
-          },
-        })
-        .add(() => {
-          this.loaderService.setLoading(false);
-        });
+          this.getLatestFiles();
+          this.toastr.success(response.message);
+        },
+      });
     }
   }
 
   getLatestFiles(): void {
     this.clearInformation();
     if (this.eventSelected) {
-      this.filesService
-        .getFilesByEvent(this.eventSelected.id)
-        .subscribe({
-          next: (response) => {
-            const images = response.eventImages;
-            const audios = response.eventAudios;
+      this.filesService.getFilesByEvent(this.eventSelected.id).subscribe({
+        next: (response) => {
+          const images = response.eventImages;
+          const audios = response.eventAudios;
 
-            if (images.length > 0) {
-              this.filesUpdateForm.setControl(
-                'images',
-                this.fb.array<FormGroup<IUpdateImageArray>>(
-                  images.map((image) =>
-                    this.fb.group({
-                      id: new FormControl(image.id),
-                      imageUsage: new FormControl(image.imageUsage ?? ''),
-                      fileUrl: new FormControl(image.fileUrl),
-                      publicId: new FormControl(image.publicId),
-                    } as IUpdateImageArray)
-                  )
+          if (images.length > 0) {
+            this.filesUpdateForm.setControl(
+              'images',
+              this.fb.array<FormGroup<IUpdateImageArray>>(
+                images.map((image) =>
+                  this.fb.group({
+                    id: new FormControl(image.id),
+                    imageUsage: new FormControl(image.imageUsage ?? ''),
+                    fileUrl: new FormControl(image.fileUrl),
+                    publicId: new FormControl(image.publicId),
+                  } as IUpdateImageArray)
                 )
-              );
-            }
+              )
+            );
+          }
 
-            if (audios.length > 0) {
-              this.filesUpdateForm.setControl(
-                'audios',
-                this.fb.array<FormGroup<IUpdateAudioArray>>(
-                  audios.map((audio) =>
-                    this.fb.group({
-                      id: new FormControl(audio.id),
-                      fileUrl: new FormControl(audio.fileUrl),
-                      publicId: new FormControl(audio.publicId),
-                    } as IUpdateAudioArray)
-                  )
+          if (audios.length > 0) {
+            this.filesUpdateForm.setControl(
+              'audios',
+              this.fb.array<FormGroup<IUpdateAudioArray>>(
+                audios.map((audio) =>
+                  this.fb.group({
+                    id: new FormControl(audio.id),
+                    fileUrl: new FormControl(audio.fileUrl),
+                    publicId: new FormControl(audio.publicId),
+                  } as IUpdateAudioArray)
                 )
-              );
-            }
-          },
-        })
-        .add(() => {
-          this.loaderService.setLoading(false);
-        });
+              )
+            );
+          }
+        },
+      });
     }
   }
 
@@ -228,18 +198,12 @@ export class FilesComponent implements OnInit {
       })
       .subscribe((response) => {
         if (response === CommonModalResponse.Confirm) {
-          this.loaderService.setLoading(true, $localize`Eliminando archivo`);
-          this.filesService
-            .deleteFile(file)
-            .subscribe({
-              next: (response: IMessageResponse) => {
-                this.getLatestFiles();
-                this.toastr.success(response.message);
-              },
-            })
-            .add(() => {
-              this.loaderService.setLoading(false);
-            });
+          this.filesService.deleteFile(file).subscribe({
+            next: (response: IMessageResponse) => {
+              this.getLatestFiles();
+              this.toastr.success(response.message);
+            },
+          });
         }
       });
   }
@@ -317,7 +281,6 @@ export class FilesComponent implements OnInit {
 
   saveChanges(): void {
     if (this.filesUpdateForm.valid && this.filesUpdateForm.dirty) {
-      this.loaderService.setLoading(true, $localize`Guardando archivos`);
       this.filesService
         .updateImage(
           this.filesUpdateForm.controls['images'].value as IUpdateImage[]
@@ -327,9 +290,6 @@ export class FilesComponent implements OnInit {
             this.toastr.success(response.message);
             this.filesUpdateForm.markAsUntouched();
           },
-        })
-        .add(() => {
-          this.loaderService.setLoading(false);
         });
     }
   }

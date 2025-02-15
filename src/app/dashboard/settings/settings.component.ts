@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { BehaviorSubject, map } from 'rxjs';
+import { EventType } from 'src/app/core/models/enum';
 import { IDropdownEvent } from 'src/app/core/models/events';
 import { ISettingAction } from 'src/app/core/models/settings';
 import { EventsService } from 'src/app/core/services/events.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 
 @Component({
   selector: 'app-settings',
@@ -10,47 +11,48 @@ import { LoaderService } from 'src/app/core/services/loader.service';
   styleUrl: './settings.component.css',
   encapsulation: ViewEncapsulation.None,
 })
-export class SettingsComponent implements OnInit {
-  events: IDropdownEvent[] = [];
-  eventSettingAction: ISettingAction = {} as ISettingAction;
+export class SettingsComponent {
+  private events = new BehaviorSubject<IDropdownEvent[]>([]);
+  events$ = this.events.asObservable();
 
-  constructor(
-    private loaderService: LoaderService,
-    private eventsService: EventsService
-  ) {}
+  eventSettingAction: ISettingAction = {
+    eventId: '',
+    isNew: true,
+    eventType: EventType.None,
+  };
 
-  ngOnInit(): void {
-    this.loaderService.setLoading(true, $localize`Cargando configuraciones`);
+  constructor(private eventsService: EventsService) {}
 
-    this.eventsService
-      .getDropdownEvents()
-      .subscribe({
-        next: (events) => {
-          this.events = events;
-        },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
-      });
-  }
+  vm$ = this.eventsService.getDropdownEvents().pipe(
+    map((events) => {
+      this.events.next(events);
+      return {
+        events,
+      };
+    })
+  );
 
   loadEventSettings() {
-    const eventFound = this.events.find(
+    const eventFound = this.events.value.find(
       (event) => event.id === $('#event-select').val()
-    );
+    ) as IDropdownEvent;
 
     if (eventFound) {
       this.eventSettingAction = {
         eventId: eventFound.id,
-        isNew: false,
+        isNew: undefined,
         eventType: eventFound.typeOfEvent,
-      } as ISettingAction;
+      };
     } else {
-      this.eventSettingAction = {} as ISettingAction;
+      this.eventSettingAction = {
+        eventId: '',
+        isNew: undefined,
+        eventType: EventType.None,
+      };
     }
   }
 
   showSelectEvent(): boolean {
-    return Object.keys(this.eventSettingAction).length === 0;
+    return this.eventSettingAction.eventType === EventType.None;
   }
 }

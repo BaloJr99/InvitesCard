@@ -3,19 +3,16 @@ import {
   ElementRef,
   Inject,
   LOCALE_ID,
-  OnInit,
   ViewEncapsulation,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest } from 'rxjs';
-import { IDownloadAudio, IDownloadImage } from '../../core/models/images';
-import { LoaderService } from '../../core/services/loader.service';
+import { ActivatedRoute } from '@angular/router';
+import { combineLatest, map, mergeMap, switchMap } from 'rxjs';
+import { IDownloadImage } from '../../core/models/images';
 import { SettingsService } from '../../core/services/settings.service';
 import { FilesService } from '../../core/services/files.service';
 import { ImageUsage } from '../../core/models/enum';
 import { IInviteSection, IUserInvite } from '../../core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
-import { IWeddingSetting } from 'src/app/core/models/settings';
 import { toLocalDate } from 'src/app/shared/utils/tools';
 
 @Component({
@@ -24,62 +21,16 @@ import { toLocalDate } from 'src/app/shared/utils/tools';
   styleUrls: ['./wedding.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
-export class WeddingComponent implements OnInit {
+export class WeddingComponent {
   counter = 0;
 
-  dayOfTheWeek = '';
-  shortDate = '';
-  longDate = '';
-
-  inviteOpened = false;
-
-  userInvite!: IUserInvite;
-  eventSettings: IWeddingSetting = {
-    sections: [],
-    eventId: '',
-    primaryColor: '',
-    secondaryColor: '',
-    weddingPrimaryColor: '',
-    weddingSecondaryColor: '',
-    weddingCopyMessage: '',
-    receptionPlace: '',
-    groomParents: '',
-    brideParents: '',
-    massUrl: '',
-    massTime: '',
-    massPlace: '',
-    venueUrl: '',
-    venueTime: '',
-    venuePlace: '',
-    civilPlace: '',
-    civilTime: '',
-    civilUrl: '',
-    dressCodeColor: '',
-    copyMessage: '',
-    hotelInformation: '',
-    hotelName: '',
-    hotelAddress: '',
-    hotelPhone: '',
-    hotelUrl: '',
-    cardNumber: '',
-    clabeBank: '',
-  };
-
-  gallery: IDownloadImage[] = [];
-  mainImage: IDownloadImage | undefined;
-
-  downloadAudio: IDownloadAudio | undefined = undefined;
   audio = new Audio();
   playAudio = false;
-
-  deadlineMet = false;
 
   sections: IInviteSection[] = [];
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
-    private loaderService: LoaderService,
     private settingsService: SettingsService,
     private filesService: FilesService,
     private invitesService: InvitesService,
@@ -87,143 +38,131 @@ export class WeddingComponent implements OnInit {
     @Inject(LOCALE_ID) private localeValue: string
   ) {}
 
-  ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      const inviteId = params['id'];
+  vm$ = this.route.params.pipe(
+    map((params) => params['id']),
+    switchMap((id) => this.invitesService.getInvite(id)),
+    mergeMap((invite) =>
+      combineLatest([
+        this.settingsService.getEventSettings(invite.eventId),
+        this.filesService.getFilesByEvent(invite.eventId),
+      ]).pipe(
+        map(([eventSettings, downloadedFiles]) => {
+          return {
+            invite,
+            eventSettings,
+            downloadedFiles,
+          };
+        })
+      )
+    ),
+    map(({ invite, eventSettings, downloadedFiles }) => {
+      const userInvite = {
+        ...invite,
+        dateOfEvent: toLocalDate(invite.dateOfEvent),
+        maxDateOfConfirmation: toLocalDate(invite.maxDateOfConfirmation),
+      } as IUserInvite;
 
-      if (!inviteId) {
-        this.router.navigate(['/error/page-not-found']);
+      const deadlineMet =
+        new Date().getTime() > new Date(invite.maxDateOfConfirmation).getTime();
+
+      const dayOfTheWeek = new Intl.DateTimeFormat(this.localeValue, {
+        weekday: 'long',
+      }).format(new Date(invite.dateOfEvent));
+
+      const shortDate = new Intl.DateTimeFormat(this.localeValue, {
+        day: 'numeric',
+        month: 'long',
+      }).format(new Date(invite.dateOfEvent));
+
+      const fullEventSettings = JSON.parse(eventSettings.settings);
+      this.sections = fullEventSettings.sections;
+
+      const parsedEventSettings = {
+        ...JSON.parse(eventSettings.settings),
+        eventId: eventSettings.eventId,
+      };
+
+      if (parsedEventSettings.massTime) {
+        const dateOfMassTime = parsedEventSettings.massTime.split(' ')[0];
+        const timeOfMassTime = parsedEventSettings.massTime.split(' ')[1];
+        parsedEventSettings.massTime = toLocalDate(
+          `${dateOfMassTime}T${timeOfMassTime}.000Z`
+        )
+          .split('T')[1]
+          .substring(0, 5);
       }
 
-      this.invitesService.getInvite(inviteId).subscribe({
-        next: (userInvite) => {
-          this.userInvite = {
-            ...userInvite,
-            dateOfEvent: toLocalDate(userInvite.dateOfEvent),
-            maxDateOfConfirmation: toLocalDate(
-              userInvite.maxDateOfConfirmation
-            ),
-          } as IUserInvite;
+      if (parsedEventSettings.venueTime) {
+        const dateOfVenueTime = parsedEventSettings.venueTime.split(' ')[0];
+        const timeOfVenueTime = parsedEventSettings.venueTime.split(' ')[1];
+        parsedEventSettings.venueTime = toLocalDate(
+          `${dateOfVenueTime}T${timeOfVenueTime}.000Z`
+        )
+          .split('T')[1]
+          .substring(0, 5);
+      }
 
-          this.deadlineMet =
-            new Date().getTime() >
-            new Date(this.userInvite.maxDateOfConfirmation).getTime();
+      if (parsedEventSettings.civilTime) {
+        const dateOfCivilTime = parsedEventSettings.civilTime.split(' ')[0];
+        const timeOfCivilTime = parsedEventSettings.civilTime.split(' ')[1];
+        parsedEventSettings.civilTime = toLocalDate(
+          `${dateOfCivilTime}T${timeOfCivilTime}.000Z`
+        )
+          .split('T')[1]
+          .substring(0, 5);
+      }
 
-          this.dayOfTheWeek = new Intl.DateTimeFormat(this.localeValue, {
-            weekday: 'long',
-          }).format(new Date(this.userInvite.dateOfEvent));
+      const downloadAudio =
+        downloadedFiles.eventAudios.length > 0
+          ? downloadedFiles.eventAudios[0]
+          : undefined;
 
-          this.shortDate = new Intl.DateTimeFormat(this.localeValue, {
-            day: 'numeric',
-            month: 'long',
-          }).format(new Date(this.userInvite.dateOfEvent));
+      if (downloadAudio) {
+        this.audio = new Audio(downloadAudio.fileUrl);
+        this.audio.volume = 0.5;
+      }
 
-          this.longDate = new Intl.DateTimeFormat(this.localeValue, {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-          }).format(new Date(this.userInvite.dateOfEvent));
+      const mainImage =
+        window.innerWidth > 575
+          ? (downloadedFiles.eventImages.find(
+              (image) => image.imageUsage === ImageUsage.Principal_Desktop
+            ) as IDownloadImage)
+          : (downloadedFiles.eventImages.find(
+              (image) => image.imageUsage === ImageUsage.Principal_Phone
+            ) as IDownloadImage);
 
-          combineLatest([
-            this.settingsService.getEventSettings(this.userInvite.eventId),
-            this.filesService.getFilesByEvent(this.userInvite.eventId),
-          ])
-            .subscribe({
-              next: ([eventSettings, downloadFiles]) => {
-                const eventSettingsParsed = JSON.parse(eventSettings.settings);
-                this.sections = eventSettingsParsed.sections;
+      const gallery = downloadedFiles.eventImages.filter(
+        (image) => image.imageUsage === ImageUsage.Gallery
+      );
 
-                this.eventSettings = {
-                  ...JSON.parse(eventSettings.settings),
-                  eventId: eventSettings.eventId,
-                };
+      this.elRef.nativeElement.style.setProperty(
+        '--custom-primary-color',
+        parsedEventSettings.weddingPrimaryColor
+      );
+      this.elRef.nativeElement.style.setProperty(
+        '--custom-secondary-color',
+        parsedEventSettings.weddingSecondaryColor
+      );
+      this.elRef.nativeElement.style.setProperty(
+        '--custom-light-primary-color',
+        `${parsedEventSettings.weddingPrimaryColor}80`
+      );
+      this.elRef.nativeElement.style.setProperty(
+        '--custom-light-secondary-color',
+        `${parsedEventSettings.weddingSecondaryColor}80`
+      );
 
-                if (this.eventSettings.massTime) {
-                  const dateOfMassTime =
-                    this.eventSettings.massTime.split(' ')[0];
-                  const timeOfMassTime =
-                    this.eventSettings.massTime.split(' ')[1];
-                  this.eventSettings.massTime = toLocalDate(
-                    `${dateOfMassTime}T${timeOfMassTime}.000Z`
-                  )
-                    .split('T')[1]
-                    .substring(0, 5);
-                }
-
-                if (this.eventSettings.venueTime) {
-                  const dateOfVenueTime =
-                    this.eventSettings.venueTime.split(' ')[0];
-                  const timeOfVenueTime =
-                    this.eventSettings.venueTime.split(' ')[1];
-                  this.eventSettings.venueTime = toLocalDate(
-                    `${dateOfVenueTime}T${timeOfVenueTime}.000Z`
-                  )
-                    .split('T')[1]
-                    .substring(0, 5);
-                }
-
-                if (this.eventSettings.civilTime) {
-                  const dateOfCivilTime =
-                    this.eventSettings.civilTime.split(' ')[0];
-                  const timeOfCivilTime =
-                    this.eventSettings.civilTime.split(' ')[1];
-                  this.eventSettings.civilTime = toLocalDate(
-                    `${dateOfCivilTime}T${timeOfCivilTime}.000Z`
-                  )
-                    .split('T')[1]
-                    .substring(0, 5);
-                }
-
-                this.downloadAudio =
-                  downloadFiles.eventAudios.length > 0
-                    ? downloadFiles.eventAudios[0]
-                    : undefined;
-
-                if (this.downloadAudio) {
-                  this.audio = new Audio(this.downloadAudio.fileUrl);
-                  this.audio.volume = 0.5;
-                }
-
-                this.mainImage =
-                  window.innerWidth > 575
-                    ? (downloadFiles.eventImages.find(
-                        (image) =>
-                          image.imageUsage === ImageUsage.Principal_Desktop
-                      ) as IDownloadImage)
-                    : (downloadFiles.eventImages.find(
-                        (image) =>
-                          image.imageUsage === ImageUsage.Principal_Phone
-                      ) as IDownloadImage);
-
-                this.gallery = downloadFiles.eventImages.filter(
-                  (image) => image.imageUsage === ImageUsage.Gallery
-                );
-
-                this.elRef.nativeElement.style.setProperty(
-                  '--custom-primary-color',
-                  this.eventSettings.weddingPrimaryColor
-                );
-                this.elRef.nativeElement.style.setProperty(
-                  '--custom-secondary-color',
-                  this.eventSettings.weddingSecondaryColor
-                );
-                this.elRef.nativeElement.style.setProperty(
-                  '--custom-light-primary-color',
-                  `${this.eventSettings.weddingPrimaryColor}80`
-                );
-                this.elRef.nativeElement.style.setProperty(
-                  '--custom-light-secondary-color',
-                  `${this.eventSettings.weddingSecondaryColor}80`
-                );
-              },
-            })
-            .add(() => {
-              this.loaderService.setLoading(false);
-            });
-        },
-      });
-    });
-  }
+      return {
+        dayOfTheWeek,
+        shortDate,
+        parsedEventSettings,
+        userInvite,
+        deadlineMet,
+        mainImage,
+        gallery,
+      };
+    })
+  );
 
   goToForm(): void {
     document.getElementById('scrollToForm')?.scrollIntoView({

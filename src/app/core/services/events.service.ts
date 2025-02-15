@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   IDropdownEvent,
@@ -43,6 +43,13 @@ export class EventsService {
   getEventInvites(eventId: string): Observable<IFullInvite[]> {
     return this.http.get<IFullInvite[]>(
       `${this.invitesBaseUrl}/invites/${eventId}`
+    ).pipe(
+      map((invites) => {
+        return invites.map((invite) => {
+          invite.kidsAllowed = Boolean(invite.kidsAllowed);
+          return invite;
+        });
+      })
     );
   }
 

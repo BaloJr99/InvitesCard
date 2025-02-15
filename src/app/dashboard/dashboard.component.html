@@ -1,6 +1,6 @@
-<div class="dashboard">
+<div class="dashboard" *ngIf="vm$ | async as vm">
   <header>
-    <app-navbar [notificationsValue]="notifications"></app-navbar>
+    <app-navbar [notificationsValue]="vm.notifications"></app-navbar>
   </header>
   <div class="container-fluid">
     <div class="row g-0 h-100">
@@ -18,10 +18,10 @@
       <button class="btn" (click)="toggleMessages()" aria-label="Toggle Messages"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
     </div>
     <div class="messages-container">
-      <div class="card" [style.display]="messagesGrouped.length === 0 ? 'block' : 'none'" i18n>
+      <div class="card" [style.display]="vm.messagesGrouped.length === 0 ? 'block' : 'none'" i18n>
         No hay mensajes
       </div>
-      <div class="message" *ngFor="let group of messagesGrouped">
+      <div class="message" *ngFor="let group of vm.messagesGrouped">
         <span class="message-date">
           <hr>
           {{ group.key }}
@@ -37,5 +37,5 @@
       </div>
     </div>
   </div>
-  <button *ngIf="route.includes('/dashboard/events/')" class="btn messages" (click)="toggleMessages()" title="Toogle Messages"><i class="fa-regular fa-comment" aria-hidden="true"></i></button>
+  <button *ngIf="vm.route.includes('/dashboard/events/')" class="btn messages" (click)="toggleMessages()" title="Toogle Messages"><i class="fa-regular fa-comment" aria-hidden="true"></i></button>
 </div>

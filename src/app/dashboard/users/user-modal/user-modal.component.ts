@@ -1,10 +1,8 @@
 import {
-  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   Input,
-  OnInit,
   Output,
   ViewChildren,
 } from '@angular/core';
@@ -15,144 +13,182 @@ import {
   Validators,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import {
-  ISavedUserRole,
-  IUpsertUser,
-  IUserAction,
-} from 'src/app/core/models/users';
-import { IRole, IRoleAction } from 'src/app/core/models/roles';
+import { ISavedUserRole, IUserAction } from 'src/app/core/models/users';
+import { IRole } from 'src/app/core/models/roles';
 import { UsersService } from 'src/app/core/services/users.service';
 import { RolesService } from 'src/app/core/services/roles.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { controlIsDuplicated } from 'src/app/shared/utils/validators/controlIsDuplicated';
-import { RoleActionEvent } from 'src/app/core/models/enum';
+import {
+  BehaviorSubject,
+  combineLatest,
+  map,
+  mergeMap,
+  Observable,
+  of,
+  tap,
+} from 'rxjs';
 
 @Component({
   selector: 'app-user-modal',
   templateUrl: './user-modal.component.html',
   styleUrls: ['./user-modal.component.css'],
 })
-export class UserModalComponent implements OnInit {
+export class UserModalComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
   serverErrorMessage: string = '';
 
-  @Input() set userActionValue(value: IUserAction | undefined) {
-    if (value) {
-      const user: IUpsertUser = value.user;
-      this.createUserForm.patchValue({
-        ...user,
-        controlIsValid: true,
-      });
+  private userAction = new BehaviorSubject<IUserAction>({
+    isNew: undefined,
+    user: {
+      id: '',
+      username: '',
+      email: '',
+      roles: [],
+      isActive: true,
+    },
+    roleChanged: undefined,
+  });
+  userAction$ = this.userAction.asObservable();
 
-      this.editedUser = user;
+  @Input() set userActionValue(value: IUserAction) {
+    if (value.roleChanged) {
+      const currentRoles = this.roles.value;
+
+      const roleFound = currentRoles.find(
+        (r) => r.id === value.roleChanged?.id
+      );
+
+      if (roleFound) {
+        this.roles.next(
+          currentRoles.map((r) =>
+            r.id === value.roleChanged?.id ? value.roleChanged : r
+          )
+        );
+      } else {
+        this.roles.next([...currentRoles, value.roleChanged as IRole]);
+      }
     }
+    this.userAction.next(value);
   }
+
+  @Input() set showModalValue(value: boolean) {
+    this.showModal.next(value);
+  }
+
+  private showModal = new BehaviorSubject<boolean>(false);
+  showModal$ = this.showModal.asObservable();
+
+  private roles = new BehaviorSubject<IRole[]>([]);
+  roles$ = this.roles.asObservable();
 
   @Output() updateUsers: EventEmitter<IUserAction> = new EventEmitter();
   @Output() selectRole: EventEmitter<ISavedUserRole> = new EventEmitter();
+  @Output() closeModal: EventEmitter<void> = new EventEmitter();
+
+  vm$ = this.rolesService.getAllRoles().pipe(
+    tap((roles) => this.roles.next(roles)),
+    mergeMap(() =>
+      combineLatest([this.userAction$, this.roles$, this.showModal$]).pipe(
+        map(([userAction, roles, showModal]) => {
+          const filteredRoles = roles.filter(
+            (r) => !userAction.user.roles.map((ur) => ur).includes(r.id)
+          );
+
+          const userRoles = roles.filter((r) =>
+            userAction.user.roles.map((ur) => ur).includes(r.id)
+          );
+
+          if (showModal) {
+            this.createUserForm.patchValue({
+              ...userAction.user,
+            });
+
+            $('#usersModal').modal('show');
+            $('#usersModal').on('hidden.bs.modal', () => {
+              this.closeModal.emit();
+            });
+          } else {
+            this.clearInputs();
+            $('#usersModal').modal('hide');
+          }
+
+          return {
+            filteredRoles,
+            userRoles,
+          };
+        })
+      )
+    )
+  );
 
   createUserForm: FormGroup = this.fb.group(
     {
-      id: [''],
+      id: '',
       username: ['', Validators.required],
       email: ['', Validators.required],
       roles: [[], [Validators.required, Validators.minLength(1)]],
-      isActive: [true],
-      controlIsValid: [true],
+      isActive: true,
+      controlIsValid: true,
     },
     {
       validators: controlIsDuplicated,
     }
   );
-  roles: IRole[] = [];
-  userRoles: IRole[] = [];
-  filteredRoles: IRole[] = [];
   roleSelected: IRole | undefined = undefined;
-  editedUser: IUpsertUser | undefined = undefined;
 
   constructor(
     private usersService: UsersService,
     private rolesService: RolesService,
     private fb: FormBuilder,
-    private toastr: ToastrService,
-    private loaderService: LoaderService,
-    private cd: ChangeDetectorRef
+    private toastr: ToastrService
   ) {}
-
-  ngOnInit(): void {
-    $('#usersModal').on('hidden.bs.modal', () => {
-      this.clearInputs();
-    });
-
-    $('#usersModal').on('shown.bs.modal', () => {
-      this.loaderService.setLoading(true, $localize`Cargando roles`);
-
-      this.rolesService
-        .getAllRoles()
-        .subscribe({
-          next: (roles) => {
-            this.roles = roles;
-            this.filteredRoles = roles;
-
-            if (this.editedUser) {
-              const user = this.editedUser;
-              this.userRoles = this.roles.filter((r) =>
-                user.roles.includes(r.id)
-              );
-              this.filterRoles();
-            }
-          },
-        })
-        .add(() => {
-          this.loaderService.setLoading(false);
-        });
-    });
-  }
 
   saveUser() {
     this.serverErrorMessage = '';
     if (this.createUserForm.valid && this.createUserForm.dirty) {
-      if (this.createUserForm.controls['id'].value !== '') {
-        this.updateUser();
-      } else {
-        this.createUser();
-      }
+      this.usernameDuplicated(
+        this.createUserForm.controls['username'].value
+      ).subscribe({
+        next: (isDuplicated: boolean) => {
+          if (!isDuplicated) {
+            if (this.createUserForm.controls['id'].value !== '') {
+              this.updateUser();
+            } else {
+              this.createUser();
+            }
+          }
+        },
+      });
     } else {
       this.createUserForm.markAllAsTouched();
     }
   }
 
   createUser() {
-    this.loaderService.setLoading(true, $localize`Creando usuario`);
-    this.usersService
-      .createUser(this.createUserForm.value)
-      .subscribe({
-        next: (response: IMessageResponse) => {
-          this.updateUsers.emit({
-            user: {
-              ...this.createUserForm.value,
-              id: response.id,
-            },
-            isNew: true,
-          });
-          this.toastr.success(response.message);
-          $('#usersModal').modal('hide');
-        },
-        error: (error) => {
-          if (error.status === 409) {
-            this.serverErrorMessage = error.error.message;
-          }
-        },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
-      });
+    this.usersService.createUser(this.createUserForm.value).subscribe({
+      next: (response: IMessageResponse) => {
+        this.updateUsers.emit({
+          user: {
+            ...this.createUserForm.value,
+            id: response.id,
+          },
+          isNew: true,
+          roleChanged: undefined,
+        });
+        this.toastr.success(response.message);
+        $('#usersModal').modal('hide');
+      },
+      error: (error) => {
+        if (error.status === 409) {
+          this.serverErrorMessage = error.error.message;
+        }
+      },
+    });
   }
 
   updateUser() {
-    this.loaderService.setLoading(true, $localize`Actualizando usuario`);
     this.usersService
       .updateUser(
         this.createUserForm.value,
@@ -163,44 +199,46 @@ export class UserModalComponent implements OnInit {
           this.updateUsers.emit({
             user: this.createUserForm.value,
             isNew: false,
+            roleChanged: undefined,
           });
           this.toastr.success(response.message);
-          $('#usersModal').modal('hide');
         },
         error: (error) => {
           if (error.status === 409) {
             this.serverErrorMessage = error.error.message;
           }
         },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
       });
   }
 
   clearInputs(): void {
-    this.createUserForm.reset({
+    const resetUser = {
       id: '',
       username: '',
       email: '',
       roles: [],
       isActive: true,
+    };
+
+    this.createUserForm.reset({
+      ...resetUser,
       controlIsValid: true,
     });
 
-    this.userRoles = [];
-    this.filteredRoles = [];
     this.roleSelected = undefined;
 
     const selectFilter = document.getElementById(
       'roleFilter'
     ) as HTMLSelectElement;
-    selectFilter.value = '';
+
+    if (selectFilter) selectFilter.value = '';
+
+    this.serverErrorMessage = '';
   }
 
   selectedRole(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
-    const role = this.roles.find(
+    const role = this.roles.value.find(
       (r) => r.id === selectElement.options[selectElement.selectedIndex].value
     );
     this.roleSelected = role;
@@ -208,12 +246,14 @@ export class UserModalComponent implements OnInit {
 
   addRole(): void {
     if (this.roleSelected) {
-      this.userRoles.push(this.roleSelected);
-      this.filterRoles();
+      const userActionValue = this.userAction.value;
+      userActionValue.user = {
+        ...this.createUserForm.value,
+        roles: [...userActionValue.user.roles, this.roleSelected.id],
+      };
 
-      this.createUserForm.patchValue({
-        roles: [...this.userRoles.map((x) => x.id)],
-      });
+      this.userAction.next(userActionValue);
+
       this.createUserForm.controls['roles'].markAsDirty();
 
       this.roleSelected = undefined;
@@ -225,38 +265,16 @@ export class UserModalComponent implements OnInit {
     }
   }
 
-  filterRoles() {
-    this.filteredRoles = this.roles.filter(
-      (f) => !this.userRoles.map((u) => u.id).includes(f.id)
-    );
-
-    this.cd.detectChanges();
-  }
-
   deleteRole(roleId: string): void {
-    this.userRoles = this.userRoles.filter((r) => r.id !== roleId);
-    this.filterRoles();
-    this.createUserForm.patchValue({
-      roles: [...this.userRoles.map((x) => x.id)],
-    });
+    const userActionValue = this.userAction.value;
+    userActionValue.user = {
+      ...this.createUserForm.value,
+      roles: userActionValue.user.roles.filter((r) => r !== roleId),
+    };
+
+    this.userAction.next(userActionValue);
 
     this.createUserForm.controls['roles'].markAsDirty();
-    this.createUserForm.markAllAsTouched();
-  }
-
-  checkUsername(event: Event) {
-    const username = (event.target as HTMLInputElement).value;
-    if (username === '') {
-      this.createUserForm.patchValue({ controlIsValid: false });
-      return;
-    }
-
-    this.usersService.checkUsername(username).subscribe({
-      next: (response: boolean) => {
-        this.createUserForm.patchValue({ controlIsValid: !response });
-        this.createUserForm.updateValueAndValidity();
-      },
-    });
   }
 
   roleAction(isEditingRole: boolean) {
@@ -270,18 +288,26 @@ export class UserModalComponent implements OnInit {
     }
   }
 
-  updateRoles(role: IRoleAction) {
-    if (role.action === RoleActionEvent.Create) {
-      this.roles.push(role.role as IRole);
-    } else if (role.action === RoleActionEvent.Update) {
-      const roleFromAction = role.role as IRole;
-      this.roles = this.roles.map((r) =>
-        r.id === roleFromAction.id ? roleFromAction : r
-      );
-
-      this.userRoles = this.userRoles.map((r) =>
-        r.id === roleFromAction.id ? roleFromAction : r
+  usernameDuplicated(newUsername: string): Observable<boolean> {
+    if (newUsername === this.userAction.value.user.username) {
+      this.createUserForm.patchValue({ controlIsValid: true });
+      this.createUserForm.updateValueAndValidity();
+      return of(false);
+    } else {
+      return this.usersService.checkUsername(newUsername).pipe(
+        map((response: boolean) => {
+          this.createUserForm.patchValue({
+            controlIsValid: !response,
+          });
+          this.createUserForm.updateValueAndValidity();
+          return response;
+        })
       );
     }
+  }
+
+  removeValidation() {
+    this.createUserForm.patchValue({ controlIsValid: true });
+    this.createUserForm.updateValueAndValidity();
   }
 }

@@ -83,7 +83,9 @@ export class TableComponent {
       if (activeFilters.length > 0) {
         sortedArray = sortedArray.filter((row) =>
           activeFilters.every((filter) =>
-            row[filter.filter].toLowerCase().includes(filter.value.toLowerCase())
+            row[filter.filter]
+              .toLowerCase()
+              .includes(filter.value.toLowerCase())
           )
         );
       }
@@ -233,7 +235,7 @@ export class TableComponent {
     this.actionResponse.emit({
       action: SelectAction.SelectAll,
       data: {
-        tableIndex: this.tableConfiguration.getValue().tableIndex.toString(),
+        tableIndex: this.tableConfiguration.value.tableIndex.toString(),
         checked: target.checked.toString(),
       },
     });
@@ -245,7 +247,7 @@ export class TableComponent {
     this.actionResponse.emit({
       action: SelectAction.SelectRecord,
       data: {
-        tableIndex: this.tableConfiguration.getValue().tableIndex.toString(),
+        tableIndex: this.tableConfiguration.value.tableIndex.toString(),
         rowIndex: index.toString(),
         checked: target.checked.toString(),
       },
@@ -254,9 +256,9 @@ export class TableComponent {
 
   allSelected(): boolean {
     try {
-      return this.tableConfiguration
-        .getValue()
-        .data.every((row) => Boolean(JSON.parse(row['beingDeleted'])));
+      return this.tableConfiguration.value.data.every((row) =>
+        Boolean(JSON.parse(row['beingDeleted']))
+      );
     } catch {
       return false;
     }
@@ -271,8 +273,8 @@ export class TableComponent {
   }
 
   showButtons(columnIndex: number): boolean {
-    const buttons = this.tableConfiguration.getValue().buttons;
-    const dataRowLength = this.tableConfiguration.getValue().headers.length;
+    const buttons = this.tableConfiguration.value.buttons;
+    const dataRowLength = this.tableConfiguration.value.headers.length;
 
     if (buttons && buttons.length > 0) {
       return columnIndex === dataRowLength - 1;
@@ -281,64 +283,64 @@ export class TableComponent {
   }
 
   previousPage(): void {
-    const currentPage = this.tableStructure.getValue().skip;
+    const currentPage = this.tableStructure.value.skip;
     this.tableStructure.next({
-      ...this.tableStructure.getValue(),
+      ...this.tableStructure.value,
       skip: currentPage - 1,
     });
   }
 
   nextPage(): void {
-    const currentPage = this.tableStructure.getValue().skip;
+    const currentPage = this.tableStructure.value.skip;
     this.tableStructure.next({
-      ...this.tableStructure.getValue(),
+      ...this.tableStructure.value,
       skip: currentPage + 1,
     });
   }
 
   firstPage(): void {
     this.tableStructure.next({
-      ...this.tableStructure.getValue(),
+      ...this.tableStructure.value,
       skip: 0,
     });
   }
 
   lastPage(): void {
     this.tableStructure.next({
-      ...this.tableStructure.getValue(),
+      ...this.tableStructure.value,
       skip: Math.floor(
-        this.tableConfiguration.getValue().data.length /
-          this.tableStructure.getValue().take
+        this.tableConfiguration.value.data.length /
+          this.tableStructure.value.take
       ),
     });
   }
 
   goToPage(index: number): void {
     this.tableStructure.next({
-      ...this.tableStructure.getValue(),
+      ...this.tableStructure.value,
       skip: index,
     });
   }
 
   sortColumn(column: string): void {
-    const columnSorted = this.tableStructure.getValue().sort;
-    const currentSortDirection = this.tableStructure.getValue().sortDirection;
+    const columnSorted = this.tableStructure.value.sort;
+    const currentSortDirection = this.tableStructure.value.sortDirection;
 
     if (columnSorted === '' || column !== columnSorted) {
       this.tableStructure.next({
-        ...this.tableStructure.getValue(),
+        ...this.tableStructure.value,
         sort: `${column}`,
         sortDirection: 'asc',
       });
     } else if (currentSortDirection === 'asc') {
       this.tableStructure.next({
-        ...this.tableStructure.getValue(),
+        ...this.tableStructure.value,
         sort: `${column}`,
         sortDirection: 'desc',
       });
     } else {
       this.tableStructure.next({
-        ...this.tableStructure.getValue(),
+        ...this.tableStructure.value,
         sort: '',
         sortDirection: '',
       });
@@ -353,7 +355,7 @@ export class TableComponent {
   }
 
   filterData(filter: IFilter) {
-    const filters = this.tableFilters.getValue();
+    const filters = this.tableFilters.value;
     const filterIndex = filters.findIndex((x) => x.filter === filter.filter);
 
     if (filterIndex !== -1) {
@@ -361,7 +363,7 @@ export class TableComponent {
     }
     // Reset the page to the first one
     this.tableStructure.next({
-      ...this.tableStructure.getValue(),
+      ...this.tableStructure.value,
       skip: 0,
     });
 

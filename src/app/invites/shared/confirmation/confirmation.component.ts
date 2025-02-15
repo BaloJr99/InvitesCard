@@ -13,10 +13,9 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { IConfirmation, IUserInvite } from 'src/app/core/models/invites';
 import { SocketService } from 'src/app/core/services/socket.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { ActivatedRoute } from '@angular/router';
 import { EventType } from 'src/app/core/models/enum';
@@ -31,29 +30,36 @@ export class ConfirmationComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  invite: IUserInvite = {} as IUserInvite;
+  private invite = new BehaviorSubject<IUserInvite>({} as IUserInvite);
+  invite$ = this.invite.asObservable();
+
+  private blockConfirmationForm = new BehaviorSubject<boolean>(false);
+  blockConfirmationForm$ = this.blockConfirmationForm.asObservable();
+
   @Input() set inviteValue(value: IUserInvite) {
-    this.invite = value;
-    const { entriesNumber } = value;
-    const numberOfEntries = Array.from(
-      { length: entriesNumber },
-      (k, j) => j + 1
-    ).sort((a, b) => b - a);
-    this.numberOfEntries.next(numberOfEntries.map((entry) => entry.toString()));
+    this.invite.next(value);
   }
 
-  blockConfirmationForm = false;
-  @Input() set deadlineMet(value: boolean) {
-    this.blockConfirmationForm = value;
-    if (value === true) {
-      this.confirmationForm.disable();
-    }
+  @Input() set deadlineMetValue(value: boolean) {
+    this.blockConfirmationForm.next(value);
   }
 
   @Output() newInvite = new EventEmitter<FormGroup>();
 
-  private numberOfEntries = new BehaviorSubject<string[]>([]);
-  numberOfEntries$ = this.numberOfEntries.asObservable();
+  vm$ = combineLatest([this.invite$, this.blockConfirmationForm$]).pipe(
+    map(([invite, blockConfirmationForm]) => {
+      const numberOfEntries = Array.from(
+        { length: invite.entriesNumber },
+        (k, j) => j + 1
+      )
+        .sort((a, b) => b - a)
+        .map((entry) => entry.toString());
+
+      if (blockConfirmationForm) this.confirmationForm.disable();
+
+      return { invite, blockConfirmationForm, numberOfEntries };
+    })
+  );
 
   confirmationForm: FormGroup = this.fb.group({
     confirmation: ['true', Validators.required],
@@ -65,7 +71,6 @@ export class ConfirmationComponent {
     private fb: FormBuilder,
     private invitesService: InvitesService,
     private socket: SocketService,
-    private loaderService: LoaderService,
     private activatedRoute: ActivatedRoute
   ) {}
 
@@ -76,10 +81,11 @@ export class ConfirmationComponent {
       const entriesConfirmed = parseInt(
         this.confirmationForm.controls['entriesConfirmed'].value
       );
-      this.confirmationForm.get('confirmation')?.setValue(assist);
-      this.confirmationForm
-        .get('entriesConfirmed')
-        ?.setValue(isNaN(entriesConfirmed) ? 0 : entriesConfirmed);
+      this.confirmationForm.patchValue({
+        confirmation: assist,
+        entriesConfirmed: isNaN(entriesConfirmed) ? 0 : entriesConfirmed,
+      });
+
       this.confirmationForm.addControl(
         'dateOfConfirmation',
         new FormControl(dateTimeToUTCDate(new Date().toString()))
@@ -91,32 +97,27 @@ export class ConfirmationComponent {
   }
 
   addnewInvite() {
-    if (this.invite.id) {
-      this.loaderService.setLoading(true, $localize`Enviando confirmación`);
-      this.invitesService
-        .sendConfirmation(
-          this.confirmationForm.value as IConfirmation,
-          this.invite.id,
-          EventType.Xv
-        )
-        .subscribe({
-          next: () => {
-            this.showDiv();
-            const inviteInfo = {
-              ...this.confirmationForm.value,
-              id: this.activatedRoute.snapshot.paramMap.get('id'),
-            };
-            this.socket.sendNotification(inviteInfo);
-          },
-        })
-        .add(() => {
-          this.loaderService.setLoading(false);
-        });
-    }
+    this.invitesService
+      .sendConfirmation(
+        this.confirmationForm.value as IConfirmation,
+        this.invite.value.id,
+        EventType.Xv
+      )
+      .subscribe({
+        next: () => {
+          this.showDiv();
+          const inviteInfo = {
+            ...this.confirmationForm.value,
+            id: this.activatedRoute.snapshot.paramMap.get('id'),
+          };
+          this.socket.sendNotification(inviteInfo);
+        },
+      });
   }
 
   showDiv(): void {
-    this.invite.confirmation = this.confirmationForm.get('confirmation')?.value;
+    this.invite.value.confirmation =
+      this.confirmationForm.controls['confirmation'].value;
   }
 
   enableControls(): void {

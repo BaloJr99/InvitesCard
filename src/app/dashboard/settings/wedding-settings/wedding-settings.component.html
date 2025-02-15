@@ -79,7 +79,7 @@
           </span>
         </div>
       </section>
-      <section class="itinerary" *ngIf="sectionEnabled('itineraryInfo', vm.sections)">
+      <section class="itinerary" *ngIf="sectionEnabled('itineraryInfo')">
         <div class="form-group col-12 col-md-6">
           <label for="massUrl" class="form-label" i18n>Url de la ubicación de la misa</label>
           <input id="massUrl"
@@ -116,7 +116,7 @@
         <div class="form-group col-12 col-md-6">
           <label for="civilUrl" class="form-label" i18n>Url de la ubicación de la ceremonia civil</label>
           <input id="civilUrl"
-                 type="text"
+                 type="url"
                  class="form-control"
                  formControlName="civilUrl"
                  [ngClass]="{'is-invalid': createEventSettingsForm.get('civilUrl') | validation }">
@@ -149,7 +149,7 @@
         <div class="form-group col-12 col-md-6">
           <label for="venueUrl" class="form-label" i18n>Url de la ubicación de la recepción</label>
           <input id="venueUrl"
-                 type="text"
+                 type="url"
                  class="form-control"
                  formControlName="venueUrl"
                  [ngClass]="{'is-invalid': createEventSettingsForm.get('venueUrl') | validation }">
@@ -180,7 +180,7 @@
           </span>
         </div>
       </section>
-      <section class="dressCode" *ngIf="sectionEnabled('dressCodeInfo', vm.sections)">
+      <section class="dressCode" *ngIf="sectionEnabled('dressCodeInfo')">
         <div class="form-group col-12">
           <label for="dressCodeColor" class="form-label" i18n>Código reservado para festejados</label>
           <input id="dressCodeColor"
@@ -193,7 +193,7 @@
           </span>
         </div>
       </section>
-      <section class="gifts" *ngIf="sectionEnabled('giftsInfo', vm.sections)">
+      <section class="gifts" *ngIf="sectionEnabled('giftsInfo')">
         <div class="form-group col-6">
           <label for="cardNumber" class="form-label" i18n>Número de Tarjeta</label>
           <input id="cardNumber"
@@ -217,7 +217,7 @@
           </span>
         </div>
       </section>
-      <section class="accomodation" *ngIf="sectionEnabled('accomodationInfo', vm.sections)">
+      <section class="accomodation" *ngIf="sectionEnabled('accomodationInfo')">
         <div class="form-group col-12 col-md-6">
           <label for="hotelUrl" class="form-label" i18n>Url de la ubicación del hotel</label>
           <input id="hotelUrl"

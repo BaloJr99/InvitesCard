@@ -1,31 +1,33 @@
-<section class="row mx-1 mt-3 breadcrumb-header">
-  <div class="col-12 header">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
-        <li class="breadcrumb-item" i18n>CONFIGURACION</li>
-      </ol>
-    </nav>
-  </div>
-</section>
-<section class="settings">
-  <div class="row g-0 main-controls">
-    <div class="col-12 col-md-4 gx-4">
-      <div class="form-group">
-        <label for="event-select" i18n>Seleccione un evento</label>
-        <select #eventSelect id="event-select" class="form-control" (change)="loadEventSettings()">
-          <option value="" i18n>Seleccione...</option>
-          <option *ngFor="let event of events" [value]="event.id">{{ event.nameOfEvent }}</option>
-        </select>
+<ng-container *ngIf="vm$ | async as vm">
+  <section class="row mx-1 mt-3 breadcrumb-header">
+    <div class="col-12 header">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
+          <li class="breadcrumb-item" i18n>CONFIGURACION</li>
+        </ol>
+      </nav>
+    </div>
+  </section>
+  <section class="settings">
+    <div class="row g-0 main-controls">
+      <div class="col-12 col-md-4 gx-4">
+        <div class="form-group">
+          <label for="event-select" i18n>Seleccione un evento</label>
+          <select #eventSelect id="event-select" class="form-control" (change)="loadEventSettings()">
+            <option value="" i18n>Seleccione...</option>
+            <option *ngFor="let event of vm.events" [value]="event.id">{{ event.nameOfEvent }}</option>
+          </select>
+        </div>
       </div>
     </div>
-  </div>
-  <ng-container [ngSwitch]="eventSettingAction.eventType">
-    <app-sweet-xv-settings *ngSwitchCase="'X'" [eventSettingAction]="eventSettingAction"></app-sweet-xv-settings>
-    <app-save-the-date-settings *ngSwitchCase="'S'" [eventSettingAction]="eventSettingAction"></app-save-the-date-settings>
-    <app-wedding-settings *ngSwitchCase="'W'" [eventSettingAction]="eventSettingAction"></app-wedding-settings>
-  </ng-container>
-</section>
-<section class="files-empty" *ngIf="showSelectEvent()">
-  <p i18n>Porfavor, seleccione un evento</p>
-</section>
+    <ng-container [ngSwitch]="eventSettingAction.eventType">
+      <app-sweet-xv-settings *ngSwitchCase="'X'" [eventSettingActionValue]="eventSettingAction"></app-sweet-xv-settings>
+      <app-save-the-date-settings *ngSwitchCase="'S'" [eventSettingActionValue]="eventSettingAction"></app-save-the-date-settings>
+      <app-wedding-settings *ngSwitchCase="'W'" [eventSettingAction]="eventSettingAction"></app-wedding-settings>
+    </ng-container>
+  </section>
+  <section class="files-empty" *ngIf="showSelectEvent()">
+    <p i18n>Porfavor, seleccione un evento</p>
+  </section>
+</ng-container>

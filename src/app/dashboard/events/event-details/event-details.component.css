@@ -66,6 +66,19 @@
     text-align: end;
   }
 
+  .offset-0 {
+    justify-content: end;
+    display: flex;
+    align-items: end;
+    gap: 8px;
+  }
+
+    .offset-0 .btn-primary {
+      background-color: var(--secondary-blue);
+      color: var(--grey);
+      border: none;
+    }
+
 @media screen and (max-width: 575px) {
   .breadcrumb-header .header {
     flex-direction: column;
@@ -83,6 +96,10 @@
     .breadcrumb-header .header .buttons .btn-primary {
       width: 100%;
       margin: 0px;
+    }
+
+    .offset-0 .btn-primary {
+      width: 50%;
     }
 }
 

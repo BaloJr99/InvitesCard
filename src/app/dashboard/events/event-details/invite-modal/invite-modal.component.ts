@@ -3,7 +3,6 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnInit,
   Output,
   ViewChildren,
 } from '@angular/core';
@@ -18,47 +17,60 @@ import {
   IInviteGroups,
   IInviteGroupsAction,
 } from 'src/app/core/models/inviteGroups';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { IUpsertInvite, IInviteAction } from 'src/app/core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-invite-modal',
   templateUrl: './invite-modal.component.html',
   styleUrls: ['./invite-modal.component.css'],
 })
-export class InviteModalComponent implements OnInit {
+export class InviteModalComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  @Input() set inviteActionValue(inviteAction: IInviteAction) {
-    if (inviteAction) {
-      this.createInviteForm.patchValue({
-        id: inviteAction.invite.id,
-        family: inviteAction.invite.family,
-        entriesNumber: inviteAction.invite.entriesNumber,
-        phoneNumber: inviteAction.invite.phoneNumber,
-        inviteGroupId: inviteAction.invite.inviteGroupId,
-        kidsAllowed: !!inviteAction.invite.kidsAllowed,
-        eventId: inviteAction.invite.eventId,
-      });
-    }
+  private inviteAction = new BehaviorSubject<IInviteAction>({
+    invite: {
+      id: '',
+      family: '',
+      entriesNumber: 1,
+      phoneNumber: '',
+      inviteGroupId: '',
+      kidsAllowed: true,
+      eventId: '',
+    },
+    isNew: false,
+  });
+  inviteAction$ = this.inviteAction.asObservable();
+
+  private inviteGroups = new BehaviorSubject<IInviteGroups[]>([]);
+  inviteGroups$ = this.inviteGroups.asObservable();
+
+  private showModal = new BehaviorSubject<boolean>(false);
+  showModal$ = this.showModal.asObservable();
+
+  @Input() set inviteGroupsValue(inviteGroups: IInviteGroups[]) {
+    this.inviteGroups.next(inviteGroups);
   }
-  @Input() eventId!: string;
-  @Input() inviteGroups!: IInviteGroups[];
+  @Input() set inviteActionValue(inviteAction: IInviteAction) {
+    this.inviteAction.next(inviteAction);
+  }
+  @Input() set showModalValue(showModal: boolean) {
+    this.showModal.next(showModal);
+  }
+
   @Output() updateInvites: EventEmitter<IInviteAction> = new EventEmitter();
   @Output() updateInviteGroups: EventEmitter<IInviteGroupsAction> =
     new EventEmitter();
+  @Output() closeModal: EventEmitter<void> = new EventEmitter();
 
   createInviteForm: FormGroup = this.fb.group({
     id: '',
-    family: [$localize`Familia`, Validators.required],
+    family: ['', Validators.required],
     entriesNumber: [1, Validators.required],
-    phoneNumber: [
-      '878',
-      [Validators.required, Validators.pattern('[0-9]{10}')],
-    ],
+    phoneNumber: ['', [Validators.required, Validators.pattern('[0-9]{10}')]],
     inviteGroupId: ['', Validators.required],
     kidsAllowed: [true, Validators.required],
     eventId: '',
@@ -66,20 +78,39 @@ export class InviteModalComponent implements OnInit {
   });
 
   showNewGroupForm = false;
-  groupSelected: IInviteGroups | undefined = undefined;
+  groupSelected!: IInviteGroups;
 
   constructor(
     private invitesService: InvitesService,
     private fb: FormBuilder,
-    private toastr: ToastrService,
-    private loaderService: LoaderService
+    private toastr: ToastrService
   ) {}
 
-  ngOnInit(): void {
-    $('#inviteModal').on('hidden.bs.modal', () => {
+  vm$ = combineLatest([
+    this.inviteAction$,
+    this.inviteGroups$,
+    this.showModal$,
+  ]).pipe(
+    map(([inviteAction, inviteGroups, showModal]) => {
+      if (showModal) {
+        $('#inviteModal').modal('show');
+
+        // Emit event to close modal when it's closed
+        $('#inviteModal').on('hidden.bs.modal', () => {
+          this.closeModal.emit();
+        });
+      } else {
+        $('#inviteModal').modal('hide');
+      }
+
       this.clearInputs();
-    });
-  }
+      this.createInviteForm.reset(inviteAction.invite);
+      return {
+        inviteAction,
+        inviteGroups,
+      };
+    })
+  );
 
   saveInvite() {
     if (this.createInviteForm.valid && this.createInviteForm.dirty) {
@@ -97,29 +128,22 @@ export class InviteModalComponent implements OnInit {
   }
 
   createInvite() {
-    this.loaderService.setLoading(true, $localize`Creando invitación`);
-    this.invitesService
-      .createInvite(this.formatInvite())
-      .subscribe({
-        next: (response: IMessageResponse) => {
-          this.updateInvites.emit({
-            invite: {
-              ...this.formatInvite(),
-              id: response.id,
-            },
-            isNew: true,
-          });
-          this.toastr.success(response.message);
-          $('#inviteModal').modal('hide');
-        },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
-      });
+    this.invitesService.createInvite(this.formatInvite()).subscribe({
+      next: (response: IMessageResponse) => {
+        this.updateInvites.emit({
+          invite: {
+            ...this.formatInvite(),
+            id: response.id,
+          },
+          isNew: true,
+        });
+        this.toastr.success(response.message);
+        this.closeModal.emit();
+      },
+    });
   }
 
   updateInvite() {
-    this.loaderService.setLoading(true, $localize`Actualizando invitación`);
     this.invitesService
       .updateInvite(
         this.formatInvite(),
@@ -132,19 +156,16 @@ export class InviteModalComponent implements OnInit {
             isNew: false,
           });
           this.toastr.success(response.message);
-          $('#inviteModal').modal('hide');
+          this.closeModal.emit();
         },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
       });
   }
 
   clearInputs(): void {
     this.createInviteForm.reset({
-      family: $localize`Familia`,
+      family: '',
       entriesNumber: 1,
-      phoneNumber: '878',
+      phoneNumber: '',
       inviteGroupId: '',
       kidsAllowed: true,
     });
@@ -158,19 +179,27 @@ export class InviteModalComponent implements OnInit {
       entriesNumber: parseInt(
         this.createInviteForm.controls['entriesNumber'].value
       ),
-      eventId: this.eventId,
     } as IUpsertInvite;
   }
 
   inviteGroupAction(isEditing: boolean, showNewGroupForm: boolean) {
+    const eventId = this.inviteAction.value.invite.eventId;
     if (isEditing) {
-      this.groupSelected = this.inviteGroups.find(
-        (famGroup) =>
-          famGroup.id === this.createInviteForm.controls['inviteGroupId'].value
-      );
+      this.groupSelected = {
+        ...(this.inviteGroups.value.find(
+          (famGroup) =>
+            famGroup.id ===
+            this.createInviteForm.controls['inviteGroupId'].value
+        ) as IInviteGroups),
+        eventId,
+      };
       this.showNewGroupForm = showNewGroupForm;
     } else if (!isEditing && showNewGroupForm) {
-      this.groupSelected = undefined;
+      this.groupSelected = {
+        id: '',
+        inviteGroup: '',
+        eventId,
+      };
       this.showNewGroupForm = showNewGroupForm;
     } else {
       this.showNewGroupForm = showNewGroupForm;

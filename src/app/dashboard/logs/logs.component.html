@@ -8,7 +8,7 @@
     </nav>
   </div>
 </section>
-<section class="history">
+<section class="history" *ngIf="vm$ | async as vm">
   <div class="full-history row mb-3">
     <div class="col-12">
       <div class="card">
@@ -24,25 +24,28 @@
       <div class="table-styling">
         <div class="inner">
           <app-table (actionResponse)="actionResponse($event)"
-                     [tableConfigurationValue]="table">
+                     [tableConfigurationValue]="vm.table">
           </app-table>
         </div>
       </div>
     </div>
-    <div class="percentage-history col-md-12 col-lg-4">
+    <div class="percentage-history col-md-12 col-lg-4" *ngIf="history$ | async as history">
       <div class="card">
         <div class="card-body">
           <h3 class="card-title" i18n>Total de errores <br> últimos 31 días</h3>
-          <span style="color: #B50012;">{{ numberOfErrorsLast31Days }}</span>
+          <span style="color: #B50012;">{{ history.numberOfErrorsLast31Days }}</span>
         </div>
       </div>
       <div class="card">
         <div class="card-body">
           <h3 class="card-title" i18n>Total de errores <br> el día de hoy</h3>
-          <span style="color: #B50012;">{{ numberOfErrorsToday }}</span>
+          <span style="color: #B50012;">{{ history.numberOfErrorsToday }}</span>
         </div>
       </div>
     </div>
   </div>
 </section>
-<app-log-modal [log]="logSelected" (clearSelectedLog)="clearSelectedLog()"></app-log-modal>
+<app-log-modal [logValue]="logSelected" 
+               [showModalValue]="showLogModal"
+               (closeModal)="closeLogModal()">
+</app-log-modal>

@@ -6,7 +6,6 @@ export interface IFullEvent {
   id: string;
   nameOfEvent: string;
   dateOfEvent: string;
-  allowCreateInvites: number;
   maxDateOfConfirmation: string;
   nameOfCelebrated: string;
   typeOfEvent: EventType;
@@ -15,14 +14,16 @@ export interface IFullEvent {
 
 export type IDashboardEvent = Pick<
   IFullEvent,
-  'id' | 'nameOfEvent' | 'dateOfEvent' | 'allowCreateInvites'
+  'id' | 'nameOfEvent' | 'dateOfEvent'
 >;
 
-export type IDropdownEvent = Pick<IFullEvent, 'id' | 'nameOfEvent' | 'typeOfEvent'>;
+export type IDropdownEvent = Pick<
+  IFullEvent,
+  'id' | 'nameOfEvent' | 'typeOfEvent'
+>;
 
-export type IEvent = Omit<IFullEvent, 'allowCreateInvites'>;
-
-export type IEventSettings = Pick<IBaseSettings, 'settings'> & Pick<IFullEvent, 'typeOfEvent'>;
+export type IEventSettings = Pick<IBaseSettings, 'settings'> &
+  Pick<IFullEvent, 'typeOfEvent'>;
 
 export interface IEventAction {
   event: IFullEvent;

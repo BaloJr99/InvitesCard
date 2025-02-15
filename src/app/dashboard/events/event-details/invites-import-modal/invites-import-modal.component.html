@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="invitesImportModal" tabindex="-1" aria-labelledby="invitesImportModalLabel" aria-hidden="true">
+<div class="modal fade" id="invitesImportModal" tabindex="-1" aria-labelledby="invitesImportModalLabel" aria-hidden="true" *ngIf="vm$ | async as vm">
   <div class="modal-dialog modal-dialog-centered" [ngClass]="(invites.length > 0 || errorInvites.length > 0) ? 'modal-xl': ''">
     <div class="modal-content">
       <div class="modal-header">

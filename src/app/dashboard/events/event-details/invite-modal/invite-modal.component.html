@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="inviteModal" tabindex="-1" aria-labelledby="inviteModalLabel" aria-hidden="true">
+<div class="modal fade" id="inviteModal" tabindex="-1" aria-labelledby="inviteModalLabel" aria-hidden="true" *ngIf="vm$ | async as vm">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -8,7 +8,7 @@
       </div>
       <ng-container *ngIf="!showNewGroupForm">
         <div class="modal-body">
-          <form [formGroup]="createInviteForm">
+          <form [formGroup]="createInviteForm" id="inviteForm">
             <div class="mb-3">
               <label for="family" class="form-label" i18n>Familia</label>
               <input id="family" 
@@ -28,7 +28,7 @@
                         formControlName="inviteGroupId" 
                         [ngClass]="{'is-invalid': createInviteForm.get('inviteGroupId') | validation }">
                   <option value="" i18n>Selecciona el grupo</option>
-                  <option *ngFor="let inviteGroup of inviteGroups" [value]="inviteGroup.id">{{ inviteGroup.inviteGroup }}</option>
+                  <option *ngFor="let inviteGroup of vm.inviteGroups" [value]="inviteGroup.id">{{ inviteGroup.inviteGroup }}</option>
                 </select>
                 <button aria-label="Edit Group" type="button" class="btn btn-dark" (click)="inviteGroupAction(true, true)" *ngIf="createInviteForm.get('inviteGroupId')?.value"><i class="fa-solid fa-pen-to-square"></i></button>
                 <button aria-label="Create Group" type="button" class="btn btn-dark" (click)="inviteGroupAction(false, true)"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
@@ -81,14 +81,11 @@
       </ng-container>
       <ng-container *ngIf="showNewGroupForm">
         <div class="modal-body">
-          <ng-container>
             <app-invite-group 
-              [eventIdValue]="eventId" 
               [inviteGroupValue]="groupSelected" 
               (isCreatingNewFormGroup)="inviteGroupAction(false, $event)"
               (updateInviteGroups)="updateCurrentInviteGroup($event)">
             </app-invite-group>
-          </ng-container>
         </div>
       </ng-container>
     </div>

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { EnvironmentService } from 'src/app/core/services/environment.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 
 @Component({
   selector: 'app-testing',
@@ -11,12 +10,10 @@ import { LoaderService } from 'src/app/core/services/loader.service';
 export class TestingComponent {
   constructor(
     private environmentService: EnvironmentService,
-    private loaderService: LoaderService,
     private toastrService: ToastrService
   ) {}
 
   cleanEnvironment(): void {
-    this.loaderService.setLoading(true);
     this.environmentService
       .cleanEnvironment()
       .subscribe({
@@ -24,8 +21,5 @@ export class TestingComponent {
           this.toastrService.success('Environment cleaned successfully');
         },
       })
-      .add(() => {
-        this.loaderService.setLoading(false);
-      });
   }
 }

@@ -1,8 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  ViewChildren,
-} from '@angular/core';
+import { Component, ElementRef, ViewChildren } from '@angular/core';
 import {
   FormBuilder,
   FormControlName,
@@ -10,7 +6,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -23,11 +18,7 @@ export class ForgotPasswordComponent {
   forgotPasswordForm: FormGroup;
   emailSent = false;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private loaderService: LoaderService
-  ) {
+  constructor(private fb: FormBuilder, private authService: AuthService) {
     this.forgotPasswordForm = this.fb.group({
       usernameOrEmail: ['', Validators.required],
     });
@@ -35,16 +26,12 @@ export class ForgotPasswordComponent {
 
   sendResetPassword(): void {
     if (this.forgotPasswordForm.valid && this.forgotPasswordForm.dirty) {
-      this.loaderService.setLoading(true, $localize`Enviando correo`);
       this.authService
         .sendResetPassword(this.forgotPasswordForm.value)
         .subscribe({
           next: () => {
             this.emailSent = true;
           },
-        })
-        .add(() => {
-          this.loaderService.setLoading(false);
         });
     } else {
       this.forgotPasswordForm.markAllAsTouched();

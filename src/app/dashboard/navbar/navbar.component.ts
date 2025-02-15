@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NavigationStart, Router, Scroll } from '@angular/router';
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { INotification } from 'src/app/core/models/common';
 import { Roles } from 'src/app/core/models/enum';
 import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
@@ -12,24 +13,14 @@ import { TokenStorageService } from 'src/app/core/services/token-storage.service
   styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent implements OnInit {
-  email = '';
-  username = '';
-  profilePhoto = '';
+  private notifications = new BehaviorSubject<INotification[]>([]);
+  notifications$ = this.notifications.asObservable();
+  private route = new BehaviorSubject<string>('');
+  route$ = this.route.asObservable();
 
-  notifications: INotification[] = [];
   @Input() set notificationsValue(value: INotification[]) {
-    if (value.length > 0) {
-      this.notifications = value;
-      this.numberOfNotifications = value.reduce(
-        (sum, { isMessageRead }) => sum + (isMessageRead ? 0 : 1),
-        0
-      );
-    }
+    this.notifications.next(value);
   }
-
-  numberOfNotifications = 0;
-  route = '';
-  isAdmin = false;
 
   constructor(
     private router: Router,
@@ -38,24 +29,38 @@ export class NavbarComponent implements OnInit {
     private commonService: CommonInvitesService
   ) {}
 
+  vm$ = combineLatest([this.notifications$, this.route$]).pipe(
+    map(([notifications, route]) => {
+      const userInformation = this.tokenService.getTokenValues();
+
+      const numberOfNotifications = notifications.reduce(
+        (sum, { isMessageRead }) => sum + (isMessageRead ? 0 : 1),
+        0
+      );
+
+      return {
+        route,
+        username: userInformation?.username || '',
+        email: userInformation?.email || '',
+        profilePhoto: userInformation?.profilePhoto,
+        isAdmin:
+          userInformation?.roles.some((r) => r.name == Roles.Admin) || false,
+        numberOfNotifications,
+        notifications,
+      };
+    })
+  );
+
   ngOnInit(): void {
     this.router.events.subscribe((events) => {
       if (events instanceof Scroll) {
-        this.route = events.routerEvent.url;
+        this.route.next(events.routerEvent.url);
       }
 
       if (events instanceof NavigationStart) {
-        this.route = events.url;
+        this.route.next(events.url);
       }
     });
-
-    const userInformation = this.tokenService.getTokenValues();
-    if (userInformation) {
-      this.username = userInformation.username;
-      this.email = userInformation.email;
-      this.profilePhoto = userInformation.profilePhoto;
-      this.isAdmin = userInformation.roles.some((r) => r.name == Roles.Admin);
-    }
   }
 
   toggleMenu(): void {
@@ -95,20 +100,17 @@ export class NavbarComponent implements OnInit {
   }
 
   maskAsRead(id: string): void {
+    const oldNotifications = this.notifications.value;
+    const notificationIndex = oldNotifications.findIndex(
+      (notification) => notification.id === id
+    );
+
     this.invitesService.readMessage(id).subscribe({
       next: () => {
-        this.notifications = this.notifications.map((notification) =>
-          notification.id === id
-            ? { ...notification, isMessageRead: true }
-            : notification
-        );
+        oldNotifications[notificationIndex].isMessageRead = true;
 
-        this.numberOfNotifications = this.notifications.reduce(
-          (sum, { isMessageRead }) => sum + (isMessageRead ? 0 : 1),
-          0
-        );
-
-        this.commonService.updateNotifications(this.notifications, null);
+        this.commonService.updateNotifications(oldNotifications, null);
+        this.notifications.next(oldNotifications);
       },
     });
   }

@@ -4,26 +4,22 @@ import {
   HostListener,
   Inject,
   LOCALE_ID,
-  OnInit,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { combineLatest, map, mergeMap, switchMap } from 'rxjs';
 import {
   CommonModalResponse,
   CommonModalType,
   ImageUsage,
 } from 'src/app/core/models/enum';
-import { IDownloadAudio, IDownloadImage } from 'src/app/core/models/images';
+import { IDownloadImage } from 'src/app/core/models/images';
 import {
   ICalendarDays,
-  ICalendarWeeks,
   ISaveTheDateUserInvite,
 } from 'src/app/core/models/invites';
-import { ISaveTheDateSetting } from 'src/app/core/models/settings';
 import { CommonModalService } from 'src/app/core/services/commonModal.service';
 import { FilesService } from 'src/app/core/services/files.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { toLocalDate } from 'src/app/shared/utils/tools';
 
@@ -32,7 +28,7 @@ import { toLocalDate } from 'src/app/shared/utils/tools';
   templateUrl: './save-the-date.component.html',
   styleUrl: './save-the-date.component.css',
 })
-export class SaveTheDateComponent implements OnInit {
+export class SaveTheDateComponent {
   @HostListener('document:visibilitychange', ['$event'])
   visibilitychange() {
     if (document.visibilityState === 'hidden' && this.playAudio) {
@@ -44,31 +40,13 @@ export class SaveTheDateComponent implements OnInit {
 
   counter = 0;
 
-  userInvite!: ISaveTheDateUserInvite;
-  eventSettings: ISaveTheDateSetting = {
-    eventId: '',
-    primaryColor: '',
-    secondaryColor: '',
-    receptionPlace: '',
-    copyMessage: '',
-    hotelName: '',
-    hotelInformation: '',
-  };
-
-  shortDate = '';
   // Variable to store the generated calendar HTML
-  dateDictionary: ICalendarWeeks[] = [];
   downloadImages: IDownloadImage[] = [];
-  downloadAudio: IDownloadAudio | undefined = undefined;
   audio = new Audio();
   playAudio = false;
 
-  deadlineMet = false;
-
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
-    private loaderService: LoaderService,
     private settingsService: SettingsService,
     private filesService: FilesService,
     private invitesService: InvitesService,
@@ -77,102 +55,102 @@ export class SaveTheDateComponent implements OnInit {
     @Inject(LOCALE_ID) private localeValue: string
   ) {}
 
-  ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      const inviteId = params['id'];
+  vm$ = this.route.params.pipe(
+    map((params) => params['id']),
+    switchMap((id) => this.invitesService.getInvite(id)),
+    mergeMap((invite) =>
+      combineLatest([
+        this.settingsService.getEventSettings(invite.eventId),
+        this.filesService.getFilesByEvent(invite.eventId),
+      ]).pipe(
+        map(([eventSettings, downloadedFiles]) => {
+          return {
+            invite,
+            eventSettings,
+            downloadedFiles,
+          };
+        })
+      )
+    ),
+    map(({ invite, eventSettings, downloadedFiles }) => {
+      const userInvite = {
+        ...invite,
+        dateOfEvent: toLocalDate(invite.dateOfEvent),
+      } as ISaveTheDateUserInvite;
 
-      if (!inviteId) {
-        this.router.navigate(['/error/page-not-found']);
+      const dateDictionary = this.generateCalendar(userInvite.dateOfEvent);
+
+      const shortDate = new Intl.DateTimeFormat(this.localeValue, {
+        month: 'long',
+        year: 'numeric',
+      }).format(new Date(userInvite.dateOfEvent));
+
+      userInvite.maxDateOfConfirmation = userInvite.maxDateOfConfirmation.slice(
+        0,
+        userInvite.maxDateOfConfirmation.length - 1
+      );
+
+      const deadlineMet =
+        new Date().getTime() >
+        new Date(userInvite.maxDateOfConfirmation).getTime();
+
+      const parsedEventSettings = {
+        ...JSON.parse(eventSettings.settings),
+        eventId: eventSettings.eventId,
+      };
+
+      const downloadAudio =
+        downloadedFiles.eventAudios.length > 0
+          ? downloadedFiles.eventAudios[0]
+          : undefined;
+
+      if (downloadAudio) this.audio = new Audio(downloadAudio.fileUrl);
+
+      this.commonModalService
+        .open({
+          modalTitle: $localize`Nuestra canción`,
+          modalBody: $localize`¿Desea reproducir el audio?`,
+          modalType: CommonModalType.YesNo,
+        })
+        .subscribe((response) => {
+          if (response === CommonModalResponse.Confirm) {
+            this.reproduceAudio();
+          }
+        });
+
+      this.downloadImages = downloadedFiles.eventImages.filter((image) =>
+        window.innerWidth > 575
+          ? image.imageUsage === ImageUsage.Desktop ||
+            image.imageUsage === ImageUsage.Both
+          : image.imageUsage === ImageUsage.Phone ||
+            image.imageUsage === ImageUsage.Both
+      );
+
+      if (this.downloadImages.length > 0) {
+        setInterval(() => {
+          this.updateBackground();
+        }, 5000);
       }
 
-      this.invitesService.getInvite(inviteId).subscribe({
-        next: (userInvite) => {
-          this.userInvite = {
-            ...userInvite,
-            dateOfEvent: toLocalDate(userInvite.dateOfEvent),
-          } as ISaveTheDateUserInvite;
+      this.elRef.nativeElement.style.setProperty(
+        '--custom-primary-color',
+        parsedEventSettings.primaryColor
+      );
 
-          this.generateCalendar();
+      this.elRef.nativeElement.style.setProperty(
+        '--custom-secondary-color',
+        parsedEventSettings.secondaryColor
+      );
 
-          this.shortDate = new Intl.DateTimeFormat(this.localeValue, {
-            month: 'long',
-            year: 'numeric',
-          }).format(new Date(this.userInvite.dateOfEvent));
-
-          this.userInvite.maxDateOfConfirmation =
-            this.userInvite.maxDateOfConfirmation.slice(
-              0,
-              this.userInvite.maxDateOfConfirmation.length - 1
-            );
-
-          this.deadlineMet =
-            new Date().getTime() >
-            new Date(this.userInvite.maxDateOfConfirmation).getTime();
-
-          combineLatest([
-            this.settingsService.getEventSettings(this.userInvite.eventId),
-            this.filesService.getFilesByEvent(this.userInvite.eventId),
-          ])
-            .subscribe({
-              next: ([eventSettings, downloadFiles]) => {
-                this.eventSettings = {
-                  ...JSON.parse(eventSettings.settings),
-                  eventId: eventSettings.eventId,
-                };
-
-                this.downloadAudio =
-                  downloadFiles.eventAudios.length > 0
-                    ? downloadFiles.eventAudios[0]
-                    : undefined;
-                if (this.downloadAudio) {
-                  this.audio = new Audio(this.downloadAudio.fileUrl);
-
-                  this.commonModalService
-                    .open({
-                      modalTitle: $localize`Nuestra canción`,
-                      modalBody: $localize`¿Desea reproducir el audio?`,
-                      modalType: CommonModalType.YesNo,
-                    })
-                    .subscribe((response) => {
-                      if (response === CommonModalResponse.Confirm) {
-                        this.reproduceAudio();
-                      }
-                    });
-                }
-
-                this.downloadImages = downloadFiles.eventImages.filter(
-                  (image) =>
-                    window.innerWidth > 575
-                      ? image.imageUsage === ImageUsage.Desktop ||
-                        image.imageUsage === ImageUsage.Both
-                      : image.imageUsage === ImageUsage.Phone ||
-                        image.imageUsage === ImageUsage.Both
-                );
-
-                if (this.downloadImages.length > 0) {
-                  setInterval(() => {
-                    this.updateBackground();
-                  }, 5000);
-                }
-
-                this.elRef.nativeElement.style.setProperty(
-                  '--custom-primary-color',
-                  this.eventSettings.primaryColor
-                );
-
-                this.elRef.nativeElement.style.setProperty(
-                  '--custom-secondary-color',
-                  this.eventSettings.secondaryColor
-                );
-              },
-            })
-            .add(() => {
-              this.loaderService.setLoading(false);
-            });
-        },
-      });
-    });
-  }
+      return {
+        shortDate,
+        parsedEventSettings,
+        userInvite,
+        dateDictionary,
+        deadlineMet,
+      };
+    })
+  );
 
   updateBackground() {
     if (this.downloadImages.length > 0) {
@@ -205,8 +183,10 @@ export class SaveTheDateComponent implements OnInit {
     }
   }
 
-  generateCalendar() {
-    const date = new Date(this.userInvite.dateOfEvent);
+  generateCalendar(dateOfEvent: string) {
+    const dateDictionary = [];
+
+    const date = new Date(dateOfEvent);
     // Get the first day of the month
     const dayone = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
 
@@ -235,8 +215,8 @@ export class SaveTheDateComponent implements OnInit {
       });
 
       if (daysOfWeek.length % 7 == 0 && daysOfWeek.length > 0) {
-        this.dateDictionary.push({
-          weekNumber: this.dateDictionary.length,
+        dateDictionary.push({
+          weekNumber: dateDictionary.length,
           days: daysOfWeek,
         });
         daysOfWeek = [];
@@ -252,8 +232,8 @@ export class SaveTheDateComponent implements OnInit {
       });
 
       if (daysOfWeek.length % 7 == 0 && daysOfWeek.length > 0) {
-        this.dateDictionary.push({
-          weekNumber: this.dateDictionary.length,
+        dateDictionary.push({
+          weekNumber: dateDictionary.length,
           days: daysOfWeek,
         });
         daysOfWeek = [];
@@ -269,13 +249,15 @@ export class SaveTheDateComponent implements OnInit {
       });
 
       if (daysOfWeek.length % 7 == 0 && daysOfWeek.length > 0) {
-        this.dateDictionary.push({
-          weekNumber: this.dateDictionary.length,
+        dateDictionary.push({
+          weekNumber: dateDictionary.length,
           days: daysOfWeek,
         });
         daysOfWeek = [];
       }
     }
+
+    return dateDictionary;
   }
 
   reproduceAudio() {

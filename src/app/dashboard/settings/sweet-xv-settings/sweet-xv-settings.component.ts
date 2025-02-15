@@ -7,7 +7,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, catchError, combineLatest, map, of } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  combineLatest,
+  mergeMap,
+  of,
+  tap,
+} from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { EventType } from 'src/app/core/models/enum';
 import {
@@ -20,7 +27,6 @@ import {
   IBaseSettings,
 } from 'src/app/core/models/settings';
 import { EventsService } from 'src/app/core/services/events.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { dateTimeToUTCDate, toLocalDate } from 'src/app/shared/utils/tools';
 
@@ -33,18 +39,17 @@ export class SweetXvSettingsComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  @Input() set eventSettingAction(eventSettingAction: ISettingAction) {
-    const eventId = eventSettingAction.eventId;
-    this.sweetXvSettings = {
-      eventId: eventId,
-      isNew: true,
-      eventType: EventType.Xv,
-    } as ISettingAction;
+  private sweetXvSettings = new BehaviorSubject<ISettingAction>({
+    isNew: undefined,
+    eventType: EventType.Xv,
+    eventId: '',
+  });
+  sweetXvSettings$ = this.sweetXvSettings.asObservable();
 
-    this.getEventSetting();
+  @Input() set eventSettingActionValue(eventSettingAction: ISettingAction) {
+    this.sweetXvSettings.next(eventSettingAction);
   }
 
-  sweetXvSettings: ISettingAction = {} as ISettingAction;
   eventDate: string = '';
 
   createEventSettingsForm: FormGroup = this.fb.group({
@@ -85,16 +90,100 @@ export class SweetXvSettingsComponent {
   private sectionsConfig = new BehaviorSubject<IInviteSection[]>([]);
   sectionsConfig$ = this.sectionsConfig.asObservable();
 
-  vm$ = combineLatest([this.sectionsConfig$]).pipe(
-    map(([sections]) => {
-      return {
-        sections,
-      };
-    })
+  private reloadSettings = new BehaviorSubject<boolean>(false);
+  reloadSettings$ = this.reloadSettings.asObservable();
+
+  vm$ = combineLatest([this.sweetXvSettings$, this.reloadSettings$]).pipe(
+    mergeMap(([sweetXvSettings]) =>
+      combineLatest([
+        this.settingsService.getEventSettings(sweetXvSettings.eventId).pipe(
+          catchError(() => {
+            if (this.sweetXvSettings.value.isNew === undefined) {
+              this.sweetXvSettings.next({
+                ...sweetXvSettings,
+                isNew: true,
+              });
+            }
+
+            return of({
+              eventId: sweetXvSettings.eventId,
+              settings: JSON.stringify({}),
+            } as IBaseSettings);
+          })
+        ),
+        this.eventsService.getEventById(sweetXvSettings.eventId),
+      ]).pipe(
+        tap(([eventSettings, eventInfo]) => {
+          this.eventDate = toLocalDate(eventInfo.dateOfEvent).split('T')[0];
+          const parsedSettings = JSON.parse(eventSettings.settings);
+
+          this.createEventSettingsForm.patchValue({
+            eventId: sweetXvSettings.eventId,
+          });
+
+          let sections = [] as IInviteSection[];
+          if (!parsedSettings.sections) {
+            sections = this.updateSections(this.baseSections);
+          } else {
+            const sectionsFound = parsedSettings.sections.map(
+              (section: IInviteSection) => {
+                const baseSection = this.baseSections.find(
+                  (s) => s.sectionId === section.sectionId
+                ) as IInviteSection;
+
+                return {
+                  ...baseSection,
+                  selected: section.selected,
+                  order: section.order,
+                };
+              }
+            ) as IInviteSection[];
+
+            // Add any missing section from the baseSections
+            this.baseSections.forEach((baseSection) => {
+              if (
+                !sectionsFound.some(
+                  (s) => s.sectionId === baseSection.sectionId
+                )
+              ) {
+                sectionsFound.push(baseSection);
+              }
+            });
+
+            sections = this.updateSections(sectionsFound);
+
+            if (parsedSettings.massTime) {
+              const dateOfMassTime = parsedSettings.massTime.split(' ')[0];
+              const timeOfMassTime = parsedSettings.massTime.split(' ')[1];
+
+              parsedSettings.massTime = toLocalDate(
+                `${dateOfMassTime}T${timeOfMassTime}.000Z`
+              ).split('T')[1];
+            }
+
+            if (parsedSettings.receptionTime) {
+              const dateOfReceptionTime =
+                parsedSettings.receptionTime.split(' ')[0];
+              const timeOfReceptionTime =
+                parsedSettings.receptionTime.split(' ')[1];
+
+              parsedSettings.receptionTime = toLocalDate(
+                `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`
+              ).split('T')[1];
+            }
+          }
+
+          this.createEventSettingsForm.patchValue({
+            ...parsedSettings,
+          });
+
+          this.sectionsConfig.next(sections);
+        })
+      )
+    )
   );
 
   constructor(
-    private loaderService: LoaderService,
     private eventsService: EventsService,
     private settingsService: SettingsService,
     private fb: FormBuilder,
@@ -172,103 +261,9 @@ export class SweetXvSettingsComponent {
     });
   }
 
-  getEventSetting(): void {
-    if (this.sweetXvSettings.eventId) {
-      combineLatest([
-        this.settingsService
-          .getEventSettings(this.sweetXvSettings.eventId)
-          .pipe(
-            catchError(() => {
-              return of({
-                eventId: this.sweetXvSettings.eventId,
-                settings: JSON.stringify({}),
-              } as IBaseSettings);
-            })
-          ),
-        this.eventsService.getEventById(this.sweetXvSettings.eventId),
-      ])
-        .subscribe({
-          next: ([eventSettings, eventInfo]) => {
-            this.eventDate = toLocalDate(eventInfo.dateOfEvent).split('T')[0];
-            const parsedSettings = JSON.parse(eventSettings.settings);
-            if (!parsedSettings.sections) {
-              this.updateSections(this.baseSections);
-
-              this.sweetXvSettings = {
-                ...this.sweetXvSettings,
-                isNew: true,
-              };
-
-              this.createEventSettingsForm.patchValue({
-                eventId: this.sweetXvSettings.eventId,
-              });
-            } else {
-              const sections = parsedSettings.sections.map(
-                (section: IInviteSection) => {
-                  const baseSection = this.baseSections.find(
-                    (s) => s.sectionId === section.sectionId
-                  ) as IInviteSection;
-
-                  return {
-                    ...baseSection,
-                    selected: section.selected,
-                    order: section.order,
-                  };
-                }
-              ) as IInviteSection[];
-
-              // Add any missing section from the baseSections
-              this.baseSections.forEach((baseSection) => {
-                if (
-                  !sections.some((s) => s.sectionId === baseSection.sectionId)
-                ) {
-                  sections.push(baseSection);
-                }
-              });
-
-              this.updateSections(sections);
-
-              this.createEventSettingsForm.patchValue({
-                ...parsedSettings,
-                eventId: this.sweetXvSettings.eventId,
-              });
-
-              this.sweetXvSettings = {
-                ...this.sweetXvSettings,
-                isNew: false,
-              };
-
-              if (parsedSettings.massTime) {
-                const dateOfMassTime = parsedSettings.massTime.split(' ')[0];
-                const timeOfMassTime = parsedSettings.massTime.split(' ')[1];
-
-                parsedSettings.massTime = toLocalDate(
-                  `${dateOfMassTime}T${timeOfMassTime}.000Z`
-                ).split('T')[1];
-              }
-
-              if (parsedSettings.receptionTime) {
-                const dateOfReceptionTime =
-                  parsedSettings.receptionTime.split(' ')[0];
-                const timeOfReceptionTime =
-                  parsedSettings.receptionTime.split(' ')[1];
-
-                parsedSettings.receptionTime = toLocalDate(
-                  `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`
-                ).split('T')[1];
-              }
-            }
-          },
-        })
-        .add(() => {
-          this.loaderService.setLoading(false);
-        });
-    }
-  }
-
   cancelChanges(): void {
     this.clearInformation();
-    this.getEventSetting();
+    this.reloadSettings.next(true);
   }
 
   saveChanges(): void {
@@ -276,7 +271,7 @@ export class SweetXvSettingsComponent {
       this.createEventSettingsForm.valid &&
       this.createEventSettingsForm.dirty
     ) {
-      if (this.sweetXvSettings.isNew) {
+      if (this.sweetXvSettings.value.isNew) {
         this.createEventSettings();
       } else {
         this.updateEventSettings();
@@ -287,43 +282,30 @@ export class SweetXvSettingsComponent {
   }
 
   createEventSettings() {
-    this.loaderService.setLoading(true, $localize`Creando configuraciones`);
     this.settingsService
       .createEventSettings(
         this.formatEventSetting(),
-        this.sweetXvSettings.eventType
+        this.sweetXvSettings.value.eventType
       )
       .subscribe({
         next: (response: IMessageResponse) => {
           this.toastr.success(response.message);
         },
-      })
-      .add(() => {
-        this.loaderService.setLoading(false);
       });
   }
 
   updateEventSettings() {
-    this.loaderService.setLoading(
-      true,
-      $localize`Actualizando configuraciones`
-    );
-    if (this.sweetXvSettings.eventId !== '') {
-      this.settingsService
-        .updateEventSettings(
-          this.formatEventSetting(),
-          this.sweetXvSettings.eventId,
-          this.sweetXvSettings.eventType
-        )
-        .subscribe({
-          next: (response: IMessageResponse) => {
-            this.toastr.success(response.message);
-          },
-        })
-        .add(() => {
-          this.loaderService.setLoading(false);
-        });
-    }
+    this.settingsService
+      .updateEventSettings(
+        this.formatEventSetting(),
+        this.sweetXvSettings.value.eventId,
+        this.sweetXvSettings.value.eventType
+      )
+      .subscribe({
+        next: (response: IMessageResponse) => {
+          this.toastr.success(response.message);
+        },
+      });
   }
 
   formatEventSetting(): ISweetXvSetting {
@@ -358,41 +340,44 @@ export class SweetXvSettingsComponent {
     } as ISweetXvSetting;
   }
 
-  sectionEnabled(sectionId: string, sections: IInviteSection[]) {
-    return sections.find((s) => s.sectionId === sectionId)?.selected;
+  sectionEnabled(sectionId: string) {
+    return this.sectionsConfig.value.find((s) => s.sectionId === sectionId)
+      ?.selected;
   }
 
   updateSection(sectionId: string, event: Event) {
     const target = event.target as HTMLInputElement;
-    const updatedSections = this.sectionsConfig.value.map((section) => {
-      if (section.sectionId === sectionId) {
-        section.selected = target.checked;
+    const oldSections = this.sectionsConfig.value;
 
-        if (target.checked) {
-          Object.keys(this.sectionsControls[sectionId].validators).forEach(
-            (control) => {
-              this.createEventSettingsForm.addControl(
-                control,
-                new FormControl(
-                  '',
-                  this.sectionsControls[sectionId].validators[control][1]
-                )
-              );
-            }
-          );
-        } else {
-          Object.keys(this.sectionsControls[sectionId].validators).forEach(
-            (control) => {
-              this.createEventSettingsForm.removeControl(control);
-            }
+    const sectionIndex = oldSections.findIndex(
+      (section) => section.sectionId === sectionId
+    );
+
+    oldSections[sectionIndex].selected = target.checked;
+
+    if (target.checked) {
+      Object.keys(this.sectionsControls[sectionId].validators).forEach(
+        (control) => {
+          this.createEventSettingsForm.addControl(
+            control,
+            new FormControl(
+              '',
+              this.sectionsControls[sectionId].validators[control][1]
+            )
           );
         }
-      }
+      );
+    } else {
+      Object.keys(this.sectionsControls[sectionId].validators).forEach(
+        (control) => {
+          this.createEventSettingsForm.removeControl(control);
+        }
+      );
+    }
 
-      return section;
-    });
     this.createEventSettingsForm.updateValueAndValidity();
-    this.sectionsConfig.next(updatedSections);
+    this.createEventSettingsForm.markAsDirty();
+    this.sectionsConfig.next(oldSections);
   }
 
   updateSections(sections: IInviteSection[]) {
@@ -421,7 +406,7 @@ export class SweetXvSettingsComponent {
       }
     });
 
-    this.sectionsConfig.next(sectionsCopy);
+    return sectionsCopy;
   }
 
   dragStart(event: Event) {
@@ -443,7 +428,7 @@ export class SweetXvSettingsComponent {
 
     this.createEventSettingsForm.markAsDirty();
 
-    this.updateSections(sections);
+    this.sectionsConfig.next(sections);
   }
 
   dragOver(event: DragEvent) {

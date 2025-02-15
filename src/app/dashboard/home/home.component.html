@@ -1,87 +1,89 @@
-<section class="row mx-1 my-3 breadcrumb-header">
-  <div class="col-12 header">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
-        <li class="breadcrumb-item"><h2 i18n>INICIO</h2></li>
-      </ol>
-    </nav>
-    <div class="filter">
-      <label for="eventId" i18n>Evento:</label>
-      <select #eventId id="eventId" class="form-control" (change)="filterInvites($event)">
-        <option value="" i18n>Todos los eventos</option>
-        <option *ngFor="let event of events" [value]="event.id">{{ event.nameOfEvent }}</option>
-      </select>
+<ng-container *ngIf="vm$ | async as vm">
+  <section class="row mx-1 my-3 breadcrumb-header">
+    <div class="col-12 header">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
+          <li class="breadcrumb-item"><h2 i18n>INICIO</h2></li>
+        </ol>
+      </nav>
+      <div class="filter">
+        <label for="eventId" i18n>Evento:</label>
+        <select #eventId id="eventId" class="form-control" (change)="filterInvites($event)">
+          <option value="" i18n>Todos los eventos</option>
+          <option *ngFor="let event of vm.events" [value]="event.id">{{ event.nameOfEvent }}</option>
+        </select>
+      </div>
     </div>
-  </div>
-</section>
-<section class="history">
-  <div class="full-history row">
-    <div class="invites-history col-md-12 col-lg-8">
-      <div class="card">
-        <div class="card-body">
-          <h3 class="card-title" i18n>Todos las pases</h3>
-          <div class="row">
-            <div class="col-12 col-md-6">
-              <canvas id="historyChart"></canvas>
-            </div>
-            <div class="col-12 col-md-6">
-              <div class="history-information">
-                <table>
-                  <thead>
-                    <tr>
-                      <th i18n>Estado de los pases</th>
-                      <th i18n>Pases</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <ng-container *ngFor="let statistic of statistics; index as i">
-                      <tr *ngIf="i !== statistics.length - 1">
-                        <td><i class="fa-solid fa-circle" [ngStyle]="{color: statistic.color}" aria-hidden="true"></i> {{ statistic.name }}</td>
-                        <td>{{ statistic.value }}</td>
+  </section>
+  <section class="history">
+    <div class="full-history row">
+      <div class="invites-history col-md-12 col-lg-8">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title" i18n>Todos las pases</h3>
+            <div class="row">
+              <div class="col-12 col-md-6">
+                <canvas id="historyChart"></canvas>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="history-information" *ngIf="history$ | async as history">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th i18n>Estado de los pases</th>
+                        <th i18n>Pases</th>
                       </tr>
-                    </ng-container>
-                  </tbody>
-                  <tfoot>
-                    <ng-container *ngFor="let statistic of statistics; index as i">
-                      <tr *ngIf="i === statistics.length - 1">
-                        <td><i class="fa-solid fa-circle" [ngStyle]="{color: statistic.color}" aria-hidden="true"></i> {{ statistic.name }}</td>
-                        <td>{{ statistic.value }}</td>
-                      </tr>
-                    </ng-container>
-                  </tfoot>
-                </table>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngFor="let statistic of history.statistics; index as i">
+                        <tr *ngIf="i !== history.statistics.length - 1">
+                          <td><i class="fa-solid fa-circle" [ngStyle]="{color: statistic.color}" aria-hidden="true"></i> {{ statistic.name }}</td>
+                          <td>{{ statistic.value }}</td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                    <tfoot>
+                      <ng-container *ngFor="let statistic of history.statistics; index as i">
+                        <tr *ngIf="i === history.statistics.length - 1">
+                          <td><i class="fa-solid fa-circle" [ngStyle]="{color: statistic.color}" aria-hidden="true"></i> {{ statistic.name }}</td>
+                          <td>{{ statistic.value }}</td>
+                        </tr>
+                      </ng-container>
+                    </tfoot>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="percentage-history col-md-12 col-lg-4">
-      <div class="card">
-        <div class="card-body">
-          <h3 class="card-title" i18n>Porcentaje de <br> pases confirmadas</h3>
-          <span style="color: #006718;">{{ percentajeOfConfirmation }}%</span>
-          <p i18n>Basado en todos los eventos</p>
+      <div class="percentage-history col-md-12 col-lg-4" *ngIf="history$ | async as history">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title" i18n>Porcentaje de <br> pases confirmadas</h3>
+            <span style="color: #006718;">{{ history.percentajeOfConfirmation }}%</span>
+            <p i18n>Basado en todos los eventos</p>
+          </div>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-body">
-          <h3 class="card-title" i18n>Porcentaje de <br> pases pendientes</h3>
-          <span style="color: #B50012;">{{ percentajeOfPendingResponse }}%</span>
-          <p i18n>Basado en todos los eventos</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="last-history row">
-    <div class="col-12">
-      <div class="card">
-        <div class="card-body">
-          <h3 class="card-title" i18n>Últimos 31 días</h3>
-          <canvas id="lastInvitesData"></canvas>
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title" i18n>Porcentaje de <br> pases pendientes</h3>
+            <span style="color: #B50012;">{{ history.percentajeOfPendingResponse }}%</span>
+            <p i18n>Basado en todos los eventos</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+    <div class="last-history row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title" i18n>Últimos 31 días</h3>
+            <canvas id="lastInvitesData"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</ng-container>

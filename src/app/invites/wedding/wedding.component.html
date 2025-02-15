@@ -1,8 +1,8 @@
-<main>
-  <div id="full-invite" *ngIf="userInvite">
+<main *ngIf="vm$ | async as vm">
+  <div id="full-invite" *ngIf="vm.userInvite">
     <div class="info invite-section">
-      <ng-container *ngIf="mainImage">
-        <div class="backgroundImage" style="background-image: url('{{mainImage.fileUrl}}');" alt="Foto de la novia y el novio" i18n-alt></div>
+      <ng-container *ngIf="vm.mainImage">
+        <div class="backgroundImage" style="background-image: url('{{vm.mainImage.fileUrl}}');" alt="Foto de la novia y el novio" i18n-alt></div>
       </ng-container>
       <button (click)="goToForm()" class="scrollFormButton" i18n-title title="Deplazar hacia el formulario"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>
       <button (click)="reproduceAudio()" class="audioButton" i18n-title title="Audio Button"><i class="fa-solid fa-music" aria-hidden="true"></i></button>
@@ -10,7 +10,7 @@
         <div class="header">
           <h1 i18n>Nuestra boda</h1>
           <h2>
-            <ng-container *ngFor="let celebrated of userInvite.nameOfCelebrated.split(';'); let i = index">
+            <ng-container *ngFor="let celebrated of vm.userInvite.nameOfCelebrated.split(';'); let i = index">
               <span *ngIf="i === 1"><br>&</span> 
               {{ celebrated.split(' ')[0] }}
             </ng-container>
@@ -19,10 +19,10 @@
         <div class="datetime">
           <div class="date">
             <hr>
-            <p>{{ dayOfTheWeek.toLocaleUpperCase() }}, {{ shortDate.toLocaleUpperCase() }}</p>
+            <p>{{ vm.dayOfTheWeek.toLocaleUpperCase() }}, {{ vm.shortDate.toLocaleUpperCase() }}</p>
             <hr>
           </div>
-          <app-countdown [dateOfEventValue]="userInvite.dateOfEvent"></app-countdown>
+          <app-countdown [dateOfEventValue]="vm.userInvite.dateOfEvent"></app-countdown>
         </div>
       </div>
     </div>
@@ -30,7 +30,7 @@
       <div class="container">
         <div class="row">
           <div class="col-12">
-            <p class="familyName">{{ userInvite.family }}</p>
+            <p class="familyName">{{ vm.userInvite.family }}</p>
           </div>
           <div class="col-12">
             <p class="phrase">
@@ -122,7 +122,7 @@
                 </g>
               </svg>
             </div>
-            <ng-container *ngFor="let brideParent of eventSettings.brideParents.split(';')">
+            <ng-container *ngFor="let brideParent of vm.parsedEventSettings.brideParents.split(';')">
               <p>{{brideParent}}</p>
             </ng-container>
           </div>
@@ -179,14 +179,14 @@
                 </g>
               </svg>
             </div>
-            <ng-container *ngFor="let groomParent of eventSettings.groomParents.split(';')">
+            <ng-container *ngFor="let groomParent of vm.parsedEventSettings.groomParents.split(';')">
               <p>{{groomParent}}</p>
             </ng-container>
           </div>
           <div class="col-12">
             <br>
-            <p class="noKids" *ngIf="!userInvite.kidsAllowed" i18n>* No niños *</p>
-            <p *ngIf="!userInvite.kidsAllowed" i18n>Para una mejor experiencia para todos los presentes, hemos decidido celebrar este momento sin niños. Deseamos que esta decisión no les impida asistir a nuestra celebración. </p>
+            <p class="noKids" *ngIf="!vm.userInvite.kidsAllowed" i18n>* No niños *</p>
+            <p *ngIf="!vm.userInvite.kidsAllowed" i18n>Para una mejor experiencia para todos los presentes, hemos decidido celebrar este momento sin niños. Deseamos que esta decisión no les impida asistir a nuestra celebración. </p>
           </div>
         </div>
       </div>
@@ -306,31 +306,31 @@
                 <div class="box">
                   <h3 class="box-header" i18n>Ceremonia<br>Religiosa</h3>
                   <div class="box-body">
-                    <p><strong>{{ eventSettings.massTime }} <span i18n>HORAS</span></strong></p>
-                    <p>{{ eventSettings.massPlace }}</p>
+                    <p><strong>{{ vm.parsedEventSettings.massTime }} <span i18n>HORAS</span></strong></p>
+                    <p>{{ vm.parsedEventSettings.massPlace }}</p>
                   </div>
                   <div class="box-footer">
-                    <a [href]="eventSettings.massUrl" target="_blank" i18n>Ir al mapa</a>
+                    <a [href]="vm.parsedEventSettings.massUrl" target="_blank" i18n>Ir al mapa</a>
                   </div>
                 </div>
                 <div class="box">
                   <h3 class="box-header" i18n>Ceremonia<br>Civil</h3>
                   <div class="box-body">
-                    <p><strong>{{ eventSettings.civilTime }} <span i18n>HORAS</span></strong></p>
-                    <p>{{ eventSettings.civilPlace }}</p>
+                    <p><strong>{{ vm.parsedEventSettings.civilTime }} <span i18n>HORAS</span></strong></p>
+                    <p>{{ vm.parsedEventSettings.civilPlace }}</p>
                   </div>
                   <div class="box-footer">
-                    <a [href]="eventSettings.civilUrl" target="_blank" i18n>Ir al mapa</a>
+                    <a [href]="vm.parsedEventSettings.civilUrl" target="_blank" i18n>Ir al mapa</a>
                   </div>
                 </div>
                 <div class="box">
                   <h3 class="box-header" i18n>Recepción</h3>
                   <div class="box-body">
-                    <p><strong>{{ eventSettings.venueTime }} <span i18n>HORAS</span></strong></p>
-                    <p>{{ eventSettings.venuePlace }}</p>
+                    <p><strong>{{ vm.parsedEventSettings.venueTime }} <span i18n>HORAS</span></strong></p>
+                    <p>{{ vm.parsedEventSettings.venuePlace }}</p>
                   </div>
                   <div class="box-footer">
-                    <a [href]="eventSettings.venueUrl" target="_blank" i18n>Ir al mapa</a>
+                    <a [href]="vm.parsedEventSettings.venueUrl" target="_blank" i18n>Ir al mapa</a>
                   </div>
                 </div>
               </div>
@@ -349,7 +349,7 @@
             <p class="attribution">Designed by <a href="http://www.freepik.es/" target="_blank" rel="noopener noreferrer">Freepik</a></p>
           </div>
         </div>
-        <p class="pt-5" i18n>- El color {{eventSettings.dressCodeColor}} -</p>
+        <p class="pt-5" i18n>- El color {{vm.parsedEventSettings.dressCodeColor}} -</p>
         <p i18n>Está reservado para la novia</p>
       </div>
     </div>
@@ -380,9 +380,9 @@
               </g>
             </svg>
             <p><strong i18n>Cuenta CLABE</strong></p>
-            <p>{{ eventSettings.clabeBank }} <button aria-label="Copiar clabe bancaria" i18n-aria-label (click)="copyText(eventSettings.clabeBank)"><i class="fa-solid fa-copy" aria-hidden="true"></i></button></p>
+            <p>{{ vm.parsedEventSettings.clabeBank }} <button aria-label="Copiar clabe bancaria" i18n-aria-label (click)="copyText(vm.parsedEventSettings.clabeBank)"><i class="fa-solid fa-copy" aria-hidden="true"></i></button></p>
             <p><strong i18n>Número de Tarjeta</strong></p>
-            <p>{{ eventSettings.cardNumber }} <button aria-label="Copiar número de tarjeta" i18n-aria-label (click)="copyText(eventSettings.cardNumber)"><i class="fa-solid fa-copy" aria-hidden="true"></i></button></p>
+            <p>{{ vm.parsedEventSettings.cardNumber }} <button aria-label="Copiar número de tarjeta" i18n-aria-label (click)="copyText(vm.parsedEventSettings.cardNumber)"><i class="fa-solid fa-copy" aria-hidden="true"></i></button></p>
           </div>
         </div>
         <p i18n>Muchas Gracias!</p>
@@ -391,13 +391,13 @@
     <div class="accomodations invite-section" [ngClass]="getSectionOrder('accomodationInfo') % 2 === 0 ? 'darkColor' : 'lightColor'" [ngStyle]="{ 'order': getSectionOrder('accomodationInfo') }" *ngIf="sectionEnabled('accomodationInfo')" >
       <div class="container">
         <h2 i18n>Hospedaje</h2>
-        <h3>{{ eventSettings.hotelName }}</h3>
+        <h3>{{ vm.parsedEventSettings.hotelName }}</h3>
         <img class="img-fluid" src="https://res.cloudinary.com/dc9vc8b7b/image/upload/v1736572693/rb_2148152191_vat2nn.png" alt="Animated Hotel Picture">
-        <p>{{ eventSettings.hotelAddress }}</p>
-        <p i18n><strong>Tel:</strong> {{ eventSettings.hotelPhone }}</p>
+        <p>{{ vm.parsedEventSettings.hotelAddress }}</p>
+        <p i18n><strong>Tel:</strong> {{ vm.parsedEventSettings.hotelPhone }}</p>
         <div class="buttons">
-          <a [href]="eventSettings.hotelUrl" target="_blank" rel="noopener noreferrer" i18n>Ir al mapa</a>
-          <a [href]="eventSettings.hotelInformation" target="_blank" rel="noopener noreferrer" i18n>Ver detalles</a>
+          <a [href]="vm.parsedEventSettings.hotelUrl" target="_blank" rel="noopener noreferrer" i18n>Ir al mapa</a>
+          <a [href]="vm.parsedEventSettings.hotelInformation" target="_blank" rel="noopener noreferrer" i18n>Ver detalles</a>
         </div>
       </div>
     </div>
@@ -406,7 +406,7 @@
         <h2 i18n>Galería</h2>
         <div class="slider">
           <div class="images">
-            <ng-container *ngFor="let image of gallery; index as i">
+            <ng-container *ngFor="let image of vm.gallery; index as i">
               <div class="image-container">
                 <img [src]="image.fileUrl" alt="Galería de Imágenes {{i}}">
               </div>
@@ -416,7 +416,7 @@
       </div>
     </div>
     <div class="invitesConfirmation invite-section" [ngClass]="getSectionOrder('confirmationInfo') % 2 === 0 ? 'darkColor' : 'lightColor'" id="scrollToForm" [ngStyle]="{ 'order': getSectionOrder('confirmationInfo') }">
-      <app-confirmation [inviteValue]="userInvite" [deadlineMet]="deadlineMet"></app-confirmation>
+      <app-confirmation [inviteValue]="vm.userInvite" [deadlineMetValue]="vm.deadlineMet"></app-confirmation>
     </div>
   </div>
 </main>

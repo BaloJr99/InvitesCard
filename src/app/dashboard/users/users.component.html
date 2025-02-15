@@ -1,36 +1,42 @@
-<section class="row mx-1 my-3 breadcrumb-header">
-  <div class="col-12 header">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
-        <li class="breadcrumb-item"><h2 i18n>USUARIOS</h2></li>
-      </ol>
-    </nav>
-    <div class="buttons">
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rolesModal" i18n>Nuevo rol</button>
-      <button class="btn btn-primary ms-md-1" data-bs-toggle="modal" data-bs-target="#usersModal" i18n>Nuevo usuario</button>
-    </div>
-  </div>
-</section>
-<section class="row mx-1 mb-3 users">
-  <div class="col-12">
-    <div class="table-styling">
-      <div class="inner">
-        <app-table (actionResponse)="actionResponse($event)"
-                   [tableConfigurationValue]="table">
-        </app-table>
+<ng-container *ngIf="vm$ | async as vm">
+  <section class="row mx-1 my-3 breadcrumb-header">
+    <div class="col-12 header">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
+          <li class="breadcrumb-item"><h2 i18n>USUARIOS</h2></li>
+        </ol>
+      </nav>
+      <div class="buttons">
+        <button class="btn btn-primary" (click)="openRoleModal(undefined)" i18n>Nuevo rol</button>
+        <button class="btn btn-primary ms-md-1" i18n (click)="openUserModal('')">Nuevo usuario</button>
       </div>
     </div>
-  </div>
-</section>
-
-<app-user-modal 
-  [userActionValue]="userAction" 
-  (updateUsers)="updateUsers($event)"
-  (selectRole)="setSelectedRole($event)">
-</app-user-modal>
-
-<app-user-role 
-  [roleValue]="roleSelected"
-  (updateRoles)="updateSavedInformation($event)">
-</app-user-role>
+  </section>
+  <section class="row mx-1 mb-3 users">
+    <div class="col-12">
+      <div class="table-styling">
+        <div class="inner">
+          <app-table (actionResponse)="actionResponse($event)"
+                     [tableConfigurationValue]="vm.table">
+          </app-table>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <app-user-modal 
+    [userActionValue]="vm.userAction" 
+    [showModalValue]="vm.showUserModal"
+    (updateUsers)="updateUsers($event)"
+    (selectRole)="setSelectedRole($event)"
+    (closeModal)="closeUserModal()">
+  </app-user-modal>
+  
+  <app-user-role 
+    [showModalValue]="vm.showRoleModal"
+    [roleActionValue]="vm.roleAction"
+    (updateRoles)="updateSavedInformation($event)"
+    (closeModal)="closeRoleModal()">
+  </app-user-role>
+</ng-container>

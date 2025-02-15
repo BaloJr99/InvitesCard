@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { BehaviorSubject, combineLatest, tap } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { FileReaderService } from 'src/app/core/services/fileReader.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { UsersService } from 'src/app/core/services/users.service';
 
 @Component({
@@ -11,31 +11,63 @@ import { UsersService } from 'src/app/core/services/users.service';
   templateUrl: './profile-modal.component.html',
   styleUrls: ['./profile-modal.component.css'],
 })
-export class ProfileModalComponent implements OnInit {
-  @Input() userId: string = '';
+export class ProfileModalComponent {
+  private userId = new BehaviorSubject<string>('');
+  userId$ = this.userId.asObservable();
+  private showModal = new BehaviorSubject<boolean>(false);
+  showModal$ = this.showModal.asObservable();
+
+  @Input() set userIdValue(value: string) {
+    this.userId.next(value);
+  }
+  @Input() set showModalValue(value: boolean) {
+    this.showModal.next(value);
+  }
   @Output() updateProfilePhoto = new EventEmitter<string>();
+  @Output() closeModal = new EventEmitter<void>();
 
   profilePhotoForm: FormGroup = this.fb.group({
     photoFiles: ['', Validators.required],
     photoFilesSource: ['', Validators.required],
   });
 
+  vm$ = combineLatest([this.userId$, this.showModal$]).pipe(
+    tap(([, showModal]) => {
+      if (showModal) {
+        $('#profileModal').modal('show');
+        $('#profileModal').on('hidden.bs.modal', () => {
+          this.clearForm();
+          this.closeModal.emit();
+        });
+      } else {
+        $('#profileModal').modal('hide');
+      }
+    })
+  );
+
+  clearForm(): void {
+    this.profilePhotoForm.reset({
+      photoFiles: '',
+      photoFilesSource: '',
+    });
+
+    const container = document.getElementById(
+      'image-container'
+    ) as HTMLImageElement;
+    const profilePhoto = document.getElementById(
+      'profile-photo'
+    ) as HTMLImageElement;
+
+    profilePhoto.src = '';
+    container.style.display = 'none';
+  }
+
   constructor(
     private fb: FormBuilder,
-    private loaderService: LoaderService,
     private fileReaderService: FileReaderService,
     private userService: UsersService,
     private toastr: ToastrService
   ) {}
-
-  ngOnInit(): void {
-    $('#profileModal').on('hidden.bs.modal', () => {
-      this.profilePhotoForm.patchValue({
-        photoFiles: '',
-        photoFilesSource: '',
-      });
-    });
-  }
 
   onPhotoChange(event: Event): void {
     const container = document.getElementById(
@@ -79,19 +111,19 @@ export class ProfileModalComponent implements OnInit {
 
         reader.readAsDataURL(element.files[0]);
       }
+    } else {
+      this.clearForm();
     }
   }
 
   saveProfilePhoto() {
-    this.loaderService.setLoading(true, $localize`Extrayendo imagenes`);
     this.fileReaderService
       .getBase64(this.profilePhotoForm.controls['photoFilesSource'].value)
       .subscribe({
         next: (fileBase64) => {
-          this.loaderService.setLoading(true, $localize`Subiendo imagenes`);
           this.userService
             .uploadProfilePhoto({
-              id: this.userId,
+              id: this.userId.value,
               profilePhotoSource: fileBase64,
             })
             .subscribe({
@@ -105,9 +137,6 @@ export class ProfileModalComponent implements OnInit {
                 this.updateProfilePhoto.emit(response.id);
                 $('#profileModal').modal('hide');
               },
-            })
-            .add(() => {
-              this.loaderService.setLoading(false);
             });
         },
       });

@@ -12,13 +12,11 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { ISaveTheDateConfirmation, ISaveTheDateUserInvite } from 'src/app/core/models/invites';
-import { SocketService } from 'src/app/core/services/socket.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
+import { ISaveTheDateUserInvite } from 'src/app/core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
-import { ActivatedRoute } from '@angular/router';
 import { EventType } from 'src/app/core/models/enum';
 import { ISaveTheDateSetting } from 'src/app/core/models/settings';
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-accomodation',
@@ -28,64 +26,81 @@ import { ISaveTheDateSetting } from 'src/app/core/models/settings';
 export class AccomodationComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
-  @Input() invite!: ISaveTheDateUserInvite;
-  @Input() inviteSettings!: ISaveTheDateSetting;
-  @Input() set deadlineMet(value: boolean) {
-    this.blockAccomodationForm = value;
-    if (value === true) {
-      this.accomodationForm.disable();
-    }
+
+  private invite = new BehaviorSubject<ISaveTheDateUserInvite>(
+    {} as ISaveTheDateUserInvite
+  );
+  invite$ = this.invite.asObservable();
+  private inviteSettings = new BehaviorSubject<ISaveTheDateSetting>(
+    {} as ISaveTheDateSetting
+  );
+  inviteSettings$ = this.inviteSettings.asObservable();
+  private deadlineMet = new BehaviorSubject<boolean>(false);
+  deadlineMet$ = this.deadlineMet.asObservable();
+
+  @Input() set inviteValue(value: ISaveTheDateUserInvite) {
+    this.invite.next(value);
   }
+
+  @Input() set inviteSettingsValue(value: ISaveTheDateSetting) {
+    this.inviteSettings.next(value);
+  }
+
+  @Input() set deadlineMetValue(value: boolean) {
+    this.deadlineMet.next(value);
+  }
+
+  vm$ = combineLatest([
+    this.invite$,
+    this.inviteSettings$,
+    this.deadlineMet$,
+  ]).pipe(
+    map(([invite, inviteSettings, deadlineMet]) => {
+      if (deadlineMet === true) {
+        this.accomodationForm.disable();
+      }
+      return {
+        blockAccomodationForm: deadlineMet,
+        invite,
+        inviteSettings,
+      };
+    })
+  );
+
   @Output() newInvite = new EventEmitter<FormGroup>();
 
-  blockAccomodationForm = false;
-  accomodationForm: FormGroup;
+  accomodationForm: FormGroup = this.fb.group({
+    needsAccomodation: [true, Validators.required],
+  });
 
   constructor(
     private fb: FormBuilder,
-    private invitesService: InvitesService,
-    private socket: SocketService,
-    private loaderService: LoaderService,
-    private activatedRoute: ActivatedRoute
-  ) {
-    this.accomodationForm = this.fb.group({
-      needsAccomodation: ['true', Validators.required],
-    });
-  }
+    private invitesService: InvitesService
+  ) {}
 
   saveInformation(): void {
-    const assist =
-      this.accomodationForm.controls['needsAccomodation'].value === 'true';
-    this.accomodationForm.patchValue({ needsAccomodation: assist });
-    this.sendUserResponse();
+    this.invitesService
+      .sendConfirmation(
+        this.formatForm(),
+        this.invite.value.id,
+        EventType.SaveTheDate
+      )
+      .subscribe({
+        next: () => {
+          this.invite.next({
+            ...this.invite.value,
+            needsAccomodation: true,
+          });
+        },
+      });
   }
 
-  sendUserResponse() {
-    if (this.invite.id) {
-      this.loaderService.setLoading(true, $localize`Enviando confirmación`);
-      this.invitesService
-        .sendConfirmation(
-          this.accomodationForm.value as ISaveTheDateConfirmation,
-          this.invite.id,
-          EventType.SaveTheDate
-        )
-        .subscribe({
-          next: () => {
-            this.showDiv();
-            const inviteInfo = {
-              ...this.accomodationForm.value,
-              id: this.activatedRoute.snapshot.paramMap.get('id'),
-            };
-            this.socket.sendNotification(inviteInfo);
-          },
-        })
-        .add(() => {
-          this.loaderService.setLoading(false);
-        });
-    }
-  }
-
-  showDiv(): void {
-    this.invite.needsAccomodation = this.accomodationForm.get('needsAccomodation')?.value;
+  formatForm() {
+    return {
+      ...this.accomodationForm.value,
+      needsAccomodation: Boolean(
+        JSON.parse(this.accomodationForm.controls['needsAccomodation'].value)
+      ),
+    };
   }
 }

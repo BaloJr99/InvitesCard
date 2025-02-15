@@ -1,4 +1,4 @@
-<div class="full-invite" *ngIf="userInvite">
+<div class="full-invite" *ngIf="vm$ | async as vm">
   <div class="info invite-section">
     <ng-container *ngFor="let downloadImage of downloadImages; index as i">  
       <ng-container *ngIf="i === 0">
@@ -12,61 +12,61 @@
     <div class="container">
       <div class="header">
         <h1>15<span>Sweet</span></h1>
-        <p>{{userInvite.nameOfCelebrated}}</p>
+        <p>{{ vm.userInvite.nameOfCelebrated }}</p>
       </div>
       <div class="datetime">
         <div class="date">
           <hr>
-          <p>{{ dayOfTheWeek.toLocaleUpperCase() }}, {{ shortDate.toLocaleUpperCase() }}</p>
+          <p>{{ vm.dayOfTheWeek.toLocaleUpperCase() }}, {{ vm.shortDate.toLocaleUpperCase() }}</p>
           <hr>
         </div>
-        <app-countdown [dateOfEventValue]="userInvite.dateOfEvent"></app-countdown>
+        <app-countdown [dateOfEventValue]="vm.userInvite.dateOfEvent"></app-countdown>
       </div>
     </div>
   </div>
   <div class="speech invite-section">
     <div class="container">
-      <p>{{eventSettings.firstSectionSentences.split(';')[0]}}</p>
+      <p>{{ vm.parsedEventSettings.firstSectionSentences.split(';')[0]}}</p>
       <div class="invites">
         <div class="divider">
           <hr>
         </div>
-        <p>{{ userInvite.family }}</p>
-        <p class="pinkLetter" i18n>Pases: {{ userInvite.entriesNumber }}</p>
-        <p class="noKids" *ngIf="!userInvite?.kidsAllowed" i18n>* No niños *</p>
+        <p>{{ vm.userInvite.family }}</p>
+        <p class="pinkLetter" i18n>Pases: {{ vm.userInvite.entriesNumber }}</p>
+        <p class="noKids" *ngIf="!vm.userInvite?.kidsAllowed" i18n>* No niños *</p>
         <div class="divider">
           <hr>
         </div>
       </div>
-      <p>{{eventSettings.firstSectionSentences.split(';')[1]}}</p>
+      <p>{{ vm.parsedEventSettings.firstSectionSentences.split(';')[1] }}</p>
     </div>
   </div>
   <div class="ceremony invite-section" [ngStyle]="{ 'order': getSectionOrder('ceremonyInfo') }" *ngIf="sectionEnabled('ceremonyInfo')">
     <div class="container">
       <h2 i18n>Ceremonia</h2>
       <div class="row">
-        <div class="col-sm-12 col-md-6" [ngClass]="eventSettings.godParents.split(';').length === 2 ? 'col-md-6' : 'col-md-12'">
+        <div class="col-sm-12 col-md-6" [ngClass]="vm.parsedEventSettings.godParents.split(';').length === 2 ? 'col-md-6' : 'col-md-12'">
           <p i18n>En compañía de mis papás</p>
-          <ng-container *ngFor="let parent of eventSettings.parents.split(';')">
+          <ng-container *ngFor="let parent of vm.parsedEventSettings.parents.split(';')">
             <p>{{parent}}</p>
           </ng-container>
         </div>
-        <div class="col-sm-12 col-md-6" *ngIf="eventSettings.godParents.split(';').length === 2">
+        <div class="col-sm-12 col-md-6" *ngIf="vm.parsedEventSettings.godParents.split(';').length === 2">
           <p i18n>Y mis padrinos</p>
-          <ng-container *ngFor="let godParent of eventSettings.godParents.split(';')">
+          <ng-container *ngFor="let godParent of vm.parsedEventSettings.godParents.split(';')">
             <p>{{godParent}}</p>
           </ng-container>
         </div>
       </div>
-      <p class="pt-5" i18n>{{eventSettings.secondSectionSentences}} <br><br>¡Mis XV Años! </p>
+      <p class="pt-5" i18n>{{vm.parsedEventSettings.secondSectionSentences}} <br><br>¡Mis XV Años! </p>
       <br>
-      <p class="pinkLetter" i18n>{{ dayOfTheWeek.substring(0, 1).toUpperCase() + dayOfTheWeek.slice(1) }} <br> {{ longDate }} <br> <i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{ eventSettings.massTime }} horas</p>
+      <p class="pinkLetter" i18n>{{ vm.dayOfTheWeek.substring(0, 1).toUpperCase() + vm.dayOfTheWeek.slice(1) }} <br> {{ vm.longDate }} <br> <i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{ vm.parsedEventSettings.massTime }} horas</p>
       <div class="row">
         <div class="col-sm-12 col-md-6">
-          <p>{{eventSettings.massAddress}}</p>
+          <p>{{vm.parsedEventSettings.massAddress}}</p>
         </div>
         <div class=" col-sm-12 col-md-6">
-          <iframe title="Mapa de la ceremonia" i18n-title [src]="eventSettings.massUrl | safe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe title="Mapa de la ceremonia" i18n-title [src]="vm.parsedEventSettings.massUrl | safe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
     </div>
@@ -75,13 +75,13 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12 col-md-6">
-          <iframe title="Mapa de la recepción" i18n-title [src]="eventSettings.receptionUrl | safe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe title="Mapa de la recepción" i18n-title [src]="vm.parsedEventSettings.receptionUrl | safe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
         <div class="col-sm-12 col-md-6">
           <h2 i18n>Recepción</h2>
-          <h3>{{eventSettings.receptionPlace}}</h3>
-          <p>{{eventSettings.receptionAddress}}</p>
-          <span i18n><i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{eventSettings.receptionTime}} horas</span>
+          <h3>{{vm.parsedEventSettings.receptionPlace}}</h3>
+          <p>{{vm.parsedEventSettings.receptionAddress}}</p>
+          <span i18n><i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{vm.parsedEventSettings.receptionTime}} horas</span>
         </div>
       </div>
     </div>
@@ -99,7 +99,7 @@
           <p i18n>MUJERES</p>
         </div>
       </div>
-      <p class="pt-5" i18n>- El color {{eventSettings.dressCodeColor}} -</p>
+      <p class="pt-5" i18n>- El color {{vm.parsedEventSettings.dressCodeColor}} -</p>
       <p i18n>Está reservado para la festejada</p>
     </div>
   </div>
@@ -118,6 +118,6 @@
     </div>
   </div>
   <div class="invitesConfirmation invite-section" id="scrollToForm" [ngStyle]="{ 'order': getSectionOrder('confirmationInfo') }">
-    <app-confirmation [inviteValue]="userInvite" [deadlineMet]="deadlineMet"></app-confirmation>
+    <app-confirmation [inviteValue]="vm.userInvite" [deadlineMetValue]="vm.deadlineMet"></app-confirmation>
   </div>
 </div>

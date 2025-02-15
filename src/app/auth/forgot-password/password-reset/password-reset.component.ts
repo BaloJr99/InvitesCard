@@ -7,7 +7,6 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { matchPassword } from 'src/app/shared/utils/validators/matchPassword';
 
 @Component({
@@ -24,8 +23,7 @@ export class PasswordResetComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private authService: AuthService,
-    private loaderService: LoaderService
+    private authService: AuthService
   ) {
     this.passwordResetForm = this.fb.group(
       {
@@ -44,7 +42,6 @@ export class PasswordResetComponent implements OnInit {
 
   resetPassword(): void {
     if (this.passwordResetForm.valid && this.passwordResetForm.dirty) {
-      this.loaderService.setLoading(true, $localize`Cambiando contraseña`);
       this.authService
         .resetPassword(
           this.route.snapshot.paramMap.get('id') ?? '',
@@ -54,9 +51,6 @@ export class PasswordResetComponent implements OnInit {
           next: () => {
             this.passwordReset = true;
           },
-        })
-        .add(() => {
-          this.loaderService.setLoading(false);
         });
     } else {
       this.passwordResetForm.markAllAsTouched();

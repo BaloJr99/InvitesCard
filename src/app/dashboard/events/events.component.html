@@ -1,32 +1,38 @@
-<section class="row mx-1 my-3 breadcrumb-header">
-  <div class="col-12 header">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
-        <li class="breadcrumb-item"><h2 i18n>EVENTOS</h2></li>
-      </ol>
-    </nav>
-    <div class="buttons">
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal" i18n *ngIf="isAdmin">Nuevo evento</button>
+<ng-container *ngIf="vm$ | async as vm">
+  <section class="row mx-1 my-3 breadcrumb-header">
+    <div class="col-12 header">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
+          <li class="breadcrumb-item"><h2 i18n>EVENTOS</h2></li>
+        </ol>
+      </nav>
+      <div class="buttons">
+        <button class="btn btn-primary" i18n (click)="openEventModal('')" *ngIf="vm.isAdmin">Nuevo evento</button>
+      </div>
     </div>
-  </div>
-</section>
-<section class="events-container">
-  <div class="row">
-    <div class="col-12 col-sm-6 col-md-4" *ngFor="let event of events">
-      <div class="card">
-        <div class="card-body">
-          <button (click)="editEvent(event.id)" class="edit-event btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal" *ngIf="isAdmin" [attr.aria-label]="getAccessibilityMessage(event.nameOfEvent)">
-            <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
-          </button>
-          <h3 class="card-title">{{ event.nameOfEvent }}</h3>
-          <p class="card-text" i18n>Fecha del evento: <br> {{ event.dateOfEvent | dateFormat }}</p>
-          <a routerLink="/dashboard/events/{{event.id}}" class="view-event btn btn-primary" i18n>
-            IR A LAS INVITACIONES <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-          </a>
+  </section>
+  <section class="events-container">
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-4" *ngFor="let event of vm.events">
+        <div class="card">
+          <div class="card-body">
+            <button (click)="openEventModal(event.id)" class="edit-event btn btn-primary" *ngIf="vm.isAdmin" [attr.aria-label]="getAccessibilityMessage(event.nameOfEvent)">
+              <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+            </button>
+            <h3 class="card-title">{{ event.nameOfEvent }}</h3>
+            <p class="card-text" i18n>Fecha del evento: <br> {{ event.dateOfEvent | dateFormat }}</p>
+            <a routerLink="/dashboard/events/{{event.id}}" class="view-event btn btn-primary" i18n>
+              IR A LAS INVITACIONES <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-<app-event-modal [eventActionValue]="eventAction" (updateEvents)="updateEvents($event)" *ngIf="isAdmin"></app-event-modal>
+  </section>
+  <app-event-modal *ngIf="vm.isAdmin"
+                   [eventActionValue]="eventAction"
+                   [showModalValue]="showEventModal"
+                   (closeModal)="closeEventModal()"
+                   (updateEvents)="updateEvents($event)"></app-event-modal>
+</ng-container>

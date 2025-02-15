@@ -1,10 +1,8 @@
 import {
-  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   Input,
-  OnInit,
   Output,
   ViewChildren,
 } from '@angular/core';
@@ -16,10 +14,8 @@ import {
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { IEventAction, IFullEvent } from 'src/app/core/models/events';
-import { IUserDropdownData } from 'src/app/core/models/users';
 import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { CommonModalService } from 'src/app/core/services/commonModal.service';
 import {
@@ -28,34 +24,44 @@ import {
   EventType,
 } from 'src/app/core/models/enum';
 import { dateToUTCDate } from 'src/app/shared/utils/tools';
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-event-modal',
   templateUrl: './event-modal.component.html',
   styleUrls: ['./event-modal.component.css'],
 })
-export class EventModalComponent implements OnInit {
+export class EventModalComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  private eventAction: IEventAction | undefined;
-  @Input() set eventActionValue(value: IEventAction | undefined) {
-    if (value) {
-      this.eventAction = value;
+  private eventAction = new BehaviorSubject<IEventAction>({
+    event: {
+      id: '',
+      nameOfEvent: '',
+      dateOfEvent: '',
+      maxDateOfConfirmation: '',
+      nameOfCelebrated: '',
+      typeOfEvent: '',
+      userId: '',
+    },
+    isNew: true,
+  } as IEventAction);
+  eventAction$ = this.eventAction.asObservable();
 
-      this.createEventForm.patchValue({
-        ...value.event,
-        dateOfEvent: value.event.dateOfEvent.split('T')[0],
-        maxDateOfConfirmation: value.event.maxDateOfConfirmation.split('T')[0],
-      });
+  @Input() set eventActionValue(value: IEventAction) {
+    this.eventAction.next(value);
+  }
 
-      if (!value.isNew) {
-        this.originalEventType = value.event.typeOfEvent;
-      }
-    }
+  private showModal = new BehaviorSubject<boolean>(false);
+  showModal$ = this.showModal.asObservable();
+
+  @Input() set showModalValue(value: boolean) {
+    this.showModal.next(value);
   }
 
   @Output() updateEvents: EventEmitter<IEventAction> = new EventEmitter();
+  @Output() closeModal: EventEmitter<void> = new EventEmitter();
 
   createEventForm: FormGroup = this.fb.group({
     id: [''],
@@ -68,43 +74,54 @@ export class EventModalComponent implements OnInit {
   });
 
   originalEventType: EventType | undefined = undefined;
-  users: IUserDropdownData[] = [];
   userEmptyMessage = '';
+
+  vm$ = combineLatest([
+    this.showModal$,
+    this.usersService.getUsersDropdownData(),
+    this.eventAction$,
+  ]).pipe(
+    map(([showModal, users, eventAction]) => {
+      if (showModal) {
+        $('#eventModal').modal('show');
+        $('#eventModal').on('hidden.bs.modal', () => {
+          this.closeModal.emit();
+        });
+      } else {
+        this.clearInputs();
+        $('#eventModal').modal('hide');
+      }
+
+      if (users.length === 0) {
+        this.userEmptyMessage = $localize`No hay usuarios disponibles`;
+      } else {
+        this.userEmptyMessage = '';
+      }
+
+      this.createEventForm.patchValue({
+        ...eventAction.event,
+        dateOfEvent: eventAction.event.dateOfEvent.split('T')[0],
+        maxDateOfConfirmation:
+          eventAction.event.maxDateOfConfirmation.split('T')[0],
+      });
+
+      if (!eventAction.isNew) {
+        this.originalEventType = eventAction.event.typeOfEvent;
+      }
+
+      return {
+        users,
+      };
+    })
+  );
 
   constructor(
     private eventsService: EventsService,
     private usersService: UsersService,
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private loaderService: LoaderService,
-    private commonModalService: CommonModalService,
-    private cd: ChangeDetectorRef
+    private commonModalService: CommonModalService
   ) {}
-
-  ngOnInit(): void {
-    $('#eventModal').on('hidden.bs.modal', () => {
-      this.clearInputs();
-    });
-
-    $('#eventModal').on('show.bs.modal', () => {
-      this.loaderService.setLoading(true, $localize`Cargando usuarios`);
-
-      this.usersService
-        .getUsersDropdownData()
-        .subscribe({
-          next: (users) => {
-            this.users = users;
-            if (users.length === 0) {
-              this.userEmptyMessage = $localize`No hay usuarios disponibles`;
-            } else {
-              this.userEmptyMessage = '';
-            }
-            this.cd.detectChanges();
-          },
-        })
-        .add(() => this.loaderService.setLoading(false));
-    });
-  }
 
   saveEvent() {
     if (this.createEventForm.valid && this.createEventForm.dirty) {
@@ -154,7 +171,6 @@ export class EventModalComponent implements OnInit {
   }
 
   createEvent() {
-    this.loaderService.setLoading(true, $localize`Creando evento`);
     this.eventsService
       .createEvent(this.formatEvent(this.createEventForm.value))
       .subscribe({
@@ -172,9 +188,6 @@ export class EventModalComponent implements OnInit {
           $('#eventModal').modal('hide');
         },
       })
-      .add(() => {
-        this.loaderService.setLoading(false);
-      });
   }
 
   formatEvent(event: IFullEvent): IFullEvent {
@@ -186,7 +199,6 @@ export class EventModalComponent implements OnInit {
   }
 
   updateEvent(override: boolean = false, overrideViewed: boolean = false) {
-    this.loaderService.setLoading(true, $localize`Actualizando evento`);
     this.eventsService
       .updateEvent(
         this.formatEvent(this.createEventForm.value),
@@ -201,9 +213,6 @@ export class EventModalComponent implements OnInit {
               ...this.createEventForm.value,
               dateOfEvent: `${this.createEventForm.value.dateOfEvent}T00:00:00`,
               maxDateOfConfirmation: `${this.createEventForm.value.maxDateOfConfirmation}T00:00:00`,
-              allowCreateInvites: override
-                ? false
-                : this.eventAction?.event.allowCreateInvites,
             },
             isNew: false,
           });
@@ -211,9 +220,6 @@ export class EventModalComponent implements OnInit {
           $('#eventModal').modal('hide');
         },
       })
-      .add(() => {
-        this.loaderService.setLoading(false);
-      });
   }
 
   clearInputs(): void {
@@ -227,11 +233,6 @@ export class EventModalComponent implements OnInit {
       userId: '',
     });
 
-    this.createEventForm.enable();
-
-    this.eventAction = undefined;
     this.originalEventType = undefined;
-
-    $('#eventId').val('');
   }
 }

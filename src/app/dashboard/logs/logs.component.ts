@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { map } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { IEmitAction, ITable, ITableHeaders } from 'src/app/core/models/common';
 import { ButtonAction } from 'src/app/core/models/enum';
 import { ILog } from 'src/app/core/models/logs';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { LoggerService } from 'src/app/core/services/logger.service';
 import { toLocalDate } from 'src/app/shared/utils/tools';
 Chart.register(...registerables);
@@ -14,52 +13,44 @@ Chart.register(...registerables);
   templateUrl: './logs.component.html',
   styleUrl: './logs.component.css',
 })
-export class LogsComponent implements OnInit {
-  logs: ILog[] = [];
-  logSelected: ILog | undefined = undefined;
-  numberOfErrorsLast31Days = 0;
-  numberOfErrorsToday = 0;
-  groupedByDate: { [key: string]: number } = {};
+export class LogsComponent {
+  private logs = new BehaviorSubject<ILog[]>([]);
+  logs$ = this.logs.asObservable();
 
-  table: ITable = {
-    headers: [] as ITableHeaders[],
-    data: [] as { [key: string]: string }[],
-  } as ITable;
+  logSelected: ILog = {} as ILog;
+  showLogModal = false;
 
-  constructor(
-    private loggerService: LoggerService,
-    private loaderService: LoaderService
-  ) {}
+  constructor(private loggerService: LoggerService) {}
 
-  ngOnInit(): void {
-    this.loaderService.setLoading(true, $localize`Cargando Logs`);
-    this.loggerService
-      .getLogs()
-      .pipe(
-        map((logs) => {
-          return logs.map((log) => {
-            return {
-              ...log,
-              dateOfError: toLocalDate(log.dateOfError),
-            };
-          });
-        })
-      )
-      .subscribe({
-        next: (logs) => {
-          this.logs = logs;
-          this.table = this.getTableConfiguration(this.logs);
-          this.RenderChart();
-        },
-      })
-      .add(() => this.loaderService.setLoading(false));
-  }
+  vm$ = this.loggerService.getLogs().pipe(
+    map((logs) => {
+      const formattedLogs = logs.map((log) => {
+        return {
+          ...log,
+          dateOfError: toLocalDate(log.dateOfError),
+        } as ILog;
+      });
+      this.logs.next(formattedLogs);
 
-  RenderChart() {
-    this.numberOfErrorsLast31Days = this.logs.length;
-    this.numberOfErrorsToday = this.logs.filter(
+      return {
+        table: this.getTableConfiguration(formattedLogs),
+      };
+    })
+  );
+
+  history$ = this.logs$.pipe(
+    map((logs) => {
+      return this.RenderChart(logs);
+    })
+  );
+
+  RenderChart(logs: ILog[]) {
+    const numberOfErrorsLast31Days = logs.length;
+    const numberOfErrorsToday = logs.filter(
       (log) => new Date().getDay() === new Date(log.dateOfError).getDay()
     ).length;
+
+    const groupedByDate: { [key: string]: number } = {};
 
     const randomColors: string[] = [];
 
@@ -73,7 +64,7 @@ export class LogsComponent implements OnInit {
     }
 
     validDates.forEach((date) => {
-      this.groupedByDate[date] = this.logs.filter((log) => {
+      groupedByDate[date] = logs.filter((log) => {
         randomColors.push(
           `rgb(${this.randomNum()}, ${this.randomNum()}, ${this.randomNum()})`
         );
@@ -90,10 +81,10 @@ export class LogsComponent implements OnInit {
     new Chart('historyChart', {
       type: 'line',
       data: {
-        labels: Object.keys(this.groupedByDate),
+        labels: Object.keys(groupedByDate),
         datasets: [
           {
-            data: Object.values(this.groupedByDate),
+            data: Object.values(groupedByDate),
             backgroundColor: randomColors,
           },
         ],
@@ -129,22 +120,26 @@ export class LogsComponent implements OnInit {
         },
       },
     });
+
+    return { numberOfErrorsLast31Days, numberOfErrorsToday };
   }
 
   randomNum() {
     return Math.floor(Math.random() * (235 - 52 + 1) + 52);
   }
 
-  clearSelectedLog() {
-    this.logSelected = undefined;
+  closeLogModal() {
+    this.showLogModal = false;
   }
 
   actionResponse(action: IEmitAction): void {
     const data = action.data as { [key: string]: string };
     if (action.action === ButtonAction.View) {
       const logId = data[$localize`Acciones`];
-      this.logSelected = this.logs.find((log) => log.id === logId);
-      $('#logModal').modal('show');
+      this.logSelected = this.logs.value.find(
+        (log) => log.id === logId
+      ) as ILog;
+      this.showLogModal = true;
     }
   }
 

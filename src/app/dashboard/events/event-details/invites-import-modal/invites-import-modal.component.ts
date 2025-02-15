@@ -1,21 +1,38 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { IErrorInvite, IBulkInvite } from 'src/app/core/models/invites';
 import { IInviteGroups } from 'src/app/core/models/inviteGroups';
-import { LoaderService } from 'src/app/core/services/loader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { IBulkMessageResponse, IBulkResults } from 'src/app/core/models/common';
 import { FileReaderService } from 'src/app/core/services/fileReader.service';
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-invites-import-dialog',
   templateUrl: './invites-import-modal.component.html',
   styleUrls: ['./invites-import-modal.component.css'],
 })
-export class InvitesImportModalComponent implements OnInit {
-  @Input() eventId: string = '';
-  @Input() inviteGroups: IInviteGroups[] = [];
+export class InvitesImportModalComponent {
+  private eventId = new BehaviorSubject<string>('');
+  eventId$ = this.eventId.asObservable();
+  private inviteGroups = new BehaviorSubject<IInviteGroups[]>([]);
+  inviteGroups$ = this.inviteGroups.asObservable();
+  private showModal = new BehaviorSubject<boolean>(false);
+  showModal$ = this.showModal.asObservable();
+
+  @Input() set eventIdValue(eventId: string) {
+    this.eventId.next(eventId);
+  }
+  @Input() set inviteGroupsValue(inviteGroups: IInviteGroups[]) {
+    this.inviteGroups.next(inviteGroups);
+  }
+  @Input() set showModalValue(show: boolean) {
+    this.showModal.next(show);
+  }
+
   @Output() updateBulkResults = new EventEmitter<IBulkResults>();
+  @Output() closeModal = new EventEmitter<void>();
+
   invites: IBulkInvite[] = [];
   errorInvites: IErrorInvite[] = [];
   processingFile = false;
@@ -23,19 +40,33 @@ export class InvitesImportModalComponent implements OnInit {
   constructor(
     private invitesService: InvitesService,
     private toastr: ToastrService,
-    private loaderService: LoaderService,
     private fileReaderService: FileReaderService
   ) {}
 
-  ngOnInit(): void {
-    $('#invitesImportModal').on('hidden.bs.modal', () => {
-      this.invites = [];
+  vm$ = combineLatest([
+    this.eventId$,
+    this.inviteGroups$,
+    this.showModal$,
+  ]).pipe(
+    map(([eventId, inviteGroups, showModal]) => {
+      // Reset values
       this.errorInvites = [];
-      const input = document.getElementById('fileInput') as HTMLInputElement;
-      input.value = '';
+      this.invites = [];
       this.processingFile = false;
-    });
-  }
+
+      if (showModal) {
+        $('#invitesImportModal').modal('show');
+        const input = document.getElementById('fileInput') as HTMLInputElement;
+        input.value = '';
+        $('#invitesImportModal').on('hidden.bs.modal', () => {
+          this.closeModal.emit();
+        });
+      } else {
+        $('#invitesImportModal').modal('hide');
+      }
+      return { eventId, inviteGroups };
+    })
+  );
 
   onFileChange = async (event: Event) => {
     const element = event.currentTarget as HTMLInputElement;
@@ -43,14 +74,12 @@ export class InvitesImportModalComponent implements OnInit {
     if (element.files && element.files.length > 0) {
       try {
         this.processingFile = true;
-        this.loaderService.setLoading(true, $localize`Procesando archivo`);
         this.fileReaderService
           .read(element.files.item(0) as File)
           .subscribe((content: string) => {
             this.processFile(content);
           });
       } catch {
-        this.loaderService.setLoading(false);
         this.processingFile = false;
       }
     } else {
@@ -61,22 +90,17 @@ export class InvitesImportModalComponent implements OnInit {
   };
 
   sendData(): void {
-    this.loaderService.setLoading(true, $localize`Procesando invitaciones`);
-    this.invitesService
-      .bulkInvites(this.invites)
-      .subscribe({
-        next: (messageResponse: IBulkMessageResponse) => {
-          this.toastr.success(messageResponse.message);
+    this.invitesService.bulkInvites(this.invites).subscribe({
+      next: (messageResponse: IBulkMessageResponse) => {
+        this.toastr.success(messageResponse.message);
 
-          this.updateBulkResults.emit({
-            inviteGroupsGenerated: messageResponse.inviteGroupsGenerated,
-            invitesGenerated: messageResponse.invitesGenerated,
-          });
-
-          $('#invitesImportModal').modal('hide');
-        },
-      })
-      .add(this.loaderService.setLoading(false));
+        this.updateBulkResults.emit({
+          inviteGroupsGenerated: messageResponse.inviteGroupsGenerated,
+          invitesGenerated: messageResponse.invitesGenerated,
+        });
+        this.closeModal.emit();
+      },
+    });
   }
 
   processFile(content: string) {
@@ -122,7 +146,7 @@ export class InvitesImportModalComponent implements OnInit {
             columns[0] === '' ? $localize`ERROR: Campo vacío` : columns[4],
         });
       } else {
-        const inviteGroupFound = this.inviteGroups.find(
+        const inviteGroupFound = this.inviteGroups.value.find(
           (f) => f.inviteGroup.toLowerCase() === columns[4].toLowerCase()
         );
         this.invites.push({
@@ -130,15 +154,13 @@ export class InvitesImportModalComponent implements OnInit {
           entriesNumber: parseInt(columns[1]),
           phoneNumber: columns[2],
           kidsAllowed: Boolean(parseInt(columns[3])),
-          eventId: this.eventId,
+          eventId: this.eventId.value,
           inviteGroupName: columns[4],
           inviteGroupId: inviteGroupFound ? inviteGroupFound.id : '',
           isNewInviteGroup: inviteGroupFound ? false : true,
         });
       }
     });
-
-    this.loaderService.setLoading(false);
   }
 
   downloadTemplate() {
