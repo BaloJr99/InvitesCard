@@ -1,6 +1,7 @@
 import test, { expect } from '@playwright/test';
 import { invitesAdminUser, sweetXvEventMock } from 'e2e/helper/mocks';
 import { LoginPage } from 'e2e/pages/auth/login-page';
+import { DashboardPage } from 'e2e/pages/dashboard/dashboard-page';
 import { EventsPage } from 'e2e/pages/dashboard/events/events-page';
 import { FilesPage } from 'e2e/pages/dashboard/files/files-page';
 import { TestingPage } from 'e2e/pages/dashboard/testing/testing-page';
@@ -23,14 +24,12 @@ test.describe('Dashboard Files (Admin)', () => {
       await dashboardPage.clickTestingLink();
       const testingPage = new TestingPage(page);
       await testingPage.clickCleanEnvironmentButton();
-      await testingPage.waitToLoad();
-
       await testingPage.clickEventsLink();
 
       const eventsPage = new EventsPage(page);
       await eventsPage.waitToLoad();
       const eventModal = await eventsPage.clickNewEventButton();
-      await eventsPage.waitToLoad();
+      await eventModal.waitForModalToShow();
 
       await eventModal.fillEventForm(
         sweetXvEventMock.nameOfEvent,
@@ -43,7 +42,7 @@ test.describe('Dashboard Files (Admin)', () => {
 
       await eventModal.clickConfirmButton();
       await eventsPage.waitToLoad();
-      expect(await eventsPage.toastrIsShowing()).toBe(true);
+      await eventsPage.waitForToast();
 
       await eventsPage.clickFilesLink();
       environmentCleaned = true;
@@ -63,9 +62,6 @@ test.describe('Dashboard Files (Admin)', () => {
     await filesPage.selectEvent(sweetXvEventMock.nameOfEvent);
     await filesPage.uploadPhotos();
     await filesPage.clickSaveFiles();
-    await filesPage.waitToLoad();
-
-    expect(await filesPage.toastrIsShowing()).toBe(true);
 
     expect(await filesPage.getImageCardCount(), {
       message: 'Image card count should be 1',
@@ -76,9 +72,6 @@ test.describe('Dashboard Files (Admin)', () => {
     await filesPage.selectEvent(sweetXvEventMock.nameOfEvent);
     await filesPage.uploadAudio();
     await filesPage.clickSaveFiles();
-    await filesPage.waitToLoad();
-
-    expect(await filesPage.toastrIsShowing()).toBe(true);
 
     expect(await filesPage.getAudioCardCount(), {
       message: 'Audio card count should be 1',
@@ -87,8 +80,6 @@ test.describe('Dashboard Files (Admin)', () => {
 
   test('should be able to expand image card', async () => {
     await filesPage.selectEvent(sweetXvEventMock.nameOfEvent);
-    await filesPage.waitToLoad();
-
     await filesPage.clickScaleImage(0);
 
     expect(await filesPage.showImageVisible(), {
@@ -98,16 +89,12 @@ test.describe('Dashboard Files (Admin)', () => {
 
   test('should be able to select image usage', async () => {
     await filesPage.selectEvent(sweetXvEventMock.nameOfEvent);
-    await filesPage.waitToLoad();
-
     await filesPage.selectImageUsage(0, ImageUsage.Both);
     await filesPage.clickSaveChanges();
-    await filesPage.waitToLoad();
 
     await filesPage.goto();
     await filesPage.waitToLoad();
     await filesPage.selectEvent(sweetXvEventMock.nameOfEvent);
-    await filesPage.waitToLoad();
 
     const imageCard = await filesPage.getImageCard(0);
     expect(await imageCard.locator('select').inputValue(), {
@@ -117,19 +104,18 @@ test.describe('Dashboard Files (Admin)', () => {
 
   test('should be able to delete image card and audio card', async () => {
     await filesPage.selectEvent(sweetXvEventMock.nameOfEvent);
-    await filesPage.waitToLoad();
 
     const commonModal = await filesPage.deleteImage(0);
-    await commonModal.waitToLoad();
+    await commonModal.waitForModalToShow();
     await commonModal.clickConfirmButton();
     await filesPage.waitToLoad();
-    expect(await filesPage.toastrIsShowing()).toBe(true);
+    await filesPage.waitForToast();
 
     await filesPage.deleteAudio(0);
-    await commonModal.waitToLoad();
+    await commonModal.waitForModalToShow();
     await commonModal.clickConfirmButton();
     await filesPage.waitToLoad();
-    expect(await filesPage.toastrIsShowing()).toBe(true);
+    await filesPage.waitForToast();
 
     expect(await filesPage.getImageCardCount(), {
       message: 'Image card count should be 0',
@@ -158,14 +144,12 @@ test.describe('Dashboard Files (invitesAdmin)', () => {
       await dashboardPage.clickTestingLink();
       const testingPage = new TestingPage(page);
       await testingPage.clickCleanEnvironmentButton();
-      await testingPage.waitToLoad();
-
       await testingPage.clickEventsLink();
 
       const eventsPage = new EventsPage(page);
       await eventsPage.waitToLoad();
       const eventModal = await eventsPage.clickNewEventButton();
-      await eventsPage.waitToLoad();
+      await eventModal.waitForModalToShow();
 
       await eventModal.fillEventForm(
         sweetXvEventMock.nameOfEvent,
@@ -178,15 +162,15 @@ test.describe('Dashboard Files (invitesAdmin)', () => {
 
       await eventModal.clickConfirmButton();
       await eventsPage.waitToLoad();
-      expect(await eventsPage.toastrIsShowing()).toBe(true);
+      await eventsPage.waitForToast();
 
       await eventsPage.clickFilesLink();
       environmentCleaned = true;
     } else {
-      const dashboardPage = await loginPage.login(
+      const dashboardPage = (await loginPage.login(
         invitesAdminUser.username,
         invitesAdminUser.password
-      );
+      )) as DashboardPage;
       await dashboardPage.waitToLoad();
       await dashboardPage.clickFilesLink();
     }
@@ -203,9 +187,6 @@ test.describe('Dashboard Files (invitesAdmin)', () => {
     await filesPage.selectEvent(sweetXvEventMock.nameOfEvent);
     await filesPage.uploadPhotos();
     await filesPage.clickSaveFiles();
-    await filesPage.waitToLoad();
-
-    expect(await filesPage.toastrIsShowing()).toBe(true);
 
     expect(await filesPage.getImageCardCount(), {
       message: 'Image card count should be 1',
@@ -216,9 +197,6 @@ test.describe('Dashboard Files (invitesAdmin)', () => {
     await filesPage.selectEvent(sweetXvEventMock.nameOfEvent);
     await filesPage.uploadAudio();
     await filesPage.clickSaveFiles();
-    await filesPage.waitToLoad();
-
-    expect(await filesPage.toastrIsShowing()).toBe(true);
 
     expect(await filesPage.getAudioCardCount(), {
       message: 'Audio card count should be 1',
@@ -227,8 +205,6 @@ test.describe('Dashboard Files (invitesAdmin)', () => {
 
   test('should be able to expand image card', async () => {
     await filesPage.selectEvent(sweetXvEventMock.nameOfEvent);
-    await filesPage.waitToLoad();
-
     await filesPage.clickScaleImage(0);
 
     expect(await filesPage.showImageVisible(), {
@@ -238,16 +214,12 @@ test.describe('Dashboard Files (invitesAdmin)', () => {
 
   test('should be able to select image usage', async () => {
     await filesPage.selectEvent(sweetXvEventMock.nameOfEvent);
-    await filesPage.waitToLoad();
-
     await filesPage.selectImageUsage(0, ImageUsage.Both);
     await filesPage.clickSaveChanges();
-    await filesPage.waitToLoad();
 
     await filesPage.goto();
     await filesPage.waitToLoad();
     await filesPage.selectEvent(sweetXvEventMock.nameOfEvent);
-    await filesPage.waitToLoad();
 
     const imageCard = await filesPage.getImageCard(0);
     expect(await imageCard.locator('select').inputValue(), {
@@ -257,19 +229,18 @@ test.describe('Dashboard Files (invitesAdmin)', () => {
 
   test('should be able to delete image card and audio card', async () => {
     await filesPage.selectEvent(sweetXvEventMock.nameOfEvent);
-    await filesPage.waitToLoad();
 
     const commonModal = await filesPage.deleteImage(0);
-    await commonModal.waitToLoad();
+    await commonModal.waitForModalToShow();
     await commonModal.clickConfirmButton();
     await filesPage.waitToLoad();
-    expect(await filesPage.toastrIsShowing()).toBe(true);
+    await filesPage.waitForToast();
 
     await filesPage.deleteAudio(0);
-    await commonModal.waitToLoad();
+    await commonModal.waitForModalToShow();
     await commonModal.clickConfirmButton();
     await filesPage.waitToLoad();
-    expect(await filesPage.toastrIsShowing()).toBe(true);
+    await filesPage.waitForToast();
 
     expect(await filesPage.getImageCardCount(), {
       message: 'Image card count should be 0',

@@ -38,7 +38,7 @@ test.describe('Dashboard Logs', () => {
   test('should be able to see the log modal', async () => {
     const rowColumns = await logsPage.getTableRowData(0);
     const logModal = await logsPage.clickViewLog(0);
-    await logModal.waitToLoad();
+    await logModal.waitForModalToShow();
 
     expect(await logModal.dateOfError.inputValue(), {
       message: 'Date of error should be visible in the log modal',

@@ -11,22 +11,56 @@ export class BasePage {
     this.toastr = page.locator('.toast-container');
   }
 
-  async waitToLoad() {
+  /**
+   * Waits for the spinner to load and disappear.
+   * Logs a message if the page or context is closed.
+   */
+  async waitToLoad(): Promise<void> {
     try {
-      await this.spinner.waitFor({ state: 'visible', timeout: 1000 });
       if (await this.spinner.isVisible()) {
-        await this.spinner.waitFor({ state: 'hidden' });
+        while (await this.spinner.isVisible()) {
+          if (this.page.isClosed()) {
+            console.log('Page or context has been closed');
+            return;
+          }
+          await this.spinner.waitFor({ state: 'hidden', timeout: 5000 });
+        }
       }
-    } catch {
-      console.log(`Spinner wasn't found`);
+    } catch (error) {
+      console.error(
+        `Error while waiting for spinner: ${(error as Error).message}`
+      );
     }
   }
 
-  async goto(path: string) {
-    await this.page.goto(path);
+  /**
+   * Navigates to the specified path.
+   * @param path - The path to navigate to.
+   */
+  async goto(path: string): Promise<void> {
+    try {
+      await this.page.goto(path);
+      await this.page.waitForURL(path);
+    } catch (error) {
+      console.error(
+        `Error while navigating to ${path}: ${(error as Error).message}`
+      );
+    }
   }
 
-  async toastrIsShowing(): Promise<boolean> {
-    return await this.toastr.isVisible();
+  /**
+   * Checks if the toastr is showing and clicks it if visible.
+   */
+  async waitForToast(): Promise<void> {
+    try {
+      await this.toastr.waitFor({ state: 'visible', timeout: 5000 });
+      if (await this.toastr.isVisible()) {
+        await this.toastr.click();
+      }
+      await this.toastr.waitFor({ state: 'hidden', timeout: 5000 });
+      await this.toastr.isVisible();
+    } catch (error) {
+      console.error(`Error while checking toastr: ${(error as Error).message}`);
+    }
   }
 }

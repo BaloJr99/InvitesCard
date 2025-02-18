@@ -57,30 +57,37 @@ export class DashboardPage extends BasePage {
 
   async clickHomeLink() {
     await this.homeLink.click();
+    await this.page.waitForURL('/dashboard/home');
   }
 
   async clickEventsLink() {
     await this.eventsLink.click();
+    await this.page.waitForURL('/dashboard/events');
   }
 
   async clickFilesLink() {
     await this.filesLink.click();
+    await this.page.waitForURL('/dashboard/files');
   }
 
   async clickUsersLink() {
     await this.usersLink.click();
+    await this.page.waitForURL('/dashboard/users');
   }
 
   async clickLogsLink() {
     await this.logsLink.click();
+    await this.page.waitForURL('/dashboard/logs');
   }
 
   async clickTestingLink() {
     await this.testingLink.click();
+    await this.page.waitForURL('/dashboard/testing');
   }
 
   async clickSettingsLink() {
     await this.settingsLink.click();
+    await this.page.waitForURL('/dashboard/settings');
   }
 
   async clickToggleProfileButton() {
@@ -94,6 +101,7 @@ export class DashboardPage extends BasePage {
   async clickLogoutButton() {
     await this.clickToggleProfileButton();
     await this.logoutButton.click();
+    await this.page.waitForURL('/auth/login');
 
     return new LoginPage(this.page);
   }
@@ -101,5 +109,6 @@ export class DashboardPage extends BasePage {
   async clickProfileButton() {
     await this.clickToggleProfileButton();
     await this.myProfileButton.click();
+    await this.page.waitForURL('/dashboard/profile/*');
   }
 }

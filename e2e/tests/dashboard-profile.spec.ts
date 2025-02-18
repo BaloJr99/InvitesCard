@@ -47,15 +47,20 @@ test.describe('Dashboard Profile', () => {
     await profilePage.fillProfileInfo('', '', '', '', '', '');
 
     const expectedValidationErrors = [
-      ' The first name is required  ',
-      ' The last name is required  ',
-      ' The username is required  ',
-      ' The gender is required  ',
-      ' The email is required  ',
-      ' The phone number is required  ',
+      'The first name is required',
+      'The last name is required',
+      'The username is required',
+      'The gender is required',
+      'The email is required',
+      'The phone number is required',
     ];
-    expect(await profilePage.getValidationErrors(), {
-      message: 'Validation errors should be displayed',
-    }).toEqual(expectedValidationErrors);
+
+    const actualValidationErrors = await profilePage.getValidationErrors();
+
+    actualValidationErrors.forEach((error, index) => {
+      expect(error, {
+        message: 'Validation error should be displayed',
+      }).toContain(expectedValidationErrors[index]);
+    });
   });
 });

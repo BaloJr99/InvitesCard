@@ -12,14 +12,11 @@ test.describe('Home Page', () => {
     await loginPage.goto();
 
     const dashboardPage = await loginPage.loginAsAdmin();
-    await dashboardPage.waitToLoad();
-    await dashboardPage.isDashboardPage();
 
     if (!environmentCleaned) {
       await dashboardPage.clickTestingLink();
       const testingPage = new TestingPage(page);
       await testingPage.clickCleanEnvironmentButton();
-      await testingPage.waitToLoad();
 
       await testingPage.clickHomeLink();
       await testingPage.waitToLoad();

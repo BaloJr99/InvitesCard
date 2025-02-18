@@ -19,7 +19,8 @@ export class ForgotPasswordPage extends BasePage {
   }
 
   override async goto() {
-    await this.page.goto('/auth/forgotPassword');
+    await super.goto('/auth/forgotPassword');
+    await this.isForgotPasswordPage();
   }
 
   async isForgotPasswordPage() {
@@ -31,6 +32,8 @@ export class ForgotPasswordPage extends BasePage {
   async resetPassword(usernameOrEmail: string) {
     await this.usernameOrEmailInput.fill(usernameOrEmail);
     await this.submitButton.click();
+
+    await this.waitToLoad();
   }
 
   async checkEmailSentSuccessMessage() {

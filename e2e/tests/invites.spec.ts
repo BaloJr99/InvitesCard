@@ -1,4 +1,5 @@
 import test, { expect } from '@playwright/test';
+import { CommonModal } from 'e2e/common/common-modal';
 import { getFormattedDate } from 'e2e/helper/date-format';
 import {
   confirmedInviteMock,
@@ -52,6 +53,8 @@ test.describe('Invites (Sweet Xv)', () => {
   let environmentCleaned = false;
 
   test.beforeEach(async ({ page, context }) => {
+    // Grant clipboard permissions to browser context
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
     // Clean environment and create a new event and invites
     if (!environmentCleaned) {
       confirmedMessageLink = '';
@@ -63,21 +66,18 @@ test.describe('Invites (Sweet Xv)', () => {
       await loginPage.goto();
 
       const dashboardPage = await loginPage.loginAsAdmin();
-      await dashboardPage.waitToLoad();
 
       await dashboardPage.clickTestingLink();
       const testingPage = new TestingPage(page);
       await testingPage.clickCleanEnvironmentButton();
-      await testingPage.waitToLoad();
-
       await testingPage.clickEventsLink();
+
       eventsPage = new EventsPage(page);
+      await eventsPage.isEventsPage();
       await eventsPage.waitToLoad();
 
       eventModal = await eventsPage.clickNewEventButton();
-      await eventModal.waitToLoad();
-      // Grant clipboard permissions to browser context
-      await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+      await eventModal.waitForModalToShow();
 
       // Create event
       await eventModal.fillEventForm(
@@ -90,14 +90,15 @@ test.describe('Invites (Sweet Xv)', () => {
       );
       await eventModal.clickConfirmButton();
       await eventsPage.waitToLoad();
+      await eventsPage.waitForToast();
 
       // Fill settings Page
       await eventsPage.clickSettingsLink();
       const settingsPage = new SettingsPage(page);
+      await settingsPage.isSettingsPage();
       await settingsPage.waitToLoad();
 
       await settingsPage.selectEvent(sweetXvEventMock.nameOfEvent);
-      await settingsPage.waitToLoad();
 
       await settingsPage.fillSweet16Settings(
         sweetXvSettingMockCopy.primaryColor,
@@ -117,40 +118,43 @@ test.describe('Invites (Sweet Xv)', () => {
       );
 
       await settingsPage.clickSaveChanges();
-      await settingsPage.waitToLoad();
 
       // Upload images
       await settingsPage.clickFilesLink();
       const filesPage = new FilesPage(page);
+      await filesPage.isFilesPage();
       await filesPage.waitToLoad();
 
       await filesPage.selectEvent(sweetXvEventMock.nameOfEvent);
-      await filesPage.waitToLoad();
 
       await filesPage.uploadPhotos();
       await filesPage.clickSaveFiles();
-      await filesPage.waitToLoad();
 
       await filesPage.selectImageUsage(0, ImageUsage.Both);
       await filesPage.clickSaveChanges();
-      await filesPage.waitToLoad();
 
       // Create invite
       await filesPage.clickEventsLink();
       eventsPage = new EventsPage(page);
+      await eventsPage.isEventsPage();
       await eventsPage.waitToLoad();
 
       eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+      await eventDetailsPage.isEventDetailsPage();
       await eventDetailsPage.waitToLoad();
 
       let invitesModal = await eventDetailsPage.clickNewInviteButton();
-      await invitesModal.waitToLoad();
+      await invitesModal.waitForModalToShow();
+      await invitesModal.waitForInviteFormToLoad();
 
       await invitesModal.clickAddNewGroupButton();
+      await invitesModal.waitForGroupFormToLoad();
       await invitesModal.fillInviteGroupForm(groupMock.inviteGroup);
 
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
+      await eventDetailsPage.waitForToast();
+      await invitesModal.waitForInviteFormToLoad();
 
       await invitesModal.fillInviteForm(
         confirmedInviteMock.family,
@@ -161,9 +165,11 @@ test.describe('Invites (Sweet Xv)', () => {
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
+      await eventDetailsPage.waitForToast();
 
       invitesModal = await eventDetailsPage.clickNewInviteButton();
-      await invitesModal.waitToLoad();
+      await invitesModal.waitForModalToShow();
+      await invitesModal.waitForInviteFormToLoad();
 
       await invitesModal.fillInviteForm(
         notConfirmedInviteMock.family,
@@ -174,9 +180,11 @@ test.describe('Invites (Sweet Xv)', () => {
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
+      await eventDetailsPage.waitForToast();
 
       invitesModal = await eventDetailsPage.clickNewInviteButton();
-      await invitesModal.waitToLoad();
+      await invitesModal.waitForModalToShow();
+      await invitesModal.waitForInviteFormToLoad();
 
       await invitesModal.fillInviteForm(
         partialConfirmedInviteMock.family,
@@ -187,9 +195,11 @@ test.describe('Invites (Sweet Xv)', () => {
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
+      await eventDetailsPage.waitForToast();
 
-      invitesModal = await eventDetailsPage.clickNewInviteButton();
-      await invitesModal.waitToLoad();
+      await eventDetailsPage.clickNewInviteButton();
+      await invitesModal.waitForModalToShow();
+      await invitesModal.waitForInviteFormToLoad();
 
       await invitesModal.fillInviteForm(
         pendingInviteMock.family,
@@ -200,6 +210,7 @@ test.describe('Invites (Sweet Xv)', () => {
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
+      await eventDetailsPage.waitForToast();
 
       await eventDetailsPage.clickAccordion(groupMock.inviteGroup);
 
@@ -270,6 +281,7 @@ test.describe('Invites (Sweet Xv)', () => {
     const invitePage = new SweetXvPage(page);
     await invitePage.gotoInvitePage(confirmedMessageLink);
     await invitePage.waitForInviteToLoad();
+    await invitePage.waitToLoad();
 
     // Check if the invite is correct
     expect(await invitePage.backgroundImage.isVisible(), {
@@ -391,6 +403,7 @@ test.describe('Invites (Sweet Xv)', () => {
     const invitePage = new SweetXvPage(page);
     await invitePage.gotoInvitePage(notConfirmedMessageLink);
     await invitePage.waitForInviteToLoad();
+    await invitePage.waitToLoad();
 
     // Check if the invite is correct
     expect(await invitePage.backgroundImage.isVisible(), {
@@ -508,6 +521,7 @@ test.describe('Invites (Sweet Xv)', () => {
     const invitePage = new SweetXvPage(page);
     await invitePage.gotoInvitePage(partialMessageLink);
     await invitePage.waitForInviteToLoad();
+    await invitePage.waitToLoad();
 
     // Check if the invite is correct
     expect(await invitePage.backgroundImage.isVisible(), {
@@ -628,9 +642,11 @@ test.describe('Invites (Sweet Xv)', () => {
     await dashboardPage.clickEventsLink();
 
     const eventsPage = new EventsPage(page);
+    await eventsPage.isEventsPage();
     await eventsPage.waitToLoad();
 
     eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+    await eventDetailsPage.isEventDetailsPage();
     await eventDetailsPage.waitToLoad();
 
     // Check if the confirmed invites statistics are correct
@@ -667,6 +683,9 @@ test.describe('Invites (Save The Date)', () => {
   let environmentCleaned = false;
 
   test.beforeEach(async ({ page, context }) => {
+    // Grant clipboard permissions to browser context
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+
     // Clean environment and create a new event and invites
     if (!environmentCleaned) {
       needsAccomodationMessageLink = '';
@@ -681,17 +700,16 @@ test.describe('Invites (Save The Date)', () => {
 
       await dashboardPage.clickTestingLink();
       const testingPage = new TestingPage(page);
+      await testingPage.isTestingPage();
       await testingPage.clickCleanEnvironmentButton();
-      await testingPage.waitToLoad();
 
       await testingPage.clickEventsLink();
       eventsPage = new EventsPage(page);
+      await eventsPage.isEventsPage();
       await eventsPage.waitToLoad();
 
       eventModal = await eventsPage.clickNewEventButton();
-      await eventModal.waitToLoad();
-      // Grant clipboard permissions to browser context
-      await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+      await eventModal.waitForModalToShow();
 
       // Create event
       await eventModal.fillEventForm(
@@ -704,14 +722,15 @@ test.describe('Invites (Save The Date)', () => {
       );
       await eventModal.clickConfirmButton();
       await eventsPage.waitToLoad();
+      await eventsPage.waitForToast();
 
       // Fill settings Page
       await eventsPage.clickSettingsLink();
       const settingsPage = new SettingsPage(page);
+      await settingsPage.isSettingsPage();
       await settingsPage.waitToLoad();
 
       await settingsPage.selectEvent(saveTheDateEventMock.nameOfEvent);
-      await settingsPage.waitToLoad();
 
       await settingsPage.fillSaveTheDateSettings(
         saveTheDateSettingMock.primaryColor,
@@ -723,40 +742,42 @@ test.describe('Invites (Save The Date)', () => {
       );
 
       await settingsPage.clickSaveChanges();
-      await settingsPage.waitToLoad();
 
       // Upload images
       await settingsPage.clickFilesLink();
       const filesPage = new FilesPage(page);
+      await filesPage.isFilesPage();
       await filesPage.waitToLoad();
 
       await filesPage.selectEvent(saveTheDateEventMock.nameOfEvent);
-      await filesPage.waitToLoad();
 
       await filesPage.uploadPhotos();
       await filesPage.clickSaveFiles();
-      await filesPage.waitToLoad();
-
       await filesPage.selectImageUsage(0, ImageUsage.Both);
       await filesPage.clickSaveChanges();
-      await filesPage.waitToLoad();
 
       // Create invite
       await filesPage.clickEventsLink();
       eventsPage = new EventsPage(page);
+      await eventsPage.isEventsPage();
       await eventsPage.waitToLoad();
 
       eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+      await eventDetailsPage.isEventDetailsPage();
       await eventDetailsPage.waitToLoad();
 
       let invitesModal = await eventDetailsPage.clickNewInviteButton();
-      await invitesModal.waitToLoad();
+      await invitesModal.waitForModalToShow();
+      await invitesModal.waitForInviteFormToLoad();
 
       await invitesModal.clickAddNewGroupButton();
+      await invitesModal.waitForGroupFormToLoad();
       await invitesModal.fillInviteGroupForm(groupMock.inviteGroup);
 
       await invitesModal.clickConfirmButton();
+      await invitesModal.waitForInviteFormToLoad();
       await eventDetailsPage.waitToLoad();
+      await eventDetailsPage.waitForToast();
 
       await invitesModal.fillInviteForm(
         confirmedInviteMock.family,
@@ -767,9 +788,11 @@ test.describe('Invites (Save The Date)', () => {
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
+      await eventDetailsPage.waitForToast();
 
       invitesModal = await eventDetailsPage.clickNewInviteButton();
-      await invitesModal.waitToLoad();
+      await invitesModal.waitForModalToShow();
+      await invitesModal.waitForInviteFormToLoad();
 
       await invitesModal.fillInviteForm(
         notConfirmedInviteMock.family,
@@ -780,9 +803,11 @@ test.describe('Invites (Save The Date)', () => {
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
+      await eventDetailsPage.waitForToast();
 
       invitesModal = await eventDetailsPage.clickNewInviteButton();
-      await invitesModal.waitToLoad();
+      await invitesModal.waitForModalToShow();
+      await invitesModal.waitForInviteFormToLoad();
 
       await invitesModal.fillInviteForm(
         pendingInviteMock.family,
@@ -793,6 +818,7 @@ test.describe('Invites (Save The Date)', () => {
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
+      await eventDetailsPage.waitForToast();
 
       await eventDetailsPage.clickAccordion(groupMock.inviteGroup);
 
@@ -849,6 +875,10 @@ test.describe('Invites (Save The Date)', () => {
     await invitePage.gotoInvitePage(needsAccomodationMessageLink);
     await invitePage.waitForInviteToLoad();
 
+    const commonModal = new CommonModal(page);
+    await commonModal.waitForModalToShow();
+    await commonModal.clickCancelButton();
+
     // Check if the invite is correct
     expect(await invitePage.backgroundImage.isVisible(), {
       message: 'Background image should be visible',
@@ -900,6 +930,10 @@ test.describe('Invites (Save The Date)', () => {
     await invitePage.gotoInvitePage(notNeedsAccomodationMessageLink);
     await invitePage.waitForInviteToLoad();
 
+    const commonModal = new CommonModal(page);
+    await commonModal.waitForModalToShow();
+    await commonModal.clickCancelButton();
+
     await invitePage.fillAccomodationForm(false);
     await invitePage.sendConfirmation();
     await invitePage.waitToLoad();
@@ -918,9 +952,11 @@ test.describe('Invites (Save The Date)', () => {
     await dashboardPage.clickEventsLink();
 
     const eventsPage = new EventsPage(page);
+    await eventsPage.isEventsPage();
     await eventsPage.waitToLoad();
 
     eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+    await eventDetailsPage.isEventDetailsPage();
     await eventDetailsPage.waitToLoad();
 
     // Check if the confirmed invites statistics are correct

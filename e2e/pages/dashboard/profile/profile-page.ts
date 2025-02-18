@@ -59,6 +59,7 @@ export class ProfilePage extends DashboardPage {
   }
 
   async isProfilePage() {
+    await this.breadcrumbHeader.waitFor({ state: 'visible', timeout: 2000 });
     expect(this.breadcrumbHeader, {
       message: 'Profile breadcrumb should be visible',
     }).toBeVisible();

@@ -10,6 +10,8 @@ export class InviteModal extends BaseModal {
   readonly addNewGroupButton: Locator;
   readonly editGroupButton: Locator;
   readonly newGroupInput: Locator;
+  readonly inviteGroupForm: Locator;
+  readonly inviteForm: Locator;
 
   constructor(page: Page) {
     super(page, '#inviteModal');
@@ -25,6 +27,8 @@ export class InviteModal extends BaseModal {
       .locator('.inviteGroupActions button')
       .nth(1);
     this.newGroupInput = this.modalLocator.locator('#inviteGroup');
+    this.inviteGroupForm = this.modalLocator.locator('#inviteGroupForm');
+    this.inviteForm = this.modalLocator.locator('#inviteForm');
   }
 
   async fillInviteForm(
@@ -55,6 +59,14 @@ export class InviteModal extends BaseModal {
 
   async clickAddNewGroupButton() {
     await this.addNewGroupButton.click();
+  }
+
+  async waitForGroupFormToLoad() {
+    await this.inviteGroupForm.waitFor({ state: 'visible', timeout: 2000 });
+  }
+
+  async waitForInviteFormToLoad() {
+    await this.inviteForm.waitFor({ state: 'visible', timeout: 2000 });
   }
 
   async clickEditGroupButton() {

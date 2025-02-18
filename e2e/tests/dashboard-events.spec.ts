@@ -8,6 +8,7 @@ import {
   sweetXvEventMock,
 } from 'e2e/helper/mocks';
 import { LoginPage } from 'e2e/pages/auth/login-page';
+import { DashboardPage } from 'e2e/pages/dashboard/dashboard-page';
 import { EventModal } from 'e2e/pages/dashboard/events/event-modal';
 import { EventsPage } from 'e2e/pages/dashboard/events/events-page';
 import { TestingPage } from 'e2e/pages/dashboard/testing/testing-page';
@@ -20,7 +21,10 @@ test.describe('Dashboard Events (Admin)', () => {
   let environmentCleaned = false;
 
   // Login as admin before each test
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page, context }) => {
+    // Grant clipboard permissions to browser context
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+
     const loginPage = new LoginPage(page);
     await loginPage.goto();
 
@@ -31,7 +35,6 @@ test.describe('Dashboard Events (Admin)', () => {
       await dashboardPage.clickTestingLink();
       const testingPage = new TestingPage(page);
       await testingPage.clickCleanEnvironmentButton();
-      await testingPage.waitToLoad();
 
       await testingPage.clickEventsLink();
       environmentCleaned = true;
@@ -51,21 +54,20 @@ test.describe('Dashboard Events (Admin)', () => {
 
   test('should show validation errors when creating an event with invalid data', async () => {
     eventModal = await eventsPage.clickNewEventButton();
-    await eventsPage.waitToLoad();
-
+    await eventModal.waitForModalToShow();
     await eventModal.clickConfirmButton();
 
     const validationErrors = await eventModal.getValidationErrors();
     expect(validationErrors[0]).toContain('The event name is required');
     expect(validationErrors[1]).toContain('The event date is required');
     expect(validationErrors[2]).toContain(
-      'The deadline confirmation is required'
+      'The confirmation deadline date is required'
     );
-    expect(validationErrors[3]).toContain('Select an event type');
+    expect(validationErrors[3]).toContain('The type of event is required');
     expect(validationErrors[4]).toContain(
       'The name of the celebrated is required'
     );
-    expect(validationErrors[5]).toContain('Assign a user');
+    expect(validationErrors[5]).toContain('The username is required');
   });
 
   test('should be able to create an event', async () => {
@@ -74,7 +76,7 @@ test.describe('Dashboard Events (Admin)', () => {
     }).toBe(0);
 
     eventModal = await eventsPage.clickNewEventButton();
-    await eventsPage.waitToLoad();
+    await eventModal.waitForModalToShow();
 
     await eventModal.fillEventForm(
       sweetXvEventMock.nameOfEvent,
@@ -86,9 +88,8 @@ test.describe('Dashboard Events (Admin)', () => {
     );
 
     await eventModal.clickConfirmButton();
-
     await eventsPage.waitToLoad();
-    expect(await eventsPage.toastrIsShowing()).toBe(true);
+    await eventsPage.waitForToast();
 
     expect(await eventsPage.getEventCardsCount(), {
       message: 'There should be 1 event',
@@ -110,19 +111,13 @@ test.describe('Dashboard Events (Admin)', () => {
   });
 
   test('should be able to edit an event', async () => {
-    expect(await eventsPage.isEditEventButtonVisible(0), {
-      message: 'Edit Event button should be visible',
-    }).toBe(true);
-
     eventModal = await eventsPage.clickEditEventButton(0);
-    await eventsPage.waitToLoad();
-
+    await eventModal.waitForModalToShow();
     await eventModal.setEventName('New Event Name');
-
     await eventModal.clickConfirmButton();
 
     await eventsPage.waitToLoad();
-    expect(await eventsPage.toastrIsShowing()).toBe(true);
+    await eventsPage.waitForToast();
 
     const eventCard = eventsPage.getEventCard(0);
 
@@ -134,23 +129,24 @@ test.describe('Dashboard Events (Admin)', () => {
   test('should be able to navigate to the event details page', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
     await eventDetailsPage.waitToLoad();
-
     await eventDetailsPage.isEventDetailsPage();
   });
 
   test('should be able to add new group to an invite', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
     await eventDetailsPage.waitToLoad();
+    await eventDetailsPage.isEventDetailsPage();
 
     const inviteModal = await eventDetailsPage.clickNewInviteButton();
-    await eventDetailsPage.waitToLoad();
+    await inviteModal.waitForModalToShow();
 
     await inviteModal.clickAddNewGroupButton();
+    await inviteModal.waitForGroupFormToLoad();
     await inviteModal.fillInviteGroupForm(groupMock.inviteGroup);
 
     await inviteModal.clickConfirmButton();
     await eventDetailsPage.waitToLoad();
-    expect(await eventDetailsPage.toastrIsShowing()).toBe(true);
+    await eventDetailsPage.waitForToast();
 
     const options = await inviteModal.getInviteGroupOptions();
     expect(options.includes(groupMock.inviteGroup)).toBe(true);
@@ -159,7 +155,10 @@ test.describe('Dashboard Events (Admin)', () => {
   test('should be able to add new invite', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
     await eventDetailsPage.waitToLoad();
+    await eventDetailsPage.isEventDetailsPage();
+
     const inviteModal = await eventDetailsPage.clickNewInviteButton();
+    await inviteModal.waitForModalToShow();
 
     await inviteModal.fillInviteForm(
       confirmedInviteMock.family,
@@ -170,9 +169,8 @@ test.describe('Dashboard Events (Admin)', () => {
     );
 
     await inviteModal.clickConfirmButton();
-
     await eventDetailsPage.waitToLoad();
-    expect(await eventDetailsPage.toastrIsShowing()).toBe(true);
+    await eventDetailsPage.waitForToast();
 
     expect(await eventDetailsPage.getAccordionsCount(), {
       message: 'There should be 1 invite group',
@@ -206,7 +204,7 @@ test.describe('Dashboard Events (Admin)', () => {
     // Check if the cancelled invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(2);
     expect(await eventCardStatistics.locator('h3').textContent()).toContain(
-      'Canceled entries'
+      'Cancelled entries'
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain('0');
 
@@ -237,11 +235,15 @@ test.describe('Dashboard Events (Admin)', () => {
       message: `Entries number should be 0 / ${confirmedInviteMock.entriesNumber}`,
     }).toBe(`0 / ${confirmedInviteMock.entriesNumber}`);
 
-    expect(await columns[3].textContent(), {
-      message: 'Third column should be empty',
+    expect(await columns[3].innerHTML(), {
+      message: 'Third column should be answered x',
+    }).toBe('<i class="fa-solid fa-xmark" aria-hidden="true"></i>');
+
+    expect(await columns[4].textContent(), {
+      message: 'Fourth column should be empty',
     }).toBe('');
 
-    const lastColumn = await columns[4].locator('button').all();
+    const lastColumn = await columns[columns.length].locator('button').all();
     expect(lastColumn.length, {
       message: 'There should be 3 buttons',
     }).toBe(3);
@@ -250,6 +252,7 @@ test.describe('Dashboard Events (Admin)', () => {
   test('should be able to edit an invite', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
     await eventDetailsPage.waitToLoad();
+    await eventDetailsPage.isEventDetailsPage();
 
     // Open accordion
     await eventDetailsPage.clickAccordion(confirmedInviteMock.inviteGroup);
@@ -258,8 +261,7 @@ test.describe('Dashboard Events (Admin)', () => {
       groupMock.inviteGroup,
       confirmedInviteMock.family
     );
-
-    await inviteModal.waitToLoad();
+    await inviteModal.waitForModalToShow();
 
     expect(await inviteModal.familyInput.inputValue()).toBe(
       confirmedInviteMock.family
@@ -287,7 +289,7 @@ test.describe('Dashboard Events (Admin)', () => {
 
     await inviteModal.clickConfirmButton();
     await eventDetailsPage.waitToLoad();
-    expect(await eventDetailsPage.toastrIsShowing()).toBe(true);
+    await eventDetailsPage.waitForToast();
 
     // Open accordion
     await eventDetailsPage.clickAccordion(confirmedInviteMock.inviteGroup);
@@ -307,11 +309,15 @@ test.describe('Dashboard Events (Admin)', () => {
       message: `Entries number should be 0 / 2`,
     }).toBe(`0 / 2`);
 
-    expect(await columns[3].textContent(), {
-      message: 'Third column should be empty',
+    expect(await columns[3].innerHTML(), {
+      message: 'Third column should be answered x',
+    }).toBe('<i class="fa-solid fa-xmark" aria-hidden="true"></i>');
+
+    expect(await columns[4].textContent(), {
+      message: 'Fourth column should be empty',
     }).toBe('');
 
-    const lastColumn = await columns[4].locator('button').all();
+    const lastColumn = await columns[columns.length].locator('button').all();
     expect(lastColumn.length, {
       message: 'There should be 3 buttons',
     }).toBe(3);
@@ -320,8 +326,7 @@ test.describe('Dashboard Events (Admin)', () => {
       groupMock.inviteGroup,
       'New Family Name'
     );
-
-    await inviteModal.waitToLoad();
+    await inviteModal.waitForModalToShow();
 
     expect(await inviteModal.familyInput.inputValue()).toBe('New Family Name');
     expect(await inviteModal.getOptionSelected()).toBe(
@@ -334,12 +339,10 @@ test.describe('Dashboard Events (Admin)', () => {
     expect(await inviteModal.kidsAllowedCheckbox.isChecked()).toBe(false);
   });
 
-  test('should be able to copy the message', async ({ page, context }) => {
-    // Grant clipboard permissions to browser context
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
-
+  test('should be able to copy the message', async ({ page }) => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
     await eventDetailsPage.waitToLoad();
+    await eventDetailsPage.isEventDetailsPage();
 
     // Open accordion
     await eventDetailsPage.clickAccordion(confirmedInviteMock.inviteGroup);
@@ -361,6 +364,7 @@ test.describe('Dashboard Events (Admin)', () => {
   test('should be able to delete an invite', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
     await eventDetailsPage.waitToLoad();
+    await eventDetailsPage.isEventDetailsPage();
 
     // Open accordion
     await eventDetailsPage.clickAccordion(confirmedInviteMock.inviteGroup);
@@ -370,11 +374,11 @@ test.describe('Dashboard Events (Admin)', () => {
       'New Family Name'
     );
 
-    await commonModal.waitToLoad();
+    await commonModal.waitForModalToShow();
     await commonModal.clickConfirmButton();
 
     await eventDetailsPage.waitToLoad();
-    expect(await eventDetailsPage.toastrIsShowing()).toBe(true);
+    await eventDetailsPage.waitForToast();
 
     expect(await eventDetailsPage.getAccordionsCount(), {
       message: 'There should be no invite groups',
@@ -401,7 +405,7 @@ test.describe('Dashboard Events (Admin)', () => {
     page,
   }) => {
     eventModal = await eventsPage.clickEditEventButton(0);
-    await eventsPage.waitToLoad();
+    await eventModal.waitForModalToShow();
 
     await eventModal.setTypeOfEvent(EventType.Wedding);
     await eventModal.setNameOfCelebrated(
@@ -409,7 +413,6 @@ test.describe('Dashboard Events (Admin)', () => {
     );
 
     await eventModal.clickConfirmButton();
-
     await eventsPage.waitToLoad();
 
     const commonModal = new CommonModal(page);
@@ -419,10 +422,10 @@ test.describe('Dashboard Events (Admin)', () => {
     await commonModal.clickConfirmButton();
 
     await eventsPage.waitToLoad();
-    expect(await eventsPage.toastrIsShowing()).toBe(true);
+    await eventsPage.waitForToast();
 
     await eventsPage.clickEditEventButton(0);
-    await eventsPage.waitToLoad();
+    await eventModal.waitForModalToShow();
 
     expect(await eventModal.typeOfEventInput.inputValue()).toBe(
       EventType.Wedding
@@ -433,18 +436,18 @@ test.describe('Dashboard Events (Admin)', () => {
     page,
   }) => {
     eventModal = await eventsPage.clickEditEventButton(0);
-    await eventsPage.waitToLoad();
+    await eventModal.waitForModalToShow();
 
     await eventModal.setTypeOfEvent(EventType.SaveTheDate);
     await eventModal.clickConfirmButton();
     await eventsPage.waitToLoad();
-    expect(await eventsPage.toastrIsShowing()).toBe(true);
+    await eventsPage.waitForToast();
 
     const commonModal = new CommonModal(page);
     expect(await commonModal.isModalVisible()).toBe(false);
 
     await eventsPage.clickEditEventButton(0);
-    await eventsPage.waitToLoad();
+    await eventModal.waitForModalToShow();
 
     expect(await eventModal.typeOfEventInput.inputValue()).toBe(
       EventType.SaveTheDate
@@ -454,15 +457,16 @@ test.describe('Dashboard Events (Admin)', () => {
   test('should be able to import invites', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
     await eventDetailsPage.waitToLoad();
+    await eventDetailsPage.isEventDetailsPage();
 
     const inviteModal = await eventDetailsPage.clickImportInvitesButton();
-    await inviteModal.waitToLoad();
+    await inviteModal.waitForModalToShow();
 
     await inviteModal.uploadFile('import-invites.csv');
     await inviteModal.clickConfirmButton();
 
     await eventDetailsPage.waitToLoad();
-    expect(await eventDetailsPage.toastrIsShowing()).toBe(true);
+    await eventDetailsPage.waitForToast();
 
     expect(await eventDetailsPage.getAccordionsCount(), {
       message: 'There should be 2 invite groups',
@@ -499,13 +503,13 @@ test.describe('Dashboard Events (Admin)', () => {
 
   test('if the event date date is in the past, the invite buttons should be disabled', async () => {
     eventModal = await eventsPage.clickEditEventButton(0);
-    await eventsPage.waitToLoad();
+    await eventModal.waitForModalToShow();
 
     await eventModal.setEventDate('2021-01-01');
 
     await eventModal.clickConfirmButton();
     await eventsPage.waitToLoad();
-    expect(await eventsPage.toastrIsShowing()).toBe(true);
+    await eventsPage.waitForToast();
 
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
     await eventDetailsPage.waitToLoad();
@@ -522,13 +526,17 @@ test.describe('Dashboard Events (Admin)', () => {
 
 test.describe('Dashboard Events (Invites Admin)', () => {
   let eventsPage: EventsPage;
+  let eventModal: EventModal;
   let environmentCleaned = false;
 
   // Login as admin before each test
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page, context }) => {
+    // Grant clipboard permissions to browser context
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+
     let loginPage = new LoginPage(page);
     await loginPage.goto();
-    let dashboardPage;
+    let dashboardPage: DashboardPage;
 
     if (!environmentCleaned) {
       dashboardPage = await loginPage.loginAsAdmin();
@@ -536,15 +544,14 @@ test.describe('Dashboard Events (Invites Admin)', () => {
       await dashboardPage.clickTestingLink();
       const testingPage = new TestingPage(page);
       await testingPage.clickCleanEnvironmentButton();
-      await testingPage.waitToLoad();
       loginPage = await testingPage.clickLogoutButton();
       environmentCleaned = true;
     }
 
-    dashboardPage = await loginPage.login(
+    dashboardPage = (await loginPage.login(
       invitesAdminUser.username,
       invitesAdminUser.password
-    );
+    )) as DashboardPage;
     await dashboardPage.waitToLoad();
     await dashboardPage.clickEventsLink();
 
@@ -566,10 +573,11 @@ test.describe('Dashboard Events (Invites Admin)', () => {
     await dashboardPage.waitToLoad();
 
     await dashboardPage.clickEventsLink();
-    await dashboardPage.waitToLoad();
-
-    const eventModal = await eventsPage.clickNewEventButton();
+    eventsPage = new EventsPage(page);
     await eventsPage.waitToLoad();
+
+    eventModal = await eventsPage.clickNewEventButton();
+    await eventModal.waitForModalToShow();
 
     await eventModal.fillEventForm(
       sweetXvEventMock.nameOfEvent,
@@ -582,19 +590,21 @@ test.describe('Dashboard Events (Invites Admin)', () => {
 
     await eventModal.clickConfirmButton();
     await eventsPage.waitToLoad();
+    await eventsPage.waitForToast();
 
     loginPage = await eventsPage.clickLogoutButton();
 
-    dashboardPage = await loginPage.login(
+    dashboardPage = (await loginPage.login(
       invitesAdminUser.username,
       invitesAdminUser.password
-    );
+    )) as DashboardPage;
 
     await dashboardPage.waitToLoad();
     await dashboardPage.clickEventsLink();
-    await eventsPage.waitToLoad();
 
     eventsPage = new EventsPage(page);
+    await eventsPage.waitToLoad();
+
     expect(await eventsPage.getEventCardsCount(), {
       message: 'There should be 1 event',
     }).toBe(1);
@@ -615,23 +625,24 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   test('should be able to navigate to the event details page', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
     await eventDetailsPage.waitToLoad();
-
     await eventDetailsPage.isEventDetailsPage();
   });
 
   test('should be able to add new group to an invite', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
     await eventDetailsPage.waitToLoad();
+    await eventDetailsPage.isEventDetailsPage();
 
     const inviteModal = await eventDetailsPage.clickNewInviteButton();
-    await eventDetailsPage.waitToLoad();
+    await inviteModal.waitForModalToShow();
 
     await inviteModal.clickAddNewGroupButton();
+    await inviteModal.waitForGroupFormToLoad();
     await inviteModal.fillInviteGroupForm(groupMock.inviteGroup);
 
     await inviteModal.clickConfirmButton();
     await eventDetailsPage.waitToLoad();
-    expect(await eventDetailsPage.toastrIsShowing()).toBe(true);
+    await eventDetailsPage.waitForToast();
 
     const options = await inviteModal.getInviteGroupOptions();
     expect(options.includes(groupMock.inviteGroup)).toBe(true);
@@ -640,7 +651,9 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   test('should be able to add new invite', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
     await eventDetailsPage.waitToLoad();
+    await eventDetailsPage.isEventDetailsPage();
     const inviteModal = await eventDetailsPage.clickNewInviteButton();
+    await inviteModal.waitForModalToShow();
 
     await inviteModal.fillInviteForm(
       confirmedInviteMock.family,
@@ -651,9 +664,8 @@ test.describe('Dashboard Events (Invites Admin)', () => {
     );
 
     await inviteModal.clickConfirmButton();
-
     await eventDetailsPage.waitToLoad();
-    expect(await eventDetailsPage.toastrIsShowing()).toBe(true);
+    await eventDetailsPage.waitForToast();
 
     expect(await eventDetailsPage.getAccordionsCount(), {
       message: 'There should be 1 invite group',
@@ -687,7 +699,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
     // Check if the cancelled invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(2);
     expect(await eventCardStatistics.locator('h3').textContent()).toContain(
-      'Canceled entries'
+      'Cancelled entries'
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain('0');
 
@@ -718,11 +730,15 @@ test.describe('Dashboard Events (Invites Admin)', () => {
       message: `Entries number should be 0 / ${confirmedInviteMock.entriesNumber}`,
     }).toBe(`0 / ${confirmedInviteMock.entriesNumber}`);
 
-    expect(await columns[3].textContent(), {
-      message: 'Third column should be empty',
+    expect(await columns[3].innerHTML(), {
+      message: 'Third column should be answered x',
+    }).toBe('<i class="fa-solid fa-xmark" aria-hidden="true"></i>');
+
+    expect(await columns[4].textContent(), {
+      message: 'Fourth column should be empty',
     }).toBe('');
 
-    const lastColumn = await columns[4].locator('button').all();
+    const lastColumn = await columns[columns.length].locator('button').all();
     expect(lastColumn.length, {
       message: 'There should be 3 buttons',
     }).toBe(3);
@@ -731,6 +747,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   test('should be able to edit an invite', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
     await eventDetailsPage.waitToLoad();
+    await eventDetailsPage.isEventDetailsPage();
 
     // Open accordion
     await eventDetailsPage.clickAccordion(confirmedInviteMock.inviteGroup);
@@ -739,8 +756,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
       groupMock.inviteGroup,
       confirmedInviteMock.family
     );
-
-    await inviteModal.waitToLoad();
+    await inviteModal.waitForModalToShow();
 
     expect(await inviteModal.familyInput.inputValue()).toBe(
       confirmedInviteMock.family
@@ -768,7 +784,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
 
     await inviteModal.clickConfirmButton();
     await eventDetailsPage.waitToLoad();
-    expect(await eventDetailsPage.toastrIsShowing()).toBe(true);
+    await eventDetailsPage.waitForToast();
 
     // Open accordion
     await eventDetailsPage.clickAccordion(confirmedInviteMock.inviteGroup);
@@ -788,11 +804,15 @@ test.describe('Dashboard Events (Invites Admin)', () => {
       message: `Entries number should be 0 / 2`,
     }).toBe(`0 / 2`);
 
-    expect(await columns[3].textContent(), {
-      message: 'Third column should be empty',
+    expect(await columns[3].innerHTML(), {
+      message: 'Third column should be answered x',
+    }).toBe('<i class="fa-solid fa-xmark" aria-hidden="true"></i>');
+
+    expect(await columns[4].textContent(), {
+      message: 'Fourth column should be empty',
     }).toBe('');
 
-    const lastColumn = await columns[4].locator('button').all();
+    const lastColumn = await columns[columns.length].locator('button').all();
     expect(lastColumn.length, {
       message: 'There should be 3 buttons',
     }).toBe(3);
@@ -802,7 +822,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
       'New Family Name'
     );
 
-    await inviteModal.waitToLoad();
+    await inviteModal.waitForModalToShow();
 
     expect(await inviteModal.familyInput.inputValue()).toBe('New Family Name');
     expect(await inviteModal.getOptionSelected()).toBe(
@@ -815,12 +835,10 @@ test.describe('Dashboard Events (Invites Admin)', () => {
     expect(await inviteModal.kidsAllowedCheckbox.isChecked()).toBe(false);
   });
 
-  test('should be able to copy the message', async ({ page, context }) => {
-    // Grant clipboard permissions to browser context
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
-
+  test('should be able to copy the message', async ({ page }) => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
     await eventDetailsPage.waitToLoad();
+    await eventDetailsPage.isEventDetailsPage();
 
     // Open accordion
     await eventDetailsPage.clickAccordion(confirmedInviteMock.inviteGroup);
@@ -842,7 +860,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   test('should be able to delete an invite', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
     await eventDetailsPage.waitToLoad();
-
+    await eventDetailsPage.isEventDetailsPage();
     // Open accordion
     await eventDetailsPage.clickAccordion(confirmedInviteMock.inviteGroup);
 
@@ -851,11 +869,11 @@ test.describe('Dashboard Events (Invites Admin)', () => {
       'New Family Name'
     );
 
-    await commonModal.waitToLoad();
+    await commonModal.waitForModalToShow();
     await commonModal.clickConfirmButton();
 
     await eventDetailsPage.waitToLoad();
-    expect(await eventDetailsPage.toastrIsShowing()).toBe(true);
+    await eventDetailsPage.waitForToast();
 
     expect(await eventDetailsPage.getAccordionsCount(), {
       message: 'There should be no invite groups',
@@ -881,15 +899,16 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   test('should be able to import invites', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
     await eventDetailsPage.waitToLoad();
+    await eventDetailsPage.isEventDetailsPage();
 
     const inviteModal = await eventDetailsPage.clickImportInvitesButton();
-    await inviteModal.waitToLoad();
+    await inviteModal.waitForModalToShow();
 
     await inviteModal.uploadFile('import-invites.csv');
     await inviteModal.clickConfirmButton();
 
     await eventDetailsPage.waitToLoad();
-    expect(await eventDetailsPage.toastrIsShowing()).toBe(true);
+    await eventDetailsPage.waitForToast();
 
     expect(await eventDetailsPage.getAccordionsCount(), {
       message: 'There should be 2 invite groups',

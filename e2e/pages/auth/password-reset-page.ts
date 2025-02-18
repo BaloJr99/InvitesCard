@@ -25,13 +25,15 @@ export class PasswordResetPage extends BasePage {
       .nth(1);
     this.matchPasswordErrorMessage = this.page
       .locator('.invalid-feedback')
-      .nth(2);
+      .nth(0);
   }
 
   override async goto() {
     await this.page.goto(`/auth/forgotPassword/${fullUserMock.id}`, {
-      waitUntil: 'domcontentloaded'
+      waitUntil: 'domcontentloaded',
     });
+    await this.page.waitForURL('/auth/forgotPassword/*');
+    await this.isPasswordResetPage();
   }
 
   async isPasswordResetPage() {

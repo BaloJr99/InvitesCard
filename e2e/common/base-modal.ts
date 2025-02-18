@@ -22,9 +22,17 @@ export class BaseModal {
     await this.cancelButton.click();
   }
 
-  async waitToLoad() {
+  async waitForModalToShow() {
     await this.modalLocator.waitFor({
       state: 'visible',
+      timeout: 10000,
+    });
+  }
+
+  async waitForModalToHide() {
+    await this.modalLocator.waitFor({
+      state: 'hidden',
+      timeout: 10000,
     });
   }
 }

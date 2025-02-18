@@ -78,10 +78,10 @@ test.describe('Dashboard Page (Invites Admin)', () => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
 
-    dashboardPage = await loginPage.login(
+    dashboardPage = (await loginPage.login(
       invitesAdminUser.username,
       invitesAdminUser.password
-    );
+    )) as DashboardPage;
     await dashboardPage.waitToLoad();
     await dashboardPage.isDashboardPage();
   });

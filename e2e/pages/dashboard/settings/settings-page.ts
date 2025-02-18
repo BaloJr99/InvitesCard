@@ -67,6 +67,7 @@ export class SettingsPage extends DashboardPage {
   }
 
   async isSettingsPage() {
+    await this.breadcrumbHeader.waitFor({ state: 'visible', timeout: 2000 });
     expect(this.breadcrumbHeader, {
       message: 'Settings breadcrumb should be visible',
     }).toBeVisible();
@@ -74,6 +75,7 @@ export class SettingsPage extends DashboardPage {
 
   async selectEvent(event: string) {
     await this.eventSelect.selectOption({ label: event });
+    await this.waitToLoad();
   }
 
   async fillSaveTheDateSettings(
@@ -126,6 +128,8 @@ export class SettingsPage extends DashboardPage {
 
   async clickSaveChanges() {
     await this.saveChangesButton.click();
+    await this.waitToLoad();
+    await this.waitForToast();
   }
 
   async clickCancelChanges() {
@@ -133,7 +137,9 @@ export class SettingsPage extends DashboardPage {
   }
 
   async getValidationErrors() {
-    const errors = await this.page.locator('.invalid-feedback').allTextContents();
+    const errors = await this.page
+      .locator('.invalid-feedback')
+      .allTextContents();
     return errors;
   }
 }

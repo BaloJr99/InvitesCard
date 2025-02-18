@@ -23,6 +23,7 @@ export class LogsPage extends DashboardPage {
   }
 
   async isLogsPage() {
+    await this.breadcrumbHeader.waitFor({ state: 'visible', timeout: 2000 });
     expect(this.breadcrumbHeader, {
       message: 'Logs breadcrumb should be visible',
     }).toBeVisible();

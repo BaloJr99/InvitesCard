@@ -43,13 +43,15 @@ export class FilesPage extends DashboardPage {
   }
 
   async isFilesPage() {
+    await this.breadcrumbHeader.waitFor({ state: 'visible', timeout: 2000 });
     expect(this.breadcrumbHeader, {
       message: 'Files breadcrumb should be visible',
     }).toBeVisible();
   }
 
   async selectEvent(event: string) {
-    return this.eventSelect.selectOption({ label: event });
+    await this.eventSelect.selectOption({ label: event });
+    await this.waitToLoad();
   }
 
   async uploadPhotos() {
@@ -68,6 +70,8 @@ export class FilesPage extends DashboardPage {
 
   async clickSaveFiles() {
     await this.saveFilesButton.click();
+    await this.waitToLoad();
+    await this.waitForToast();
   }
 
   async imageContainerVisible() {
@@ -138,6 +142,8 @@ export class FilesPage extends DashboardPage {
 
   async clickSaveChanges() {
     await this.saveChanges.click();
+    await this.waitToLoad();
+    await this.waitForToast();
   }
 
   async clickCancelChanges() {

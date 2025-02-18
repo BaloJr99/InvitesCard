@@ -29,7 +29,8 @@ export class LoginPage extends BasePage {
   }
 
   override async goto() {
-    await this.page.goto('/auth/login');
+    await super.goto('/auth/login');
+    await this.isLoginPage();
   }
 
   async isLoginPage() {
@@ -42,7 +43,18 @@ export class LoginPage extends BasePage {
     await this.usernameInput.fill(username);
     await this.passwordInput.fill(password);
     await this.loginButton.click();
+
+    if ((await this.page.locator('.invalid-feedback').count()) > 0) {
+      return new LoginPage(this.page);
+    }
+
     await this.waitToLoad();
+
+    if (await this.errorMessage.isVisible()) {
+      return new LoginPage(this.page);
+    }
+
+    await this.page.waitForURL('/dashboard/home');
 
     return new DashboardPage(this.page);
   }
@@ -50,10 +62,12 @@ export class LoginPage extends BasePage {
   async loginAsAdmin() {
     await this.login(fullUserMock.username, fullUserMock.password);
     await this.waitToLoad();
+    await this.page.waitForURL('/dashboard/home');
     return new DashboardPage(this.page);
   }
 
   async clickResetPassword() {
     await this.forgotPasswordLink.click();
+    await this.page.waitForURL('/auth/forgotPassword');
   }
 }

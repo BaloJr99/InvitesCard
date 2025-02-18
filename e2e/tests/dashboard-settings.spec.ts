@@ -5,6 +5,7 @@ import {
   sweetXvEventMock,
 } from 'e2e/helper/mocks';
 import { LoginPage } from 'e2e/pages/auth/login-page';
+import { DashboardPage } from 'e2e/pages/dashboard/dashboard-page';
 import { EventsPage } from 'e2e/pages/dashboard/events/events-page';
 import { SettingsPage } from 'e2e/pages/dashboard/settings/settings-page';
 import { TestingPage } from 'e2e/pages/dashboard/testing/testing-page';
@@ -31,14 +32,13 @@ test.describe('Dashboard settings (Sweet 16)', () => {
       await dashboardPage.clickTestingLink();
       const testingPage = new TestingPage(page);
       await testingPage.clickCleanEnvironmentButton();
-      await testingPage.waitToLoad();
-
       await testingPage.clickEventsLink();
 
       const eventsPage = new EventsPage(page);
       await eventsPage.waitToLoad();
+
       const eventModal = await eventsPage.clickNewEventButton();
-      await eventsPage.waitToLoad();
+      await eventModal.waitForModalToShow();
 
       await eventModal.fillEventForm(
         sweetXvEventMock.nameOfEvent,
@@ -51,7 +51,7 @@ test.describe('Dashboard settings (Sweet 16)', () => {
 
       await eventModal.clickConfirmButton();
       await eventsPage.waitToLoad();
-      expect(await eventsPage.toastrIsShowing()).toBe(true);
+      await eventsPage.waitForToast();
 
       await eventsPage.clickSettingsLink();
       environmentCleaned = true;
@@ -69,7 +69,6 @@ test.describe('Dashboard settings (Sweet 16)', () => {
     }).toBe(true);
 
     await settingsPage.selectEvent(sweetXvEventMock.nameOfEvent);
-    await settingsPage.waitToLoad();
 
     expect(await settingsPage.filesEmptyMessage.isVisible(), {
       message: 'The select a event message should not be visible',
@@ -78,7 +77,6 @@ test.describe('Dashboard settings (Sweet 16)', () => {
 
   test('should be able to fill the form and save the settings', async () => {
     await settingsPage.selectEvent(sweetXvEventMock.nameOfEvent);
-    await settingsPage.waitToLoad();
 
     const dateOfMass = sweetXvSettingMock.massTime.split(' ');
     const dateOfMassTime = dateOfMass[0];
@@ -115,8 +113,7 @@ test.describe('Dashboard settings (Sweet 16)', () => {
 
     await settingsPage.clickSaveChanges();
     await settingsPage.waitToLoad();
-
-    expect(await settingsPage.toastrIsShowing()).toBe(true);
+    await settingsPage.waitForToast();
   });
 });
 
@@ -136,14 +133,12 @@ test.describe('Dashboard settings (Save the date)', () => {
       await dashboardPage.clickTestingLink();
       const testingPage = new TestingPage(page);
       await testingPage.clickCleanEnvironmentButton();
-      await testingPage.waitToLoad();
-
       await testingPage.clickEventsLink();
 
       const eventsPage = new EventsPage(page);
       await eventsPage.waitToLoad();
       const eventModal = await eventsPage.clickNewEventButton();
-      await eventsPage.waitToLoad();
+      await eventModal.waitForModalToShow();
 
       await eventModal.fillEventForm(
         saveTheDateEventMock.nameOfEvent,
@@ -156,15 +151,15 @@ test.describe('Dashboard settings (Save the date)', () => {
 
       await eventModal.clickConfirmButton();
       await eventsPage.waitToLoad();
-      expect(await eventsPage.toastrIsShowing()).toBe(true);
+      await eventsPage.waitForToast();
 
       await eventsPage.clickSettingsLink();
       environmentCleaned = true;
     } else {
-      const dashboardPage = await loginPage.login(
+      const dashboardPage = (await loginPage.login(
         invitesAdminUser.username,
         invitesAdminUser.password
-      );
+      )) as DashboardPage;
       await dashboardPage.waitToLoad();
       await dashboardPage.clickSettingsLink();
     }
@@ -179,7 +174,6 @@ test.describe('Dashboard settings (Save the date)', () => {
     }).toBe(true);
 
     await settingsPage.selectEvent(saveTheDateEventMock.nameOfEvent);
-    await settingsPage.waitToLoad();
 
     expect(await settingsPage.filesEmptyMessage.isVisible(), {
       message: 'The select a event message should not be visible',
@@ -188,7 +182,6 @@ test.describe('Dashboard settings (Save the date)', () => {
 
   test('should be able to fill the form and save the settings', async () => {
     await settingsPage.selectEvent(saveTheDateEventMock.nameOfEvent);
-    await settingsPage.waitToLoad();
 
     await settingsPage.fillSaveTheDateSettings(
       saveTheDateSettingMock.primaryColor,
@@ -201,7 +194,6 @@ test.describe('Dashboard settings (Save the date)', () => {
 
     await settingsPage.clickSaveChanges();
     await settingsPage.waitToLoad();
-
-    expect(await settingsPage.toastrIsShowing()).toBe(true);
+    await settingsPage.waitForToast();
   });
 });

@@ -21,7 +21,6 @@ test.describe('Dashboard users', () => {
       await dashboardPage.clickTestingLink();
       const testingPage = new TestingPage(page);
       await testingPage.clickCleanEnvironmentButton();
-      await testingPage.waitToLoad();
       await testingPage.clickUsersLink();
       environmentCleaned = true;
     } else {
@@ -38,7 +37,7 @@ test.describe('Dashboard users', () => {
 
   test('should be able to see roles modal validation errors', async () => {
     const rolesModal = await usersPage.clickNewRoleButton();
-    await rolesModal.waitToLoad();
+    await rolesModal.waitForModalToShow();
     await rolesModal.clickConfirmButton();
 
     const expectedErrors = ['The role name is required'];
@@ -51,19 +50,17 @@ test.describe('Dashboard users', () => {
 
   test('should be able to add new role', async () => {
     const rolesModal = await usersPage.clickNewRoleButton();
-    await rolesModal.waitToLoad();
+    await rolesModal.waitForModalToShow();
 
     await rolesModal.fillForm(testRoleMock.roleName, testRoleMock.isActive);
     await rolesModal.clickConfirmButton();
-
     await usersPage.waitToLoad();
-    expect(await usersPage.toastrIsShowing()).toBe(true);
+    await usersPage.waitForToast();
   });
 
   test('should be able to see users modal validation errors', async () => {
     const usersModal = await usersPage.clickNewUserButton();
-    await usersModal.waitToLoad();
-    await usersPage.waitToLoad();
+    await usersModal.waitForModalToShow();
     await usersModal.clickConfirmButton();
 
     const expectedErrors = [
@@ -80,8 +77,7 @@ test.describe('Dashboard users', () => {
 
   test('should be able to add new user', async () => {
     const usersModal = await usersPage.clickNewUserButton();
-    await usersModal.waitToLoad();
-    await usersPage.waitToLoad();
+    await usersModal.waitForModalToShow();
 
     await usersModal.fillForm(
       testUserMock.username,
@@ -90,8 +86,7 @@ test.describe('Dashboard users', () => {
       testUserMock.isActive
     );
     await usersModal.clickConfirmButton();
-
     await usersPage.waitToLoad();
-    expect(await usersPage.toastrIsShowing()).toBe(true);
+    await usersPage.waitForToast();
   });
 });

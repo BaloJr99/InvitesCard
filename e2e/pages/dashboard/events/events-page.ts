@@ -6,19 +6,22 @@ import { EventDetailsPage } from './event-details/event-details-page';
 export class EventsPage extends DashboardPage {
   readonly breadcrumbHeader: Locator;
   readonly newEventButton: Locator;
+  readonly modal: Locator;
 
   constructor(page: Page) {
     super(page);
     this.breadcrumbHeader = page.locator('.breadcrumb-header li', {
-      hasText: 'EVENTOS',
+      hasText: 'EVENTS',
     });
 
     this.newEventButton = page.locator('button', {
       hasText: 'New event',
     });
+    this.modal = page.locator('#eventModal');
   }
 
   async isEventsPage() {
+    await this.breadcrumbHeader.waitFor({ state: 'visible', timeout: 2000 });
     expect(this.breadcrumbHeader, {
       message: 'Events breadcrumb should be visible',
     }).toBeVisible();
@@ -47,17 +50,11 @@ export class EventsPage extends DashboardPage {
     return this.page.locator('.events-container .card').nth(index);
   };
 
-  async isEditEventButtonVisible(index: number): Promise<boolean> {
-    const eventCard = this.getEventCard(index);
-    const button = eventCard.locator('button.edit-event');
-
-    return button.isVisible();
-  }
-
   async clickEditEventButton(index: number) {
     const eventCard = this.getEventCard(index);
     const button = eventCard.locator('button.edit-event');
     await button.click();
+    await this.waitToLoad();
 
     return new EventModal(this.page);
   }
@@ -66,6 +63,8 @@ export class EventsPage extends DashboardPage {
     const eventCard = this.getEventCard(index);
     const button = eventCard.locator('a');
     await button.click();
+    await this.waitToLoad();
+    await this.page.waitForURL('/dashboard/events/**');
 
     return new EventDetailsPage(this.page);
   }

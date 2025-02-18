@@ -39,6 +39,7 @@ export class EventDetailsPage extends DashboardPage {
   }
 
   async isEventDetailsPage() {
+    await this.breadcrumbHeader.waitFor({ state: 'visible', timeout: 2000 });
     expect(this.breadcrumbHeader, {
       message: 'Event Details breadcrumb should be visible',
     }).toBeVisible();
@@ -117,8 +118,8 @@ export class EventDetailsPage extends DashboardPage {
     const table = new TableHelper(this.page, tableId);
 
     expect(await table.getTableHeadersCount(), {
-      message: 'Table headers count should be 5',
-    }).toBe(5);
+      message: 'Table headers count should be 6',
+    }).toBe(6);
 
     return await table.getTableRowByColumn('Family', family);
   }
@@ -131,7 +132,7 @@ export class EventDetailsPage extends DashboardPage {
     const tableRow = await table.getTableRowByColumn('Family', family);
 
     const columns = await tableRow.locator('td').all();
-    const lastColumn = await columns[4].locator('button').all();
+    const lastColumn = await columns[columns.length].locator('button').all();
 
     // Click edit button
     await lastColumn[0].click();
@@ -147,7 +148,7 @@ export class EventDetailsPage extends DashboardPage {
     const tableRow = await table.getTableRowByColumn('Family', family);
 
     const columns = await tableRow.locator('td').all();
-    const lastColumn = await columns[4].locator('button').all();
+    const lastColumn = await columns[columns.length].locator('button').all();
 
     // Click delete button
     await lastColumn[1].click();
@@ -163,7 +164,8 @@ export class EventDetailsPage extends DashboardPage {
     const tableRow = await table.getTableRowByColumn('Family', family);
 
     const columns = await tableRow.locator('td').all();
-    const lastColumn = await columns[4].locator('button').all();
+
+    const lastColumn = await columns[columns.length - 1].locator('button').all();
 
     // Click copy button
     await lastColumn[2].click();

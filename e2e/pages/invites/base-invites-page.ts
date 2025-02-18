@@ -10,24 +10,29 @@ export class BaseInvitesPage extends BasePage {
   }
 
   async waitForInviteToLoad() {
-    if (await this.loader.isVisible()) {
-      await this.loader.waitFor({ state: 'hidden' });
-    }
-
     try {
-      await this.loader.waitFor({ state: 'visible', timeout: 1000 });
-    } catch {
-      console.log('Loader was hidden');
+      // Wait for the invite loader to appear
+      if (await this.loader.isVisible()) {
+        while (await this.loader.isVisible()) {
+          if (this.page.isClosed()) {
+            console.log('Page or context has been closed');
+            return;
+          }
+          await this.loader.waitFor({ state: 'hidden', timeout: 5000 });
+        }
+      } else {
+        // Wait for the generic loader to appear
+        this.waitToLoad();
+      }
+    } catch (error) {
+      console.error(
+        `Error while waiting for loader: ${(error as Error).message}`
+      );
     }
-
-    if (await this.loader.isVisible()) {
-      await this.waitForInviteToLoad();
-    }
-
-    return this.page;
   }
 
   async gotoInvitePage(url: string) {
     await this.page.goto(url);
+    await this.page.waitForURL(url);
   }
 }
