@@ -45,10 +45,8 @@ export class UsersComponent {
   });
   roleAction$ = this.roleAction.asObservable();
 
-  private showUserModal = new BehaviorSubject<boolean>(false);
-  showUserModal$ = this.showUserModal.asObservable();
-  private showRoleModal = new BehaviorSubject<boolean>(false);
-  showRoleModal$ = this.showRoleModal;
+  showUserModal = false;
+  showRoleModal = false;
   private refreshRoles = new BehaviorSubject<boolean>(false);
   refreshRoles$ = this.refreshRoles.asObservable();
 
@@ -60,22 +58,14 @@ export class UsersComponent {
   vm$ = this.usersService.getAllUsers().pipe(
     tap((allUsers) => this.users.next(allUsers)),
     mergeMap(() =>
-      combineLatest([
-        this.users$,
-        this.userAction$,
-        this.roleAction$,
-        this.showUserModal$,
-        this.showRoleModal$,
-      ]).pipe(
-        map(([users, userAction, roleAction, showUserModal, showRoleModal]) => {
+      combineLatest([this.users$, this.userAction$, this.roleAction$]).pipe(
+        map(([users, userAction, roleAction]) => {
           const table = this.getTableConfiguration(users);
 
           return {
             table,
             userAction,
             roleAction,
-            showUserModal,
-            showRoleModal,
           };
         })
       )
@@ -114,7 +104,8 @@ export class UsersComponent {
     );
 
     this.users.next(oldUsers);
-    this.showUserModal.next(false);
+
+    this.showUserModal = false;
   }
 
   openUserModal(userId: string): void {
@@ -131,6 +122,8 @@ export class UsersComponent {
         isNew: true,
         roleChanged: undefined,
       });
+
+      this.showUserModal = true;
     } else {
       this.usersService.getUserById(userId).subscribe({
         next: (user) => {
@@ -142,11 +135,11 @@ export class UsersComponent {
             isNew: false,
             roleChanged: undefined,
           });
+
+          this.showUserModal = true;
         },
       });
     }
-
-    this.showUserModal.next(true);
   }
 
   openRoleModal(role: IRole | undefined): void {
@@ -166,15 +159,15 @@ export class UsersComponent {
       });
     }
 
-    this.showRoleModal.next(true);
+    this.showRoleModal = true;
   }
 
   closeUserModal(): void {
-    this.showUserModal.next(false);
+    this.showUserModal = false;
   }
 
   closeRoleModal(): void {
-    this.showRoleModal.next(false);
+    this.showRoleModal = false;
   }
 
   setSelectedRole(savedUser: ISavedUserRole): void {
@@ -184,7 +177,7 @@ export class UsersComponent {
   }
 
   updateSavedInformation(roleAction: IRoleAction): void {
-    this.showRoleModal.next(false);
+    this.showRoleModal = false;
 
     if (this.savedUser && roleAction.action === RoleActionEvent.Update) {
       this.userAction.next({
@@ -198,7 +191,7 @@ export class UsersComponent {
         },
         roleChanged: roleAction.role,
       });
-      this.showUserModal.next(true);
+      this.showUserModal = true;
     }
   }
 

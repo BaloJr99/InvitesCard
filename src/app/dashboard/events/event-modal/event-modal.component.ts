@@ -35,16 +35,18 @@ export class EventModalComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
+  private baseEvent = {
+    id: '',
+    nameOfEvent: '',
+    dateOfEvent: '',
+    maxDateOfConfirmation: '',
+    nameOfCelebrated: '',
+    typeOfEvent: '',
+    userId: '',
+  };
+
   private eventAction = new BehaviorSubject<IEventAction>({
-    event: {
-      id: '',
-      nameOfEvent: '',
-      dateOfEvent: '',
-      maxDateOfConfirmation: '',
-      nameOfCelebrated: '',
-      typeOfEvent: '',
-      userId: '',
-    },
+    event: { ...this.baseEvent },
     isNew: true,
   } as IEventAction);
   eventAction$ = this.eventAction.asObservable();
@@ -82,6 +84,17 @@ export class EventModalComponent {
     this.eventAction$,
   ]).pipe(
     map(([showModal, users, eventAction]) => {
+      this.createEventForm.patchValue({
+        ...eventAction.event,
+        dateOfEvent: eventAction.event.dateOfEvent.split('T')[0],
+        maxDateOfConfirmation:
+          eventAction.event.maxDateOfConfirmation.split('T')[0],
+      });
+
+      if (!eventAction.isNew) {
+        this.originalEventType = eventAction.event.typeOfEvent;
+      }
+
       if (showModal) {
         $('#eventModal').modal('show');
         $('#eventModal').on('hidden.bs.modal', () => {
@@ -96,17 +109,6 @@ export class EventModalComponent {
         this.userEmptyMessage = $localize`No hay usuarios disponibles`;
       } else {
         this.userEmptyMessage = '';
-      }
-
-      this.createEventForm.patchValue({
-        ...eventAction.event,
-        dateOfEvent: eventAction.event.dateOfEvent.split('T')[0],
-        maxDateOfConfirmation:
-          eventAction.event.maxDateOfConfirmation.split('T')[0],
-      });
-
-      if (!eventAction.isNew) {
-        this.originalEventType = eventAction.event.typeOfEvent;
       }
 
       return {
@@ -185,9 +187,8 @@ export class EventModalComponent {
             isNew: true,
           });
           this.toastr.success(response.message);
-          $('#eventModal').modal('hide');
         },
-      })
+      });
   }
 
   formatEvent(event: IFullEvent): IFullEvent {
@@ -217,9 +218,8 @@ export class EventModalComponent {
             isNew: false,
           });
           this.toastr.success(response.message);
-          $('#eventModal').modal('hide');
         },
-      })
+      });
   }
 
   clearInputs(): void {

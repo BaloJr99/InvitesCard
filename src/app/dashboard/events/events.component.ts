@@ -17,18 +17,22 @@ export class EventsComponent {
     private tokenService: TokenStorageService
   ) {}
 
+  private baseEvent = {
+    id: '',
+    nameOfEvent: '',
+    dateOfEvent: '',
+    maxDateOfConfirmation: '',
+    nameOfCelebrated: '',
+    userId: '',
+    typeOfEvent: EventType.None,
+  };
+
   private events = new BehaviorSubject<IDashboardEvent[]>([]);
   events$ = this.events.asObservable();
 
   eventAction: IEventAction = {
     event: {
-      id: '',
-      nameOfEvent: '',
-      dateOfEvent: '',
-      maxDateOfConfirmation: '',
-      nameOfCelebrated: '',
-      typeOfEvent: '',
-      userId: '',
+      ...this.baseEvent,
     },
     isNew: true,
   } as IEventAction;
@@ -76,6 +80,12 @@ export class EventsComponent {
       a.nameOfEvent.toLowerCase().localeCompare(b.nameOfEvent.toLowerCase())
     );
 
+    this.eventAction = {
+      event: { ...this.baseEvent },
+      isNew: true,
+    };
+
+    this.closeEventModal();
     this.events.next(eventsCopy);
   }
 
@@ -103,24 +113,20 @@ export class EventsComponent {
               event,
               isNew: false,
             };
+
+            this.showEventModal = true;
           },
         });
     } else {
       this.eventAction = {
         event: {
-          id: '',
-          nameOfEvent: '',
-          dateOfEvent: '',
-          maxDateOfConfirmation: '',
-          nameOfCelebrated: '',
-          userId: '',
-          typeOfEvent: EventType.None,
+          ...this.baseEvent,
         },
         isNew: true,
       };
-    }
 
-    this.showEventModal = true;
+      this.showEventModal = true;
+    }
   }
 
   getAccessibilityMessage(eventName: string) {

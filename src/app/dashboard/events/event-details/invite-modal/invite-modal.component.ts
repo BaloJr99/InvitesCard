@@ -104,7 +104,7 @@ export class InviteModalComponent {
       }
 
       this.clearInputs();
-      this.createInviteForm.reset(inviteAction.invite);
+      this.createInviteForm.patchValue(inviteAction.invite);
       return {
         inviteAction,
         inviteGroups,

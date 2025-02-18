@@ -27,14 +27,14 @@
   
   <app-user-modal 
     [userActionValue]="vm.userAction" 
-    [showModalValue]="vm.showUserModal"
+    [showModalValue]="showUserModal"
     (updateUsers)="updateUsers($event)"
     (selectRole)="setSelectedRole($event)"
     (closeModal)="closeUserModal()">
   </app-user-modal>
   
   <app-user-role 
-    [showModalValue]="vm.showRoleModal"
+    [showModalValue]="showRoleModal"
     [roleActionValue]="vm.roleAction"
     (updateRoles)="updateSavedInformation($event)"
     (closeModal)="closeRoleModal()">
