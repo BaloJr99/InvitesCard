@@ -243,7 +243,9 @@ test.describe('Dashboard Events (Admin)', () => {
       message: 'Fourth column should be empty',
     }).toBe('');
 
-    const lastColumn = await columns[columns.length].locator('button').all();
+    const lastColumn = await columns[columns.length - 1]
+      .locator('button')
+      .all();
     expect(lastColumn.length, {
       message: 'There should be 3 buttons',
     }).toBe(3);
@@ -317,7 +319,9 @@ test.describe('Dashboard Events (Admin)', () => {
       message: 'Fourth column should be empty',
     }).toBe('');
 
-    const lastColumn = await columns[columns.length].locator('button').all();
+    const lastColumn = await columns[columns.length - 1]
+      .locator('button')
+      .all();
     expect(lastColumn.length, {
       message: 'There should be 3 buttons',
     }).toBe(3);
@@ -738,7 +742,9 @@ test.describe('Dashboard Events (Invites Admin)', () => {
       message: 'Fourth column should be empty',
     }).toBe('');
 
-    const lastColumn = await columns[columns.length].locator('button').all();
+    const lastColumn = await columns[columns.length - 1]
+      .locator('button')
+      .all();
     expect(lastColumn.length, {
       message: 'There should be 3 buttons',
     }).toBe(3);
@@ -812,7 +818,9 @@ test.describe('Dashboard Events (Invites Admin)', () => {
       message: 'Fourth column should be empty',
     }).toBe('');
 
-    const lastColumn = await columns[columns.length].locator('button').all();
+    const lastColumn = await columns[columns.length - 1]
+      .locator('button')
+      .all();
     expect(lastColumn.length, {
       message: 'There should be 3 buttons',
     }).toBe(3);

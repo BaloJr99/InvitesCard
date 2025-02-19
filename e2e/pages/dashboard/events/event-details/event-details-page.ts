@@ -132,7 +132,9 @@ export class EventDetailsPage extends DashboardPage {
     const tableRow = await table.getTableRowByColumn('Family', family);
 
     const columns = await tableRow.locator('td').all();
-    const lastColumn = await columns[columns.length].locator('button').all();
+    const lastColumn = await columns[columns.length - 1]
+      .locator('button')
+      .all();
 
     // Click edit button
     await lastColumn[0].click();
@@ -148,7 +150,9 @@ export class EventDetailsPage extends DashboardPage {
     const tableRow = await table.getTableRowByColumn('Family', family);
 
     const columns = await tableRow.locator('td').all();
-    const lastColumn = await columns[columns.length].locator('button').all();
+    const lastColumn = await columns[columns.length - 1]
+      .locator('button')
+      .all();
 
     // Click delete button
     await lastColumn[1].click();
@@ -165,7 +169,9 @@ export class EventDetailsPage extends DashboardPage {
 
     const columns = await tableRow.locator('td').all();
 
-    const lastColumn = await columns[columns.length - 1].locator('button').all();
+    const lastColumn = await columns[columns.length - 1]
+      .locator('button')
+      .all();
 
     // Click copy button
     await lastColumn[2].click();

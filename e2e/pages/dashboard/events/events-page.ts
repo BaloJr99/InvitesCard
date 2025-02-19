@@ -42,8 +42,14 @@ export class EventsPage extends DashboardPage {
   }
 
   async getEventCardsCount(): Promise<number> {
-    const eventCards = await this.page.locator('.events-container .card').all();
-    return eventCards.length;
+    try {
+      await this.page.waitForSelector('.events-container .card', { state: 'visible' });
+      
+      const eventCards = await this.page.locator('.events-container .card').all();
+      return eventCards.length;
+    } catch {
+      return 0;
+    }
   }
 
   getEventCard = (index: number) => {
