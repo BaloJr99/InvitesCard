@@ -39,15 +39,15 @@ export class SweetXvSettingsComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  private sweetXvSettings = new BehaviorSubject<ISettingAction>({
+  private sweetXvSettingsAction = {
     isNew: undefined,
     eventType: EventType.Xv,
     eventId: '',
-  });
-  sweetXvSettings$ = this.sweetXvSettings.asObservable();
+  } as ISettingAction;
 
-  @Input() set eventSettingActionValue(eventSettingAction: ISettingAction) {
-    this.sweetXvSettings.next(eventSettingAction);
+  @Input() set eventSettingActionValue(value: ISettingAction) {
+    this.sweetXvSettingsAction = value;
+    this.reloadSettings.next(true);
   }
 
   eventDate: string = '';
@@ -93,94 +93,91 @@ export class SweetXvSettingsComponent {
   private reloadSettings = new BehaviorSubject<boolean>(false);
   reloadSettings$ = this.reloadSettings.asObservable();
 
-  vm$ = combineLatest([this.sweetXvSettings$, this.reloadSettings$]).pipe(
-    mergeMap(([sweetXvSettings]) =>
+  vm$ = this.reloadSettings$.pipe(
+    mergeMap(() =>
       combineLatest([
-        this.settingsService.getEventSettings(sweetXvSettings.eventId).pipe(
-          catchError(() => {
-            if (this.sweetXvSettings.value.isNew === undefined) {
-              this.sweetXvSettings.next({
-                ...sweetXvSettings,
+        this.settingsService
+          .getEventSettings(this.sweetXvSettingsAction.eventId)
+          .pipe(
+            catchError(() => {
+              this.sweetXvSettingsAction = {
+                ...this.sweetXvSettingsAction,
                 isNew: true,
-              });
-            }
+              };
 
-            return of({
-              eventId: sweetXvSettings.eventId,
-              settings: JSON.stringify({}),
-            } as IBaseSettings);
-          })
-        ),
-        this.eventsService.getEventById(sweetXvSettings.eventId),
-      ]).pipe(
-        tap(([eventSettings, eventInfo]) => {
-          this.eventDate = toLocalDate(eventInfo.dateOfEvent).split('T')[0];
-          const parsedSettings = JSON.parse(eventSettings.settings);
+              return of({
+                eventId: this.sweetXvSettingsAction.eventId,
+                settings: JSON.stringify({}),
+              } as IBaseSettings);
+            })
+          ),
+        this.eventsService.getEventById(this.sweetXvSettingsAction.eventId),
+      ])
+    ),
+    tap(([eventSettings, eventInfo]) => {
+      this.eventDate = toLocalDate(eventInfo.dateOfEvent).split('T')[0];
+      const parsedSettings = JSON.parse(eventSettings.settings);
 
-          this.createEventSettingsForm.patchValue({
-            eventId: sweetXvSettings.eventId,
-          });
+      this.createEventSettingsForm.patchValue({
+        eventId: this.sweetXvSettingsAction.eventId,
+      });
 
-          let sections = [] as IInviteSection[];
-          if (!parsedSettings.sections) {
-            sections = this.updateSections(this.baseSections);
-          } else {
-            const sectionsFound = parsedSettings.sections.map(
-              (section: IInviteSection) => {
-                const baseSection = this.baseSections.find(
-                  (s) => s.sectionId === section.sectionId
-                ) as IInviteSection;
+      let sections = [] as IInviteSection[];
+      if (!parsedSettings.sections) {
+        sections = this.updateSections(this.baseSections);
+      } else {
+        const sectionsFound = parsedSettings.sections.map(
+          (section: IInviteSection) => {
+            const baseSection = this.baseSections.find(
+              (s) => s.sectionId === section.sectionId
+            ) as IInviteSection;
 
-                return {
-                  ...baseSection,
-                  selected: section.selected,
-                  order: section.order,
-                };
-              }
-            ) as IInviteSection[];
-
-            // Add any missing section from the baseSections
-            this.baseSections.forEach((baseSection) => {
-              if (
-                !sectionsFound.some(
-                  (s) => s.sectionId === baseSection.sectionId
-                )
-              ) {
-                sectionsFound.push(baseSection);
-              }
-            });
-
-            sections = this.updateSections(sectionsFound);
-
-            if (parsedSettings.massTime) {
-              const dateOfMassTime = parsedSettings.massTime.split(' ')[0];
-              const timeOfMassTime = parsedSettings.massTime.split(' ')[1];
-
-              parsedSettings.massTime = toLocalDate(
-                `${dateOfMassTime}T${timeOfMassTime}.000Z`
-              ).split('T')[1];
-            }
-
-            if (parsedSettings.receptionTime) {
-              const dateOfReceptionTime =
-                parsedSettings.receptionTime.split(' ')[0];
-              const timeOfReceptionTime =
-                parsedSettings.receptionTime.split(' ')[1];
-
-              parsedSettings.receptionTime = toLocalDate(
-                `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`
-              ).split('T')[1];
-            }
+            return {
+              ...baseSection,
+              selected: section.selected,
+              order: section.order,
+            };
           }
+        ) as IInviteSection[];
 
-          this.createEventSettingsForm.patchValue({
-            ...parsedSettings,
-          });
+        // Add any missing section from the baseSections
+        this.baseSections.forEach((baseSection) => {
+          if (
+            !sectionsFound.some((s) => s.sectionId === baseSection.sectionId)
+          ) {
+            sectionsFound.push(baseSection);
+          }
+        });
 
-          this.sectionsConfig.next(sections);
-        })
-      )
-    )
+        sections = this.updateSections(sectionsFound);
+
+        if (parsedSettings.massTime) {
+          const dateOfMassTime = parsedSettings.massTime.split(' ')[0];
+          const timeOfMassTime = parsedSettings.massTime.split(' ')[1];
+
+          parsedSettings.massTime = toLocalDate(
+            `${dateOfMassTime}T${timeOfMassTime}.000Z`
+          ).split('T')[1];
+        }
+
+        if (parsedSettings.receptionTime) {
+          const dateOfReceptionTime =
+            parsedSettings.receptionTime.split(' ')[0];
+          const timeOfReceptionTime =
+            parsedSettings.receptionTime.split(' ')[1];
+
+          parsedSettings.receptionTime = toLocalDate(
+            `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`
+          ).split('T')[1];
+        }
+      }
+
+      this.createEventSettingsForm.patchValue({
+        ...parsedSettings,
+      });
+
+      this.sectionsConfig.next(sections);
+    })
   );
 
   constructor(
@@ -271,7 +268,7 @@ export class SweetXvSettingsComponent {
       this.createEventSettingsForm.valid &&
       this.createEventSettingsForm.dirty
     ) {
-      if (this.sweetXvSettings.value.isNew) {
+      if (this.sweetXvSettingsAction.isNew) {
         this.createEventSettings();
       } else {
         this.updateEventSettings();
@@ -285,7 +282,7 @@ export class SweetXvSettingsComponent {
     this.settingsService
       .createEventSettings(
         this.formatEventSetting(),
-        this.sweetXvSettings.value.eventType
+        this.sweetXvSettingsAction.eventType
       )
       .subscribe({
         next: (response: IMessageResponse) => {
@@ -298,8 +295,8 @@ export class SweetXvSettingsComponent {
     this.settingsService
       .updateEventSettings(
         this.formatEventSetting(),
-        this.sweetXvSettings.value.eventId,
-        this.sweetXvSettings.value.eventType
+        this.sweetXvSettingsAction.eventId,
+        this.sweetXvSettingsAction.eventType
       )
       .subscribe({
         next: (response: IMessageResponse) => {

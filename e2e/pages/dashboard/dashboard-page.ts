@@ -57,37 +57,51 @@ export class DashboardPage extends BasePage {
 
   async clickHomeLink() {
     await this.homeLink.click();
-    await this.page.waitForURL('/dashboard/home');
+    await this.page.waitForURL('/dashboard/home', {
+      waitUntil: 'domcontentloaded',
+    });
   }
 
   async clickEventsLink() {
     await this.eventsLink.click();
-    await this.page.waitForURL('/dashboard/events');
+    await this.page.waitForURL('/dashboard/events', {
+      waitUntil: 'domcontentloaded',
+    });
   }
 
   async clickFilesLink() {
     await this.filesLink.click();
-    await this.page.waitForURL('/dashboard/files');
+    await this.page.waitForURL('/dashboard/files', {
+      waitUntil: 'domcontentloaded',
+    });
   }
 
   async clickUsersLink() {
     await this.usersLink.click();
-    await this.page.waitForURL('/dashboard/users');
+    await this.page.waitForURL('/dashboard/users', {
+      waitUntil: 'domcontentloaded',
+    });
   }
 
   async clickLogsLink() {
     await this.logsLink.click();
-    await this.page.waitForURL('/dashboard/logs');
+    await this.page.waitForURL('/dashboard/logs', {
+      waitUntil: 'domcontentloaded',
+    });
   }
 
   async clickTestingLink() {
     await this.testingLink.click();
-    await this.page.waitForURL('/dashboard/testing');
+    await this.page.waitForURL('/dashboard/testing', {
+      waitUntil: 'domcontentloaded',
+    });
   }
 
   async clickSettingsLink() {
     await this.settingsLink.click();
-    await this.page.waitForURL('/dashboard/settings');
+    await this.page.waitForURL('/dashboard/settings', {
+      waitUntil: 'domcontentloaded',
+    });
   }
 
   async clickToggleProfileButton() {
@@ -101,7 +115,9 @@ export class DashboardPage extends BasePage {
   async clickLogoutButton() {
     await this.clickToggleProfileButton();
     await this.logoutButton.click();
-    await this.page.waitForURL('/auth/login');
+    await this.page.waitForURL('/auth/login', {
+      waitUntil: 'domcontentloaded',
+    });
 
     return new LoginPage(this.page);
   }
@@ -109,6 +125,8 @@ export class DashboardPage extends BasePage {
   async clickProfileButton() {
     await this.clickToggleProfileButton();
     await this.myProfileButton.click();
-    await this.page.waitForURL('/dashboard/profile/*');
+    await this.page.waitForURL('/dashboard/profile/*', {
+      waitUntil: 'domcontentloaded',
+    });
   }
 }

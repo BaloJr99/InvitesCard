@@ -54,7 +54,9 @@ export class LoginPage extends BasePage {
       return new LoginPage(this.page);
     }
 
-    await this.page.waitForURL('/dashboard/home');
+    await this.page.waitForURL('/dashboard/home', {
+      waitUntil: 'domcontentloaded',
+    });
 
     return new DashboardPage(this.page);
   }
@@ -62,12 +64,16 @@ export class LoginPage extends BasePage {
   async loginAsAdmin() {
     await this.login(fullUserMock.username, fullUserMock.password);
     await this.waitToLoad();
-    await this.page.waitForURL('/dashboard/home');
+    await this.page.waitForURL('/dashboard/home', {
+      waitUntil: 'domcontentloaded',
+    });
     return new DashboardPage(this.page);
   }
 
   async clickResetPassword() {
     await this.forgotPasswordLink.click();
-    await this.page.waitForURL('/auth/forgotPassword');
+    await this.page.waitForURL('/auth/forgotPassword', {
+      waitUntil: 'domcontentloaded',
+    });
   }
 }

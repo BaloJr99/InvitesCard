@@ -31,12 +31,10 @@ export class ErrorInterceptor implements HttpInterceptor {
       retry({
         count: 1,
         delay: (error: HttpErrorResponse) => {
-          switch (error.status) {
-            case 401:
-              return throwError(() => error);
-            default:
-              return of(null);
+          if (error.message.includes('ERR_CONNECTION_REFUSED')) {
+            return of(null); // Retry for ERR_CONNECTION_REFUSED
           }
+          return throwError(() => error);
         },
       }),
       catchError((error: HttpErrorResponse) => {

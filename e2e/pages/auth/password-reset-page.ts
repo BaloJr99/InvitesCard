@@ -32,7 +32,9 @@ export class PasswordResetPage extends BasePage {
     await this.page.goto(`/auth/forgotPassword/${fullUserMock.id}`, {
       waitUntil: 'domcontentloaded',
     });
-    await this.page.waitForURL('/auth/forgotPassword/*');
+    await this.page.waitForURL('/auth/forgotPassword/*', {
+      waitUntil: 'domcontentloaded',
+    });
     await this.isPasswordResetPage();
   }
 

@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <ng-container [ngSwitch]="eventSettingAction.eventType">
+    <ng-container *ngIf="!showSelectEvent()" [ngSwitch]="eventSettingAction.eventType">
       <app-sweet-xv-settings *ngSwitchCase="'X'" [eventSettingActionValue]="eventSettingAction"></app-sweet-xv-settings>
       <app-save-the-date-settings *ngSwitchCase="'S'" [eventSettingActionValue]="eventSettingAction"></app-save-the-date-settings>
       <app-wedding-settings *ngSwitchCase="'W'" [eventSettingAction]="eventSettingAction"></app-wedding-settings>

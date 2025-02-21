@@ -33,6 +33,8 @@ export class BaseInvitesPage extends BasePage {
 
   async gotoInvitePage(url: string) {
     await this.page.goto(url);
-    await this.page.waitForURL(url);
+    await this.page.waitForURL(url, {
+      waitUntil: 'domcontentloaded',
+    });
   }
 }

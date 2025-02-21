@@ -40,7 +40,9 @@ export class BasePage {
   async goto(path: string): Promise<void> {
     try {
       await this.page.goto(path);
-      await this.page.waitForURL(path);
+      await this.page.waitForURL(path, {
+        waitUntil: 'domcontentloaded',
+      });
     } catch (error) {
       console.error(
         `Error while navigating to ${path}: ${(error as Error).message}`
