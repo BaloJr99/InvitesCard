@@ -32,11 +32,10 @@
           <td class="buttons">
             <button *ngFor="let button of vm.buttons" 
                     class="btn" 
-                    [ngClass]="button.isDisabled ? 'btn-secondary' : ''" 
+                    [ngClass]="button.class ? button.class : 'btn-primary'"
                     (click)="onAction(button.action, rowIndex)" 
                     [disabled]="button.isDisabled" 
                     [title]="button.accessibleText"
-                    [style]="button.styles"
                     [innerHtml]="button.innerHtml">
             </button>
           </td>

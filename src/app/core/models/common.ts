@@ -75,7 +75,7 @@ export interface ITableButtons {
   accessibleText: string;
   action: ButtonAction;
   isDisabled?: boolean;
-  styles?: string;
+  class?: string;
 }
 
 export interface ITableStructure {

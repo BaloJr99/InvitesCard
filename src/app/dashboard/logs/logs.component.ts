@@ -159,7 +159,7 @@ export class LogsComponent {
           accessibleText: $localize`Ver log`,
           action: ButtonAction.View,
           innerHtml: '<i class="fa-solid fa-eye" aria-hidden="true"></i>',
-          styles: 'background-color: #ADB5BD;',
+          class: 'btn-secondary',
         },
       ],
       useCheckbox: false,

@@ -17,7 +17,7 @@
             <div class="profile-image">
               <i class="fa-solid fa-user" *ngIf="!createProfileForm.get('profilePhoto')?.value"></i>
               <img [src]="vm.user.profilePhoto" alt="profile" *ngIf="createProfileForm.get('profilePhoto')?.value">
-              <button class="btn btn-secondary" (click)="openProfileModal()" i18n-aria-label aria-label="Añade foto de perfil"><i class="fa-solid fa-camera"></i></button>
+              <button class="btn btn-dark" (click)="openProfileModal()" i18n-aria-label aria-label="Añade foto de perfil"><i class="fa-solid fa-camera"></i></button>
             </div>
             <br>
             <div class="profile-info">
