@@ -9,6 +9,7 @@
 
 .filter-dialog.show {
   display: block;
+  z-index: 1;
 }
 
   .filter-dialog h3 {
@@ -24,9 +25,3 @@
     display: flex;
     justify-content: space-between;
   }
-
-    .filter-dialog .filter-dialog-footer button {
-      border-radius: 10px;
-      background-color: var(--secondary-blue);
-      color: var(--grey);
-    }

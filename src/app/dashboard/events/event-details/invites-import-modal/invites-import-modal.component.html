@@ -10,7 +10,7 @@
         <div class="mb-3">
           <div class="download-template">
             <input id="fileInput" aria-labelledby="helpId" type="file" class="form-control" placeholder="Seleccionar Archivo CSV" accept=".csv" (change)="onFileChange($event)"/>
-            <button class="btn btn-primary" i18n-aria-label aria-label="Descargar plantilla" (click)="downloadTemplate()"><i class="fa-solid fa-download"></i></button>
+            <button class="btn btn-dark" i18n-aria-label aria-label="Descargar plantilla" (click)="downloadTemplate()"><i class="fa-solid fa-download"></i></button>
             <i class="fa-solid fa-circle-info btn-secondary"><span i18n>Descargar plantilla</span></i>
           </div>
           <small id="helpId" class="form-text text-muted" i18n>Los unicos archivos soportados son en formato CSV</small>
@@ -52,7 +52,7 @@
       </div>
       <div class="modal-footer">
         <button data-testid="cancel-button" type="button" class="btn btn-secondary" data-bs-dismiss="modal" i18n>Cerrar</button>
-        <button data-testid="confirm-button" type="button" class="btn btn-primary" (click)="sendData()" [disabled]="this.invites.length === 0" i18n>Procesar archivo</button>
+        <button data-testid="confirm-button" type="button" class="btn btn-dark" (click)="sendData()" [disabled]="this.invites.length === 0" i18n>Procesar archivo</button>
       </div>
     </div>
   </div>

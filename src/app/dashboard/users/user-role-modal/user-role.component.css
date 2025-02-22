@@ -22,9 +22,3 @@
       width: calc(100% - 26px);
       margin-right: 10px;
     }
-
-.modal-footer .btn-primary {
-  background-color: var(--secondary-blue);
-  color: var(--grey);
-  border: none;
-}

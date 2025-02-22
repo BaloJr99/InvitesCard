@@ -118,12 +118,6 @@ form {
   border-top: 2px solid var(--teal-blue);
 }
 
-  .footer .btn-primary {
-    background-color: var(--secondary-blue);
-    color: var(--grey);
-    border: none;
-  }
-
   .footer button#cancel-changes {
     margin-right: 10px;
   }

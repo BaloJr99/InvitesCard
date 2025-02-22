@@ -30,7 +30,7 @@
           <input id="musicFiles" class="form-control" formControlName="musicFiles" type="file" (change)="onMusicChange($event)" accept=".mp3">
         </div>
         <div class="col-12 col-md-2 form-footer gx-4 mt-2" >
-          <button class="btn btn-primary" (click)="saveFiles()" i18n>Subir archivos</button>
+          <button class="btn btn-dark" (click)="saveFiles()" i18n>Subir archivos</button>
         </div>
       </div>
     </form>
@@ -79,8 +79,8 @@
     </div>
   </div>
   <div class="footer" *ngIf="filesUpdateForm.controls['audios'].length > 0 || filesUpdateForm.controls['images'].length > 0">
-    <button id="cancel-changes" class="btn btn-primary" (click)="cancelChanges()" [disabled]="!filesUpdateForm.dirty" i18n>Cancelar Cambios</button>
-    <button id="save-changes" class="btn btn-primary" (click)="saveChanges()" [disabled]="!filesUpdateForm.dirty" i18n>Guardar Cambios</button>
+    <button id="cancel-changes" class="btn btn-dark" (click)="cancelChanges()" [disabled]="!filesUpdateForm.dirty" i18n>Cancelar Cambios</button>
+    <button id="save-changes" class="btn btn-dark" (click)="saveChanges()" [disabled]="!filesUpdateForm.dirty" i18n>Guardar Cambios</button>
   </div>  
 </section>
 <section class="files-empty" *ngIf="!eventSelected">

@@ -1,9 +1,3 @@
-.btn-primary {
-  background-color: var(--secondary-blue);
-  color: var(--grey);
-  border: none;
-}
-
 .inviteGroup-validation {
   display: flex;
   flex-direction: row;

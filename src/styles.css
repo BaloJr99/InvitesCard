@@ -25,3 +25,18 @@ html, body {
 *:focus-visible {
   outline: var(--focus-outline, 2px solid #0af) !important;
 }
+
+.custom-primary,
+.custom-primary:active {
+  margin-top: 40px;
+  width: 50%;
+  background-color: #ffc0c0 !important;
+  border: 2px solid #ff9696 !important;
+  margin: 20px;
+  color: black !important;
+}
+
+  .custom-primary:hover,
+  .custom-primary:focus {
+    background-color: #ff9696 !important;
+  }

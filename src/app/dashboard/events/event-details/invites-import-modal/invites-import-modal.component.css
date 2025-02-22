@@ -55,10 +55,3 @@
     color: #ffffff;
     font-size: 16px;
   }
-
-  .modal-body .btn-primary,
-  .modal-footer .btn-primary {
-    background-color: var(--secondary-blue);
-    color: var(--grey);
-    border: none;
-  }

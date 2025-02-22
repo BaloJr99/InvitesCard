@@ -5,9 +5,3 @@
   .modal .modal-body #profile-photo {
     width: 100%;
   }
-
-.modal .modal-footer .btn-primary {
-  background-color: var(--secondary-blue);
-  color: var(--grey);
-  border: none;
-}

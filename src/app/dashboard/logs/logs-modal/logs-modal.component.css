@@ -1,9 +1,3 @@
-.modal .btn-primary {
-  background-color: var(--secondary-blue);
-  color: var(--grey);
-  border: none;
-}
-
 .modal .modal-body {
   text-align: left;
 }

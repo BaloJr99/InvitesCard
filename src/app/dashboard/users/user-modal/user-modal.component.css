@@ -45,9 +45,3 @@
       display: flex;
       gap: 10px;
     }
-
-.modal .modal-footer .btn-primary {
-  background-color: var(--secondary-blue);
-  color: var(--grey);
-  border: none;
-}

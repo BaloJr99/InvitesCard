@@ -10,12 +10,6 @@
   align-items: center;
 }
 
-  .breadcrumb-header .header .buttons .btn-primary {
-    background-color: var(--secondary-blue);
-    color: var(--grey);
-    border: none;
-  }
-
   .breadcrumb-header .header nav {
     flex-grow: 1;
   }
@@ -70,7 +64,7 @@
     gap: 10px;
   }
   
-  .breadcrumb-header .header .buttons .btn-primary {
+  .breadcrumb-header .header .buttons .btn-dark {
     width: 100%;
     margin: 0px;
   }

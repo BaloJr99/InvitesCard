@@ -32,12 +32,6 @@
           text-decoration: underline; 
         }
 
-    .breadcrumb-header .header .buttons .btn-primary {
-      background-color: var(--secondary-blue);
-      color: var(--grey);
-      border: none;
-    }
-
 .events-container {
   padding: 0px 20px;
 }
@@ -61,19 +55,10 @@
         font-size: 20px;
       }
 
-      .events-container .card .card-body .view-event {
-        background-color: var(--secondary-blue);
-        color: var(--grey);
-        border: none;
-      }
-
       .events-container .card .card-body .edit-event {
         position: absolute;
         right: 15px;
         top: 10px;
-        background-color: var(--secondary-blue);
-        color: var(--grey);
-        border: none;
       }
 
 @media screen and (max-width: 575px) {
@@ -90,7 +75,7 @@
       gap: 10px;
     }
   
-    .breadcrumb-header .header .buttons .btn-primary {
+    .breadcrumb-header .header .buttons .custom-primary {
       width: 100%;
       margin: 0px;
     }

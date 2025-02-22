@@ -9,8 +9,8 @@
         </ol>
       </nav>
       <div class="buttons">
-        <button class="btn btn-primary" (click)="openImportInvitesModal()" i18n [disabled]="vm.isDeadlineMet">Importar invitaciones</button>
-        <button class="btn btn-primary" (click)="openInviteModal('')" i18n [disabled]="vm.isDeadlineMet">Nueva invitación</button>
+        <button class="btn btn-dark" (click)="openImportInvitesModal()" i18n [disabled]="vm.isDeadlineMet">Importar invitaciones</button>
+        <button class="btn btn-dark" (click)="openInviteModal('')" i18n [disabled]="vm.isDeadlineMet">Nueva invitación</button>
       </div>
     </div>
   </div>
@@ -59,8 +59,8 @@
           <input type="text" class="form-control" name="filterByFamily" id="filterByFamily" placeholder="Buscar familia"/>
         </div>
         <div class="col-12 offset-0 offset-md-4 col-md-4 mt-3">
-          <button class="btn btn-primary" id="searchInvites" (click)="filter()">Buscar</button>
-          <button class="btn btn-primary" id="cleanInvites" (click)="clearFilter()">Limpiar</button>
+          <button class="btn btn-dark" id="searchInvites" (click)="filter()">Buscar</button>
+          <button class="btn btn-dark" id="cleanInvites" (click)="clearFilter()">Limpiar</button>
         </div>
       </div>
     </div>
