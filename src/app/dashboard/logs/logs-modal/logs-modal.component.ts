@@ -6,6 +6,7 @@ import { ILog } from 'src/app/core/models/logs';
   selector: 'app-log-modal',
   templateUrl: './logs-modal.component.html',
   styleUrls: ['./logs-modal.component.css'],
+  standalone: false,
 })
 export class LogsModalComponent {
   private log = new BehaviorSubject<ILog | undefined>(undefined);

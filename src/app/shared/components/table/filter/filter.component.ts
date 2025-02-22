@@ -11,6 +11,7 @@ import { IFilter } from 'src/app/core/models/common';
   selector: 'app-filter',
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.css'],
+  standalone: false,
 })
 export class FilterComponent {
   @HostListener('keydown', ['$event']) onKeyDown(e: KeyboardEvent): void {

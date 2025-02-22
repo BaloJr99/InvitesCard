@@ -10,6 +10,7 @@ import { toLocalDate } from 'src/app/shared/utils/tools';
   selector: 'app-events',
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.css'],
+  standalone: false,
 })
 export class EventsComponent {
   constructor(

@@ -6,6 +6,7 @@ import { EventType } from '../core/models/enum';
 @Component({
   selector: 'app-invites',
   templateUrl: './invites.component.html',
+  standalone: false,
 })
 export class InvitesComponent implements OnInit {
   inviteResolved: IEventTypeResolved = {

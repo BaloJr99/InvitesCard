@@ -34,6 +34,7 @@ import { dateTimeToUTCDate, toLocalDate } from 'src/app/shared/utils/tools';
   selector: 'app-wedding-settings',
   templateUrl: './wedding-settings.component.html',
   styleUrl: './wedding-settings.component.css',
+  standalone: false,
 })
 export class WeddingSettingsComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

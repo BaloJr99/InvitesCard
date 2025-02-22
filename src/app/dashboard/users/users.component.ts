@@ -17,6 +17,7 @@ import { UsersService } from 'src/app/core/services/users.service';
   templateUrl: './users.component.html',
   styleUrl: './users.component.css',
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class UsersComponent {
   private users = new BehaviorSubject<IUserEventsInfo[]>([]);

@@ -45,6 +45,7 @@ import { ToastrService } from 'ngx-toastr';
   selector: 'app-event-details',
   templateUrl: './event-details.component.html',
   styleUrls: ['./event-details.component.css'],
+  standalone: false,
 })
 export class EventDetailsComponent implements OnInit {
   constructor(

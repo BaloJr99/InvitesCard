@@ -27,6 +27,7 @@ import { toLocalDate } from 'src/app/shared/utils/tools';
   selector: 'app-save-the-date',
   templateUrl: './save-the-date.component.html',
   styleUrl: './save-the-date.component.css',
+  standalone: false,
 })
 export class SaveTheDateComponent {
   @HostListener('document:visibilitychange', ['$event'])

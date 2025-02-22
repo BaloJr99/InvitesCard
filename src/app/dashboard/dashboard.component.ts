@@ -11,6 +11,7 @@ import { BehaviorSubject, combineLatest, map } from 'rxjs';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
+  standalone: false,
 })
 export class DashboardComponent implements OnInit {
   private route = new BehaviorSubject<string>('');

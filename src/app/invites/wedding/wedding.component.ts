@@ -20,6 +20,7 @@ import { toLocalDate } from 'src/app/shared/utils/tools';
   templateUrl: './wedding.component.html',
   styleUrls: ['./wedding.component.css'],
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class WeddingComponent {
   counter = 0;

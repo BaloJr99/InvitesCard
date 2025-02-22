@@ -19,6 +19,7 @@ import { controlIsDuplicated } from 'src/app/shared/utils/validators/controlIsDu
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
+  standalone: false,
 })
 export class ProfileComponent implements OnInit {
   @ViewChildren(FormControlName, { read: ElementRef })

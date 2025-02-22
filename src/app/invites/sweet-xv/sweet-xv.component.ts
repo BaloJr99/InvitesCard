@@ -20,6 +20,7 @@ import { toLocalDate } from 'src/app/shared/utils/tools';
   templateUrl: './sweet-xv.component.html',
   styleUrls: ['./sweet-xv.component.css'],
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class SweetXvComponent {
   counter = 0;

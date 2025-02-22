@@ -34,6 +34,7 @@ import { dateTimeToUTCDate, toLocalDate } from 'src/app/shared/utils/tools';
   selector: 'app-sweet-xv-settings',
   templateUrl: './sweet-xv-settings.component.html',
   styleUrl: './sweet-xv-settings.component.css',
+  standalone: false,
 })
 export class SweetXvSettingsComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

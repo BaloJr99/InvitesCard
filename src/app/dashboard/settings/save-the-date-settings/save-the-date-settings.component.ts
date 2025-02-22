@@ -23,6 +23,7 @@ import { SettingsService } from 'src/app/core/services/settings.service';
   selector: 'app-save-the-date-settings',
   templateUrl: './save-the-date-settings.component.html',
   styleUrl: './save-the-date-settings.component.css',
+  standalone: false,
 })
 export class SaveTheDateSettingsComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

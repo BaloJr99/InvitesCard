@@ -13,6 +13,7 @@ Chart.register(...registerables);
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
+  standalone: false,
 })
 export class HomeComponent {
   private eventSelected = new BehaviorSubject<string>('');

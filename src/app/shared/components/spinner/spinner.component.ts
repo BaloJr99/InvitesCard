@@ -6,6 +6,7 @@ import { LoaderService } from 'src/app/core/services/loader.service';
   selector: 'app-spinner',
   templateUrl: './spinner.component.html',
   styleUrls: ['./spinner.component.css'],
+  standalone: false,
 })
 export class SpinnerComponent {
   constructor(private loader: LoaderService) {}

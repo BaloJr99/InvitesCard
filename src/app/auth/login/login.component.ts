@@ -15,6 +15,7 @@ import { TokenStorageService } from 'src/app/core/services/token-storage.service
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
+  standalone: false,
 })
 export class LoginComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

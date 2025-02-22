@@ -6,6 +6,7 @@ import { EnvironmentService } from 'src/app/core/services/environment.service';
   selector: 'app-testing',
   templateUrl: './testing.component.html',
   styleUrl: './testing.component.css',
+  standalone: false,
 })
 export class TestingComponent {
   constructor(
@@ -14,12 +15,10 @@ export class TestingComponent {
   ) {}
 
   cleanEnvironment(): void {
-    this.environmentService
-      .cleanEnvironment()
-      .subscribe({
-        next: () => {
-          this.toastrService.success('Environment cleaned successfully');
-        },
-      })
+    this.environmentService.cleanEnvironment().subscribe({
+      next: () => {
+        this.toastrService.success('Environment cleaned successfully');
+      },
+    });
   }
 }

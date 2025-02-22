@@ -13,6 +13,7 @@ import { ButtonAction, SelectAction } from 'src/app/core/models/enum';
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css'],
+  standalone: false,
 })
 export class TableComponent {
   containsData = false;

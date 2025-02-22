@@ -33,6 +33,7 @@ import {
   selector: 'app-user-modal',
   templateUrl: './user-modal.component.html',
   styleUrls: ['./user-modal.component.css'],
+  standalone: false,
 })
 export class UserModalComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

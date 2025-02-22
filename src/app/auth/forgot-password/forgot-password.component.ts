@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.css',
+  standalone: false,
 })
 export class ForgotPasswordComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

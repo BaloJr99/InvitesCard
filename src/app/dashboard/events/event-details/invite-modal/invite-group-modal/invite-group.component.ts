@@ -21,6 +21,7 @@ import { map, Observable, of } from 'rxjs';
   selector: 'app-invite-group',
   templateUrl: './invite-group.component.html',
   styleUrls: ['./invite-group.component.css'],
+  standalone: false,
 })
 export class InviteGroupComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

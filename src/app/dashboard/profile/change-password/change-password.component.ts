@@ -21,6 +21,7 @@ import { matchPassword } from 'src/app/shared/utils/validators/matchPassword';
   selector: 'app-change-password',
   templateUrl: './change-password.component.html',
   styleUrl: './change-password.component.css',
+  standalone: false,
 })
 export class ChangePasswordComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

@@ -11,6 +11,7 @@ import { TokenStorageService } from 'src/app/core/services/token-storage.service
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
+  standalone: false,
 })
 export class NavbarComponent implements OnInit {
   private notifications = new BehaviorSubject<INotification[]>([]);

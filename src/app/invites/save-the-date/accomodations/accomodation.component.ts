@@ -22,6 +22,7 @@ import { BehaviorSubject, combineLatest, map } from 'rxjs';
   selector: 'app-accomodation',
   templateUrl: './accomodation.component.html',
   styleUrls: ['./accomodation.component.css'],
+  standalone: false,
 })
 export class AccomodationComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

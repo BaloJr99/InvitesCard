@@ -24,6 +24,7 @@ import { BehaviorSubject, combineLatest, map, Observable, of, tap } from 'rxjs';
   selector: 'app-user-role',
   templateUrl: './user-role.component.html',
   styleUrls: ['./user-role.component.css'],
+  standalone: false,
 })
 export class UserRoleComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

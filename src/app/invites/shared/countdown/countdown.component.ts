@@ -6,6 +6,7 @@ import { ITimer } from 'src/app/core/models/invites';
   selector: 'app-countdown',
   templateUrl: './countdown.component.html',
   styleUrls: ['./countdown.component.css'],
+  standalone: false,
 })
 export class CountdownComponent {
   time$ = new BehaviorSubject<ITimer>({

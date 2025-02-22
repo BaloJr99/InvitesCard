@@ -10,6 +10,7 @@ import { UsersService } from 'src/app/core/services/users.service';
   selector: 'app-profile-modal',
   templateUrl: './profile-modal.component.html',
   styleUrls: ['./profile-modal.component.css'],
+  standalone: false,
 })
 export class ProfileModalComponent {
   private userId = new BehaviorSubject<string>('');

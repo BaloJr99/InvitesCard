@@ -11,6 +11,7 @@ import { BehaviorSubject, combineLatest, map } from 'rxjs';
   selector: 'app-invites-import-dialog',
   templateUrl: './invites-import-modal.component.html',
   styleUrls: ['./invites-import-modal.component.css'],
+  standalone: false,
 })
 export class InvitesImportModalComponent {
   private eventId = new BehaviorSubject<string>('');

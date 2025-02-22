@@ -26,6 +26,7 @@ import { BehaviorSubject, combineLatest, map } from 'rxjs';
   selector: 'app-invite-modal',
   templateUrl: './invite-modal.component.html',
   styleUrls: ['./invite-modal.component.css'],
+  standalone: false,
 })
 export class InviteModalComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

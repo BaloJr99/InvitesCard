@@ -8,6 +8,7 @@ import { ErrorModalService } from 'src/app/core/services/error.service';
   selector: 'app-error-modal',
   templateUrl: './error-modal.component.html',
   styleUrls: ['./error-modal.component.css'],
+  standalone: false,
 })
 export class ErrorModalComponent {
   constructor(public errorService: ErrorModalService) {}

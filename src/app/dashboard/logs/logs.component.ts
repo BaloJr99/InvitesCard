@@ -12,6 +12,7 @@ Chart.register(...registerables);
   selector: 'app-logs',
   templateUrl: './logs.component.html',
   styleUrl: './logs.component.css',
+  standalone: false,
 })
 export class LogsComponent {
   private logs = new BehaviorSubject<ILog[]>([]);

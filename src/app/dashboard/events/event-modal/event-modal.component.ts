@@ -30,6 +30,7 @@ import { BehaviorSubject, combineLatest, map } from 'rxjs';
   selector: 'app-event-modal',
   templateUrl: './event-modal.component.html',
   styleUrls: ['./event-modal.component.css'],
+  standalone: false,
 })
 export class EventModalComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

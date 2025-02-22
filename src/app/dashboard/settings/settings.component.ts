@@ -10,6 +10,7 @@ import { EventsService } from 'src/app/core/services/events.service';
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css',
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class SettingsComponent {
   private events = new BehaviorSubject<IDropdownEvent[]>([]);

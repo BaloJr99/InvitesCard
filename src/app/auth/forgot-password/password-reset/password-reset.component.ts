@@ -13,6 +13,7 @@ import { matchPassword } from 'src/app/shared/utils/validators/matchPassword';
   selector: 'app-password-reset',
   templateUrl: './password-reset.component.html',
   styleUrl: './password-reset.component.css',
+  standalone: false,
 })
 export class PasswordResetComponent implements OnInit {
   @ViewChildren(FormControlName, { read: ElementRef })

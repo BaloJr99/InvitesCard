@@ -22,6 +22,7 @@ import { FilesService } from 'src/app/core/services/files.service';
   selector: 'app-files',
   templateUrl: './files.component.html',
   styleUrl: './files.component.css',
+  standalone: false,
 })
 export class FilesComponent {
   events: IDropdownEvent[] = [];

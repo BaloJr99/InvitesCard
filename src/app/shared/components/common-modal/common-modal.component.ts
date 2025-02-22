@@ -7,6 +7,7 @@ import { CommonModalService } from 'src/app/core/services/commonModal.service';
   selector: 'app-common-modal',
   templateUrl: './common-modal.component.html',
   styleUrl: './common-modal.component.css',
+  standalone: false,
 })
 export class CommonModalComponent {
   @Input() set options(value: ICommonModal) {

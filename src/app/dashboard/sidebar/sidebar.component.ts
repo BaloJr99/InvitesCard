@@ -6,6 +6,7 @@ import { TokenStorageService } from 'src/app/core/services/token-storage.service
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
+  standalone: false,
 })
 export class SidebarComponent implements OnInit {
   isAdmin = false;
