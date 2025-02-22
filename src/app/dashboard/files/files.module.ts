@@ -8,6 +8,7 @@ import { FilesService } from 'src/app/core/services/files.service';
 const routes: Routes = [
   {
     path: '',
+    title: 'InvitesMX -- Files',
     component: FilesComponent,
   },
 ];

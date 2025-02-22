@@ -12,6 +12,7 @@ import { WeddingComponent } from './wedding/wedding.component';
 const routes: Routes = [
   {
     path: ':id',
+    title: 'InvitesMX -- Invite',
     component: InvitesComponent,
     resolve: { invite: invitesResolver },
   },

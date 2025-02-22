@@ -7,6 +7,7 @@ import { EventsService } from 'src/app/core/services/events.service';
 const routes: Routes = [
   {
     path: '',
+    title: 'InvitesMX -- Home',
     component: HomeComponent,
   },
 ];

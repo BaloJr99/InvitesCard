@@ -13,6 +13,7 @@ import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe'
 const routes: Routes = [
   {
     path: '',
+    title: 'InvitesMX -- Settings',
     component: SettingsComponent,
   },
 ];

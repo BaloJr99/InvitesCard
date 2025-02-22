@@ -6,11 +6,13 @@ import { loginGuard } from '../core/guards/login.guard';
 const routes: Routes = [
   {
     path: 'login',
+    title: 'InvitesMX -- Login',
     component: LoginComponent,
     canActivate: [loginGuard],
   },
   {
     path: 'forgotPassword',
+    title: 'InvitesMX -- Forgot Password',
     loadChildren: () =>
       import('./forgot-password/forgot-password.module').then(
         (m) => m.ForgotPasswordModule

@@ -14,6 +14,7 @@ const routes: Routes = [
   },
   {
     path: ':id',
+    title: 'InvitesMX -- Reset Password',
     loadChildren: () => import('./password-reset/password-reset.module').then(m => m.PasswordResetModule)
   }
 ]

@@ -8,6 +8,7 @@ import { LogsModalComponent } from './logs-modal/logs-modal.component';
 const routes: Routes = [
   {
     path: '',
+    title: 'InvitesMX -- Logs',
     component: LogsComponent,
   },
 ];

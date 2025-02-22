@@ -14,6 +14,7 @@ import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 const routes: Routes = [
   {
     path: '',
+    title: 'InvitesMX -- Users',
     component: UsersComponent,
   },
 ];

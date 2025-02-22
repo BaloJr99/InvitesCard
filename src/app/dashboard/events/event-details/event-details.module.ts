@@ -15,6 +15,7 @@ import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe'
 const routes: Routes = [
   {
     path: '',
+    title: 'InvitesMX -- Event Details',
     component: EventDetailsComponent,
     resolve: { eventResolved: eventResolver },
   },

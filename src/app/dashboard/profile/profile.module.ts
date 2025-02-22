@@ -12,11 +12,13 @@ import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe'
 const routes: Routes = [
   {
     path: '',
+    title: 'InvitesMX -- Profile',
     component: ProfileComponent,
     resolve: { userProfile: profileResolver },
   },
   {
     path: ':id',
+    title: 'InvitesMX -- Profile',
     component: ProfileComponent,
     resolve: { userProfile: profileResolver },
   },

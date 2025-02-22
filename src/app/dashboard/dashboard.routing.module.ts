@@ -51,6 +51,7 @@ const routes: Routes = [
       },
       {
         path: 'testing',
+        title: 'InvitesMX -- Testing',
         component: TestingComponent,
         canActivate: [environmentGuard],
       },
