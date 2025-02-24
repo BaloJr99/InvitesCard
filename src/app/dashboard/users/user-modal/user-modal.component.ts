@@ -11,6 +11,7 @@ import {
   FormControlName,
   FormGroup,
   Validators,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ISavedUserRole, IUserAction } from 'src/app/core/models/users';
@@ -28,12 +29,20 @@ import {
   of,
   tap,
 } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { ValidationPipe } from '../../../shared/pipes/validation.pipe';
+import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe';
 
 @Component({
   selector: 'app-user-modal',
   templateUrl: './user-modal.component.html',
   styleUrls: ['./user-modal.component.css'],
-  standalone: false,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ValidationPipe,
+    ValidationErrorPipe,
+  ],
 })
 export class UserModalComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

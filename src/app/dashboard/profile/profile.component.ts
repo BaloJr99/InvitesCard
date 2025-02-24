@@ -14,12 +14,23 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { controlIsDuplicated } from 'src/app/shared/utils/validators/controlIsDuplicated';
+import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ProfileModalComponent } from './profile-modal/profile-modal.component';
+import { ValidationPipe } from '../../shared/pipes/validation.pipe';
+import { ValidationErrorPipe } from '../../shared/pipes/validation-error.pipe';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
-  standalone: false,
+  imports: [
+    SharedModule,
+    ChangePasswordComponent,
+    ProfileModalComponent,
+    ValidationPipe,
+    ValidationErrorPipe,
+  ],
 })
 export class ProfileComponent implements OnInit {
   @ViewChildren(FormControlName, { read: ElementRef })

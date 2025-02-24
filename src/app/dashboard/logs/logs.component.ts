@@ -6,13 +6,16 @@ import { ButtonAction } from 'src/app/core/models/enum';
 import { ILog } from 'src/app/core/models/logs';
 import { LoggerService } from 'src/app/core/services/logger.service';
 import { toLocalDate } from 'src/app/shared/utils/tools';
+import { TableComponent } from '../../shared/components/table/table.component';
+import { LogsModalComponent } from './logs-modal/logs-modal.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-logs',
   templateUrl: './logs.component.html',
   styleUrl: './logs.component.css',
-  standalone: false,
+  imports: [SharedModule, TableComponent, LogsModalComponent],
 })
 export class LogsComponent {
   private logs = new BehaviorSubject<ILog[]>([]);

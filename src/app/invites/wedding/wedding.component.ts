@@ -14,13 +14,16 @@ import { ImageUsage } from '../../core/models/enum';
 import { IInviteSection, IUserInvite } from '../../core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { toLocalDate } from 'src/app/shared/utils/tools';
+import { CommonModule } from '@angular/common';
+import { CountdownComponent } from '../shared/countdown/countdown.component';
+import { ConfirmationComponent } from '../shared/confirmation/confirmation.component';
 
 @Component({
   selector: 'app-wedding',
   templateUrl: './wedding.component.html',
   styleUrls: ['./wedding.component.css'],
   encapsulation: ViewEncapsulation.None,
-  standalone: false,
+  imports: [CommonModule, CountdownComponent, ConfirmationComponent],
 })
 export class WeddingComponent {
   counter = 0;

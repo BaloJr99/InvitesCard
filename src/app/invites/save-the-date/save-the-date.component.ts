@@ -22,12 +22,14 @@ import { FilesService } from 'src/app/core/services/files.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { toLocalDate } from 'src/app/shared/utils/tools';
+import { CommonModule } from '@angular/common';
+import { AccomodationComponent } from './accomodations/accomodation.component';
 
 @Component({
   selector: 'app-save-the-date',
   templateUrl: './save-the-date.component.html',
   styleUrl: './save-the-date.component.css',
-  standalone: false,
+  imports: [AccomodationComponent, CommonModule],
 })
 export class SaveTheDateComponent {
   @HostListener('document:visibilitychange', ['$event'])

@@ -8,12 +8,14 @@ import {
   ITableStructure,
 } from 'src/app/core/models/common';
 import { ButtonAction, SelectAction } from 'src/app/core/models/enum';
+import { CommonModule } from '@angular/common';
+import { FilterComponent } from './filter/filter.component';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css'],
-  standalone: false,
+  imports: [CommonModule, FilterComponent],
 })
 export class TableComponent {
   containsData = false;

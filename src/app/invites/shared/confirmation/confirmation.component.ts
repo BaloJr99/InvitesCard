@@ -12,6 +12,7 @@ import {
   FormControlName,
   FormGroup,
   Validators,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { IConfirmation, IUserInvite } from 'src/app/core/models/invites';
@@ -20,12 +21,20 @@ import { InvitesService } from 'src/app/core/services/invites.service';
 import { ActivatedRoute } from '@angular/router';
 import { EventType } from 'src/app/core/models/enum';
 import { dateTimeToUTCDate } from 'src/app/shared/utils/tools';
+import { CommonModule } from '@angular/common';
+import { ValidationPipe } from '../../../shared/pipes/validation.pipe';
+import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe';
 
 @Component({
   selector: 'app-confirmation',
   templateUrl: './confirmation.component.html',
   styleUrls: ['./confirmation.component.css'],
-  standalone: false,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ValidationPipe,
+    ValidationErrorPipe,
+  ],
 })
 export class ConfirmationComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

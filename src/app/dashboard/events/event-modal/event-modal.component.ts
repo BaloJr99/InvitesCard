@@ -10,6 +10,7 @@ import {
   FormBuilder,
   FormControlName,
   FormGroup,
+  ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -25,12 +26,20 @@ import {
 } from 'src/app/core/models/enum';
 import { dateToUTCDate } from 'src/app/shared/utils/tools';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { ValidationPipe } from '../../../shared/pipes/validation.pipe';
+import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-event-modal',
   templateUrl: './event-modal.component.html',
   styleUrls: ['./event-modal.component.css'],
-  standalone: false,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ValidationErrorPipe,
+    ValidationPipe,
+  ],
 })
 export class EventModalComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

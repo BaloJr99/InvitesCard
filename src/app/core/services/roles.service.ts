@@ -5,7 +5,9 @@ import { environment } from '../../../environments/environment';
 import { IRole } from '../models/roles';
 import { IMessageResponse } from '../models/common';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class RolesService {
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/roles';

@@ -1,17 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NavigationStart, Router, Scroll } from '@angular/router';
+import { NavigationStart, Router, Scroll, RouterModule } from '@angular/router';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { INotification } from 'src/app/core/models/common';
 import { Roles } from 'src/app/core/models/enum';
 import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
-  standalone: false,
+  imports: [CommonModule, RouterModule],
 })
 export class NavbarComponent implements OnInit {
   private notifications = new BehaviorSubject<INotification[]>([]);

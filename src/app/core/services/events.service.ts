@@ -11,7 +11,9 @@ import {
 import { IMessageResponse } from '../models/common';
 import { IFullInvite } from '../models/invites';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class EventsService {
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/events';
@@ -41,16 +43,16 @@ export class EventsService {
   }
 
   getEventInvites(eventId: string): Observable<IFullInvite[]> {
-    return this.http.get<IFullInvite[]>(
-      `${this.invitesBaseUrl}/invites/${eventId}`
-    ).pipe(
-      map((invites) => {
-        return invites.map((invite) => {
-          invite.kidsAllowed = Boolean(invite.kidsAllowed);
-          return invite;
-        });
-      })
-    );
+    return this.http
+      .get<IFullInvite[]>(`${this.invitesBaseUrl}/invites/${eventId}`)
+      .pipe(
+        map((invites) => {
+          return invites.map((invite) => {
+            invite.kidsAllowed = Boolean(invite.kidsAllowed);
+            return invite;
+          });
+        })
+      );
   }
 
   isDeadlineMet(eventId: string): Observable<boolean> {
@@ -79,7 +81,7 @@ export class EventsService {
       {
         params: {
           override,
-          overrideViewed
+          overrideViewed,
         },
       }
     );

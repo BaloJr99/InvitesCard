@@ -10,7 +10,9 @@ import {
 } from '../models/images';
 import { IMessageResponse } from '../models/common';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class FilesService {
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/files';

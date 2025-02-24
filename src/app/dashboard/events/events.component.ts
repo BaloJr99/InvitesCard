@@ -5,12 +5,16 @@ import { IDashboardEvent, IEventAction } from 'src/app/core/models/events';
 import { EventsService } from 'src/app/core/services/events.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { toLocalDate } from 'src/app/shared/utils/tools';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { EventModalComponent } from './event-modal/event-modal.component';
+import { DateFormatPipe } from '../../shared/pipes/date-format.pipe';
 
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.css'],
-  standalone: false,
+  imports: [CommonModule, EventModalComponent, DateFormatPipe, RouterModule],
 })
 export class EventsComponent {
   constructor(

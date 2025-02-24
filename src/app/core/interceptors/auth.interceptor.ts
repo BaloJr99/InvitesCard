@@ -13,7 +13,9 @@ import { Router } from '@angular/router';
 
 const TOKEN_HEADER_KEY = 'Authorization';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class AuthInterceptor implements HttpInterceptor {
   private isRefreshing = false;
 

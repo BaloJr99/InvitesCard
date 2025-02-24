@@ -1,17 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationStart, Router, Scroll } from '@angular/router';
+import { NavigationStart, Router, Scroll, RouterModule } from '@angular/router';
 import { TokenStorageService } from '../core/services/token-storage.service';
 import { SocketService } from '../core/services/socket.service';
 import { IMessage } from '../core/models/common';
 import { CommonInvitesService } from '../core/services/commonInvites.service';
 import { toLocalDate } from '../shared/utils/tools';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { NavbarComponent } from './navbar/navbar.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  standalone: false,
+  imports: [CommonModule, NavbarComponent, RouterModule, SidebarComponent],
 })
 export class DashboardComponent implements OnInit {
   private route = new BehaviorSubject<string>('');

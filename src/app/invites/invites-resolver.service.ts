@@ -19,7 +19,12 @@ export const invitesResolver: ResolveFn<IEventTypeResolved> = (
   const overrideEventType = route.queryParamMap.get('eventType') ?? '';
 
   const inviteFound = invitesService.getInviteEventType(id).pipe(
-    map((eventType) => ({ eventType: eventType === EventType.Wedding && overrideEventType ? overrideEventType : eventType })),
+    map((eventType) => ({
+      eventType:
+        eventType === EventType.Wedding && overrideEventType
+          ? overrideEventType
+          : eventType,
+    })),
     catchError(() => {
       router.navigate(['/error/page-not-found']);
       return EMPTY;

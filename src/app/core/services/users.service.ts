@@ -12,7 +12,9 @@ import {
 } from '../models/users';
 import { IMessageResponse } from '../models/common';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class UsersService {
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/users';

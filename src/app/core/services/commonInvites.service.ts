@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { IMessage, INotification } from '../models/common';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class CommonInvitesService {
   private notifications = new BehaviorSubject<INotification[]>([]);
   notifications$ = this.notifications.asObservable();

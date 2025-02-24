@@ -9,7 +9,9 @@ import {
 } from '../models/settings';
 import { IMessageResponse } from '../models/common';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SettingsService {
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/settings';

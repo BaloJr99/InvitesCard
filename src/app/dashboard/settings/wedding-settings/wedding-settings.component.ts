@@ -5,6 +5,7 @@ import {
   FormControlName,
   FormGroup,
   Validators,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import {
@@ -29,12 +30,20 @@ import {
 import { EventsService } from 'src/app/core/services/events.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { dateTimeToUTCDate, toLocalDate } from 'src/app/shared/utils/tools';
+import { CommonModule } from '@angular/common';
+import { ValidationPipe } from '../../../shared/pipes/validation.pipe';
+import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe';
 
 @Component({
   selector: 'app-wedding-settings',
   templateUrl: './wedding-settings.component.html',
   styleUrl: './wedding-settings.component.css',
-  standalone: false,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ValidationPipe,
+    ValidationErrorPipe,
+  ],
 })
 export class WeddingSettingsComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

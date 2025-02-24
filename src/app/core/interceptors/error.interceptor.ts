@@ -10,7 +10,9 @@ import { Observable, catchError, finalize, of, retry, throwError } from 'rxjs';
 import { ErrorModalService } from '../services/error.service';
 import { LoaderService } from '../services/loader.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ErrorInterceptor implements HttpInterceptor {
   constructor(
     private errorService: ErrorModalService,

@@ -4,13 +4,22 @@ import { EventType } from 'src/app/core/models/enum';
 import { IDropdownEvent } from 'src/app/core/models/events';
 import { ISettingAction } from 'src/app/core/models/settings';
 import { EventsService } from 'src/app/core/services/events.service';
+import { SweetXvSettingsComponent } from './sweet-xv-settings/sweet-xv-settings.component';
+import { SaveTheDateSettingsComponent } from './save-the-date-settings/save-the-date-settings.component';
+import { WeddingSettingsComponent } from './wedding-settings/wedding-settings.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css',
   encapsulation: ViewEncapsulation.None,
-  standalone: false,
+  imports: [
+    SharedModule,
+    SweetXvSettingsComponent,
+    SaveTheDateSettingsComponent,
+    WeddingSettingsComponent,
+  ],
 })
 export class SettingsComponent {
   private events = new BehaviorSubject<IDropdownEvent[]>([]);

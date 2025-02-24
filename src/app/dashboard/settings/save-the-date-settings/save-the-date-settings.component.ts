@@ -4,6 +4,7 @@ import {
   FormControlName,
   FormGroup,
   Validators,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import {
@@ -18,12 +19,20 @@ import { IMessageResponse } from 'src/app/core/models/common';
 import { EventType } from 'src/app/core/models/enum';
 import { IBaseSettings, ISettingAction } from 'src/app/core/models/settings';
 import { SettingsService } from 'src/app/core/services/settings.service';
+import { CommonModule } from '@angular/common';
+import { ValidationPipe } from '../../../shared/pipes/validation.pipe';
+import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe';
 
 @Component({
   selector: 'app-save-the-date-settings',
   templateUrl: './save-the-date-settings.component.html',
   styleUrl: './save-the-date-settings.component.css',
-  standalone: false,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ValidationPipe,
+    ValidationErrorPipe,
+  ],
 })
 export class SaveTheDateSettingsComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

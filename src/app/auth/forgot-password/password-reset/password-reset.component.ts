@@ -8,12 +8,15 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { matchPassword } from 'src/app/shared/utils/validators/matchPassword';
+import { ValidationPipe } from '../../../shared/pipes/validation.pipe';
+import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @Component({
   selector: 'app-password-reset',
   templateUrl: './password-reset.component.html',
   styleUrl: './password-reset.component.css',
-  standalone: false,
+  imports: [SharedModule, ValidationPipe, ValidationErrorPipe],
 })
 export class PasswordResetComponent implements OnInit {
   @ViewChildren(FormControlName, { read: ElementRef })

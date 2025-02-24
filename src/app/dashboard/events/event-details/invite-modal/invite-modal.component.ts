@@ -10,6 +10,7 @@ import {
   FormBuilder,
   FormControlName,
   FormGroup,
+  ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -21,12 +22,22 @@ import { IMessageResponse } from 'src/app/core/models/common';
 import { IUpsertInvite, IInviteAction } from 'src/app/core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { InviteGroupComponent } from './invite-group-modal/invite-group.component';
+import { ValidationPipe } from '../../../../shared/pipes/validation.pipe';
+import { ValidationErrorPipe } from '../../../../shared/pipes/validation-error.pipe';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-invite-modal',
   templateUrl: './invite-modal.component.html',
   styleUrls: ['./invite-modal.component.css'],
-  standalone: false,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    InviteGroupComponent,
+    ValidationPipe,
+    ValidationErrorPipe,
+  ],
 })
 export class InviteModalComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

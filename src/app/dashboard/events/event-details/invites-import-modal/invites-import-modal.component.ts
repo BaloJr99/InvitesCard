@@ -6,12 +6,13 @@ import { InvitesService } from 'src/app/core/services/invites.service';
 import { IBulkMessageResponse, IBulkResults } from 'src/app/core/models/common';
 import { FileReaderService } from 'src/app/core/services/fileReader.service';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-invites-import-dialog',
   templateUrl: './invites-import-modal.component.html',
   styleUrls: ['./invites-import-modal.component.css'],
-  standalone: false,
+  imports: [CommonModule],
 })
 export class InvitesImportModalComponent {
   private eventId = new BehaviorSubject<string>('');

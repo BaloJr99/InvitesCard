@@ -4,7 +4,9 @@ import { IUser } from '../models/users';
 
 const TOKEN_KEY = 'x-access-token';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TokenStorageService {
   constructor(private jwtService: JwtHelperService) {}
 

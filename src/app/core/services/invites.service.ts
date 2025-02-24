@@ -13,7 +13,9 @@ import {
 } from '../models/invites';
 import { IBulkMessageResponse, IMessageResponse } from '../models/common';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class InvitesService {
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/invites';
@@ -25,7 +27,9 @@ export class InvitesService {
   }
 
   getInvite(id: string): Observable<IUserInvite | ISaveTheDateUserInvite> {
-    return this.http.get<IUserInvite | ISaveTheDateUserInvite>(`${this.invitesBaseUrl}/invite/${id}`);
+    return this.http.get<IUserInvite | ISaveTheDateUserInvite>(
+      `${this.invitesBaseUrl}/invite/${id}`
+    );
   }
 
   createInvite(invite: IUpsertInvite): Observable<IMessageResponse> {

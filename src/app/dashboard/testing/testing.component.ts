@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { EnvironmentService } from 'src/app/core/services/environment.service';
 
@@ -6,7 +7,7 @@ import { EnvironmentService } from 'src/app/core/services/environment.service';
   selector: 'app-testing',
   templateUrl: './testing.component.html',
   styleUrl: './testing.component.css',
-  standalone: false,
+  imports: [RouterModule],
 })
 export class TestingComponent {
   constructor(

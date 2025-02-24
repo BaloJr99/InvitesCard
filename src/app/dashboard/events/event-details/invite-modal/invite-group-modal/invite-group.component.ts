@@ -6,7 +6,12 @@ import {
   Output,
   ViewChildren,
 } from '@angular/core';
-import { FormBuilder, FormControlName, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControlName,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import {
   IInviteGroups,
@@ -16,12 +21,20 @@ import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service'
 import { IMessageResponse } from 'src/app/core/models/common';
 import { controlIsDuplicated } from 'src/app/shared/utils/validators/controlIsDuplicated';
 import { map, Observable, of } from 'rxjs';
+import { ValidationPipe } from '../../../../../shared/pipes/validation.pipe';
+import { ValidationErrorPipe } from '../../../../../shared/pipes/validation-error.pipe';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-invite-group',
   templateUrl: './invite-group.component.html',
   styleUrls: ['./invite-group.component.css'],
-  standalone: false,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ValidationPipe,
+    ValidationErrorPipe,
+  ],
 })
 export class InviteGroupComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

@@ -5,7 +5,9 @@ import { environment } from '../../../environments/environment';
 import { IInviteGroups } from '../models/inviteGroups';
 import { IMessageResponse } from '../models/common';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class InviteGroupsService {
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/inviteGroups';

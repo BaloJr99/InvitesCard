@@ -10,12 +10,16 @@ import { Router } from '@angular/router';
 import { IAuthUser } from 'src/app/core/models/users';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
+import { ValidationPipe } from '../../shared/pipes/validation.pipe';
+import { ValidationErrorPipe } from '../../shared/pipes/validation-error.pipe';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  standalone: false,
+  imports: [SharedModule, ValidationPipe, ValidationErrorPipe],
+  standalone: true,
 })
 export class LoginComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

@@ -1,22 +1,27 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../shared/shared.module';
-import { AuthRoutingModule } from './auth.routing.module';
+import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
-import { ValidationPipe } from '../shared/pipes/validation.pipe';
-import { ValidationErrorPipe } from '../shared/pipes/validation-error.pipe';
+import { loginGuard } from '../core/guards/login.guard';
+
+const routes: Routes = [
+  {
+    path: 'login',
+    title: 'InvitesMX -- Login',
+    component: LoginComponent,
+    canActivate: [loginGuard],
+  },
+  {
+    path: 'forgotPassword',
+    title: 'InvitesMX -- Forgot Password',
+    loadChildren: () =>
+      import('./forgot-password/forgot-password.module').then(
+        (m) => m.ForgotPasswordModule
+      ),
+  },
+  { path: '', pathMatch: 'full', redirectTo: '/auth/login' },
+];
 
 @NgModule({
-  imports: [
-    AuthRoutingModule,
-    SharedModule,
-    ValidationPipe,
-    ValidationErrorPipe,
-  ],
-  declarations: [
-    AuthRoutingModule.components,
-    LoginComponent,
-    ForgotPasswordComponent,
-  ],
+  imports: [RouterModule.forChild(routes)],
 })
 export class AuthModule {}

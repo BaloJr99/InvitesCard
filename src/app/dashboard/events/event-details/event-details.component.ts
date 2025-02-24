@@ -40,12 +40,23 @@ import {
 import { CommonModalService } from 'src/app/core/services/commonModal.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { ToastrService } from 'ngx-toastr';
+import { EventCardComponent } from './event-card/event-card.component';
+import { TableComponent } from '../../../shared/components/table/table.component';
+import { InviteModalComponent } from './invite-modal/invite-modal.component';
+import { InvitesImportModalComponent } from './invites-import-modal/invites-import-modal.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @Component({
   selector: 'app-event-details',
   templateUrl: './event-details.component.html',
   styleUrls: ['./event-details.component.css'],
-  standalone: false,
+  imports: [
+    SharedModule,
+    EventCardComponent,
+    TableComponent,
+    InviteModalComponent,
+    InvitesImportModalComponent,
+  ],
 })
 export class EventDetailsComponent implements OnInit {
   constructor(

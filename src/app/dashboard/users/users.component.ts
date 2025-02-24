@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { BehaviorSubject, combineLatest, map, mergeMap, tap } from 'rxjs';
 import { IEmitAction, ITable, ITableHeaders } from 'src/app/core/models/common';
 import { ButtonAction, RoleActionEvent } from 'src/app/core/models/enum';
@@ -11,13 +11,23 @@ import {
   IUserEventsInfo,
 } from 'src/app/core/models/users';
 import { UsersService } from 'src/app/core/services/users.service';
+import { CommonModule } from '@angular/common';
+import { TableComponent } from '../../shared/components/table/table.component';
+import { UserModalComponent } from './user-modal/user-modal.component';
+import { UserRoleComponent } from './user-role-modal/user-role.component';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrl: './users.component.css',
   encapsulation: ViewEncapsulation.None,
-  standalone: false,
+  imports: [
+    CommonModule,
+    RouterModule,
+    TableComponent,
+    UserModalComponent,
+    UserRoleComponent,
+  ],
 })
 export class UsersComponent {
   private users = new BehaviorSubject<IUserEventsInfo[]>([]);

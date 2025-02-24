@@ -1,12 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { BehaviorSubject, interval } from 'rxjs';
 import { ITimer } from 'src/app/core/models/invites';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-countdown',
   templateUrl: './countdown.component.html',
   styleUrls: ['./countdown.component.css'],
-  standalone: false,
+  imports: [CommonModule],
 })
 export class CountdownComponent {
   time$ = new BehaviorSubject<ITimer>({

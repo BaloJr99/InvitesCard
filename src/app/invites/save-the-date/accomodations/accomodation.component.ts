@@ -11,18 +11,20 @@ import {
   FormControlName,
   FormGroup,
   Validators,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { ISaveTheDateUserInvite } from 'src/app/core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { EventType } from 'src/app/core/models/enum';
 import { ISaveTheDateSetting } from 'src/app/core/models/settings';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-accomodation',
   templateUrl: './accomodation.component.html',
   styleUrls: ['./accomodation.component.css'],
-  standalone: false,
+  imports: [CommonModule, ReactiveFormsModule],
 })
 export class AccomodationComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

@@ -3,12 +3,13 @@ import {} from 'bootstrap';
 import { map } from 'rxjs';
 import { IZodErrors } from 'src/app/core/models/common';
 import { ErrorModalService } from 'src/app/core/services/error.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-error-modal',
   templateUrl: './error-modal.component.html',
   styleUrls: ['./error-modal.component.css'],
-  standalone: false,
+  imports: [CommonModule],
 })
 export class ErrorModalComponent {
   constructor(public errorService: ErrorModalService) {}

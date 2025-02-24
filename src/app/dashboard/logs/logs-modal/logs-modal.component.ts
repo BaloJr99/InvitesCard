@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { ILog } from 'src/app/core/models/logs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-log-modal',
   templateUrl: './logs-modal.component.html',
   styleUrls: ['./logs-modal.component.css'],
-  standalone: false,
+  imports: [CommonModule],
 })
 export class LogsModalComponent {
   private log = new BehaviorSubject<ILog | undefined>(undefined);

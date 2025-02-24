@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { IMessageResponse } from '../models/common';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class EnvironmentService {
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/environment';

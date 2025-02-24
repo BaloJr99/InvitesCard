@@ -17,12 +17,13 @@ import { CommonModalService } from 'src/app/core/services/commonModal.service';
 import { EventsService } from 'src/app/core/services/events.service';
 import { FileReaderService } from 'src/app/core/services/fileReader.service';
 import { FilesService } from 'src/app/core/services/files.service';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @Component({
   selector: 'app-files',
   templateUrl: './files.component.html',
   styleUrl: './files.component.css',
-  standalone: false,
+  imports: [SharedModule],
 })
 export class FilesComponent {
   events: IDropdownEvent[] = [];

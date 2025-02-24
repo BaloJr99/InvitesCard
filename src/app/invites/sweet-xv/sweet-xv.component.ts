@@ -14,13 +14,17 @@ import { ImageUsage } from '../../core/models/enum';
 import { IInviteSection, IUserInvite } from '../../core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { toLocalDate } from 'src/app/shared/utils/tools';
+import { CommonModule } from '@angular/common';
+import { CountdownComponent } from '../shared/countdown/countdown.component';
+import { ConfirmationComponent } from '../shared/confirmation/confirmation.component';
+import { SafePipe } from 'src/app/shared/pipes/safe.pipe';
 
 @Component({
   selector: 'app-sweet-xv',
   templateUrl: './sweet-xv.component.html',
   styleUrls: ['./sweet-xv.component.css'],
   encapsulation: ViewEncapsulation.None,
-  standalone: false,
+  imports: [CommonModule, CountdownComponent, ConfirmationComponent, SafePipe],
 })
 export class SweetXvComponent {
   counter = 0;

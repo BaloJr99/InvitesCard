@@ -7,13 +7,14 @@ import { EventsService } from 'src/app/core/services/events.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { createStatistics } from 'src/app/shared/utils/statistics/statistics';
 import { toLocalDate } from 'src/app/shared/utils/tools';
+import { SharedModule } from 'src/app/shared/shared.module';
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  standalone: false,
+  imports: [SharedModule],
 })
 export class HomeComponent {
   private eventSelected = new BehaviorSubject<string>('');

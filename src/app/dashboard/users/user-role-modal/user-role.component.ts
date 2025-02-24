@@ -11,6 +11,7 @@ import {
   FormControlName,
   FormGroup,
   Validators,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { RolesService } from 'src/app/core/services/roles.service';
@@ -19,12 +20,20 @@ import { IRole, IRoleAction } from 'src/app/core/models/roles';
 import { controlIsDuplicated } from 'src/app/shared/utils/validators/controlIsDuplicated';
 import { RoleActionEvent } from 'src/app/core/models/enum';
 import { BehaviorSubject, combineLatest, map, Observable, of, tap } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { ValidationPipe } from '../../../shared/pipes/validation.pipe';
+import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe';
 
 @Component({
   selector: 'app-user-role',
   templateUrl: './user-role.component.html',
   styleUrls: ['./user-role.component.css'],
-  standalone: false,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ValidationPipe,
+    ValidationErrorPipe,
+  ],
 })
 export class UserRoleComponent {
   @ViewChildren(FormControlName, { read: ElementRef })

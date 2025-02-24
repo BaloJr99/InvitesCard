@@ -6,7 +6,9 @@ import { IAuthUser } from '../models/users';
 import { IToken } from '../models/tokens';
 import { IMessageResponse } from '../models/common';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class AuthService {
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/auth';

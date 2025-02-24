@@ -1,16 +1,22 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, combineLatest, tap } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { FileReaderService } from 'src/app/core/services/fileReader.service';
 import { UsersService } from 'src/app/core/services/users.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile-modal',
   templateUrl: './profile-modal.component.html',
   styleUrls: ['./profile-modal.component.css'],
-  standalone: false,
+  imports: [CommonModule, ReactiveFormsModule],
 })
 export class ProfileModalComponent {
   private userId = new BehaviorSubject<string>('');

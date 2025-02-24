@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ILog } from '../models/logs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class LoggerService {
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/logs';
