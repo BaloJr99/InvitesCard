@@ -48,24 +48,23 @@ describe('Confirmation Component (Shallow Test)', () => {
       'sendConfirmation',
     ]);
     TestBed.configureTestingModule({
-      declarations: [ConfirmationComponent],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
-      providers: [
+    imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe, ConfirmationComponent],
+    providers: [
         { provide: InvitesService, useValue: invitesSpy },
         {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              data: {
-                paramMap: convertToParamMap({
-                  id: sweetXvUserInviteMockCopy.id,
-                }),
-              },
+            provide: ActivatedRoute,
+            useValue: {
+                snapshot: {
+                    data: {
+                        paramMap: convertToParamMap({
+                            id: sweetXvUserInviteMockCopy.id,
+                        }),
+                    },
+                },
             },
-          },
         },
-      ],
-    }).compileComponents();
+    ],
+}).compileComponents();
 
     invitesServiceSpy = TestBed.inject(
       InvitesService

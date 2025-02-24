@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { NavigationStart, Router } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
@@ -35,16 +35,13 @@ describe('Navbar Component (Integrated Test)', () => {
       'updateNotifications',
     ]);
 
-    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-    routerSpy.events = of(new NavigationStart(0, 'http://localhost:4200'));
-
     TestBed.configureTestingModule({
-      declarations: [NavbarComponent],
+      imports: [NavbarComponent],
       providers: [
         { provide: InvitesService, useValue: invitesSpy },
         { provide: TokenStorageService, useValue: tokenStorageSpy },
         { provide: CommonInvitesService, useValue: commonInvitesSpy },
-        { provide: Router, useValue: routerSpy },
+        provideRouter([]),
       ],
     }).compileComponents();
 
@@ -102,6 +99,7 @@ describe('Navbar Component (Integrated Test)', () => {
   });
 
   it('should call signOut, and navigate to /auth/login when logout is called', () => {
+    spyOn(router, 'navigate');
     const baseMenu = fixture.debugElement.query(By.css('.base-menu.menu'));
     const menuItems = baseMenu.queryAll(By.css('ul li'));
     const logoutButton = menuItems[1].query(By.css('button'));

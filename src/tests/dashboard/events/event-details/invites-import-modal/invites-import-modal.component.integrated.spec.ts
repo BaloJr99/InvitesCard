@@ -37,8 +37,7 @@ describe('Invites Import Modal Component (Integrated Test)', () => {
     const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['read']);
 
     TestBed.configureTestingModule({
-      declarations: [InvitesImportModalComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, InvitesImportModalComponent],
       providers: [
         { provide: ToastrService, useValue: toastrSpy },
         { provide: InvitesService, useValue: invitesSpy },

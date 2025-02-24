@@ -17,9 +17,9 @@ describe('Spinner Component (Integrated Test)', () => {
     });
 
     TestBed.configureTestingModule({
-      declarations: [SpinnerComponent],
-      providers: [{ provide: LoaderService, useValue: loaderSpy }],
-    }).compileComponents();
+    imports: [SpinnerComponent],
+    providers: [{ provide: LoaderService, useValue: loaderSpy }],
+}).compileComponents();
   }));
 
   beforeEach(() => {

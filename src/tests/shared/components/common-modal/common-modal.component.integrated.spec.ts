@@ -15,9 +15,9 @@ describe('Common Modal Component (Integrated Test)', () => {
     ]);
 
     TestBed.configureTestingModule({
-      declarations: [CommonModalComponent],
-      providers: [{ provide: CommonModalService, useValue: commonModalSpy }],
-    }).compileComponents();
+    imports: [CommonModalComponent],
+    providers: [{ provide: CommonModalService, useValue: commonModalSpy }],
+}).compileComponents();
   }));
 
   beforeEach(() => {

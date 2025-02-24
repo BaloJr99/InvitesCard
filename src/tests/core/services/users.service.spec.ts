@@ -150,10 +150,12 @@ describe('Users Service', () => {
   it('should call getUserProfile', () => {
     usersServiceSpy.getUserProfile.and.returnValue(of(userProfileMockCopy));
 
-    usersServiceSpy.getUserProfile(fullUserMockCopy.id).subscribe((response) => {
-      expect(response).toEqual(userProfileMockCopy);
-      expect(response.id).toEqual(fullUserMockCopy.id);
-    });
+    usersServiceSpy
+      .getUserProfile(fullUserMockCopy.id)
+      .subscribe((response) => {
+        expect(response).toEqual(userProfileMockCopy);
+        expect(response.id).toEqual(fullUserMockCopy.id);
+      });
 
     expect(usersServiceSpy.getUserProfile)
       .withContext('Expected getUserProfile to have been called')
@@ -175,7 +177,9 @@ describe('Users Service', () => {
   });
 
   it('should call uploadProfilePhoto', () => {
-    usersServiceSpy.uploadProfilePhoto.and.returnValue(of(messageResponseMockCopy));
+    usersServiceSpy.uploadProfilePhoto.and.returnValue(
+      of(messageResponseMockCopy)
+    );
 
     usersServiceSpy
       .uploadProfilePhoto(userProfilePhotoMockCopy)

@@ -82,8 +82,12 @@ describe('Save The Date Settings (Integrated Test)', () => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [SaveTheDateSettingsComponent],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        SaveTheDateSettingsComponent,
+      ],
       providers: [
         { provide: SettingsService, useValue: settingsSpy },
         { provide: ToastrService, useValue: toastrSpy },

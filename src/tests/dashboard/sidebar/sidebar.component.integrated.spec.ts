@@ -28,8 +28,7 @@ describe('Sidebar Component (Integrated Test)', () => {
     ]);
 
     TestBed.configureTestingModule({
-      declarations: [SidebarComponent],
-      imports: [RouterLink],
+      imports: [RouterLink, SidebarComponent],
       providers: [
         { provide: TokenStorageService, useValue: tokenStorageSpy },
         provideRouter([]),

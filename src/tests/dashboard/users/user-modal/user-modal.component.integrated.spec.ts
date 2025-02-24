@@ -74,8 +74,12 @@ describe('User Modal Component (Integrated Test)', () => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [UserModalComponent],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        UserModalComponent,
+      ],
       providers: [
         { provide: UsersService, useValue: usersSpy },
         { provide: RolesService, useValue: rolesSpy },

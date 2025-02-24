@@ -9,8 +9,8 @@ describe('Table Component (Integrated Test)', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [FilterComponent, TableComponent],
-    }).compileComponents();
+    imports: [FilterComponent, TableComponent],
+}).compileComponents();
   }));
 
   beforeEach(() => {

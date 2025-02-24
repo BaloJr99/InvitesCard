@@ -46,17 +46,22 @@ describe('Login Component (Integrated Test)', () => {
     const tokenSpy = jasmine.createSpyObj('TokenStorageService', ['saveToken']);
 
     TestBed.configureTestingModule({
-      declarations: [LoginComponent],
-      imports: [ReactiveFormsModule, RouterLink, ValidationPipe, ValidationErrorPipe],
+      imports: [
+        ReactiveFormsModule,
+        RouterLink,
+        ValidationPipe,
+        ValidationErrorPipe,
+        LoginComponent,
+      ],
       providers: [
         { provide: AuthService, useValue: authSpy },
         { provide: TokenStorageService, useValue: tokenSpy },
         provideRouter([
           {
             path: 'dashboard',
-            loadChildren: () =>
-              import('../../../app/dashboard/dashboard.module').then(
-                (m) => m.DashboardModule
+            loadComponent: () =>
+              import('../../../app/dashboard/dashboard.component').then(
+                (m) => m.DashboardComponent
               ),
           },
         ]),
@@ -75,7 +80,10 @@ describe('Login Component (Integrated Test)', () => {
   it('authService loginAccount() should called', () => {
     authServiceSpy.loginAccount.and.returnValue(of(tokenMockCopy));
 
-    updateFormUsingEvent(loginDataMockCopy.usernameOrEmail, loginDataMockCopy.password);
+    updateFormUsingEvent(
+      loginDataMockCopy.usernameOrEmail,
+      loginDataMockCopy.password
+    );
     fixture.detectChanges();
 
     const button = fixture.debugElement.query(By.css('button'));
@@ -88,16 +96,19 @@ describe('Login Component (Integrated Test)', () => {
   });
 
   it('should route to dashboard if login successfully', () => {
-    const navigateSpy = spyOn(router, 'navigate');
+    spyOn(router, 'navigate');
     authServiceSpy.loginAccount.and.returnValue(of(tokenMockCopy));
-    updateFormUsingEvent(loginDataMockCopy.usernameOrEmail, loginDataMockCopy.password);
+    updateFormUsingEvent(
+      loginDataMockCopy.usernameOrEmail,
+      loginDataMockCopy.password
+    );
     fixture.detectChanges();
 
     const button = fixture.debugElement.query(By.css('button'));
     button.nativeElement.click();
     fixture.detectChanges();
 
-    expect(navigateSpy)
+    expect(router.navigate)
       .withContext('Should redirect to dashboard')
       .toHaveBeenCalledWith(['/dashboard']);
   });
@@ -113,7 +124,10 @@ describe('Login Component (Integrated Test)', () => {
       );
     });
 
-    updateFormUsingEvent(loginDataMockCopy.usernameOrEmail, loginDataMockCopy.password);
+    updateFormUsingEvent(
+      loginDataMockCopy.usernameOrEmail,
+      loginDataMockCopy.password
+    );
     fixture.detectChanges();
 
     const button = fixture.debugElement.query(By.css('button'));

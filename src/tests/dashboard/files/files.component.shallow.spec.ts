@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { EventsService } from 'src/app/core/services/events.service';
@@ -53,13 +54,13 @@ describe('Files Component (Shallow Test)', () => {
     const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [FilesComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, FilesComponent],
       providers: [
         { provide: EventsService, useValue: eventsSpy },
         { provide: FilesService, useValue: filesSpy },
         { provide: ToastrService, useValue: toastrSpy },
         { provide: FileReaderService, useValue: fileReaderSpy },
+        provideRouter([]),
       ],
     });
 

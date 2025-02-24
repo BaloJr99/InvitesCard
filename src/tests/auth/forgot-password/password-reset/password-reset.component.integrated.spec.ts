@@ -5,7 +5,6 @@ import {
   tick,
   waitForAsync,
 } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import {
   ActivatedRoute,
@@ -18,6 +17,7 @@ import { PasswordResetComponent } from 'src/app/auth/forgot-password/password-re
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
 import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   fullUserMock,
@@ -52,12 +52,11 @@ describe('Password Reset Component (Integrated Test)', () => {
     const authSpy = jasmine.createSpyObj('AuthService', ['resetPassword']);
 
     TestBed.configureTestingModule({
-      declarations: [PasswordResetComponent],
       imports: [
-        ReactiveFormsModule,
-        RouterLink,
+        SharedModule,
         ValidationPipe,
         ValidationErrorPipe,
+        PasswordResetComponent,
       ],
       providers: [
         { provide: AuthService, useValue: authSpy },

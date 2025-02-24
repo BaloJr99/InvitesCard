@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { EventsService } from 'src/app/core/services/events.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
@@ -26,10 +27,11 @@ describe('HomeComponent (Integrated Test)', () => {
     ]);
 
     TestBed.configureTestingModule({
-      declarations: [HomeComponent],
+      imports: [HomeComponent],
       providers: [
         { provide: InvitesService, useValue: invitesSpy },
         { provide: EventsService, useValue: eventsSpy },
+        provideRouter([]),
       ],
     }).compileComponents();
 
@@ -42,7 +44,9 @@ describe('HomeComponent (Integrated Test)', () => {
   }));
 
   beforeEach(() => {
-    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMockCopy));
+    eventsServiceSpy.getDropdownEvents.and.returnValue(
+      of(dropdownEventsMockCopy)
+    );
     invitesServiceSpy.getAllInvites.and.returnValue(
       of([{ ...dashboardInvitesMockCopy }])
     );

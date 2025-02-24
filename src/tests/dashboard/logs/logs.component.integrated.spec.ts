@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { LoggerService } from 'src/app/core/services/logger.service';
 import { LogsModalComponent } from 'src/app/dashboard/logs/logs-modal/logs-modal.component';
@@ -19,13 +20,16 @@ describe('Logs Component (Integrated Test)', () => {
     const loggerSpy = jasmine.createSpyObj('LoggerService', ['getLogs']);
 
     TestBed.configureTestingModule({
-      declarations: [
+      imports: [
         FilterComponent,
         LogsComponent,
         LogsModalComponent,
         TableComponent,
       ],
-      providers: [{ provide: LoggerService, useValue: loggerSpy }],
+      providers: [
+        { provide: LoggerService, useValue: loggerSpy },
+        provideRouter([]),
+      ],
     }).compileComponents();
 
     loggerServiceSpy = TestBed.inject(

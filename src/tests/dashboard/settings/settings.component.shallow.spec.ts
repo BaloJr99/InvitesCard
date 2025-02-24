@@ -1,6 +1,9 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { importProvidersFrom, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
+import { ToastrModule } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { EventsService } from 'src/app/core/services/events.service';
 import { SettingsComponent } from 'src/app/dashboard/settings/settings.component';
@@ -31,10 +34,18 @@ describe('Settings Component (Shallow Test)', () => {
     ]);
 
     TestBed.configureTestingModule({
-      declarations: [SettingsComponent],
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [ValidationPipe, ValidationErrorPipe],
-      providers: [{ provide: EventsService, useValue: eventsSpy }],
+      imports: [ValidationPipe, ValidationErrorPipe, SettingsComponent],
+      providers: [
+        { provide: EventsService, useValue: eventsSpy },
+        provideRouter([]),
+        provideHttpClient(),
+        importProvidersFrom(
+          ToastrModule.forRoot({
+            positionClass: 'toast-bottom-right',
+          })
+        ),
+      ],
     }).compileComponents();
 
     eventsServiceSpy = TestBed.inject(

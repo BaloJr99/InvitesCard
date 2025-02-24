@@ -85,8 +85,13 @@ describe('Profile Component (Integrated Test)', () => {
     const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [ProfileComponent, ProfileModalComponent],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        ProfileComponent,
+        ProfileModalComponent,
+      ],
       providers: [
         {
           provide: ActivatedRoute,

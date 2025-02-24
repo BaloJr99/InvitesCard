@@ -143,8 +143,12 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
     const eventsSpy = jasmine.createSpyObj('EventsService', ['getEventById']);
 
     TestBed.configureTestingModule({
-      declarations: [SweetXvSettingsComponent],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        SweetXvSettingsComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: SettingsService, useValue: settingsSpy },

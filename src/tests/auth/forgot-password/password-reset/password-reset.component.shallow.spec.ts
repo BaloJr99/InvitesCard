@@ -33,8 +33,12 @@ describe('Password Reset Component (Shallow Test)', () => {
     const authSpy = jasmine.createSpyObj('AuthService', ['resetPassword']);
 
     TestBed.configureTestingModule({
-      declarations: [PasswordResetComponent],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        PasswordResetComponent,
+      ],
       providers: [
         { provide: AuthService, useValue: authSpy },
         {

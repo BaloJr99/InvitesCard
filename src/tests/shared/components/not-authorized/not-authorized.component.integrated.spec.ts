@@ -13,15 +13,15 @@ describe('Not Authorized Component (Integrated Test)', () => {
     const tokenSpy = jasmine.createSpyObj('TokenStorageService', ['signOut']);
 
     TestBed.configureTestingModule({
-      declarations: [NotAuthorizedComponent],
+      imports: [NotAuthorizedComponent],
       providers: [
         { provide: TokenStorageService, useValue: tokenSpy },
         provideRouter([
           {
             path: 'auth/login',
-            loadChildren: () =>
-              import('../../../../app/auth/auth.module').then(
-                (m) => m.AuthModule
+            loadComponent: () =>
+              import('../../../../app/auth/login/login.component').then(
+                (m) => m.LoginComponent
               ),
           },
         ]),
@@ -53,13 +53,13 @@ describe('Not Authorized Component (Integrated Test)', () => {
   });
 
   it('should route to auth login', () => {
-    const navigateSpy = spyOn(router, 'navigate');
+    spyOn(router, 'navigate');
 
     const button = fixture.debugElement.query(By.css('button'));
     button.nativeElement.click();
     fixture.detectChanges();
 
-    expect(navigateSpy)
+    expect(router.navigate)
       .withContext('Should redirect to auth/login')
       .toHaveBeenCalledWith(['/auth/login']);
   });

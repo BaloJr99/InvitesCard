@@ -9,10 +9,10 @@ import {
 } from 'src/tests/mocks/mocks';
 import { deepCopy } from 'src/app/shared/utils/tools';
 
-const fullUserMockCopy = deepCopy(fullUserMock)
-const loginDataMockCopy = deepCopy(loginDataMock)
-const messageResponseMockCopy = deepCopy(messageResponseMock)
-const tokenMockCopy = deepCopy(tokenMock)
+const fullUserMockCopy = deepCopy(fullUserMock);
+const loginDataMockCopy = deepCopy(loginDataMock);
+const messageResponseMockCopy = deepCopy(messageResponseMock);
+const tokenMockCopy = deepCopy(tokenMock);
 
 // Create a test suite for the AuthService
 describe('AuthService', () => {
@@ -56,7 +56,9 @@ describe('AuthService', () => {
   });
 
   it('should call sendResetPassword', () => {
-    authServiceSpy.sendResetPassword.and.returnValue(of(messageResponseMockCopy));
+    authServiceSpy.sendResetPassword.and.returnValue(
+      of(messageResponseMockCopy)
+    );
 
     authServiceSpy
       .sendResetPassword(loginDataMockCopy.usernameOrEmail)

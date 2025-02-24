@@ -64,8 +64,12 @@ describe('User Modal Component (Shallow Test)', () => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [UserModalComponent],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        UserModalComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: UsersService, useValue: usersSpy },

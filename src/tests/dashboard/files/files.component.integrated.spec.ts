@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { CommonModalResponse, ImageUsage } from 'src/app/core/models/enum';
@@ -76,14 +77,14 @@ describe('Files Component (Integrated Test)', () => {
     const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['open']);
 
     TestBed.configureTestingModule({
-      declarations: [FilesComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, FilesComponent],
       providers: [
         { provide: EventsService, useValue: eventsSpy },
         { provide: FilesService, useValue: filesSpy },
         { provide: FileReaderService, useValue: fileReaderSpy },
         { provide: ToastrService, useValue: toastrSpy },
         { provide: CommonModalService, useValue: commonModalSpy },
+        provideRouter([]),
       ],
     });
 
@@ -103,7 +104,9 @@ describe('Files Component (Integrated Test)', () => {
 
   beforeEach(() => {
     filesServiceSpy.getFilesByEvent.and.returnValue(of(downloadFileMockCopy));
-    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMockCopy));
+    eventsServiceSpy.getDropdownEvents.and.returnValue(
+      of(dropdownEventsMockCopy)
+    );
     fixture = TestBed.createComponent(FilesComponent);
     fixture.detectChanges();
   });

@@ -64,7 +64,9 @@ describe('EventsService', () => {
   });
 
   it('should call getDropdownEvents', () => {
-    eventsServiceSpy.getDropdownEvents.and.returnValue(of(dropdownEventsMockCopy));
+    eventsServiceSpy.getDropdownEvents.and.returnValue(
+      of(dropdownEventsMockCopy)
+    );
 
     eventsServiceSpy.getDropdownEvents().subscribe((response) => {
       expect(response).toBe(dropdownEventsMockCopy);
@@ -76,7 +78,9 @@ describe('EventsService', () => {
   });
 
   it('should call getEventSettings', () => {
-    eventsServiceSpy.getEventSettings.and.returnValue(of(eventInformationMockCopy));
+    eventsServiceSpy.getEventSettings.and.returnValue(
+      of(eventInformationMockCopy)
+    );
 
     eventsServiceSpy
       .getEventSettings(fullEventsMockCopy.id, [])
@@ -111,9 +115,11 @@ describe('EventsService', () => {
   it('should call isDeadlineMet', () => {
     eventsServiceSpy.isDeadlineMet.and.returnValue(of(true));
 
-    eventsServiceSpy.isDeadlineMet(fullEventsMockCopy.id).subscribe((response) => {
-      expect(response).toBeTrue();
-    });
+    eventsServiceSpy
+      .isDeadlineMet(fullEventsMockCopy.id)
+      .subscribe((response) => {
+        expect(response).toBeTrue();
+      });
 
     expect(eventsServiceSpy.isDeadlineMet).toHaveBeenCalledOnceWith(
       fullEventsMockCopy.id
@@ -123,10 +129,12 @@ describe('EventsService', () => {
   it('should call getEventById', () => {
     eventsServiceSpy.getEventById.and.returnValue(of(fullEventsMockCopy));
 
-    eventsServiceSpy.getEventById(fullEventsMockCopy.id).subscribe((response) => {
-      expect(response).toBe(fullEventsMockCopy);
-      expect(response.id).toEqual(fullEventsMockCopy.id);
-    });
+    eventsServiceSpy
+      .getEventById(fullEventsMockCopy.id)
+      .subscribe((response) => {
+        expect(response).toBe(fullEventsMockCopy);
+        expect(response.id).toEqual(fullEventsMockCopy.id);
+      });
 
     expect(eventsServiceSpy.getEventById).toHaveBeenCalledOnceWith(
       fullEventsMockCopy.id
@@ -165,9 +173,11 @@ describe('EventsService', () => {
   it('should call deleteEvent', () => {
     eventsServiceSpy.deleteEvent.and.returnValue(of(messageResponseMockCopy));
 
-    eventsServiceSpy.deleteEvent(fullEventsMockCopy.id).subscribe((response) => {
-      expect(response).toBe(messageResponseMockCopy);
-    });
+    eventsServiceSpy
+      .deleteEvent(fullEventsMockCopy.id)
+      .subscribe((response) => {
+        expect(response).toBe(messageResponseMockCopy);
+      });
 
     expect(eventsServiceSpy.deleteEvent).toHaveBeenCalledOnceWith(
       fullEventsMockCopy.id

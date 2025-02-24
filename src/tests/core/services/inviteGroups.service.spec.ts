@@ -80,7 +80,10 @@ describe('Invite Groups Service', () => {
     );
 
     inviteGroupsServiceSpy
-      .updateInviteGroup(fullInvitesGroupsMockCopy, fullInvitesGroupsMockCopy.id)
+      .updateInviteGroup(
+        fullInvitesGroupsMockCopy,
+        fullInvitesGroupsMockCopy.id
+      )
       .subscribe((response) => {
         expect(response).toEqual(messageResponseMockCopy);
       });

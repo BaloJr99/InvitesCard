@@ -1,6 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { LoggerService } from 'src/app/core/services/logger.service';
 import { LogsComponent } from 'src/app/dashboard/logs/logs.component';
@@ -17,8 +18,11 @@ describe('Logs Component (Shallow Test)', () => {
     const loggerSpy = jasmine.createSpyObj('LoggerService', ['getLogs']);
 
     TestBed.configureTestingModule({
-      declarations: [LogsComponent],
-      providers: [{ provide: LoggerService, useValue: loggerSpy }],
+      imports: [LogsComponent],
+      providers: [
+        { provide: LoggerService, useValue: loggerSpy },
+        provideRouter([]),
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

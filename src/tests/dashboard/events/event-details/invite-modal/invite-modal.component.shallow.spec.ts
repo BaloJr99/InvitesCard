@@ -55,8 +55,12 @@ describe('Invite Modal Component (Shallow Test)', () => {
     const invitesSpy = jasmine.createSpyObj('InviteGroupsService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [InviteModalComponent],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        InviteModalComponent,
+      ],
       providers: [
         { provide: ToastrService, useValue: toastrSpy },
         { provide: InvitesService, useValue: invitesSpy },

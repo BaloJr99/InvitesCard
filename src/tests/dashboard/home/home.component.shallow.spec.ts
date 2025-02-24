@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { EventsService } from 'src/app/core/services/events.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
@@ -36,10 +37,11 @@ describe('HomeComponent (Shallow Test)', () => {
     ]);
 
     TestBed.configureTestingModule({
-      declarations: [HomeComponent],
+      imports: [HomeComponent],
       providers: [
         { provide: InvitesService, useValue: invitesSpy },
         { provide: EventsService, useValue: eventsSpy },
+        provideRouter([]),
       ],
     }).compileComponents();
 

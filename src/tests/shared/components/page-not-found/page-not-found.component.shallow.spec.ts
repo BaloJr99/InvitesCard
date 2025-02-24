@@ -8,14 +8,14 @@ describe('Page Not Found (Shallow Test)', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PageNotFoundComponent],
+      imports: [PageNotFoundComponent],
       providers: [
         provideRouter([
           {
             path: 'dashboard',
-            loadChildren: () =>
-              import('../../../../app/dashboard/dashboard.module').then(
-                (m) => m.DashboardModule
+            loadComponent: () =>
+              import('src/app/dashboard/dashboard.component').then(
+                (m) => m.DashboardComponent
               ),
           },
         ]),

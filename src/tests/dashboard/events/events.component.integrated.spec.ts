@@ -33,8 +33,7 @@ describe('Events Component (Integrated Test)', () => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [EventsComponent],
-      imports: [DateFormatPipe, RouterLink],
+      imports: [DateFormatPipe, RouterLink, EventsComponent],
       providers: [
         { provide: EventsService, useValue: eventsSpy },
         { provide: TokenStorageService, useValue: tokenSpy },

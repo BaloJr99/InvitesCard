@@ -34,8 +34,7 @@ describe('Profile Modal Component (Integrated Test)', () => {
     ]);
 
     TestBed.configureTestingModule({
-      declarations: [ProfileModalComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ProfileModalComponent],
       providers: [
         { provide: UsersService, useValue: userSpy },
         { provide: ToastrService, useValue: toastrSpy },

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 import { LoginComponent } from 'src/app/auth/login/login.component';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
@@ -34,11 +35,16 @@ describe('Login Component (Shallow Test)', () => {
     const tokenSpy = jasmine.createSpyObj('TokenStorageService', ['saveToken']);
 
     TestBed.configureTestingModule({
-      declarations: [LoginComponent],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        LoginComponent,
+      ],
       providers: [
         { provide: AuthService, useValue: authSpy },
         { provide: TokenStorageService, useValue: tokenSpy },
+        provideRouter([]),
       ],
     }).compileComponents();
   }));

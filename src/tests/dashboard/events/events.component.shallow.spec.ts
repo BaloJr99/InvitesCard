@@ -1,7 +1,9 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { importProvidersFrom, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
+import { ToastrModule } from 'ngx-toastr';
 import { BehaviorSubject } from 'rxjs';
 import { IDashboardEvent } from 'src/app/core/models/events';
 import { EventsService } from 'src/app/core/services/events.service';
@@ -27,13 +29,18 @@ describe('Events Component (Shallow Test)', () => {
     ]);
 
     TestBed.configureTestingModule({
-      declarations: [EventsComponent],
-      imports: [DateFormatPipe],
+      imports: [DateFormatPipe, EventsComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: EventsService, useValue: eventsSpy },
         { provide: TokenStorageService, useValue: tokenStorageSpy },
+        importProvidersFrom(
+          ToastrModule.forRoot({
+            positionClass: 'toast-bottom-right',
+          })
+        ),
         provideRouter([]),
+        provideHttpClient(),
       ],
     });
 

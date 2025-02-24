@@ -65,8 +65,12 @@ describe('Invite Modal Component (Integrated Test)', () => {
     ]);
 
     TestBed.configureTestingModule({
-      declarations: [InviteModalComponent],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        InviteModalComponent,
+      ],
       providers: [
         { provide: ToastrService, useValue: toastrSpy },
         { provide: InvitesService, useValue: invitesSpy },

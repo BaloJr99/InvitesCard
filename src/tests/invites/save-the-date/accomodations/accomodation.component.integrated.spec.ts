@@ -27,22 +27,21 @@ describe('Accomodation Component (Integrated Test)', () => {
     );
 
     TestBed.configureTestingModule({
-      declarations: [AccomodationComponent],
-      imports: [ReactiveFormsModule],
-      providers: [
+    imports: [ReactiveFormsModule, AccomodationComponent],
+    providers: [
         { provide: InvitesService, useValue: invitesSpy },
         {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: convertToParamMap({
-                id: saveTheDateUserInviteMockCopy.id,
-              }),
+            provide: ActivatedRoute,
+            useValue: {
+                snapshot: {
+                    paramMap: convertToParamMap({
+                        id: saveTheDateUserInviteMockCopy.id,
+                    }),
+                },
             },
-          },
         },
-      ],
-    }).compileComponents();
+    ],
+}).compileComponents();
 
     invitesServiceSpy = TestBed.inject(
       InvitesService

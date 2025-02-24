@@ -59,7 +59,9 @@ describe('Invites Service', () => {
   });
 
   it('should call getAllInvites', () => {
-    invitesServiceSpy.getAllInvites.and.returnValue(of([dashboardInvitesMockCopy]));
+    invitesServiceSpy.getAllInvites.and.returnValue(
+      of([dashboardInvitesMockCopy])
+    );
 
     invitesServiceSpy.getAllInvites().subscribe((response) => {
       expect(response).toEqual([dashboardInvitesMockCopy]);
@@ -87,9 +89,11 @@ describe('Invites Service', () => {
   it('should call createInvite', () => {
     invitesServiceSpy.createInvite.and.returnValue(of(messageResponseMockCopy));
 
-    invitesServiceSpy.createInvite(upsertInviteMockCopy).subscribe((response) => {
-      expect(response).toBe(messageResponseMockCopy);
-    });
+    invitesServiceSpy
+      .createInvite(upsertInviteMockCopy)
+      .subscribe((response) => {
+        expect(response).toBe(messageResponseMockCopy);
+      });
 
     expect(invitesServiceSpy.createInvite)
       .withContext('Expected createInvite to have been called')
@@ -125,7 +129,9 @@ describe('Invites Service', () => {
   });
 
   it('should call sendConfirmation', () => {
-    invitesServiceSpy.sendConfirmation.and.returnValue(of(messageResponseMockCopy));
+    invitesServiceSpy.sendConfirmation.and.returnValue(
+      of(messageResponseMockCopy)
+    );
 
     invitesServiceSpy
       .sendConfirmation(
@@ -161,11 +167,15 @@ describe('Invites Service', () => {
   });
 
   it('should call bulkInvites', () => {
-    invitesServiceSpy.bulkInvites.and.returnValue(of(bulkMessageResponseMockCopy));
+    invitesServiceSpy.bulkInvites.and.returnValue(
+      of(bulkMessageResponseMockCopy)
+    );
 
-    invitesServiceSpy.bulkInvites([bulkInvitesMockCopy]).subscribe((response) => {
-      expect(response).toBe(bulkMessageResponseMockCopy);
-    });
+    invitesServiceSpy
+      .bulkInvites([bulkInvitesMockCopy])
+      .subscribe((response) => {
+        expect(response).toBe(bulkMessageResponseMockCopy);
+      });
 
     expect(invitesServiceSpy.bulkInvites)
       .withContext('Expected bulkInvites to have been called')

@@ -68,14 +68,16 @@ describe('Event Details Component (Integrated Test)', () => {
     const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
         TableComponent,
         EventCardComponent,
         EventDetailsComponent,
         InvitesImportModalComponent,
         InviteModalComponent,
       ],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         {
           provide: ActivatedRoute,

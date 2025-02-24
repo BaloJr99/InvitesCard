@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { RolesService } from 'src/app/core/services/roles.service';
@@ -34,18 +34,21 @@ describe('Users Component (Integrated Test)', () => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
         FilterComponent,
         TableComponent,
         UserModalComponent,
         UserRoleComponent,
         UsersComponent,
       ],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
       providers: [
         { provide: UsersService, useValue: usersSpy },
         { provide: RolesService, useValue: rolesSpy },
         { provide: ToastrService, useValue: toastrSpy },
+        provideRouter([]),
       ],
     }).compileComponents();
 

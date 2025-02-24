@@ -25,8 +25,7 @@ describe('Profile Modal Component (Shallow Test)', () => {
     const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [ProfileModalComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, ProfileModalComponent],
       providers: [
         { provide: UsersService, useValue: userSpy },
         { provide: ToastrService, useValue: toastrSpy },

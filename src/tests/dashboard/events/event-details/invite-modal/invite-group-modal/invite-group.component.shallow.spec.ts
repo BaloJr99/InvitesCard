@@ -27,8 +27,12 @@ describe('Invite Group Component (Shallow Test)', () => {
     const inviteGroupsSpy = jasmine.createSpyObj('InviteGroupsService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [InviteGroupComponent],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        InviteGroupComponent,
+      ],
       providers: [
         { provide: ToastrService, useValue: toastrSpy },
         { provide: InviteGroupsService, useValue: inviteGroupsSpy },

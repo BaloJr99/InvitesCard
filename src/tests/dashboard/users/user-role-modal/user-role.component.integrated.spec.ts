@@ -47,8 +47,12 @@ describe('User Role Component (Integrated Test)', () => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [UserRoleComponent],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        UserRoleComponent,
+      ],
       providers: [
         { provide: RolesService, useValue: rolesSpy },
         { provide: ToastrService, useValue: toastrSpy },

@@ -65,8 +65,12 @@ describe('Profile Component (Shallow Test)', () => {
     });
 
     TestBed.configureTestingModule({
-      declarations: [ProfileComponent],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        ProfileComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {

@@ -76,9 +76,11 @@ describe('Roles Service', () => {
   it('should call updateRole', () => {
     rolesServiceSpy.updateRole.and.returnValue(of(messageResponseMockCopy));
 
-    rolesServiceSpy.updateRole(roleMockCopy, roleMockCopy.id).subscribe((response) => {
-      expect(response).toEqual(messageResponseMockCopy);
-    });
+    rolesServiceSpy
+      .updateRole(roleMockCopy, roleMockCopy.id)
+      .subscribe((response) => {
+        expect(response).toEqual(messageResponseMockCopy);
+      });
 
     expect(rolesServiceSpy.updateRole)
       .withContext('Expected updateRole to have been called')

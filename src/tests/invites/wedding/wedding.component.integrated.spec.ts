@@ -32,24 +32,21 @@ describe('Wedding Component (Integrated Test)', () => {
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['getInvite']);
 
     TestBed.configureTestingModule({
-      declarations: [
-        CountdownComponent,
+    imports: [SafePipe, CountdownComponent,
         ConfirmationComponent,
-        WeddingComponent,
-      ],
-      imports: [SafePipe],
-      providers: [
+        WeddingComponent],
+    providers: [
         {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({ id: weddingUserInviteMockCopy.id }),
-          },
+            provide: ActivatedRoute,
+            useValue: {
+                params: of({ id: weddingUserInviteMockCopy.id }),
+            },
         },
         { provide: SettingsService, useValue: settingsSpy },
         { provide: FilesService, useValue: filesSpy },
         { provide: InvitesService, useValue: invitesSpy },
-      ],
-    }).compileComponents();
+    ],
+}).compileComponents();
 
     invitesServiceSpy = TestBed.inject(
       InvitesService

@@ -23,22 +23,22 @@ describe('Invites Component (Integrated Test)', () => {
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [InvitesComponent, SweetXvComponent, SaveTheDateComponent],
-      providers: [
+    imports: [InvitesComponent, SweetXvComponent, SaveTheDateComponent,],
+    providers: [
         {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              data: { invite: { eventType: EventType.Xv } },
+            provide: ActivatedRoute,
+            useValue: {
+                snapshot: {
+                    data: { invite: { eventType: EventType.Xv } },
+                },
+                params: of({ id: newInviteMockCopy.id }),
             },
-            params: of({ id: newInviteMockCopy.id }),
-          },
         },
         { provide: SettingsService, useValue: settingsSpy },
         { provide: FilesService, useValue: filesSpy },
         { provide: InvitesService, useValue: invitesSpy },
-      ],
-    }).compileComponents();
+    ],
+}).compileComponents();
   }));
 
   beforeEach(() => {

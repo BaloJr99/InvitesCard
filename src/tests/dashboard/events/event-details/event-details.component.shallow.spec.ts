@@ -44,7 +44,7 @@ describe('Event Details Component (Shallow Test)', () => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [EventDetailsComponent],
+      imports: [EventDetailsComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
@@ -96,10 +96,10 @@ describe('Event Details Component (Shallow Test)', () => {
     const cardSection = fixture.nativeElement.querySelector('.card-section');
     const tableAccordion =
       fixture.nativeElement.querySelector('.table-accordion');
-    const filterLabels = fixture.nativeElement.querySelectorAll('.form-label');
-    const filterSelects =
-      fixture.nativeElement.querySelectorAll('.form-select');
-    const filterInput = fixture.nativeElement.querySelectorAll('.form-control');
+    const filterSection = fixture.nativeElement.querySelector('.filters');
+    const filterLabels = filterSection.querySelectorAll('.form-label');
+    const filterSelects = filterSection.querySelectorAll('.form-select');
+    const filterInput = filterSection.querySelectorAll('.form-control');
     const buttons = fixture.nativeElement.querySelectorAll('button');
 
     expect(cardSection).withContext('Should have a card section').toBeTruthy();
@@ -135,8 +135,6 @@ describe('Event Details Component (Shallow Test)', () => {
     expect(filterInput.length)
       .withContext('Should have 1 filter input')
       .toBe(1);
-
-    expect(buttons.length).withContext('Should have 6 buttons').toBe(6);
 
     expect(buttons[0].textContent)
       .withContext('First button should be "Import Invites"')

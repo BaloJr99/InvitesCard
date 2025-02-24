@@ -23,22 +23,22 @@ describe('Accomodation Component (Shallow Test)', () => {
     );
 
     TestBed.configureTestingModule({
-      declarations: [AccomodationComponent],
-      providers: [
+    imports: [AccomodationComponent],
+    providers: [
         { provide: InvitesService, useValue: invitesSpy },
         {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: convertToParamMap({
-                id: saveTheDateUserInviteMockCopy.id,
-              }),
+            provide: ActivatedRoute,
+            useValue: {
+                snapshot: {
+                    paramMap: convertToParamMap({
+                        id: saveTheDateUserInviteMockCopy.id,
+                    }),
+                },
             },
-          },
         },
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
+    ],
+    schemas: [NO_ERRORS_SCHEMA],
+}).compileComponents();
   }));
 
   beforeEach(() => {

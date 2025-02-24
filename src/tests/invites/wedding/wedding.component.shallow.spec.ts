@@ -33,21 +33,20 @@ describe('Wedding Component (Shallow Test)', () => {
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['getInvite']);
 
     TestBed.configureTestingModule({
-      declarations: [WeddingComponent],
-      imports: [SafePipe],
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [
+    imports: [SafePipe, WeddingComponent],
+    schemas: [NO_ERRORS_SCHEMA],
+    providers: [
         {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({ id: weddingUserInviteMockCopy.id }),
-          },
+            provide: ActivatedRoute,
+            useValue: {
+                params: of({ id: weddingUserInviteMockCopy.id }),
+            },
         },
         { provide: SettingsService, useValue: settingsSpy },
         { provide: FilesService, useValue: filesSpy },
         { provide: InvitesService, useValue: invitesSpy },
-      ],
-    }).compileComponents();
+    ],
+}).compileComponents();
 
     invitesServiceSpy = TestBed.inject(
       InvitesService

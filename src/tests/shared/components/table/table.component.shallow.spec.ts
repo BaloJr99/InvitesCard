@@ -19,12 +19,12 @@ describe('Table Component (Shallow Test)', () => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [TableComponent],
-      providers: [
+    imports: [TableComponent],
+    providers: [
         { provide: InvitesService, useValue: invitesSpy },
         { provide: ToastrService, useValue: toastrSpy },
-      ],
-    }).compileComponents();
+    ],
+}).compileComponents();
   }));
 
   beforeEach(() => {

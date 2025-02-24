@@ -11,12 +11,12 @@ describe('Not Authorized Component (Shallow Test)', () => {
     const tokenSpy = jasmine.createSpyObj('TokenStorageService', ['signOut']);
 
     TestBed.configureTestingModule({
-      declarations: [NotAuthorizedComponent],
-      providers: [
+    imports: [NotAuthorizedComponent],
+    providers: [
         provideRouter([]),
         { provide: TokenStorageService, useValue: tokenSpy },
-      ],
-    }).compileComponents();
+    ],
+}).compileComponents();
   }));
 
   beforeEach(() => {

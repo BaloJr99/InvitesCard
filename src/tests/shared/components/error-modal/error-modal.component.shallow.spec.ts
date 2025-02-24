@@ -16,9 +16,9 @@ describe('Error Modal Component (Shallow Test)', () => {
     errorModalSpy.errorResponse$ = of(errorMockCopy);
 
     TestBed.configureTestingModule({
-      declarations: [ErrorModalComponent],
-      providers: [{ provide: ErrorModalService, useValue: errorModalSpy }],
-    }).compileComponents();
+    imports: [ErrorModalComponent],
+    providers: [{ provide: ErrorModalService, useValue: errorModalSpy }],
+}).compileComponents();
   }));
 
   beforeEach(() => {

@@ -8,6 +8,8 @@ import { BehaviorSubject } from 'rxjs';
 import { IMessage, INotification } from 'src/app/core/models/common';
 import { By } from '@angular/platform-browser';
 import { deepCopy } from 'src/app/shared/utils/tools';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
 
 const userMockCopy = deepCopy(userMock);
 
@@ -33,11 +35,13 @@ describe('Dashboard Component (Integrated Test)', () => {
     );
 
     TestBed.configureTestingModule({
-      declarations: [DashboardComponent],
+      imports: [DashboardComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: TokenStorageService, useValue: tokenStorageSpy },
         { provide: CommonInvitesService, useValue: commonInvitesSpy },
+        provideRouter([]),
+        provideHttpClient(),
       ],
     }).compileComponents();
 

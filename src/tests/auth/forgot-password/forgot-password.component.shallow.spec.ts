@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 import { ForgotPasswordComponent } from 'src/app/auth/forgot-password/forgot-password.component';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
@@ -25,9 +26,16 @@ describe('Forgot Password (Shallow Test)', () => {
     const authSpy = jasmine.createSpyObj('AuthService', ['sendResetPassword']);
 
     TestBed.configureTestingModule({
-      declarations: [ForgotPasswordComponent],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        ForgotPasswordComponent,
+      ],
+      providers: [
+        { provide: AuthService, useValue: authSpy },
+        provideRouter([]),
+      ],
     }).compileComponents();
   }));
 

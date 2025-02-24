@@ -39,21 +39,21 @@ describe('Save The Date Component (Shallow Test)', () => {
     const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['open']);
 
     TestBed.configureTestingModule({
-      declarations: [SaveTheDateComponent],
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [
+    imports: [SaveTheDateComponent],
+    schemas: [NO_ERRORS_SCHEMA],
+    providers: [
         {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({ id: saveTheDateUserInviteMockCopy.id }),
-          },
+            provide: ActivatedRoute,
+            useValue: {
+                params: of({ id: saveTheDateUserInviteMockCopy.id }),
+            },
         },
         { provide: SettingsService, useValue: settingsSpy },
         { provide: FilesService, useValue: filesSpy },
         { provide: InvitesService, useValue: invitesSpy },
         { provide: CommonModalService, useValue: commonModalSpy },
-      ],
-    });
+    ],
+});
 
     invitesServiceSpy = TestBed.inject(
       InvitesService

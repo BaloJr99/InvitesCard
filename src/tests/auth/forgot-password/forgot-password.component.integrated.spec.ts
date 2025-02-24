@@ -37,12 +37,12 @@ describe('Forgot Password Component (Integrated Test)', () => {
     const authSpy = jasmine.createSpyObj('AuthService', ['sendResetPassword']);
 
     TestBed.configureTestingModule({
-      declarations: [ForgotPasswordComponent],
       imports: [
         ReactiveFormsModule,
         RouterLink,
         ValidationPipe,
         ValidationErrorPipe,
+        ForgotPasswordComponent,
       ],
       providers: [
         { provide: AuthService, useValue: authSpy },

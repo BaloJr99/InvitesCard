@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { EventsService } from 'src/app/core/services/events.service';
@@ -39,17 +40,20 @@ describe('Settings Component (Integrated Test)', () => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [
-        SaveTheDateSettingsComponent,
-        SweetXvSettingsComponent,
-        SettingsComponent,
-      ],
       providers: [
         { provide: EventsService, useValue: eventsSpy },
         { provide: SettingsService, useValue: settingsSpy },
         { provide: ToastrService, useValue: toastrSpy },
+        provideRouter([]),
       ],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        SaveTheDateSettingsComponent,
+        SweetXvSettingsComponent,
+        SettingsComponent,
+      ],
     }).compileComponents();
 
     eventsServiceSpy = TestBed.inject(

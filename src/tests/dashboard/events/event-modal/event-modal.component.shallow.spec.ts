@@ -67,12 +67,18 @@ describe('Event Modal Component (Shallow Test)', () => {
 
   beforeEach(waitForAsync(() => {
     const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
-    const usersSpy = jasmine.createSpyObj('UsersService', ['getUsersDropdownData']);
+    const usersSpy = jasmine.createSpyObj('UsersService', [
+      'getUsersDropdownData',
+    ]);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [EventModalComponent],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        EventModalComponent,
+      ],
       providers: [
         { provide: EventsService, useValue: eventsSpy },
         { provide: UsersService, useValue: usersSpy },

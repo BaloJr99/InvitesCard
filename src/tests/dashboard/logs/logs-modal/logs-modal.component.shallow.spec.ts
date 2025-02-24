@@ -11,7 +11,7 @@ describe('Logs Modal Component (Isolated Test)', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [LogsModalComponent],
+      imports: [LogsModalComponent],
     }).compileComponents();
   }));
 

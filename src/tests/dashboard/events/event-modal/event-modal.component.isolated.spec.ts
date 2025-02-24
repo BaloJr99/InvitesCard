@@ -39,7 +39,9 @@ describe('Event Modal Component (Isolated Test)', () => {
 
   beforeEach(() => {
     const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
-    const usersSpy = jasmine.createSpyObj('UsersService', ['getUsersDropdownData']);
+    const usersSpy = jasmine.createSpyObj('UsersService', [
+      'getUsersDropdownData',
+    ]);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['']);
 

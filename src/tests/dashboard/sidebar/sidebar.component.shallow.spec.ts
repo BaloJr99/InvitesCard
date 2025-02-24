@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { SidebarComponent } from 'src/app/dashboard/sidebar/sidebar.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
@@ -27,8 +28,11 @@ describe('Sidebar Component (Shallow Test)', () => {
     ]);
 
     TestBed.configureTestingModule({
-      declarations: [SidebarComponent],
-      providers: [{ provide: TokenStorageService, useValue: tokenStorageSpy }],
+      imports: [SidebarComponent],
+      providers: [
+        { provide: TokenStorageService, useValue: tokenStorageSpy },
+        provideRouter([]),
+      ],
     });
 
     tokenStorageServiceSpy = TestBed.inject(

@@ -9,14 +9,14 @@ describe('Page Not Found Component (Integrated Test)', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PageNotFoundComponent],
+      imports: [PageNotFoundComponent],
       providers: [
         provideRouter([
           {
             path: 'auth/login',
             loadChildren: () =>
-              import('../../../../app/auth/auth.module').then(
-                (m) => m.AuthModule
+              import('../../../../app/auth/login/login.component').then(
+                (m) => m.LoginComponent
               ),
           },
         ]),
@@ -32,13 +32,13 @@ describe('Page Not Found Component (Integrated Test)', () => {
   });
 
   it('should route to dashboard', () => {
-    const navigateSpy = spyOn(router, 'navigate');
+    spyOn(router, 'navigate');
 
     const button = fixture.debugElement.query(By.css('button'));
     button.nativeElement.click();
     fixture.detectChanges();
 
-    expect(navigateSpy)
+    expect(router.navigate)
       .withContext('Should redirect to /dashboard')
       .toHaveBeenCalledWith(['/dashboard']);
   });

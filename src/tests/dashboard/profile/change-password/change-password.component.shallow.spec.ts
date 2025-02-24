@@ -32,8 +32,12 @@ describe('Change Password Component (Shallow test)', () => {
     const authSpy = jasmine.createSpyObj('AuthService', ['']);
 
     TestBed.configureTestingModule({
-      declarations: [ChangePasswordComponent],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        ChangePasswordComponent,
+      ],
       providers: [
         { provide: ToastrService, useValue: toastrSpy },
         { provide: AuthService, useValue: authSpy },

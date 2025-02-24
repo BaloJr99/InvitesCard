@@ -85,8 +85,12 @@ describe('Event Modal Component (Integrated Test)', () => {
     const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['open']);
 
     TestBed.configureTestingModule({
-      declarations: [EventModalComponent],
-      imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe],
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        EventModalComponent,
+      ],
       providers: [
         { provide: EventsService, useValue: eventsSpy },
         { provide: UsersService, useValue: usersSpy },

@@ -7,7 +7,7 @@ describe('Event Card Component (Shallow Test)', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [EventCardComponent],
+      imports: [EventCardComponent],
     }).compileComponents();
   }));
 

@@ -7,8 +7,8 @@ describe('Filter Component (Shallow Test)', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [FilterComponent],
-    }).compileComponents();
+    imports: [FilterComponent],
+}).compileComponents();
   }));
 
   beforeEach(() => {
