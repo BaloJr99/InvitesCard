@@ -110,6 +110,8 @@ export class EventDetailsPage extends DashboardPage {
       name: inviteGroup,
     });
 
+    await accordionButton.waitFor({ state: 'visible' });
+
     await accordionButton.click();
   }
 

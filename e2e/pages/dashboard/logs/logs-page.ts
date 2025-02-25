@@ -30,6 +30,7 @@ export class LogsPage extends DashboardPage {
   }
 
   async getTotalErrorsLast31Days(): Promise<number> {
+    await this.percentageHistory.waitFor({ state: 'visible' });
     const historyCards = await this.percentageHistory.locator('.card').all();
     const totalErrorsLast31Days = await historyCards[0]
       .locator('span')
@@ -38,12 +39,14 @@ export class LogsPage extends DashboardPage {
   }
 
   async getTotalErrorsToday(): Promise<number> {
+    await this.percentageHistory.waitFor({ state: 'visible' });
     const historyCards = await this.percentageHistory.locator('.card').all();
     const totalErrorsToday = await historyCards[1].locator('span').innerText();
     return parseInt(totalErrorsToday);
   }
 
   async getTableRowData(rowIndex: number) {
+    await this.page.waitForSelector('#logsTable', { state: 'visible' });
     const table = new TableHelper(this.page, 'logsTable');
     const row = await table.getTableRowByIndex(rowIndex);
 
