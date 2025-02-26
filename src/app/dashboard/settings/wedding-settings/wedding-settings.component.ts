@@ -8,25 +8,14 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import {
-  BehaviorSubject,
-  catchError,
-  combineLatest,
-  mergeMap,
-  of,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, combineLatest, mergeMap, tap } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { EventType } from 'src/app/core/models/enum';
 import {
   IInviteSection,
   IInviteSectionsProperties,
 } from 'src/app/core/models/invites';
-import {
-  IBaseSettings,
-  ISettingAction,
-  IWeddingSetting,
-} from 'src/app/core/models/settings';
+import { ISettingAction, IWeddingSetting } from 'src/app/core/models/settings';
 import { EventsService } from 'src/app/core/services/events.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { dateTimeToUTCDate, toLocalDate } from 'src/app/shared/utils/tools';
@@ -49,14 +38,15 @@ export class WeddingSettingsComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
-  private weddingSettings = new BehaviorSubject<ISettingAction>({
+  private weddingSettingsAction = {
     isNew: undefined,
     eventType: EventType.Wedding,
     eventId: '',
-  });
-  weddingSettings$ = this.weddingSettings.asObservable();
+  } as ISettingAction;
+
   @Input() set eventSettingAction(eventSettingAction: ISettingAction) {
-    this.weddingSettings.next(eventSettingAction);
+    this.weddingSettingsAction = eventSettingAction;
+    this.reloadSettings.next(true);
   }
 
   autoCompleteOptions: string[] = [
@@ -126,32 +116,33 @@ export class WeddingSettingsComponent {
   private reloadSettings = new BehaviorSubject<boolean>(false);
   reloadSettings$ = this.reloadSettings.asObservable();
 
-  vm$ = combineLatest([this.weddingSettings$, this.reloadSettings$]).pipe(
-    mergeMap(([weddingSettings]) =>
+  vm$ = this.reloadSettings$.pipe(
+    mergeMap(() =>
       combineLatest([
-        this.settingsService.getEventSettings(weddingSettings.eventId).pipe(
-          catchError(() => {
-            if (this.weddingSettings.value.isNew === undefined) {
-              this.weddingSettings.next({
-                ...weddingSettings,
-                isNew: true,
-              });
-            }
-
-            return of({
-              eventId: weddingSettings.eventId,
-              settings: JSON.stringify({}),
-            } as IBaseSettings);
-          })
-        ),
-        this.eventsService.getEventById(weddingSettings.eventId),
+        this.settingsService
+          .getEventSettings(this.weddingSettingsAction.eventId)
+          .pipe(
+            tap((response) => {
+              const settings = JSON.parse(response.settings);
+              if (
+                Object.keys(settings).length === 0 &&
+                this.weddingSettingsAction.isNew === undefined
+              ) {
+                this.weddingSettingsAction = {
+                  ...this.weddingSettingsAction,
+                  isNew: true,
+                };
+              }
+            })
+          ),
+        this.eventsService.getEventById(this.weddingSettingsAction.eventId),
       ]).pipe(
         tap(([eventSettings, eventInfo]) => {
           this.eventDate = toLocalDate(eventInfo.dateOfEvent).split('T')[0];
           const parsedSettings = JSON.parse(eventSettings.settings);
 
           this.createEventSettingsForm.patchValue({
-            eventId: weddingSettings.eventId,
+            eventId: this.weddingSettingsAction.eventId,
           });
 
           let sections = [] as IInviteSection[];
@@ -327,7 +318,7 @@ export class WeddingSettingsComponent {
       this.createEventSettingsForm.valid &&
       this.createEventSettingsForm.dirty
     ) {
-      if (this.weddingSettings.value.isNew) {
+      if (this.weddingSettingsAction.isNew) {
         this.createEventSettings();
       } else {
         this.updateEventSettings();
@@ -341,7 +332,7 @@ export class WeddingSettingsComponent {
     this.settingsService
       .createEventSettings(
         this.formatEventSetting(),
-        this.weddingSettings.value.eventType
+        this.weddingSettingsAction.eventType
       )
       .subscribe({
         next: (response: IMessageResponse) => {
@@ -354,8 +345,8 @@ export class WeddingSettingsComponent {
     this.settingsService
       .updateEventSettings(
         this.formatEventSetting(),
-        this.weddingSettings.value.eventId,
-        this.weddingSettings.value.eventType
+        this.weddingSettingsAction.eventId,
+        this.weddingSettingsAction.eventType
       )
       .subscribe({
         next: (response: IMessageResponse) => {

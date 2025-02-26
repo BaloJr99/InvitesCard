@@ -31,12 +31,15 @@ export class ErrorModalComponent {
             })
             .join(', ');
         }
+
+        if (information.serverError.status === 404) {
+          errorMessage = information.serverError.error.message;
+        }
       }
 
       if (
         information.serverError?.status !== undefined &&
         information.serverError.status !== 401 &&
-        information.serverError.status !== 404 &&
         information.serverError.status !== 409
       ) {
         errorTriggered = information.hasError;

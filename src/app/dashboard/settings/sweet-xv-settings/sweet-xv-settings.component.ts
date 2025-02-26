@@ -8,25 +8,14 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import {
-  BehaviorSubject,
-  catchError,
-  combineLatest,
-  mergeMap,
-  of,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, combineLatest, mergeMap, tap } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { EventType } from 'src/app/core/models/enum';
 import {
   IInviteSection,
   IInviteSectionsProperties,
 } from 'src/app/core/models/invites';
-import {
-  ISweetXvSetting,
-  ISettingAction,
-  IBaseSettings,
-} from 'src/app/core/models/settings';
+import { ISweetXvSetting, ISettingAction } from 'src/app/core/models/settings';
 import { EventsService } from 'src/app/core/services/events.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { dateTimeToUTCDate, toLocalDate } from 'src/app/shared/utils/tools';
@@ -109,16 +98,17 @@ export class SweetXvSettingsComponent {
         this.settingsService
           .getEventSettings(this.sweetXvSettingsAction.eventId)
           .pipe(
-            catchError(() => {
-              this.sweetXvSettingsAction = {
-                ...this.sweetXvSettingsAction,
-                isNew: true,
-              };
-
-              return of({
-                eventId: this.sweetXvSettingsAction.eventId,
-                settings: JSON.stringify({}),
-              } as IBaseSettings);
+            tap((response) => {
+              const settings = JSON.parse(response.settings);
+              if (
+                Object.keys(settings).length === 0 &&
+                this.sweetXvSettingsAction.isNew === undefined
+              ) {
+                this.sweetXvSettingsAction = {
+                  ...this.sweetXvSettingsAction,
+                  isNew: true,
+                };
+              }
             })
           ),
         this.eventsService.getEventById(this.sweetXvSettingsAction.eventId),

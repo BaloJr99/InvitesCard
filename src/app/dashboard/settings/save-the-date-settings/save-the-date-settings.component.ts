@@ -7,17 +7,10 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import {
-  BehaviorSubject,
-  catchError,
-  combineLatest,
-  of,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, mergeMap, tap } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { EventType } from 'src/app/core/models/enum';
-import { IBaseSettings, ISettingAction } from 'src/app/core/models/settings';
+import { ISettingAction } from 'src/app/core/models/settings';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { CommonModule } from '@angular/common';
 import { ValidationPipe } from '../../../shared/pipes/validation.pipe';
@@ -39,15 +32,15 @@ export class SaveTheDateSettingsComponent {
   formInputElements!: ElementRef[];
 
   @Input() set eventSettingActionValue(eventSettingAction: ISettingAction) {
-    this.saveTheDateSettings.next(eventSettingAction);
+    this.saveTheDateSettingsAction = eventSettingAction;
+    this.reloadSettings.next(true);
   }
 
-  private saveTheDateSettings = new BehaviorSubject<ISettingAction>({
+  private saveTheDateSettingsAction = {
     isNew: undefined,
     eventType: EventType.SaveTheDate,
     eventId: '',
-  });
-  saveTheDateSettings$ = this.saveTheDateSettings.asObservable();
+  } as ISettingAction;
 
   private reloadSettings = new BehaviorSubject<boolean>(false);
   reloadSettings$ = this.reloadSettings.asObservable();
@@ -80,33 +73,31 @@ export class SaveTheDateSettingsComponent {
     });
   }
 
-  vm$ = combineLatest([this.saveTheDateSettings$, this.reloadSettings$]).pipe(
-    switchMap(([saveTheDateSettings]) =>
+  vm$ = this.reloadSettings$.pipe(
+    mergeMap(() =>
       this.settingsService
-        .getEventSettings(saveTheDateSettings.eventId)
+        .getEventSettings(this.saveTheDateSettingsAction.eventId)
         .pipe(
-          catchError(() => {
-            if (saveTheDateSettings.isNew === undefined) {
-              this.saveTheDateSettings.next({
-                ...saveTheDateSettings,
+          tap((response) => {
+            const settings = JSON.parse(response.settings);
+            if (
+              Object.keys(settings).length === 0 &&
+              this.saveTheDateSettingsAction.isNew === undefined
+            ) {
+              this.saveTheDateSettingsAction = {
+                ...this.saveTheDateSettingsAction,
                 isNew: true,
-              });
+              };
             }
-            return of({
-              eventId: saveTheDateSettings.eventId,
-              settings: JSON.stringify({}),
-            } as IBaseSettings);
           })
         )
-        .pipe(
-          tap((eventSettings) => {
-            this.createEventSettingsForm.patchValue({
-              ...JSON.parse(eventSettings.settings),
-              eventId: eventSettings.eventId,
-            });
-          })
-        )
-    )
+    ),
+    tap((eventSettings) => {
+      this.createEventSettingsForm.patchValue({
+        ...JSON.parse(eventSettings.settings),
+        eventId: eventSettings.eventId,
+      });
+    })
   );
 
   cancelChanges(): void {
@@ -119,7 +110,7 @@ export class SaveTheDateSettingsComponent {
       this.createEventSettingsForm.valid &&
       this.createEventSettingsForm.dirty
     ) {
-      if (this.saveTheDateSettings.value.isNew) {
+      if (this.saveTheDateSettingsAction.isNew) {
         this.createEventSettings();
       } else {
         this.updateEventSettings();
@@ -133,7 +124,7 @@ export class SaveTheDateSettingsComponent {
     this.settingsService
       .createEventSettings(
         this.createEventSettingsForm.value,
-        this.saveTheDateSettings.value.eventType
+        this.saveTheDateSettingsAction.eventType
       )
       .subscribe({
         next: (response: IMessageResponse) => {
@@ -143,12 +134,12 @@ export class SaveTheDateSettingsComponent {
   }
 
   updateEventSettings() {
-    if (this.saveTheDateSettings.value.eventId !== '') {
+    if (this.saveTheDateSettingsAction.eventId !== '') {
       this.settingsService
         .updateEventSettings(
           this.createEventSettingsForm.value,
-          this.saveTheDateSettings.value.eventId,
-          this.saveTheDateSettings.value.eventType
+          this.saveTheDateSettingsAction.eventId,
+          this.saveTheDateSettingsAction.eventType
         )
         .subscribe({
           next: (response: IMessageResponse) => {
