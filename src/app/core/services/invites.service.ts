@@ -12,6 +12,7 @@ import {
   IUserInvite,
 } from '../models/invites';
 import { IBulkMessageResponse, IMessageResponse } from '../models/common';
+import { IAlbumResolved } from '../models/gallery';
 
 @Injectable({
   providedIn: 'root',
@@ -86,5 +87,11 @@ export class InvitesService {
 
   getInviteEventType(id: string): Observable<string> {
     return this.http.get<string>(`${this.invitesBaseUrl}/invite/${id}/event`);
+  }
+
+  isEventActive(nameOfEvent: string): Observable<IAlbumResolved> {
+    return this.http.get<IAlbumResolved>(
+      `${this.invitesBaseUrl}/isActive/${nameOfEvent}`
+    );
   }
 }

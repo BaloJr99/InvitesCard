@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { eventResolver } from './event-details/event-resolver.service';
+import { eventResolver } from './event-details/event.resolver';
 
 export const events_routes: Routes = [
   {

@@ -1,15 +1,7 @@
-import {
-  Component,
-  ViewChildren,
-  ElementRef,
-  Input,
-  EventEmitter,
-  Output,
-} from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
-  FormControlName,
   FormGroup,
   Validators,
   ReactiveFormsModule,
@@ -37,9 +29,6 @@ import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe
   ],
 })
 export class ConfirmationComponent {
-  @ViewChildren(FormControlName, { read: ElementRef })
-  formInputElements!: ElementRef[];
-
   private invite = new BehaviorSubject<IUserInvite>({} as IUserInvite);
   invite$ = this.invite.asObservable();
 

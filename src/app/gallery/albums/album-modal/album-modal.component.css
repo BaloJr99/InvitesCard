@@ -1,0 +1,24 @@
+.nameOfAlbum-validation {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+  .nameOfAlbum-validation i.fa-circle-check {
+    color: green;
+  }
+  
+  .nameOfAlbum-validation i.fa-circle-xmark {
+    color: red;
+  }
+
+  .nameOfAlbum-validation #nameOfAlbum {
+    width: calc(100% - 26px);
+    margin-right: 10px;
+  }
+
+.modal .modal-body {
+  text-align: left;
+}

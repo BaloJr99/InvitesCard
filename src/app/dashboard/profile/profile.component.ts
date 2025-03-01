@@ -1,10 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
-import {
-  FormBuilder,
-  FormControlName,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, map, Observable, of } from 'rxjs';
@@ -33,9 +28,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
   ],
 })
 export class ProfileComponent implements OnInit {
-  @ViewChildren(FormControlName, { read: ElementRef })
-  formInputElements!: ElementRef[];
-
   private user = new BehaviorSubject<IUserProfile>({} as IUserProfile);
   user$ = this.user.asObservable();
 

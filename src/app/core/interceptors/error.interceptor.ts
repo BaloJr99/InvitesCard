@@ -33,6 +33,9 @@ export function errorInterceptor(
       },
     }),
     catchError((error: HttpErrorResponse) => {
+      if (error?.url?.includes('invites/invite') || error?.url?.includes('invites/isActive')) {
+        return throwError(() => error);
+      }
       errorService.setError(true, error);
       return throwError(() => error);
     }),

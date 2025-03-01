@@ -1,11 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, ViewChildren } from '@angular/core';
-import {
-  FormBuilder,
-  FormControlName,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IAuthUser } from 'src/app/core/models/users';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -19,11 +14,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   imports: [SharedModule, ValidationPipe, ValidationErrorPipe],
-  standalone: true,
 })
 export class LoginComponent {
-  @ViewChildren(FormControlName, { read: ElementRef })
-  formInputElements!: ElementRef[];
   loginForm: FormGroup;
 
   authErrorMessage = '';

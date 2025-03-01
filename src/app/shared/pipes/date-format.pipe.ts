@@ -1,7 +1,6 @@
 import { Inject, LOCALE_ID, Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  standalone: true,
   name: 'dateFormat',
 })
 export class DateFormatPipe implements PipeTransform {

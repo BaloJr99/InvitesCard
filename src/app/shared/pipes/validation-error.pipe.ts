@@ -178,11 +178,13 @@ const ERROR_MESSAGES: Record<string, Record<string, string>> = {
     required: $localize`La CLABE es requerida`,
     pattern: $localize`La CLABE debe tener 18 dígitos`,
   },
+  nameOfAlbum: {
+    required: $localize`El nombre del album es requerido`,
+  }
 };
 
 @Pipe({
   name: 'validationError',
-  standalone: true,
   pure: false,
 })
 export class ValidationErrorPipe implements PipeTransform {

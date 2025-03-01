@@ -1,14 +1,11 @@
 import {
   Component,
-  ElementRef,
   EventEmitter,
   Input,
   Output,
-  ViewChildren,
 } from '@angular/core';
 import {
   FormBuilder,
-  FormControlName,
   FormGroup,
   Validators,
   ReactiveFormsModule,
@@ -36,9 +33,6 @@ import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe
   ],
 })
 export class UserRoleComponent {
-  @ViewChildren(FormControlName, { read: ElementRef })
-  formInputElements!: ElementRef[];
-
   private roleAction = new BehaviorSubject<IRoleAction>({
     action: RoleActionEvent.None,
     role: {

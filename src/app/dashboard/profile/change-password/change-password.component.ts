@@ -1,14 +1,6 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChildren,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   FormBuilder,
-  FormControlName,
   FormGroup,
   Validators,
   ReactiveFormsModule,
@@ -33,8 +25,6 @@ import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe
   ],
 })
 export class ChangePasswordComponent {
-  @ViewChildren(FormControlName, { read: ElementRef })
-  formInputElements!: ElementRef[];
   @Input() userId: string = '';
   @Output() showChangePasswordValue = new EventEmitter<boolean>();
   passwordResetForm: FormGroup = this.fb.group(

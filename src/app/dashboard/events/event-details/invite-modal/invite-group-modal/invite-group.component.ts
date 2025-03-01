@@ -1,17 +1,5 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChildren,
-} from '@angular/core';
-import {
-  FormBuilder,
-  FormControlName,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import {
   IInviteGroups,
@@ -37,9 +25,6 @@ import { CommonModule } from '@angular/common';
   ],
 })
 export class InviteGroupComponent {
-  @ViewChildren(FormControlName, { read: ElementRef })
-  formInputElements!: ElementRef[];
-
   private inviteGroup!: IInviteGroups;
   @Input() set inviteGroupValue(value: IInviteGroups) {
     this.inviteGroup = value;

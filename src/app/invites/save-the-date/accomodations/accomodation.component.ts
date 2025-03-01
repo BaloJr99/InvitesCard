@@ -1,14 +1,6 @@
-import {
-  Component,
-  ViewChildren,
-  ElementRef,
-  Input,
-  EventEmitter,
-  Output,
-} from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import {
   FormBuilder,
-  FormControlName,
   FormGroup,
   Validators,
   ReactiveFormsModule,
@@ -27,9 +19,6 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, ReactiveFormsModule],
 })
 export class AccomodationComponent {
-  @ViewChildren(FormControlName, { read: ElementRef })
-  formInputElements!: ElementRef[];
-
   private invite = new BehaviorSubject<ISaveTheDateUserInvite>(
     {} as ISaveTheDateUserInvite
   );

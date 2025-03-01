@@ -4,11 +4,17 @@ import { auth_routes } from './auth/auth.routes';
 import { invites_routes } from './invites/invites.routes';
 import { shared_routes } from './shared/shared.routes';
 import { dashboard_routes } from './dashboard/dashboard.routes';
+import { gallery_routes } from './gallery/gallery.routes';
 
 export const routes: Routes = [
   {
     path: 'invites',
     children: [...invites_routes],
+  },
+  {
+    path: 'gallery',
+    title: 'InvitesMX -- Gallery',
+    children: [...gallery_routes],
   },
   {
     path: 'dashboard',

@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { passwordResetResolver } from './forgot-password/password-reset/password-resolver.service';
+import { passwordResetResolver } from './forgot-password/password-reset/password.resolver';
 import { loginGuard } from '../core/guards/login.guard';
 
 export const auth_routes: Routes = [

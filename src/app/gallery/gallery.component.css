@@ -1,0 +1,31 @@
+.container {
+  padding-top: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+  header h1 {
+    text-align: start;
+    font-family: 'Playwrite';
+    font-size: 50px;
+  }
+
+@media (max-width: 575px) {
+  .container {
+    padding-top: 0;
+  }
+
+  nav {
+    justify-content: center;
+  }
+
+  header h1 {
+    font-family: 'Playwrite';
+    font-size: 35px;
+    margin-bottom: 0px;
+  }
+}

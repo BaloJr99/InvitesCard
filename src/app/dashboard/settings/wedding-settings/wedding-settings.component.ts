@@ -1,8 +1,7 @@
-import { Component, ElementRef, Input, ViewChildren } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
-  FormControlName,
   FormGroup,
   Validators,
   ReactiveFormsModule,
@@ -35,9 +34,6 @@ import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe
   ],
 })
 export class WeddingSettingsComponent {
-  @ViewChildren(FormControlName, { read: ElementRef })
-  formInputElements!: ElementRef[];
-
   private weddingSettingsAction = {
     isNew: undefined,
     eventType: EventType.Wedding,

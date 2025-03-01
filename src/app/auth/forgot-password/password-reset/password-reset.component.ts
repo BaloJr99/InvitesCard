@@ -1,10 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
-import {
-  FormBuilder,
-  FormControlName,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { matchPassword } from 'src/app/shared/utils/validators/matchPassword';
@@ -19,8 +14,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [SharedModule, ValidationPipe, ValidationErrorPipe],
 })
 export class PasswordResetComponent implements OnInit {
-  @ViewChildren(FormControlName, { read: ElementRef })
-  formInputElements!: ElementRef[];
   passwordResetForm: FormGroup;
   passwordReset = false;
 

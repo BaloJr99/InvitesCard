@@ -1,0 +1,38 @@
+<!-- Modal -->
+<div class="modal fade" id="albumModal" tabindex="-1" aria-labelledby="albumModalLabel" aria-hidden="true" *ngIf="vm$ | async as vm">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="albumModalLabel" i18n>Albúm</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" i18n-aria-label aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="createAlbumForm" id="albumForm">
+          <div class="mb-3">
+            <label for="nameOfAlbum" class="form-label" i18n>Nombre del albúm</label>
+            <div class="nameOfAlbum-validation">
+              <input id="nameOfAlbum"
+                     type="text"
+                     min="1"
+                     class="form-control"
+                     formControlName="nameOfAlbum" 
+                     [ngClass]="{'is-invalid': (createAlbumForm.get('nameOfAlbum') | validation) || createAlbumForm.errors?.['controlIsDuplicated'] }"
+                     (keyup)="removeValidation()">
+              <i class="fa-solid" aria-hidden="true" [ngClass]="createAlbumForm.get('controlIsValid')?.value ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
+              <span class="invalid-feedback d-block" role="alert" *ngIf="createAlbumForm.get('nameOfAlbum') | validation">
+                {{ createAlbumForm.get('nameOfAlbum')?.errors | validationError: 'nameOfAlbum' }}
+              </span>
+              <span class="invalid-feedback d-block" role="alert" *ngIf="!createAlbumForm.get('controlIsValid')?.value">
+                {{ null | validationError: 'custom': 'controlIsDuplicated' }}
+              </span>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-testid="cancel-button" class="btn btn-outline-dark" data-bs-dismiss="modal" i18n>Cerrar</button>
+        <button type="button" data-testid="confirm-button" class="btn btn-dark" (click)="saveAlbum()" i18n [disabled]="!(createAlbumForm.valid && createAlbumForm.touched)">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { invitesResolver } from './invites-resolver.service';
+import { invitesResolver } from './invites.resolver';
 import { Routes } from '@angular/router';
 
 export const invites_routes: Routes = [

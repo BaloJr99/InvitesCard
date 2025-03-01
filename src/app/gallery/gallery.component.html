@@ -1,0 +1,10 @@
+<div class="container" *ngIf="vm$ | async as vm">
+  <nav class="navbar navbar-expand-lg" *ngIf="vm$ | async as vm">
+    <header>
+      <h1>{{ vm.nameOfEvent }}</h1>
+    </header>
+  </nav>
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+</div>

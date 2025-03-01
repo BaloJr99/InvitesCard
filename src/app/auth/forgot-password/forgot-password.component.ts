@@ -1,10 +1,5 @@
-import { Component, ElementRef, ViewChildren } from '@angular/core';
-import {
-  FormBuilder,
-  FormControlName,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ValidationPipe } from '../../shared/pipes/validation.pipe';
 import { ValidationErrorPipe } from '../../shared/pipes/validation-error.pipe';
@@ -17,8 +12,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [SharedModule, ValidationPipe, ValidationErrorPipe],
 })
 export class ForgotPasswordComponent {
-  @ViewChildren(FormControlName, { read: ElementRef })
-  formInputElements!: ElementRef[];
   forgotPasswordForm: FormGroup;
   emailSent = false;
 

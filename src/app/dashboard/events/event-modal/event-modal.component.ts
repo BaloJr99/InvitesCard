@@ -1,14 +1,6 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChildren,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   FormBuilder,
-  FormControlName,
   FormGroup,
   ReactiveFormsModule,
   Validators,
@@ -42,9 +34,6 @@ import { CommonModule } from '@angular/common';
   ],
 })
 export class EventModalComponent {
-  @ViewChildren(FormControlName, { read: ElementRef })
-  formInputElements!: ElementRef[];
-
   private baseEvent = {
     id: '',
     nameOfEvent: '',

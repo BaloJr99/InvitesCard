@@ -1,0 +1,31 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="row g-0 my-3 breadcrumb-header">
+    <div class="col-12 header">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a routerLink="/gallery/{{vm.nameOfEvent}}" routerLinkActive="active" i18n>ALBÚMS</a></li>
+          <li class="breadcrumb-item"><h2 i18n>IMÁGENES</h2></li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+  <div class="row">
+    <form class="upload-form col-12 col-md-12" [formGroup]="saveFilesForm">
+      <div>
+        <label for="photoFiles" i18n>Seleccionar fotos</label>
+        <input id="photoFiles" class="form-control" formControlName="photoFiles" type="file" (change)="onPhotosChange($event)" multiple accept=".png, .jpg, .jpeg">
+      </div>
+      <button class="btn btn-dark" (click)="saveFiles()" i18n>Subir archivos</button>
+    </form>
+  </div>
+  <div class="row mt-3" *ngIf="uploadProgress$ | async as progress">
+    <div class="col-12">
+      <div id="bar" [ngStyle]="{'width': progress}">{{progress}}</div>
+    </div>
+  </div>
+  <div class="row" *ngIf="albumImages$ | async as images">
+    <div class="image-container col-12 my-3">
+      <img *ngFor="let image of images" src="{{image.fileUrl}}" class="img-fluid" i18n-alt alt="Imagen subida por usuario" loading="lazy">
+    </div>
+  </div>
+</ng-container>

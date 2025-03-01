@@ -1,0 +1,65 @@
+.breadcrumb-header {
+  flex: 0 1 auto;
+}
+
+  .breadcrumb-header .header {
+    display: flex;
+    align-items: center;
+  }
+
+    .breadcrumb-header .header nav {
+      flex-grow: 1;
+    }
+
+    .breadcrumb-header .header .breadcrumb {
+      margin-bottom: 0;
+    }
+
+    .breadcrumb-header .header .breadcrumb .breadcrumb-item {
+      font-size: 15px;
+      display: inline;
+    }
+
+    .breadcrumb-header .header .buttons .btn-dark:not(:last-child) {
+      margin-right: 8px;
+    }
+
+.card {
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background-color: #f9f9f9;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+  .card img {
+    position: absolute;
+    width: 50%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+  }
+
+  .card .card-body {
+    background-color: white;
+    margin-top: 120px;
+    border-top: 2px solid #000000;
+    z-index: 1;
+  }
+
+  .card h2 {
+    font-family: 'Playwrite';
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 0;
+  }
+
+  .card small {
+    font-family: 'Merriweather';
+  }
+
+  .card .edit-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }

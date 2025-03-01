@@ -1,7 +1,6 @@
-import { Component, ElementRef, Input, ViewChildren } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {
   FormBuilder,
-  FormControlName,
   FormGroup,
   Validators,
   ReactiveFormsModule,
@@ -28,9 +27,6 @@ import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe
   ],
 })
 export class SaveTheDateSettingsComponent {
-  @ViewChildren(FormControlName, { read: ElementRef })
-  formInputElements!: ElementRef[];
-
   @Input() set eventSettingActionValue(eventSettingAction: ISettingAction) {
     this.saveTheDateSettingsAction = eventSettingAction;
     this.reloadSettings.next(true);
