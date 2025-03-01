@@ -1,17 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FilterComponent } from 'src/app/shared/components/table/filter/filter.component';
 
 describe('Filter Component (Shallow Test)', () => {
   let fixture: ComponentFixture<FilterComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-    imports: [FilterComponent],
-}).compileComponents();
-  }));
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [FilterComponent],
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(FilterComponent);
     fixture.detectChanges();
   });

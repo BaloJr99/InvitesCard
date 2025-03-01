@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { DashboardComponent } from 'src/app/dashboard/dashboard.component';
@@ -20,7 +20,7 @@ describe('Dashboard Component (Shallow Test)', () => {
   let messagesDataSubject: BehaviorSubject<IMessage[]>;
   let notificationsDataSubject: BehaviorSubject<INotification[]>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     messagesDataSubject = new BehaviorSubject<IMessage[]>([]);
     notificationsDataSubject = new BehaviorSubject<INotification[]>([]);
     const tokenStorageSpy = jasmine.createSpyObj('TokenStorageService', [
@@ -35,7 +35,7 @@ describe('Dashboard Component (Shallow Test)', () => {
       }
     );
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [DashboardComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
@@ -49,9 +49,7 @@ describe('Dashboard Component (Shallow Test)', () => {
     tokenStorageServiceSpy = TestBed.inject(
       TokenStorageService
     ) as jasmine.SpyObj<TokenStorageService>;
-  }));
 
-  beforeEach(() => {
     tokenStorageServiceSpy.getTokenValues.and.returnValue(userMockCopy);
     fixture = TestBed.createComponent(DashboardComponent);
     fixture.detectChanges();

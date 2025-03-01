@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
@@ -43,35 +43,38 @@ describe('Confirmation Component (Shallow Test)', () => {
     messageInput.nativeElement.dispatchEvent(new Event('input'));
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const invitesSpy = jasmine.createSpyObj('InvitesService', [
       'sendConfirmation',
     ]);
-    TestBed.configureTestingModule({
-    imports: [ReactiveFormsModule, ValidationPipe, ValidationErrorPipe, ConfirmationComponent],
-    providers: [
+    await TestBed.configureTestingModule({
+      imports: [
+        ReactiveFormsModule,
+        ValidationPipe,
+        ValidationErrorPipe,
+        ConfirmationComponent,
+      ],
+      providers: [
         { provide: InvitesService, useValue: invitesSpy },
         {
-            provide: ActivatedRoute,
-            useValue: {
-                snapshot: {
-                    data: {
-                        paramMap: convertToParamMap({
-                            id: sweetXvUserInviteMockCopy.id,
-                        }),
-                    },
-                },
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              data: {
+                paramMap: convertToParamMap({
+                  id: sweetXvUserInviteMockCopy.id,
+                }),
+              },
             },
+          },
         },
-    ],
-}).compileComponents();
+      ],
+    }).compileComponents();
 
     invitesServiceSpy = TestBed.inject(
       InvitesService
     ) as jasmine.SpyObj<InvitesService>;
-  }));
 
-  beforeEach(() => {
     invitesServiceSpy.sendConfirmation.and.returnValue(
       of(messageResponseMockCopy)
     );

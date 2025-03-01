@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { PageNotFoundComponent } from 'src/app/shared/components/page-not-found/page-not-found.component';
@@ -6,8 +6,8 @@ import { PageNotFoundComponent } from 'src/app/shared/components/page-not-found/
 describe('Page Not Found (Shallow Test)', () => {
   let fixture: ComponentFixture<PageNotFoundComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PageNotFoundComponent],
       providers: [
         provideRouter([
@@ -21,9 +21,7 @@ describe('Page Not Found (Shallow Test)', () => {
         ]),
       ],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PageNotFoundComponent);
     fixture.detectChanges();
   });

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
 import { ISpinner } from 'src/app/core/models/common';
@@ -10,19 +10,17 @@ describe('Spinner Component (Integrated Test)', () => {
   let fixture: ComponentFixture<SpinnerComponent>;
   let loadingSubject: Subject<ISpinner>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     loadingSubject = new Subject<ISpinner>();
     const loaderSpy = jasmine.createSpyObj('LoaderService', [''], {
       loading$: loadingSubject.asObservable(),
     });
 
-    TestBed.configureTestingModule({
-    imports: [SpinnerComponent],
-    providers: [{ provide: LoaderService, useValue: loaderSpy }],
-}).compileComponents();
-  }));
+    await TestBed.configureTestingModule({
+      imports: [SpinnerComponent],
+      providers: [{ provide: LoaderService, useValue: loaderSpy }],
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(SpinnerComponent);
     fixture.detectChanges();
   });

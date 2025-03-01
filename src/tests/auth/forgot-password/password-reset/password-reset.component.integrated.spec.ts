@@ -3,12 +3,10 @@ import {
   fakeAsync,
   TestBed,
   tick,
-  waitForAsync,
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import {
   ActivatedRoute,
-  convertToParamMap,
   Router,
   RouterLink,
 } from '@angular/router';
@@ -48,10 +46,10 @@ describe('Password Reset Component (Integrated Test)', () => {
     confirmPasswordInput.nativeElement.dispatchEvent(new Event('input'));
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const authSpy = jasmine.createSpyObj('AuthService', ['resetPassword']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         SharedModule,
         ValidationPipe,
@@ -65,7 +63,7 @@ describe('Password Reset Component (Integrated Test)', () => {
           useValue: {
             snapshot: {
               data: { reset: true },
-              paramMap: convertToParamMap({ id: fullUserMockCopy.id }),
+              params: { id: fullUserMockCopy.id },
             },
           },
         },
@@ -74,9 +72,7 @@ describe('Password Reset Component (Integrated Test)', () => {
 
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     router = TestBed.inject(Router);
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PasswordResetComponent);
     fixture.detectChanges();
   });

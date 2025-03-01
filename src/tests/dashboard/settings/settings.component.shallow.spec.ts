@@ -1,6 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import { importProvidersFrom, NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { ToastrModule } from 'ngx-toastr';
@@ -27,13 +27,13 @@ describe('Settings Component (Shallow Test)', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const eventsSpy = jasmine.createSpyObj('EventsService', [
       'getDropdownEvents',
       'getEventById',
     ]);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [ValidationPipe, ValidationErrorPipe, SettingsComponent],
       providers: [
@@ -51,9 +51,7 @@ describe('Settings Component (Shallow Test)', () => {
     eventsServiceSpy = TestBed.inject(
       EventsService
     ) as jasmine.SpyObj<EventsService>;
-  }));
 
-  beforeEach(() => {
     eventsServiceSpy.getDropdownEvents.and.returnValue(
       of(dropdownEventsMockCopy)
     );

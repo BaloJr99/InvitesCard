@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -57,14 +57,14 @@ describe('Invite Modal Component (Integrated Test)', () => {
     kidsAllowedCheckbox.nativeElement.dispatchEvent(new Event('checkbox'));
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const invitesSpy = jasmine.createSpyObj('InvitesService', [
       'createInvite',
       'updateInvite',
     ]);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         ValidationPipe,
@@ -80,9 +80,7 @@ describe('Invite Modal Component (Integrated Test)', () => {
     invitesServiceSpy = TestBed.inject(
       InvitesService
     ) as jasmine.SpyObj<InvitesService>;
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(InviteModalComponent);
     // We need to populate the inviteGroupId select with options
     fixture.componentRef.setInput('inviteGroupsValue', [

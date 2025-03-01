@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { EventType } from 'src/app/core/models/enum';
@@ -17,31 +17,29 @@ const newInviteMockCopy = deepCopy(newInviteMock);
 describe('Invites Component (Integrated Test)', () => {
   let fixture: ComponentFixture<InvitesComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const settingsSpy = jasmine.createSpyObj('SettingsService', ['']);
     const filesSpy = jasmine.createSpyObj('FilesService', ['']);
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
 
-    TestBed.configureTestingModule({
-    imports: [InvitesComponent, SweetXvComponent, SaveTheDateComponent,],
-    providers: [
+    await TestBed.configureTestingModule({
+      imports: [InvitesComponent, SweetXvComponent, SaveTheDateComponent],
+      providers: [
         {
-            provide: ActivatedRoute,
-            useValue: {
-                snapshot: {
-                    data: { invite: { eventType: EventType.Xv } },
-                },
-                params: of({ id: newInviteMockCopy.id }),
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              data: { invite: { eventType: EventType.Xv } },
             },
+            params: of({ id: newInviteMockCopy.id }),
+          },
         },
         { provide: SettingsService, useValue: settingsSpy },
         { provide: FilesService, useValue: filesSpy },
         { provide: InvitesService, useValue: invitesSpy },
-    ],
-}).compileComponents();
-  }));
+      ],
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(InvitesComponent);
     fixture.detectChanges();
   });

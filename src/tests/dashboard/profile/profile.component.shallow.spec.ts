@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
@@ -19,7 +19,6 @@ describe('Profile Component (Shallow Test)', () => {
   let fixture: ComponentFixture<ProfileComponent>;
 
   const updateFormUsingEvent = (
-    id: string,
     username: string,
     firstName: string,
     lastName: string,
@@ -56,7 +55,7 @@ describe('Profile Component (Shallow Test)', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const usersSpy = jasmine.createSpyObj('UsersService', ['']);
     const authSpy = jasmine.createSpyObj('AuthService', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
@@ -64,7 +63,7 @@ describe('Profile Component (Shallow Test)', () => {
       getTokenValues: userProfileMockCopy,
     });
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         ValidationPipe,
@@ -98,9 +97,7 @@ describe('Profile Component (Shallow Test)', () => {
         { provide: TokenStorageService, useValue: tokenStorageSpy },
       ],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ProfileComponent);
     fixture.detectChanges();
   });
@@ -220,7 +217,6 @@ describe('Profile Component (Shallow Test)', () => {
 
   it('Expect form controls to be filled when user fills inputs', () => {
     updateFormUsingEvent(
-      userProfileMockCopy.id,
       userProfileMockCopy.username,
       userProfileMockCopy.firstName,
       userProfileMockCopy.lastName,
@@ -264,7 +260,7 @@ describe('Profile Component (Shallow Test)', () => {
   });
 
   it('Display firstName, lastName, username, gender, email and phoneNumber error message when fields are blank', () => {
-    updateFormUsingEvent('', '', '', '', '', '', '');
+    updateFormUsingEvent('', '', '', '', '', '');
 
     const errorSpans = fixture.debugElement.queryAll(
       By.css('.invalid-feedback')
@@ -304,7 +300,6 @@ describe('Profile Component (Shallow Test)', () => {
 
   it("Shouldn't display error message when fields are filled", () => {
     updateFormUsingEvent(
-      userProfileMockCopy.id,
       userProfileMockCopy.username,
       userProfileMockCopy.firstName,
       userProfileMockCopy.lastName,

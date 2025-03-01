@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -26,7 +26,7 @@ describe('Save The Date Component (Integrated Test)', () => {
   let filesServiceSpy: jasmine.SpyObj<FilesService>;
   let commonModalServiceSpy: jasmine.SpyObj<CommonModalService>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const settingsSpy = jasmine.createSpyObj('SettingsService', [
       'getEventSettings',
     ]);
@@ -34,21 +34,25 @@ describe('Save The Date Component (Integrated Test)', () => {
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['getInvite']);
     const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['open']);
 
-    TestBed.configureTestingModule({
-    imports: [ReactiveFormsModule, AccomodationComponent, SaveTheDateComponent],
-    providers: [
+    await TestBed.configureTestingModule({
+      imports: [
+        ReactiveFormsModule,
+        AccomodationComponent,
+        SaveTheDateComponent,
+      ],
+      providers: [
         {
-            provide: ActivatedRoute,
-            useValue: {
-                params: of({ id: saveTheDateUserInviteMockCopy.id }),
-            },
+          provide: ActivatedRoute,
+          useValue: {
+            params: of({ id: saveTheDateUserInviteMockCopy.id }),
+          },
         },
         { provide: SettingsService, useValue: settingsSpy },
         { provide: FilesService, useValue: filesSpy },
         { provide: InvitesService, useValue: invitesSpy },
         { provide: CommonModalService, useValue: commonModalSpy },
-    ],
-});
+      ],
+    }).compileComponents();
 
     invitesServiceSpy = TestBed.inject(
       InvitesService
@@ -65,9 +69,7 @@ describe('Save The Date Component (Integrated Test)', () => {
     settingsServiceSpy.getEventSettings.and.returnValue(
       of(saveTheDateBaseSettingMockCopy)
     );
-  }));
 
-  beforeEach(() => {
     filesServiceSpy.getFilesByEvent.and.returnValue(
       of({
         eventImages: [],

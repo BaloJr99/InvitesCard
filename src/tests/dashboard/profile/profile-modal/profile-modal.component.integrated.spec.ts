@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -26,21 +26,21 @@ describe('Profile Modal Component (Integrated Test)', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const userSpy = jasmine.createSpyObj('UserService', ['uploadProfilePhoto']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const fileReaderSpy = jasmine.createSpyObj('FileReaderService', [
       'getBase64',
     ]);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, ProfileModalComponent],
       providers: [
         { provide: UsersService, useValue: userSpy },
         { provide: ToastrService, useValue: toastrSpy },
         { provide: FileReaderService, useValue: fileReaderSpy },
       ],
-    });
+    }).compileComponents();
 
     userServiceSpy = TestBed.inject(
       UsersService
@@ -48,9 +48,7 @@ describe('Profile Modal Component (Integrated Test)', () => {
     fileReaderServiceSpy = TestBed.inject(
       FileReaderService
     ) as jasmine.SpyObj<FileReaderService>;
-  }));
 
-  beforeEach(() => {
     userServiceSpy.uploadProfilePhoto.and.returnValue(
       of(messageResponseMockCopy)
     );

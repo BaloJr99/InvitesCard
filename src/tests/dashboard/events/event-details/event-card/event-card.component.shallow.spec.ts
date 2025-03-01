@@ -1,17 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { EventCardComponent } from 'src/app/dashboard/events/event-details/event-card/event-card.component';
 
 describe('Event Card Component (Shallow Test)', () => {
   let fixture: ComponentFixture<EventCardComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [EventCardComponent],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(EventCardComponent);
     fixture.detectChanges();
   });

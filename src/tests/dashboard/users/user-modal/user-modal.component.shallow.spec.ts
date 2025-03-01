@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -55,7 +55,7 @@ describe('User Modal Component (Shallow Test)', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const usersSpy = jasmine.createSpyObj('UsersService', [
       'createUser',
       'checkUsername',
@@ -63,7 +63,7 @@ describe('User Modal Component (Shallow Test)', () => {
     const rolesSpy = jasmine.createSpyObj('RolesService', ['getAllRoles']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         ValidationPipe,
@@ -84,9 +84,7 @@ describe('User Modal Component (Shallow Test)', () => {
     rolesServiceSpy = TestBed.inject(
       RolesService
     ) as jasmine.SpyObj<RolesService>;
-  }));
 
-  beforeEach(() => {
     usersServiceSpy.createUser.and.returnValue(of());
     usersServiceSpy.checkUsername.and.returnValue(of(false));
     rolesServiceSpy.getAllRoles.and.returnValue(of([roleMockCopy]));

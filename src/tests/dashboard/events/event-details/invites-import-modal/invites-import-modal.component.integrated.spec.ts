@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -31,12 +31,12 @@ describe('Invites Import Modal Component (Integrated Test)', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['bulkInvites']);
     const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['read']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, InvitesImportModalComponent],
       providers: [
         { provide: ToastrService, useValue: toastrSpy },
@@ -52,9 +52,7 @@ describe('Invites Import Modal Component (Integrated Test)', () => {
     fileReaderServiceSpy = TestBed.inject(
       FileReaderService
     ) as jasmine.SpyObj<FileReaderService>;
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(InvitesImportModalComponent);
     fixture.detectChanges();
   });

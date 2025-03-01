@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
@@ -45,7 +45,7 @@ describe('Files Component (Shallow Test)', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const eventsSpy = jasmine.createSpyObj('EventsService', [
       'getDropdownEvents',
     ]);
@@ -53,7 +53,7 @@ describe('Files Component (Shallow Test)', () => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, FilesComponent],
       providers: [
         { provide: EventsService, useValue: eventsSpy },
@@ -62,7 +62,7 @@ describe('Files Component (Shallow Test)', () => {
         { provide: FileReaderService, useValue: fileReaderSpy },
         provideRouter([]),
       ],
-    });
+    }).compileComponents();
 
     eventsServiceSpy = TestBed.inject(
       EventsService
@@ -70,9 +70,7 @@ describe('Files Component (Shallow Test)', () => {
     filesServiceSpy = TestBed.inject(
       FilesService
     ) as jasmine.SpyObj<FilesService>;
-  }));
 
-  beforeEach(() => {
     filesServiceSpy.getFilesByEvent.and.returnValue(of(downloadFileMockCopy));
     eventsServiceSpy.getDropdownEvents.and.returnValue(of([]));
     fixture = TestBed.createComponent(FilesComponent);

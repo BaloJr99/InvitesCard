@@ -3,7 +3,6 @@ import {
   fakeAsync,
   TestBed,
   tick,
-  waitForAsync,
 } from '@angular/core/testing';
 import { provideRouter, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -25,14 +24,14 @@ describe('Events Component (Integrated Test)', () => {
   let tokenStorageServiceSpy: jasmine.SpyObj<TokenStorageService>;
   let router: Router;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const eventsSpy = jasmine.createSpyObj('EventsService', ['getEvents']);
     const tokenSpy = jasmine.createSpyObj('TokenStorageService', [
       'getTokenValues',
     ]);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [DateFormatPipe, RouterLink, EventsComponent],
       providers: [
         { provide: EventsService, useValue: eventsSpy },
@@ -51,9 +50,7 @@ describe('Events Component (Integrated Test)', () => {
     ) as jasmine.SpyObj<TokenStorageService>;
 
     router = TestBed.inject(Router);
-  }));
 
-  beforeEach(() => {
     eventsServiceSpy.getEvents.and.returnValue(of(dashboardEventsMockCopy));
 
     fixture = TestBed.createComponent(EventsComponent);

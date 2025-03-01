@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { CommonModalType } from 'src/app/core/models/enum';
 import { CommonModalService } from 'src/app/core/services/commonModal.service';
@@ -7,20 +7,18 @@ import { commonModalMock } from 'src/tests/mocks/mocks';
 
 describe('Common Modal Component (Integrated Test)', () => {
   let fixture: ComponentFixture<CommonModalComponent>;
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const commonModalSpy = jasmine.createSpyObj('CommonModalService', [
       'confirmModal',
       'closeModal',
       'open',
     ]);
 
-    TestBed.configureTestingModule({
-    imports: [CommonModalComponent],
-    providers: [{ provide: CommonModalService, useValue: commonModalSpy }],
-}).compileComponents();
-  }));
+    await TestBed.configureTestingModule({
+      imports: [CommonModalComponent],
+      providers: [{ provide: CommonModalService, useValue: commonModalSpy }],
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(CommonModalComponent);
     fixture.detectChanges();
   });

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -19,22 +19,20 @@ describe('Profile Modal Component (Shallow Test)', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const userSpy = jasmine.createSpyObj('UserService', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, ProfileModalComponent],
       providers: [
         { provide: UsersService, useValue: userSpy },
         { provide: ToastrService, useValue: toastrSpy },
         { provide: FileReaderService, useValue: fileReaderSpy },
       ],
-    });
-  }));
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ProfileModalComponent);
     fixture.detectChanges();
   });

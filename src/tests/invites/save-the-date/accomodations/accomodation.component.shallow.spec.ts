@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { InvitesService } from 'src/app/core/services/invites.service';
@@ -16,32 +16,30 @@ const saveTheDateUserInviteMockCopy = deepCopy(saveTheDateUserInviteMock);
 describe('Accomodation Component (Shallow Test)', () => {
   let fixture: ComponentFixture<AccomodationComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const invitesSpy: jasmine.SpyObj<InvitesService> = jasmine.createSpyObj(
       'InvitesService',
       ['']
     );
 
-    TestBed.configureTestingModule({
-    imports: [AccomodationComponent],
-    providers: [
+    await TestBed.configureTestingModule({
+      imports: [AccomodationComponent],
+      providers: [
         { provide: InvitesService, useValue: invitesSpy },
         {
-            provide: ActivatedRoute,
-            useValue: {
-                snapshot: {
-                    paramMap: convertToParamMap({
-                        id: saveTheDateUserInviteMockCopy.id,
-                    }),
-                },
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: convertToParamMap({
+                id: saveTheDateUserInviteMockCopy.id,
+              }),
             },
+          },
         },
-    ],
-    schemas: [NO_ERRORS_SCHEMA],
-}).compileComponents();
-  }));
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(AccomodationComponent);
     fixture.detectChanges();
   });

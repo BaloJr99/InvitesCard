@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -30,11 +30,11 @@ describe('User Role Component (Shallow Test)', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const rolesSpy = jasmine.createSpyObj('RolesService', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         ValidationPipe,
@@ -47,9 +47,7 @@ describe('User Role Component (Shallow Test)', () => {
         { provide: ToastrService, useValue: toastrSpy },
       ],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(UserRoleComponent);
     fixture.detectChanges();
   });

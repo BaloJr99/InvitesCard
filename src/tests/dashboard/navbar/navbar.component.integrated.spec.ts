@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
@@ -24,7 +24,7 @@ describe('Navbar Component (Integrated Test)', () => {
   let commonInvitesServiceSpy: jasmine.SpyObj<CommonInvitesService>;
   let router: Router;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['readMessage']);
     const tokenStorageSpy = jasmine.createSpyObj('TokenStorageService', [
       'signOut',
@@ -35,7 +35,7 @@ describe('Navbar Component (Integrated Test)', () => {
       'updateNotifications',
     ]);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [NavbarComponent],
       providers: [
         { provide: InvitesService, useValue: invitesSpy },
@@ -58,9 +58,7 @@ describe('Navbar Component (Integrated Test)', () => {
     ) as jasmine.SpyObj<CommonInvitesService>;
 
     router = TestBed.inject(Router);
-  }));
 
-  beforeEach(() => {
     invitesServiceSpy.readMessage.and.returnValue(of(messageResponseMockCopy));
     tokenStorageServiceSpy.getTokenValues.and.returnValue(userMockCopy);
 

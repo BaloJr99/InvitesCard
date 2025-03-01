@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
@@ -70,7 +70,7 @@ describe('Profile Component (Integrated Test)', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const usersSpy = jasmine.createSpyObj('UsersService', [
       'updateProfile',
       'checkUsername',
@@ -84,7 +84,7 @@ describe('Profile Component (Integrated Test)', () => {
     ]);
     const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         ValidationPipe,
@@ -127,9 +127,7 @@ describe('Profile Component (Integrated Test)', () => {
     tokenStorageServiceSpy = TestBed.inject(
       TokenStorageService
     ) as jasmine.SpyObj<TokenStorageService>;
-  }));
 
-  beforeEach(() => {
     tokenStorageServiceSpy.getTokenValues.and.returnValue(userMockCopy);
     usersServiceSpy.updateProfile.and.returnValue(of(messageResponseMockCopy));
     usersServiceSpy.checkUsername.and.returnValue(of(true));

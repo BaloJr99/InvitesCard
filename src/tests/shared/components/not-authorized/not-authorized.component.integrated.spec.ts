@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter, Router } from '@angular/router';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
@@ -9,10 +9,10 @@ describe('Not Authorized Component (Integrated Test)', () => {
   let router: Router;
   let tokenStorageServiceSpy: jasmine.SpyObj<TokenStorageService>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const tokenSpy = jasmine.createSpyObj('TokenStorageService', ['signOut']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [NotAuthorizedComponent],
       providers: [
         { provide: TokenStorageService, useValue: tokenSpy },
@@ -32,9 +32,7 @@ describe('Not Authorized Component (Integrated Test)', () => {
     tokenStorageServiceSpy = TestBed.inject(
       TokenStorageService
     ) as jasmine.SpyObj<TokenStorageService>;
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(NotAuthorizedComponent);
     fixture.detectChanges();
   });

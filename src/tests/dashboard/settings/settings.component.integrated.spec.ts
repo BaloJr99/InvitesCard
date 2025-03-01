@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
@@ -29,7 +29,7 @@ describe('Settings Component (Integrated Test)', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const eventsSpy = jasmine.createSpyObj('EventsService', [
       'getDropdownEvents',
       'getEventById',
@@ -39,7 +39,7 @@ describe('Settings Component (Integrated Test)', () => {
     ]);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       providers: [
         { provide: EventsService, useValue: eventsSpy },
         { provide: SettingsService, useValue: settingsSpy },
@@ -62,9 +62,7 @@ describe('Settings Component (Integrated Test)', () => {
     settingsServiceSpy = TestBed.inject(
       SettingsService
     ) as jasmine.SpyObj<SettingsService>;
-  }));
 
-  beforeEach(() => {
     settingsServiceSpy.getEventSettings.and.returnValue(of());
     eventsServiceSpy.getDropdownEvents.and.returnValue(
       of(dropdownEventsMockCopy)

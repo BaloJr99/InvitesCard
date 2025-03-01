@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
@@ -14,7 +14,7 @@ const userMockCopy = deepCopy(userMock);
 describe('Navbar Component (Shallow Test)', () => {
   let fixture: ComponentFixture<NavbarComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
     const tokenStorageSpy = jasmine.createSpyObj('TokenStorageService', {
       getTokenValues: userMockCopy,
@@ -22,7 +22,7 @@ describe('Navbar Component (Shallow Test)', () => {
 
     const commonInvitesSpy = jasmine.createSpyObj('CommonInvitesService', ['']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [NavbarComponent],
       providers: [
         { provide: InvitesService, useValue: invitesSpy },
@@ -31,9 +31,7 @@ describe('Navbar Component (Shallow Test)', () => {
         provideRouter([]),
       ],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(NavbarComponent);
     fixture.componentRef.setInput('notificationsValue', notificationsMockCopy);
     fixture.detectChanges();

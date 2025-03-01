@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { PasswordResetComponent } from 'src/app/auth/forgot-password/password-reset/password-reset.component';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
@@ -29,10 +29,10 @@ describe('Password Reset Component (Shallow Test)', () => {
     confirmPasswordInput.nativeElement.dispatchEvent(new Event('input'));
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const authSpy = jasmine.createSpyObj('AuthService', ['resetPassword']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         ValidationPipe,
@@ -46,15 +46,13 @@ describe('Password Reset Component (Shallow Test)', () => {
           useValue: {
             snapshot: {
               data: { reset: true },
-              paramMap: convertToParamMap({ id: fullUserMockCopy.id }),
+              params: { id: fullUserMockCopy.id },
             },
           },
         },
       ],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PasswordResetComponent);
     fixture.detectChanges();
   });

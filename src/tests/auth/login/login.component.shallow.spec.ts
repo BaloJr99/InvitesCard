@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
@@ -30,11 +30,11 @@ describe('Login Component (Shallow Test)', () => {
     passwordInput.nativeElement.dispatchEvent(new Event('input'));
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const authSpy = jasmine.createSpyObj('AuthService', ['loginAccount']);
     const tokenSpy = jasmine.createSpyObj('TokenStorageService', ['saveToken']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         ValidationPipe,
@@ -47,9 +47,7 @@ describe('Login Component (Shallow Test)', () => {
         provideRouter([]),
       ],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
     fixture.detectChanges();
   });

@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
@@ -28,7 +28,7 @@ describe('Event Details Component (Shallow Test)', () => {
   let eventsServiceSpy: jasmine.SpyObj<EventsService>;
   let inviteGroupsServiceSpy: jasmine.SpyObj<InviteGroupsService>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const inviteGroupSpy = jasmine.createSpyObj('InviteGroupService', [
       'getAllInviteGroups',
     ]);
@@ -43,7 +43,7 @@ describe('Event Details Component (Shallow Test)', () => {
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [EventDetailsComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
@@ -77,9 +77,7 @@ describe('Event Details Component (Shallow Test)', () => {
     inviteGroupsServiceSpy = TestBed.inject(
       InviteGroupsService
     ) as jasmine.SpyObj<InviteGroupsService>;
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(EventDetailsComponent);
     inviteGroupsServiceSpy.getAllInviteGroups.and.returnValue(
       of([fullInvitesGroupsMockCopy])

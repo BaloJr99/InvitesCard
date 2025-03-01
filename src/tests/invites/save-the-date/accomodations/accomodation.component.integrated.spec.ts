@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
@@ -20,35 +20,33 @@ describe('Accomodation Component (Integrated Test)', () => {
   let fixture: ComponentFixture<AccomodationComponent>;
   let invitesServiceSpy: jasmine.SpyObj<InvitesService>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const invitesSpy: jasmine.SpyObj<InvitesService> = jasmine.createSpyObj(
       'InvitesService',
       ['sendConfirmation']
     );
 
-    TestBed.configureTestingModule({
-    imports: [ReactiveFormsModule, AccomodationComponent],
-    providers: [
+    await TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule, AccomodationComponent],
+      providers: [
         { provide: InvitesService, useValue: invitesSpy },
         {
-            provide: ActivatedRoute,
-            useValue: {
-                snapshot: {
-                    paramMap: convertToParamMap({
-                        id: saveTheDateUserInviteMockCopy.id,
-                    }),
-                },
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: convertToParamMap({
+                id: saveTheDateUserInviteMockCopy.id,
+              }),
             },
+          },
         },
-    ],
-}).compileComponents();
+      ],
+    }).compileComponents();
 
     invitesServiceSpy = TestBed.inject(
       InvitesService
     ) as jasmine.SpyObj<InvitesService>;
-  }));
 
-  beforeEach(() => {
     invitesServiceSpy.sendConfirmation.and.returnValue(
       of(messageResponseMockCopy)
     );
@@ -58,7 +56,10 @@ describe('Accomodation Component (Integrated Test)', () => {
 
   it('should call sendConfirmation when sendUserResponse is called', () => {
     fixture.componentRef.setInput('inviteValue', saveTheDateUserInviteMockCopy);
-    fixture.componentRef.setInput('inviteSettingsValue', saveTheDateSettingMockCopy);
+    fixture.componentRef.setInput(
+      'inviteSettingsValue',
+      saveTheDateSettingMockCopy
+    );
     fixture.detectChanges();
 
     const form = fixture.debugElement.query(By.css('form'));

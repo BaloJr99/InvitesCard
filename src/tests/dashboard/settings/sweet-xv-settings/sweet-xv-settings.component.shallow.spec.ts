@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -135,14 +135,14 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
     }
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const settingsSpy = jasmine.createSpyObj('SettingsService', [
       'getEventSettings',
     ]);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const eventsSpy = jasmine.createSpyObj('EventsService', ['getEventById']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         ValidationPipe,
@@ -164,9 +164,7 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
     eventsServiceSpy = TestBed.inject(
       EventsService
     ) as jasmine.SpyObj<EventsService>;
-  }));
 
-  beforeEach(() => {
     settingsServiceSpy.getEventSettings.and.returnValue(
       of(sweetXvBaseSettingMockCopy)
     );

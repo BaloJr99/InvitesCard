@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -65,13 +65,13 @@ describe('Save The Date Settings Component (Shallow test)', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const settingsSpy = jasmine.createSpyObj('SettingsService', [
       'getEventSettings',
     ]);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         ValidationPipe,
@@ -88,9 +88,7 @@ describe('Save The Date Settings Component (Shallow test)', () => {
     settingsServiceSpy = TestBed.inject(
       SettingsService
     ) as jasmine.SpyObj<SettingsService>;
-  }));
 
-  beforeEach(() => {
     settingsServiceSpy.getEventSettings.and.returnValue(
       of(saveTheDateBaseSettingMockCopy)
     );

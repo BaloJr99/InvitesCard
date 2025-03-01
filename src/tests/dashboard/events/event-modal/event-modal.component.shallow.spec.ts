@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -65,14 +65,14 @@ describe('Event Modal Component (Shallow Test)', () => {
     userIdInput.nativeElement.dispatchEvent(new Event('change'));
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
     const usersSpy = jasmine.createSpyObj('UsersService', [
       'getUsersDropdownData',
     ]);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         ValidationPipe,
@@ -89,9 +89,7 @@ describe('Event Modal Component (Shallow Test)', () => {
     usersServiceSpy = TestBed.inject(
       UsersService
     ) as jasmine.SpyObj<UsersService>;
-  }));
 
-  beforeEach(() => {
     usersServiceSpy.getUsersDropdownData.and.returnValue(
       of([userDropdownDataMockCopy])
     );
@@ -253,7 +251,7 @@ describe('Event Modal Component (Shallow Test)', () => {
       .toContain('El usuario es requerido');
   });
 
-  it("Shouldn't display username and password error message when fields are filled", () => {
+  it("Shouldn't display error message when fields are filled", () => {
     updateFormUsingEvent(
       fullEventsMockCopy.dateOfEvent,
       fullEventsMockCopy.dateOfEvent,

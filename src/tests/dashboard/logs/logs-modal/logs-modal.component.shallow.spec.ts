@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { LogsModalComponent } from 'src/app/dashboard/logs/logs-modal/logs-modal.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
@@ -9,13 +9,11 @@ const logMockCopy = deepCopy(logMock);
 describe('Logs Modal Component (Isolated Test)', () => {
   let fixture: ComponentFixture<LogsModalComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [LogsModalComponent],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(LogsModalComponent);
     fixture.detectChanges();
   });

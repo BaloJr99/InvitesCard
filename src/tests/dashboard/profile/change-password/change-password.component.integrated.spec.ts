@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -30,11 +30,11 @@ describe('Change Password Component (Integrated Test)', () => {
     confirmPasswordInput.nativeElement.dispatchEvent(new Event('input'));
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const authSpy = jasmine.createSpyObj('AuthService', ['resetPassword']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         ValidationPipe,
@@ -48,9 +48,7 @@ describe('Change Password Component (Integrated Test)', () => {
     }).compileComponents();
 
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ChangePasswordComponent);
     fixture.detectChanges();
   });

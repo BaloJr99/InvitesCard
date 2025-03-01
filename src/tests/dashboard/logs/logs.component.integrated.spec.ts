@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
@@ -16,10 +16,10 @@ describe('Logs Component (Integrated Test)', () => {
   let fixture: ComponentFixture<LogsComponent>;
   let loggerServiceSpy: jasmine.SpyObj<LoggerService>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const loggerSpy = jasmine.createSpyObj('LoggerService', ['getLogs']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         FilterComponent,
         LogsComponent,
@@ -35,9 +35,7 @@ describe('Logs Component (Integrated Test)', () => {
     loggerServiceSpy = TestBed.inject(
       LoggerService
     ) as jasmine.SpyObj<LoggerService>;
-  }));
 
-  beforeEach(() => {
     loggerServiceSpy.getLogs.and.returnValue(of([logMockCopy]));
     fixture = TestBed.createComponent(LogsComponent);
     fixture.detectChanges();

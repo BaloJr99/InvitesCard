@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
@@ -24,29 +24,32 @@ describe('Wedding Component (Integrated Test)', () => {
   let filesServiceSpy: jasmine.SpyObj<FilesService>;
   let settingsServiceSpy: jasmine.SpyObj<SettingsService>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const settingsSpy = jasmine.createSpyObj('SettingsService', [
       'getEventSettings',
     ]);
     const filesSpy = jasmine.createSpyObj('FilesService', ['getFilesByEvent']);
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['getInvite']);
 
-    TestBed.configureTestingModule({
-    imports: [SafePipe, CountdownComponent,
+    await TestBed.configureTestingModule({
+      imports: [
+        SafePipe,
+        CountdownComponent,
         ConfirmationComponent,
-        WeddingComponent],
-    providers: [
+        WeddingComponent,
+      ],
+      providers: [
         {
-            provide: ActivatedRoute,
-            useValue: {
-                params: of({ id: weddingUserInviteMockCopy.id }),
-            },
+          provide: ActivatedRoute,
+          useValue: {
+            params: of({ id: weddingUserInviteMockCopy.id }),
+          },
         },
         { provide: SettingsService, useValue: settingsSpy },
         { provide: FilesService, useValue: filesSpy },
         { provide: InvitesService, useValue: invitesSpy },
-    ],
-}).compileComponents();
+      ],
+    }).compileComponents();
 
     invitesServiceSpy = TestBed.inject(
       InvitesService
@@ -57,9 +60,7 @@ describe('Wedding Component (Integrated Test)', () => {
     settingsServiceSpy = TestBed.inject(
       SettingsService
     ) as jasmine.SpyObj<SettingsService>;
-  }));
 
-  beforeEach(() => {
     invitesServiceSpy.getInvite.and.returnValue(of(weddingUserInviteMockCopy));
     settingsServiceSpy.getEventSettings.and.returnValue(
       of(weddingBaseSettingMockCopy)

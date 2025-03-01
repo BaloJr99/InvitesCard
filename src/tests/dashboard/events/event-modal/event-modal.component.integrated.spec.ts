@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -73,7 +73,7 @@ describe('Event Modal Component (Integrated Test)', () => {
     userIdInput.nativeElement.dispatchEvent(new Event('change'));
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const eventsSpy = jasmine.createSpyObj('EventsService', [
       'createEvent',
       'updateEvent',
@@ -84,7 +84,7 @@ describe('Event Modal Component (Integrated Test)', () => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['open']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         ValidationPipe,
@@ -108,9 +108,7 @@ describe('Event Modal Component (Integrated Test)', () => {
     usersServiceSpy = TestBed.inject(
       UsersService
     ) as jasmine.SpyObj<UsersService>;
-  }));
 
-  beforeEach(() => {
     usersServiceSpy.getUsersDropdownData.and.returnValue(
       of([userDropdownDataMockCopy])
     );

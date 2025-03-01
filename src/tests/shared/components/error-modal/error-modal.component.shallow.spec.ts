@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 import { ErrorModalService } from 'src/app/core/services/error.service';
@@ -11,17 +11,15 @@ const errorMockCopy = deepCopy(errorMock);
 describe('Error Modal Component (Shallow Test)', () => {
   let fixture: ComponentFixture<ErrorModalComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const errorModalSpy = jasmine.createSpyObj('ErrorModalService', ['']);
     errorModalSpy.errorResponse$ = of(errorMockCopy);
 
-    TestBed.configureTestingModule({
-    imports: [ErrorModalComponent],
-    providers: [{ provide: ErrorModalService, useValue: errorModalSpy }],
-}).compileComponents();
-  }));
+    await TestBed.configureTestingModule({
+      imports: [ErrorModalComponent],
+      providers: [{ provide: ErrorModalService, useValue: errorModalSpy }],
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ErrorModalComponent);
     fixture.detectChanges();
   });

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { EventsService } from 'src/app/core/services/events.service';
@@ -18,7 +18,7 @@ describe('HomeComponent (Integrated Test)', () => {
   let eventsServiceSpy: jasmine.SpyObj<EventsService>;
   let invitesServiceSpy: jasmine.SpyObj<InvitesService>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const invitesSpy = jasmine.createSpyObj('InvitesService', [
       'getAllInvites',
     ]);
@@ -26,7 +26,7 @@ describe('HomeComponent (Integrated Test)', () => {
       'getDropdownEvents',
     ]);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [HomeComponent],
       providers: [
         { provide: InvitesService, useValue: invitesSpy },
@@ -41,9 +41,7 @@ describe('HomeComponent (Integrated Test)', () => {
     invitesServiceSpy = TestBed.inject(
       InvitesService
     ) as jasmine.SpyObj<InvitesService>;
-  }));
 
-  beforeEach(() => {
     eventsServiceSpy.getDropdownEvents.and.returnValue(
       of(dropdownEventsMockCopy)
     );

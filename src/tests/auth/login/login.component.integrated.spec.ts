@@ -4,7 +4,6 @@ import {
   fakeAsync,
   TestBed,
   tick,
-  waitForAsync,
 } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -41,11 +40,11 @@ describe('Login Component (Integrated Test)', () => {
     passwordInput.nativeElement.dispatchEvent(new Event('input'));
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const authSpy = jasmine.createSpyObj('AuthService', ['loginAccount']);
     const tokenSpy = jasmine.createSpyObj('TokenStorageService', ['saveToken']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         RouterLink,
@@ -70,9 +69,7 @@ describe('Login Component (Integrated Test)', () => {
 
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     router = TestBed.inject(Router);
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
     fixture.detectChanges();
   });

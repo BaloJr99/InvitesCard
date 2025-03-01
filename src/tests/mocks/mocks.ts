@@ -60,6 +60,11 @@ import {
   ISweetXvSetting,
   IWeddingSetting,
 } from 'src/app/core/models/settings';
+import {
+  IAlbum,
+  IAlbumImage,
+  IFullAlbumImage,
+} from 'src/app/core/models/gallery';
 
 export const roleMock: IRole = {
   id: '674a68009dc087f77323d40d',
@@ -837,4 +842,28 @@ export const showGiftsSection: IInviteSection[] = [
 export const errorMock: IError = {
   hasError: true,
   serverError: null,
+};
+
+export const albumMock: IAlbum = {
+  id: '7bedc081-d0c5-4f4a-9e65-f43742d0f489',
+  nameOfAlbum: 'Test Album',
+  dateOfAlbum: new Date().toISOString(),
+  eventId: fullEventsMock.id,
+  isActive: true,
+  thumbnail: 'Test.jpg',
+};
+
+export const albumImagesMock: IAlbumImage[] = [
+  {
+    id: '7d9b8e50-6319-48d1-a6c6-760b34feda40',
+    fileUrl: 'https://fakepath/Test.jpg',
+    publicId: 'test',
+    albumId: albumMock.id,
+    isActive: true,
+  },
+];
+
+export const fullAlbumImageMock: IFullAlbumImage = {
+  ...albumImagesMock[0],
+  image: 'base64',
 };

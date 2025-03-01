@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { provideRouter, Router } from '@angular/router';
@@ -25,7 +25,7 @@ describe('Users Component (Integrated Test)', () => {
   let rolesServiceSpy: jasmine.SpyObj<RolesService>;
   let router: Router;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const usersSpy = jasmine.createSpyObj('UsersService', [
       'getAllUsers',
       'getUserById',
@@ -33,7 +33,7 @@ describe('Users Component (Integrated Test)', () => {
     const rolesSpy = jasmine.createSpyObj('RolesService', ['getAllRoles']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         ValidationPipe,
@@ -60,9 +60,7 @@ describe('Users Component (Integrated Test)', () => {
     rolesServiceSpy = TestBed.inject(
       RolesService
     ) as jasmine.SpyObj<RolesService>;
-  }));
 
-  beforeEach(() => {
     usersServiceSpy.getAllUsers.and.returnValue(of([userEventsInfoMockCopy]));
     usersServiceSpy.getUserById.and.returnValue(of(searchUserMockCopy));
     rolesServiceSpy.getAllRoles.and.returnValue(of([]));

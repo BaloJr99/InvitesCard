@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
@@ -22,25 +22,23 @@ describe('Sidebar Component (Shallow Test)', () => {
     CONFIGURACIÓN: false,
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const tokenStorageSpy = jasmine.createSpyObj('TokenStorageService', [
       'getTokenValues',
     ]);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [SidebarComponent],
       providers: [
         { provide: TokenStorageService, useValue: tokenStorageSpy },
         provideRouter([]),
       ],
-    });
+    }).compileComponents();
 
     tokenStorageServiceSpy = TestBed.inject(
       TokenStorageService
     ) as jasmine.SpyObj<TokenStorageService>;
-  }));
 
-  beforeEach(() => {
     tokenStorageServiceSpy.getTokenValues.and.returnValue(userMockCopy);
     fixture = TestBed.createComponent(SidebarComponent);
     fixture.detectChanges();

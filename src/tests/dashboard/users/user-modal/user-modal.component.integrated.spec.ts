@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -64,7 +64,7 @@ describe('User Modal Component (Integrated Test)', () => {
     userIsActiveInput.nativeElement.dispatchEvent(new Event('change'));
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const usersSpy = jasmine.createSpyObj('UsersService', [
       'createUser',
       'updateUser',
@@ -73,7 +73,7 @@ describe('User Modal Component (Integrated Test)', () => {
     const rolesSpy = jasmine.createSpyObj('RolesService', ['getAllRoles']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         ValidationPipe,
@@ -93,9 +93,7 @@ describe('User Modal Component (Integrated Test)', () => {
     rolesServiceSpy = TestBed.inject(
       RolesService
     ) as jasmine.SpyObj<RolesService>;
-  }));
 
-  beforeEach(() => {
     usersServiceSpy.createUser.and.returnValue(of(messageResponseMockCopy));
     usersServiceSpy.updateUser.and.returnValue(of(messageResponseMockCopy));
     usersServiceSpy.checkUsername.and.returnValue(of(false));

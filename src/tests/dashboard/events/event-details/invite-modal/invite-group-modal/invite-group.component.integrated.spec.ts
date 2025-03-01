@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -27,7 +27,7 @@ describe('Invite Group Component (Integrated Test)', () => {
     inviteGroupInput.nativeElement.dispatchEvent(new Event('input'));
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const inviteGroupsSpy = jasmine.createSpyObj('InviteGroupsService', [
       'createInviteGroup',
@@ -35,7 +35,7 @@ describe('Invite Group Component (Integrated Test)', () => {
       'checkInviteGroup',
     ]);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         ValidationPipe,
@@ -51,9 +51,7 @@ describe('Invite Group Component (Integrated Test)', () => {
     inviteGroupsServiceSpy = TestBed.inject(
       InviteGroupsService
     ) as jasmine.SpyObj<InviteGroupsService>;
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(InviteGroupComponent);
     fixture.detectChanges();
   });

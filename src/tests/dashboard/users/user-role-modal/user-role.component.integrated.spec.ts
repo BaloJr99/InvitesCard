@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -38,7 +38,7 @@ describe('User Role Component (Integrated Test)', () => {
     roleIsActiveInput.nativeElement.dispatchEvent(new Event('change'));
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const rolesSpy = jasmine.createSpyObj('RolesService', [
       'createRole',
       'updateRole',
@@ -46,7 +46,7 @@ describe('User Role Component (Integrated Test)', () => {
     ]);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         ValidationPipe,
@@ -62,9 +62,7 @@ describe('User Role Component (Integrated Test)', () => {
     rolesServiceSpy = TestBed.inject(
       RolesService
     ) as jasmine.SpyObj<RolesService>;
-  }));
 
-  beforeEach(() => {
     rolesServiceSpy.createRole.and.returnValue(of(messageResponseMockCopy));
     rolesServiceSpy.updateRole.and.returnValue(of(messageResponseMockCopy));
     rolesServiceSpy.checkRoleName.and.returnValue(of(false));

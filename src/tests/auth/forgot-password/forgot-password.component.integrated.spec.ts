@@ -3,7 +3,6 @@ import {
   fakeAsync,
   TestBed,
   tick,
-  waitForAsync,
 } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -33,10 +32,10 @@ describe('Forgot Password Component (Integrated Test)', () => {
     usernameInput.nativeElement.dispatchEvent(new Event('input'));
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const authSpy = jasmine.createSpyObj('AuthService', ['sendResetPassword']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         RouterLink,
@@ -52,9 +51,7 @@ describe('Forgot Password Component (Integrated Test)', () => {
 
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     router = TestBed.inject(Router);
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ForgotPasswordComponent);
     fixture.detectChanges();
   });

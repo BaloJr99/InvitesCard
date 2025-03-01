@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
 import { ICommonModal } from 'src/app/core/models/common';
@@ -9,24 +9,18 @@ describe('Common Modal Component (Shallow Test)', () => {
   let fixture: ComponentFixture<CommonModalComponent>;
   let commonModalDataSubject: Subject<ICommonModal>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     commonModalDataSubject = new Subject<ICommonModal>();
 
-    const commonModalSpy = jasmine.createSpyObj(
-      'CommonModalService',
-      [''],
-      {
-        commonModalData$: commonModalDataSubject.asObservable(),
-      }
-    );
+    const commonModalSpy = jasmine.createSpyObj('CommonModalService', [''], {
+      commonModalData$: commonModalDataSubject.asObservable(),
+    });
 
-    TestBed.configureTestingModule({
-    imports: [CommonModalComponent],
-    providers: [{ provide: CommonModalService, useValue: commonModalSpy }],
-}).compileComponents();
-  }));
+    await TestBed.configureTestingModule({
+      imports: [CommonModalComponent],
+      providers: [{ provide: CommonModalService, useValue: commonModalSpy }],
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(CommonModalComponent);
     fixture.detectChanges();
   });

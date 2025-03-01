@@ -1,10 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
@@ -30,7 +25,7 @@ describe('Save The Date Component (Shallow Test)', () => {
   let filesServiceSpy: jasmine.SpyObj<FilesService>;
   let commonModalServiceSpy: jasmine.SpyObj<CommonModalService>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const settingsSpy = jasmine.createSpyObj('SettingsService', [
       'getEventSettings',
     ]);
@@ -38,22 +33,22 @@ describe('Save The Date Component (Shallow Test)', () => {
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['getInvite']);
     const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['open']);
 
-    TestBed.configureTestingModule({
-    imports: [SaveTheDateComponent],
-    schemas: [NO_ERRORS_SCHEMA],
-    providers: [
+    await TestBed.configureTestingModule({
+      imports: [SaveTheDateComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
         {
-            provide: ActivatedRoute,
-            useValue: {
-                params: of({ id: saveTheDateUserInviteMockCopy.id }),
-            },
+          provide: ActivatedRoute,
+          useValue: {
+            params: of({ id: saveTheDateUserInviteMockCopy.id }),
+          },
         },
         { provide: SettingsService, useValue: settingsSpy },
         { provide: FilesService, useValue: filesSpy },
         { provide: InvitesService, useValue: invitesSpy },
         { provide: CommonModalService, useValue: commonModalSpy },
-    ],
-});
+      ],
+    }).compileComponents();
 
     invitesServiceSpy = TestBed.inject(
       InvitesService
@@ -70,9 +65,7 @@ describe('Save The Date Component (Shallow Test)', () => {
     settingsServiceSpy.getEventSettings.and.returnValue(
       of(saveTheDateBaseSettingMockCopy)
     );
-  }));
 
-  beforeEach(() => {
     filesServiceSpy.getFilesByEvent.and.returnValue(
       of({
         eventImages: [],
@@ -113,7 +106,8 @@ describe('Save The Date Component (Shallow Test)', () => {
       .withContext('Main header should be rendered')
       .toBe('SAVE The DATE');
 
-    const namesOfCouple = saveTheDateUserInviteMockCopy.nameOfCelebrated.split(';');
+    const namesOfCouple =
+      saveTheDateUserInviteMockCopy.nameOfCelebrated.split(';');
     expect(names.nativeElement.textContent)
       .withContext('Names should be rendered')
       .toContain(namesOfCouple[0]);

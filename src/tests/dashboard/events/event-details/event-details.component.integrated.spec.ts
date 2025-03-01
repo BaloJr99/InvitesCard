@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
@@ -50,7 +50,7 @@ describe('Event Details Component (Integrated Test)', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const inviteGroupsSpy = jasmine.createSpyObj('InviteGroupsService', [
       'getAllInviteGroups',
     ]);
@@ -67,7 +67,7 @@ describe('Event Details Component (Integrated Test)', () => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         ValidationPipe,
@@ -114,9 +114,7 @@ describe('Event Details Component (Integrated Test)', () => {
     eventsServiceSpy = TestBed.inject(
       EventsService
     ) as jasmine.SpyObj<EventsService>;
-  }));
 
-  beforeEach(() => {
     inviteGroupsServiceSpy.getAllInviteGroups.and.returnValue(
       of([fullInvitesGroupsMockCopy])
     );

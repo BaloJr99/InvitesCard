@@ -1,9 +1,10 @@
 import { provideHttpClient } from '@angular/common/http';
 import { importProvidersFrom, NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { ToastrModule } from 'ngx-toastr';
 import { of } from 'rxjs';
+import { RolesService } from 'src/app/core/services/roles.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { UsersComponent } from 'src/app/dashboard/users/users.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
@@ -14,15 +15,18 @@ const userEventsInfoMockCopy = deepCopy(userEventsInfoMock);
 describe('Users Component (Shallow Test)', () => {
   let fixture: ComponentFixture<UsersComponent>;
   let usersServiceSpy: jasmine.SpyObj<UsersService>;
+  let rolesServiceSpy: jasmine.SpyObj<RolesService>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const usersSpy = jasmine.createSpyObj('UsersService', ['getAllUsers']);
+    const rolesSpy = jasmine.createSpyObj('RolesService', ['getAllRoles']);
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [UsersComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: UsersService, useValue: usersSpy },
+        { provide: RolesService, useValue: rolesSpy },
         provideRouter([]),
         provideHttpClient(),
         importProvidersFrom(
@@ -36,10 +40,13 @@ describe('Users Component (Shallow Test)', () => {
     usersServiceSpy = TestBed.inject(
       UsersService
     ) as jasmine.SpyObj<UsersService>;
-  }));
 
-  beforeEach(() => {
+    rolesServiceSpy = TestBed.inject(
+      RolesService
+    ) as jasmine.SpyObj<RolesService>;
+
     usersServiceSpy.getAllUsers.and.returnValue(of([userEventsInfoMockCopy]));
+    rolesServiceSpy.getAllRoles.and.returnValue(of([]));
     fixture = TestBed.createComponent(UsersComponent);
     fixture.detectChanges();
   });
