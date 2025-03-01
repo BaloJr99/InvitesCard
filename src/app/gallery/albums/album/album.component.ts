@@ -33,7 +33,7 @@ export class AlbumComponent {
     private toastrService: ToastrService
   ) {}
 
-  albumResolved = {} as IAlbumResolved;
+  private albumResolved = {} as IAlbumResolved;
   private uploadProgress = new Subject<string>();
   uploadProgress$ = this.uploadProgress.asObservable();
 
@@ -144,12 +144,4 @@ export class AlbumComponent {
       });
     }
   }
-
-  // deleteAlbum(albumId: string) {
-  //   this.galleryService.deleteAlbum(albumId).subscribe(() => {
-  //     const oldAlbums = this.albums.value;
-  //     const newAlbums = oldAlbums.filter((album) => album.id !== albumId);
-  //     this.albums.next(newAlbums);
-  //   });
-  // }
 }

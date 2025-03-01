@@ -48,7 +48,7 @@ export class AlbumsComponent {
       this.albumsResolved = data['albumResolved'];
 
       // Get parent id from the route
-      const nameOfAlbum = this.route.snapshot.paramMap.get('id');
+      const nameOfAlbum = this.route.snapshot.params['id'];
 
       return {
         eventId: this.albumsResolved.eventId,
@@ -90,14 +90,6 @@ export class AlbumsComponent {
       },
       isNew: false,
     };
-  }
-
-  deleteAlbum(albumId: string) {
-    this.galleryService.deleteAlbum(albumId).subscribe(() => {
-      const oldAlbums = this.albums.value;
-      const newAlbums = oldAlbums.filter((album) => album.id !== albumId);
-      this.albums.next(newAlbums);
-    });
   }
 
   closeAlbumModal() {

@@ -107,7 +107,7 @@ export class ConfirmationComponent {
           this.showDiv();
           const inviteInfo = {
             ...this.confirmationForm.value,
-            id: this.activatedRoute.snapshot.paramMap.get('id'),
+            id: this.activatedRoute.snapshot.params['id'],
           };
           this.socket.sendNotification(inviteInfo);
         },

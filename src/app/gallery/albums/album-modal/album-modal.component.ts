@@ -163,6 +163,7 @@ export class AlbumModalComponent {
       id: '',
       nameOfAlbum: '',
       eventId: '',
+      controlIsValid: true,
     });
   }
 }

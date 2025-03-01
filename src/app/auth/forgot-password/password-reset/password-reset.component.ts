@@ -41,7 +41,7 @@ export class PasswordResetComponent implements OnInit {
     if (this.passwordResetForm.valid && this.passwordResetForm.dirty) {
       this.authService
         .resetPassword(
-          this.route.snapshot.paramMap.get('id') ?? '',
+          this.route.snapshot.params['id'],
           this.passwordResetForm.value
         )
         .subscribe({

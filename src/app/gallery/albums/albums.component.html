@@ -7,7 +7,7 @@
         </ol>
       </nav>
       <div class="buttons">
-        <button class="btn btn-dark" i18n (click)="createNewAlbum()" [disabled]="vm.isActive">+ Nuevo Albúm</button>
+        <button class="btn btn-dark" i18n (click)="createNewAlbum()" [disabled]="!vm.isActive">+ Nuevo Albúm</button>
       </div>
     </div>
   </div>
