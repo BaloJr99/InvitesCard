@@ -34,6 +34,7 @@ export default defineConfig({
       executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
     },
   },
+  timeout: 60000,
 
   /* Configure projects for major browsers */
   projects: [

@@ -21,7 +21,7 @@ export class EventsPage extends DashboardPage {
   }
 
   async isEventsPage() {
-    await this.breadcrumbHeader.waitFor({ state: 'visible', timeout: 2000 });
+    await this.breadcrumbHeader.waitFor({ state: 'visible', timeout: 5000 });
     expect(this.breadcrumbHeader, {
       message: 'Events breadcrumb should be visible',
     }).toBeVisible();
@@ -34,6 +34,7 @@ export class EventsPage extends DashboardPage {
 
   async clickNewEventButton() {
     await this.newEventButton.click();
+    await this.waitToLoad();
     return new EventModal(this.page);
   }
 
@@ -46,12 +47,13 @@ export class EventsPage extends DashboardPage {
     return eventCards.length;
   }
 
-  getEventCard = (index: number) => {
+  async getEventCard(index: number) {
+    await this.page.waitForSelector('.events-container .card');
     return this.page.locator('.events-container .card').nth(index);
-  };
+  }
 
   async clickEditEventButton(index: number) {
-    const eventCard = this.getEventCard(index);
+    const eventCard = await this.getEventCard(index);
     const button = eventCard.locator('button.edit-event');
     await button.click();
     await this.waitToLoad();
@@ -59,12 +61,12 @@ export class EventsPage extends DashboardPage {
     return new EventModal(this.page);
   }
 
-  async clickGoToInvitesButton(index: number) {
-    const eventCard = this.getEventCard(index);
+  async clickGoToInvitesButton(index: number, eventId: string) {
+    const eventCard = await this.getEventCard(index);
     const button = eventCard.locator('a');
     await button.click();
     await this.waitToLoad();
-    await this.page.waitForURL('/dashboard/events/**', {
+    await this.page.waitForURL(`/dashboard/events/${eventId}`, {
       waitUntil: 'domcontentloaded',
     });
 

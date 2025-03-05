@@ -110,12 +110,14 @@ test.describe('Dashboard Files (Admin)', () => {
     await commonModal.clickConfirmButton();
     await filesPage.waitToLoad();
     await filesPage.waitForToast();
+    await commonModal.waitForModalToHide();
 
     await filesPage.deleteAudio(0);
     await commonModal.waitForModalToShow();
     await commonModal.clickConfirmButton();
     await filesPage.waitToLoad();
     await filesPage.waitForToast();
+    await commonModal.waitForModalToHide();
 
     expect(await filesPage.getImageCardCount(), {
       message: 'Image card count should be 0',

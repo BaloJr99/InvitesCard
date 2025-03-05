@@ -16,15 +16,24 @@ export class BasePage {
    * Logs a message if the page or context is closed.
    */
   async waitToLoad(): Promise<void> {
+    const initialUrl = this.page.url();
     try {
-      if (await this.spinner.isVisible()) {
-        while (await this.spinner.isVisible()) {
-          if (this.page.isClosed()) {
-            console.log('Page or context has been closed');
-            return;
+      if ((await this.spinner.isVisible()) && this.page.url() === initialUrl) {
+        while (
+          (await this.spinner.isVisible()) &&
+          this.page.url() === initialUrl
+        ) {
+          try {
+            await this.spinner.waitFor({ state: 'hidden', timeout: 5000 });
+          } catch {
+            console.log('Spinner is still visible');
           }
-          await this.spinner.waitFor({ state: 'hidden', timeout: 5000 });
         }
+      }
+
+      if (await this.spinner.isVisible()) {
+        // Retry again with new url
+        await this.waitToLoad();
       }
     } catch (error) {
       console.error(
@@ -55,14 +64,24 @@ export class BasePage {
    */
   async waitForToast(): Promise<void> {
     try {
-      await this.toastr.waitFor({ state: 'visible', timeout: 5000 });
       if (await this.toastr.isVisible()) {
         await this.toastr.click();
+        while (await this.toastr.isVisible()) {
+          try {
+            await this.toastr.waitFor({ state: 'hidden', timeout: 5000 });
+          } catch {
+            console.log('Toastr is still visible');
+          }
+        }
       }
-      await this.toastr.waitFor({ state: 'hidden', timeout: 5000 });
-      await this.toastr.isVisible();
+
+      if (await this.toastr.isVisible()) {
+        await this.waitForToast();
+      }
     } catch (error) {
-      console.error(`Error while checking toastr: ${(error as Error).message}`);
+      console.error(
+        `Error while waiting for toastr: ${(error as Error).message}`
+      );
     }
   }
 }

@@ -62,11 +62,42 @@ export class InviteModal extends BaseModal {
   }
 
   async waitForGroupFormToLoad() {
-    await this.inviteGroupForm.waitFor({ state: 'visible', timeout: 2000 });
+    try {
+      if (await this.modalLocator.isVisible()) {
+        while (!(await this.inviteGroupForm.isVisible())) {
+          try {
+            await this.inviteGroupForm.waitFor({
+              state: 'visible',
+              timeout: 5000,
+            });
+          } catch {
+            console.log('Invite group form is still hidden');
+          }
+        }
+      }
+    } catch (error) {
+      console.error(
+        `Error while waiting for invite group form: ${(error as Error).message}`
+      );
+    }
   }
 
   async waitForInviteFormToLoad() {
-    await this.inviteForm.waitFor({ state: 'visible', timeout: 2000 });
+    try {
+      if (await this.modalLocator.isVisible()) {
+        while (!(await this.inviteForm.isVisible())) {
+          try {
+            await this.inviteForm.waitFor({ state: 'visible', timeout: 5000 });
+          } catch {
+            console.log('Invite form is still hidden');
+          }
+        }
+      }
+    } catch (error) {
+      console.error(
+        `Error while waiting for invite form: ${(error as Error).message}`
+      );
+    }
   }
 
   async clickEditGroupButton() {

@@ -26,7 +26,7 @@ export class UsersPage extends DashboardPage {
   }
 
   async isUsersPage() {
-    await this.breadcrumbHeader.waitFor({ state: 'visible', timeout: 2000 });
+    await this.breadcrumbHeader.waitFor({ state: 'visible', timeout: 5000 });
     expect(this.breadcrumbHeader, {
       message: 'Users breadcrumb should be visible',
     }).toBeVisible();

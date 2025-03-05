@@ -36,6 +36,7 @@ export class PasswordResetPage extends BasePage {
       waitUntil: 'domcontentloaded',
     });
     await this.isPasswordResetPage();
+    await this.waitToLoad();
   }
 
   async isPasswordResetPage() {
@@ -48,6 +49,7 @@ export class PasswordResetPage extends BasePage {
     await this.passwordInput.fill(password);
     await this.confirmPasswordInput.fill(confirmPassword);
     await this.submitButton.click();
+    await this.waitToLoad();
   }
 
   async checkPasswordChangedSuccessMessage() {

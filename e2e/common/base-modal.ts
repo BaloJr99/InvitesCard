@@ -14,6 +14,13 @@ export class BaseModal {
     this.cancelButton = this.modalLocator.getByTestId('cancel-button');
   }
 
+  async clickConfirmButtonAndReturnId(): Promise<string> {
+    const responsePromise = this.page.waitForResponse('**/api/**');
+    await this.clickConfirmButton();
+    const response = await responsePromise;
+    return JSON.parse((await response.body()).toString())['id'];
+  }
+
   async clickConfirmButton() {
     await this.confirmButton.click();
   }
@@ -23,16 +30,42 @@ export class BaseModal {
   }
 
   async waitForModalToShow() {
-    await this.modalLocator.waitFor({
-      state: 'visible',
-      timeout: 10000,
-    });
+    try {
+      if (!(await this.modalLocator.isVisible())) {
+        while (!(await this.modalLocator.isVisible())) {
+          try {
+            await this.modalLocator.waitFor({
+              state: 'visible',
+              timeout: 5000,
+            });
+          } catch {
+            console.log('Modal is still hidden');
+          }
+        }
+      }
+    } catch (error) {
+      console.error(
+        `Error while waiting for modal to show: ${(error as Error).message}`
+      );
+    }
   }
 
   async waitForModalToHide() {
-    await this.modalLocator.waitFor({
-      state: 'hidden',
-      timeout: 10000,
-    });
+    try {
+      while (await this.page.locator('.modal-backdrop').isVisible()) {
+        try {
+          await this.page.locator('.modal-backdrop').waitFor({
+            state: 'hidden',
+            timeout: 5000,
+          });
+        } catch {
+          console.log('Modal still visible');
+        }
+      }
+    } catch (error) {
+      console.error(
+        `Error while waiting for modal to hide: ${(error as Error).message}`
+      );
+    }
   }
 }

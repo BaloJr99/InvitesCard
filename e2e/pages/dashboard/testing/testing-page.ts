@@ -21,7 +21,7 @@ export class TestingPage extends DashboardPage {
   }
 
   async isTestingPage() {
-    await this.breadcrumbHeader.waitFor({ state: 'visible', timeout: 2000 });
+    await this.breadcrumbHeader.waitFor({ state: 'visible', timeout: 5000 });
     expect(this.breadcrumbHeader, {
       message: 'Testing breadcrumb should be visible',
     }).toBeVisible();

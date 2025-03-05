@@ -15,6 +15,8 @@ import { TestingPage } from 'e2e/pages/dashboard/testing/testing-page';
 import { EventType } from 'src/app/core/models/enum';
 import { saveTheDateUserInviteMock } from 'src/tests/mocks/mocks';
 
+let eventId = '';
+
 test.describe('Dashboard Events (Admin)', () => {
   let eventsPage: EventsPage;
   let eventModal: EventModal;
@@ -87,7 +89,7 @@ test.describe('Dashboard Events (Admin)', () => {
       sweetXvEventMock.assignedUser
     );
 
-    await eventModal.clickConfirmButton();
+    eventId = await eventModal.clickConfirmButtonAndReturnId();
     await eventsPage.waitToLoad();
     await eventsPage.waitForToast();
 
@@ -95,7 +97,7 @@ test.describe('Dashboard Events (Admin)', () => {
       message: 'There should be 1 event',
     }).toBe(1);
 
-    const eventCard = eventsPage.getEventCard(0);
+    const eventCard = await eventsPage.getEventCard(0);
 
     expect(await eventCard.locator('h3').textContent()).toContain(
       sweetXvEventMock.nameOfEvent
@@ -119,7 +121,7 @@ test.describe('Dashboard Events (Admin)', () => {
     await eventsPage.waitToLoad();
     await eventsPage.waitForToast();
 
-    const eventCard = eventsPage.getEventCard(0);
+    const eventCard = await eventsPage.getEventCard(0);
 
     expect(await eventCard.locator('h3').textContent()).toContain(
       'New Event Name'
@@ -127,13 +129,19 @@ test.describe('Dashboard Events (Admin)', () => {
   });
 
   test('should be able to navigate to the event details page', async () => {
-    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
+      0,
+      eventId
+    );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
   });
 
   test('should be able to add new group to an invite', async () => {
-    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
+      0,
+      eventId
+    );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
 
@@ -153,7 +161,10 @@ test.describe('Dashboard Events (Admin)', () => {
   });
 
   test('should be able to add new invite', async () => {
-    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
+      0,
+      eventId
+    );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
 
@@ -252,7 +263,10 @@ test.describe('Dashboard Events (Admin)', () => {
   });
 
   test('should be able to edit an invite', async () => {
-    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
+      0,
+      eventId
+    );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
 
@@ -344,7 +358,10 @@ test.describe('Dashboard Events (Admin)', () => {
   });
 
   test('should be able to copy the message', async ({ page }) => {
-    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
+      0,
+      eventId
+    );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
 
@@ -366,7 +383,10 @@ test.describe('Dashboard Events (Admin)', () => {
   });
 
   test('should be able to delete an invite', async () => {
-    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
+      0,
+      eventId
+    );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
 
@@ -459,7 +479,10 @@ test.describe('Dashboard Events (Admin)', () => {
   });
 
   test('should be able to import invites', async () => {
-    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
+      0,
+      eventId
+    );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
 
@@ -515,7 +538,10 @@ test.describe('Dashboard Events (Admin)', () => {
     await eventsPage.waitToLoad();
     await eventsPage.waitForToast();
 
-    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
+      0,
+      eventId
+    );
     await eventDetailsPage.waitToLoad();
 
     expect(await eventDetailsPage.importInvites.isDisabled(), {
@@ -591,8 +617,8 @@ test.describe('Dashboard Events (Invites Admin)', () => {
       sweetXvEventMock.nameOfCelebrated,
       invitesAdminUser.username
     );
-
-    await eventModal.clickConfirmButton();
+    
+    eventId = await eventModal.clickConfirmButtonAndReturnId();
     await eventsPage.waitToLoad();
     await eventsPage.waitForToast();
 
@@ -613,7 +639,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
       message: 'There should be 1 event',
     }).toBe(1);
 
-    const eventCard = eventsPage.getEventCard(0);
+    const eventCard = await eventsPage.getEventCard(0);
     expect(await eventCard.locator('h3').textContent()).toContain(
       sweetXvEventMock.nameOfEvent
     );
@@ -627,13 +653,19 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   });
 
   test('should be able to navigate to the event details page', async () => {
-    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
+      0,
+      eventId
+    );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
   });
 
   test('should be able to add new group to an invite', async () => {
-    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
+      0,
+      eventId
+    );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
 
@@ -653,7 +685,10 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   });
 
   test('should be able to add new invite', async () => {
-    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
+      0,
+      eventId
+    );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
     const inviteModal = await eventDetailsPage.clickNewInviteButton();
@@ -751,7 +786,10 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   });
 
   test('should be able to edit an invite', async () => {
-    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
+      0,
+      eventId
+    );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
 
@@ -844,7 +882,10 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   });
 
   test('should be able to copy the message', async ({ page }) => {
-    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
+      0,
+      eventId
+    );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
 
@@ -866,7 +907,10 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   });
 
   test('should be able to delete an invite', async () => {
-    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
+      0,
+      eventId
+    );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
     // Open accordion
@@ -905,7 +949,10 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   });
 
   test('should be able to import invites', async () => {
-    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(0);
+    const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
+      0,
+      eventId
+    );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
 

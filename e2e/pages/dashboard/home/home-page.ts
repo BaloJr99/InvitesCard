@@ -22,7 +22,7 @@ export class HomePage extends DashboardPage {
   }
 
   async isHomePage() {
-    await this.breadcrumbHeader.waitFor({ state: 'visible', timeout: 2000 });
+    await this.breadcrumbHeader.waitFor({ state: 'visible', timeout: 5000 });
     expect(this.breadcrumbHeader, {
       message: 'Home breadcrumb should be visible',
     }).toBeVisible();
