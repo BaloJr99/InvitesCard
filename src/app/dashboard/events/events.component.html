@@ -23,7 +23,10 @@
             <h3 class="card-title">{{ event.nameOfEvent }}</h3>
             <p class="card-text" i18n>Fecha del evento: <br> {{ event.dateOfEvent | dateFormat }}</p>
             <a routerLink="/dashboard/events/{{event.id}}" class="view-event btn btn-dark" i18n>
-              IR A LAS INVITACIONES <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              IR A LAS INVITACIONES <i class="fa-solid fa-envelope ms-2" aria-hidden="true"></i>
+            </a>
+            <a routerLink="/dashboard/events/gallery/{{event.nameOfEvent}}" class="view-event btn btn-dark mt-2" i18n>
+              IR A GALERÍA <i class="fa-solid fa-images ms-2" aria-hidden="true"></i>
             </a>
           </div>
         </div>

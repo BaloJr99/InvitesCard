@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { profileResolver } from './profile.resolver';
+import { profileResolver } from '../../core/resolvers/profile.resolver';
 
 export const profile_routes: Routes = [
   {

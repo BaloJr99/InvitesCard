@@ -63,7 +63,7 @@ export class EventsPage extends DashboardPage {
 
   async clickGoToInvitesButton(index: number, eventId: string) {
     const eventCard = await this.getEventCard(index);
-    const button = eventCard.locator('a');
+    const button = eventCard.locator('a').first();
     await button.click();
     await this.waitToLoad();
     await this.page.waitForURL(`/dashboard/events/${eventId}`, {

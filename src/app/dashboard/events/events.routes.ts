@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
-import { eventResolver } from './event-details/event.resolver';
+import { eventResolver } from '../../core/resolvers/event.resolver';
+import { gallery_routes } from './event-albums/event-gallery.routes';
 
 export const events_routes: Routes = [
   {
@@ -7,6 +8,11 @@ export const events_routes: Routes = [
     title: 'InvitesMX -- Events',
     loadComponent: () =>
       import('./events.component').then((m) => m.EventsComponent),
+  },
+  {
+    path: 'gallery',
+    title: 'InvitesMX -- Gallery',
+    children: [...gallery_routes],
   },
   {
     path: ':id',

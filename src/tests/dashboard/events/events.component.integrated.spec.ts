@@ -75,7 +75,20 @@ describe('Events Component (Integrated Test)', () => {
       `/dashboard/events/${dashboardEventsMockCopy[0].id}`
     );
     expect(routerLinks[2].href).toBe(
+      `/dashboard/events/gallery/${dashboardEventsMockCopy[0].nameOfEvent.replaceAll(
+        ' ',
+        '%20'
+      )}`
+    );
+
+    expect(routerLinks[3].href).toBe(
       `/dashboard/events/${dashboardEventsMockCopy[1].id}`
+    );
+    expect(routerLinks[4].href).toBe(
+      `/dashboard/events/gallery/${dashboardEventsMockCopy[1].nameOfEvent.replaceAll(
+        ' ',
+        '%20'
+      )}`
     );
   });
 

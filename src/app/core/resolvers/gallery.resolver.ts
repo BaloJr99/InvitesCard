@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
 import { catchError, EMPTY, Observable } from 'rxjs';
 import { InvitesService } from 'src/app/core/services/invites.service';
-import { IAlbumResolved } from '../core/models/gallery';
+import { IAlbumResolved } from '../models/gallery';
 
 export const galleryResolver: ResolveFn<IAlbumResolved> = (
   route: ActivatedRouteSnapshot

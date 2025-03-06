@@ -11,34 +11,6 @@ label {
   overflow: hidden;
 }
 
-.breadcrumb-header .header {
-  display: flex;
-  align-items: center;
-}
-
-  .breadcrumb-header .header nav {
-    flex-grow: 1;
-  }
-
-  .breadcrumb-header .header .breadcrumb {
-    margin-bottom: 0;
-  }
-
-    .breadcrumb-header .header .breadcrumb .breadcrumb-item {
-      font-size: 15px;
-    }
-
-      .breadcrumb-header .header .breadcrumb .breadcrumb-item a {
-        text-decoration: none; 
-        font-weight: bold;
-        text-decoration: none;
-        color: #01337E;
-      }
-
-      .breadcrumb-header .header .breadcrumb .breadcrumb-item a:hover {
-        text-decoration: underline; 
-      }
-
 .settings {
   text-align: left;
   flex-grow: 1;

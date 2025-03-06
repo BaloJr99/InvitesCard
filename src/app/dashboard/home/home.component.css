@@ -1,43 +1,9 @@
-.breadcrumb-header {
-  flex: 0 1 auto;
+.breadcrumb-header .header .filter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
-
-  .breadcrumb-header .header {
-    display: flex;
-    align-items: center;
-  }
-
-    .breadcrumb-header .header nav {
-      flex-grow: 1;
-    }
-
-    .breadcrumb-header .header .breadcrumb {
-      margin-bottom: 0;
-    }
-
-      .breadcrumb-header .header .breadcrumb .breadcrumb-item,
-      .breadcrumb-header .header .breadcrumb .breadcrumb-item h2 {
-        font-size: 15px;
-        display: inline;
-      }
-
-        .breadcrumb-header .header .breadcrumb .breadcrumb-item a {
-          text-decoration: none;
-          font-weight: bold;
-          text-decoration: none;
-          color: #01337E;
-        }
-
-        .breadcrumb-header .header .breadcrumb .breadcrumb-item a:hover {
-          text-decoration: underline;
-        }
-
-    .breadcrumb-header .header .filter {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-    }
 
 .history {
   padding: 0px 15px;
@@ -137,11 +103,6 @@
 }
 
 @media (max-width: 575px) {
-  .breadcrumb-header .header {
-    flex-direction: column;
-    gap: 10px;
-  }
-
   .history .invites-history canvas {
     margin-bottom: 20px;
   }

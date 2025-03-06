@@ -31,9 +31,3 @@
   .card small {
     font-family: 'Merriweather';
   }
-
-  .card .edit-btn {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-  }

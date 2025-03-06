@@ -1,37 +1,37 @@
 <ng-container *ngIf="vm$ | async as vm">
-  <div class="row g-0 mx-1 my-3 breadcrumb-header">
+  <div class="row mx-1 my-3 breadcrumb-header">
     <div class="col-12 header">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a></li>
+          <li class="breadcrumb-item"><a routerLink="/dashboard/events" routerLinkActive="active" i18n>EVENTOS</a></li>
           <li class="breadcrumb-item" i18n>ALBÚMS</li>
         </ol>
       </nav>
       <div class="buttons">
-        <button class="btn btn-dark" i18n (click)="createNewAlbum()" [disabled]="!vm.isActive">+ Nuevo Albúm</button>
+        <button class="btn btn-dark" i18n (click)="openQRCodeModal()" [disabled]="vm.isActive">Generar QR</button>
       </div>
     </div>
   </div>
-  <div class="row" *ngIf="albums$ | async as albums">
+  <div class="row mx-1" *ngIf="albums$ | async as albums">
     <div class="col-12 col-md-3" *ngFor="let album of albums">
       <div class="card">
-        <button class="btn btn-dark edit-btn" (click)="editAlbum(album)" title="Editar" i18n-title>
-          <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
-        </button>
         <img [src]="(album.thumbnail === '' || !album.thumbnail) ? 'https://res.cloudinary.com/dc9vc8b7b/image/upload/v1740712022/no-image_xnqgsr.png' : album.thumbnail " alt="">
         <div class="card-body">
           <div class="info">
             <h2 class="card-title">{{ album.nameOfAlbum }}</h2>
             <small i18n>Fecha de creación: {{ album.dateOfAlbum }}</small>
           </div>
-          <a class="btn btn-dark mt-2 w-100" routerLink="/gallery/{{vm.nameOfAlbum}}/{{album.id}}" i18n>Ir al albúm <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          <a class="btn btn-dark mt-2 w-100" routerLink="/dashboard/events/gallery/{{vm.nameOfAlbum}}/{{album.id}}" i18n>Ir al albúm <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
         </div>
       </div>
     </div>
   </div>
 </ng-container>
 
-<app-album-modal [showModalValue]="showAlbumModal" 
-                 [albumActionValue]="albumAction"
-                 (closeModal)="closeAlbumModal()"
-                 (updateAlbums)="updateAlbums($event)">
-</app-album-modal>
+<app-qr-code
+  [showModalValue]="showQRCode"
+  [urlValue]="galleryUrl"
+  (closeModal)="closeQRCodeModal()">
+
+</app-qr-code>

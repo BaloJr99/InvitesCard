@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { galleryResolver } from './gallery.resolver';
+import { galleryResolver } from '../core/resolvers/gallery.resolver';
 
 export const gallery_routes: Routes = [
   {

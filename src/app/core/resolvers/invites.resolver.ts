@@ -1,10 +1,10 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
 import { EMPTY, Observable, catchError, map } from 'rxjs';
-import { IEventTypeResolved } from '../core/models/invites';
-import { InvitesService } from '../core/services/invites.service';
-import { LoaderService } from '../core/services/loader.service';
-import { EventType } from '../core/models/enum';
+import { IEventTypeResolved } from '../models/invites';
+import { InvitesService } from '../services/invites.service';
+import { LoaderService } from '../services/loader.service';
+import { EventType } from '../models/enum';
 
 export const invitesResolver: ResolveFn<IEventTypeResolved> = (
   route: ActivatedRouteSnapshot
