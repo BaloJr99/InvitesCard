@@ -42,7 +42,7 @@ export class QrCodeModalComponent {
 
       return {
         showModal,
-        url,
+        url: url.replaceAll(' ', '%20'),
       };
     })
   );
