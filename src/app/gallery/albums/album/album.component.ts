@@ -4,7 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import {
   BehaviorSubject,
+  catchError,
   combineLatest,
+  EMPTY,
   map,
   Observable,
   Subject,
@@ -125,6 +127,9 @@ export class AlbumComponent {
                     );
                     progress = progress > 100 ? 100 : progress;
                     this.uploadProgress.next(`${progress}%`);
+                  }),
+                  catchError(() => {
+                    return EMPTY;
                   })
                 )
             );

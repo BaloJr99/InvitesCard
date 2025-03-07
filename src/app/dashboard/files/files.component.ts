@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { combineLatest, Observable, take, tap } from 'rxjs';
+import { catchError, combineLatest, EMPTY, Observable, take, tap } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { CommonModalResponse, CommonModalType } from 'src/app/core/models/enum';
 import { IDropdownEvent } from 'src/app/core/models/events';
@@ -82,10 +82,16 @@ export class FilesComponent {
 
           filesBase64.forEach((base64) => {
             apiCalls.push(
-              this.filesService.uploadImages({
-                eventId: this.eventSelected?.id ?? '',
-                image: base64,
-              })
+              this.filesService
+                .uploadImages({
+                  eventId: this.eventSelected?.id ?? '',
+                  image: base64,
+                })
+                .pipe(
+                  catchError(() => {
+                    return EMPTY;
+                  })
+                )
             );
           });
 
