@@ -54,6 +54,7 @@ export class NavbarComponent implements OnInit {
   );
 
   ngOnInit(): void {
+    this.route.next(this.router.url);
     this.router.events.subscribe((events) => {
       if (events instanceof Scroll) {
         this.route.next(events.routerEvent.url);
