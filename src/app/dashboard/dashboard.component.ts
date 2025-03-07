@@ -68,6 +68,7 @@ export class DashboardComponent implements OnInit {
       this.socket.joinRoom(userInformation.username);
     }
 
+    this.route.next(this.router.url);
     this.router.events.subscribe((events) => {
       if (events instanceof Scroll) {
         this.route.next(events.routerEvent.url);
