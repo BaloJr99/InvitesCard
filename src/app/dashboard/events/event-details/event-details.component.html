@@ -11,6 +11,7 @@
       <div class="buttons">
         <button class="btn btn-dark" (click)="openImportInvitesModal()" i18n [disabled]="vm.isDeadlineMet">Importar invitaciones</button>
         <button class="btn btn-dark" (click)="openInviteModal('')" i18n [disabled]="vm.isDeadlineMet">Nueva invitación</button>
+        <button class="btn btn-danger" (click)="cancelInvites()" i18n>Cancelar Invitaciones</button>
       </div>
     </div>
   </div>
@@ -88,9 +89,11 @@
     [showModalValue]="showInviteModal"
     [inviteGroupsValue]="inviteGroups" 
     [inviteActionValue]="inviteAction"  
+    [typeOfEventValue]="vm.typeOfEvent"
     (updateInvites)="updateInvites($event)"
     (updateInviteGroups)="updateInviteGroups($event)"
-    (closeModal)="closeInviteModal()">
+    (closeModal)="closeInviteModal()"
+    (updateOverwroteInvite)="updateOverwroteInvite($event)">
   </app-invite-modal>
   <app-invites-import-dialog
     [showModalValue]="showImportInvitesModal" 

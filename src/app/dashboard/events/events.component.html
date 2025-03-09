@@ -20,7 +20,7 @@
             <button (click)="openEventModal(event.id)" class="edit-event btn btn-dark" *ngIf="vm.isAdmin" [attr.aria-label]="getAccessibilityMessage(event.nameOfEvent)">
               <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
             </button>
-            <h3 class="card-title">{{ event.nameOfEvent }}</h3>
+            <h3 class="card-title" [ngStyle]="{ 'padding-right': vm.isAdmin ? '50px' : '0px' }">{{ event.nameOfEvent }}</h3>
             <p class="card-text" i18n>Fecha del evento: <br> {{ event.dateOfEvent | dateFormat }}</p>
             <a routerLink="/dashboard/events/{{event.id}}" class="view-event btn btn-dark" i18n>
               IR A LAS INVITACIONES <i class="fa-solid fa-envelope ms-2" aria-hidden="true"></i>

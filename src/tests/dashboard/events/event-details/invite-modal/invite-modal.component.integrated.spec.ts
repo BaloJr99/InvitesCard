@@ -102,7 +102,7 @@ describe('Invite Modal Component (Integrated Test)', () => {
     fixture.detectChanges();
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));
-    const saveButton = buttons[4];
+    const saveButton = buttons[5];
     saveButton.nativeElement.click();
     fixture.detectChanges();
 
@@ -130,7 +130,7 @@ describe('Invite Modal Component (Integrated Test)', () => {
     fixture.detectChanges();
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));
-    const saveButton = buttons[4];
+    const saveButton = buttons[5];
     saveButton.nativeElement.click();
     fixture.detectChanges();
 

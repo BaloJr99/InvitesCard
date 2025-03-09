@@ -6,6 +6,7 @@ import {
   IBulkInvite,
   IConfirmation,
   IDashboardInvite,
+  IOverwriteConfirmation,
   ISaveTheDateConfirmation,
   ISaveTheDateUserInvite,
   IUpsertInvite,
@@ -92,6 +93,23 @@ export class InvitesService {
   isEventActive(nameOfEvent: string): Observable<IAlbumResolved> {
     return this.http.get<IAlbumResolved>(
       `${this.invitesBaseUrl}/isActive/${nameOfEvent}`
+    );
+  }
+
+  cancelInvites(id: string): Observable<IMessageResponse> {
+    return this.http.patch<IMessageResponse>(
+      `${this.invitesBaseUrl}/cancel/${id}`,
+      null
+    );
+  }
+
+  overwriteConfirmation(
+    overwriteConfirmation: IOverwriteConfirmation,
+    id: string
+  ): Observable<IMessageResponse> {
+    return this.http.patch<IMessageResponse>(
+      `${this.invitesBaseUrl}/overwrite/${id}`,
+      overwriteConfirmation
     );
   }
 }

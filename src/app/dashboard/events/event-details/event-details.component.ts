@@ -28,6 +28,7 @@ import {
   IFullInvite,
   IInviteAction,
   IInvitesFilters,
+  IOverwriteConfirmation,
 } from 'src/app/core/models/invites';
 import { EventsService } from 'src/app/core/services/events.service';
 import {
@@ -332,6 +333,7 @@ export class EventDetailsComponent implements OnInit {
         return {
           ...eventDetails,
           statistics,
+          typeOfEvent: eventDetails.eventSettings.typeOfEvent,
         };
       }
     )
@@ -887,5 +889,34 @@ export class EventDetailsComponent implements OnInit {
 
   closeImportInvitesModal() {
     this.showImportInvitesModal = false;
+  }
+
+  cancelInvites() {
+    this.invitesService.cancelInvites(this.eventResolved.value.id).subscribe({
+      next: (response: IMessageResponse) => {
+        this.toastrService.success(response.message);
+      },
+    });
+  }
+
+  updateOverwroteInvite(
+    overridedInviteConfirmation: IOverwriteConfirmation
+  ): void {
+    const originalInvitesCopy = this.originalInvites.value;
+    const indexOfInvite = originalInvitesCopy.findIndex(
+      (f) => f.id === overridedInviteConfirmation.id
+    );
+
+    originalInvitesCopy[indexOfInvite] = {
+      ...originalInvitesCopy[indexOfInvite],
+      confirmation: overridedInviteConfirmation.confirmation,
+      dateOfConfirmation: null,
+      entriesConfirmed: overridedInviteConfirmation.entriesConfirmed,
+      message: '',
+      isMessageRead: false,
+      inviteViewed: false,
+    };
+
+    this.originalInvites.next(originalInvitesCopy);
   }
 }

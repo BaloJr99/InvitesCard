@@ -6,7 +6,7 @@
         <h1 class="modal-title fs-5" id="inviteModalLabel" i18n>Invitaciones Personalizadas</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" i18n-aria-label aria-label="Cerrar"></button>
       </div>
-      <ng-container *ngIf="!showNewGroupForm">
+      <ng-container *ngIf="!showNewGroupForm && !showOverwriteConfirmation">
         <div class="modal-body">
           <form [formGroup]="createInviteForm" id="inviteForm">
             <div class="mb-3">
@@ -22,7 +22,7 @@
             </div>
             <div class="mb-3">
               <label for="inviteGroupId" class="form-label" i18n>Grupo</label>
-              <div class="inviteGroupActions">
+              <div class="buttonActions">
                 <select #inviteGroupId id="inviteGroupId" 
                         class="form-control" 
                         formControlName="inviteGroupId" 
@@ -39,12 +39,15 @@
             </div>
             <div class="mb-3">
               <label for="entriesNumber" class="form-label" i18n>Numero de pases</label>
-              <input id="entriesNumber" 
-                     type="number" 
-                     min="1" 
-                     class="form-control" 
-                     formControlName="entriesNumber" 
-                     [ngClass]="{'is-invalid': createInviteForm.get('entriesNumber') | validation }">
+              <div class="buttonActions">
+                <input id="entriesNumber" 
+                type="number" 
+                min="1" 
+                class="form-control" 
+                formControlName="entriesNumber" 
+                [ngClass]="{'is-invalid': createInviteForm.get('entriesNumber') | validation }">
+                <button aria-label="Sobreescribir" title="Sobreescribir" type="button" class="btn btn-dark" (click)="showOverwriteConfirmationForm()" *ngIf="!vm.inviteAction.isNew"><i class="fa-solid fa-arrow-rotate-right"></i></button>
+              </div>
               <span class="invalid-feedback d-block" role="alert" *ngIf="createInviteForm.get('entriesNumber') | validation">
                 {{ createInviteForm.get('entriesNumber')?.errors | validationError: 'entriesNumber' }}
               </span>
@@ -81,11 +84,22 @@
       </ng-container>
       <ng-container *ngIf="showNewGroupForm">
         <div class="modal-body">
-            <app-invite-group 
+            <app-invite-group-form 
               [inviteGroupValue]="groupSelected" 
               (isCreatingNewFormGroup)="inviteGroupAction(false, $event)"
               (updateInviteGroups)="updateCurrentInviteGroup($event)">
-            </app-invite-group>
+            </app-invite-group-form>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="showOverwriteConfirmationForm">
+        <div class="modal-body">
+            <app-overwrite-confirmation-form 
+              [showOverwriteConfirmationValue]="showOverwriteConfirmation"
+              [overwriteConfirmationValue]="overwriteConfirmation"
+              [typeOfEventValue]="vm.typeOfEvent"
+              (closeOverwriteConfirmationForm)="closeOverwriteConfirmationForm()"
+              (updateInvites)="updateOverwroteInviteFromForm($event)">
+            </app-overwrite-confirmation-form>
         </div>
       </ng-container>
     </div>

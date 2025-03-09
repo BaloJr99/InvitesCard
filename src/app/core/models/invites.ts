@@ -151,3 +151,8 @@ export interface IInvitesFilters {
   filterByNeedsAccomodation: boolean | undefined;
   filterByAnswered: boolean | undefined;
 }
+
+export type IOverwriteConfirmation = Pick<
+  IConfirmation,
+  'entriesNumber' | 'entriesConfirmed' | 'id' | 'confirmation'
+>;

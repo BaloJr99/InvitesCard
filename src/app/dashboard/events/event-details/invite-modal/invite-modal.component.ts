@@ -11,13 +11,19 @@ import {
   IInviteGroupsAction,
 } from 'src/app/core/models/inviteGroups';
 import { IMessageResponse } from 'src/app/core/models/common';
-import { IUpsertInvite, IInviteAction } from 'src/app/core/models/invites';
+import {
+  IUpsertInvite,
+  IInviteAction,
+  IOverwriteConfirmation,
+} from 'src/app/core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
-import { InviteGroupComponent } from './invite-group-modal/invite-group.component';
+import { InviteGroupFormComponent } from './invite-group-form/invite-group-form.component';
 import { ValidationPipe } from '../../../../shared/pipes/validation.pipe';
 import { ValidationErrorPipe } from '../../../../shared/pipes/validation-error.pipe';
 import { CommonModule } from '@angular/common';
+import { EventType } from 'src/app/core/models/enum';
+import { OverwriteConfirmationFormComponent } from './overwrite-confirmation-form/overwrite-confirmation-form.component';
 
 @Component({
   selector: 'app-invite-modal',
@@ -26,7 +32,8 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    InviteGroupComponent,
+    InviteGroupFormComponent,
+    OverwriteConfirmationFormComponent,
     ValidationPipe,
     ValidationErrorPipe,
   ],
@@ -52,20 +59,31 @@ export class InviteModalComponent {
   private showModal = new BehaviorSubject<boolean>(false);
   showModal$ = this.showModal.asObservable();
 
+  private typeOfEvent = new BehaviorSubject<EventType>(EventType.None);
+  typeOfEvent$ = this.typeOfEvent.asObservable();
+
   @Input() set inviteGroupsValue(inviteGroups: IInviteGroups[]) {
     this.inviteGroups.next(inviteGroups);
   }
+
   @Input() set inviteActionValue(inviteAction: IInviteAction) {
     this.inviteAction.next(inviteAction);
   }
+
   @Input() set showModalValue(showModal: boolean) {
     this.showModal.next(showModal);
+  }
+
+  @Input() set typeOfEventValue(value: EventType) {
+    this.typeOfEvent.next(value);
   }
 
   @Output() updateInvites: EventEmitter<IInviteAction> = new EventEmitter();
   @Output() updateInviteGroups: EventEmitter<IInviteGroupsAction> =
     new EventEmitter();
   @Output() closeModal: EventEmitter<void> = new EventEmitter();
+  @Output() updateOverwroteInvite: EventEmitter<IOverwriteConfirmation> =
+    new EventEmitter();
 
   createInviteForm: FormGroup = this.fb.group({
     id: '',
@@ -81,6 +99,14 @@ export class InviteModalComponent {
   showNewGroupForm = false;
   groupSelected!: IInviteGroups;
 
+  showOverwriteConfirmation = false;
+  overwriteConfirmation: IOverwriteConfirmation = {
+    entriesConfirmed: null,
+    entriesNumber: 0,
+    id: '',
+    confirmation: null,
+  };
+
   constructor(
     private invitesService: InvitesService,
     private fb: FormBuilder,
@@ -91,8 +117,9 @@ export class InviteModalComponent {
     this.inviteAction$,
     this.inviteGroups$,
     this.showModal$,
+    this.typeOfEvent$,
   ]).pipe(
-    map(([inviteAction, inviteGroups, showModal]) => {
+    map(([inviteAction, inviteGroups, showModal, typeOfEvent]) => {
       if (showModal) {
         $('#inviteModal').modal('show');
 
@@ -109,6 +136,7 @@ export class InviteModalComponent {
       return {
         inviteAction,
         inviteGroups,
+        typeOfEvent,
       };
     })
   );
@@ -172,6 +200,7 @@ export class InviteModalComponent {
     });
 
     this.showNewGroupForm = false;
+    this.showOverwriteConfirmation = false;
   }
 
   formatInvite(): IUpsertInvite {
@@ -207,11 +236,31 @@ export class InviteModalComponent {
     }
   }
 
+  showOverwriteConfirmationForm() {
+    const invite = this.inviteAction.value.invite;
+    this.showOverwriteConfirmation = true;
+
+    this.overwriteConfirmation = {
+      confirmation: null,
+      entriesConfirmed: 0,
+      entriesNumber: invite.entriesNumber,
+      id: invite.id,
+    };
+  }
+
   updateCurrentInviteGroup(event: IInviteGroupsAction) {
     this.showNewGroupForm = false;
     this.updateInviteGroups.emit(event);
     this.createInviteForm.patchValue({
       inviteGroupId: event.inviteGroup.id,
     });
+  }
+
+  closeOverwriteConfirmationForm() {
+    this.showOverwriteConfirmation = false;
+  }
+
+  updateOverwroteInviteFromForm(event: IOverwriteConfirmation) {
+    this.updateOverwroteInvite.emit(event);
   }
 }

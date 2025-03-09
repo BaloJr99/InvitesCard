@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
-import { InviteGroupComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-group-modal/invite-group.component';
+import { InviteGroupFormComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-group-form/invite-group-form.component';
 import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
 import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
@@ -16,8 +16,8 @@ import {
 const fullInvitesGroupsMockCopy = deepCopy(fullInvitesGroupsMock);
 const messageResponseMockCopy = deepCopy(messageResponseMock);
 
-describe('Invite Group Component (Integrated Test)', () => {
-  let fixture: ComponentFixture<InviteGroupComponent>;
+describe('Invite Group Form Component (Integrated Test)', () => {
+  let fixture: ComponentFixture<InviteGroupFormComponent>;
   let inviteGroupsServiceSpy: jasmine.SpyObj<InviteGroupsService>;
 
   const updateFormUsingEvent = (inviteGroup: string) => {
@@ -40,7 +40,7 @@ describe('Invite Group Component (Integrated Test)', () => {
         ReactiveFormsModule,
         ValidationPipe,
         ValidationErrorPipe,
-        InviteGroupComponent,
+        InviteGroupFormComponent,
       ],
       providers: [
         { provide: ToastrService, useValue: toastrSpy },
@@ -52,7 +52,7 @@ describe('Invite Group Component (Integrated Test)', () => {
       InviteGroupsService
     ) as jasmine.SpyObj<InviteGroupsService>;
 
-    fixture = TestBed.createComponent(InviteGroupComponent);
+    fixture = TestBed.createComponent(InviteGroupFormComponent);
     fixture.detectChanges();
   });
 

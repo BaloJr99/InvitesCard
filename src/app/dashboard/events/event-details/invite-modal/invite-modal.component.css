@@ -2,7 +2,7 @@
   text-align: left;
 }
 
-  .modal .modal-body .inviteGroupActions {
+  .modal .modal-body .buttonActions {
     display: flex;
     gap: 10px;
   }

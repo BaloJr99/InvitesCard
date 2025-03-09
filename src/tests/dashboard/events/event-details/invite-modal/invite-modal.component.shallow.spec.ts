@@ -148,7 +148,7 @@ describe('Invite Modal Component (Shallow Test)', () => {
     spyOn(fixture.componentInstance, 'saveInvite');
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));
-    const saveButton = buttons[3];
+    const saveButton = buttons[4];
     saveButton.nativeElement.click();
 
     expect(fixture.componentInstance.saveInvite).toHaveBeenCalled();
@@ -167,7 +167,7 @@ describe('Invite Modal Component (Shallow Test)', () => {
     fixture.detectChanges();
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));
-    const saveButton = buttons[4];
+    const saveButton = buttons[5];
     saveButton.nativeElement.click();
 
     expect(fixture.componentInstance.createInvite).toHaveBeenCalled();
@@ -190,7 +190,7 @@ describe('Invite Modal Component (Shallow Test)', () => {
     fixture.detectChanges();
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));
-    const saveButton = buttons[4];
+    const saveButton = buttons[5];
     saveButton.nativeElement.click();
 
     expect(fixture.componentInstance.updateInvite).toHaveBeenCalled();

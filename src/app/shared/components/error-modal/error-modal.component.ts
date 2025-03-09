@@ -35,6 +35,10 @@ export class ErrorModalComponent {
         if (information.serverError.status === 404) {
           errorMessage = information.serverError.error.message;
         }
+
+        if (information.serverError.status === 403) {
+          errorMessage = information.serverError.error.error;
+        }
       }
 
       if (

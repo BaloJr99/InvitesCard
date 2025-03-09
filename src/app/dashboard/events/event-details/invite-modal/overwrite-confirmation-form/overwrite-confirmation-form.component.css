@@ -1,0 +1,20 @@
+.inviteGroup-validation {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+  .inviteGroup-validation i.fa-circle-check {
+    color: green;
+  }
+  
+  .inviteGroup-validation i.fa-circle-xmark {
+    color: red;
+  }
+
+  .inviteGroup-validation #inviteGroup {
+    width: calc(100% - 26px);
+    margin-right: 10px;
+  }

@@ -1,0 +1,21 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <form [formGroup]="overwriteConfirmationForm" id="overwriteConfirmationForm" *ngIf="vm.showForm">
+    <div class="mb-3">
+      <label for="entriesConfirmed" class="form-label" i18n>Numero de pases a confirmar</label>
+      <select id="entriesConfirmed" 
+              class="form-control" 
+              formControlName="entriesConfirmed" 
+              [ngClass]="{'is-invalid': overwriteConfirmationForm.get('entriesConfirmed') | validation }">
+        <option value="" i18n>Selecciona el numero de pases</option>
+        <option *ngFor="let number of vm.numberOfEntries" [value]="number">{{ number }}</option>
+      </select>
+      <span class="invalid-feedback d-block" role="alert" *ngIf="overwriteConfirmationForm.get('entriesConfirmed') | validation">
+        {{ overwriteConfirmationForm.get('entriesConfirmed')?.errors | validationError: 'entriesConfirmed' }}
+      </span>
+    </div>
+  </form>
+  <div class="modal-footer" *ngIf="vm.showForm">
+    <button data-testid="cancel-button" type="button" class="btn btn-outline-dark" (click)="toggleIsOverridingConfirmation()" i18n>Cancelar</button>
+    <button data-testid="confirm-button" type="button" class="btn btn-dark" (click)="saveOverwriteConfirmation()" i18n>Sobreescribir</button>
+  </div>
+</ng-container>

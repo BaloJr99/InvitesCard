@@ -14,9 +14,9 @@ import { ValidationErrorPipe } from '../../../../../shared/pipes/validation-erro
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-invite-group',
-  templateUrl: './invite-group.component.html',
-  styleUrls: ['./invite-group.component.css'],
+  selector: 'app-invite-group-form',
+  templateUrl: './invite-group-form.component.html',
+  styleUrls: ['./invite-group-form.component.css'],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -24,7 +24,7 @@ import { CommonModule } from '@angular/common';
     ValidationErrorPipe,
   ],
 })
-export class InviteGroupComponent {
+export class InviteGroupFormComponent {
   private inviteGroup!: IInviteGroups;
   @Input() set inviteGroupValue(value: IInviteGroups) {
     this.inviteGroup = value;

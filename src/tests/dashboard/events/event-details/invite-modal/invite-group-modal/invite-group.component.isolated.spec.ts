@@ -1,12 +1,12 @@
 import { FormBuilder } from '@angular/forms';
-import { InviteGroupComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-group-modal/invite-group.component';
+import { InviteGroupFormComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-group-form/invite-group-form.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { fullInvitesGroupsMock } from 'src/tests/mocks/mocks';
 
 const fullInvitesGroupsMockCopy = deepCopy(fullInvitesGroupsMock);
 
-describe('Invite Group Component (Isolated Test)', () => {
-  let component: InviteGroupComponent;
+describe('Invite Group Form Component (Isolated Test)', () => {
+  let component: InviteGroupFormComponent;
 
   const updateForm = (inviteGroup: string) => {
     component.createInviteGroupForm.controls['inviteGroup'].setValue(
@@ -15,9 +15,9 @@ describe('Invite Group Component (Isolated Test)', () => {
   };
 
   beforeEach(() => {
-    const inviteGroupSpy = jasmine.createSpyObj('InviteGroupComponent', ['']);
+    const inviteGroupSpy = jasmine.createSpyObj('InviteGroupFormComponent', ['']);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    component = new InviteGroupComponent(
+    component = new InviteGroupFormComponent(
       inviteGroupSpy,
       new FormBuilder(),
       toastrSpy

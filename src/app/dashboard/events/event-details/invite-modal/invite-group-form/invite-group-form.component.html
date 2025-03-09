@@ -4,7 +4,6 @@
     <div class="inviteGroup-validation">
       <input id="inviteGroup"
              type="text"
-             min="1"
              class="form-control"
              formControlName="inviteGroup" 
              [ngClass]="{'is-invalid': (createInviteGroupForm.get('inviteGroup') | validation) || createInviteGroupForm.errors?.['controlIsDuplicated'] }"

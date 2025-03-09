@@ -31,7 +31,7 @@
             <select id="entriesConfirmed" 
                     class="form-control" 
                     formControlName="entriesConfirmed" 
-                    [ngClass]="{'is-invalid': confirmationForm.get('confirmPassword') | validation }">
+                    [ngClass]="{'is-invalid': confirmationForm.get('entriesConfirmed') | validation }">
               <option value="" i18n>Selecciona el numero de pases</option>
               <option *ngFor="let number of vm.numberOfEntries" [value]="number">{{ number }}</option>
             </select>
