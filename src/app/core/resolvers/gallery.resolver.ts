@@ -1,18 +1,18 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
 import { catchError, EMPTY, Observable } from 'rxjs';
-import { InvitesService } from 'src/app/core/services/invites.service';
 import { IAlbumResolved } from '../models/gallery';
+import { EventsService } from '../services/events.service';
 
 export const galleryResolver: ResolveFn<IAlbumResolved> = (
   route: ActivatedRouteSnapshot
 ): Observable<IAlbumResolved> => {
-  const invitesService = inject(InvitesService);
+  const eventsService = inject(EventsService);
   const router = inject(Router);
 
   const id = route.paramMap.get('id') ?? '';
 
-  const isEventActive = invitesService.isEventActive(id).pipe(
+  const isEventActive = eventsService.isEventActive(id).pipe(
     catchError(() => {
       router.navigate(['/error/page-not-found']);
       return EMPTY;

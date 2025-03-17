@@ -169,6 +169,7 @@ export class WeddingSettingsPage extends SettingsPage {
       await this.itinerarySectionCheckbox.check();
     } else {
       await this.itinerarySectionCheckbox.uncheck();
+      await this.itinerarySection.waitFor({ state: 'hidden' });
     }
   }
 
@@ -177,6 +178,7 @@ export class WeddingSettingsPage extends SettingsPage {
       await this.dressCodeSectionCheckbox.check();
     } else {
       await this.dressCodeSectionCheckbox.uncheck();
+      await this.dressCodeSection.waitFor({ state: 'hidden' });
     }
   }
 
@@ -185,6 +187,7 @@ export class WeddingSettingsPage extends SettingsPage {
       await this.giftsSectionCheckbox.check();
     } else {
       await this.giftsSectionCheckbox.uncheck();
+      await this.giftsSection.waitFor({ state: 'hidden' });
     }
   }
 }

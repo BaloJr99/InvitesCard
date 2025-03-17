@@ -10,6 +10,7 @@ import {
 } from '../models/events';
 import { IMessageResponse } from '../models/common';
 import { IFullInvite } from '../models/invites';
+import { IAlbumResolved } from '../models/gallery';
 
 @Injectable({
   providedIn: 'root',
@@ -89,5 +90,11 @@ export class EventsService {
 
   deleteEvent(id: string): Observable<IMessageResponse> {
     return this.http.delete<IMessageResponse>(`${this.invitesBaseUrl}/${id}`);
+  }
+
+  isEventActive(nameOfEvent: string): Observable<IAlbumResolved> {
+    return this.http.get<IAlbumResolved>(
+      `${this.invitesBaseUrl}/isActive/${nameOfEvent}`
+    );
   }
 }

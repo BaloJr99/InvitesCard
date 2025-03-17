@@ -29,8 +29,9 @@
         </td>
         <td *ngIf="showColumn(vm.showCheckbox, columnIndex)" [innerHTML]="row[column.text]"></td>
         <ng-container *ngIf="showButtons(columnIndex)">
-          <td class="buttons">
-            <button *ngFor="let button of vm.buttons" 
+          <td>
+            <div class="buttons">
+              <button *ngFor="let button of vm.buttons" 
                     class="btn" 
                     [ngClass]="button.class ? button.class : 'btn-primary'"
                     (click)="onAction(button.action, rowIndex)" 
@@ -38,6 +39,7 @@
                     [title]="button.accessibleText"
                     [innerHtml]="button.innerHtml">
             </button>
+            </div>
           </td>
         </ng-container>
       </ng-container>

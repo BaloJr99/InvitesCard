@@ -248,6 +248,7 @@ export const newInviteMock: IFullInvite = {
   message: null,
   inviteViewed: false,
   needsAccomodation: null,
+  lastViewedDate: null,
 };
 
 export const confirmedInviteMock: IFullInvite = {
@@ -260,6 +261,7 @@ export const confirmedInviteMock: IFullInvite = {
   isMessageRead: false,
   message: 'Test Message',
   needsAccomodation: true,
+  lastViewedDate: new Date().toISOString(),
 };
 
 export const notConfirmedInviteMock: IFullInvite = {
@@ -272,6 +274,7 @@ export const notConfirmedInviteMock: IFullInvite = {
   isMessageRead: false,
   message: 'Test Message',
   needsAccomodation: true,
+  lastViewedDate: new Date().toISOString(),
 };
 
 export const fullFileMock: IFullFile = {

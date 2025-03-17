@@ -67,7 +67,7 @@ table {
       right: 0;
     }
 
-    table tbody td.buttons {
+    table tbody .buttons {
       display: flex;
       justify-content: center;
       gap: 10px;
@@ -92,11 +92,11 @@ table {
     }
 
 @media (max-width: 575px) {
-  table tbody td.buttons {
+  table tbody .buttons {
     flex-direction: column;
   }
 
-  table tfoot td .buttons {
+  table tfoot .buttons {
     justify-content: center;
   }
 

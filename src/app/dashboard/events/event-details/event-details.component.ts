@@ -414,6 +414,7 @@ export class EventDetailsComponent implements OnInit {
         isMessageRead: false,
         needsAccomodation: null,
         inviteViewed: false,
+        lastViewedDate: null,
       });
     } else {
       const indexOfInvite = this.originalInvites.value.findIndex(
@@ -430,6 +431,7 @@ export class EventDetailsComponent implements OnInit {
         isMessageRead: originalInvite.isMessageRead,
         needsAccomodation: originalInvite.needsAccomodation,
         inviteViewed: originalInvite.inviteViewed,
+        lastViewedDate: originalInvite.lastViewedDate,
       };
     }
 
@@ -469,6 +471,7 @@ export class EventDetailsComponent implements OnInit {
         isMessageRead: false,
         needsAccomodation: null,
         inviteViewed: false,
+        lastViewedDate: null,
       });
     });
 
@@ -640,7 +643,7 @@ export class EventDetailsComponent implements OnInit {
 
     return tableHeaders.concat([
       {
-        text: $localize`Vista`,
+        text: $localize`Última Vista`,
         sortable: true,
       },
       {
@@ -669,9 +672,21 @@ export class EventDetailsComponent implements OnInit {
               ? `0 / ${invite.entriesNumber}`
               : `${invite.entriesConfirmed} / ${invite.entriesNumber}`;
           break;
-        case $localize`Vista`:
+        case $localize`Última Vista`:
           row[text] = invite.inviteViewed
-            ? '<i class="fa-solid fa-eye" aria-hidden="true"></i>'
+            ? `${new Date(invite.lastViewedDate as string).toLocaleString(
+                this.localeValue,
+                {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                }
+              )} <br> ${new Date(
+                invite.lastViewedDate as string
+              ).toLocaleString(this.localeValue, {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}`
             : '';
           break;
         case $localize`Contestada`:

@@ -21,10 +21,14 @@ export class InviteModal extends BaseModal {
     this.contactNumberInput = this.modalLocator.locator('#phoneNumber');
     this.kidsAllowedCheckbox = this.modalLocator.locator('#kidsAllowed');
     this.addNewGroupButton = this.modalLocator
-      .locator('.inviteGroupActions button')
+      .locator('.buttonActions')
+      .nth(0)
+      .locator('button')
       .nth(0);
     this.editGroupButton = this.modalLocator
-      .locator('.inviteGroupActions button')
+      .locator('.buttonActions')
+      .nth(0)
+      .locator('button')
       .nth(1);
     this.newGroupInput = this.modalLocator.locator('#inviteGroup');
     this.inviteGroupForm = this.modalLocator.locator('#inviteGroupForm');
