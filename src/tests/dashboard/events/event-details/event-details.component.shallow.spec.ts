@@ -107,8 +107,8 @@ describe('Event Details Component (Shallow Test)', () => {
       .toBeTruthy();
 
     expect(filterLabels.length)
-      .withContext('Should have 4 filter labels')
-      .toBe(4);
+      .withContext('Should have 6 filter labels')
+      .toBe(6);
 
     expect(filterLabels[0].textContent)
       .withContext('First filter label should be "View"')
@@ -126,13 +126,21 @@ describe('Event Details Component (Shallow Test)', () => {
       .withContext('Third filter label should be "Family"')
       .toContain('Filtrar (Familia)');
 
+    expect(filterLabels[4].textContent)
+      .withContext('Fourth filter label should be "Last Viewed"')
+      .toContain('Fecha Inicio (Última Vista)');
+
+    expect(filterLabels[5].textContent)
+      .withContext('Fifth filter label should be "Last Viewed"')
+      .toContain('Fecha Final (Última Vista)');
+
     expect(filterSelects.length)
       .withContext('Should have 3 filter selects')
       .toBe(3);
 
     expect(filterInput.length)
-      .withContext('Should have 1 filter input')
-      .toBe(1);
+      .withContext('Should have 3 filter input')
+      .toBe(3);
 
     expect(buttons[0].textContent)
       .withContext('First button should be "Import Invites"')

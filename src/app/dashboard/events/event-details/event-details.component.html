@@ -59,7 +59,19 @@
           </label>
           <input type="text" class="form-control" name="filterByFamily" id="filterByFamily" i18n-placeholder placeholder="Buscar familia"/>
         </div>
-        <div class="col-12 offset-0 offset-md-4 col-md-4 mt-3">
+        <div class="col-12 col-md-4 mt-3 text-start">
+          <label for="filterByLastViewedStartDate" class="form-label">
+            <strong i18n>Fecha Inicio (Última Vista)</strong>
+          </label>
+          <input type="date" class="form-control" name="filterByLastViewedStartDate" id="filterByLastViewedStartDate"/>
+        </div>
+        <div class="col-12 col-md-4 mt-3 text-start">
+          <label for="filterByLastViewedEndDate" class="form-label">
+            <strong i18n>Fecha Final (Última Vista)</strong>
+          </label>
+          <input type="date" class="form-control" name="filterByLastViewedEndDate" id="filterByLastViewedEndDate"/>
+        </div>
+        <div class="col-12 offset-0 offset-md-8 col-md-4 mt-3">
           <button class="btn btn-dark" id="searchInvites" (click)="filter()">Buscar</button>
           <button class="btn btn-dark" id="cleanInvites" (click)="clearFilter()">Limpiar</button>
         </div>

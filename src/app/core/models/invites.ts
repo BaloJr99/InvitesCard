@@ -152,6 +152,8 @@ export interface IInvitesFilters {
   filterByInviteViewed: boolean | undefined;
   filterByNeedsAccomodation: boolean | undefined;
   filterByAnswered: boolean | undefined;
+  filterByLastViewedStartDate: string;
+  filterByLastViewedEndDate: string;
 }
 
 export type IOverwriteConfirmation = Pick<

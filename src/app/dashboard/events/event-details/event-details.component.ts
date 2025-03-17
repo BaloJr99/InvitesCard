@@ -46,6 +46,7 @@ import { TableComponent } from '../../../shared/components/table/table.component
 import { InviteModalComponent } from './invite-modal/invite-modal.component';
 import { InvitesImportModalComponent } from './invites-import-modal/invites-import-modal.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { dateToUTCDate } from 'src/app/shared/utils/tools';
 
 @Component({
   selector: 'app-event-details',
@@ -91,6 +92,8 @@ export class EventDetailsComponent implements OnInit {
     filterByAnswered: undefined,
     filterByInviteViewed: undefined,
     filterByNeedsAccomodation: undefined,
+    filterByLastViewedStartDate: '',
+    filterByLastViewedEndDate: '',
   });
   inviteFilters$ = this.inviteFilters.asObservable();
 
@@ -198,7 +201,15 @@ export class EventDetailsComponent implements OnInit {
               ? true
               : inviteFilters.filterByNeedsAccomodation
               ? invite.needsAccomodation
-              : invite.needsAccomodation == false)
+              : invite.needsAccomodation == false) &&
+            (inviteFilters.filterByLastViewedStartDate === ''
+              ? true
+              : new Date(invite.lastViewedDate as string) >=
+                new Date(inviteFilters.filterByLastViewedStartDate)) &&
+            (inviteFilters.filterByLastViewedEndDate === ''
+              ? true
+              : new Date(invite.lastViewedDate as string) <=
+                new Date(inviteFilters.filterByLastViewedEndDate))
         );
 
         if (
@@ -491,11 +502,37 @@ export class EventDetailsComponent implements OnInit {
     const needsAccomodationFilter = document.getElementById(
       'filterByNeedsAccomodation'
     ) as HTMLSelectElement;
+    const lastViewedStartDateFilter = document.getElementById(
+      'filterByLastViewedStartDate'
+    ) as HTMLInputElement;
+    const lastViewedEndDateFilter = document.getElementById(
+      'filterByLastViewedEndDate'
+    ) as HTMLInputElement;
 
     const familyFilterValue = familyFilter.value.trim().toLocaleLowerCase();
     const inviteViewedFilterValue = inviteViewedFilter.value;
     const answeredFilterValue = answeredFilter.value;
     const needsAccomodationFilterValue = needsAccomodationFilter.value;
+    let lastViewedStartDateFilterValue = lastViewedStartDateFilter.value;
+    if (lastViewedStartDateFilterValue !== '') {
+      // Set time to 00:00:00
+      lastViewedStartDateFilterValue = dateToUTCDate(
+        lastViewedStartDateFilter.value
+      );
+    }
+
+    let lastViewedEndDateFilterValue = lastViewedEndDateFilter.value;
+    if (lastViewedEndDateFilterValue !== '') {
+      // Set time to 23:59:59
+      lastViewedEndDateFilterValue = new Date(
+        new Date(dateToUTCDate(lastViewedEndDateFilter.value)).setHours(
+          23,
+          59,
+          59,
+          999
+        )
+      ).toISOString();
+    }
 
     this.inviteFilters.next({
       filterByFamily: familyFilterValue,
@@ -511,6 +548,8 @@ export class EventDetailsComponent implements OnInit {
         needsAccomodationFilterValue === 'all'
           ? undefined
           : needsAccomodationFilterValue === 'true',
+      filterByLastViewedStartDate: lastViewedStartDateFilterValue,
+      filterByLastViewedEndDate: lastViewedEndDateFilterValue,
     });
   }
 
@@ -527,17 +566,27 @@ export class EventDetailsComponent implements OnInit {
     const needsAccomodationFilter = document.getElementById(
       'filterByNeedsAccomodation'
     ) as HTMLSelectElement;
+    const lastViewedStartDateFilter = document.getElementById(
+      'filterByLastViewedStartDate'
+    ) as HTMLInputElement;
+    const lastViewedEndDateFilter = document.getElementById(
+      'filterByLastViewedEndDate'
+    ) as HTMLInputElement;
 
     familyFilter.value = '';
     inviteViewedFilter.value = 'all';
     answeredFilter.value = 'all';
     needsAccomodationFilter.value = 'all';
+    lastViewedStartDateFilter.value = '';
+    lastViewedEndDateFilter.value = '';
 
     this.inviteFilters.next({
       filterByFamily: '',
       filterByAnswered: undefined,
       filterByInviteViewed: undefined,
       filterByNeedsAccomodation: undefined,
+      filterByLastViewedStartDate: '',
+      filterByLastViewedEndDate: '',
     });
   }
 
