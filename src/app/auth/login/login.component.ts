@@ -19,6 +19,7 @@ export class LoginComponent {
   loginForm: FormGroup;
 
   authErrorMessage = '';
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -52,6 +53,16 @@ export class LoginComponent {
       });
     } else {
       this.loginForm.markAllAsTouched();
+    }
+  }
+
+  toggleShowPassword() {
+    this.showPassword = !this.showPassword;
+    const password = document.getElementById('password') as HTMLInputElement;
+    if (this.showPassword) {
+      password.type = 'text';
+    } else {
+      password.type = 'password';
     }
   }
 }

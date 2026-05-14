@@ -16,6 +16,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
 export class PasswordResetComponent implements OnInit {
   passwordResetForm: FormGroup;
   passwordReset = false;
+  showPassword = false;
+  showConfirmPassword = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -51,6 +53,26 @@ export class PasswordResetComponent implements OnInit {
         });
     } else {
       this.passwordResetForm.markAllAsTouched();
+    }
+  }
+
+  toggleShowPassword() {
+    this.showPassword = !this.showPassword;
+    const password = document.getElementById('password') as HTMLInputElement;
+    if (this.showPassword) {
+      password.type = 'text';
+    } else {
+      password.type = 'password';
+    }
+  }
+
+  toggleConfirmShowPassword() {
+    this.showConfirmPassword = !this.showConfirmPassword;
+    const password = document.getElementById('confirmPassword') as HTMLInputElement;
+    if (this.showConfirmPassword) {
+      password.type = 'text';
+    } else {
+      password.type = 'password';
     }
   }
 }

@@ -34,6 +34,7 @@
               formControlName="password" 
               [ngClass]="{'is-invalid': loginForm.get('password') | validation }"
               i18n-placeholder>
+              <button id="togglePasswordVisibility" type="button" class="fa-solid" tabindex="0" (click)="toggleShowPassword()" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" attr.aria-label="{{showPassword ? 'Hide' : 'Show'}} Password"></button>
           </div>
           <span class="invalid-feedback d-block" role="alert" *ngIf="loginForm.get('password') | validation">
             {{ loginForm.get('password')?.errors | validationError: 'password' }}
