@@ -1,58 +1,62 @@
-<main *ngIf="vm$ | async as vm">
-  <div id="full-invite" *ngIf="vm.userInvite">
-    <div class="info invite-section">
-      <ng-container *ngIf="vm.mainImage">
-        <div class="backgroundImage" style="background-image: url('{{vm.mainImage.fileUrl}}');" alt="Foto de la novia y el novio" i18n-alt></div>
-      </ng-container>
-      <button (click)="goToForm()" class="scrollFormButton" i18n-title title="Deplazar hacia el formulario"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>
-      <button (click)="reproduceAudio()" class="audioButton" i18n-title title="Audio Button"><i class="fa-solid fa-music" aria-hidden="true"></i></button>
-      <div class="container">
-        <div class="header">
-          <h1 i18n>Nuestra boda</h1>
-          <h2>
-            <ng-container *ngFor="let celebrated of vm.userInvite.nameOfCelebrated.split(';'); let i = index">
-              <span *ngIf="i === 1"><br>&</span> 
-              {{ celebrated.split(' ')[0] }}
-            </ng-container>
-          </h2>
-        </div>
-        <div class="datetime">
-          <div class="date">
-            <hr>
-            <p>{{ vm.dayOfTheWeek.toLocaleUpperCase() }}, {{ vm.shortDate.toLocaleUpperCase() }}</p>
-            <hr>
-          </div>
-          <app-countdown [dateOfEventValue]="vm.userInvite.dateOfEvent"></app-countdown>
-        </div>
-      </div>
-    </div>
-    <div class="speech invite-section darkColor">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <p class="familyName">{{ vm.userInvite.family }}</p>
-          </div>
-          <div class="col-12">
-            <p class="phrase">
-              <i i18n>El día en que nuestros corazones se unen para siempre ha llegado. Ven a disfrutar con nosotros de esta celebración que estará llena de alegría y amor ¡Y por supuesto de comida y bailes!</i>
-            </p>
-            <br>
-          </div>
-          <div class="col-12">
-            <p><strong i18n>En compañía de nuestros padres:</strong></p>
-          </div>
-          <div class="offset-md-2 col-sm-12 col-md-4 mb-3 mb-md-0">
-            <div class="brideIcon">
-              <svg height="800px" width="800px" version="1.1" id="_x32_" viewBox="0 0 512 512"  xml:space="preserve">
-                <style type="text/css">
-                  .st0{fill:#000000;}
-                </style>
-                <g>
-                  <circle class="st0" cx="209.741" cy="390.257" r="7.058"/>
-                  <circle class="st0" cx="229.346" cy="409.078" r="7.058"/>
-                  <circle class="st0" cx="256.009" cy="416.92" r="7.058"/>
-                  <circle class="st0" cx="302.278" cy="390.257" r="7.058"/>
-                  <circle class="st0" cx="282.672" cy="409.078" r="7.058"/>
+@if (vm$ | async; as vm) {
+  <main>
+    @if (vm.userInvite) {
+      <div id="full-invite">
+        <div class="info invite-section">
+          @if (vm.mainImage) {
+            <div class="backgroundImage" style="background-image: url('{{vm.mainImage.fileUrl}}');" alt="Foto de la novia y el novio" i18n-alt></div>
+          }
+          <button (click)="goToForm()" class="scrollFormButton" i18n-title title="Deplazar hacia el formulario"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>
+          <button (click)="reproduceAudio()" class="audioButton" i18n-title title="Audio Button"><i class="fa-solid fa-music" aria-hidden="true"></i></button>
+          <div class="container">
+            <div class="header">
+              <h1 i18n>Nuestra boda</h1>
+              <h2>
+                @for (celebrated of vm.userInvite.nameOfCelebrated.split(';'); track celebrated; let i = $index) {
+                  @if (i === 1) {
+                    <span><br>&</span>
+                  }
+                  {{ celebrated.split(' ')[0] }}
+                }
+              </h2>
+            </div>
+            <div class="datetime">
+              <div class="date">
+                <hr>
+                  <p>{{ vm.dayOfTheWeek.toLocaleUpperCase() }}, {{ vm.shortDate.toLocaleUpperCase() }}</p>
+                  <hr>
+                  </div>
+                  <app-countdown [dateOfEventValue]="vm.userInvite.dateOfEvent"></app-countdown>
+                </div>
+              </div>
+            </div>
+            <div class="speech invite-section darkColor">
+              <div class="container">
+                <div class="row">
+                  <div class="col-12">
+                    <p class="familyName">{{ vm.userInvite.family }}</p>
+                  </div>
+                  <div class="col-12">
+                    <p class="phrase">
+                      <i i18n>El día en que nuestros corazones se unen para siempre ha llegado. Ven a disfrutar con nosotros de esta celebración que estará llena de alegría y amor ¡Y por supuesto de comida y bailes!</i>
+                    </p>
+                    <br>
+                    </div>
+                    <div class="col-12">
+                      <p><strong i18n>En compañía de nuestros padres:</strong></p>
+                    </div>
+                    <div class="offset-md-2 col-sm-12 col-md-4 mb-3 mb-md-0">
+                      <div class="brideIcon">
+                        <svg height="800px" width="800px" version="1.1" id="_x32_" viewBox="0 0 512 512"  xml:space="preserve">
+                          <style type="text/css">
+                            .st0{fill:#000000;}
+                          </style>
+                          <g>
+                            <circle class="st0" cx="209.741" cy="390.257" r="7.058"/>
+                            <circle class="st0" cx="229.346" cy="409.078" r="7.058"/>
+                            <circle class="st0" cx="256.009" cy="416.92" r="7.058"/>
+                            <circle class="st0" cx="302.278" cy="390.257" r="7.058"/>
+                            <circle class="st0" cx="282.672" cy="409.078" r="7.058"/>
                   <path class="st0" d="M217.197,56.966c0-0.625,0-1.256,0.061-1.881c-0.625-5.459-3.639-9.539-6.899-9.288
                     c-3.388,0.312-5.71,5.208-5.268,10.979c0.061,0.815,0.184,1.568,0.374,2.322c-0.754,0-1.568,0-2.383,0.062
                     c-5.772,0.441-10.226,3.578-9.975,6.966c0.313,3.326,5.208,5.71,10.979,5.207c0.815-0.061,1.568-0.19,2.322-0.312
@@ -119,20 +123,20 @@
                     c-0.625-0.435-1.256-0.815-1.881-1.128c0.502-0.563,0.937-1.127,1.378-1.758c3.137-4.393,3.578-9.472,1.005-11.353
                     c-2.574-1.819-7.218,0.312-10.354,4.767c-0.434,0.564-0.815,1.194-1.127,1.82c-0.251-0.19-0.441-0.374-0.692-0.564
                     c-0.938,2.947-2.194,5.771-3.64,8.467C328.616,86.956,332.317,90.466,335.454,94.167z"/>
-                </g>
-              </svg>
-            </div>
-            <ng-container *ngFor="let brideParent of vm.parsedEventSettings.brideParents.split(';')">
-              <p>{{brideParent}}</p>
-            </ng-container>
-          </div>
-          <div class="col-sm-12 col-md-4">
-            <div class="groom-icon">
-              <svg height="800px" width="800px" version="1.1" id="_x32_" viewBox="0 0 512 512"  xml:space="preserve">
-                <style type="text/css">
-                  .st0{fill:#000000;}
-                </style>
-                <g>
+                                </g>
+                              </svg>
+                            </div>
+                            @for (brideParent of vm.parsedEventSettings.brideParents.split(';'); track brideParent) {
+                              <p>{{brideParent}}</p>
+                            }
+                          </div>
+                          <div class="col-sm-12 col-md-4">
+                            <div class="groom-icon">
+                              <svg height="800px" width="800px" version="1.1" id="_x32_" viewBox="0 0 512 512"  xml:space="preserve">
+                                <style type="text/css">
+                                  .st0{fill:#000000;}
+                                </style>
+                                <g>
                   <path class="st0" d="M437.666,404.773c-12.269-18.374-30.904-28.535-48.419-35.136c-8.778-3.304-17.366-5.742-24.928-7.811
                     c-7.548-2.055-14.116-3.787-18.528-5.446c-7.716-2.867-15.869-6.581-21.556-10.576c-2.841-1.981-5.03-4.023-6.299-5.762
                     c-1.283-1.78-1.632-3.008-1.646-4.083c0-7.421,0-16.695,0-28.91c9.872-10.986,24.056-28.01,29.884-55
@@ -176,55 +180,60 @@
                     l35.76-32.12l-25.304-35.579l35.941-17.971l-8.79-31.65c2.975,0.813,6.024,1.645,9.194,2.572
                     c15.627,4.513,32.893,10.859,45.746,21.893c6.447,5.52,11.846,12.148,15.721,20.496c3.861,8.347,6.238,18.488,6.238,31.214
                     C435.678,454.891,435.544,457.758,435.309,460.727z"/>
-                </g>
-              </svg>
-            </div>
-            <ng-container *ngFor="let groomParent of vm.parsedEventSettings.groomParents.split(';')">
-              <p>{{groomParent}}</p>
-            </ng-container>
-          </div>
-          <div class="col-12">
-            <br>
-            <p class="noKids" *ngIf="!vm.userInvite.kidsAllowed" i18n>* No niños *</p>
-            <p *ngIf="!vm.userInvite.kidsAllowed" i18n>Para una mejor experiencia para todos los presentes, hemos decidido celebrar este momento sin niños. Deseamos que esta decisión no les impida asistir a nuestra celebración. </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="itinerary invite-section" [ngClass]="getSectionOrder('itineraryInfo') % 2 === 0 ? 'darkColor' : 'lightColor'" [ngStyle]="{ 'order': getSectionOrder('itineraryInfo') }" *ngIf="sectionEnabled('itineraryInfo')">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <h2 i18n>Itinerario</h2>
-            <div class="itinerary-box">
-              <div class="icons">
-                <div class="rule"></div>
-                <div class="outside-box">
-                  <div class="icon">
-                    <svg height="800px" width="800px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-                        viewBox="0 0 512 512"  xml:space="preserve">
-                      <style type="text/css">
-                        .st0{fill:#000000;}
-                      </style>
-                      <g>
+                                  </g>
+                                </svg>
+                              </div>
+                              @for (groomParent of vm.parsedEventSettings.groomParents.split(';'); track groomParent) {
+                                <p>{{groomParent}}</p>
+                              }
+                            </div>
+                            <div class="col-12">
+                              <br>
+                                @if (!vm.userInvite.kidsAllowed) {
+                                  <p class="noKids" i18n>* No niños *</p>
+                                }
+                                @if (!vm.userInvite.kidsAllowed) {
+                                  <p i18n>Para una mejor experiencia para todos los presentes, hemos decidido celebrar este momento sin niños. Deseamos que esta decisión no les impida asistir a nuestra celebración. </p>
+                                }
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        @if (sectionEnabled('itineraryInfo')) {
+                          <div class="itinerary invite-section" [ngClass]="getSectionOrder('itineraryInfo') % 2 === 0 ? 'darkColor' : 'lightColor'" [ngStyle]="{ 'order': getSectionOrder('itineraryInfo') }">
+                            <div class="container">
+                              <div class="row">
+                                <div class="col-12">
+                                  <h2 i18n>Itinerario</h2>
+                                  <div class="itinerary-box">
+                                    <div class="icons">
+                                      <div class="rule"></div>
+                                      <div class="outside-box">
+                                        <div class="icon">
+                                          <svg height="800px" width="800px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            viewBox="0 0 512 512"  xml:space="preserve">
+                                            <style type="text/css">
+                                              .st0{fill:#000000;}
+                                            </style>
+                                            <g>
                         <path class="st0" d="M390.305,235.134H237.759v-12.689l-93.676-107.348V72.594h35.682V33.46h-35.682V0h-39.142v33.46H69.26v39.134
                           h35.681v42.518L11.265,222.444V512h93.782v-88.388c0.03-10.748,8.732-19.45,19.473-19.465c10.741,0.015,19.442,8.717,19.457,19.465
                           V512h71.575h16.028h6.178h149.737h113.239V361.667L390.305,235.134z M225.387,287.939v211.682h-9.835h-59.203v-76.009
                           c0-17.584-14.246-31.837-31.829-31.837c-17.584,0-31.845,14.253-31.845,31.837v76.009H23.637V227.09l93.676-107.34V60.214H81.632
                           V45.833l35.681,0.008V12.372h14.397V45.84h35.682v14.374h-35.682v59.528l93.676,107.348v20.417h159.299L480.93,357.8H237.759
                           v-69.86H225.387z M488.362,499.621H387.495H237.759V370.18h250.604V499.621z"/>
-                        <path class="st0" d="M349.351,460.676v-52.601h-51.045v58.787h51.045V460.676z M336.979,454.482h-26.3v-34.035h26.3V454.482z"/>
-                        <path class="st0" d="M430.564,460.676v-52.601h-51.045v58.787h51.045V460.676z M418.192,454.482h-26.301v-34.035h26.301V454.482z"/>
-                        <path class="st0" d="M97.493,305.274h54.913v-6.186v-48.726H97.493V305.274z M109.867,262.734h30.167v30.168h-30.167V262.734z"/>
-                      </g>
-                    </svg>
-                  </div>
-                </div>
-                <div class="outside-box">
-                  <div class="icon">
-                    <svg fill="#000000" version="1.1" id="Layer_1" viewBox="0 0 512 512" xml:space="preserve">
-                      <g>
-                        <g>
+                                                <path class="st0" d="M349.351,460.676v-52.601h-51.045v58.787h51.045V460.676z M336.979,454.482h-26.3v-34.035h26.3V454.482z"/>
+                                                <path class="st0" d="M430.564,460.676v-52.601h-51.045v58.787h51.045V460.676z M418.192,454.482h-26.301v-34.035h26.301V454.482z"/>
+                                                <path class="st0" d="M97.493,305.274h54.913v-6.186v-48.726H97.493V305.274z M109.867,262.734h30.167v30.168h-30.167V262.734z"/>
+                                              </g>
+                                            </svg>
+                                          </div>
+                                        </div>
+                                        <div class="outside-box">
+                                          <div class="icon">
+                                            <svg fill="#000000" version="1.1" id="Layer_1" viewBox="0 0 512 512" xml:space="preserve">
+                                              <g>
+                                                <g>
                           <path d="M371.769,176.364l30.47-30.47l-21.71-25.265h-52.305l-21.71,25.265l30.47,30.47
                             c-29.557,3.279-57.658,14.863-80.982,33.507c-23.324-18.644-51.425-30.228-80.982-33.507l30.47-30.47l-21.71-25.265h-52.305
                             l-21.71,25.265l30.47,30.47C61.471,185.049,0,251.988,0,333.024c0,86.914,70.71,157.625,157.625,157.625
@@ -261,162 +270,173 @@
                             c-0.642-0.701-1.298-1.387-1.951-2.075c-0.385-0.406-0.763-0.818-1.153-1.221c-0.781-0.805-1.577-1.594-2.373-2.382
                             c-0.262-0.259-0.516-0.525-0.78-0.783c24.804-19.075,55.302-29.493,86.786-29.493c78.529,0,142.417,63.888,142.417,142.417
                             C496.792,411.554,432.904,475.441,354.375,475.441z"/>
-                        </g>
-                      </g>
-                      <g>
-                        <g>
-                          <rect x="248.396" y="21.351" width="15.208" height="47.344"/>
-                        </g>
-                      </g>
-                      <g>
-                        <g>
-                            <rect x="294.983" y="52.217" transform="matrix(0.4198 -0.9076 0.9076 0.4198 130.5873 323.9224)" width="47.343" height="15.207"/>
-                        </g>
-                      </g>
-                      <g>
-                        <g>
-                          <rect x="185.738" y="36.156" transform="matrix(0.9076 -0.4198 0.4198 0.9076 -7.2537 86.6932)" width="15.207" height="47.343"/>
-                        </g>
-                      </g>
-                    </svg>
-                  </div>
-                </div>
-                <div class="outside-box">
-                  <div class="icon">
-                    <svg width="800px" height="800px" viewBox="0 0 64 64" id="svg5" version="1.1" xml:space="preserve">
-                      <defs id="defs2"/>
-                      <g id="layer1" transform="translate(-288)">
-                      <path d="m 306.51953,28.427734 c -0.65112,0.01192 -1.2849,0.197012 -1.76562,0.677735 -0.19132,0.191315 -0.33188,0.408965 -0.4375,0.640625 a 1,1 0 0 0 -0.01,0.01367 l -12.23828,27.630859 a 1.0001,1.0001 0 0 0 1.31836,1.320313 l 27.55469,-12.207032 a 1,1 0 0 0 0.0312,-0.01758 c 0.25349,-0.107628 0.492,-0.255673 0.69922,-0.46289 0.64095,-0.640964 0.75701,-1.554055 0.63671,-2.416016 -0.1203,-0.861954 -0.46342,-1.778629 -0.97461,-2.769531 -1.02236,-1.981805 -2.73782,-4.253456 -4.93945,-6.455079 -2.20162,-2.201621 -4.47133,-3.915124 -6.45312,-4.9375 -0.99091,-0.511187 -1.90759,-0.856262 -2.76953,-0.976562 -0.21549,-0.03007 -0.43531,-0.04499 -0.65235,-0.04102 z m 0.0508,1.996094 c 0.089,9.7e-5 0.19549,0.0074 0.32422,0.02539 0.51494,0.07186 1.26901,0.329842 2.12891,0.773437 1.71979,0.887219 3.87745,2.494643 5.95703,4.574219 2.07958,2.079576 3.68895,4.239191 4.57617,5.958984 0.4436,0.859905 0.69963,1.612019 0.77148,2.126953 0.0719,0.514929 -0.0276,0.683896 -0.0703,0.726563 -0.0426,0.04264 -0.21166,0.144108 -0.72656,0.07227 -0.51494,-0.07186 -1.269,-0.327882 -2.12891,-0.771485 -1.71978,-0.887219 -3.8794,-2.496596 -5.95898,-4.576172 -2.07958,-2.079575 -3.687,-4.237238 -4.57422,-5.957031 -0.4436,-0.859896 -0.69962,-1.613971 -0.77148,-2.128906 -0.0522,-0.374223 -0.0139,-0.562797 0.0273,-0.65625 l 0.01,-0.01953 v -0.002 c 0.0119,-0.02231 0.0242,-0.0418 0.0332,-0.05078 0.032,-0.03198 0.13522,-0.09599 0.40234,-0.0957 z m -1.79297,3.212891 c 0.0977,0.215664 0.20131,0.433135 0.31641,0.65625 1.02238,1.981797 2.73392,4.253456 4.93555,6.455078 2.20161,2.201622 4.47523,3.915117 6.45703,4.9375 0.22178,0.114411 0.43793,0.217246 0.65234,0.314453 l -7.70898,3.414062 c -1.63582,-0.960717 -3.51199,-2.441234 -5.2461,-4.173828 -1.12769,-1.12896 -2.15508,-2.324404 -3.0039,-3.482422 z m -4.51953,10.205078 c 0.75731,0.951967 1.60333,1.900939 2.51172,2.810547 1.4484,1.447366 2.97852,2.730397 4.46094,3.736328 l -12.28516,5.443359 z" id="rect55015" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
-                      <path d="m 341.62891,26.142578 c -5.4532,-0.472611 -9.9929,1.468384 -13.30664,3.830078 -4.41833,3.148926 -6.82227,7.06836 -6.82227,7.06836 a 1,1 0 0 0 0.32812,1.376953 1,1 0 0 0 1.375,-0.328125 c 0,0 2.21942,-3.594817 6.2793,-6.488282 4.05988,-2.893464 9.79515,-5.061483 17.17774,-2.240234 a 1,1 0 0 0 1.29101,-0.576172 1,1 0 0 0 -0.57617,-1.291015 c -2.0092,-0.767816 -3.92836,-1.194026 -5.74609,-1.351563 z" id="path55061" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
-                      <path d="m 332.38672,8.0546875 a 1,1 0 0 0 -1.08789,0.9023438 c 0,0 -0.40206,4.2050857 -2.76367,8.5957027 -2.36162,4.390618 -6.54694,8.872789 -14.41602,9.607422 a 1,1 0 0 0 -0.90234,1.087891 1,1 0 0 0 1.08789,0.902344 c 8.56641,-0.799735 13.42206,-5.87213 15.99218,-10.650391 2.57013,-4.778261 2.99219,-9.3574219 2.99219,-9.3574219 a 1,1 0 0 0 -0.90234,-1.0878906 z" id="path55081" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
-                      <path d="m 310.21289,15.603516 c -1.64501,0 -3,1.354992 -3,3 0,1.645008 1.35499,3 3,3 1.64501,0 3,-1.354992 3,-3 0,-1.645008 -1.35499,-3 -3,-3 z m 0,2 c 0.56413,0 1,0.435871 1,1 0,0.564128 -0.43587,1 -1,1 -0.56413,0 -1,-0.435872 -1,-1 0,-0.564129 0.43587,-1 1,-1 z" id="path55087" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
-                      <path d="m 343.42773,7.7519531 c -1.98555,0 -3.61718,1.6316312 -3.61718,3.6171879 0,1.985556 1.63163,3.617187 3.61718,3.617187 1.98556,0 3.61719,-1.631631 3.61719,-3.617187 0,-1.9855567 -1.63163,-3.6171879 -3.61719,-3.6171879 z m 0,2 c 0.90468,0 1.61719,0.7125099 1.61719,1.6171879 0,0.904677 -0.71251,1.617187 -1.61719,1.617187 -0.90467,0 -1.61718,-0.71251 -1.61718,-1.617187 0,-0.904678 0.71251,-1.6171879 1.61718,-1.6171879 z" id="circle55089" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
-                      <path d="m 345.01758,45.775391 c -1.64501,0 -3,1.354992 -3,3 0,1.645008 1.35499,3 3,3 1.64501,0 3,-1.354992 3,-3 0,-1.645008 -1.35499,-3 -3,-3 z m 0,2 c 0.56413,0 1,0.435871 1,1 0,0.564128 -0.43587,1 -1,1 -0.56413,0 -1,-0.435872 -1,-1 0,-0.564129 0.43587,-1 1,-1 z" id="circle55091" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
-                      <path d="m 323.25391,7.8359375 a 1,1 0 0 0 -1,1 v 1.3867185 h -1.38672 a 1,1 0 0 0 -1,1 1,1 0 0 0 1,1 h 1.38672 v 1.386719 a 1,1 0 0 0 1,1 1,1 0 0 0 1,-1 v -1.386719 h 1.38671 a 1,1 0 0 0 1,-1 1,1 0 0 0 -1,-1 h -1.38671 V 8.8359375 a 1,1 0 0 0 -1,-1 z" id="path55093" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
-                      <path d="m 335.43555,17.988281 a 1,1 0 0 0 -0.70703,0.292969 1,1 0 0 0 0,1.414062 l 0.98046,0.980469 -0.98046,0.980469 a 1,1 0 0 0 0,1.414062 1,1 0 0 0 1.41406,0 l 0.98047,-0.980468 0.98047,0.980468 a 1,1 0 0 0 1.41406,0 1,1 0 0 0 0,-1.414062 l -0.98047,-0.980469 0.98047,-0.980469 a 1,1 0 0 0 0,-1.414062 1,1 0 0 0 -0.70703,-0.292969 1,1 0 0 0 -0.70703,0.292969 l -0.98047,0.980469 -0.98047,-0.980469 a 1,1 0 0 0 -0.70703,-0.292969 z" id="path55097" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
-                      <path d="m 336.42383,36.179688 a 1,1 0 0 0 -1,1 v 1.386718 h -1.38672 a 1,1 0 0 0 -1,1 1,1 0 0 0 1,1 h 1.38672 v 1.386719 a 1,1 0 0 0 1,1 1,1 0 0 0 1,-1 v -1.386719 h 1.38672 a 1,1 0 0 0 1,-1 1,1 0 0 0 -1,-1 h -1.38672 v -1.386718 a 1,1 0 0 0 -1,-1 z" id="path55101" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
-                      <path d="m 327.12305,45.207031 a 1,1 0 0 0 -0.86133,1.123047 1,1 0 0 0 1.12305,0.859375 c 0.27918,-0.03692 0.56457,-0.03692 0.84375,0 0.3226,0.04267 0.62337,0.135167 0.875,0.271484 0.24912,0.134963 0.4597,0.319998 0.5957,0.523438 0.13344,0.199604 0.20437,0.438385 0.20117,0.640625 -0.003,0.196172 -0.0845,0.396844 -0.19141,0.513672 -0.0735,0.08031 -0.19388,0.167022 -0.34765,0.232422 -0.15633,0.06649 -0.35162,0.115209 -0.57813,0.15039 -0.45436,0.07057 -1.041,0.06628 -1.72656,0.203125 -1.11132,0.221822 -2.12648,0.804948 -2.87891,1.652344 -0.75241,0.847402 -1.21004,1.924937 -1.29882,3.054688 -0.0888,1.129772 0.19581,2.264238 0.80664,3.21875 0.61083,0.954515 1.5229,1.689358 2.58593,2.082031 1.06304,0.392671 2.2337,0.427836 3.31836,0.09961 1.08467,-0.328222 2.03811,-1.005696 2.70508,-1.921875 0.66698,-0.916179 1.01891,-2.032979 0.99805,-3.166015 -0.0209,-1.132989 -0.41301,-2.23594 -1.11328,-3.126954 a 1,1 0 0 0 -1.4043,-0.167968 1,1 0 0 0 -0.16797,1.404297 c 0.42449,0.540113 0.67287,1.240812 0.68555,1.927734 0.0126,0.686876 -0.21091,1.39578 -0.61524,1.951172 -0.40432,0.555392 -1.01043,0.986575 -1.66796,1.185547 -0.65754,0.198973 -1.4005,0.175542 -2.04493,-0.0625 -0.64442,-0.238042 -1.2254,-0.704556 -1.5957,-1.283203 -0.3703,-0.578649 -0.54991,-1.299522 -0.49609,-1.984375 0.0538,-0.684876 0.34466,-1.369108 0.80078,-1.882813 0.45613,-0.513708 1.10169,-0.883108 1.77539,-1.017578 0.42304,-0.08444 0.97793,-0.08652 1.64062,-0.189453 0.33204,-0.05157 0.69088,-0.132381 1.05469,-0.28711 0.36637,-0.155817 0.73295,-0.383979 1.04102,-0.720703 0.47197,-0.515881 0.70404,-1.172715 0.71484,-1.833984 0.0104,-0.655201 -0.1959,-1.269888 -0.53906,-1.783203 -0.34058,-0.509479 -0.7998,-0.898356 -1.30469,-1.171875 -0.50238,-0.272164 -1.03887,-0.424368 -1.56641,-0.494141 -0.45398,-0.06004 -0.9132,-0.06004 -1.36718,-10e-7 z" id="path55105" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
-                      <path d="m 301.02148,4.1113281 c -0.57378,-0.1511089 -1.17501,-0.1480852 -1.74804,0.00586 -0.57304,0.1539437 -1.09481,0.4527814 -1.51563,0.8710937 a 1,1 0 0 0 -0.004,1.4160157 1,1 0 0 0 1.41406,0.00391 c 0.16958,-0.1685704 0.39407,-0.2973377 0.625,-0.359375 0.23092,-0.062037 0.48947,-0.062849 0.7207,-0.00195 0.23123,0.060896 0.45458,0.1877274 0.625,0.3554687 0.17042,0.1677399 0.30264,0.390867 0.36719,0.6210938 0.11455,0.4085376 0.038,1.0258141 -0.004,1.8242188 -0.021,0.4013203 -0.0238,0.8545476 0.082,1.3398442 0.10725,0.491566 0.32514,1.00622 0.73829,1.433594 0.34668,0.35862 0.7868,0.605319 1.27343,0.714843 0.48664,0.109525 0.99012,0.07591 1.45703,-0.09961 0.46691,-0.175516 0.86814,-0.481809 1.16211,-0.884765 0.29399,-0.402969 0.46173,-0.876806 0.48633,-1.375 a 1,1 0 0 0 -0.94922,-1.0488281 1,1 0 0 0 -1.04883,0.9492187 c -0.005,0.1008625 -0.046,0.2153004 -0.10546,0.2968744 -0.0595,0.08159 -0.15549,0.153924 -0.25,0.189453 -0.0945,0.03554 -0.21398,0.04366 -0.3125,0.02149 -0.0985,-0.02217 -0.20325,-0.08169 -0.27344,-0.154296 -0.0871,-0.09005 -0.1765,-0.2571772 -0.22266,-0.4687507 -0.0475,-0.2178422 -0.0576,-0.4912337 -0.041,-0.8085938 0.0335,-0.6389559 0.20762,-1.4933511 -0.0664,-2.4707031 -0.16019,-0.5713314 -0.46776,-1.0896381 -0.89062,-1.5058594 -0.42288,-0.4162197 -0.94574,-0.714121 -1.51954,-0.8652344 z" id="path55109" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
-                      </g>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-              <div class="boxes">
-                <div class="box">
-                  <h3 class="box-header" i18n>Ceremonia<br>Religiosa</h3>
-                  <div class="box-body">
-                    <p><strong>{{ vm.parsedEventSettings.massTime }} <span i18n>HORAS</span></strong></p>
-                    <p>{{ vm.parsedEventSettings.massPlace }}</p>
-                  </div>
-                  <div class="box-footer">
-                    <a [href]="vm.parsedEventSettings.massUrl" target="_blank" i18n>Ir al mapa</a>
-                  </div>
-                </div>
-                <div class="box">
-                  <h3 class="box-header" i18n>Ceremonia<br>Civil</h3>
-                  <div class="box-body">
-                    <p><strong>{{ vm.parsedEventSettings.civilTime }} <span i18n>HORAS</span></strong></p>
-                    <p>{{ vm.parsedEventSettings.civilPlace }}</p>
-                  </div>
-                  <div class="box-footer">
-                    <a [href]="vm.parsedEventSettings.civilUrl" target="_blank" i18n>Ir al mapa</a>
-                  </div>
-                </div>
-                <div class="box">
-                  <h3 class="box-header" i18n>Recepción</h3>
-                  <div class="box-body">
-                    <p><strong>{{ vm.parsedEventSettings.venueTime }} <span i18n>HORAS</span></strong></p>
-                    <p>{{ vm.parsedEventSettings.venuePlace }}</p>
-                  </div>
-                  <div class="box-footer">
-                    <a [href]="vm.parsedEventSettings.venueUrl" target="_blank" i18n>Ir al mapa</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="dressCode invite-section" [ngClass]="getSectionOrder('dressCodeInfo') % 2 === 0 ? 'darkColor' : 'lightColor'" [ngStyle]="{ 'order': getSectionOrder('dressCodeInfo') }" *ngIf="sectionEnabled('dressCodeInfo')">
-      <div class="container">
-        <h2 i18n>Código de vestimenta</h2>
-        <p>Formal</p>
-        <div class="row justify-content-center">
-          <div class="col-sm-12 col-md-6">
-            <img src="https://res.cloudinary.com/dc9vc8b7b/image/upload/v1736566124/Formal_Dress_jv1jvd.png" alt="Vestimenta Formal"  i18n-alt>
-            <p class="attribution">Designed by <a href="http://www.freepik.es/" target="_blank" rel="noopener noreferrer">Freepik</a></p>
-          </div>
-        </div>
-        <p class="pt-5" i18n>- El color {{vm.parsedEventSettings.dressCodeColor}} -</p>
-        <p i18n>Está reservado para la novia</p>
-      </div>
-    </div>
-    <div class="gifts invite-section" [ngClass]="getSectionOrder('giftsInfo') % 2 === 0 ? 'darkColor' : 'lightColor'" [ngStyle]="{ 'order': getSectionOrder('giftsInfo') }" *ngIf="sectionEnabled('giftsInfo')" >
-      <div class="container">
-        <p i18n>
+                                                  </g>
+                                                </g>
+                                                <g>
+                                                  <g>
+                                                    <rect x="248.396" y="21.351" width="15.208" height="47.344"/>
+                                                  </g>
+                                                </g>
+                                                <g>
+                                                  <g>
+                                                    <rect x="294.983" y="52.217" transform="matrix(0.4198 -0.9076 0.9076 0.4198 130.5873 323.9224)" width="47.343" height="15.207"/>
+                                                  </g>
+                                                </g>
+                                                <g>
+                                                  <g>
+                                                    <rect x="185.738" y="36.156" transform="matrix(0.9076 -0.4198 0.4198 0.9076 -7.2537 86.6932)" width="15.207" height="47.343"/>
+                                                  </g>
+                                                </g>
+                                              </svg>
+                                            </div>
+                                          </div>
+                                          <div class="outside-box">
+                                            <div class="icon">
+                                              <svg width="800px" height="800px" viewBox="0 0 64 64" id="svg5" version="1.1" xml:space="preserve">
+                                                <defs id="defs2"/>
+                                                <g id="layer1" transform="translate(-288)">
+                                                  <path d="m 306.51953,28.427734 c -0.65112,0.01192 -1.2849,0.197012 -1.76562,0.677735 -0.19132,0.191315 -0.33188,0.408965 -0.4375,0.640625 a 1,1 0 0 0 -0.01,0.01367 l -12.23828,27.630859 a 1.0001,1.0001 0 0 0 1.31836,1.320313 l 27.55469,-12.207032 a 1,1 0 0 0 0.0312,-0.01758 c 0.25349,-0.107628 0.492,-0.255673 0.69922,-0.46289 0.64095,-0.640964 0.75701,-1.554055 0.63671,-2.416016 -0.1203,-0.861954 -0.46342,-1.778629 -0.97461,-2.769531 -1.02236,-1.981805 -2.73782,-4.253456 -4.93945,-6.455079 -2.20162,-2.201621 -4.47133,-3.915124 -6.45312,-4.9375 -0.99091,-0.511187 -1.90759,-0.856262 -2.76953,-0.976562 -0.21549,-0.03007 -0.43531,-0.04499 -0.65235,-0.04102 z m 0.0508,1.996094 c 0.089,9.7e-5 0.19549,0.0074 0.32422,0.02539 0.51494,0.07186 1.26901,0.329842 2.12891,0.773437 1.71979,0.887219 3.87745,2.494643 5.95703,4.574219 2.07958,2.079576 3.68895,4.239191 4.57617,5.958984 0.4436,0.859905 0.69963,1.612019 0.77148,2.126953 0.0719,0.514929 -0.0276,0.683896 -0.0703,0.726563 -0.0426,0.04264 -0.21166,0.144108 -0.72656,0.07227 -0.51494,-0.07186 -1.269,-0.327882 -2.12891,-0.771485 -1.71978,-0.887219 -3.8794,-2.496596 -5.95898,-4.576172 -2.07958,-2.079575 -3.687,-4.237238 -4.57422,-5.957031 -0.4436,-0.859896 -0.69962,-1.613971 -0.77148,-2.128906 -0.0522,-0.374223 -0.0139,-0.562797 0.0273,-0.65625 l 0.01,-0.01953 v -0.002 c 0.0119,-0.02231 0.0242,-0.0418 0.0332,-0.05078 0.032,-0.03198 0.13522,-0.09599 0.40234,-0.0957 z m -1.79297,3.212891 c 0.0977,0.215664 0.20131,0.433135 0.31641,0.65625 1.02238,1.981797 2.73392,4.253456 4.93555,6.455078 2.20161,2.201622 4.47523,3.915117 6.45703,4.9375 0.22178,0.114411 0.43793,0.217246 0.65234,0.314453 l -7.70898,3.414062 c -1.63582,-0.960717 -3.51199,-2.441234 -5.2461,-4.173828 -1.12769,-1.12896 -2.15508,-2.324404 -3.0039,-3.482422 z m -4.51953,10.205078 c 0.75731,0.951967 1.60333,1.900939 2.51172,2.810547 1.4484,1.447366 2.97852,2.730397 4.46094,3.736328 l -12.28516,5.443359 z" id="rect55015" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
+                                                  <path d="m 341.62891,26.142578 c -5.4532,-0.472611 -9.9929,1.468384 -13.30664,3.830078 -4.41833,3.148926 -6.82227,7.06836 -6.82227,7.06836 a 1,1 0 0 0 0.32812,1.376953 1,1 0 0 0 1.375,-0.328125 c 0,0 2.21942,-3.594817 6.2793,-6.488282 4.05988,-2.893464 9.79515,-5.061483 17.17774,-2.240234 a 1,1 0 0 0 1.29101,-0.576172 1,1 0 0 0 -0.57617,-1.291015 c -2.0092,-0.767816 -3.92836,-1.194026 -5.74609,-1.351563 z" id="path55061" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
+                                                  <path d="m 332.38672,8.0546875 a 1,1 0 0 0 -1.08789,0.9023438 c 0,0 -0.40206,4.2050857 -2.76367,8.5957027 -2.36162,4.390618 -6.54694,8.872789 -14.41602,9.607422 a 1,1 0 0 0 -0.90234,1.087891 1,1 0 0 0 1.08789,0.902344 c 8.56641,-0.799735 13.42206,-5.87213 15.99218,-10.650391 2.57013,-4.778261 2.99219,-9.3574219 2.99219,-9.3574219 a 1,1 0 0 0 -0.90234,-1.0878906 z" id="path55081" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
+                                                  <path d="m 310.21289,15.603516 c -1.64501,0 -3,1.354992 -3,3 0,1.645008 1.35499,3 3,3 1.64501,0 3,-1.354992 3,-3 0,-1.645008 -1.35499,-3 -3,-3 z m 0,2 c 0.56413,0 1,0.435871 1,1 0,0.564128 -0.43587,1 -1,1 -0.56413,0 -1,-0.435872 -1,-1 0,-0.564129 0.43587,-1 1,-1 z" id="path55087" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
+                                                  <path d="m 343.42773,7.7519531 c -1.98555,0 -3.61718,1.6316312 -3.61718,3.6171879 0,1.985556 1.63163,3.617187 3.61718,3.617187 1.98556,0 3.61719,-1.631631 3.61719,-3.617187 0,-1.9855567 -1.63163,-3.6171879 -3.61719,-3.6171879 z m 0,2 c 0.90468,0 1.61719,0.7125099 1.61719,1.6171879 0,0.904677 -0.71251,1.617187 -1.61719,1.617187 -0.90467,0 -1.61718,-0.71251 -1.61718,-1.617187 0,-0.904678 0.71251,-1.6171879 1.61718,-1.6171879 z" id="circle55089" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
+                                                  <path d="m 345.01758,45.775391 c -1.64501,0 -3,1.354992 -3,3 0,1.645008 1.35499,3 3,3 1.64501,0 3,-1.354992 3,-3 0,-1.645008 -1.35499,-3 -3,-3 z m 0,2 c 0.56413,0 1,0.435871 1,1 0,0.564128 -0.43587,1 -1,1 -0.56413,0 -1,-0.435872 -1,-1 0,-0.564129 0.43587,-1 1,-1 z" id="circle55091" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
+                                                  <path d="m 323.25391,7.8359375 a 1,1 0 0 0 -1,1 v 1.3867185 h -1.38672 a 1,1 0 0 0 -1,1 1,1 0 0 0 1,1 h 1.38672 v 1.386719 a 1,1 0 0 0 1,1 1,1 0 0 0 1,-1 v -1.386719 h 1.38671 a 1,1 0 0 0 1,-1 1,1 0 0 0 -1,-1 h -1.38671 V 8.8359375 a 1,1 0 0 0 -1,-1 z" id="path55093" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
+                                                  <path d="m 335.43555,17.988281 a 1,1 0 0 0 -0.70703,0.292969 1,1 0 0 0 0,1.414062 l 0.98046,0.980469 -0.98046,0.980469 a 1,1 0 0 0 0,1.414062 1,1 0 0 0 1.41406,0 l 0.98047,-0.980468 0.98047,0.980468 a 1,1 0 0 0 1.41406,0 1,1 0 0 0 0,-1.414062 l -0.98047,-0.980469 0.98047,-0.980469 a 1,1 0 0 0 0,-1.414062 1,1 0 0 0 -0.70703,-0.292969 1,1 0 0 0 -0.70703,0.292969 l -0.98047,0.980469 -0.98047,-0.980469 a 1,1 0 0 0 -0.70703,-0.292969 z" id="path55097" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
+                                                  <path d="m 336.42383,36.179688 a 1,1 0 0 0 -1,1 v 1.386718 h -1.38672 a 1,1 0 0 0 -1,1 1,1 0 0 0 1,1 h 1.38672 v 1.386719 a 1,1 0 0 0 1,1 1,1 0 0 0 1,-1 v -1.386719 h 1.38672 a 1,1 0 0 0 1,-1 1,1 0 0 0 -1,-1 h -1.38672 v -1.386718 a 1,1 0 0 0 -1,-1 z" id="path55101" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
+                                                  <path d="m 327.12305,45.207031 a 1,1 0 0 0 -0.86133,1.123047 1,1 0 0 0 1.12305,0.859375 c 0.27918,-0.03692 0.56457,-0.03692 0.84375,0 0.3226,0.04267 0.62337,0.135167 0.875,0.271484 0.24912,0.134963 0.4597,0.319998 0.5957,0.523438 0.13344,0.199604 0.20437,0.438385 0.20117,0.640625 -0.003,0.196172 -0.0845,0.396844 -0.19141,0.513672 -0.0735,0.08031 -0.19388,0.167022 -0.34765,0.232422 -0.15633,0.06649 -0.35162,0.115209 -0.57813,0.15039 -0.45436,0.07057 -1.041,0.06628 -1.72656,0.203125 -1.11132,0.221822 -2.12648,0.804948 -2.87891,1.652344 -0.75241,0.847402 -1.21004,1.924937 -1.29882,3.054688 -0.0888,1.129772 0.19581,2.264238 0.80664,3.21875 0.61083,0.954515 1.5229,1.689358 2.58593,2.082031 1.06304,0.392671 2.2337,0.427836 3.31836,0.09961 1.08467,-0.328222 2.03811,-1.005696 2.70508,-1.921875 0.66698,-0.916179 1.01891,-2.032979 0.99805,-3.166015 -0.0209,-1.132989 -0.41301,-2.23594 -1.11328,-3.126954 a 1,1 0 0 0 -1.4043,-0.167968 1,1 0 0 0 -0.16797,1.404297 c 0.42449,0.540113 0.67287,1.240812 0.68555,1.927734 0.0126,0.686876 -0.21091,1.39578 -0.61524,1.951172 -0.40432,0.555392 -1.01043,0.986575 -1.66796,1.185547 -0.65754,0.198973 -1.4005,0.175542 -2.04493,-0.0625 -0.64442,-0.238042 -1.2254,-0.704556 -1.5957,-1.283203 -0.3703,-0.578649 -0.54991,-1.299522 -0.49609,-1.984375 0.0538,-0.684876 0.34466,-1.369108 0.80078,-1.882813 0.45613,-0.513708 1.10169,-0.883108 1.77539,-1.017578 0.42304,-0.08444 0.97793,-0.08652 1.64062,-0.189453 0.33204,-0.05157 0.69088,-0.132381 1.05469,-0.28711 0.36637,-0.155817 0.73295,-0.383979 1.04102,-0.720703 0.47197,-0.515881 0.70404,-1.172715 0.71484,-1.833984 0.0104,-0.655201 -0.1959,-1.269888 -0.53906,-1.783203 -0.34058,-0.509479 -0.7998,-0.898356 -1.30469,-1.171875 -0.50238,-0.272164 -1.03887,-0.424368 -1.56641,-0.494141 -0.45398,-0.06004 -0.9132,-0.06004 -1.36718,-10e-7 z" id="path55105" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
+                                                  <path d="m 301.02148,4.1113281 c -0.57378,-0.1511089 -1.17501,-0.1480852 -1.74804,0.00586 -0.57304,0.1539437 -1.09481,0.4527814 -1.51563,0.8710937 a 1,1 0 0 0 -0.004,1.4160157 1,1 0 0 0 1.41406,0.00391 c 0.16958,-0.1685704 0.39407,-0.2973377 0.625,-0.359375 0.23092,-0.062037 0.48947,-0.062849 0.7207,-0.00195 0.23123,0.060896 0.45458,0.1877274 0.625,0.3554687 0.17042,0.1677399 0.30264,0.390867 0.36719,0.6210938 0.11455,0.4085376 0.038,1.0258141 -0.004,1.8242188 -0.021,0.4013203 -0.0238,0.8545476 0.082,1.3398442 0.10725,0.491566 0.32514,1.00622 0.73829,1.433594 0.34668,0.35862 0.7868,0.605319 1.27343,0.714843 0.48664,0.109525 0.99012,0.07591 1.45703,-0.09961 0.46691,-0.175516 0.86814,-0.481809 1.16211,-0.884765 0.29399,-0.402969 0.46173,-0.876806 0.48633,-1.375 a 1,1 0 0 0 -0.94922,-1.0488281 1,1 0 0 0 -1.04883,0.9492187 c -0.005,0.1008625 -0.046,0.2153004 -0.10546,0.2968744 -0.0595,0.08159 -0.15549,0.153924 -0.25,0.189453 -0.0945,0.03554 -0.21398,0.04366 -0.3125,0.02149 -0.0985,-0.02217 -0.20325,-0.08169 -0.27344,-0.154296 -0.0871,-0.09005 -0.1765,-0.2571772 -0.22266,-0.4687507 -0.0475,-0.2178422 -0.0576,-0.4912337 -0.041,-0.8085938 0.0335,-0.6389559 0.20762,-1.4933511 -0.0664,-2.4707031 -0.16019,-0.5713314 -0.46776,-1.0896381 -0.89062,-1.5058594 -0.42288,-0.4162197 -0.94574,-0.714121 -1.51954,-0.8652344 z" id="path55109" style="color:#000000;fill:#000000;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.1"/>
+                                                </g>
+                                              </svg>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="boxes">
+                                          <div class="box">
+                                            <h3 class="box-header" i18n>Ceremonia<br>Religiosa</h3>
+                                            <div class="box-body">
+                                              <p><strong>{{ vm.parsedEventSettings.massTime }} <span i18n>HORAS</span></strong></p>
+                                              <p>{{ vm.parsedEventSettings.massPlace }}</p>
+                                            </div>
+                                            <div class="box-footer">
+                                              <a [href]="vm.parsedEventSettings.massUrl" target="_blank" i18n>Ir al mapa</a>
+                                            </div>
+                                          </div>
+                                          <div class="box">
+                                            <h3 class="box-header" i18n>Ceremonia<br>Civil</h3>
+                                            <div class="box-body">
+                                              <p><strong>{{ vm.parsedEventSettings.civilTime }} <span i18n>HORAS</span></strong></p>
+                                              <p>{{ vm.parsedEventSettings.civilPlace }}</p>
+                                            </div>
+                                            <div class="box-footer">
+                                              <a [href]="vm.parsedEventSettings.civilUrl" target="_blank" i18n>Ir al mapa</a>
+                                            </div>
+                                          </div>
+                                          <div class="box">
+                                            <h3 class="box-header" i18n>Recepción</h3>
+                                            <div class="box-body">
+                                              <p><strong>{{ vm.parsedEventSettings.venueTime }} <span i18n>HORAS</span></strong></p>
+                                              <p>{{ vm.parsedEventSettings.venuePlace }}</p>
+                                            </div>
+                                            <div class="box-footer">
+                                              <a [href]="vm.parsedEventSettings.venueUrl" target="_blank" i18n>Ir al mapa</a>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            }
+                            @if (sectionEnabled('dressCodeInfo')) {
+                              <div class="dressCode invite-section" [ngClass]="getSectionOrder('dressCodeInfo') % 2 === 0 ? 'darkColor' : 'lightColor'" [ngStyle]="{ 'order': getSectionOrder('dressCodeInfo') }">
+                                <div class="container">
+                                  <h2 i18n>Código de vestimenta</h2>
+                                  <p>Formal</p>
+                                  <div class="row justify-content-center">
+                                    <div class="col-sm-12 col-md-6">
+                                      <img src="https://res.cloudinary.com/dc9vc8b7b/image/upload/v1736566124/Formal_Dress_jv1jvd.png" alt="Vestimenta Formal"  i18n-alt>
+                                      <p class="attribution">Designed by <a href="http://www.freepik.es/" target="_blank" rel="noopener noreferrer">Freepik</a></p>
+                                    </div>
+                                  </div>
+                                  <p class="pt-5" i18n>- El color {{vm.parsedEventSettings.dressCodeColor}} -</p>
+                                  <p i18n>Está reservado para la novia</p>
+                                </div>
+                              </div>
+                            }
+                            @if (sectionEnabled('giftsInfo')) {
+                              <div class="gifts invite-section" [ngClass]="getSectionOrder('giftsInfo') % 2 === 0 ? 'darkColor' : 'lightColor'" [ngStyle]="{ 'order': getSectionOrder('giftsInfo') }" >
+                                <div class="container">
+                                  <p i18n>
           Su asistencia a nuestra boda será regalo suficiente. Pero si desean darnos un obsequio, pueden hacerlo en efectivo colocando su apoyo en un sobre y depositándolo el día de la boda en el cofre que encontrarán en la recepción. ¡Muchas gracias!
         </p>
-        <div class="row">
-          <div class="col-12">
-            <br>
-            <svg fill="#000000" preserveAspectRatio="xMidYMid" width="31.781" height="31.906"
-              viewBox="0 0 31.781 31.906">
-              <path d="M28.802,31.908 L2.981,31.908 C1.338,31.908 0.001,30.566 0.001,28.915 L0.001,13.951 C0.001,13.938 0.008,13.928 0.008,13.916 C0.009,13.880 0.021,13.846 0.029,13.811 C0.040,13.731 0.054,13.655 0.084,13.580 C0.088,13.566 0.089,13.551 0.095,13.538 C0.115,13.495 0.146,13.459 0.174,13.420 C0.201,13.379 0.213,13.333 0.245,13.295 C0.262,13.276 0.284,13.269 0.301,13.252 C0.309,13.244 0.314,13.233 0.322,13.225 C0.331,13.216 0.335,13.205 0.344,13.197 L4.967,9.172 L4.967,4.973 C4.967,4.422 5.412,3.975 5.960,3.975 L10.937,3.975 L15.241,0.228 C15.615,-0.096 16.168,-0.096 16.542,0.228 L20.847,3.975 L25.823,3.975 C26.372,3.975 26.816,4.422 26.816,4.973 L26.816,9.172 L31.440,13.197 C31.449,13.205 31.452,13.217 31.462,13.225 C31.470,13.233 31.475,13.244 31.483,13.253 C31.500,13.269 31.522,13.277 31.538,13.295 C31.570,13.332 31.582,13.378 31.607,13.418 C31.636,13.458 31.668,13.495 31.688,13.538 C31.694,13.552 31.695,13.567 31.699,13.581 C31.729,13.655 31.742,13.730 31.753,13.808 C31.762,13.844 31.774,13.879 31.775,13.916 C31.775,13.928 31.782,13.938 31.782,13.951 L31.782,28.915 C31.782,30.566 30.445,31.908 28.802,31.908 ZM28.298,29.913 L15.988,18.957 C15.955,18.929 15.827,18.929 15.783,18.967 L3.485,29.913 L28.298,29.913 ZM1.906,28.652 L9.030,22.312 L1.906,16.073 L1.906,28.652 ZM2.508,13.953 L4.967,16.106 L4.967,11.813 L2.508,13.953 ZM15.892,2.302 L13.970,3.975 L17.813,3.975 L15.892,2.302 ZM20.759,5.906 C20.665,5.935 20.570,5.967 20.472,5.967 C20.356,5.967 20.240,5.947 20.129,5.906 L6.906,5.906 L6.906,17.805 L10.529,20.978 L14.478,17.463 C15.277,16.776 16.506,16.776 17.293,17.453 L21.253,20.977 L24.906,17.779 L24.906,5.906 L20.759,5.906 ZM26.816,11.813 L26.816,16.106 L29.274,13.953 L26.816,11.813 ZM29.906,16.047 L22.753,22.312 L29.906,28.678 L29.906,16.047 Z"/>
-            </svg>
-            <p i18n>
+                                  <div class="row">
+                                    <div class="col-12">
+                                      <br>
+                                        <svg fill="#000000" preserveAspectRatio="xMidYMid" width="31.781" height="31.906"
+                                          viewBox="0 0 31.781 31.906">
+                                          <path d="M28.802,31.908 L2.981,31.908 C1.338,31.908 0.001,30.566 0.001,28.915 L0.001,13.951 C0.001,13.938 0.008,13.928 0.008,13.916 C0.009,13.880 0.021,13.846 0.029,13.811 C0.040,13.731 0.054,13.655 0.084,13.580 C0.088,13.566 0.089,13.551 0.095,13.538 C0.115,13.495 0.146,13.459 0.174,13.420 C0.201,13.379 0.213,13.333 0.245,13.295 C0.262,13.276 0.284,13.269 0.301,13.252 C0.309,13.244 0.314,13.233 0.322,13.225 C0.331,13.216 0.335,13.205 0.344,13.197 L4.967,9.172 L4.967,4.973 C4.967,4.422 5.412,3.975 5.960,3.975 L10.937,3.975 L15.241,0.228 C15.615,-0.096 16.168,-0.096 16.542,0.228 L20.847,3.975 L25.823,3.975 C26.372,3.975 26.816,4.422 26.816,4.973 L26.816,9.172 L31.440,13.197 C31.449,13.205 31.452,13.217 31.462,13.225 C31.470,13.233 31.475,13.244 31.483,13.253 C31.500,13.269 31.522,13.277 31.538,13.295 C31.570,13.332 31.582,13.378 31.607,13.418 C31.636,13.458 31.668,13.495 31.688,13.538 C31.694,13.552 31.695,13.567 31.699,13.581 C31.729,13.655 31.742,13.730 31.753,13.808 C31.762,13.844 31.774,13.879 31.775,13.916 C31.775,13.928 31.782,13.938 31.782,13.951 L31.782,28.915 C31.782,30.566 30.445,31.908 28.802,31.908 ZM28.298,29.913 L15.988,18.957 C15.955,18.929 15.827,18.929 15.783,18.967 L3.485,29.913 L28.298,29.913 ZM1.906,28.652 L9.030,22.312 L1.906,16.073 L1.906,28.652 ZM2.508,13.953 L4.967,16.106 L4.967,11.813 L2.508,13.953 ZM15.892,2.302 L13.970,3.975 L17.813,3.975 L15.892,2.302 ZM20.759,5.906 C20.665,5.935 20.570,5.967 20.472,5.967 C20.356,5.967 20.240,5.947 20.129,5.906 L6.906,5.906 L6.906,17.805 L10.529,20.978 L14.478,17.463 C15.277,16.776 16.506,16.776 17.293,17.453 L21.253,20.977 L24.906,17.779 L24.906,5.906 L20.759,5.906 ZM26.816,11.813 L26.816,16.106 L29.274,13.953 L26.816,11.813 ZM29.906,16.047 L22.753,22.312 L29.906,28.678 L29.906,16.047 Z"/>
+                                        </svg>
+                                        <p i18n>
               También para su comodidad ponemos a su disposición la siguiente cuenta bancaria.
             </p>
-            <br>
-            <svg width="800px" height="800px" viewBox="0 -8 42 42">
-              <g id="icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                <g id="ui-gambling-website-lined-icnos-casinoshunter" transform="translate(-729.000000, -547.000000)" fill="#252528" fill-rule="nonzero">
-                  <g id="square-filled" transform="translate(50.000000, 120.000000)">
-                    <path d="M708.440202,427 C709.918327,427 711.116584,428.2042 711.116584,429.689655 L711.116,430.538 L711.265312,430.538718 L711.265512,430.256336 C711.265512,429.266032 712.06435,428.463232 713.049767,428.463232 C713.393444,428.463232 713.729808,428.56298 714.018428,428.750486 L720.184194,432.756148 C721.011748,433.293778 721.248928,434.403805 720.713951,435.235463 C720.576846,435.448602 720.396281,435.630063 720.184194,435.767848 L714.018428,439.77351 C713.190874,440.31114 712.086325,440.072783 711.551348,439.241125 C711.364768,438.951073 711.265512,438.613041 711.265512,438.268298 L711.265312,437.984585 L711.116,437.984 L711.118297,442.217325 C713.355457,446.366261 711.377052,452.694044 705.182253,452.989315 L704.900763,452.9985 C697.961649,453.136281 695.067302,443.743322 700.748655,439.965974 C701.339522,439.603285 701.054367,439.761985 701.441164,439.557934 C701.818537,439.358856 701.358338,439.592982 702.219834,439.169233 C703.049023,438.83792 703.953651,438.655172 704.900552,438.655172 C706.731861,438.687553 708.209331,439.236706 709.332941,440.102922 L709.332,437.984 L701.303183,437.984959 C700.317767,437.984959 699.518929,437.182159 699.518929,436.191856 L699.518929,432.33214 C699.518929,431.341836 700.317767,430.539036 701.303155,430.539036 L709.332,430.538 L709.332329,429.689655 C709.332329,429.194503 708.93291,428.793103 708.440202,428.793103 L681.676382,428.793103 C681.183674,428.793103 680.784255,429.194503 680.784255,429.689655 L680.784255,445.827586 C680.784255,446.322738 681.183674,446.724138 681.676382,446.724138 L697.789938,446.724514 C697.867707,447.350994 698.025872,447.952379 698.253732,448.517913 L681.676382,448.517241 C680.198257,448.517241 679,447.313042 679,445.827586 L679,429.689655 C679,428.2042 680.198257,427 681.676382,427 L708.440202,427 Z M702.66583,449.011445 L701.432601,450.237808 C702.193196,450.830391 703.110248,451.232688 704.110898,451.372876 L704.110898,451.372876 L704.110898,449.63261 C703.582461,449.524353 703.093244,449.30894 702.66583,449.011445 L702.66583,449.011445 Z M707.135221,449.011497 C706.707808,449.30894 706.218591,449.524353 705.690206,449.63261 L705.690206,449.63261 L705.690206,451.372876 C706.690804,451.232688 707.607908,450.830391 708.368451,450.237808 L708.368451,450.237808 Z M710.49678,446.46402 L708.754592,446.46402 C708.66973,446.973002 708.485372,447.448744 708.22168,447.87088 L708.22168,447.87088 L709.464123,449.106352 C710.018039,448.346255 710.384754,447.44309 710.49678,446.46402 L710.49678,446.46402 Z M701.046512,446.46402 L699.304324,446.46402 C699.41635,447.44309 699.783066,448.346255 700.336982,449.1063 L700.336982,449.1063 L701.579424,447.870828 C701.315679,447.448691 701.131321,446.97295 701.046512,446.46402 L701.046512,446.46402 Z M704.900657,443.511838 C701.841379,443.565914 701.840905,448.087393 704.900552,448.14194 C707.959726,448.087812 707.960199,443.566385 704.900657,443.511838 Z M700.4648,442.378392 C699.898566,443.09703 699.505107,443.95617 699.346281,444.893571 L699.346281,444.893571 L701.10779,444.893571 C701.224553,444.424687 701.427179,443.989464 701.69803,443.604704 L701.69803,443.604704 Z M709.336304,442.378392 L708.103074,443.604704 C708.373926,443.989464 708.576604,444.424687 708.693315,444.893571 L708.693315,444.893571 L710.45477,444.893571 C710.295997,443.95617 709.902539,443.09703 709.336304,442.378392 L709.336304,442.378392 Z M688.481441,442.241379 C688.938504,442.241379 689.309027,442.611902 689.309027,443.068966 C689.309027,443.526029 688.938504,443.896552 688.481441,443.896552 L683.396096,443.896552 C682.939032,443.896552 682.568509,443.526029 682.568509,443.068966 C682.568509,442.611902 682.939032,442.241379 683.396096,442.241379 L688.481441,442.241379 Z M696.114086,442.241379 C696.571149,442.241379 696.941672,442.611902 696.941672,443.068966 C696.941672,443.526029 696.571149,443.896552 696.114086,443.896552 L691.02874,443.896552 C690.571677,443.896552 690.201154,443.526029 690.201154,443.068966 C690.201154,442.611902 690.571677,442.241379 691.02874,442.241379 L696.114086,442.241379 Z M704.110898,440.280901 C703.183686,440.41083 702.328279,440.766013 701.60264,441.288867 L701.60264,441.288867 L702.845082,442.52434 C703.228222,442.287673 703.655004,442.114557 704.110898,442.021168 L704.110898,442.021168 Z M705.690206,440.280953 L705.690206,442.02122 C706.1461,442.114609 706.572882,442.287725 706.956022,442.524392 L706.956022,442.524392 L708.198465,441.288972 C707.472825,440.766013 706.617419,440.410882 705.690206,440.280953 L705.690206,440.280953 Z M713.049767,430.256336 L713.048297,432.331765 L701.303167,432.33214 L701.303167,436.191856 L713.048297,436.191415 L713.049767,438.26766 L719.215532,434.261998 L713.049767,430.256336 Z M687.029146,430.586207 C688.014563,430.586207 688.813401,431.389007 688.813401,432.37931 C688.813401,433.369614 688.014563,434.172414 687.029146,434.172414 C686.495948,434.172414 686.017376,433.937372 685.690423,433.564763 C685.364534,433.937372 684.885962,434.172414 684.352764,434.172414 C683.367347,434.172414 682.568509,433.369614 682.568509,432.37931 C682.568509,431.389007 683.367347,430.586207 684.352764,430.586207 C684.885962,430.586207 685.364534,430.821249 685.691487,431.193857 C686.017376,430.821249 686.495948,430.586207 687.029146,430.586207 Z" id="deposit">
-                    </path>
-                  </g>
-                </g>
-              </g>
-            </svg>
-            <p><strong i18n>Cuenta CLABE</strong></p>
-            <p>{{ vm.parsedEventSettings.clabeBank }} <button aria-label="Copiar clabe bancaria" i18n-aria-label (click)="copyText(vm.parsedEventSettings.clabeBank)"><i class="fa-solid fa-copy" aria-hidden="true"></i></button></p>
-            <p><strong i18n>Número de Tarjeta</strong></p>
-            <p>{{ vm.parsedEventSettings.cardNumber }} <button aria-label="Copiar número de tarjeta" i18n-aria-label (click)="copyText(vm.parsedEventSettings.cardNumber)"><i class="fa-solid fa-copy" aria-hidden="true"></i></button></p>
-          </div>
-        </div>
-        <p i18n>Muchas Gracias!</p>
-      </div>
-    </div>
-    <div class="accomodations invite-section" [ngClass]="getSectionOrder('accomodationInfo') % 2 === 0 ? 'darkColor' : 'lightColor'" [ngStyle]="{ 'order': getSectionOrder('accomodationInfo') }" *ngIf="sectionEnabled('accomodationInfo')" >
-      <div class="container">
-        <h2 i18n>Hospedaje</h2>
-        <h3>{{ vm.parsedEventSettings.hotelName }}</h3>
-        <img class="img-fluid" src="https://res.cloudinary.com/dc9vc8b7b/image/upload/v1736572693/rb_2148152191_vat2nn.png" alt="Animated Hotel Picture">
-        <p>{{ vm.parsedEventSettings.hotelAddress }}</p>
-        <p i18n><strong>Tel:</strong> {{ vm.parsedEventSettings.hotelPhone }}</p>
-        <div class="buttons">
-          <a [href]="vm.parsedEventSettings.hotelUrl" target="_blank" rel="noopener noreferrer" i18n>Ir al mapa</a>
-          <a [href]="vm.parsedEventSettings.hotelInformation" target="_blank" rel="noopener noreferrer" i18n>Ver detalles</a>
-        </div>
-      </div>
-    </div>
-    <div class="gallery invite-section" [ngClass]="getSectionOrder('galleryInfo') % 2 === 0 ? 'darkColor' : 'lightColor'" [ngStyle]="{ 'order': getSectionOrder('galleryInfo') }" *ngIf="sectionEnabled('galleryInfo')" >
-      <div class="container">
-        <h2 i18n>Galería</h2>
-        <div class="slider">
-          <div class="images">
-            <ng-container *ngFor="let image of vm.gallery; index as i">
-              <div class="image-container">
-                <img [src]="image.fileUrl" alt="Galería de Imágenes {{i}}">
-              </div>
-            </ng-container>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="invitesConfirmation invite-section" [ngClass]="getSectionOrder('confirmationInfo') % 2 === 0 ? 'darkColor' : 'lightColor'" id="scrollToForm" [ngStyle]="{ 'order': getSectionOrder('confirmationInfo') }">
-      <app-confirmation [inviteValue]="vm.userInvite" [deadlineMetValue]="vm.deadlineMet"></app-confirmation>
-    </div>
-  </div>
-</main>
+                                        <br>
+                                          <svg width="800px" height="800px" viewBox="0 -8 42 42">
+                                            <g id="icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                              <g id="ui-gambling-website-lined-icnos-casinoshunter" transform="translate(-729.000000, -547.000000)" fill="#252528" fill-rule="nonzero">
+                                                <g id="square-filled" transform="translate(50.000000, 120.000000)">
+                                                  <path d="M708.440202,427 C709.918327,427 711.116584,428.2042 711.116584,429.689655 L711.116,430.538 L711.265312,430.538718 L711.265512,430.256336 C711.265512,429.266032 712.06435,428.463232 713.049767,428.463232 C713.393444,428.463232 713.729808,428.56298 714.018428,428.750486 L720.184194,432.756148 C721.011748,433.293778 721.248928,434.403805 720.713951,435.235463 C720.576846,435.448602 720.396281,435.630063 720.184194,435.767848 L714.018428,439.77351 C713.190874,440.31114 712.086325,440.072783 711.551348,439.241125 C711.364768,438.951073 711.265512,438.613041 711.265512,438.268298 L711.265312,437.984585 L711.116,437.984 L711.118297,442.217325 C713.355457,446.366261 711.377052,452.694044 705.182253,452.989315 L704.900763,452.9985 C697.961649,453.136281 695.067302,443.743322 700.748655,439.965974 C701.339522,439.603285 701.054367,439.761985 701.441164,439.557934 C701.818537,439.358856 701.358338,439.592982 702.219834,439.169233 C703.049023,438.83792 703.953651,438.655172 704.900552,438.655172 C706.731861,438.687553 708.209331,439.236706 709.332941,440.102922 L709.332,437.984 L701.303183,437.984959 C700.317767,437.984959 699.518929,437.182159 699.518929,436.191856 L699.518929,432.33214 C699.518929,431.341836 700.317767,430.539036 701.303155,430.539036 L709.332,430.538 L709.332329,429.689655 C709.332329,429.194503 708.93291,428.793103 708.440202,428.793103 L681.676382,428.793103 C681.183674,428.793103 680.784255,429.194503 680.784255,429.689655 L680.784255,445.827586 C680.784255,446.322738 681.183674,446.724138 681.676382,446.724138 L697.789938,446.724514 C697.867707,447.350994 698.025872,447.952379 698.253732,448.517913 L681.676382,448.517241 C680.198257,448.517241 679,447.313042 679,445.827586 L679,429.689655 C679,428.2042 680.198257,427 681.676382,427 L708.440202,427 Z M702.66583,449.011445 L701.432601,450.237808 C702.193196,450.830391 703.110248,451.232688 704.110898,451.372876 L704.110898,451.372876 L704.110898,449.63261 C703.582461,449.524353 703.093244,449.30894 702.66583,449.011445 L702.66583,449.011445 Z M707.135221,449.011497 C706.707808,449.30894 706.218591,449.524353 705.690206,449.63261 L705.690206,449.63261 L705.690206,451.372876 C706.690804,451.232688 707.607908,450.830391 708.368451,450.237808 L708.368451,450.237808 Z M710.49678,446.46402 L708.754592,446.46402 C708.66973,446.973002 708.485372,447.448744 708.22168,447.87088 L708.22168,447.87088 L709.464123,449.106352 C710.018039,448.346255 710.384754,447.44309 710.49678,446.46402 L710.49678,446.46402 Z M701.046512,446.46402 L699.304324,446.46402 C699.41635,447.44309 699.783066,448.346255 700.336982,449.1063 L700.336982,449.1063 L701.579424,447.870828 C701.315679,447.448691 701.131321,446.97295 701.046512,446.46402 L701.046512,446.46402 Z M704.900657,443.511838 C701.841379,443.565914 701.840905,448.087393 704.900552,448.14194 C707.959726,448.087812 707.960199,443.566385 704.900657,443.511838 Z M700.4648,442.378392 C699.898566,443.09703 699.505107,443.95617 699.346281,444.893571 L699.346281,444.893571 L701.10779,444.893571 C701.224553,444.424687 701.427179,443.989464 701.69803,443.604704 L701.69803,443.604704 Z M709.336304,442.378392 L708.103074,443.604704 C708.373926,443.989464 708.576604,444.424687 708.693315,444.893571 L708.693315,444.893571 L710.45477,444.893571 C710.295997,443.95617 709.902539,443.09703 709.336304,442.378392 L709.336304,442.378392 Z M688.481441,442.241379 C688.938504,442.241379 689.309027,442.611902 689.309027,443.068966 C689.309027,443.526029 688.938504,443.896552 688.481441,443.896552 L683.396096,443.896552 C682.939032,443.896552 682.568509,443.526029 682.568509,443.068966 C682.568509,442.611902 682.939032,442.241379 683.396096,442.241379 L688.481441,442.241379 Z M696.114086,442.241379 C696.571149,442.241379 696.941672,442.611902 696.941672,443.068966 C696.941672,443.526029 696.571149,443.896552 696.114086,443.896552 L691.02874,443.896552 C690.571677,443.896552 690.201154,443.526029 690.201154,443.068966 C690.201154,442.611902 690.571677,442.241379 691.02874,442.241379 L696.114086,442.241379 Z M704.110898,440.280901 C703.183686,440.41083 702.328279,440.766013 701.60264,441.288867 L701.60264,441.288867 L702.845082,442.52434 C703.228222,442.287673 703.655004,442.114557 704.110898,442.021168 L704.110898,442.021168 Z M705.690206,440.280953 L705.690206,442.02122 C706.1461,442.114609 706.572882,442.287725 706.956022,442.524392 L706.956022,442.524392 L708.198465,441.288972 C707.472825,440.766013 706.617419,440.410882 705.690206,440.280953 L705.690206,440.280953 Z M713.049767,430.256336 L713.048297,432.331765 L701.303167,432.33214 L701.303167,436.191856 L713.048297,436.191415 L713.049767,438.26766 L719.215532,434.261998 L713.049767,430.256336 Z M687.029146,430.586207 C688.014563,430.586207 688.813401,431.389007 688.813401,432.37931 C688.813401,433.369614 688.014563,434.172414 687.029146,434.172414 C686.495948,434.172414 686.017376,433.937372 685.690423,433.564763 C685.364534,433.937372 684.885962,434.172414 684.352764,434.172414 C683.367347,434.172414 682.568509,433.369614 682.568509,432.37931 C682.568509,431.389007 683.367347,430.586207 684.352764,430.586207 C684.885962,430.586207 685.364534,430.821249 685.691487,431.193857 C686.017376,430.821249 686.495948,430.586207 687.029146,430.586207 Z" id="deposit">
+                                                  </path>
+                                                </g>
+                                              </g>
+                                            </g>
+                                          </svg>
+                                          <p><strong i18n>Cuenta CLABE</strong></p>
+                                          <p>{{ vm.parsedEventSettings.clabeBank }} <button aria-label="Copiar clabe bancaria" i18n-aria-label (click)="copyText(vm.parsedEventSettings.clabeBank)"><i class="fa-solid fa-copy" aria-hidden="true"></i></button></p>
+                                          <p><strong i18n>Número de Tarjeta</strong></p>
+                                          <p>{{ vm.parsedEventSettings.cardNumber }} <button aria-label="Copiar número de tarjeta" i18n-aria-label (click)="copyText(vm.parsedEventSettings.cardNumber)"><i class="fa-solid fa-copy" aria-hidden="true"></i></button></p>
+                                        </div>
+                                      </div>
+                                      <p i18n>Muchas Gracias!</p>
+                                    </div>
+                                  </div>
+                                }
+                                @if (sectionEnabled('accomodationInfo')) {
+                                  <div class="accomodations invite-section" [ngClass]="getSectionOrder('accomodationInfo') % 2 === 0 ? 'darkColor' : 'lightColor'" [ngStyle]="{ 'order': getSectionOrder('accomodationInfo') }" >
+                                    <div class="container">
+                                      <h2 i18n>Hospedaje</h2>
+                                      <h3>{{ vm.parsedEventSettings.hotelName }}</h3>
+                                      <img class="img-fluid" src="https://res.cloudinary.com/dc9vc8b7b/image/upload/v1736572693/rb_2148152191_vat2nn.png" alt="Animated Hotel Picture">
+                                      <p>{{ vm.parsedEventSettings.hotelAddress }}</p>
+                                      <p i18n><strong>Tel:</strong> {{ vm.parsedEventSettings.hotelPhone }}</p>
+                                      <div class="buttons">
+                                        <a [href]="vm.parsedEventSettings.hotelUrl" target="_blank" rel="noopener noreferrer" i18n>Ir al mapa</a>
+                                        <a [href]="vm.parsedEventSettings.hotelInformation" target="_blank" rel="noopener noreferrer" i18n>Ver detalles</a>
+                                      </div>
+                                    </div>
+                                  </div>
+                                }
+                                @if (sectionEnabled('galleryInfo')) {
+                                  <div class="gallery invite-section" [ngClass]="getSectionOrder('galleryInfo') % 2 === 0 ? 'darkColor' : 'lightColor'" [ngStyle]="{ 'order': getSectionOrder('galleryInfo') }" >
+                                    <div class="container">
+                                      <h2 i18n>Galería</h2>
+                                      <div class="slider">
+                                        <div class="images">
+                                          @for (image of vm.gallery; track image; let i = $index) {
+                                            <div class="image-container">
+                                              <img [src]="image.fileUrl" alt="Galería de Imágenes {{i}}">
+                                            </div>
+                                          }
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                }
+                                <div class="invitesConfirmation invite-section" [ngClass]="getSectionOrder('confirmationInfo') % 2 === 0 ? 'darkColor' : 'lightColor'" id="scrollToForm" [ngStyle]="{ 'order': getSectionOrder('confirmationInfo') }">
+                                  <app-confirmation [inviteValue]="vm.userInvite" [deadlineMetValue]="vm.deadlineMet"></app-confirmation>
+                                </div>
+                              </div>
+                            }
+                          </main>
+                        }

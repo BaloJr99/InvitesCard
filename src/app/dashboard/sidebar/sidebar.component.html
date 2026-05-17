@@ -9,15 +9,21 @@
     <a routerLink="/dashboard/files" routerLinkActive="active" i18n>
       <i class="fa-solid fa-file-lines" aria-hidden="true"></i> ARCHIVOS
     </a>
-    <a routerLink="/dashboard/users" routerLinkActive="active" i18n *ngIf="isAdmin">
+    @if (isAdmin) {
+      <a routerLink="/dashboard/users" routerLinkActive="active" i18n>
       <i class="fa-solid fa-user" aria-hidden="true"></i> USUARIOS
     </a>
-    <a routerLink="/dashboard/logs" routerLinkActive="active" i18n *ngIf="isAdmin">
+    }
+    @if (isAdmin) {
+      <a routerLink="/dashboard/logs" routerLinkActive="active" i18n>
       <i class="fa-solid fa-user" aria-hidden="true"></i> LOGS
     </a>
-    <a routerLink="/dashboard/testing" routerLinkActive="active" i18n *ngIf="isAdmin">
+    }
+    @if (isAdmin) {
+      <a routerLink="/dashboard/testing" routerLinkActive="active" i18n>
       <i class="fa-solid fa-flask" aria-hidden="true"></i> TESTING
     </a>
+    }
     <a routerLink="/dashboard/settings" routerLinkActive="active" i18n>
       <i class="fa-solid fa-gear" aria-hidden="true"></i> CONFIGURACIÓN
     </a>

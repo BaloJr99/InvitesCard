@@ -10,41 +10,45 @@
           <label for="usernameOrEmail" i18n>Usuario</label>
           <div class="inputField">
             <i class="fa-solid fa-user" aria-hidden="true"></i>
-            <input id="usernameOrEmail" 
-              class="form-control" 
-              type="text" 
+            <input id="usernameOrEmail"
+              class="form-control"
+              type="text"
               autocomplete="username"
-              placeholder="Escriba su usuario" 
-              formControlName="usernameOrEmail" 
+              placeholder="Escriba su usuario"
+              formControlName="usernameOrEmail"
               [ngClass]="{'is-invalid': loginForm.get('usernameOrEmail') | validation }"
               i18n-placeholder>
+            </div>
+            @if (loginForm.get('usernameOrEmail') | validation) {
+              <span class="invalid-feedback d-block" role="alert">
+                {{ loginForm.get('usernameOrEmail')?.errors | validationError: 'usernameOrEmail' }}
+              </span>
+            }
           </div>
-          <span class="invalid-feedback d-block" role="alert" *ngIf="loginForm.get('usernameOrEmail') | validation">
-            {{ loginForm.get('usernameOrEmail')?.errors | validationError: 'usernameOrEmail' }}
-          </span>
+          <div class="form-group">
+            <label for="password" i18n>Contraseña</label>
+            <div class="inputField">
+              <i class="fa-solid fa-lock" aria-hidden="true"></i>
+              <input id="password"
+                class="form-control"
+                type="password"
+                placeholder="Escriba su contraseña"
+                formControlName="password"
+                [ngClass]="{'is-invalid': loginForm.get('password') | validation }"
+                i18n-placeholder>
+                <button id="togglePasswordVisibility" type="button" class="fa-solid" tabindex="0" (click)="toggleShowPassword()" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" attr.aria-label="{{showPassword ? 'Hide' : 'Show'}} Password"></button>
+              </div>
+              @if (loginForm.get('password') | validation) {
+                <span class="invalid-feedback d-block" role="alert">
+                  {{ loginForm.get('password')?.errors | validationError: 'password' }}
+                </span>
+              }
+              <span class="forgotPassword" id="forgotPassword">
+                <a routerLink="/auth/forgotPassword" i18n>¿Olvido su contraseña?</a>
+              </span>
+            </div>
+            <button class="btn custom-primary" id="loginButton" i18n>Iniciar sesión</button>
+          </form>
         </div>
-        <div class="form-group">
-          <label for="password" i18n>Contraseña</label>
-          <div class="inputField">
-            <i class="fa-solid fa-lock" aria-hidden="true"></i>
-            <input id="password" 
-              class="form-control" 
-              type="password" 
-              placeholder="Escriba su contraseña"
-              formControlName="password" 
-              [ngClass]="{'is-invalid': loginForm.get('password') | validation }"
-              i18n-placeholder>
-              <button id="togglePasswordVisibility" type="button" class="fa-solid" tabindex="0" (click)="toggleShowPassword()" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" attr.aria-label="{{showPassword ? 'Hide' : 'Show'}} Password"></button>
-          </div>
-          <span class="invalid-feedback d-block" role="alert" *ngIf="loginForm.get('password') | validation">
-            {{ loginForm.get('password')?.errors | validationError: 'password' }}
-          </span>
-          <span class="forgotPassword" id="forgotPassword">
-            <a routerLink="/auth/forgotPassword" i18n>¿Olvido su contraseña?</a>
-          </span>
-        </div>
-        <button class="btn custom-primary" id="loginButton" i18n>Iniciar sesión</button>
-      </form>
+      </div>
     </div>
-  </div>
-</div>

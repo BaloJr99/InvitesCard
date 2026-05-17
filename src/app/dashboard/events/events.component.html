@@ -1,4 +1,4 @@
-<ng-container *ngIf="vm$ | async as vm">
+@if (vm$ | async; as vm) {
   <section class="row mx-1 my-3 breadcrumb-header">
     <div class="col-12 header">
       <nav aria-label="breadcrumb">
@@ -8,34 +8,42 @@
         </ol>
       </nav>
       <div class="buttons">
-        <button class="btn btn-dark" i18n (click)="openEventModal('')" *ngIf="vm.isAdmin">Nuevo evento</button>
+        @if (vm.isAdmin) {
+          <button class="btn btn-dark" i18n (click)="openEventModal('')">Nuevo evento</button>
+        }
       </div>
     </div>
   </section>
   <section class="events-container">
     <div class="row">
-      <div class="col-12 col-sm-6 col-md-4" *ngFor="let event of vm.events">
-        <div class="card">
-          <div class="card-body">
-            <button (click)="openEventModal(event.id)" class="edit-event btn btn-dark" *ngIf="vm.isAdmin" [attr.aria-label]="getAccessibilityMessage(event.nameOfEvent)">
-              <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
-            </button>
-            <h3 class="card-title" [ngStyle]="{ 'padding-right': vm.isAdmin ? '50px' : '0px' }">{{ event.nameOfEvent }}</h3>
-            <p class="card-text" i18n>Fecha del evento: <br> {{ event.dateOfEvent | dateFormat }}</p>
-            <a routerLink="/dashboard/events/{{event.id}}" class="view-event btn btn-dark" i18n>
+      @for (event of vm.events; track event) {
+        <div class="col-12 col-sm-6 col-md-4">
+          <div class="card">
+            <div class="card-body">
+              @if (vm.isAdmin) {
+                <button (click)="openEventModal(event.id)" class="edit-event btn btn-dark" [attr.aria-label]="getAccessibilityMessage(event.nameOfEvent)">
+                  <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+                </button>
+              }
+              <h3 class="card-title" [ngStyle]="{ 'padding-right': vm.isAdmin ? '50px' : '0px' }">{{ event.nameOfEvent }}</h3>
+              <p class="card-text" i18n>Fecha del evento: <br> {{ event.dateOfEvent | dateFormat }}</p>
+              <a routerLink="/dashboard/events/{{event.id}}" class="view-event btn btn-dark" i18n>
               IR A LAS INVITACIONES <i class="fa-solid fa-envelope ms-2" aria-hidden="true"></i>
             </a>
-            <a routerLink="/dashboard/events/gallery/{{event.nameOfEvent}}" class="view-event btn btn-dark mt-2" i18n>
+              <a routerLink="/dashboard/events/gallery/{{event.nameOfEvent}}" class="view-event btn btn-dark mt-2" i18n>
               IR A GALERÍA <i class="fa-solid fa-images ms-2" aria-hidden="true"></i>
             </a>
+            </div>
           </div>
         </div>
-      </div>
+      }
     </div>
   </section>
-  <app-event-modal *ngIf="vm.isAdmin"
-                   [eventActionValue]="eventAction"
-                   [showModalValue]="showEventModal"
-                   (closeModal)="closeEventModal()"
-                   (updateEvents)="updateEvents($event)"></app-event-modal>
-</ng-container>
+  @if (vm.isAdmin) {
+    <app-event-modal
+      [eventActionValue]="eventAction"
+      [showModalValue]="showEventModal"
+      (closeModal)="closeEventModal()"
+    (updateEvents)="updateEvents($event)"></app-event-modal>
+  }
+}

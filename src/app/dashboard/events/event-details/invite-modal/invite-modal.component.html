@@ -1,107 +1,127 @@
 <!-- Modal -->
-<div class="modal fade" id="inviteModal" tabindex="-1" aria-labelledby="inviteModalLabel" aria-hidden="true" *ngIf="vm$ | async as vm">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="inviteModalLabel" i18n>Invitaciones Personalizadas</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" i18n-aria-label aria-label="Cerrar"></button>
-      </div>
-      <ng-container *ngIf="!showNewGroupForm && !showOverwriteConfirmation">
-        <div class="modal-body">
-          <form [formGroup]="createInviteForm" id="inviteForm">
-            <div class="mb-3">
-              <label for="family" class="form-label" i18n>Familia</label>
-              <input id="family" 
-                     type="text" 
-                     class="form-control" 
-                     formControlName="family" 
-                     [ngClass]="{'is-invalid': createInviteForm.get('family') | validation }">
-              <span class="invalid-feedback d-block" role="alert" *ngIf="createInviteForm.get('family') | validation">
-                {{ createInviteForm.get('family')?.errors | validationError: 'family' }}
-              </span>
-            </div>
-            <div class="mb-3">
-              <label for="inviteGroupId" class="form-label" i18n>Grupo</label>
-              <div class="buttonActions">
-                <select #inviteGroupId id="inviteGroupId" 
-                        class="form-control" 
-                        formControlName="inviteGroupId" 
-                        [ngClass]="{'is-invalid': createInviteForm.get('inviteGroupId') | validation }">
-                  <option value="" i18n>Selecciona el grupo</option>
-                  <option *ngFor="let inviteGroup of vm.inviteGroups" [value]="inviteGroup.id">{{ inviteGroup.inviteGroup }}</option>
-                </select>
-                <button aria-label="Edit Group" type="button" class="btn btn-dark" (click)="inviteGroupAction(true, true)" *ngIf="createInviteForm.get('inviteGroupId')?.value"><i class="fa-solid fa-pen-to-square"></i></button>
-                <button aria-label="Create Group" type="button" class="btn btn-dark" (click)="inviteGroupAction(false, true)"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+@if (vm$ | async; as vm) {
+  <div class="modal fade" id="inviteModal" tabindex="-1" aria-labelledby="inviteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="inviteModalLabel" i18n>Invitaciones Personalizadas</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" i18n-aria-label aria-label="Cerrar"></button>
+        </div>
+        @if (!showNewGroupForm && !showOverwriteConfirmation) {
+          <div class="modal-body">
+            <form [formGroup]="createInviteForm" id="inviteForm">
+              <div class="mb-3">
+                <label for="family" class="form-label" i18n>Familia</label>
+                <input id="family"
+                  type="text"
+                  class="form-control"
+                  formControlName="family"
+                  [ngClass]="{'is-invalid': createInviteForm.get('family') | validation }">
+                  @if (createInviteForm.get('family') | validation) {
+                    <span class="invalid-feedback d-block" role="alert">
+                      {{ createInviteForm.get('family')?.errors | validationError: 'family' }}
+                    </span>
+                  }
+                </div>
+                <div class="mb-3">
+                  <label for="inviteGroupId" class="form-label" i18n>Grupo</label>
+                  <div class="buttonActions">
+                    <select #inviteGroupId id="inviteGroupId"
+                      class="form-control"
+                      formControlName="inviteGroupId"
+                      [ngClass]="{'is-invalid': createInviteForm.get('inviteGroupId') | validation }">
+                      <option value="" i18n>Selecciona el grupo</option>
+                      @for (inviteGroup of vm.inviteGroups; track inviteGroup) {
+                        <option [value]="inviteGroup.id">{{ inviteGroup.inviteGroup }}</option>
+                      }
+                    </select>
+                    @if (createInviteForm.get('inviteGroupId')?.value) {
+                      <button aria-label="Edit Group" type="button" class="btn btn-dark" (click)="inviteGroupAction(true, true)"><i class="fa-solid fa-pen-to-square"></i></button>
+                    }
+                    <button aria-label="Create Group" type="button" class="btn btn-dark" (click)="inviteGroupAction(false, true)"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                  </div>
+                  @if (createInviteForm.get('inviteGroupId') | validation) {
+                    <span class="invalid-feedback d-block" role="alert">
+                      {{ createInviteForm.get('inviteGroupId')?.errors | validationError: 'inviteGroupId' }}
+                    </span>
+                  }
+                </div>
+                <div class="mb-3">
+                  <label for="entriesNumber" class="form-label" i18n>Numero de pases</label>
+                  <div class="buttonActions">
+                    <input id="entriesNumber"
+                      type="number"
+                      min="1"
+                      class="form-control"
+                      formControlName="entriesNumber"
+                      [ngClass]="{'is-invalid': createInviteForm.get('entriesNumber') | validation }">
+                      @if (!vm.inviteAction.isNew) {
+                        <button aria-label="Sobreescribir" title="Sobreescribir" type="button" class="btn btn-dark" (click)="showOverwriteConfirmationForm()"><i class="fa-solid fa-arrow-rotate-right"></i></button>
+                      }
+                    </div>
+                    @if (createInviteForm.get('entriesNumber') | validation) {
+                      <span class="invalid-feedback d-block" role="alert">
+                        {{ createInviteForm.get('entriesNumber')?.errors | validationError: 'entriesNumber' }}
+                      </span>
+                    }
+                  </div>
+                  <div class="mb-3">
+                    <label for="phoneNumber" class="form-label" i18n>Telefono de contacto</label>
+                    <input id="phoneNumber"
+                      type="tel"
+                      class="form-control"
+                      formControlName="phoneNumber"
+                      [ngClass]="{'is-invalid': createInviteForm.get('phoneNumber') | validation }"
+                      maxlength="10">
+                      @if (createInviteForm.get('phoneNumber') | validation) {
+                        <span class="invalid-feedback d-block" role="alert">
+                          {{ createInviteForm.get('phoneNumber')?.errors | validationError: 'phoneNumber' }}
+                        </span>
+                      }
+                    </div>
+                    <div class="form-check">
+                      <input id="kidsAllowed"
+                        class="form-check-input"
+                        type="checkbox"
+                        formControlName="kidsAllowed"
+                        [ngClass]="{'is-invalid': createInviteForm.get('kidsAllowed') | validation }">
+                        <label for="kidsAllowed" class="form-check-label" i18n>Niños permitidos</label>
+                        @if (createInviteForm.get('kidsAllowed') | validation) {
+                          <span class="invalid-feedback d-block" role="alert">
+                            {{ createInviteForm.get('kidsAllowed')?.errors | validationError: 'kidsAllowed' }}
+                          </span>
+                        }
+                      </div>
+                    </form>
+                  </div>
+                  @if (!showNewGroupForm) {
+                    <div class="modal-footer">
+                      <button data-testid="cancel-button" type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" i18n>Cerrar</button>
+                      <button data-testid="confirm-button" type="button" class="btn btn-dark" (click)="saveInvite()" i18n>Guardar</button>
+                    </div>
+                  }
+                }
+                @if (showNewGroupForm) {
+                  <div class="modal-body">
+                    <app-invite-group-form
+                      [inviteGroupValue]="groupSelected"
+                      (isCreatingNewFormGroup)="inviteGroupAction(false, $event)"
+                      (updateInviteGroups)="updateCurrentInviteGroup($event)">
+                    </app-invite-group-form>
+                  </div>
+                }
+                @if (showOverwriteConfirmation) {
+                  <div class="modal-body">
+                    <app-overwrite-confirmation-form
+                      [showOverwriteConfirmationValue]="showOverwriteConfirmation"
+                      [overwriteConfirmationValue]="overwriteConfirmation"
+                      [typeOfEventValue]="vm.typeOfEvent"
+                      (closeOverwriteConfirmationForm)="closeOverwriteConfirmationForm()"
+                      (updateInvites)="updateOverwroteInviteFromForm($event)">
+                    </app-overwrite-confirmation-form>
+                  </div>
+                }
               </div>
-              <span class="invalid-feedback d-block" role="alert" *ngIf="createInviteForm.get('inviteGroupId') | validation">
-                {{ createInviteForm.get('inviteGroupId')?.errors | validationError: 'inviteGroupId' }}
-              </span>
             </div>
-            <div class="mb-3">
-              <label for="entriesNumber" class="form-label" i18n>Numero de pases</label>
-              <div class="buttonActions">
-                <input id="entriesNumber" 
-                type="number" 
-                min="1" 
-                class="form-control" 
-                formControlName="entriesNumber" 
-                [ngClass]="{'is-invalid': createInviteForm.get('entriesNumber') | validation }">
-                <button aria-label="Sobreescribir" title="Sobreescribir" type="button" class="btn btn-dark" (click)="showOverwriteConfirmationForm()" *ngIf="!vm.inviteAction.isNew"><i class="fa-solid fa-arrow-rotate-right"></i></button>
-              </div>
-              <span class="invalid-feedback d-block" role="alert" *ngIf="createInviteForm.get('entriesNumber') | validation">
-                {{ createInviteForm.get('entriesNumber')?.errors | validationError: 'entriesNumber' }}
-              </span>
-            </div>
-            <div class="mb-3">
-              <label for="phoneNumber" class="form-label" i18n>Telefono de contacto</label>
-              <input id="phoneNumber" 
-                     type="tel" 
-                     class="form-control" 
-                     formControlName="phoneNumber" 
-                     [ngClass]="{'is-invalid': createInviteForm.get('phoneNumber') | validation }" 
-                     maxlength="10">
-              <span class="invalid-feedback d-block" role="alert" *ngIf="createInviteForm.get('phoneNumber') | validation">
-                {{ createInviteForm.get('phoneNumber')?.errors | validationError: 'phoneNumber' }}
-              </span>
-            </div>
-            <div class="form-check">
-              <input id="kidsAllowed" 
-                     class="form-check-input" 
-                     type="checkbox" 
-                     formControlName="kidsAllowed" 
-                     [ngClass]="{'is-invalid': createInviteForm.get('kidsAllowed') | validation }">
-              <label for="kidsAllowed" class="form-check-label" i18n>Niños permitidos</label>
-              <span class="invalid-feedback d-block" role="alert" *ngIf="createInviteForm.get('kidsAllowed') | validation">
-                {{ createInviteForm.get('kidsAllowed')?.errors | validationError: 'kidsAllowed' }}
-              </span>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer" *ngIf="!showNewGroupForm">
-          <button data-testid="cancel-button" type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" i18n>Cerrar</button>
-          <button data-testid="confirm-button" type="button" class="btn btn-dark" (click)="saveInvite()" i18n>Guardar</button>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="showNewGroupForm">
-        <div class="modal-body">
-            <app-invite-group-form 
-              [inviteGroupValue]="groupSelected" 
-              (isCreatingNewFormGroup)="inviteGroupAction(false, $event)"
-              (updateInviteGroups)="updateCurrentInviteGroup($event)">
-            </app-invite-group-form>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="showOverwriteConfirmationForm">
-        <div class="modal-body">
-            <app-overwrite-confirmation-form 
-              [showOverwriteConfirmationValue]="showOverwriteConfirmation"
-              [overwriteConfirmationValue]="overwriteConfirmation"
-              [typeOfEventValue]="vm.typeOfEvent"
-              (closeOverwriteConfirmationForm)="closeOverwriteConfirmationForm()"
-              (updateInvites)="updateOverwroteInviteFromForm($event)">
-            </app-overwrite-confirmation-form>
-        </div>
-      </ng-container>
-    </div>
-  </div>
-</div>
+          </div>
+        }

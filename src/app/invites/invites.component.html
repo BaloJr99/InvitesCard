@@ -1,5 +1,12 @@
-<ng-container [ngSwitch]="inviteResolved.eventType">
-  <app-sweet-xv *ngSwitchCase="'X'"></app-sweet-xv>
-  <app-save-the-date *ngSwitchCase="'S'"></app-save-the-date>
-  <app-wedding *ngSwitchCase="'W'"></app-wedding>
-</ng-container>
+
+@switch (inviteResolved.eventType) {
+  @case ('X') {
+    <app-sweet-xv></app-sweet-xv>
+  }
+  @case ('S') {
+    <app-save-the-date></app-save-the-date>
+  }
+  @case ('W') {
+    <app-wedding></app-wedding>
+  }
+}

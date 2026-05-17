@@ -1,89 +1,115 @@
-<table class="table row-border hover text-center" *ngIf="vm$ | async as vm" [id]="vm.tableId"> 
-  <thead>
-    <tr>
-      <ng-container *ngFor="let header of vm.headers; index as i">
-        <td *ngIf="i === 0 && vm.showCheckbox">
-          <input id="checkbox-all-{{vm.tableIndex}}" type="checkbox" (change)="selectAll($event)" [checked]="allSelected()" [attr.aria-label]="getAccessibilityMessage(header.text, true)">
-        </td>
-        <th *ngIf="(i !== 0 || !vm.useCheckbox)" attr.aria-sort="{{vm.sortDirection === '' ? 'none' : vm.sortDirection === 'asc' ? 'ascending' : 'descending'}}">
-          <div>
-            <ng-container *ngIf="!header.sortable">
-              <span>{{ header.text }}</span>
-            </ng-container>
-            <ng-container *ngIf="header.sortable">
-              <button class="sort" (click)="sortColumn(header.text)">
-                <span>{{ header.text }}</span>
-              </button>
-            </ng-container>
-            <app-filter [text]="header.text" [index]="i" (filter)="filterData($event)" *ngIf="header.filterable"></app-filter>
+@if (vm$ | async; as vm) {
+  <table class="table row-border hover text-center" [id]="vm.tableId">
+    <thead>
+      <tr>
+        @for (header of vm.headers; track header; let i = $index) {
+          @if (i === 0 && vm.showCheckbox) {
+            <td>
+              <input id="checkbox-all-{{vm.tableIndex}}" type="checkbox" (change)="selectAll($event)" [checked]="allSelected()" [attr.aria-label]="getAccessibilityMessage(header.text, true)">
+            </td>
+          }
+          @if ((i !== 0 || !vm.useCheckbox)) {
+            <th attr.aria-sort="{{vm.sortDirection === '' ? 'none' : vm.sortDirection === 'asc' ? 'ascending' : 'descending'}}">
+              <div>
+                @if (!header.sortable) {
+                  <span>{{ header.text }}</span>
+                }
+                @if (header.sortable) {
+                  <button class="sort" (click)="sortColumn(header.text)">
+                    <span>{{ header.text }}</span>
+                  </button>
+                }
+                @if (header.filterable) {
+                  <app-filter [text]="header.text" [index]="i" (filter)="filterData($event)"></app-filter>
+                }
+              </div>
+            </th>
+          }
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of vm.recordsToDisplay; track row; let rowIndex = $index) {
+        <tr>
+          @for (column of vm.headers; track column; let columnIndex = $index) {
+            @if (columnIndex === 0 && vm.showCheckbox) {
+              <td>
+                <input id="checkbox-individual-{{vm.tableIndex}}" (change)="selectRecord($event, rowIndex)" [checked]="rowSelected(rowIndex)" type="checkbox" [attr.aria-label]="getAccessibilityMessage(row[vm.checkboxHeader ?? ''], false)">
+              </td>
+            }
+            @if (showColumn(vm.showCheckbox, columnIndex)) {
+              <td [innerHTML]="row[column.text]"></td>
+            }
+            @if (showButtons(columnIndex)) {
+              <td>
+                <div class="buttons">
+                  @for (button of vm.buttons; track button) {
+                    <button
+                      class="btn"
+                      [ngClass]="button.class ? button.class : 'btn-primary'"
+                      (click)="onAction(button.action, rowIndex)"
+                      [disabled]="button.isDisabled"
+                      [title]="button.accessibleText"
+                      [innerHtml]="button.innerHtml">
+                    </button>
+                  }
+                </div>
+              </td>
+            }
+          }
+        </tr>
+      }
+      @if (!containsData) {
+        <tr>
+          <td [attr.colspan]="vm.headers.length" i18n>No se encontro información</td>
+        </tr>
+      }
+    </tbody>
+    <tfoot>
+      <tr class="desktop">
+        <td [attr.colspan]="vm.showColSpan" i18n>
+        Showing {{ vm.firstRecord }} to {{vm.recordsShowing}} of {{ vm.totalRecords }} records
+      </td>
+        <td [attr.colspan]="vm.paginationSpan">
+          <div class="buttons">
+            <button aria-label="Ir a la primer página" i18n-aria-label class="btn btn-outline-dark" (click)="firstPage()" [disabled]="vm.skip === 0"><i class="fa-solid fa-angles-left"></i></button>
+            <button aria-label="Ir a la página anterior" i18n-aria-label class="btn btn-outline-dark" (click)="previousPage()" [disabled]="vm.skip === 0"><i class="fa-solid fa-angle-left"></i></button>
+            @for (button of vm.pageNumberArray; track button; let i = $index) {
+              @if (button.isPage) {
+                <button attr.aria-label="{{button.accessibleText}}" class="btn" [ngClass]="vm.skip + 1 === button.pageNumber ? 'btn-dark' : 'btn-outline-dark'" (click)="goToPage(i)">{{button.pageNumber}}</button>
+              }
+              @if (!button.isPage) {
+                <span class="border border-dark rounded p-2">...</span>
+              }
+            }
+            <button aria-label="Ir a la siguiente página" i18n-aria-label class="btn btn-outline-dark" (click)="nextPage()" [disabled]="vm.isLastPage"><i class="fa-solid fa-angle-right"></i></button>
+            <button aria-label="Ir a la última página" i18n-aria-label class="btn btn-outline-dark" (click)="lastPage()" [disabled]="vm.isLastPage"><i class="fa-solid fa-angles-right"></i></button>
           </div>
-        </th>
-      </ng-container>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let row of vm.recordsToDisplay; index as rowIndex">
-      <ng-container *ngFor="let column of vm.headers; index as columnIndex">
-        <td *ngIf="columnIndex === 0 && vm.showCheckbox">
-          <input id="checkbox-individual-{{vm.tableIndex}}" (change)="selectRecord($event, rowIndex)" [checked]="rowSelected(rowIndex)" type="checkbox" [attr.aria-label]="getAccessibilityMessage(row[vm.checkboxHeader ?? ''], false)">
         </td>
-        <td *ngIf="showColumn(vm.showCheckbox, columnIndex)" [innerHTML]="row[column.text]"></td>
-        <ng-container *ngIf="showButtons(columnIndex)">
-          <td>
-            <div class="buttons">
-              <button *ngFor="let button of vm.buttons" 
-                    class="btn" 
-                    [ngClass]="button.class ? button.class : 'btn-primary'"
-                    (click)="onAction(button.action, rowIndex)" 
-                    [disabled]="button.isDisabled" 
-                    [title]="button.accessibleText"
-                    [innerHtml]="button.innerHtml">
-            </button>
-            </div>
-          </td>
-        </ng-container>
-      </ng-container>
-    </tr>
-    <tr *ngIf="!containsData">
-      <td [attr.colspan]="vm.headers.length" i18n>No se encontro información</td>
-    </tr>
-  </tbody>
-  <tfoot>
-    <tr class="desktop">
-      <td [attr.colspan]="vm.showColSpan" i18n>
+      </tr>
+      <tr class="mobile">
+        <td [attr.colspan]="vm.headers.length" i18n>
         Showing {{ vm.firstRecord }} to {{vm.recordsShowing}} of {{ vm.totalRecords }} records
       </td>
-      <td [attr.colspan]="vm.paginationSpan">
-        <div class="buttons">
-          <button aria-label="Ir a la primer página" i18n-aria-label class="btn btn-outline-dark" (click)="firstPage()" [disabled]="vm.skip === 0"><i class="fa-solid fa-angles-left"></i></button>
-          <button aria-label="Ir a la página anterior" i18n-aria-label class="btn btn-outline-dark" (click)="previousPage()" [disabled]="vm.skip === 0"><i class="fa-solid fa-angle-left"></i></button>
-          <ng-container *ngFor="let button of vm.pageNumberArray; index as i">
-            <button *ngIf="button.isPage" attr.aria-label="{{button.accessibleText}}" class="btn" [ngClass]="vm.skip + 1 === button.pageNumber ? 'btn-dark' : 'btn-outline-dark'" (click)="goToPage(i)">{{button.pageNumber}}</button>
-            <span *ngIf="!button.isPage" class="border border-dark rounded p-2">...</span>
-          </ng-container>
-          <button aria-label="Ir a la siguiente página" i18n-aria-label class="btn btn-outline-dark" (click)="nextPage()" [disabled]="vm.isLastPage"><i class="fa-solid fa-angle-right"></i></button>
-          <button aria-label="Ir a la última página" i18n-aria-label class="btn btn-outline-dark" (click)="lastPage()" [disabled]="vm.isLastPage"><i class="fa-solid fa-angles-right"></i></button>
-        </div>
-      </td>
-    </tr>
-    <tr class="mobile">
-      <td [attr.colspan]="vm.headers.length" i18n>
-        Showing {{ vm.firstRecord }} to {{vm.recordsShowing}} of {{ vm.totalRecords }} records
-      </td>
-    </tr>
-    <tr class="mobile">
-      <td [attr.colspan]="vm.headers.length">
-        <div class="buttons">
-          <button aria-label="Ir a la primer página" i18n-aria-label class="btn btn-outline-dark" (click)="firstPage()" [disabled]="vm.skip === 0"><i class="fa-solid fa-angles-left"></i></button>
-          <button aria-label="Ir a la página anterior" i18n-aria-label class="btn btn-outline-dark" (click)="previousPage()" [disabled]="vm.skip === 0"><i class="fa-solid fa-angle-left"></i></button>
-          <ng-container *ngFor="let button of vm.pageNumberArray; index as i">
-            <button *ngIf="button.isPage" attr.aria-label="{{button.accessibleText}}" class="btn" [ngClass]="vm.skip + 1 === button.pageNumber ? 'btn-dark' : 'btn-outline-dark'" (click)="goToPage(i)">{{button.pageNumber}}</button>
-            <span *ngIf="!button.isPage" class="border border-dark rounded p-2">...</span>
-          </ng-container>
-          <button aria-label="Ir a la siguiente página" i18n-aria-label class="btn btn-outline-dark" (click)="nextPage()" [disabled]="vm.isLastPage"><i class="fa-solid fa-angle-right"></i></button>
-          <button aria-label="Ir a la última página" i18n-aria-label class="btn btn-outline-dark" (click)="lastPage()" [disabled]="vm.isLastPage"><i class="fa-solid fa-angles-right"></i></button>
-        </div>
-      </td>
-    </tr>
-  </tfoot>
-</table>
+      </tr>
+      <tr class="mobile">
+        <td [attr.colspan]="vm.headers.length">
+          <div class="buttons">
+            <button aria-label="Ir a la primer página" i18n-aria-label class="btn btn-outline-dark" (click)="firstPage()" [disabled]="vm.skip === 0"><i class="fa-solid fa-angles-left"></i></button>
+            <button aria-label="Ir a la página anterior" i18n-aria-label class="btn btn-outline-dark" (click)="previousPage()" [disabled]="vm.skip === 0"><i class="fa-solid fa-angle-left"></i></button>
+            @for (button of vm.pageNumberArray; track button; let i = $index) {
+              @if (button.isPage) {
+                <button attr.aria-label="{{button.accessibleText}}" class="btn" [ngClass]="vm.skip + 1 === button.pageNumber ? 'btn-dark' : 'btn-outline-dark'" (click)="goToPage(i)">{{button.pageNumber}}</button>
+              }
+              @if (!button.isPage) {
+                <span class="border border-dark rounded p-2">...</span>
+              }
+            }
+            <button aria-label="Ir a la siguiente página" i18n-aria-label class="btn btn-outline-dark" (click)="nextPage()" [disabled]="vm.isLastPage"><i class="fa-solid fa-angle-right"></i></button>
+            <button aria-label="Ir a la última página" i18n-aria-label class="btn btn-outline-dark" (click)="lastPage()" [disabled]="vm.isLastPage"><i class="fa-solid fa-angles-right"></i></button>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+}

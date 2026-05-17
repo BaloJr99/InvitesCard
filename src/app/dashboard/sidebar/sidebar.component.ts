@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Roles } from 'src/app/core/models/enum';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule],
 })
 export class SidebarComponent implements OnInit {
   isAdmin = false;

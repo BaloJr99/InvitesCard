@@ -1,4 +1,4 @@
-<ng-container *ngIf="vm$ | async as vm">
+@if (vm$ | async; as vm) {
   <section class="row mx-1 my-3 breadcrumb-header">
     <div class="col-12 header">
       <nav aria-label="breadcrumb">
@@ -18,25 +18,23 @@
       <div class="table-styling">
         <div class="inner">
           <app-table (actionResponse)="actionResponse($event)"
-                     [tableConfigurationValue]="vm.table">
+            [tableConfigurationValue]="vm.table">
           </app-table>
         </div>
       </div>
     </div>
   </section>
-  
-  <app-user-modal 
-    [userActionValue]="vm.userAction" 
+  <app-user-modal
+    [userActionValue]="vm.userAction"
     [showModalValue]="showUserModal"
     (updateUsers)="updateUsers($event)"
     (selectRole)="setSelectedRole($event)"
     (closeModal)="closeUserModal()">
   </app-user-modal>
-  
-  <app-user-role 
+  <app-user-role
     [showModalValue]="showRoleModal"
     [roleActionValue]="vm.roleAction"
     (updateRoles)="updateSavedInformation($event)"
     (closeModal)="closeRoleModal()">
   </app-user-role>
-</ng-container>
+}

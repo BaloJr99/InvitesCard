@@ -1,4 +1,4 @@
-<ng-container *ngIf="vm$ | async as vm">
+@if (vm$ | async; as vm) {
   <div class="row g-0 my-3 breadcrumb-header">
     <div class="col-12 header">
       <nav aria-label="breadcrumb">
@@ -18,14 +18,20 @@
       <button class="btn btn-dark" (click)="saveFiles()" i18n>Subir fotos</button>
     </form>
   </div>
-  <div class="row mt-3" *ngIf="uploadProgress$ | async as progress">
-    <div class="col-12">
-      <div id="bar" [ngStyle]="{'width': progress}">{{progress}}</div>
+  @if (uploadProgress$ | async; as progress) {
+    <div class="row mt-3">
+      <div class="col-12">
+        <div id="bar" [ngStyle]="{'width': progress}">{{progress}}</div>
+      </div>
     </div>
-  </div>
-  <div class="row" *ngIf="albumImages$ | async as images">
-    <div class="image-container col-12 my-3">
-      <img *ngFor="let image of images" src="{{image.fileUrl}}" class="img-fluid" i18n-alt alt="Imagen subida por usuario" loading="lazy">
+  }
+  @if (albumImages$ | async; as images) {
+    <div class="row">
+      <div class="image-container col-12 my-3">
+        @for (image of images; track image) {
+          <img src="{{image.fileUrl}}" class="img-fluid" i18n-alt alt="Imagen subida por usuario" loading="lazy">
+        }
+      </div>
     </div>
-  </div>
-</ng-container>
+  }
+}

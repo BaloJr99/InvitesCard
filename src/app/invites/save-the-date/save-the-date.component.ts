@@ -32,7 +32,7 @@ import { AccomodationComponent } from './accomodations/accomodation.component';
   imports: [AccomodationComponent, CommonModule],
 })
 export class SaveTheDateComponent {
-  @HostListener('document:visibilitychange', ['$event'])
+  @HostListener('document:visibilitychange')
   visibilitychange() {
     if (document.visibilityState === 'hidden' && this.playAudio) {
       this.audio.pause();

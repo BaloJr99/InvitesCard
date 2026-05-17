@@ -1,123 +1,137 @@
-<div class="full-invite" *ngIf="vm$ | async as vm">
-  <div class="info invite-section">
-    <ng-container *ngFor="let downloadImage of downloadImages; index as i">  
-      <ng-container *ngIf="i === 0">
-        <div class="backgroundImage{{i}}" style="background-image: url('{{downloadImage.fileUrl}}');" alt=""></div>
-      </ng-container>
-      <ng-container *ngIf="i !== 0">
-        <div class="backgroundImage{{i}}" style="visibility: hidden; background-image: url('{{downloadImage.fileUrl}}');" alt=""></div>
-      </ng-container>
-    </ng-container>
-    <button (click)="goToForm()" class="scrollFormButton" i18n-title title="Deplazar hacia el formulario"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>
-    <div class="container">
-      <div class="header">
-        <h1>15<span>Sweet</span></h1>
-        <p>{{ vm.userInvite.nameOfCelebrated }}</p>
-      </div>
-      <div class="datetime">
-        <div class="date">
-          <hr>
-          <p>{{ vm.dayOfTheWeek.toLocaleUpperCase() }}, {{ vm.shortDate.toLocaleUpperCase() }}</p>
-          <hr>
+@if (vm$ | async; as vm) {
+  <div class="full-invite">
+    <div class="info invite-section">
+      @for (downloadImage of downloadImages; track downloadImage; let i = $index) {
+        @if (i === 0) {
+          <div class="backgroundImage{{i}}" style="background-image: url('{{downloadImage.fileUrl}}');" alt=""></div>
+        }
+        @if (i !== 0) {
+          <div class="backgroundImage{{i}}" style="visibility: hidden; background-image: url('{{downloadImage.fileUrl}}');" alt=""></div>
+        }
+      }
+      <button (click)="goToForm()" class="scrollFormButton" i18n-title title="Deplazar hacia el formulario"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>
+      <div class="container">
+        <div class="header">
+          <h1>15<span>Sweet</span></h1>
+          <p>{{ vm.userInvite.nameOfCelebrated }}</p>
         </div>
-        <app-countdown [dateOfEventValue]="vm.userInvite.dateOfEvent"></app-countdown>
-      </div>
-    </div>
-  </div>
-  <div class="speech invite-section">
-    <div class="container">
-      <p>{{ vm.parsedEventSettings.firstSectionSentences.split(';')[0]}}</p>
-      <div class="invites">
-        <div class="divider">
-          <hr>
+        <div class="datetime">
+          <div class="date">
+            <hr>
+              <p>{{ vm.dayOfTheWeek.toLocaleUpperCase() }}, {{ vm.shortDate.toLocaleUpperCase() }}</p>
+              <hr>
+              </div>
+              <app-countdown [dateOfEventValue]="vm.userInvite.dateOfEvent"></app-countdown>
+            </div>
+          </div>
         </div>
-        <p>{{ vm.userInvite.family }}</p>
-        <p class="pinkLetter" i18n>Pases: {{ vm.userInvite.entriesNumber }}</p>
-        <p class="noKids" *ngIf="!vm.userInvite?.kidsAllowed" i18n>* No niños *</p>
-        <div class="divider">
-          <hr>
-        </div>
-      </div>
-      <p>{{ vm.parsedEventSettings.firstSectionSentences.split(';')[1] }}</p>
-    </div>
-  </div>
-  <div class="ceremony invite-section" [ngStyle]="{ 'order': getSectionOrder('ceremonyInfo') }" *ngIf="sectionEnabled('ceremonyInfo')">
-    <div class="container">
-      <h2 i18n>Ceremonia</h2>
-      <div class="row">
-        <div class="col-sm-12 col-md-6" [ngClass]="vm.parsedEventSettings.godParents.split(';').length === 2 ? 'col-md-6' : 'col-md-12'">
-          <p i18n>En compañía de mis papás</p>
-          <ng-container *ngFor="let parent of vm.parsedEventSettings.parents.split(';')">
-            <p>{{parent}}</p>
-          </ng-container>
-        </div>
-        <div class="col-sm-12 col-md-6" *ngIf="vm.parsedEventSettings.godParents.split(';').length === 2">
-          <p i18n>Y mis padrinos</p>
-          <ng-container *ngFor="let godParent of vm.parsedEventSettings.godParents.split(';')">
-            <p>{{godParent}}</p>
-          </ng-container>
-        </div>
-      </div>
-      <p class="pt-5" i18n>{{vm.parsedEventSettings.secondSectionSentences}} <br><br>¡Mis XV Años! </p>
-      <br>
-      <p class="pinkLetter" i18n>{{ vm.dayOfTheWeek.substring(0, 1).toUpperCase() + vm.dayOfTheWeek.slice(1) }} <br> {{ vm.longDate }} <br> <i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{ vm.parsedEventSettings.massTime }} horas</p>
-      <div class="row">
-        <div class="col-sm-12 col-md-6">
-          <p>{{vm.parsedEventSettings.massAddress}}</p>
-        </div>
-        <div class=" col-sm-12 col-md-6">
-          <iframe title="Mapa de la ceremonia" i18n-title [src]="vm.parsedEventSettings.massUrl | safe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="reception invite-section" [ngStyle]="{ 'order': getSectionOrder('receptionInfo') }" *ngIf="sectionEnabled('receptionInfo')">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12 col-md-6">
-          <iframe title="Mapa de la recepción" i18n-title [src]="vm.parsedEventSettings.receptionUrl | safe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-        <div class="col-sm-12 col-md-6">
-          <h2 i18n>Recepción</h2>
-          <h3>{{vm.parsedEventSettings.receptionPlace}}</h3>
-          <p>{{vm.parsedEventSettings.receptionAddress}}</p>
-          <span i18n><i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{vm.parsedEventSettings.receptionTime}} horas</span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="dressCode invite-section" [ngStyle]="{ 'order': getSectionOrder('dressCodeInfo') }" *ngIf="sectionEnabled('dressCodeInfo')">
-    <div class="container">
-      <h2 i18n>Código de vestimenta: <br> Formal</h2>
-      <div class="row">
-        <div class="col-sm-12 col-md-6">
-          <img src="assets/menFormal.png" alt="Vestimenta Formal de Hombre"  i18n-alt>
-          <p i18n>HOMBRES</p>
-        </div>
-        <div class="col-sm-12 col-md-6">
-          <img src="assets/womenFormal.png" alt="Vestimenta Formal de Mujer"  i18n-alt>
-          <p i18n>MUJERES</p>
-        </div>
-      </div>
-      <p class="pt-5" i18n>- El color {{vm.parsedEventSettings.dressCodeColor}} -</p>
-      <p i18n>Está reservado para la festejada</p>
-    </div>
-  </div>
-  <div class="gifts invite-section" [ngStyle]="{ 'order': getSectionOrder('giftsInfo') }" *ngIf="sectionEnabled('giftsInfo')" >
-    <div class="container">
-      <p i18n>El mejor regalo que me puedes dar es tu presencia, pero si gustan regalarme algo: </p>
-      <div class="row">
-        <div class="col-sm-12 col-md-6">
-          <img src="assets/bills.png" alt="Regalo monetario"  i18n-alt>
-        </div>
-        <div class="col-sm-12 col-md-6">
-          <img src="assets/box.png" alt="Regalo en caja"  i18n-alt>
-        </div>
-      </div>
-      <p i18n>Muchas Gracias!</p>
-    </div>
-  </div>
-  <div class="invitesConfirmation invite-section" id="scrollToForm" [ngStyle]="{ 'order': getSectionOrder('confirmationInfo') }">
-    <app-confirmation [inviteValue]="vm.userInvite" [deadlineMetValue]="vm.deadlineMet"></app-confirmation>
-  </div>
-</div>
+        <div class="speech invite-section">
+          <div class="container">
+            <p>{{ vm.parsedEventSettings.firstSectionSentences.split(';')[0]}}</p>
+            <div class="invites">
+              <div class="divider">
+                <hr>
+                </div>
+                <p>{{ vm.userInvite.family }}</p>
+                <p class="pinkLetter" i18n>Pases: {{ vm.userInvite.entriesNumber }}</p>
+                @if (!vm.userInvite.kidsAllowed) {
+                  <p class="noKids" i18n>* No niños *</p>
+                }
+                <div class="divider">
+                  <hr>
+                  </div>
+                </div>
+                <p>{{ vm.parsedEventSettings.firstSectionSentences.split(';')[1] }}</p>
+              </div>
+            </div>
+            @if (sectionEnabled('ceremonyInfo')) {
+              <div class="ceremony invite-section" [ngStyle]="{ 'order': getSectionOrder('ceremonyInfo') }">
+                <div class="container">
+                  <h2 i18n>Ceremonia</h2>
+                  <div class="row">
+                    <div class="col-sm-12 col-md-6" [ngClass]="vm.parsedEventSettings.godParents.split(';').length === 2 ? 'col-md-6' : 'col-md-12'">
+                      <p i18n>En compañía de mis papás</p>
+                      @for (parent of vm.parsedEventSettings.parents.split(';'); track parent) {
+                        <p>{{parent}}</p>
+                      }
+                    </div>
+                    @if (vm.parsedEventSettings.godParents.split(';').length === 2) {
+                      <div class="col-sm-12 col-md-6">
+                        <p i18n>Y mis padrinos</p>
+                        @for (godParent of vm.parsedEventSettings.godParents.split(';'); track godParent) {
+                          <p>{{godParent}}</p>
+                        }
+                      </div>
+                    }
+                  </div>
+                  <p class="pt-5" i18n>{{vm.parsedEventSettings.secondSectionSentences}} <br><br>¡Mis XV Años! </p>
+                  <br>
+                    <p class="pinkLetter" i18n>{{ vm.dayOfTheWeek.substring(0, 1).toUpperCase() + vm.dayOfTheWeek.slice(1) }} <br> {{ vm.longDate }} <br> <i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{ vm.parsedEventSettings.massTime }} horas</p>
+                    <div class="row">
+                      <div class="col-sm-12 col-md-6">
+                        <p>{{vm.parsedEventSettings.massAddress}}</p>
+                      </div>
+                      <div class=" col-sm-12 col-md-6">
+                        <iframe title="Mapa de la ceremonia" i18n-title [src]="vm.parsedEventSettings.massUrl | safe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+              @if (sectionEnabled('receptionInfo')) {
+                <div class="reception invite-section" [ngStyle]="{ 'order': getSectionOrder('receptionInfo') }">
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-sm-12 col-md-6">
+                        <iframe title="Mapa de la recepción" i18n-title [src]="vm.parsedEventSettings.receptionUrl | safe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <h2 i18n>Recepción</h2>
+                        <h3>{{vm.parsedEventSettings.receptionPlace}}</h3>
+                        <p>{{vm.parsedEventSettings.receptionAddress}}</p>
+                        <span i18n><i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{vm.parsedEventSettings.receptionTime}} horas</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+              @if (sectionEnabled('dressCodeInfo')) {
+                <div class="dressCode invite-section" [ngStyle]="{ 'order': getSectionOrder('dressCodeInfo') }">
+                  <div class="container">
+                    <h2 i18n>Código de vestimenta: <br> Formal</h2>
+                    <div class="row">
+                      <div class="col-sm-12 col-md-6">
+                        <img src="assets/menFormal.png" alt="Vestimenta Formal de Hombre"  i18n-alt>
+                        <p i18n>HOMBRES</p>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <img src="assets/womenFormal.png" alt="Vestimenta Formal de Mujer"  i18n-alt>
+                        <p i18n>MUJERES</p>
+                      </div>
+                    </div>
+                    <p class="pt-5" i18n>- El color {{vm.parsedEventSettings.dressCodeColor}} -</p>
+                    <p i18n>Está reservado para la festejada</p>
+                  </div>
+                </div>
+              }
+              @if (sectionEnabled('giftsInfo')) {
+                <div class="gifts invite-section" [ngStyle]="{ 'order': getSectionOrder('giftsInfo') }" >
+                  <div class="container">
+                    <p i18n>El mejor regalo que me puedes dar es tu presencia, pero si gustan regalarme algo: </p>
+                    <div class="row">
+                      <div class="col-sm-12 col-md-6">
+                        <img src="assets/bills.png" alt="Regalo monetario"  i18n-alt>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <img src="assets/box.png" alt="Regalo en caja"  i18n-alt>
+                      </div>
+                    </div>
+                    <p i18n>Muchas Gracias!</p>
+                  </div>
+                </div>
+              }
+              <div class="invitesConfirmation invite-section" id="scrollToForm" [ngStyle]="{ 'order': getSectionOrder('confirmationInfo') }">
+                <app-confirmation [inviteValue]="vm.userInvite" [deadlineMetValue]="vm.deadlineMet"></app-confirmation>
+              </div>
+            </div>
+          }

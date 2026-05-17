@@ -1,41 +1,49 @@
-<div class="dashboard" *ngIf="vm$ | async as vm">
-  <header>
-    <app-navbar [notificationsValue]="vm.notifications"></app-navbar>
-  </header>
-  <div class="container-fluid">
-    <div class="row g-0 h-100">
-      <aside class="col-lg-2 col-md-12 d-none d-lg-block">
-        <app-sidebar></app-sidebar>
-      </aside>
-      <main class="col-md-12 col-lg-10">
-        <router-outlet></router-outlet>
-      </main>
+@if (vm$ | async; as vm) {
+  <div class="dashboard">
+    <header>
+      <app-navbar [notificationsValue]="vm.notifications"></app-navbar>
+    </header>
+    <div class="container-fluid">
+      <div class="row g-0 h-100">
+        <aside class="col-lg-2 col-md-12 d-none d-lg-block">
+          <app-sidebar></app-sidebar>
+        </aside>
+        <main class="col-md-12 col-lg-10">
+          <router-outlet></router-outlet>
+        </main>
+      </div>
     </div>
-  </div>
-  <div class="messages-chat">
-    <div class="messages-header">
-      <h2 i18n>Mensajes</h2>
-      <button class="btn" (click)="toggleMessages()" aria-label="Toggle Messages"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
-    </div>
-    <div class="messages-container">
-      <div class="card" [style.display]="vm.messagesGrouped.length === 0 ? 'block' : 'none'" i18n>
+    <div class="messages-chat">
+      <div class="messages-header">
+        <h2 i18n>Mensajes</h2>
+        <button class="btn" (click)="toggleMessages()" aria-label="Toggle Messages"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+      </div>
+      <div class="messages-container">
+        <div class="card" [style.display]="vm.messagesGrouped.length === 0 ? 'block' : 'none'" i18n>
         No hay mensajes
       </div>
-      <div class="message" *ngFor="let group of vm.messagesGrouped">
-        <span class="message-date">
-          <hr>
-          {{ group.key }}
-          <hr>
-        </span>
-        <div class="card text-start ps-2" *ngFor="let message of group.value">
-          <p class="text-start mb-0">
-            <span class="message-time">{{message.time}}</span>
-            {{ message.family }}:
-          </p>
-          <span class="chat-message">{{ message.message }}</span>
+        @for (group of vm.messagesGrouped; track group) {
+          <div class="message">
+            <span class="message-date">
+              <hr>
+                {{ group.key }}
+                <hr>
+                </span>
+                @for (message of group.value; track message) {
+                  <div class="card text-start ps-2">
+                    <p class="text-start mb-0">
+                      <span class="message-time">{{message.time}}</span>
+                      {{ message.family }}:
+                    </p>
+                    <span class="chat-message">{{ message.message }}</span>
+                  </div>
+                }
+              </div>
+            }
+          </div>
         </div>
+        @if (vm.route.includes('/dashboard/events/')) {
+          <button class="btn btn-dark messages" (click)="toggleMessages()" title="Toogle Messages"><i class="fa-regular fa-comment" aria-hidden="true"></i></button>
+        }
       </div>
-    </div>
-  </div>
-  <button *ngIf="vm.route.includes('/dashboard/events/')" class="btn btn-dark messages" (click)="toggleMessages()" title="Toogle Messages"><i class="fa-regular fa-comment" aria-hidden="true"></i></button>
-</div>
+    }

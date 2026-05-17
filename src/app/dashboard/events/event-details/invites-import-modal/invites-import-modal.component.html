@@ -1,59 +1,69 @@
 <!-- Modal -->
-<div class="modal fade" id="invitesImportModal" tabindex="-1" aria-labelledby="invitesImportModalLabel" aria-hidden="true" *ngIf="vm$ | async as vm">
-  <div class="modal-dialog modal-dialog-centered" [ngClass]="(invites.length > 0 || errorInvites.length > 0) ? 'modal-xl': ''">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="invitesImportModalLabel" i18n>Importar</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" i18n-aria-label aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body text-start">
-        <div class="mb-3">
-          <div class="download-template">
-            <input id="fileInput" aria-labelledby="helpId" type="file" class="form-control" placeholder="Seleccionar Archivo CSV" accept=".csv" (change)="onFileChange($event)"/>
-            <button class="btn btn-dark" i18n-aria-label aria-label="Descargar plantilla" (click)="downloadTemplate()"><i class="fa-solid fa-download"></i></button>
-            <i class="fa-solid fa-circle-info btn-secondary"><span i18n>Descargar plantilla</span></i>
+@if (vm$ | async; as vm) {
+  <div class="modal fade" id="invitesImportModal" tabindex="-1" aria-labelledby="invitesImportModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" [ngClass]="(invites.length > 0 || errorInvites.length > 0) ? 'modal-xl': ''">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="invitesImportModalLabel" i18n>Importar</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" i18n-aria-label aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body text-start">
+          <div class="mb-3">
+            <div class="download-template">
+              <input id="fileInput" aria-labelledby="helpId" type="file" class="form-control" placeholder="Seleccionar Archivo CSV" accept=".csv" (change)="onFileChange($event)"/>
+              <button class="btn btn-dark" i18n-aria-label aria-label="Descargar plantilla" (click)="downloadTemplate()"><i class="fa-solid fa-download"></i></button>
+              <i class="fa-solid fa-circle-info btn-secondary"><span i18n>Descargar plantilla</span></i>
+            </div>
+            <small id="helpId" class="form-text text-muted" i18n>Los unicos archivos soportados son en formato CSV</small>
           </div>
-          <small id="helpId" class="form-text text-muted" i18n>Los unicos archivos soportados son en formato CSV</small>
+          @if (processingFile) {
+            <div class="mb-3 progress-bar">
+              <div id="bar">1%</div>
+            </div>
+          }
+          @if (invites.length > 0 || errorInvites.length > 0) {
+            <table class="table table-striped">
+              <thead>
+                <th scope="col" i18n>Familia</th>
+                <th scope="col" i18n># de pases</th>
+                <th scope="col" i18n>Numero de teléfono</th>
+                <th scope="col" i18n>Niños permitidos</th>
+                <th scope="col" i18n>Grupo</th>
+              </thead>
+              <tbody>
+                @for (invite of invites; track invite) {
+                  <tr>
+                    <td >{{ invite.family }}</td>
+                    <td>{{ invite.entriesNumber }}</td>
+                    <td>{{ invite.phoneNumber }}</td>
+                    <td>
+                      <i class="fa-solid" aria-hidden="true" [ngClass]="invite.kidsAllowed ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
+                    </td>
+                    <td>{{ invite.inviteGroupName }} @if (invite.isNewInviteGroup) {
+                      <i class="fa-solid fa-star" aria-hidden="true"></i>
+                    }</td>
+                  </tr>
+                }
+                @for (invite of errorInvites; track invite) {
+                  <tr>
+                    <td [ngClass]="invite.family.includes('ERROR') ? 'error' : ''">{{ invite.family }}</td>
+                    <td [ngClass]="invite.entriesNumber.includes('ERROR') ? 'error' : ''">{{ invite.entriesNumber }}</td>
+                    <td [ngClass]="invite.phoneNumber.includes('ERROR') ? 'error' : ''">{{ invite.phoneNumber }}</td>
+                    <td>
+                      <i class="fa-solid" aria-hidden="true" [ngClass]="invite.kidsAllowed ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
+                    </td>
+                    <td [ngClass]="invite.inviteGroupId.includes('ERROR') ? 'error' : ''">{{ invite.inviteGroupId }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
         </div>
-
-        <div class="mb-3 progress-bar" *ngIf="processingFile">
-          <div id="bar">1%</div>
+        <div class="modal-footer">
+          <button data-testid="cancel-button" type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" i18n>Cerrar</button>
+          <button data-testid="confirm-button" type="button" class="btn btn-dark" (click)="sendData()" [disabled]="this.invites.length === 0" i18n>Procesar archivo</button>
         </div>
-
-        <table class="table table-striped" *ngIf="invites.length > 0 || errorInvites.length > 0">
-          <thead>
-            <th scope="col" i18n>Familia</th>
-            <th scope="col" i18n># de pases</th>
-            <th scope="col" i18n>Numero de teléfono</th>
-            <th scope="col" i18n>Niños permitidos</th>
-            <th scope="col" i18n>Grupo</th>
-          </thead>
-          <tbody>
-            <tr *ngFor="let invite of invites">
-              <td >{{ invite.family }}</td>
-              <td>{{ invite.entriesNumber }}</td>
-              <td>{{ invite.phoneNumber }}</td>
-              <td>
-                <i class="fa-solid" aria-hidden="true" [ngClass]="invite.kidsAllowed ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
-              </td>
-              <td>{{ invite.inviteGroupName }} <i class="fa-solid fa-star" aria-hidden="true" *ngIf="invite.isNewInviteGroup"></i></td>
-            </tr>
-            <tr *ngFor="let invite of errorInvites">
-              <td [ngClass]="invite.family.includes('ERROR') ? 'error' : ''">{{ invite.family }}</td>
-              <td [ngClass]="invite.entriesNumber.includes('ERROR') ? 'error' : ''">{{ invite.entriesNumber }}</td>
-              <td [ngClass]="invite.phoneNumber.includes('ERROR') ? 'error' : ''">{{ invite.phoneNumber }}</td>
-              <td>
-                <i class="fa-solid" aria-hidden="true" [ngClass]="invite.kidsAllowed ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
-              </td>
-              <td [ngClass]="invite.inviteGroupId.includes('ERROR') ? 'error' : ''">{{ invite.inviteGroupId }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button data-testid="cancel-button" type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" i18n>Cerrar</button>
-        <button data-testid="confirm-button" type="button" class="btn btn-dark" (click)="sendData()" [disabled]="this.invites.length === 0" i18n>Procesar archivo</button>
       </div>
     </div>
   </div>
-</div>
+}

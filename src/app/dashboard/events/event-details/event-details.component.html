@@ -1,4 +1,4 @@
-<ng-container *ngIf="vm$ | async as vm">
+@if (vm$ | async; as vm) {
   <div class="row mx-1 my-3 breadcrumb-header">
     <div class="col-12 header">
       <nav aria-label="breadcrumb">
@@ -17,7 +17,9 @@
   </div>
   <section class="row mx-1 card-section">
     <div class="col-12 card-container">
-      <app-event-card *ngFor="let statistic of vm.statistics" [displayText]="statistic.name" [number]="statistic.value" [backgroundColor]="statistic.color"></app-event-card>
+      @for (statistic of vm.statistics; track statistic) {
+        <app-event-card [displayText]="statistic.name" [number]="statistic.value" [backgroundColor]="statistic.color"></app-event-card>
+      }
     </div>
   </section>
   <section class="row mx-1 table-accordion">
@@ -78,29 +80,31 @@
       </div>
     </div>
     <div class="col-12">
-      <div class="accordion" id="inviteAccordion" *ngFor="let inviteGroup of invitesGrouped | keyvalue; index as i">
-        <div class="accordion-item">
-          <h3 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#accordion' + inviteGroup.key.replaceAll(' ', '')" aria-expanded="true" aria-controls="collapseOne">
-              {{ inviteGroup.key }}
-            </button>
-          </h3>
-          <div [id]="'accordion' + inviteGroup.key.replaceAll(' ', '')" class="accordion-collapse collapse">
-            <div class="accordion-body">
-              <app-table (actionResponse)="actionResponse($event)"
-                         [tableConfigurationValue]="findTableConfiguration(inviteGroup.key)">
-              </app-table>
-              <button class="btn btn-danger mt-3" (click)="bulkDeleteInvites(inviteGroup.key)" [disabled]="!allowDeleteInvites(inviteGroup.key)" i18n>Eliminar Invitaciones</button>
+      @for (inviteGroup of invitesGrouped | keyvalue; track inviteGroup; let i = $index) {
+        <div class="accordion" id="inviteAccordion">
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#accordion' + inviteGroup.key.replaceAll(' ', '')" aria-expanded="true" aria-controls="collapseOne">
+                {{ inviteGroup.key }}
+              </button>
+            </h3>
+            <div [id]="'accordion' + inviteGroup.key.replaceAll(' ', '')" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                <app-table (actionResponse)="actionResponse($event)"
+                  [tableConfigurationValue]="findTableConfiguration(inviteGroup.key)">
+                </app-table>
+                <button class="btn btn-danger mt-3" (click)="bulkDeleteInvites(inviteGroup.key)" [disabled]="!allowDeleteInvites(inviteGroup.key)" i18n>Eliminar Invitaciones</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      }
     </div>
   </section>
-  <app-invite-modal 
+  <app-invite-modal
     [showModalValue]="showInviteModal"
-    [inviteGroupsValue]="inviteGroups" 
-    [inviteActionValue]="inviteAction"  
+    [inviteGroupsValue]="inviteGroups"
+    [inviteActionValue]="inviteAction"
     [typeOfEventValue]="vm.typeOfEvent"
     (updateInvites)="updateInvites($event)"
     (updateInviteGroups)="updateInviteGroups($event)"
@@ -108,10 +112,10 @@
     (updateOverwroteInvite)="updateOverwroteInvite($event)">
   </app-invite-modal>
   <app-invites-import-dialog
-    [showModalValue]="showImportInvitesModal" 
+    [showModalValue]="showImportInvitesModal"
     [eventIdValue]="vm.eventId"
     [inviteGroupsValue]="inviteGroups"
     (updateBulkResults)="updateBulkResults($event)"
     (closeModal)="closeImportInvitesModal()">
   </app-invites-import-dialog>
-</ng-container>
+}

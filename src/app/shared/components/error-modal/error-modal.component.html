@@ -1,4 +1,4 @@
-<ng-container *ngIf="vm$ | async as vm">
+@if (vm$ | async; as vm) {
   <div [style.visibility]="vm.errorTriggered ? 'visible' : 'hidden'">
     <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -18,4 +18,4 @@
       </div>
     </div>
   </div>
-</ng-container>
+}

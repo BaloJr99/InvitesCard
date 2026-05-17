@@ -1,30 +1,34 @@
-<div class="time" *ngIf="time$ | async as time">
-  <div class="card">
+@if (time$ | async; as time) {
+  <div class="time">
+    <div class="card">
       <div class="card-body">
-      <h3 class="card-title">{{ time.days }}</h3>
-      <p class="card-text" i18n>Días</p>
+        <h3 class="card-title">{{ time.days }}</h3>
+        <p class="card-text" i18n>Días</p>
       </div>
-  </div>
-  <div class="card">
+    </div>
+    <div class="card">
       <div class="card-body">
-      <h3 class="card-title">{{ time.hours }}</h3>
-      <p class="card-text" i18n>Horas</p>
+        <h3 class="card-title">{{ time.hours }}</h3>
+        <p class="card-text" i18n>Horas</p>
       </div>
-  </div>
-  <div class="card">
+    </div>
+    <div class="card">
       <div class="card-body">
-      <h3 class="card-title">{{ time.minutes }}</h3>
-      <p class="card-text" i18n>Minutos</p>
+        <h3 class="card-title">{{ time.minutes }}</h3>
+        <p class="card-text" i18n>Minutos</p>
       </div>
-  </div>
-  <div class="card">
+    </div>
+    <div class="card">
       <div class="card-body">
-      <h3 class="card-title">{{ time.seconds }}</h3>
-      <p class="card-text" i18n>Segundos</p>
+        <h3 class="card-title">{{ time.seconds }}</h3>
+        <p class="card-text" i18n>Segundos</p>
       </div>
+    </div>
   </div>
-</div>
-<div class="fireworks" *ngIf="eventWasMet">
-  <img src="assets/fireworks.gif" alt="Fuegos artificiales" i18n-alt>
-  <h2 i18n>Hoy es el dia</h2>
-</div>
+}
+@if (eventWasMet) {
+  <div class="fireworks">
+    <img src="assets/fireworks.gif" alt="Fuegos artificiales" i18n-alt>
+    <h2 i18n>Hoy es el dia</h2>
+  </div>
+}

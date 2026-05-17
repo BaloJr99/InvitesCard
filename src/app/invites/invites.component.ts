@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IEventTypeResolved } from '../core/models/invites';
 import { EventType } from '../core/models/enum';
-import { CommonModule } from '@angular/common';
+
 import { SweetXvComponent } from './sweet-xv/sweet-xv.component';
 import { SaveTheDateComponent } from './save-the-date/save-the-date.component';
 import { WeddingComponent } from './wedding/wedding.component';
@@ -11,11 +11,10 @@ import { WeddingComponent } from './wedding/wedding.component';
   selector: 'app-invites',
   templateUrl: './invites.component.html',
   imports: [
-    CommonModule,
     SweetXvComponent,
     SaveTheDateComponent,
-    WeddingComponent,
-  ],
+    WeddingComponent
+],
 })
 export class InvitesComponent implements OnInit {
   inviteResolved: IEventTypeResolved = {
