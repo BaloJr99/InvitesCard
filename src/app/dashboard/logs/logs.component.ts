@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { BehaviorSubject, map } from 'rxjs';
 import { IEmitAction, ITable, ITableHeaders } from 'src/app/core/models/common';
@@ -18,13 +18,13 @@ Chart.register(...registerables);
   imports: [SharedModule, TableComponent, LogsModalComponent],
 })
 export class LogsComponent {
+  private loggerService = inject(LoggerService);
+
   private logs = new BehaviorSubject<ILog[]>([]);
   logs$ = this.logs.asObservable();
 
   logSelected: ILog = {} as ILog;
   showLogModal = false;
-
-  constructor(private loggerService: LoggerService) {}
 
   vm$ = this.loggerService.getLogs().pipe(
     map((logs) => {

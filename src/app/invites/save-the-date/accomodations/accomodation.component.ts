@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -19,6 +19,9 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, ReactiveFormsModule],
 })
 export class AccomodationComponent {
+  private fb = inject(FormBuilder);
+  private invitesService = inject(InvitesService);
+
   private invite = new BehaviorSubject<ISaveTheDateUserInvite>(
     {} as ISaveTheDateUserInvite
   );
@@ -64,11 +67,6 @@ export class AccomodationComponent {
   accomodationForm: FormGroup = this.fb.group({
     needsAccomodation: [true, Validators.required],
   });
-
-  constructor(
-    private fb: FormBuilder,
-    private invitesService: InvitesService
-  ) {}
 
   saveInformation(): void {
     this.invitesService

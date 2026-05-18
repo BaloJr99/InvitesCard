@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { map } from 'rxjs';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { CommonModule } from '@angular/common';
@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
 })
 export class SpinnerComponent {
-  constructor(private loader: LoaderService) {}
+  private loader = inject(LoaderService);
 
   vm$ = this.loader.loading$.pipe(
     map((spinner) => {

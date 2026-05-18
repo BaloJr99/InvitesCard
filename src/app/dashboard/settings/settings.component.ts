@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, inject } from '@angular/core';
 import { BehaviorSubject, map } from 'rxjs';
 import { EventType } from 'src/app/core/models/enum';
 import { IDropdownEvent } from 'src/app/core/models/events';
@@ -22,6 +22,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
   ],
 })
 export class SettingsComponent {
+  private eventsService = inject(EventsService);
+
   private events = new BehaviorSubject<IDropdownEvent[]>([]);
   events$ = this.events.asObservable();
 
@@ -30,8 +32,6 @@ export class SettingsComponent {
     isNew: true,
     eventType: EventType.None,
   };
-
-  constructor(private eventsService: EventsService) {}
 
   vm$ = this.eventsService.getDropdownEvents().pipe(
     map((events) => {

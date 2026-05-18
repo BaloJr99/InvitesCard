@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -27,6 +27,10 @@ import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe
   ],
 })
 export class SaveTheDateSettingsComponent {
+  private settingsService = inject(SettingsService);
+  private fb = inject(FormBuilder);
+  private toastr = inject(ToastrService);
+
   @Input() set eventSettingActionValue(eventSettingAction: ISettingAction) {
     this.saveTheDateSettingsAction = eventSettingAction;
     this.reloadSettings.next(true);
@@ -50,12 +54,6 @@ export class SaveTheDateSettingsComponent {
     hotelName: ['', Validators.required],
     hotelInformation: ['', Validators.required],
   });
-
-  constructor(
-    private settingsService: SettingsService,
-    private fb: FormBuilder,
-    private toastr: ToastrService
-  ) {}
 
   clearInformation(): void {
     this.createEventSettingsForm.reset({

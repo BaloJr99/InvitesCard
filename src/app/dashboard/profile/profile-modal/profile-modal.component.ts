@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -19,6 +19,11 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, ReactiveFormsModule],
 })
 export class ProfileModalComponent {
+  private fb = inject(FormBuilder);
+  private fileReaderService = inject(FileReaderService);
+  private userService = inject(UsersService);
+  private toastr = inject(ToastrService);
+
   private userId = new BehaviorSubject<string>('');
   userId$ = this.userId.asObservable();
   private showModal = new BehaviorSubject<boolean>(false);
@@ -68,13 +73,6 @@ export class ProfileModalComponent {
     profilePhoto.src = '';
     container.style.display = 'none';
   }
-
-  constructor(
-    private fb: FormBuilder,
-    private fileReaderService: FileReaderService,
-    private userService: UsersService,
-    private toastr: ToastrService
-  ) {}
 
   onPhotoChange(event: Event): void {
     const container = document.getElementById(

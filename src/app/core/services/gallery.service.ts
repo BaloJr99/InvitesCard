@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IMessageResponse } from '../models/common';
@@ -15,10 +15,10 @@ import { toLocalDate } from 'src/app/shared/utils/tools';
   providedIn: 'root',
 })
 export class GalleryService {
+  private http = inject(HttpClient);
+
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/gallery';
-
-  constructor(private http: HttpClient) {}
 
   getAlbums(eventId: string): Observable<IAlbum[]> {
     return this.http.get<IAlbum[]>(`${this.invitesBaseUrl}/${eventId}`).pipe(

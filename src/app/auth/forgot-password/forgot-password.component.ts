@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ValidationPipe } from '../../shared/pipes/validation.pipe';
@@ -12,10 +12,13 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [SharedModule, ValidationPipe, ValidationErrorPipe],
 })
 export class ForgotPasswordComponent {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+
   forgotPasswordForm: FormGroup;
   emailSent = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor() {
     this.forgotPasswordForm = this.fb.group({
       usernameOrEmail: ['', Validators.required],
     });

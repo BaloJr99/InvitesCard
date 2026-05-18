@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { IErrorInvite, IBulkInvite } from 'src/app/core/models/invites';
 import { IInviteGroups } from 'src/app/core/models/inviteGroups';
@@ -15,6 +15,10 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
 })
 export class InvitesImportModalComponent {
+  private invitesService = inject(InvitesService);
+  private toastr = inject(ToastrService);
+  private fileReaderService = inject(FileReaderService);
+
   private eventId = new BehaviorSubject<string>('');
   eventId$ = this.eventId.asObservable();
   private inviteGroups = new BehaviorSubject<IInviteGroups[]>([]);
@@ -38,12 +42,6 @@ export class InvitesImportModalComponent {
   invites: IBulkInvite[] = [];
   errorInvites: IErrorInvite[] = [];
   processingFile = false;
-
-  constructor(
-    private invitesService: InvitesService,
-    private toastr: ToastrService,
-    private fileReaderService: FileReaderService
-  ) {}
 
   vm$ = combineLatest([
     this.eventId$,

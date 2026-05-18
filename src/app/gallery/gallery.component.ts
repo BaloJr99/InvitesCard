@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { map } from 'rxjs';
 
@@ -10,7 +10,8 @@ import { map } from 'rxjs';
   styleUrl: './gallery.component.css',
 })
 export class GalleryComponent {
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   vm$ = this.route.params.pipe(
     map(() => {

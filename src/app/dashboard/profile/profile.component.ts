@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -28,6 +28,13 @@ import { SharedModule } from 'src/app/shared/shared.module';
   ],
 })
 export class ProfileComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private usersService = inject(UsersService);
+  private authService = inject(AuthService);
+  private fb = inject(FormBuilder);
+  private toastr = inject(ToastrService);
+  private tokenService = inject(TokenStorageService);
+
   private user = new BehaviorSubject<IUserProfile>({} as IUserProfile);
   user$ = this.user.asObservable();
 
@@ -53,14 +60,7 @@ export class ProfileComponent implements OnInit {
     }
   );
 
-  constructor(
-    private route: ActivatedRoute,
-    private usersService: UsersService,
-    private authService: AuthService,
-    private fb: FormBuilder,
-    private toastr: ToastrService,
-    private tokenService: TokenStorageService
-  ) {
+  constructor() {
     this.userInformation = this.tokenService.getTokenValues() as IUser;
   }
 

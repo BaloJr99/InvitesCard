@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
@@ -16,10 +16,10 @@ import { IAlbumResolved } from '../models/gallery';
   providedIn: 'root',
 })
 export class EventsService {
+  private http = inject(HttpClient);
+
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/events';
-
-  constructor(private http: HttpClient) {}
 
   getEvents(): Observable<IDashboardEvent[]> {
     return this.http.get<IDashboardEvent[]>(this.invitesBaseUrl);

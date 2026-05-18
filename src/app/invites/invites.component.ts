@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IEventTypeResolved } from '../core/models/invites';
 import { EventType } from '../core/models/enum';
@@ -17,11 +17,11 @@ import { WeddingComponent } from './wedding/wedding.component';
 ],
 })
 export class InvitesComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+
   inviteResolved: IEventTypeResolved = {
     eventType: EventType.None,
   };
-
-  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.inviteResolved = this.route.snapshot.data['invite'];

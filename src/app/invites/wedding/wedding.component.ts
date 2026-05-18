@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  Inject,
-  LOCALE_ID,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, ElementRef, LOCALE_ID, ViewEncapsulation, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, map, mergeMap, switchMap } from 'rxjs';
 import { IDownloadImage } from '../../core/models/images';
@@ -26,21 +20,19 @@ import { ConfirmationComponent } from '../shared/confirmation/confirmation.compo
   imports: [CommonModule, CountdownComponent, ConfirmationComponent],
 })
 export class WeddingComponent {
+  private route = inject(ActivatedRoute);
+  private settingsService = inject(SettingsService);
+  private filesService = inject(FilesService);
+  private invitesService = inject(InvitesService);
+  private elRef = inject(ElementRef);
+  private localeValue = inject(LOCALE_ID);
+
   counter = 0;
 
   audio = new Audio();
   playAudio = false;
 
   sections: IInviteSection[] = [];
-
-  constructor(
-    private route: ActivatedRoute,
-    private settingsService: SettingsService,
-    private filesService: FilesService,
-    private invitesService: InvitesService,
-    private elRef: ElementRef,
-    @Inject(LOCALE_ID) private localeValue: string
-  ) {}
 
   vm$ = this.route.params.pipe(
     map((params) => params['id']),

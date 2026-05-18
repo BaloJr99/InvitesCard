@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { BehaviorSubject, combineLatest, map, mergeMap, tap } from 'rxjs';
 import { IEmitAction, ITable, ITableHeaders } from 'src/app/core/models/common';
@@ -30,6 +30,9 @@ import { UserRoleComponent } from './user-role-modal/user-role.component';
   ],
 })
 export class UsersComponent {
+  private usersService = inject(UsersService);
+  private router = inject(Router);
+
   private users = new BehaviorSubject<IUserEventsInfo[]>([]);
   users$ = this.users.asObservable();
 
@@ -63,8 +66,6 @@ export class UsersComponent {
 
   roleSelected: IRole | undefined = undefined;
   savedUser: IUpsertUser | undefined = undefined;
-
-  constructor(private usersService: UsersService, private router: Router) {}
 
   vm$ = this.usersService.getAllUsers().pipe(
     tap((allUsers) => this.users.next(allUsers)),

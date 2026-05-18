@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -14,16 +14,16 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [SharedModule, ValidationPipe, ValidationErrorPipe],
 })
 export class PasswordResetComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+
   passwordResetForm: FormGroup;
   passwordReset = false;
   showPassword = false;
   showConfirmPassword = false;
 
-  constructor(
-    private route: ActivatedRoute,
-    private fb: FormBuilder,
-    private authService: AuthService
-  ) {
+  constructor() {
     this.passwordResetForm = this.fb.group(
       {
         password: ['', Validators.required],

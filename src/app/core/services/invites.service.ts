@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
@@ -18,10 +18,10 @@ import { IBulkMessageResponse, IMessageResponse } from '../models/common';
   providedIn: 'root',
 })
 export class InvitesService {
+  private http = inject(HttpClient);
+
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/invites';
-
-  constructor(private http: HttpClient) {}
 
   getAllInvites(): Observable<IDashboardInvite[]> {
     return this.http.get<IDashboardInvite[]>(this.invitesBaseUrl);

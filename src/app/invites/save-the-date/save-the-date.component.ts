@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  Inject,
-  LOCALE_ID,
-} from '@angular/core';
+import { Component, ElementRef, HostListener, LOCALE_ID, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, map, mergeMap, switchMap } from 'rxjs';
 import {
@@ -32,6 +26,14 @@ import { AccomodationComponent } from './accomodations/accomodation.component';
   imports: [AccomodationComponent, CommonModule],
 })
 export class SaveTheDateComponent {
+  private route = inject(ActivatedRoute);
+  private settingsService = inject(SettingsService);
+  private filesService = inject(FilesService);
+  private invitesService = inject(InvitesService);
+  private elRef = inject(ElementRef);
+  private commonModalService = inject(CommonModalService);
+  private localeValue = inject(LOCALE_ID);
+
   @HostListener('document:visibilitychange')
   visibilitychange() {
     if (document.visibilityState === 'hidden' && this.playAudio) {
@@ -47,16 +49,6 @@ export class SaveTheDateComponent {
   downloadImages: IDownloadImage[] = [];
   audio = new Audio();
   playAudio = false;
-
-  constructor(
-    private route: ActivatedRoute,
-    private settingsService: SettingsService,
-    private filesService: FilesService,
-    private invitesService: InvitesService,
-    private elRef: ElementRef,
-    private commonModalService: CommonModalService,
-    @Inject(LOCALE_ID) private localeValue: string
-  ) {}
 
   vm$ = this.route.params.pipe(
     map((params) => params['id']),

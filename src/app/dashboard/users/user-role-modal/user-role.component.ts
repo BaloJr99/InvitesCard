@@ -1,9 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -33,6 +28,10 @@ import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe
   ],
 })
 export class UserRoleComponent {
+  private rolesService = inject(RolesService);
+  private fb = inject(FormBuilder);
+  private toastr = inject(ToastrService);
+
   private roleAction = new BehaviorSubject<IRoleAction>({
     action: RoleActionEvent.None,
     role: {
@@ -68,12 +67,6 @@ export class UserRoleComponent {
       validators: controlIsDuplicated,
     }
   );
-
-  constructor(
-    private rolesService: RolesService,
-    private fb: FormBuilder,
-    private toastr: ToastrService
-  ) {}
 
   vm$ = combineLatest([this.roleAction$, this.showModal]).pipe(
     tap(([roleAction, showModal]) => {

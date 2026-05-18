@@ -8,89 +8,111 @@
     </nav>
   </div>
 </section>
-<section class="files" *ngIf="vm$ | async as vm">
-  <div class="row g-0 main-controls">
-    <div class="col-12 col-md-4 gx-4">
-      <div class="form-group">
-        <label for="event-select" i18n>Seleccione un evento</label>
-        <select #eventSelect id="event-select" class="form-control" (change)="searchImages()">
-          <option value="" i18n>Seleccione...</option>
-          <option *ngFor="let event of events" [value]="event.id">{{ event.nameOfEvent }}</option>
-        </select>
+@if(vm$ | async; as vm) {
+  <section class="files">
+    <div class="row g-0 main-controls">
+      <div class="col-12 col-md-4 gx-4">
+        <div class="form-group">
+          <label for="event-select" i18n>Seleccione un evento</label>
+          <select #eventSelect id="event-select" class="form-control" (change)="searchImages()">
+            <option value="" i18n>Seleccione...</option>
+            @for (event of events; track $index) {
+              <option [value]="event.id">{{ event.nameOfEvent }}</option>
+            }
+          </select>
+        </div>
       </div>
+      @if (eventSelected) {
+        <form class="upload-form col-12 col-md-12" [formGroup]="saveFilesForm">
+          <div class="row g-0 justify-content-end">
+            <div class="col-12 col-md-5 gx-4">
+              <label for="photoFiles" i18n>Seleccionar fotos</label>
+              <input id="photoFiles" class="form-control" formControlName="photoFiles" type="file" (change)="onPhotosChange($event)" multiple accept=".png, .jpg, .jpeg">
+            </div>
+            <div class="col-12 col-md-5 gx-4">
+              <label for="musicFiles" i18n>Seleccionar música</label>
+              <input id="musicFiles" class="form-control" formControlName="musicFiles" type="file" (change)="onMusicChange($event)" accept=".mp3">
+            </div>
+            <div class="col-12 col-md-2 form-footer gx-4 mt-2" >
+              <button class="btn btn-dark" (click)="saveFiles()" i18n>Subir archivos</button>
+            </div>
+          </div>
+        </form>
+      }
     </div>
-    <form class="upload-form col-12 col-md-12" [formGroup]="saveFilesForm" *ngIf="eventSelected">
-      <div class="row g-0 justify-content-end">
-        <div class="col-12 col-md-5 gx-4">
-          <label for="photoFiles" i18n>Seleccionar fotos</label>
-          <input id="photoFiles" class="form-control" formControlName="photoFiles" type="file" (change)="onPhotosChange($event)" multiple accept=".png, .jpg, .jpeg">
-        </div>
-        <div class="col-12 col-md-5 gx-4">
-          <label for="musicFiles" i18n>Seleccionar música</label>
-          <input id="musicFiles" class="form-control" formControlName="musicFiles" type="file" (change)="onMusicChange($event)" accept=".mp3">
-        </div>
-        <div class="col-12 col-md-2 form-footer gx-4 mt-2" >
-          <button class="btn btn-dark" (click)="saveFiles()" i18n>Subir archivos</button>
-        </div>
-      </div>
-    </form>
-  </div>
 
-  <div class="row g-0">
-    <div class="col-12 gx-4" [formGroup]="filesUpdateForm">
-      <div class="image-container mb-3" formArrayName="images" *ngIf="filesUpdateForm.controls['images'].length > 0">
-        <div class="card" *ngFor="let imageGroup of filesUpdateForm.controls['images'].controls; index as i">
-          <div class="card-body" [formGroup]="imageGroup"> 
-            <div class="image-controls">
-              <img src="{{ imageGroup.controls.fileUrl.value }}" alt="Invite Photo {{i}}">
-              <button class="btn btn-light" (click)="scaleImageUrl = imageGroup.controls.fileUrl.value" title="Expandir foto" i18n-title><i aria-hidden="true" class="fa-solid fa-expand"></i></button>
-            </div>
-            <div class="controls">
-              <div class="form-group">
-                <label for="my-select-{{i}}" i18n>Uso de la imagen</label>
-                <select id="my-select-{{i}}" class="form-control" formControlName="imageUsage">
-                  <option value="" i18n>Seleccione...</option>
-                  <option value="B" i18n>Ambos</option>
-                  <option value="P" i18n>Celular</option>
-                  <option value="C" i18n>Computadora</option>
-                  <option value="M" i18n>Principal (Celular)</option>
-                  <option value="D" i18n>Principal (Computadora)</option>
-                  <option value="G" i18n>Gallery</option>
-                </select>
-                <button class="btn btn-danger" title="Eliminar imagen" i18n-title (click)="showImageDeleteDialog(imageGroup.controls.id.value)"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+    <div class="row g-0">
+      <div class="col-12 gx-4" [formGroup]="filesUpdateForm">
+        @if (filesUpdateForm.controls['images'].length > 0) {
+          <div class="image-container mb-3" formArrayName="images">
+            @for (imageGroup of filesUpdateForm.controls['images'].controls; track $index) {
+              <div class="card">
+                <div class="card-body" [formGroup]="imageGroup"> 
+                  <div class="image-controls">
+                    <img src="{{ imageGroup.controls.fileUrl.value }}" alt="Invite Photo {{$index}}">
+                    <button class="btn btn-light" (click)="scaleImageUrl = imageGroup.controls.fileUrl.value" title="Expandir foto" i18n-title><i aria-hidden="true" class="fa-solid fa-expand"></i></button>
+                  </div>
+                  <div class="controls">
+                    <div class="form-group">
+                      <label for="my-select-{{$index}}" i18n>Uso de la imagen</label>
+                      <select id="my-select-{{$index}}" class="form-control" formControlName="imageUsage">
+                        <option value="" i18n>Seleccione...</option>
+                        <option value="B" i18n>Ambos</option>
+                        <option value="P" i18n>Celular</option>
+                        <option value="C" i18n>Computadora</option>
+                        <option value="M" i18n>Principal (Celular)</option>
+                        <option value="D" i18n>Principal (Computadora)</option>
+                        <option value="G" i18n>Gallery</option>
+                      </select>
+                      <button class="btn btn-danger" title="Eliminar imagen" i18n-title (click)="showImageDeleteDialog(imageGroup.controls.id.value)"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
+            }
           </div>
-        </div>
-      </div>
-      <div class="music-container mb-3" *ngIf="filesUpdateForm.controls['audios'].length > 0">
-        <div class="card"*ngFor="let audioControl of filesUpdateForm.controls['audios'].controls; index as i">
-          <div class="card-body">
-            <div class="audio-controls">
-              <audio controls>
-                <source src="{{ audioControl.controls.fileUrl.value }}" type="audio/mp3">
-                Your browser does not support the audio element.
-              </audio>
-              <button class="btn btn-danger" i18n-title title="Eliminar Audio" (click)="showAudioDeleteDialog(audioControl.controls.id.value)"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
-            </div>
+        }
+        
+        @if (filesUpdateForm.controls['audios'].length > 0) {
+          <div class="music-container mb-3">
+            @for (audioControl of filesUpdateForm.controls['audios'].controls; track $index) {
+              <div class="card">
+                <div class="card-body">
+                  <div class="audio-controls">
+                    <audio controls>
+                      <source src="{{ audioControl.controls.fileUrl.value }}" type="audio/mp3">
+                      Your browser does not support the audio element.
+                    </audio>
+                    <button class="btn btn-danger" i18n-title title="Eliminar Audio" (click)="showAudioDeleteDialog(audioControl.controls.id.value)"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+                  </div>
+                </div>
+              </div>
+            }
           </div>
-        </div>
+        }
       </div>
     </div>
-  </div>
-  <div class="footer" *ngIf="filesUpdateForm.controls['audios'].length > 0 || filesUpdateForm.controls['images'].length > 0">
-    <button id="cancel-changes" class="btn btn-dark" (click)="cancelChanges()" [disabled]="!filesUpdateForm.dirty" i18n>Cancelar Cambios</button>
-    <button id="save-changes" class="btn btn-dark" (click)="saveChanges()" [disabled]="!filesUpdateForm.dirty" i18n>Guardar Cambios</button>
-  </div>  
-</section>
-<section class="files-empty" *ngIf="!eventSelected">
-  <p i18n>Porfavor, seleccione un evento</p>
-</section>
-<section class="show-image" *ngIf="scaleImageUrl"> 
-  <div class="card">
-    <div class="card-body">
-      <img [src]="scaleImageUrl" alt="Scaled Image" lazyload>
-      <button class="btn btn-danger" (click)="scaleImageUrl = ''" i18n>Cerrar</button>
+    @if (filesUpdateForm.controls['audios'].length > 0 || filesUpdateForm.controls['images'].length > 0) {
+      <div class="footer">
+        <button id="cancel-changes" class="btn btn-dark" (click)="cancelChanges()" [disabled]="!filesUpdateForm.dirty" i18n>Cancelar Cambios</button>
+        <button id="save-changes" class="btn btn-dark" (click)="saveChanges()" [disabled]="!filesUpdateForm.dirty" i18n>Guardar Cambios</button>
+      </div>
+    }
+  </section>
+}
+@if (!eventSelected) {
+  <section class="files-empty">
+    <p i18n>Porfavor, seleccione un evento</p>
+  </section>
+}
+
+@if (scaleImageUrl) {
+  <section class="show-image"> 
+    <div class="card">
+      <div class="card-body">
+        <img [src]="scaleImageUrl" alt="Scaled Image" lazyload>
+        <button class="btn btn-danger" (click)="scaleImageUrl = ''" i18n>Cerrar</button>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+}

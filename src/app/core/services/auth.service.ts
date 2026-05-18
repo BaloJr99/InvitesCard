@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IAuthUser } from '../models/users';
@@ -10,10 +10,10 @@ import { IMessageResponse } from '../models/common';
   providedIn: 'root',
 })
 export class AuthService {
+  private http = inject(HttpClient);
+
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/auth';
-
-  constructor(private http: HttpClient) {}
 
   loginAccount(user: IAuthUser): Observable<IToken> {
     return this.http.post<IToken>(`${this.invitesBaseUrl}/signin`, user, {

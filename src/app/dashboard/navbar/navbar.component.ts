@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { NavigationStart, Router, Scroll, RouterModule } from '@angular/router';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { INotification } from 'src/app/core/models/common';
@@ -15,6 +15,11 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, RouterModule],
 })
 export class NavbarComponent implements OnInit {
+  private router = inject(Router);
+  private invitesService = inject(InvitesService);
+  private tokenService = inject(TokenStorageService);
+  private commonService = inject(CommonInvitesService);
+
   private notifications = new BehaviorSubject<INotification[]>([]);
   notifications$ = this.notifications.asObservable();
   private route = new BehaviorSubject<string>('');
@@ -23,13 +28,6 @@ export class NavbarComponent implements OnInit {
   @Input() set notificationsValue(value: INotification[]) {
     this.notifications.next(value);
   }
-
-  constructor(
-    private router: Router,
-    private invitesService: InvitesService,
-    private tokenService: TokenStorageService,
-    private commonService: CommonInvitesService
-  ) {}
 
   vm$ = combineLatest([this.notifications$, this.route$]).pipe(
     map(([notifications, route]) => {

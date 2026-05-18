@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -25,6 +25,10 @@ import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe
   ],
 })
 export class ChangePasswordComponent {
+  private fb = inject(FormBuilder);
+  private toastrService = inject(ToastrService);
+  private authService = inject(AuthService);
+
   @Input() userId: string = '';
   @Output() showChangePasswordValue = new EventEmitter<boolean>();
   passwordResetForm: FormGroup = this.fb.group(
@@ -36,12 +40,6 @@ export class ChangePasswordComponent {
       validators: matchPassword,
     }
   );
-
-  constructor(
-    private fb: FormBuilder,
-    private toastrService: ToastrService,
-    private authService: AuthService
-  ) {}
 
   resetPassword(): void {
     if (this.passwordResetForm.valid && this.passwordResetForm.dirty) {

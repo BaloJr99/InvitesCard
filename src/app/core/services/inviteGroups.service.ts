@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { IInviteGroups } from '../models/inviteGroups';
@@ -9,10 +9,10 @@ import { IMessageResponse } from '../models/common';
   providedIn: 'root',
 })
 export class InviteGroupsService {
+  private http = inject(HttpClient);
+
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/inviteGroups';
-
-  constructor(private http: HttpClient) {}
 
   getAllInviteGroups(eventId: string): Observable<IInviteGroups[]> {
     return this.http.get<IInviteGroups[]>(`${this.invitesBaseUrl}/${eventId}`);

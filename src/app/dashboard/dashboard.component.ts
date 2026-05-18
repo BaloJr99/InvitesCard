@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { NavigationStart, Router, Scroll, RouterModule } from '@angular/router';
 import { TokenStorageService } from '../core/services/token-storage.service';
 import { SocketService } from '../core/services/socket.service';
@@ -17,15 +17,13 @@ import { SidebarComponent } from './sidebar/sidebar.component';
   imports: [CommonModule, NavbarComponent, RouterModule, SidebarComponent],
 })
 export class DashboardComponent implements OnInit {
+  private tokenService = inject(TokenStorageService);
+  private socket = inject(SocketService);
+  private commonInvitesService = inject(CommonInvitesService);
+  private router = inject(Router);
+
   private route = new BehaviorSubject<string>('');
   route$ = this.route.asObservable();
-
-  constructor(
-    private tokenService: TokenStorageService,
-    private socket: SocketService,
-    private commonInvitesService: CommonInvitesService,
-    private router: Router
-  ) {}
 
   vm$ = combineLatest([
     this.route$,

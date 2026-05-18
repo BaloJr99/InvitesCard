@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
@@ -16,10 +16,10 @@ import { IMessageResponse } from '../models/common';
   providedIn: 'root',
 })
 export class UsersService {
+  private http = inject(HttpClient);
+
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/users';
-
-  constructor(private http: HttpClient) {}
 
   getAllUsers(): Observable<IUserEventsInfo[]> {
     return this.http.get<IUserEventsInfo[]>(this.invitesBaseUrl);

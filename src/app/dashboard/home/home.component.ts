@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { EventType } from 'src/app/core/models/enum';
@@ -17,17 +17,15 @@ Chart.register(...registerables);
   imports: [SharedModule],
 })
 export class HomeComponent {
+  private invitesService = inject(InvitesService);
+  private eventsService = inject(EventsService);
+
   private eventSelected = new BehaviorSubject<string>('');
   eventSelected$ = this.eventSelected.asObservable();
   private invites = new BehaviorSubject<IDashboardInvite[]>([]);
   invites$ = this.invites.asObservable();
   lastInvitesChart: Chart<'bar', number[], string> | undefined;
   historyChart: Chart<'pie', number[], string> | undefined;
-
-  constructor(
-    private invitesService: InvitesService,
-    private eventsService: EventsService
-  ) {}
 
   history$ = this.invites$.pipe(
     map((invites) => {

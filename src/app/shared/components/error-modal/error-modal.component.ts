@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {} from 'bootstrap';
+import { Component, inject } from '@angular/core';
+
 import { map } from 'rxjs';
 import { IZodErrors } from 'src/app/core/models/common';
 import { ErrorModalService } from 'src/app/core/services/error.service';
@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
 })
 export class ErrorModalComponent {
-  constructor(public errorService: ErrorModalService) {}
+  errorService = inject(ErrorModalService);
 
   vm$ = this.errorService.errorResponse$.pipe(
     map((information) => {

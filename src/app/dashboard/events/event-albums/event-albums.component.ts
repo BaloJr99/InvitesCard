@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { BehaviorSubject, map, switchMap, tap } from 'rxjs';
 import { IAlbum, IAlbumResolved } from 'src/app/core/models/gallery';
@@ -13,13 +13,11 @@ import { QrCodeModalComponent } from 'src/app/shared/components/qr-code-modal/qr
   styleUrl: './event-albums.component.css',
 })
 export class AlbumsComponent {
+  private galleryService = inject(GalleryService);
+  private route = inject(ActivatedRoute);
+
   galleryUrl = '';
   showQRCode = false;
-
-  constructor(
-    private galleryService: GalleryService,
-    private route: ActivatedRoute
-  ) {}
 
   albumsResolved = {} as IAlbumResolved;
 

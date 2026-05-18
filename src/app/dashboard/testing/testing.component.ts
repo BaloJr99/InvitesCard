@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { EnvironmentService } from 'src/app/core/services/environment.service';
@@ -10,10 +10,8 @@ import { EnvironmentService } from 'src/app/core/services/environment.service';
   imports: [RouterModule],
 })
 export class TestingComponent {
-  constructor(
-    private environmentService: EnvironmentService,
-    private toastrService: ToastrService
-  ) {}
+  private environmentService = inject(EnvironmentService);
+  private toastrService = inject(ToastrService);
 
   cleanEnvironment(): void {
     this.environmentService.cleanEnvironment().subscribe({

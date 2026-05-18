@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
@@ -13,10 +13,10 @@ import { IMessageResponse } from '../models/common';
   providedIn: 'root',
 })
 export class SettingsService {
+  private http = inject(HttpClient);
+
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/settings';
-
-  constructor(private http: HttpClient) {}
 
   getEventSettings(eventId: string): Observable<IBaseSettings> {
     return this.http.get<IBaseSettings>(`${this.invitesBaseUrl}/${eventId}`);

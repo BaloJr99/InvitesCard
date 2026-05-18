@@ -1,4 +1,4 @@
-import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, LOCALE_ID, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, combineLatest, map, mergeMap } from 'rxjs';
 import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
@@ -61,17 +61,15 @@ import { dateToUTCDate } from 'src/app/shared/utils/tools';
   ],
 })
 export class EventDetailsComponent implements OnInit {
-  constructor(
-    private route: ActivatedRoute,
-    private inviteGroupsService: InviteGroupsService,
-    private invitesService: InvitesService,
-    private eventsService: EventsService,
-    private commonInvitesService: CommonInvitesService,
-    private socket: SocketService,
-    private toastrService: ToastrService,
-    private commonModalService: CommonModalService,
-    @Inject(LOCALE_ID) private localeValue: string
-  ) {}
+  private route = inject(ActivatedRoute);
+  private inviteGroupsService = inject(InviteGroupsService);
+  private invitesService = inject(InvitesService);
+  private eventsService = inject(EventsService);
+  private commonInvitesService = inject(CommonInvitesService);
+  private socket = inject(SocketService);
+  private toastrService = inject(ToastrService);
+  private commonModalService = inject(CommonModalService);
+  private localeValue = inject(LOCALE_ID);
 
   showInviteModal = false;
   showImportInvitesModal = false;

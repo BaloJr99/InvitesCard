@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 
@@ -8,10 +8,8 @@ import { TokenStorageService } from 'src/app/core/services/token-storage.service
   styleUrls: ['./not-authorized.component.css'],
 })
 export class NotAuthorizedComponent {
-  constructor(
-    private router: Router,
-    private tokenService: TokenStorageService
-  ) {}
+  private router = inject(Router);
+  private tokenService = inject(TokenStorageService);
 
   logout(): void {
     this.tokenService.signOut();

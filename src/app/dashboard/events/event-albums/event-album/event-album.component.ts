@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, map, switchMap, tap } from 'rxjs';
 import { IAlbumImage, IAlbumResolved } from 'src/app/core/models/gallery';
@@ -12,10 +12,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
   styleUrl: './event-album.component.css',
 })
 export class AlbumComponent {
-  constructor(
-    private route: ActivatedRoute,
-    private galleryService: GalleryService
-  ) {}
+  private route = inject(ActivatedRoute);
+  private galleryService = inject(GalleryService);
 
   private albumResolved = {} as IAlbumResolved;
 

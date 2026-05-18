@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IAuthUser } from 'src/app/core/models/users';
@@ -16,17 +16,17 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [SharedModule, ValidationPipe, ValidationErrorPipe],
 })
 export class LoginComponent {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private tokenService = inject(TokenStorageService);
+
   loginForm: FormGroup;
 
   authErrorMessage = '';
   showPassword = false;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private tokenService: TokenStorageService
-  ) {
+  constructor() {
     this.loginForm = this.fb.group({
       usernameOrEmail: ['', Validators.required],
       password: ['', Validators.required],

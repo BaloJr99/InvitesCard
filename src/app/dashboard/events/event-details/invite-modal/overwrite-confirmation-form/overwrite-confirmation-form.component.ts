@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { IMessageResponse } from 'src/app/core/models/common';
@@ -22,6 +22,10 @@ import { EventType } from 'src/app/core/models/enum';
   ],
 })
 export class OverwriteConfirmationFormComponent {
+  private invitesService = inject(InvitesService);
+  private fb = inject(FormBuilder);
+  private toastr = inject(ToastrService);
+
   private overwriteConfirmation = new BehaviorSubject<IOverwriteConfirmation>({
     id: '',
     entriesConfirmed: 0,
@@ -57,12 +61,6 @@ export class OverwriteConfirmationFormComponent {
     id: ['', Validators.required],
     entriesConfirmed: ['', Validators.required],
   });
-
-  constructor(
-    private invitesService: InvitesService,
-    private fb: FormBuilder,
-    private toastr: ToastrService
-  ) {}
 
   vm$ = combineLatest([
     this.overwriteConfirmation$,

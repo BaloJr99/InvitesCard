@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import {
@@ -25,6 +25,10 @@ import { CommonModule } from '@angular/common';
   ],
 })
 export class InviteGroupFormComponent {
+  private inviteGroupsService = inject(InviteGroupsService);
+  private fb = inject(FormBuilder);
+  private toastr = inject(ToastrService);
+
   private inviteGroup!: IInviteGroups;
   @Input() set inviteGroupValue(value: IInviteGroups) {
     this.inviteGroup = value;
@@ -48,12 +52,6 @@ export class InviteGroupFormComponent {
     },
     { validators: controlIsDuplicated }
   );
-
-  constructor(
-    private inviteGroupsService: InviteGroupsService,
-    private fb: FormBuilder,
-    private toastr: ToastrService
-  ) {}
 
   toggleIsCreatingNewFormGroup(): void {
     this.isCreatingNewFormGroup.emit(false);

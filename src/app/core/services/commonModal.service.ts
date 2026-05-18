@@ -1,9 +1,4 @@
-import {
-  ApplicationRef,
-  ComponentRef,
-  createComponent,
-  Injectable,
-} from '@angular/core';
+import { ApplicationRef, ComponentRef, createComponent, Injectable, inject } from '@angular/core';
 import { ICommonModal } from '../models/common';
 import { CommonModalComponent } from 'src/app/shared/components/common-modal/common-modal.component';
 import { Observable, Subject } from 'rxjs';
@@ -13,10 +8,10 @@ import { CommonModalResponse } from '../models/enum';
   providedIn: 'root',
 })
 export class CommonModalService {
+  private applicationRef = inject(ApplicationRef);
+
   private componentRef!: ComponentRef<CommonModalComponent>;
   private componentSubscriber!: Subject<CommonModalResponse>;
-
-  constructor(private applicationRef: ApplicationRef) {}
 
   open(options: ICommonModal): Observable<CommonModalResponse> {
     const environmentInjector = this.applicationRef.injector;

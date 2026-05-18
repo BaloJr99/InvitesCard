@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -37,6 +37,11 @@ import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe
   ],
 })
 export class UserModalComponent {
+  private usersService = inject(UsersService);
+  private rolesService = inject(RolesService);
+  private fb = inject(FormBuilder);
+  private toastr = inject(ToastrService);
+
   serverErrorMessage: string = '';
 
   private userAction = new BehaviorSubject<IUserAction>({
@@ -137,13 +142,6 @@ export class UserModalComponent {
     }
   );
   roleSelected: IRole | undefined = undefined;
-
-  constructor(
-    private usersService: UsersService,
-    private rolesService: RolesService,
-    private fb: FormBuilder,
-    private toastr: ToastrService
-  ) {}
 
   saveUser() {
     this.serverErrorMessage = '';

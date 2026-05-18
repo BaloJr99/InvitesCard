@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, combineLatest, EMPTY, Observable, take, tap } from 'rxjs';
@@ -26,6 +26,13 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [SharedModule],
 })
 export class FilesComponent {
+  private eventsService = inject(EventsService);
+  private filesService = inject(FilesService);
+  private fileReaderService = inject(FileReaderService);
+  private commonModalService = inject(CommonModalService);
+  private fb = inject(FormBuilder);
+  private toastr = inject(ToastrService);
+
   events: IDropdownEvent[] = [];
   eventSelected: IDropdownEvent | undefined = undefined;
 
@@ -42,15 +49,6 @@ export class FilesComponent {
     musicFiles: '',
     musicFilesSource: '',
   });
-
-  constructor(
-    private eventsService: EventsService,
-    private filesService: FilesService,
-    private fileReaderService: FileReaderService,
-    private commonModalService: CommonModalService,
-    private fb: FormBuilder,
-    private toastr: ToastrService
-  ) {}
 
   vm$ = this.eventsService.getDropdownEvents().pipe(
     tap((events) => {

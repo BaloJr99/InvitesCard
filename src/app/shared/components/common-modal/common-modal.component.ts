@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { ICommonModal } from 'src/app/core/models/common';
 import { CommonModalType } from 'src/app/core/models/enum';
 import { CommonModalService } from 'src/app/core/services/commonModal.service';
@@ -11,6 +11,8 @@ import { NgClass } from '@angular/common';
   imports: [NgClass],
 })
 export class CommonModalComponent {
+  commonModalService = inject(CommonModalService);
+
   @Input() set options(value: ICommonModal) {
     this.commonModalData = value;
     if (value.modalType === CommonModalType.Confirm) {
@@ -36,9 +38,7 @@ export class CommonModalComponent {
 
   actionButton1 = '';
   actionButton2 = '';
-
-  constructor(public commonModalService: CommonModalService) {}
-
+  
   confirmAction(): void {
     this.confirmModal.emit();
   }

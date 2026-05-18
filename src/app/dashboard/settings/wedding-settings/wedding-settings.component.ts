@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -34,6 +34,11 @@ import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe
   ],
 })
 export class WeddingSettingsComponent {
+  private eventsService = inject(EventsService);
+  private settingsService = inject(SettingsService);
+  private fb = inject(FormBuilder);
+  private toastr = inject(ToastrService);
+
   private weddingSettingsAction = {
     isNew: undefined,
     eventType: EventType.Wedding,
@@ -208,12 +213,7 @@ export class WeddingSettingsComponent {
     )
   );
 
-  constructor(
-    private eventsService: EventsService,
-    private settingsService: SettingsService,
-    private fb: FormBuilder,
-    private toastr: ToastrService
-  ) {
+  constructor() {
     this.baseSections = [
       {
         sectionId: 'inviteInfo',

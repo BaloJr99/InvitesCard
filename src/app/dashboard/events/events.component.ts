@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { EventType, Roles } from 'src/app/core/models/enum';
 import { IDashboardEvent, IEventAction } from 'src/app/core/models/events';
@@ -17,10 +17,8 @@ import { DateFormatPipe } from '../../shared/pipes/date-format.pipe';
   imports: [CommonModule, EventModalComponent, DateFormatPipe, RouterModule],
 })
 export class EventsComponent {
-  constructor(
-    private eventsService: EventsService,
-    private tokenService: TokenStorageService
-  ) {}
+  private eventsService = inject(EventsService);
+  private tokenService = inject(TokenStorageService);
 
   private baseEvent = {
     id: '',

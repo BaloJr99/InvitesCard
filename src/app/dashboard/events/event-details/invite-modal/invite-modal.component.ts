@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -39,6 +39,10 @@ import { OverwriteConfirmationFormComponent } from './overwrite-confirmation-for
   ],
 })
 export class InviteModalComponent {
+  private invitesService = inject(InvitesService);
+  private fb = inject(FormBuilder);
+  private toastr = inject(ToastrService);
+
   private inviteAction = new BehaviorSubject<IInviteAction>({
     invite: {
       id: '',
@@ -106,12 +110,6 @@ export class InviteModalComponent {
     id: '',
     confirmation: null,
   };
-
-  constructor(
-    private invitesService: InvitesService,
-    private fb: FormBuilder,
-    private toastr: ToastrService
-  ) {}
 
   vm$ = combineLatest([
     this.inviteAction$,

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -27,13 +27,11 @@ import { SharedModule } from 'src/app/shared/shared.module';
   styleUrl: './album.component.css',
 })
 export class AlbumComponent {
-  constructor(
-    private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private galleryService: GalleryService,
-    private fileReaderService: FileReaderService,
-    private toastrService: ToastrService
-  ) {}
+  private fb = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
+  private galleryService = inject(GalleryService);
+  private fileReaderService = inject(FileReaderService);
+  private toastrService = inject(ToastrService);
 
   private albumResolved = {} as IAlbumResolved;
   private uploadProgress = new Subject<string>();

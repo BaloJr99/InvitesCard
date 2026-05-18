@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Roles } from 'src/app/core/models/enum';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { RouterModule } from '@angular/router';
@@ -11,9 +11,9 @@ import { RouterModule } from '@angular/router';
   imports: [RouterModule],
 })
 export class SidebarComponent implements OnInit {
-  isAdmin = false;
+  private tokenService = inject(TokenStorageService);
 
-  constructor(private tokenService: TokenStorageService) {}
+  isAdmin = false;
 
   ngOnInit(): void {
     const userInformation = this.tokenService.getTokenValues();

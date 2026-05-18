@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, combineLatest, map, Observable, of, tap } from 'rxjs';
@@ -17,6 +17,10 @@ import { controlIsDuplicated } from 'src/app/shared/utils/validators/controlIsDu
   styleUrl: './album-modal.component.css',
 })
 export class AlbumModalComponent {
+  private galleryService = inject(GalleryService);
+  private fb = inject(FormBuilder);
+  private toastr = inject(ToastrService);
+
   private baseAlbum = {
     id: '',
     nameOfAlbum: '',
@@ -52,12 +56,6 @@ export class AlbumModalComponent {
     },
     { validators: controlIsDuplicated }
   );
-
-  constructor(
-    private galleryService: GalleryService,
-    private fb: FormBuilder,
-    private toastr: ToastrService
-  ) {}
 
   vm$ = combineLatest([this.showModal$, this.albumAction$]).pipe(
     tap(([showModal, albumAction]) => {

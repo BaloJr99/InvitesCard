@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -34,6 +34,12 @@ import { CommonModule } from '@angular/common';
   ],
 })
 export class EventModalComponent {
+  private eventsService = inject(EventsService);
+  private usersService = inject(UsersService);
+  private fb = inject(FormBuilder);
+  private toastr = inject(ToastrService);
+  private commonModalService = inject(CommonModalService);
+
   private baseEvent = {
     id: '',
     nameOfEvent: '',
@@ -115,14 +121,6 @@ export class EventModalComponent {
       };
     })
   );
-
-  constructor(
-    private eventsService: EventsService,
-    private usersService: UsersService,
-    private fb: FormBuilder,
-    private toastr: ToastrService,
-    private commonModalService: CommonModalService
-  ) {}
 
   saveEvent() {
     if (this.createEventForm.valid && this.createEventForm.dirty) {

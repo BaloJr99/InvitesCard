@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { BehaviorSubject, filter, map, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, map, switchMap, tap } from 'rxjs';
 import {
   IAlbum,
   IAlbumAction,
@@ -18,10 +18,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './albums.component.css',
 })
 export class AlbumsComponent {
-  constructor(
-    private galleryService: GalleryService,
-    private route: ActivatedRoute
-  ) {}
+  private galleryService = inject(GalleryService);
+  private route = inject(ActivatedRoute);
 
   albumsResolved = {} as IAlbumResolved;
 
