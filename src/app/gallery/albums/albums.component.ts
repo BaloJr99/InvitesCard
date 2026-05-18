@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { BehaviorSubject, map, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, filter, map, switchMap, tap } from 'rxjs';
 import {
   IAlbum,
   IAlbumAction,
@@ -41,7 +41,10 @@ export class AlbumsComponent {
   showAlbumModal = false;
 
   private albums = new BehaviorSubject<IAlbum[]>([]);
-  albums$ = this.albums.asObservable();
+  albums$ = this.albums.asObservable().pipe(
+    // Filter out the inactive albums
+    map((albums) => albums.filter((album) => album.isActive))
+  );
 
   vm$ = this.route.data.pipe(
     map((data) => {
