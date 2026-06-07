@@ -262,7 +262,7 @@
     "1722679471862650883": "{$TAG_INPUT} No ",
     "5251602584326827612": "ENVIAR",
     "7753194795068578971": "Su respuesta ha sido enviada",
-    "6632139447954098081": "Muchas gracias por su tiempo. {$START_TAG_SPAN} Le compartimos el Flyer con información sobre el hotel {$LINE_BREAK}{$START_ITALIC_TEXT}{$CLOSE_ITALIC_TEXT}{$LINE_BREAK}{$START_LINK}{$INTERPOLATION}{$CLOSE_LINK}{$CLOSE_TAG_SPAN}",
+    "8179449126819768702": "Muchas gracias por su tiempo. {$START_BLOCK_IF}{$START_TAG_SPAN} Le compartimos el Flyer con información sobre el hotel {$LINE_BREAK}{$START_ITALIC_TEXT}{$CLOSE_ITALIC_TEXT}{$LINE_BREAK}{$START_LINK}{$INTERPOLATION}{$CLOSE_LINK}{$CLOSE_TAG_SPAN}{$CLOSE_BLOCK_IF}",
     "335617198286430489": "Puede cerrar la página",
     "6920542179199172768": "DO",
     "7267509033418068719": "LU",

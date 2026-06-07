@@ -262,7 +262,7 @@
     "1722679471862650883": "{$TAG_INPUT} No ",
     "5251602584326827612": "SUBMIT",
     "7753194795068578971": "Your response has been sent",
-    "6632139447954098081": "Thank you very much for your time. {$START_TAG_SPAN} Here is the Flyer with information about the hotel {$LINE_BREAK}{$START_ITALIC_TEXT}{$CLOSE_ITALIC_TEXT}{$LINE_BREAK}{$START_LINK}{$INTERPOLATION}{$CLOSE_LINK}{$CLOSE_TAG_SPAN}",
+    "8179449126819768702": "Thank you very much for your time. {$START_BLOCK_IF}{$START_TAG_SPAN} Here is the Flyer with information about the hotel {$LINE_BREAK}{$START_ITALIC_TEXT}{$CLOSE_ITALIC_TEXT}{$LINE_BREAK}{$START_LINK}{$INTERPOLATION}{$CLOSE_LINK}{$CLOSE_TAG_SPAN}{$CLOSE_BLOCK_IF}",
     "335617198286430489": "You can close the page",
     "6920542179199172768": "SUN",
     "7267509033418068719": "MON",
