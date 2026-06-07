@@ -6,7 +6,7 @@ import { SpinnerComponent } from 'src/app/shared/components/spinner/spinner.comp
 
 describe('Spinner Component (Isolated Test)', () => {
   let component: SpinnerComponent;
-  let loadingSubject = new Subject<ISpinner>();
+  const loadingSubject = new Subject<ISpinner>();
   const loaderSpy = jasmine.createSpyObj('LoaderService', [], {
     loading$: loadingSubject.asObservable(),
   });
