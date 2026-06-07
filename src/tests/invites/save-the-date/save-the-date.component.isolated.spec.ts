@@ -1,29 +1,36 @@
-import { ElementRef } from '@angular/core';
+import { ElementRef, LOCALE_ID } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
+import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { FilesService } from 'src/app/core/services/files.service';
+import { InvitesService } from 'src/app/core/services/invites.service';
+import { SettingsService } from 'src/app/core/services/settings.service';
 import { SaveTheDateComponent } from 'src/app/invites/save-the-date/save-the-date.component';
 
 describe('Save The Date Settings Component (Isolated Test)', () => {
   let component: SaveTheDateComponent;
+  const activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', [''], {
+    params: of({ id: 1 }),
+  });
+  const settingsSpy = jasmine.createSpyObj('SettingsService', ['']);
+  const filesSpy = jasmine.createSpyObj('FilesService', ['']);
+  const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
+  const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['']);
 
   beforeEach(() => {
-    const activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', [''], {
-      params: of({ id: 1 }),
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: ActivatedRoute, useValue: activatedRouteSpy },
+        { provide: SettingsService, useValue: settingsSpy },
+        { provide: FilesService, useValue: filesSpy },
+        { provide: InvitesService, useValue: invitesSpy },
+        { provide: CommonModalService, useValue: commonModalSpy },
+        { provide: LOCALE_ID, useValue: 'en-US' },
+      ],
     });
-    const eventSettingsSpy = jasmine.createSpyObj('EventSettingsService', ['']);
-    const filesSpy = jasmine.createSpyObj('FilesService', ['']);
-    const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
-    const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['']);
-    const localeId = 'en-US';
 
-    component = new SaveTheDateComponent(
-      activatedRouteSpy,
-      eventSettingsSpy,
-      filesSpy,
-      invitesSpy,
-      new ElementRef(null),
-      commonModalSpy,
-      localeId
-    );
+    component = TestBed.createComponent(SaveTheDateComponent).componentInstance;
   });
 
   it('should create', () => {

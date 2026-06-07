@@ -1,21 +1,27 @@
 import { EventEmitter } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { FileReaderService } from 'src/app/core/services/fileReader.service';
+import { UsersService } from 'src/app/core/services/users.service';
 import { ProfileModalComponent } from 'src/app/dashboard/profile/profile-modal/profile-modal.component';
 
 describe('Profile Modal Component (Isolated Test)', () => {
   let component: ProfileModalComponent;
+  const userSpy = jasmine.createSpyObj('UserService', ['']);
+  const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
+  const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
 
   beforeEach(() => {
-    const userSpy = jasmine.createSpyObj('UserService', ['']);
-    const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
-
-    component = new ProfileModalComponent(
-      new FormBuilder(),
-      fileReaderSpy,
-      userSpy,
-      toastrSpy
-    );
+    TestBed.configureTestingModule({
+      providers: [
+        FormBuilder,
+        { provide: UsersService, useValue: userSpy },
+        { provide: ToastrService, useValue: toastrSpy },
+        { provide: FileReaderService, useValue: fileReaderSpy },
+      ],
+    });
+    component = TestBed.createComponent(ProfileModalComponent).componentInstance;
   });
 
   it('should create', () => {

@@ -1,5 +1,7 @@
+import { TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { ForgotPasswordComponent } from 'src/app/auth/forgot-password/forgot-password.component';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock } from 'src/tests/mocks/mocks';
 
@@ -14,7 +16,16 @@ describe('ForgotPasswordComponent Isolated', () => {
   };
 
   beforeEach(() => {
-    component = new ForgotPasswordComponent(new FormBuilder(), authServiceSpy);
+    TestBed.configureTestingModule({
+      providers: [
+        FormBuilder,
+        { provide: AuthService, useValue: authServiceSpy },
+      ],
+    });
+
+    component = TestBed.createComponent(
+      ForgotPasswordComponent,
+    ).componentInstance;
   });
 
   it('should create', () => {

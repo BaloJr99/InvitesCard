@@ -1,15 +1,26 @@
+import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
+import { EventsService } from 'src/app/core/services/events.service';
+import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { EventsComponent } from 'src/app/dashboard/events/events.component';
 
 describe('Events Component (Isolated Test)', () => {
   let component: EventsComponent;
+  const eventsSpy = jasmine.createSpyObj('EventsService', ['getEvents']);
+  const tokenStorageSpy = jasmine.createSpyObj('TokenStorageService', ['']);
 
   beforeEach(() => {
-    const eventsSpy = jasmine.createSpyObj('EventsService', ['getEvents']);
-    const tokenStorageSpy = jasmine.createSpyObj('TokenStorageService', ['']);
     eventsSpy.getEvents.and.returnValue(of([]));
 
-    component = new EventsComponent(eventsSpy, tokenStorageSpy);
+    TestBed.configureTestingModule({
+      providers: [
+        EventsComponent,
+        { provide: EventsService, useValue: eventsSpy },
+        { provide: TokenStorageService, useValue: tokenStorageSpy },
+      ],
+    });
+
+    component = TestBed.createComponent(EventsComponent).componentInstance;
   });
 
   it('should create', () => {

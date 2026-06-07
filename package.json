@@ -27,6 +27,7 @@
     "bootstrap": "5.3.8",
     "chart.js": "4.5.1",
     "dotenv": "17.4.2",
+    "jasmine": "5.13.0",
     "jquery": "4.0.0",
     "ngx-toastr": "20.0.5",
     "rxjs": "7.8.2",

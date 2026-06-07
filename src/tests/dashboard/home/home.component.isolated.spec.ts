@@ -1,20 +1,29 @@
+import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
+import { EventsService } from 'src/app/core/services/events.service';
+import { InvitesService } from 'src/app/core/services/invites.service';
 import { HomeComponent } from 'src/app/dashboard/home/home.component';
 
 describe('Home Component (Isolated Test)', () => {
   let component: HomeComponent;
+  const invitesSpy = jasmine.createSpyObj('InvitesService', [
+    'getAllInvites',
+  ]);
+  const eventsSpy = jasmine.createSpyObj('EventsService', [
+    'getDropdownEvents',
+  ]);
 
   beforeEach(() => {
-    const invitesSpy = jasmine.createSpyObj('InvitesService', [
-      'getAllInvites',
-    ]);
     invitesSpy.getAllInvites.and.returnValue(of([]));
-    const eventsSpy = jasmine.createSpyObj('EventsService', [
-      'getDropdownEvents',
-    ]);
     eventsSpy.getDropdownEvents.and.returnValue(of([]));
 
-    component = new HomeComponent(invitesSpy, eventsSpy);
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: InvitesService, useValue: invitesSpy },
+        { provide: EventsService, useValue: eventsSpy },
+      ],
+    });
+    component = TestBed.createComponent(HomeComponent).componentInstance;
   });
 
   it('should create', () => {

@@ -1,27 +1,32 @@
-import { ElementRef } from '@angular/core';
+import { LOCALE_ID } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
+import { FilesService } from 'src/app/core/services/files.service';
+import { InvitesService } from 'src/app/core/services/invites.service';
+import { SettingsService } from 'src/app/core/services/settings.service';
 import { WeddingComponent } from 'src/app/invites/wedding/wedding.component';
 
 describe('Wedding Component (Isolated Test)', () => {
   let component: WeddingComponent;
+  const activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', [''], {
+    params: of({ id: 1 }),
+  });
+  const settingsSpy = jasmine.createSpyObj('SettingsService', ['']);
+  const filesSpy = jasmine.createSpyObj('FilesService', ['']);
+  const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
 
   beforeEach(() => {
-    const activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', [''], {
-      params: of({ id: 1 }),
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: SettingsService, useValue: settingsSpy },
+        { provide: FilesService, useValue: filesSpy },
+        { provide: InvitesService, useValue: invitesSpy },
+        { provide: ActivatedRoute, useValue: activatedRouteSpy },
+        { provide: LOCALE_ID, useValue: 'en-US' },
+      ],
     });
-    const settingsSpy = jasmine.createSpyObj('SettingsService', ['']);
-    const filesSpy = jasmine.createSpyObj('FilesService', ['']);
-    const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
-    const localeId = 'en-US';
-
-    component = new WeddingComponent(
-      activatedRouteSpy,
-      settingsSpy,
-      filesSpy,
-      invitesSpy,
-      new ElementRef(null),
-      localeId
-    );
+    component = TestBed.createComponent(WeddingComponent).componentInstance;
   });
 
   it('should create', () => {

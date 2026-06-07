@@ -1,28 +1,41 @@
+import { TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
+import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { EventsService } from 'src/app/core/services/events.service';
+import { FileReaderService } from 'src/app/core/services/fileReader.service';
+import { FilesService } from 'src/app/core/services/files.service';
 import { FilesComponent } from 'src/app/dashboard/files/files.component';
 
 describe('Files Component (Isolated Test)', () => {
   let component: FilesComponent;
+  const eventsSpy = jasmine.createSpyObj('EventsService', [
+    'getDropdownEvents',
+  ]);
+  const filesSpy = jasmine.createSpyObj('FilesService', ['']);
+  const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
+  const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['']);
+  const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
+  const activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', ['']);
 
   beforeEach(() => {
-    const eventsSpy = jasmine.createSpyObj('EventsService', [
-      'getDropdownEvents',
-    ]);
-    const filesSpy = jasmine.createSpyObj('FilesService', ['']);
     eventsSpy.getDropdownEvents.and.returnValue(of([]));
-    const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
-    const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['']);
-    const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
-    component = new FilesComponent(
-      eventsSpy,
-      filesSpy,
-      fileReaderSpy,
-      commonModalSpy,
-      new FormBuilder(),
-      toastrSpy
-    );
+    TestBed.configureTestingModule({
+      providers: [
+        FormBuilder,
+        { provide: EventsService, useValue: eventsSpy },
+        { provide: FilesService, useValue: filesSpy },
+        { provide: FileReaderService, useValue: fileReaderSpy },
+        { provide: CommonModalService, useValue: commonModalSpy },
+        { provide: ToastrService, useValue: toastrSpy },
+        { provide: ActivatedRoute, useValue: activatedRouteSpy },
+      ],
+    });
+
+    component = TestBed.createComponent(FilesComponent).componentInstance;
   });
 
   it('should create', () => {

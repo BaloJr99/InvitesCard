@@ -1,4 +1,7 @@
+import { TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { SettingsService } from 'src/app/core/services/settings.service';
 import { SaveTheDateSettingsComponent } from 'src/app/dashboard/settings/save-the-date-settings/save-the-date-settings.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { saveTheDateSettingMock } from 'src/tests/mocks/mocks';
@@ -7,6 +10,8 @@ const saveTheDateSettingMockCopy = deepCopy(saveTheDateSettingMock);
 
 describe('Save The Date Settings Component (Isolated Test)', () => {
   let component: SaveTheDateSettingsComponent;
+  const settingsSpy = jasmine.createSpyObj('SettingsService', ['']);
+  const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
   const updateForm = (
     eventId: string,
@@ -37,14 +42,15 @@ describe('Save The Date Settings Component (Isolated Test)', () => {
   };
 
   beforeEach(() => {
-    const settingsSpy = jasmine.createSpyObj('SettingsService', ['']);
-    const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
+    TestBed.configureTestingModule({
+      providers: [
+        FormBuilder,
+        { provide: SettingsService, useValue: settingsSpy },
+        { provide: ToastrService, useValue: toastrSpy },
+      ],
+    });
 
-    component = new SaveTheDateSettingsComponent(
-      settingsSpy,
-      new FormBuilder(),
-      toastrSpy
-    );
+    component = TestBed.createComponent(SaveTheDateSettingsComponent).componentInstance;
   });
 
   it('should create', () => {

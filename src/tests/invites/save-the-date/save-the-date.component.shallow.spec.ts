@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { LOCALE_ID, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -47,6 +47,7 @@ describe('Save The Date Component (Shallow Test)', () => {
         { provide: FilesService, useValue: filesSpy },
         { provide: InvitesService, useValue: invitesSpy },
         { provide: CommonModalService, useValue: commonModalSpy },
+        { provide: LOCALE_ID, useValue: 'en-US' },
       ],
     }).compileComponents();
 

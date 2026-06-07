@@ -83,7 +83,7 @@ describe('Login Component (Integrated Test)', () => {
     );
     fixture.detectChanges();
 
-    const button = fixture.debugElement.query(By.css('button'));
+    const button = fixture.debugElement.query(By.css('#loginButton'));
     button.nativeElement.click();
     fixture.detectChanges();
 
@@ -101,7 +101,7 @@ describe('Login Component (Integrated Test)', () => {
     );
     fixture.detectChanges();
 
-    const button = fixture.debugElement.query(By.css('button'));
+    const button = fixture.debugElement.query(By.css('#loginButton'));
     button.nativeElement.click();
     fixture.detectChanges();
 
@@ -127,7 +127,7 @@ describe('Login Component (Integrated Test)', () => {
     );
     fixture.detectChanges();
 
-    const button = fixture.debugElement.query(By.css('button'));
+    const button = fixture.debugElement.query(By.css('#loginButton'));
     button.nativeElement.click();
 
     fixture.detectChanges();

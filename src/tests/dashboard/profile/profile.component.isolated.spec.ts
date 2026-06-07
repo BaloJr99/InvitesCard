@@ -1,5 +1,10 @@
+import { TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { TokenStorageService } from 'src/app/core/services/token-storage.service';
+import { UsersService } from 'src/app/core/services/users.service';
 import { ProfileComponent } from 'src/app/dashboard/profile/profile.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { userProfileMock } from 'src/tests/mocks/mocks';
@@ -8,6 +13,13 @@ const userProfileMockCopy = deepCopy(userProfileMock);
 
 describe('Profile Component (Isolated Test)', () => {
   let component: ProfileComponent;
+  const userSpy = jasmine.createSpyObj('UserService', ['']);
+  const authSpy = jasmine.createSpyObj('AuthService', ['']);
+  const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
+  const tokenStorageSpy = jasmine.createSpyObj('TokenStorageService', [
+    'getTokenValues',
+  ]);
+  const activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', ['']);
 
   const updateForm = (
     id: string,
@@ -28,21 +40,18 @@ describe('Profile Component (Isolated Test)', () => {
   };
 
   beforeEach(() => {
-    const userSpy = jasmine.createSpyObj('UserService', ['']);
-    const authSpy = jasmine.createSpyObj('AuthService', ['']);
-    const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    const tokenStorageSpy = jasmine.createSpyObj('TokenStorageService', [
-      'getTokenValues',
-    ]);
+    TestBed.configureTestingModule({
+      providers: [
+        FormBuilder,
+        { provide: UsersService, useValue: userSpy },
+        { provide: AuthService, useValue: authSpy },
+        { provide: ToastrService, useValue: toastrSpy },
+        { provide: TokenStorageService, useValue: tokenStorageSpy },
+        { provide: ActivatedRoute, useValue: activatedRouteSpy },
+      ],
+    });
 
-    component = new ProfileComponent(
-      new ActivatedRoute(),
-      userSpy,
-      authSpy,
-      new FormBuilder(),
-      toastrSpy,
-      tokenStorageSpy
-    );
+    component = TestBed.createComponent(ProfileComponent).componentInstance;
   });
 
   it('should create', () => {

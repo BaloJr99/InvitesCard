@@ -1,5 +1,8 @@
+import { TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { InvitesService } from 'src/app/core/services/invites.service';
+import { SocketService } from 'src/app/core/services/socket.service';
 import { ConfirmationComponent } from 'src/app/invites/shared/confirmation/confirmation.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { confirmationInviteMock } from 'src/tests/mocks/mocks';
@@ -8,6 +11,9 @@ const confirmationInviteMockCopy = deepCopy(confirmationInviteMock);
 
 describe('Confirmation Component (Isolated Test)', () => {
   let component: ConfirmationComponent;
+  const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
+  const socketSpy = jasmine.createSpyObj('SocketService', ['']);
+  const activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', ['']);
 
   const updateForm = (
     confirmation: boolean | null,
@@ -34,15 +40,15 @@ describe('Confirmation Component (Isolated Test)', () => {
   };
 
   beforeEach(() => {
-    const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
-    const socketSpy = jasmine.createSpyObj('SocketService', ['']);
-
-    component = new ConfirmationComponent(
-      new FormBuilder(),
-      invitesSpy,
-      socketSpy,
-      new ActivatedRoute()
-    );
+    TestBed.configureTestingModule({
+      providers: [
+        FormBuilder,
+        { provide: ActivatedRoute, useValue: activatedRouteSpy },
+        { provide: InvitesService, useValue: invitesSpy },
+        { provide: SocketService, useValue: socketSpy },
+      ],
+    });
+    component = TestBed.createComponent(ConfirmationComponent).componentInstance;
   });
 
   it('should create', () => {

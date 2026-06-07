@@ -1,16 +1,23 @@
+import { TestBed } from '@angular/core/testing';
+import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { GalleryComponent } from 'src/app/gallery/gallery.component';
 
 describe('GalleryComponent', () => {
   let component: GalleryComponent;
+  const activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', [''], {
+    params: of(),
+  });
+  const routerSpy = jasmine.createSpyObj('Router', ['']);
 
   beforeEach(async () => {
-    const activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', [''], {
-      params: of(),
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: ActivatedRoute, useValue: activatedRouteSpy },
+        { provide: Router, useValue: routerSpy },
+      ],
     });
-    const routerSpy = jasmine.createSpyObj('Router', ['']);
-
-    component = new GalleryComponent(activatedRouteSpy, routerSpy);
+    component = TestBed.createComponent(GalleryComponent).componentInstance;
   });
 
   it('should create', () => {

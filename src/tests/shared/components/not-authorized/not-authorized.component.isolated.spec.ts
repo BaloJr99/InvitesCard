@@ -1,3 +1,6 @@
+import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { NotAuthorizedComponent } from 'src/app/shared/components/not-authorized/not-authorized.component';
 
 describe('Not Authorized Component (Isolated Test)', () => {
@@ -8,7 +11,14 @@ describe('Not Authorized Component (Isolated Test)', () => {
   ]);
 
   beforeEach(() => {
-    component = new NotAuthorizedComponent(routerSpy, tokenStorageServiceSpy);
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: Router, useValue: routerSpy },
+        { provide: TokenStorageService, useValue: tokenStorageServiceSpy },
+      ],
+    });
+
+    component = TestBed.createComponent(NotAuthorizedComponent).componentInstance;
   });
 
   it('should create', () => {

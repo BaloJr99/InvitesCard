@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { LOCALE_ID, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -45,6 +45,7 @@ describe('Wedding Component (Shallow Test)', () => {
         { provide: SettingsService, useValue: settingsSpy },
         { provide: FilesService, useValue: filesSpy },
         { provide: InvitesService, useValue: invitesSpy },
+        { provide: LOCALE_ID, useValue: 'en-US' },
       ],
     }).compileComponents();
 

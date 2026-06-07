@@ -1,13 +1,21 @@
+import { TestBed } from '@angular/core/testing';
 import { FormBuilder, Validators } from '@angular/forms';
+import { InvitesService } from 'src/app/core/services/invites.service';
 import { AccomodationComponent } from 'src/app/invites/save-the-date/accomodations/accomodation.component';
 
 describe('Accomodation Component (Isolated Test)', () => {
   let component: AccomodationComponent;
+  const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
 
   beforeEach(() => {
-    const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
+    TestBed.configureTestingModule({
+      providers: [
+        FormBuilder,
+        { provide: InvitesService, useValue: invitesSpy },
+      ],
+    });
 
-    component = new AccomodationComponent(new FormBuilder(), invitesSpy);
+    component = TestBed.createComponent(AccomodationComponent).componentInstance;
   });
 
   it('should create', () => {

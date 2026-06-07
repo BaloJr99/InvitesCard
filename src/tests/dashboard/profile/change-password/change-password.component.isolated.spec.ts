@@ -1,5 +1,8 @@
 import { EventEmitter } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { ChangePasswordComponent } from 'src/app/dashboard/profile/change-password/change-password.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock } from 'src/tests/mocks/mocks';
@@ -8,6 +11,8 @@ const loginDataMockCopy = deepCopy(loginDataMock);
 
 describe('Change Password Component (Isolated Test)', () => {
   let component: ChangePasswordComponent;
+  const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
+  const authSpy = jasmine.createSpyObj('AuthService', ['']);
 
   const updateForm = (password: string, confirmPassword: string) => {
     component.passwordResetForm.controls['password'].setValue(password);
@@ -17,14 +22,15 @@ describe('Change Password Component (Isolated Test)', () => {
   };
 
   beforeEach(() => {
-    const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    const authSpy = jasmine.createSpyObj('AuthService', ['']);
+    TestBed.configureTestingModule({
+      providers: [
+        FormBuilder,
+        { provide: ToastrService, useValue: toastrSpy },
+        { provide: AuthService, useValue: authSpy },
+      ],
+    });
 
-    component = new ChangePasswordComponent(
-      new FormBuilder(),
-      toastrSpy,
-      authSpy
-    );
+    component = TestBed.createComponent(ChangePasswordComponent).componentInstance;
   });
 
   it('should create', () => {

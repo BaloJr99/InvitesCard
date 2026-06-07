@@ -1,6 +1,8 @@
+import { TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { PasswordResetComponent } from 'src/app/auth/forgot-password/password-reset/password-reset.component';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock } from 'src/tests/mocks/mocks';
 
@@ -9,20 +11,27 @@ const loginDataMockCopy = deepCopy(loginDataMock);
 describe('PasswordResetComponent Isolated', () => {
   let component: PasswordResetComponent;
   const authServiceSpy = jasmine.createSpyObj('AuthService', ['']);
+  const activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', ['']);
 
   const updateForm = (password: string, confirmPassword: string) => {
     component.passwordResetForm.controls['password'].setValue(password);
     component.passwordResetForm.controls['confirmPassword'].setValue(
-      confirmPassword
+      confirmPassword,
     );
   };
 
   beforeEach(() => {
-    component = new PasswordResetComponent(
-      new ActivatedRoute(),
-      new FormBuilder(),
-      authServiceSpy
-    );
+    TestBed.configureTestingModule({
+      providers: [
+        FormBuilder,
+        { provide: AuthService, useValue: authServiceSpy },
+        { provide: ActivatedRoute, useValue: activatedRouteSpy },
+      ],
+    });
+
+    component = TestBed.createComponent(
+      PasswordResetComponent,
+    ).componentInstance;
   });
 
   it('should create', () => {

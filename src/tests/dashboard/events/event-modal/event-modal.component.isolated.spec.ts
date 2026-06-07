@@ -1,5 +1,10 @@
+import { TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { EventType } from 'src/app/core/models/enum';
+import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { EventsService } from 'src/app/core/services/events.service';
+import { UsersService } from 'src/app/core/services/users.service';
 import { EventModalComponent } from 'src/app/dashboard/events/event-modal/event-modal.component';
 import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
 import { fullEventsMock } from 'src/tests/mocks/mocks';
@@ -14,8 +19,14 @@ describe('Event Modal Component (Isolated Test)', () => {
       fullEventsMockCopy.maxDateOfConfirmation
     ).substring(0, 10),
   };
-
+  
   let component: EventModalComponent;
+  const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
+  const usersSpy = jasmine.createSpyObj('UsersService', [
+    'getUsersDropdownData',
+  ]);
+  const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
+  const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['']);
 
   const updateForm = (
     nameOfEvent: string,
@@ -38,20 +49,18 @@ describe('Event Modal Component (Isolated Test)', () => {
   };
 
   beforeEach(() => {
-    const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
-    const usersSpy = jasmine.createSpyObj('UsersService', [
-      'getUsersDropdownData',
-    ]);
-    const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['']);
+    TestBed.configureTestingModule({
+      providers: [
+        FormBuilder,
+        { provide: EventsService, useValue: eventsSpy },
+        { provide: UsersService, useValue: usersSpy },
+        { provide: ToastrService, useValue: toastrSpy },
+        { provide: CommonModalService, useValue: commonModalSpy },
+      ],
+    });
 
-    component = new EventModalComponent(
-      eventsSpy,
-      usersSpy,
-      new FormBuilder(),
-      toastrSpy,
-      commonModalSpy
-    );
+    component = TestBed.createComponent(EventModalComponent).componentInstance;
+    
   });
 
   it('should create', () => {

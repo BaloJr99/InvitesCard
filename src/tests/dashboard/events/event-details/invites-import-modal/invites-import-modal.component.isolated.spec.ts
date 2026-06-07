@@ -1,17 +1,26 @@
+import { TestBed } from '@angular/core/testing';
+import { ToastrService } from 'ngx-toastr';
+import { FileReaderService } from 'src/app/core/services/fileReader.service';
+import { InvitesService } from 'src/app/core/services/invites.service';
 import { InvitesImportModalComponent } from 'src/app/dashboard/events/event-details/invites-import-modal/invites-import-modal.component';
 
 describe('Invites Import Modal Component (Isolated Test)', () => {
   let component: InvitesImportModalComponent;
+  const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
+  const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
+  const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
 
   beforeEach(() => {
-    const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
-    const fileReaderSpy = jasmine.createSpyObj('FileReaderService', ['']);
-    component = new InvitesImportModalComponent(
-      invitesSpy,
-      toastrSpy,
-      fileReaderSpy
-    );
+    TestBed.configureTestingModule({
+      providers: [
+        InvitesImportModalComponent,
+        { provide: ToastrService, useValue: toastrSpy },
+        { provide: InvitesService, useValue: invitesSpy },
+        { provide: FileReaderService, useValue: fileReaderSpy },
+      ],
+    });
+    
+    component = TestBed.createComponent(InvitesImportModalComponent).componentInstance;
   });
 
   it('should create', () => {

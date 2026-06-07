@@ -1,31 +1,43 @@
+import { LOCALE_ID } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { EventType } from 'src/app/core/models/enum';
+import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
+import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { EventsService } from 'src/app/core/services/events.service';
+import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
+import { InvitesService } from 'src/app/core/services/invites.service';
+import { SocketService } from 'src/app/core/services/socket.service';
 import { EventDetailsComponent } from 'src/app/dashboard/events/event-details/event-details.component';
 
 describe('Event Details Component (Isolated Test)', () => {
   let component: EventDetailsComponent;
+  const activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', ['']);
+  const inviteGroupsSpy = jasmine.createSpyObj('InviteGroupsService', ['']);
+  const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
+  const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
+  const commonInvitesSpy = jasmine.createSpyObj('CommonInvitesService', ['']);
+  const socketSpy = jasmine.createSpyObj('SocketService', ['']);
+  const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
+  const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['']);
 
   beforeEach(() => {
-    const activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', ['']);
-    const inviteGroupsSpy = jasmine.createSpyObj('InviteGroupsService', ['']);
-    const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
-    const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
-    const commonInvitesSpy = jasmine.createSpyObj('CommonInvitesService', ['']);
-    const socketSpy = jasmine.createSpyObj('SocketService', ['']);
-    const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['']);
-    const localeId = 'en-US';
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: ActivatedRoute, useValue: activatedRouteSpy },
+        { provide: InviteGroupsService, useValue: inviteGroupsSpy },
+        { provide: InvitesService, useValue: invitesSpy },
+        { provide: EventsService, useValue: eventsSpy },
+        { provide: CommonInvitesService, useValue: commonInvitesSpy },
+        { provide: SocketService, useValue: socketSpy },
+        { provide: ToastrService, useValue: toastrSpy },
+        { provide: CommonModalService, useValue: commonModalSpy },
+        { provide: LOCALE_ID, useValue: 'en-US' },
+      ],
+    });
 
-    component = new EventDetailsComponent(
-      activatedRouteSpy,
-      inviteGroupsSpy,
-      invitesSpy,
-      eventsSpy,
-      commonInvitesSpy,
-      socketSpy,
-      toastrSpy,
-      commonModalSpy,
-      localeId
-    );
+    component = TestBed.createComponent(EventDetailsComponent).componentInstance;
   });
 
   it('should create', () => {

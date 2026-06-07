@@ -1,5 +1,9 @@
+import { TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
+import { RolesService } from 'src/app/core/services/roles.service';
+import { UsersService } from 'src/app/core/services/users.service';
 import { UserModalComponent } from 'src/app/dashboard/users/user-modal/user-modal.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { roleMock, upsertUserMock } from 'src/tests/mocks/mocks';
@@ -9,6 +13,9 @@ const rolesMockCopy = deepCopy(roleMock);
 
 describe('User Modal Component (Isolated Test)', () => {
   let component: UserModalComponent;
+  const usersSpy = jasmine.createSpyObj('UsersService', ['']);
+  const rolesSpy = jasmine.createSpyObj('RolesService', ['getAllRoles']);
+  const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
   const updateForm = (
     username: string,
@@ -27,17 +34,18 @@ describe('User Modal Component (Isolated Test)', () => {
   };
 
   beforeEach(() => {
-    const usersSpy = jasmine.createSpyObj('UsersService', ['']);
-    const rolesSpy = jasmine.createSpyObj('RolesService', ['getAllRoles']);
     rolesSpy.getAllRoles.and.returnValue(of([rolesMockCopy]));
-    const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
-    component = new UserModalComponent(
-      usersSpy,
-      rolesSpy,
-      new FormBuilder(),
-      toastrSpy
-    );
+    TestBed.configureTestingModule({
+      providers: [
+        FormBuilder,
+        { provide: UsersService, useValue: usersSpy },
+        { provide: RolesService, useValue: rolesSpy },
+        { provide: ToastrService, useValue: toastrSpy },
+      ],
+    });
+
+    component = TestBed.createComponent(UserModalComponent).componentInstance;
   });
 
   it('should create', () => {

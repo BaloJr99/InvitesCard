@@ -86,7 +86,7 @@ describe('Password Reset Component (Integrated Test)', () => {
     );
     fixture.detectChanges();
 
-    const button = fixture.debugElement.query(By.css('button'));
+    const button = fixture.debugElement.query(By.css('#resetPasswordButton'));
     button.nativeElement.click();
     fixture.detectChanges();
 
@@ -112,7 +112,7 @@ describe('Password Reset Component (Integrated Test)', () => {
     );
     fixture.detectChanges();
 
-    const button = fixture.debugElement.query(By.css('button'));
+    const button = fixture.debugElement.query(By.css('#resetPasswordButton'));
     button.nativeElement.click();
     fixture.detectChanges();
 

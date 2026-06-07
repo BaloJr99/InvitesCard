@@ -1,18 +1,23 @@
+import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { EventType } from 'src/app/core/models/enum';
 import { ISettingAction } from 'src/app/core/models/settings';
+import { EventsService } from 'src/app/core/services/events.service';
 import { SettingsComponent } from 'src/app/dashboard/settings/settings.component';
 
 describe('Settings Component (Isolated Test)', () => {
   let component: SettingsComponent;
+  const eventsSpy = jasmine.createSpyObj('EventsService', [
+    'getDropdownEvents',
+  ]);
 
   beforeEach(() => {
-    const eventsSpy = jasmine.createSpyObj('EventsService', [
-      'getDropdownEvents',
-    ]);
     eventsSpy.getDropdownEvents.and.returnValue(of([]));
+    TestBed.configureTestingModule({
+      providers: [{ provide: EventsService, useValue: eventsSpy }],
+    });
 
-    component = new SettingsComponent(eventsSpy);
+    component = TestBed.createComponent(SettingsComponent).componentInstance;
   });
 
   it('should create', () => {

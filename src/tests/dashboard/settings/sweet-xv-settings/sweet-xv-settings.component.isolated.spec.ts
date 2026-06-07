@@ -1,4 +1,8 @@
+import { TestBed } from '@angular/core/testing';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { EventsService } from 'src/app/core/services/events.service';
+import { SettingsService } from 'src/app/core/services/settings.service';
 import { SweetXvSettingsComponent } from 'src/app/dashboard/settings/sweet-xv-settings/sweet-xv-settings.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import {
@@ -17,6 +21,9 @@ const sweetXvSettingMockCopy = deepCopy(sweetXvSettingMock);
 
 describe('Sweet Xv Settings Component (Isolated Test)', () => {
   let component: SweetXvSettingsComponent;
+  const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
+  const settingsSpy = jasmine.createSpyObj('SettingsService', ['']);
+  const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
   const updateForm = (
     eventId: string,
@@ -75,16 +82,15 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
   };
 
   beforeEach(() => {
-    const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
-    const settingsSpy = jasmine.createSpyObj('SettingsService', ['']);
-    const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-
-    component = new SweetXvSettingsComponent(
-      eventsSpy,
-      settingsSpy,
-      new FormBuilder(),
-      toastrSpy
-    );
+    TestBed.configureTestingModule({
+      providers: [
+        FormBuilder,
+        { provide: EventsService, useValue: eventsSpy },
+        { provide: SettingsService, useValue: settingsSpy },
+        { provide: ToastrService, useValue: toastrSpy },
+      ],
+    });
+    component = TestBed.createComponent(SweetXvSettingsComponent).componentInstance;
   });
 
   it('should create', () => {

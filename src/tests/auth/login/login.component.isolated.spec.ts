@@ -1,5 +1,9 @@
+import { TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoginComponent } from 'src/app/auth/login/login.component';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { loginDataMock } from 'src/tests/mocks/mocks';
 
@@ -10,6 +14,7 @@ describe('Login Component (Isolated Test)', () => {
   const authServiceSpy = jasmine.createSpyObj('AuthService', ['']);
   const tokenServiceSpy = jasmine.createSpyObj('TokenStorageService', ['']);
   const routerSpy = jasmine.createSpyObj('Router', ['']);
+  const activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', ['']);
 
   const updateForm = (username: string, password: string) => {
     component.loginForm.controls['usernameOrEmail'].setValue(username);
@@ -17,12 +22,17 @@ describe('Login Component (Isolated Test)', () => {
   };
 
   beforeEach(() => {
-    component = new LoginComponent(
-      new FormBuilder(),
-      authServiceSpy,
-      routerSpy,
-      tokenServiceSpy
-    );
+    TestBed.configureTestingModule({
+      providers: [
+        FormBuilder,
+        { provide: AuthService, useValue: authServiceSpy },
+        { provide: TokenStorageService, useValue: tokenServiceSpy },
+        { provide: Router, useValue: routerSpy },
+        { provide: ActivatedRoute, useValue: activatedRouteSpy },
+      ],
+    });
+    
+    component = TestBed.createComponent(LoginComponent).componentInstance;
   });
 
   it('should create the component', () => {

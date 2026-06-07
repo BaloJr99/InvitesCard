@@ -1,4 +1,6 @@
+import { TestBed } from '@angular/core/testing';
 import { CommonModalType } from 'src/app/core/models/enum';
+import { CommonModalService } from 'src/app/core/services/commonModal.service';
 import { CommonModalComponent } from 'src/app/shared/components/common-modal/common-modal.component';
 
 describe('Common Modal Component (Isolated Test)', () => {
@@ -8,7 +10,12 @@ describe('Common Modal Component (Isolated Test)', () => {
   ]);
 
   beforeEach(() => {
-    component = new CommonModalComponent(commonModalServiceSpy);
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: CommonModalService, useValue: commonModalServiceSpy },
+      ],
+    });
+    component = TestBed.createComponent(CommonModalComponent).componentInstance;
   });
 
   it('should create', () => {

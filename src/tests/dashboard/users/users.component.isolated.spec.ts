@@ -1,4 +1,7 @@
+import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { of } from 'rxjs';
+import { UsersService } from 'src/app/core/services/users.service';
 import { UsersComponent } from 'src/app/dashboard/users/users.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { userEventsInfoMock } from 'src/tests/mocks/mocks';
@@ -7,13 +10,20 @@ const userEventsInfoMockCopy = deepCopy(userEventsInfoMock);
 
 describe('Users Component (Isolated Test)', () => {
   let component: UsersComponent;
+  const usersSpy = jasmine.createSpyObj('UsersService', ['getAllUsers']);
+  const routerSpy = jasmine.createSpyObj('Router', ['']);
 
   beforeEach(() => {
-    const usersSpy = jasmine.createSpyObj('UsersService', ['getAllUsers']);
     usersSpy.getAllUsers.and.returnValue(of([userEventsInfoMockCopy]));
-    const routerSpy = jasmine.createSpyObj('Router', ['']);
 
-    component = new UsersComponent(usersSpy, routerSpy);
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: UsersService, useValue: usersSpy },
+        { provide: Router, useValue: routerSpy },
+      ],
+    });
+
+    component = TestBed.createComponent(UsersComponent).componentInstance;
   });
 
   it('should create', () => {

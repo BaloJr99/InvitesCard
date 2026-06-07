@@ -1,4 +1,7 @@
+import { TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { InvitesService } from 'src/app/core/services/invites.service';
 import { InviteModalComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-modal.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { newInviteMock } from 'src/tests/mocks/mocks';
@@ -7,6 +10,8 @@ const newInviteMockCopy = deepCopy(newInviteMock);
 
 describe('Invite Modal Component (Isolated Test)', () => {
   let component: InviteModalComponent;
+  const invitesService = jasmine.createSpyObj('InvitesService', ['']);
+  const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
   const updateForm = (
     family: string,
@@ -27,13 +32,14 @@ describe('Invite Modal Component (Isolated Test)', () => {
   };
 
   beforeEach(() => {
-    const inviteModalSpy = jasmine.createSpyObj('InviteModalComponent', ['']);
-    const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
-    component = new InviteModalComponent(
-      inviteModalSpy,
-      new FormBuilder(),
-      toastrSpy
-    );
+    TestBed.configureTestingModule({
+      providers: [
+        FormBuilder,
+        { provide: InvitesService, useValue: invitesService },
+        { provide: ToastrService, useValue: toastrSpy },
+      ],
+    });
+    component = TestBed.createComponent(InviteModalComponent).componentInstance;
   });
 
   it('should create', () => {
