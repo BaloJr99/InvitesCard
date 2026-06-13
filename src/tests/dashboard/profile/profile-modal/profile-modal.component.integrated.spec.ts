@@ -3,7 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
-import { FileReaderService } from 'src/app/core/services/fileReader.service';
+import { FileReaderService } from 'src/app/core/services/file-reader.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { ProfileModalComponent } from 'src/app/dashboard/profile/profile-modal/profile-modal.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
@@ -43,14 +43,14 @@ describe('Profile Modal Component (Integrated Test)', () => {
     }).compileComponents();
 
     userServiceSpy = TestBed.inject(
-      UsersService
+      UsersService,
     ) as jasmine.SpyObj<UsersService>;
     fileReaderServiceSpy = TestBed.inject(
-      FileReaderService
+      FileReaderService,
     ) as jasmine.SpyObj<FileReaderService>;
 
     userServiceSpy.uploadProfilePhoto.and.returnValue(
-      of(messageResponseMockCopy)
+      of(messageResponseMockCopy),
     );
     fileReaderServiceSpy.getBase64.and.returnValue(of('image'));
     fixture = TestBed.createComponent(ProfileModalComponent);

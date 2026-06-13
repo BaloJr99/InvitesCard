@@ -3,10 +3,10 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { EventType } from 'src/app/core/models/enum';
-import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
-import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { CommonInvitesService } from 'src/app/core/services/common-invites.service';
+import { CommonModalService } from 'src/app/core/services/common-modal.service';
 import { EventsService } from 'src/app/core/services/events.service';
-import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
+import { InviteGroupsService } from 'src/app/core/services/invite-groups.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { SocketService } from 'src/app/core/services/socket.service';
 import { EventDetailsComponent } from 'src/app/dashboard/events/event-details/event-details.component';
@@ -37,7 +37,9 @@ describe('Event Details Component (Isolated Test)', () => {
       ],
     });
 
-    component = TestBed.createComponent(EventDetailsComponent).componentInstance;
+    component = TestBed.createComponent(
+      EventDetailsComponent,
+    ).componentInstance;
   });
 
   it('should create', () => {

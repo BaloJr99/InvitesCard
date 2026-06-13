@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { CommonModalResponse } from 'src/app/core/models/enum';
-import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { CommonModalService } from 'src/app/core/services/common-modal.service';
 import { FilesService } from 'src/app/core/services/files.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
@@ -55,33 +55,33 @@ describe('Save The Date Component (Integrated Test)', () => {
     }).compileComponents();
 
     invitesServiceSpy = TestBed.inject(
-      InvitesService
+      InvitesService,
     ) as jasmine.SpyObj<InvitesService>;
     settingsServiceSpy = TestBed.inject(
-      SettingsService
+      SettingsService,
     ) as jasmine.SpyObj<SettingsService>;
     filesServiceSpy = TestBed.inject(
-      FilesService
+      FilesService,
     ) as jasmine.SpyObj<FilesService>;
     commonModalServiceSpy = TestBed.inject(
-      CommonModalService
+      CommonModalService,
     ) as jasmine.SpyObj<CommonModalService>;
     settingsServiceSpy.getEventSettings.and.returnValue(
-      of(saveTheDateBaseSettingMockCopy)
+      of(saveTheDateBaseSettingMockCopy),
     );
 
     filesServiceSpy.getFilesByEvent.and.returnValue(
       of({
         eventImages: [],
         eventAudios: [],
-      })
+      }),
     );
     settingsServiceSpy.getEventSettings.and.returnValue(
-      of(saveTheDateBaseSettingMockCopy)
+      of(saveTheDateBaseSettingMockCopy),
     );
     commonModalServiceSpy.open.and.returnValue(of(CommonModalResponse.Cancel));
     invitesServiceSpy.getInvite.and.returnValue(
-      of(saveTheDateUserInviteMockCopy)
+      of(saveTheDateUserInviteMockCopy),
     );
 
     fixture = TestBed.createComponent(SaveTheDateComponent);
@@ -93,7 +93,7 @@ describe('Save The Date Component (Integrated Test)', () => {
 
   it('should render the accomodation component', () => {
     const accomodationComponent = fixture.debugElement.query(
-      By.directive(AccomodationComponent)
+      By.directive(AccomodationComponent),
     );
 
     expect(accomodationComponent)

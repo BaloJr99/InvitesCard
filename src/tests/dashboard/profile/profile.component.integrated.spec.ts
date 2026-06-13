@@ -5,7 +5,7 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { FileReaderService } from 'src/app/core/services/fileReader.service';
+import { FileReaderService } from 'src/app/core/services/file-reader.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { ProfileModalComponent } from 'src/app/dashboard/profile/profile-modal/profile-modal.component';
@@ -36,7 +36,7 @@ describe('Profile Component (Integrated Test)', () => {
     lastName: string,
     phoneNumber: string,
     email: string,
-    gender: string
+    gender: string,
   ) => {
     fixture.componentInstance.createProfileForm.patchValue({
       id,
@@ -121,18 +121,18 @@ describe('Profile Component (Integrated Test)', () => {
     }).compileComponents();
 
     usersServiceSpy = TestBed.inject(
-      UsersService
+      UsersService,
     ) as jasmine.SpyObj<UsersService>;
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     tokenStorageServiceSpy = TestBed.inject(
-      TokenStorageService
+      TokenStorageService,
     ) as jasmine.SpyObj<TokenStorageService>;
 
     tokenStorageServiceSpy.getTokenValues.and.returnValue(userMockCopy);
     usersServiceSpy.updateProfile.and.returnValue(of(messageResponseMockCopy));
     usersServiceSpy.checkUsername.and.returnValue(of(true));
     authServiceSpy.sendResetPasswordToUser.and.returnValue(
-      of(messageResponseMockCopy)
+      of(messageResponseMockCopy),
     );
 
     fixture = TestBed.createComponent(ProfileComponent);
@@ -142,7 +142,7 @@ describe('Profile Component (Integrated Test)', () => {
   it('should call getTokenValues on init', () => {
     expect(tokenStorageServiceSpy.getTokenValues)
       .withContext(
-        'getTokenValues from TokenStorageService should have been called'
+        'getTokenValues from TokenStorageService should have been called',
       )
       .toHaveBeenCalled();
   });
@@ -155,7 +155,7 @@ describe('Profile Component (Integrated Test)', () => {
       userProfileMockCopy.lastName,
       userProfileMockCopy.phoneNumber,
       userProfileMockCopy.email,
-      userProfileMockCopy.gender
+      userProfileMockCopy.gender,
     );
 
     const form = fixture.debugElement.query(By.css('form'));
@@ -177,7 +177,7 @@ describe('Profile Component (Integrated Test)', () => {
       userProfileMockCopy.lastName,
       userProfileMockCopy.phoneNumber,
       userProfileMockCopy.email,
-      userProfileMockCopy.gender
+      userProfileMockCopy.gender,
     );
 
     const form = fixture.debugElement.query(By.css('form'));

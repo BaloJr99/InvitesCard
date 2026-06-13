@@ -3,7 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
-import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
+import { InviteGroupsService } from 'src/app/core/services/invite-groups.service';
 import { InviteGroupFormComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-group-form/invite-group-form.component';
 import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
 import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
@@ -49,7 +49,7 @@ describe('Invite Group Form Component (Integrated Test)', () => {
     }).compileComponents();
 
     inviteGroupsServiceSpy = TestBed.inject(
-      InviteGroupsService
+      InviteGroupsService,
     ) as jasmine.SpyObj<InviteGroupsService>;
 
     fixture = TestBed.createComponent(InviteGroupFormComponent);
@@ -58,7 +58,7 @@ describe('Invite Group Form Component (Integrated Test)', () => {
 
   it('inviteGroupsService createInviteGroup() should called', () => {
     inviteGroupsServiceSpy.createInviteGroup.and.returnValue(
-      of(messageResponseMockCopy)
+      of(messageResponseMockCopy),
     );
     inviteGroupsServiceSpy.checkInviteGroup.and.returnValue(of(false));
 
@@ -79,7 +79,7 @@ describe('Invite Group Form Component (Integrated Test)', () => {
 
     expect(inviteGroupsServiceSpy.createInviteGroup)
       .withContext(
-        "createInviteGroup method from InviteGroupService should've been called"
+        "createInviteGroup method from InviteGroupService should've been called",
       )
       .toHaveBeenCalled();
   });
@@ -93,7 +93,7 @@ describe('Invite Group Form Component (Integrated Test)', () => {
     fixture.detectChanges();
 
     inviteGroupsServiceSpy.updateInviteGroup.and.returnValue(
-      of(messageResponseMockCopy)
+      of(messageResponseMockCopy),
     );
     inviteGroupsServiceSpy.checkInviteGroup.and.returnValue(of(false));
 
@@ -107,7 +107,7 @@ describe('Invite Group Form Component (Integrated Test)', () => {
 
     expect(inviteGroupsServiceSpy.updateInviteGroup)
       .withContext(
-        "updateInviteGroup method from InviteGroupService should've been called"
+        "updateInviteGroup method from InviteGroupService should've been called",
       )
       .toHaveBeenCalled();
   });

@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
+import { CommonInvitesService } from 'src/app/core/services/common-invites.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { DashboardComponent } from 'src/app/dashboard/dashboard.component';
 import { userMock } from '../mocks/mocks';
@@ -31,7 +31,7 @@ describe('Dashboard Component (Integrated Test)', () => {
       {
         messages$: messagesDataSubject.asObservable(),
         notifications$: notificationsDataSubject.asObservable(),
-      }
+      },
     );
 
     await TestBed.configureTestingModule({
@@ -46,7 +46,7 @@ describe('Dashboard Component (Integrated Test)', () => {
     }).compileComponents();
 
     tokenStorageServiceSpy = TestBed.inject(
-      TokenStorageService
+      TokenStorageService,
     ) as jasmine.SpyObj<TokenStorageService>;
 
     tokenStorageServiceSpy.getTokenValues.and.returnValue(userMockCopy);

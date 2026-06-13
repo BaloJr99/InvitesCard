@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
+import { CommonInvitesService } from 'src/app/core/services/common-invites.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { NavbarComponent } from 'src/app/dashboard/navbar/navbar.component';
@@ -46,15 +46,15 @@ describe('Navbar Component (Integrated Test)', () => {
     }).compileComponents();
 
     invitesServiceSpy = TestBed.inject(
-      InvitesService
+      InvitesService,
     ) as jasmine.SpyObj<InvitesService>;
 
     tokenStorageServiceSpy = TestBed.inject(
-      TokenStorageService
+      TokenStorageService,
     ) as jasmine.SpyObj<TokenStorageService>;
 
     commonInvitesServiceSpy = TestBed.inject(
-      CommonInvitesService
+      CommonInvitesService,
     ) as jasmine.SpyObj<CommonInvitesService>;
 
     router = TestBed.inject(Router);
@@ -70,14 +70,14 @@ describe('Navbar Component (Integrated Test)', () => {
   it('should call toggleMenu when the account button is clicked', () => {
     spyOn(fixture.componentInstance, 'toggleMenu');
     const navbarWithSearchAndForm = fixture.nativeElement.querySelector(
-      '.navbarWithSearchAndForm'
+      '.navbarWithSearchAndForm',
     );
     const accountButton = navbarWithSearchAndForm.querySelector('.account');
     accountButton.click();
 
     expect(fixture.componentInstance.toggleMenu)
       .withContext(
-        'You should call toggleMenu when the account button is clicked'
+        'You should call toggleMenu when the account button is clicked',
       )
       .toHaveBeenCalled();
   });
@@ -121,7 +121,7 @@ describe('Navbar Component (Integrated Test)', () => {
     fixture.detectChanges();
 
     const notificationMessages = fixture.debugElement.query(
-      By.css('.base-menu.notificationMessages')
+      By.css('.base-menu.notificationMessages'),
     );
 
     const notificationItems = notificationMessages.queryAll(By.css('button'));
@@ -129,7 +129,7 @@ describe('Navbar Component (Integrated Test)', () => {
 
     expect(fixture.componentInstance.maskAsRead)
       .withContext(
-        'You should call maskAsRead when the notification is clicked'
+        'You should call maskAsRead when the notification is clicked',
       )
       .toHaveBeenCalled();
   });
@@ -149,7 +149,7 @@ describe('Navbar Component (Integrated Test)', () => {
     //   .toBe(1);
 
     const notificationMessages = fixture.debugElement.query(
-      By.css('.base-menu.notificationMessages')
+      By.css('.base-menu.notificationMessages'),
     );
 
     const notificationItems = notificationMessages.queryAll(By.css('button'));
@@ -157,13 +157,13 @@ describe('Navbar Component (Integrated Test)', () => {
 
     expect(invitesServiceSpy.readMessage)
       .withContext(
-        'You should call readMessage when the notification is clicked'
+        'You should call readMessage when the notification is clicked',
       )
       .toHaveBeenCalled();
 
     expect(commonInvitesServiceSpy.updateNotifications)
       .withContext(
-        'You should call updateNotifications when the notification is clicked'
+        'You should call updateNotifications when the notification is clicked',
       )
       .toHaveBeenCalled();
 

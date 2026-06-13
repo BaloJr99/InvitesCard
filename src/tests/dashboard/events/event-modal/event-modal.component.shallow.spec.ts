@@ -4,13 +4,18 @@ import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { EventType } from 'src/app/core/models/enum';
+import { EventTypesService } from 'src/app/core/services/event-types.service';
 import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { EventModalComponent } from 'src/app/dashboard/events/event-modal/event-modal.component';
 import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
 import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
-import { fullEventsMock, userDropdownDataMock } from 'src/tests/mocks/mocks';
+import {
+  eventTypesMock,
+  fullEventsMock,
+  userDropdownDataMock,
+} from 'src/tests/mocks/mocks';
 
 let fullEventsMockCopy = deepCopy(fullEventsMock);
 const userDropdownDataMockCopy = deepCopy(userDropdownDataMock);
@@ -18,12 +23,13 @@ const userDropdownDataMockCopy = deepCopy(userDropdownDataMock);
 describe('Event Modal Component (Shallow Test)', () => {
   let fixture: ComponentFixture<EventModalComponent>;
   let usersServiceSpy: jasmine.SpyObj<UsersService>;
+  let eventTypesServiceSpy: jasmine.SpyObj<EventTypesService>;
 
   fullEventsMockCopy = {
     ...fullEventsMockCopy,
     dateOfEvent: toLocalDate(fullEventsMockCopy.dateOfEvent).substring(0, 10),
     maxDateOfConfirmation: toLocalDate(
-      fullEventsMockCopy.maxDateOfConfirmation
+      fullEventsMockCopy.maxDateOfConfirmation,
     ).substring(0, 10),
   };
 
@@ -32,18 +38,18 @@ describe('Event Modal Component (Shallow Test)', () => {
     dateOfEvent: string,
     maxDateOfConfirmation: string,
     nameOfCelebrated: string,
-    typeOfEvent: EventType,
-    userId: string
+    eventTypeId: string,
+    userId: string,
   ) => {
     const nameOfEventInput = fixture.debugElement.query(By.css('#nameOfEvent'));
     const dateOfEventInput = fixture.debugElement.query(By.css('#dateOfEvent'));
     const maxDateOfConfirmationInput = fixture.debugElement.query(
-      By.css('#maxDateOfConfirmation')
+      By.css('#maxDateOfConfirmation'),
     );
     const nameOfCelebratedInput = fixture.debugElement.query(
-      By.css('#nameOfCelebrated')
+      By.css('#nameOfCelebrated'),
     );
-    const typeOfEventInput = fixture.debugElement.query(By.css('#typeOfEvent'));
+    const eventTypeIdInput = fixture.debugElement.query(By.css('#eventTypeId'));
     const userIdInput = fixture.debugElement.query(By.css('#userId'));
 
     nameOfEventInput.nativeElement.value = nameOfEvent;
@@ -58,8 +64,8 @@ describe('Event Modal Component (Shallow Test)', () => {
     nameOfCelebratedInput.nativeElement.value = nameOfCelebrated;
     nameOfCelebratedInput.nativeElement.dispatchEvent(new Event('input'));
 
-    typeOfEventInput.nativeElement.value = typeOfEvent;
-    typeOfEventInput.nativeElement.dispatchEvent(new Event('change'));
+    eventTypeIdInput.nativeElement.value = eventTypeId;
+    eventTypeIdInput.nativeElement.dispatchEvent(new Event('change'));
 
     userIdInput.nativeElement.value = userId;
     userIdInput.nativeElement.dispatchEvent(new Event('change'));
@@ -71,6 +77,9 @@ describe('Event Modal Component (Shallow Test)', () => {
       'getUsersDropdownData',
     ]);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
+    const eventTypesSpy = jasmine.createSpyObj('EventTypesService', [
+      'getEventTypes',
+    ]);
 
     await TestBed.configureTestingModule({
       imports: [
@@ -83,16 +92,24 @@ describe('Event Modal Component (Shallow Test)', () => {
         { provide: EventsService, useValue: eventsSpy },
         { provide: UsersService, useValue: usersSpy },
         { provide: ToastrService, useValue: toastrSpy },
+        { provide: EventTypesService, useValue: eventTypesSpy },
       ],
     }).compileComponents();
 
     usersServiceSpy = TestBed.inject(
-      UsersService
+      UsersService,
     ) as jasmine.SpyObj<UsersService>;
 
+    eventTypesServiceSpy = TestBed.inject(
+      EventTypesService,
+    ) as jasmine.SpyObj<EventTypesService>;
+
     usersServiceSpy.getUsersDropdownData.and.returnValue(
-      of([userDropdownDataMockCopy])
+      of([userDropdownDataMockCopy]),
     );
+
+    eventTypesServiceSpy.getEventTypes.and.returnValue(of(eventTypesMock));
+
     fixture = TestBed.createComponent(EventModalComponent);
     fixture.detectChanges();
   });
@@ -101,12 +118,12 @@ describe('Event Modal Component (Shallow Test)', () => {
     const nameOfEventInput = fixture.debugElement.query(By.css('#nameOfEvent'));
     const dateOfEventInput = fixture.debugElement.query(By.css('#dateOfEvent'));
     const maxDateOfConfirmationInput = fixture.debugElement.query(
-      By.css('#maxDateOfConfirmation')
+      By.css('#maxDateOfConfirmation'),
     );
     const nameOfCelebratedInput = fixture.debugElement.query(
-      By.css('#nameOfCelebrated')
+      By.css('#nameOfCelebrated'),
     );
-    const typeOfEventInput = fixture.debugElement.query(By.css('#typeOfEvent'));
+    const eventTypeIdInput = fixture.debugElement.query(By.css('#eventTypeId'));
     const userIdInput = fixture.debugElement.query(By.css('#userId'));
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));
@@ -129,8 +146,8 @@ describe('Event Modal Component (Shallow Test)', () => {
       .withContext("name of celebrated input shouldn't be null")
       .not.toBeNull();
 
-    expect(typeOfEventInput)
-      .withContext("type of event input shouldn't be null")
+    expect(eventTypeIdInput)
+      .withContext("eventTypeId input shouldn't be null")
       .not.toBeNull();
 
     expect(userIdInput)
@@ -152,17 +169,17 @@ describe('Event Modal Component (Shallow Test)', () => {
       fullEventsMockCopy.dateOfEvent,
       fullEventsMockCopy.maxDateOfConfirmation,
       fullEventsMockCopy.nameOfCelebrated,
-      fullEventsMockCopy.typeOfEvent,
-      fullEventsMockCopy.userId
+      fullEventsMockCopy.eventTypeId,
+      fullEventsMockCopy.userId,
     );
     expect(
-      fixture.componentInstance.createEventForm.controls['nameOfEvent'].value
+      fixture.componentInstance.createEventForm.controls['nameOfEvent'].value,
     )
       .withContext('NameOfEvent control should be filled when input changes')
       .toBe(fullEventsMockCopy.nameOfEvent);
 
     expect(
-      fixture.componentInstance.createEventForm.controls['dateOfEvent'].value
+      fixture.componentInstance.createEventForm.controls['dateOfEvent'].value,
     )
       .withContext('DateOfEvent control should be filled when input changes')
       .toBe(fullEventsMockCopy.dateOfEvent);
@@ -170,27 +187,27 @@ describe('Event Modal Component (Shallow Test)', () => {
     expect(
       fixture.componentInstance.createEventForm.controls[
         'maxDateOfConfirmation'
-      ].value
+      ].value,
     )
       .withContext(
-        'MaxDateOfConfirmation control should be filled when input changes'
+        'MaxDateOfConfirmation control should be filled when input changes',
       )
       .toBe(fullEventsMockCopy.maxDateOfConfirmation);
 
     expect(
       fixture.componentInstance.createEventForm.controls['nameOfCelebrated']
-        .value
+        .value,
     )
       .withContext(
-        'NameOfCelebrated control should be filled when input changes'
+        'NameOfCelebrated control should be filled when input changes',
       )
       .toBe(fullEventsMockCopy.nameOfCelebrated);
 
     expect(
-      fixture.componentInstance.createEventForm.controls['typeOfEvent'].value
+      fixture.componentInstance.createEventForm.controls['eventTypeId'].value,
     )
-      .withContext('TypeOfEvent control should be filled when input changes')
-      .toBe(fullEventsMockCopy.typeOfEvent);
+      .withContext('EventTypeId control should be filled when input changes')
+      .toBe(fullEventsMockCopy.eventTypeId);
 
     expect(fixture.componentInstance.createEventForm.controls['userId'].value)
       .withContext('UserId control should be filled when input changes')
@@ -216,13 +233,13 @@ describe('Event Modal Component (Shallow Test)', () => {
     fixture.detectChanges();
 
     const errorSpans = fixture.debugElement.queryAll(
-      By.css('.invalid-feedback')
+      By.css('.invalid-feedback'),
     );
 
     const nameOfEventErrorSpan = errorSpans[0];
     const dateOfEventErrorSpan = errorSpans[1];
     const maxDateOfConfirmationErrorSpan = errorSpans[2];
-    const typeOfEventErrorSpan = errorSpans[3];
+    const eventTypesIdErrorSpan = errorSpans[3];
     const nameOfCelebratedErrorSpan = errorSpans[4];
     const userIdErrorSpan = errorSpans[5];
 
@@ -238,8 +255,8 @@ describe('Event Modal Component (Shallow Test)', () => {
       .withContext('MaxDateOfConfirmation span for error should be filled')
       .toContain('La fecha de limite de confirmación es requerida');
 
-    expect(typeOfEventErrorSpan.nativeElement.innerHTML)
-      .withContext('TypeOfEvent span for error should be filled')
+    expect(eventTypesIdErrorSpan.nativeElement.innerHTML)
+      .withContext('EventTypeId span for error should be filled')
       .toContain('El tipo de evento es requerido');
 
     expect(nameOfCelebratedErrorSpan.nativeElement.innerHTML)
@@ -257,13 +274,13 @@ describe('Event Modal Component (Shallow Test)', () => {
       fullEventsMockCopy.dateOfEvent,
       fullEventsMockCopy.dateOfEvent,
       fullEventsMockCopy.dateOfEvent,
-      EventType.Xv,
-      fullEventsMockCopy.userId
+      eventTypesMock[1].id,
+      fullEventsMockCopy.userId,
     );
     fixture.detectChanges();
 
     const errorSpans = fixture.debugElement.queryAll(
-      By.css('.invalid-feedback')
+      By.css('.invalid-feedback'),
     );
 
     expect(errorSpans.length)

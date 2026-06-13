@@ -39,7 +39,7 @@ describe('Events Component (Isolated Test)', () => {
           dateOfEvent: '',
           maxDateOfConfirmation: '',
           nameOfCelebrated: '',
-          typeOfEvent: '',
+          eventTypeId: '',
           userId: '',
         }),
         isNew: true,

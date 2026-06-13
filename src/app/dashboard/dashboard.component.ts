@@ -3,7 +3,7 @@ import { NavigationStart, Router, Scroll, RouterModule } from '@angular/router';
 import { TokenStorageService } from '../core/services/token-storage.service';
 import { SocketService } from '../core/services/socket.service';
 import { IMessage } from '../core/models/common';
-import { CommonInvitesService } from '../core/services/commonInvites.service';
+import { CommonInvitesService } from '../core/services/common-invites.service';
 import { toLocalDate } from '../shared/utils/tools';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -49,7 +49,7 @@ export class DashboardComponent implements OnInit {
       const sortedNotifications = notifications.sort(
         (a, b) =>
           new Date(toLocalDate(b.dateOfConfirmation)).getTime() -
-          new Date(toLocalDate(a.dateOfConfirmation)).getTime()
+          new Date(toLocalDate(a.dateOfConfirmation)).getTime(),
       );
 
       return {
@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit {
         route,
         notifications: sortedNotifications,
       };
-    })
+    }),
   );
 
   ngOnInit(): void {
@@ -80,7 +80,7 @@ export class DashboardComponent implements OnInit {
     window.addEventListener('click', ({ target }) => {
       const toggleMenu = document.querySelector('.menu');
       const toggleNotifications = document.querySelector(
-        '.notificationMessages'
+        '.notificationMessages',
       );
 
       const clickedElement = target as HTMLElement;

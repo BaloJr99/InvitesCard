@@ -52,19 +52,21 @@
                     }
                   </div>
                   <div class="mb-3">
-                    <label for="typeOfEvent" class="form-label" i18n>Tipo de evento</label>
-                    <select id="typeOfEvent"
+                    <label for="eventTypeId" class="form-label" i18n>Tipo de evento</label>
+                    <select id="eventTypeId"
                       class="form-control"
-                      formControlName="typeOfEvent"
-                      [ngClass]="{'is-invalid': createEventForm.get('typeOfEvent') | validation }">
+                      formControlName="eventTypeId"
+                      [ngClass]="{'is-invalid': createEventForm.get('eventTypeId') | validation }">
                       <option value="" i18n>Seleccione...</option>
-                      <option value="X" i18n>Quinceañera</option>
-                      <option value="W" i18n>Boda</option>
-                      <option value="S">Save the date</option>
+                      @for (eventType of vm.eventTypes; track eventType) {
+                        <option [value]="eventType.id">
+                          {{ eventType.name }}
+                        </option>
+                      }
                     </select>
-                    @if (createEventForm.get('typeOfEvent') | validation) {
+                    @if (createEventForm.get('eventTypeId') | validation) {
                       <span class="invalid-feedback d-block" role="alert">
-                        {{ createEventForm.get('typeOfEvent')?.errors | validationError: 'typeOfEvent' }}
+                        {{ createEventForm.get('eventTypeId')?.errors | validationError: 'eventTypeId' }}
                       </span>
                     }
                   </div>

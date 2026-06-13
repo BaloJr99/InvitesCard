@@ -13,9 +13,9 @@ import {
   IUpdateImage,
   IUpdateImageArray,
 } from 'src/app/core/models/images';
-import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { CommonModalService } from 'src/app/core/services/common-modal.service';
 import { EventsService } from 'src/app/core/services/events.service';
-import { FileReaderService } from 'src/app/core/services/fileReader.service';
+import { FileReaderService } from 'src/app/core/services/file-reader.service';
 import { FilesService } from 'src/app/core/services/files.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 

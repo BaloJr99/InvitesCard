@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
-import { FileReaderService } from 'src/app/core/services/fileReader.service';
+import { FileReaderService } from 'src/app/core/services/file-reader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { InvitesImportModalComponent } from 'src/app/dashboard/events/event-details/invites-import-modal/invites-import-modal.component';
 import { deepCopy } from 'src/app/shared/utils/tools';

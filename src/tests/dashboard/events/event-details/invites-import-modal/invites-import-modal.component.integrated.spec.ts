@@ -3,7 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
-import { FileReaderService } from 'src/app/core/services/fileReader.service';
+import { FileReaderService } from 'src/app/core/services/file-reader.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { InvitesImportModalComponent } from 'src/app/dashboard/events/event-details/invites-import-modal/invites-import-modal.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
@@ -46,11 +46,11 @@ describe('Invites Import Modal Component (Integrated Test)', () => {
     }).compileComponents();
 
     invitesServiceSpy = TestBed.inject(
-      InvitesService
+      InvitesService,
     ) as jasmine.SpyObj<InvitesService>;
 
     fileReaderServiceSpy = TestBed.inject(
-      FileReaderService
+      FileReaderService,
     ) as jasmine.SpyObj<FileReaderService>;
 
     fixture = TestBed.createComponent(InvitesImportModalComponent);
@@ -84,7 +84,7 @@ describe('Invites Import Modal Component (Integrated Test)', () => {
   it('should call invitesService bulkInvites() method when sendData() is called', () => {
     fixture.componentInstance.invites = [bulkInvitesMockCopy];
     invitesServiceSpy.bulkInvites.and.returnValue(
-      of(bulkMessageResponseMockCopy)
+      of(bulkMessageResponseMockCopy),
     );
 
     fixture.detectChanges();
@@ -96,7 +96,7 @@ describe('Invites Import Modal Component (Integrated Test)', () => {
 
     expect(invitesServiceSpy.bulkInvites)
       .withContext(
-        "bulkInvites method from InvitesService should've been called"
+        "bulkInvites method from InvitesService should've been called",
       )
       .toHaveBeenCalled();
   });

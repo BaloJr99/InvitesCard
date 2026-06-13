@@ -5,7 +5,7 @@ import { provideRouter } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { EventsService } from 'src/app/core/services/events.service';
-import { FileReaderService } from 'src/app/core/services/fileReader.service';
+import { FileReaderService } from 'src/app/core/services/file-reader.service';
 import { FilesService } from 'src/app/core/services/files.service';
 import { FilesComponent } from 'src/app/dashboard/files/files.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
@@ -65,10 +65,10 @@ describe('Files Component (Shallow Test)', () => {
     }).compileComponents();
 
     eventsServiceSpy = TestBed.inject(
-      EventsService
+      EventsService,
     ) as jasmine.SpyObj<EventsService>;
     filesServiceSpy = TestBed.inject(
-      FilesService
+      FilesService,
     ) as jasmine.SpyObj<FilesService>;
 
     filesServiceSpy.getFilesByEvent.and.returnValue(of(downloadFileMockCopy));
@@ -156,11 +156,11 @@ describe('Files Component (Shallow Test)', () => {
     fixture.detectChanges();
 
     const imageContainer = fixture.debugElement.query(
-      By.css('.image-container')
+      By.css('.image-container'),
     );
 
     const musicContainer = fixture.debugElement.query(
-      By.css('.music-container')
+      By.css('.music-container'),
     );
 
     expect(imageContainer)
@@ -183,7 +183,7 @@ describe('Files Component (Shallow Test)', () => {
     fixture.detectChanges();
 
     const imageContainer = fixture.debugElement.query(
-      By.css('.image-container')
+      By.css('.image-container'),
     );
     const imageCards = imageContainer.queryAll(By.css('.card'));
 
@@ -204,7 +204,7 @@ describe('Files Component (Shallow Test)', () => {
     fixture.detectChanges();
 
     const audioContainer = fixture.debugElement.query(
-      By.css('.music-container')
+      By.css('.music-container'),
     );
     const audioCards = audioContainer.queryAll(By.css('.card'));
 
@@ -226,7 +226,7 @@ describe('Files Component (Shallow Test)', () => {
     fixture.detectChanges();
 
     const imageContainer = fixture.debugElement.query(
-      By.css('.image-container')
+      By.css('.image-container'),
     );
     const imageCards = imageContainer.queryAll(By.css('.card'));
     const buttons = imageCards[0].queryAll(By.css('button'));

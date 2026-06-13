@@ -3,7 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
-import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
+import { InviteGroupsService } from 'src/app/core/services/invite-groups.service';
 import { InviteGroupFormComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-group-form/invite-group-form.component';
 import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
 import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
@@ -64,7 +64,7 @@ describe('Invite Group Form Component (Shallow Test)', () => {
     updateFormUsingEvent(fullInvitesGroupsMockCopy.inviteGroup);
     expect(
       fixture.componentInstance.createInviteGroupForm.controls['inviteGroup']
-        .value
+        .value,
     )
       .withContext('InviteGroup control should be filled when input changes')
       .toBe(fullInvitesGroupsMockCopy.inviteGroup);
@@ -91,14 +91,14 @@ describe('Invite Group Form Component (Shallow Test)', () => {
 
     expect(fixture.componentInstance.toggleIsCreatingNewFormGroup)
       .withContext(
-        'toggleIsCreatingNewFormGroup method should have been called'
+        'toggleIsCreatingNewFormGroup method should have been called',
       )
       .toHaveBeenCalled();
   });
 
   it('Expect save button to trigger inviteGroupDuplicated', () => {
     spyOn(fixture.componentInstance, 'inviteGroupDuplicated').and.returnValue(
-      of(false)
+      of(false),
     );
 
     updateFormUsingEvent(fullInvitesGroupsMockCopy.inviteGroup);
@@ -117,7 +117,7 @@ describe('Invite Group Form Component (Shallow Test)', () => {
     fixture.detectChanges();
 
     const errorSpans = fixture.debugElement.queryAll(
-      By.css('.invalid-feedback')
+      By.css('.invalid-feedback'),
     );
     const inviteGroupErrorSpan = errorSpans[0];
 
@@ -131,7 +131,7 @@ describe('Invite Group Form Component (Shallow Test)', () => {
     fixture.detectChanges();
 
     const errorSpans = fixture.debugElement.queryAll(
-      By.css('.invalid-feedback')
+      By.css('.invalid-feedback'),
     );
 
     expect(errorSpans.length)
@@ -146,7 +146,7 @@ describe('Invite Group Form Component (Shallow Test)', () => {
     fixture.detectChanges();
 
     const errorSpans = fixture.debugElement.queryAll(
-      By.css('.invalid-feedback')
+      By.css('.invalid-feedback'),
     );
     const inviteGroupErrorSpan = errorSpans[0];
 

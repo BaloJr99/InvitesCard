@@ -32,7 +32,7 @@ describe('Settings Service', () => {
     });
 
     settingsServiceSpy = TestBed.inject(
-      SettingsService
+      SettingsService,
     ) as jasmine.SpyObj<SettingsService>;
   });
 
@@ -45,7 +45,7 @@ describe('Settings Service', () => {
 
   it('should call getEventSettings', () => {
     settingsServiceSpy.getEventSettings.and.returnValue(
-      of(baseSettingMockCopy)
+      of(baseSettingMockCopy),
     );
 
     settingsServiceSpy
@@ -62,7 +62,7 @@ describe('Settings Service', () => {
 
   it('should call createEventSettings (Sweet Xv)', () => {
     settingsServiceSpy.createEventSettings.and.returnValue(
-      of(messageResponseMockCopy)
+      of(messageResponseMockCopy),
     );
 
     settingsServiceSpy
@@ -78,7 +78,7 @@ describe('Settings Service', () => {
 
   it('should call createEventSettings (Save The Date)', () => {
     settingsServiceSpy.createEventSettings.and.returnValue(
-      of(messageResponseMockCopy)
+      of(messageResponseMockCopy),
     );
 
     settingsServiceSpy
@@ -91,20 +91,20 @@ describe('Settings Service', () => {
       .withContext('Expected createEventSettings to have been called')
       .toHaveBeenCalledOnceWith(
         saveTheDateSettingMockCopy,
-        fullEventsMockCopy.id
+        fullEventsMockCopy.id,
       );
   });
 
   it('should call updateEventSettings (Sweet Xv)', () => {
     settingsServiceSpy.updateEventSettings.and.returnValue(
-      of(messageResponseMockCopy)
+      of(messageResponseMockCopy),
     );
 
     settingsServiceSpy
       .updateEventSettings(
         sweetXvSettingMockCopy,
         fullEventsMockCopy.id,
-        fullEventsMockCopy.typeOfEvent
+        fullEventsMockCopy.eventTypeId,
       )
       .subscribe((response) => {
         expect(response).toEqual(messageResponseMockCopy);
@@ -115,20 +115,20 @@ describe('Settings Service', () => {
       .toHaveBeenCalledOnceWith(
         sweetXvSettingMockCopy,
         fullEventsMockCopy.id,
-        fullEventsMockCopy.typeOfEvent
+        fullEventsMockCopy.eventTypeId,
       );
   });
 
   it('should call updateEventSettings (Save The Date)', () => {
     settingsServiceSpy.updateEventSettings.and.returnValue(
-      of(messageResponseMockCopy)
+      of(messageResponseMockCopy),
     );
 
     settingsServiceSpy
       .updateEventSettings(
         saveTheDateSettingMockCopy,
         fullEventsMockCopy.id,
-        fullEventsMockCopy.typeOfEvent
+        fullEventsMockCopy.eventTypeId,
       )
       .subscribe((response) => {
         expect(response).toEqual(messageResponseMockCopy);
@@ -139,7 +139,7 @@ describe('Settings Service', () => {
       .toHaveBeenCalledOnceWith(
         saveTheDateSettingMockCopy,
         fullEventsMockCopy.id,
-        fullEventsMockCopy.typeOfEvent
+        fullEventsMockCopy.eventTypeId,
       );
   });
 });

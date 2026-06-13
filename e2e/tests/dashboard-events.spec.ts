@@ -13,6 +13,7 @@ import { EventModal } from 'e2e/pages/dashboard/events/event-modal';
 import { EventsPage } from 'e2e/pages/dashboard/events/events-page';
 import { TestingPage } from 'e2e/pages/dashboard/testing/testing-page';
 import { EventType } from 'src/app/core/models/enum';
+import { IEventType } from 'src/app/core/models/event-types';
 import { saveTheDateUserInviteMock } from 'src/tests/mocks/mocks';
 
 let eventId = '';
@@ -21,6 +22,7 @@ test.describe('Dashboard Events (Admin)', () => {
   let eventsPage: EventsPage;
   let eventModal: EventModal;
   let environmentCleaned = false;
+  let eventTypes: IEventType[];
 
   // Login as admin before each test
   test.beforeEach(async ({ page, context }) => {
@@ -44,8 +46,16 @@ test.describe('Dashboard Events (Admin)', () => {
       await dashboardPage.clickEventsLink();
     }
 
+    const responsePromise = page.waitForResponse(
+      (response) =>
+        response.url().includes('/api/eventtypes') && response.status() === 200,
+    );
+
     eventsPage = new EventsPage(page);
     await eventsPage.waitToLoad();
+
+    const response = await responsePromise;
+    eventTypes = await response.json();
   });
 
   test('should be able to see new event button', async () => {
@@ -63,11 +73,11 @@ test.describe('Dashboard Events (Admin)', () => {
     expect(validationErrors[0]).toContain('The event name is required');
     expect(validationErrors[1]).toContain('The event date is required');
     expect(validationErrors[2]).toContain(
-      'The confirmation deadline date is required'
+      'The confirmation deadline date is required',
     );
     expect(validationErrors[3]).toContain('The type of event is required');
     expect(validationErrors[4]).toContain(
-      'The name of the celebrated is required'
+      'The name of the celebrated is required',
     );
     expect(validationErrors[5]).toContain('The username is required');
   });
@@ -84,9 +94,9 @@ test.describe('Dashboard Events (Admin)', () => {
       sweetXvEventMock.nameOfEvent,
       sweetXvEventMock.dateOfEvent,
       sweetXvEventMock.maxDateOfConfirmation,
-      sweetXvEventMock.typeOfEvent,
+      eventTypes.find((s) => s.name === EventType.Xv)?.id ?? '',
       sweetXvEventMock.nameOfCelebrated,
-      sweetXvEventMock.assignedUser
+      sweetXvEventMock.assignedUser,
     );
 
     eventId = await eventModal.clickConfirmButtonAndReturnId();
@@ -100,7 +110,7 @@ test.describe('Dashboard Events (Admin)', () => {
     const eventCard = await eventsPage.getEventCard(0);
 
     expect(await eventCard.locator('h3').textContent()).toContain(
-      sweetXvEventMock.nameOfEvent
+      sweetXvEventMock.nameOfEvent,
     );
 
     expect(await eventCard.locator('p').textContent()).toContain(
@@ -108,7 +118,7 @@ test.describe('Dashboard Events (Admin)', () => {
         day: 'numeric',
         month: 'long',
         year: 'numeric',
-      })
+      }),
     );
   });
 
@@ -124,14 +134,14 @@ test.describe('Dashboard Events (Admin)', () => {
     const eventCard = await eventsPage.getEventCard(0);
 
     expect(await eventCard.locator('h3').textContent()).toContain(
-      'New Event Name'
+      'New Event Name',
     );
   });
 
   test('should be able to navigate to the event details page', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
       0,
-      eventId
+      eventId,
     );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
@@ -140,7 +150,7 @@ test.describe('Dashboard Events (Admin)', () => {
   test('should be able to add new group to an invite', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
       0,
-      eventId
+      eventId,
     );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
@@ -163,7 +173,7 @@ test.describe('Dashboard Events (Admin)', () => {
   test('should be able to add new invite', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
       0,
-      eventId
+      eventId,
     );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
@@ -176,7 +186,7 @@ test.describe('Dashboard Events (Admin)', () => {
       confirmedInviteMock.inviteGroup,
       confirmedInviteMock.entriesNumber.toString(),
       confirmedInviteMock.contactNumber,
-      confirmedInviteMock.kidsAllowed
+      confirmedInviteMock.kidsAllowed,
     );
 
     await inviteModal.clickConfirmButton();
@@ -189,43 +199,43 @@ test.describe('Dashboard Events (Admin)', () => {
 
     expect(
       await eventDetailsPage.getInviteGroupInviteCount(
-        confirmedInviteMock.inviteGroup
+        confirmedInviteMock.inviteGroup,
       ),
       {
         message: 'There should be 1 invite',
-      }
+      },
     ).toBe(1);
 
     // Check if the confirmed invites statistics are correct
     let eventCardStatistics = await eventDetailsPage.getEventCardStatistic(0);
     expect(await eventCardStatistics.locator('h3').textContent()).toContain(
-      'Confirmed entries'
+      'Confirmed entries',
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain('0');
 
     // Check if the pending invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(1);
     expect(await eventCardStatistics.locator('h3').textContent()).toContain(
-      'Pending entries'
+      'Pending entries',
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain(
-      `${confirmedInviteMock.entriesNumber}`
+      `${confirmedInviteMock.entriesNumber}`,
     );
 
     // Check if the cancelled invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(2);
     expect(await eventCardStatistics.locator('h3').textContent()).toContain(
-      'Cancelled entries'
+      'Cancelled entries',
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain('0');
 
     // Check if the total invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(3);
     expect(await eventCardStatistics.locator('h3').textContent()).toContain(
-      'Total entries'
+      'Total entries',
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain(
-      `${confirmedInviteMock.entriesNumber}`
+      `${confirmedInviteMock.entriesNumber}`,
     );
 
     // Open accordion
@@ -233,7 +243,7 @@ test.describe('Dashboard Events (Admin)', () => {
 
     const tableRow = await eventDetailsPage.getInviteRow(
       groupMock.inviteGroup,
-      confirmedInviteMock.family
+      confirmedInviteMock.family,
     );
 
     const columns = await tableRow.locator('td').all();
@@ -265,7 +275,7 @@ test.describe('Dashboard Events (Admin)', () => {
   test('should be able to edit an invite', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
       0,
-      eventId
+      eventId,
     );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
@@ -275,24 +285,24 @@ test.describe('Dashboard Events (Admin)', () => {
 
     let inviteModal = await eventDetailsPage.clickEditButton(
       groupMock.inviteGroup,
-      confirmedInviteMock.family
+      confirmedInviteMock.family,
     );
     await inviteModal.waitForModalToShow();
 
     expect(await inviteModal.familyInput.inputValue()).toBe(
-      confirmedInviteMock.family
+      confirmedInviteMock.family,
     );
     expect(await inviteModal.getOptionSelected()).toBe(
-      confirmedInviteMock.inviteGroup
+      confirmedInviteMock.inviteGroup,
     );
     expect(await inviteModal.entriesNumberInput.inputValue()).toBe(
-      confirmedInviteMock.entriesNumber.toString()
+      confirmedInviteMock.entriesNumber.toString(),
     );
     expect(await inviteModal.contactNumberInput.inputValue()).toBe(
-      confirmedInviteMock.contactNumber
+      confirmedInviteMock.contactNumber,
     );
     expect(await inviteModal.kidsAllowedCheckbox.isChecked()).toBe(
-      confirmedInviteMock.kidsAllowed
+      confirmedInviteMock.kidsAllowed,
     );
 
     await inviteModal.fillInviteForm(
@@ -300,7 +310,7 @@ test.describe('Dashboard Events (Admin)', () => {
       groupMock.inviteGroup,
       '2',
       '9876543210',
-      false
+      false,
     );
 
     await inviteModal.clickConfirmButton();
@@ -312,7 +322,7 @@ test.describe('Dashboard Events (Admin)', () => {
 
     const tableRow = await eventDetailsPage.getInviteRow(
       groupMock.inviteGroup,
-      'New Family Name'
+      'New Family Name',
     );
 
     const columns = await tableRow.locator('td').all();
@@ -342,17 +352,17 @@ test.describe('Dashboard Events (Admin)', () => {
 
     inviteModal = await eventDetailsPage.clickEditButton(
       groupMock.inviteGroup,
-      'New Family Name'
+      'New Family Name',
     );
     await inviteModal.waitForModalToShow();
 
     expect(await inviteModal.familyInput.inputValue()).toBe('New Family Name');
     expect(await inviteModal.getOptionSelected()).toBe(
-      confirmedInviteMock.inviteGroup
+      confirmedInviteMock.inviteGroup,
     );
     expect(await inviteModal.entriesNumberInput.inputValue()).toBe('2');
     expect(await inviteModal.contactNumberInput.inputValue()).toBe(
-      '9876543210'
+      '9876543210',
     );
     expect(await inviteModal.kidsAllowedCheckbox.isChecked()).toBe(false);
   });
@@ -360,7 +370,7 @@ test.describe('Dashboard Events (Admin)', () => {
   test('should be able to copy the message', async ({ page }) => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
       0,
-      eventId
+      eventId,
     );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
@@ -370,12 +380,12 @@ test.describe('Dashboard Events (Admin)', () => {
 
     await eventDetailsPage.clickCopyButton(
       confirmedInviteMock.inviteGroup,
-      'New Family Name'
+      'New Family Name',
     );
 
     // Get clipboard content after the button has been clicked
     const handle = await page.evaluateHandle(() =>
-      navigator.clipboard.readText()
+      navigator.clipboard.readText(),
     );
     const clipboardContent = await handle.jsonValue();
 
@@ -385,7 +395,7 @@ test.describe('Dashboard Events (Admin)', () => {
   test('should be able to delete an invite', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
       0,
-      eventId
+      eventId,
     );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
@@ -395,7 +405,7 @@ test.describe('Dashboard Events (Admin)', () => {
 
     const commonModal = await eventDetailsPage.clickDeleteButton(
       groupMock.inviteGroup,
-      'New Family Name'
+      'New Family Name',
     );
 
     await commonModal.waitForModalToShow();
@@ -431,9 +441,11 @@ test.describe('Dashboard Events (Admin)', () => {
     eventModal = await eventsPage.clickEditEventButton(0);
     await eventModal.waitForModalToShow();
 
-    await eventModal.setTypeOfEvent(EventType.Wedding);
+    await eventModal.setEventTypeId(
+      eventTypes.find((s) => s.name === EventType.Wedding)?.id ?? '',
+    );
     await eventModal.setNameOfCelebrated(
-      saveTheDateUserInviteMock.nameOfCelebrated
+      saveTheDateUserInviteMock.nameOfCelebrated,
     );
 
     await eventModal.clickConfirmButton();
@@ -441,7 +453,7 @@ test.describe('Dashboard Events (Admin)', () => {
 
     const commonModal = new CommonModal(page);
     expect(await commonModal.modalContent.textContent()).toContain(
-      'You are changing the event type to one that is not supported, are you sure to override the New Event Name event? This will cause information captured by guests and the event settings to be deleted.'
+      'You are changing the event type to one that is not supported, are you sure to override the New Event Name event? This will cause information captured by guests and the event settings to be deleted.',
     );
     await commonModal.clickConfirmButton();
 
@@ -451,8 +463,8 @@ test.describe('Dashboard Events (Admin)', () => {
     await eventsPage.clickEditEventButton(0);
     await eventModal.waitForModalToShow();
 
-    expect(await eventModal.typeOfEventInput.inputValue()).toBe(
-      EventType.Wedding
+    expect(await eventModal.eventTypeIdInput.inputValue()).toBe(
+      eventTypes.find((s) => s.name === EventType.Wedding)?.id ?? '',
     );
   });
 
@@ -462,7 +474,9 @@ test.describe('Dashboard Events (Admin)', () => {
     eventModal = await eventsPage.clickEditEventButton(0);
     await eventModal.waitForModalToShow();
 
-    await eventModal.setTypeOfEvent(EventType.SaveTheDate);
+    await eventModal.setEventTypeId(
+      eventTypes.find((s) => s.name === EventType.SaveTheDate)?.id ?? '',
+    );
     await eventModal.clickConfirmButton();
     await eventsPage.waitToLoad();
     await eventsPage.waitForToast();
@@ -473,15 +487,15 @@ test.describe('Dashboard Events (Admin)', () => {
     await eventsPage.clickEditEventButton(0);
     await eventModal.waitForModalToShow();
 
-    expect(await eventModal.typeOfEventInput.inputValue()).toBe(
-      EventType.SaveTheDate
+    expect(await eventModal.eventTypeIdInput.inputValue()).toBe(
+      eventTypes.find((s) => s.name === EventType.SaveTheDate)?.id ?? '',
     );
   });
 
   test('should be able to import invites', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
       0,
-      eventId
+      eventId,
     );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
@@ -540,7 +554,7 @@ test.describe('Dashboard Events (Admin)', () => {
 
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
       0,
-      eventId
+      eventId,
     );
     await eventDetailsPage.waitToLoad();
 
@@ -558,6 +572,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   let eventsPage: EventsPage;
   let eventModal: EventModal;
   let environmentCleaned = false;
+  let eventTypes: IEventType[];
 
   // Login as admin before each test
   test.beforeEach(async ({ page, context }) => {
@@ -580,9 +595,10 @@ test.describe('Dashboard Events (Invites Admin)', () => {
 
     dashboardPage = (await loginPage.login(
       invitesAdminUser.username,
-      invitesAdminUser.password
+      invitesAdminUser.password,
     )) as DashboardPage;
     await dashboardPage.waitToLoad();
+
     await dashboardPage.clickEventsLink();
 
     eventsPage = new EventsPage(page);
@@ -603,8 +619,17 @@ test.describe('Dashboard Events (Invites Admin)', () => {
     await dashboardPage.waitToLoad();
 
     await dashboardPage.clickEventsLink();
+
+    const responsePromise = page.waitForResponse(
+      (response) =>
+        response.url().includes('/api/eventtypes') && response.status() === 200,
+    );
+
     eventsPage = new EventsPage(page);
     await eventsPage.waitToLoad();
+
+    const response = await responsePromise;
+    eventTypes = await response.json();
 
     eventModal = await eventsPage.clickNewEventButton();
     await eventModal.waitForModalToShow();
@@ -613,11 +638,11 @@ test.describe('Dashboard Events (Invites Admin)', () => {
       sweetXvEventMock.nameOfEvent,
       sweetXvEventMock.dateOfEvent,
       sweetXvEventMock.maxDateOfConfirmation,
-      sweetXvEventMock.typeOfEvent,
+      eventTypes.find((s) => s.name === EventType.Xv)?.id ?? '',
       sweetXvEventMock.nameOfCelebrated,
-      invitesAdminUser.username
+      invitesAdminUser.username,
     );
-    
+
     eventId = await eventModal.clickConfirmButtonAndReturnId();
     await eventsPage.waitToLoad();
     await eventsPage.waitForToast();
@@ -626,7 +651,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
 
     dashboardPage = (await loginPage.login(
       invitesAdminUser.username,
-      invitesAdminUser.password
+      invitesAdminUser.password,
     )) as DashboardPage;
 
     await dashboardPage.waitToLoad();
@@ -641,21 +666,21 @@ test.describe('Dashboard Events (Invites Admin)', () => {
 
     const eventCard = await eventsPage.getEventCard(0);
     expect(await eventCard.locator('h3').textContent()).toContain(
-      sweetXvEventMock.nameOfEvent
+      sweetXvEventMock.nameOfEvent,
     );
     expect(await eventCard.locator('p').textContent()).toContain(
       getFormattedDate(sweetXvEventMock.dateOfEvent.concat('T00:00:00'), {
         day: 'numeric',
         month: 'long',
         year: 'numeric',
-      })
+      }),
     );
   });
 
   test('should be able to navigate to the event details page', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
       0,
-      eventId
+      eventId,
     );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
@@ -664,7 +689,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   test('should be able to add new group to an invite', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
       0,
-      eventId
+      eventId,
     );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
@@ -687,7 +712,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   test('should be able to add new invite', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
       0,
-      eventId
+      eventId,
     );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
@@ -699,7 +724,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
       confirmedInviteMock.inviteGroup,
       confirmedInviteMock.entriesNumber.toString(),
       confirmedInviteMock.contactNumber,
-      confirmedInviteMock.kidsAllowed
+      confirmedInviteMock.kidsAllowed,
     );
 
     await inviteModal.clickConfirmButton();
@@ -712,43 +737,43 @@ test.describe('Dashboard Events (Invites Admin)', () => {
 
     expect(
       await eventDetailsPage.getInviteGroupInviteCount(
-        confirmedInviteMock.inviteGroup
+        confirmedInviteMock.inviteGroup,
       ),
       {
         message: 'There should be 1 invite',
-      }
+      },
     ).toBe(1);
 
     // Check if the confirmed invites statistics are correct
     let eventCardStatistics = await eventDetailsPage.getEventCardStatistic(0);
     expect(await eventCardStatistics.locator('h3').textContent()).toContain(
-      'Confirmed entries'
+      'Confirmed entries',
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain('0');
 
     // Check if the pending invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(1);
     expect(await eventCardStatistics.locator('h3').textContent()).toContain(
-      'Pending entries'
+      'Pending entries',
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain(
-      `${confirmedInviteMock.entriesNumber}`
+      `${confirmedInviteMock.entriesNumber}`,
     );
 
     // Check if the cancelled invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(2);
     expect(await eventCardStatistics.locator('h3').textContent()).toContain(
-      'Cancelled entries'
+      'Cancelled entries',
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain('0');
 
     // Check if the total invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(3);
     expect(await eventCardStatistics.locator('h3').textContent()).toContain(
-      'Total entries'
+      'Total entries',
     );
     expect(await eventCardStatistics.locator('p').textContent()).toContain(
-      `${confirmedInviteMock.entriesNumber}`
+      `${confirmedInviteMock.entriesNumber}`,
     );
 
     // Open accordion
@@ -756,7 +781,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
 
     const tableRow = await eventDetailsPage.getInviteRow(
       groupMock.inviteGroup,
-      confirmedInviteMock.family
+      confirmedInviteMock.family,
     );
 
     const columns = await tableRow.locator('td').all();
@@ -788,7 +813,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   test('should be able to edit an invite', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
       0,
-      eventId
+      eventId,
     );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
@@ -798,24 +823,24 @@ test.describe('Dashboard Events (Invites Admin)', () => {
 
     let inviteModal = await eventDetailsPage.clickEditButton(
       groupMock.inviteGroup,
-      confirmedInviteMock.family
+      confirmedInviteMock.family,
     );
     await inviteModal.waitForModalToShow();
 
     expect(await inviteModal.familyInput.inputValue()).toBe(
-      confirmedInviteMock.family
+      confirmedInviteMock.family,
     );
     expect(await inviteModal.getOptionSelected()).toBe(
-      confirmedInviteMock.inviteGroup
+      confirmedInviteMock.inviteGroup,
     );
     expect(await inviteModal.entriesNumberInput.inputValue()).toBe(
-      confirmedInviteMock.entriesNumber.toString()
+      confirmedInviteMock.entriesNumber.toString(),
     );
     expect(await inviteModal.contactNumberInput.inputValue()).toBe(
-      confirmedInviteMock.contactNumber
+      confirmedInviteMock.contactNumber,
     );
     expect(await inviteModal.kidsAllowedCheckbox.isChecked()).toBe(
-      confirmedInviteMock.kidsAllowed
+      confirmedInviteMock.kidsAllowed,
     );
 
     await inviteModal.fillInviteForm(
@@ -823,7 +848,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
       groupMock.inviteGroup,
       '2',
       '9876543210',
-      false
+      false,
     );
 
     await inviteModal.clickConfirmButton();
@@ -835,7 +860,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
 
     const tableRow = await eventDetailsPage.getInviteRow(
       groupMock.inviteGroup,
-      'New Family Name'
+      'New Family Name',
     );
 
     const columns = await tableRow.locator('td').all();
@@ -865,18 +890,18 @@ test.describe('Dashboard Events (Invites Admin)', () => {
 
     inviteModal = await eventDetailsPage.clickEditButton(
       groupMock.inviteGroup,
-      'New Family Name'
+      'New Family Name',
     );
 
     await inviteModal.waitForModalToShow();
 
     expect(await inviteModal.familyInput.inputValue()).toBe('New Family Name');
     expect(await inviteModal.getOptionSelected()).toBe(
-      confirmedInviteMock.inviteGroup
+      confirmedInviteMock.inviteGroup,
     );
     expect(await inviteModal.entriesNumberInput.inputValue()).toBe('2');
     expect(await inviteModal.contactNumberInput.inputValue()).toBe(
-      '9876543210'
+      '9876543210',
     );
     expect(await inviteModal.kidsAllowedCheckbox.isChecked()).toBe(false);
   });
@@ -884,7 +909,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   test('should be able to copy the message', async ({ page }) => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
       0,
-      eventId
+      eventId,
     );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
@@ -894,12 +919,12 @@ test.describe('Dashboard Events (Invites Admin)', () => {
 
     await eventDetailsPage.clickCopyButton(
       confirmedInviteMock.inviteGroup,
-      'New Family Name'
+      'New Family Name',
     );
 
     // Get clipboard content after the button has been clicked
     const handle = await page.evaluateHandle(() =>
-      navigator.clipboard.readText()
+      navigator.clipboard.readText(),
     );
     const clipboardContent = await handle.jsonValue();
 
@@ -909,7 +934,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   test('should be able to delete an invite', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
       0,
-      eventId
+      eventId,
     );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
@@ -918,7 +943,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
 
     const commonModal = await eventDetailsPage.clickDeleteButton(
       groupMock.inviteGroup,
-      'New Family Name'
+      'New Family Name',
     );
 
     await commonModal.waitForModalToShow();
@@ -951,7 +976,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   test('should be able to import invites', async () => {
     const eventDetailsPage = await eventsPage.clickGoToInvitesButton(
       0,
-      eventId
+      eventId,
     );
     await eventDetailsPage.waitToLoad();
     await eventDetailsPage.isEventDetailsPage();
@@ -988,7 +1013,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
     // Check if the pending invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(1);
     expect(await eventCardStatistics.locator('p').textContent()).toContain(
-      '15'
+      '15',
     );
 
     // Check if the cancelled invites statistics are correct
@@ -998,7 +1023,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
     // Check if the total invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(3);
     expect(await eventCardStatistics.locator('p').textContent()).toContain(
-      '15'
+      '15',
     );
   });
 });

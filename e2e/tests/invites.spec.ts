@@ -23,6 +23,7 @@ import { SaveTheDatePage } from 'e2e/pages/invites/save-the-date-page';
 import { SweetXvPage } from 'e2e/pages/invites/sweet-xv-page';
 import { WeddingPage } from 'e2e/pages/invites/wedding-page';
 import { EventType, ImageUsage } from 'src/app/core/models/enum';
+import { IEventType } from 'src/app/core/models/event-types';
 import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
 import {
   saveTheDateSettingMock,
@@ -37,12 +38,12 @@ test.describe('Invites (Sweet Xv)', () => {
   sweetXvSettingMockCopy = {
     ...sweetXvSettingMockCopy,
     massTime: toLocalDate(
-      sweetXvSettingMockCopy.massTime.replace(' ', 'T').concat('.000Z')
+      sweetXvSettingMockCopy.massTime.replace(' ', 'T').concat('.000Z'),
     )
       .split('T')[1]
       .substring(0, 5),
     receptionTime: toLocalDate(
-      sweetXvSettingMockCopy.receptionTime.replace(' ', 'T').concat('.000Z')
+      sweetXvSettingMockCopy.receptionTime.replace(' ', 'T').concat('.000Z'),
     )
       .split('T')[1]
       .substring(0, 5),
@@ -56,6 +57,8 @@ test.describe('Invites (Sweet Xv)', () => {
   let eventModal: EventModal;
   let eventDetailsPage: EventDetailsPage;
   let environmentCleaned = false;
+
+  let eventTypes: IEventType[];
 
   test.beforeEach(async ({ page, context }) => {
     // Grant clipboard permissions to browser context
@@ -77,9 +80,18 @@ test.describe('Invites (Sweet Xv)', () => {
       await testingPage.clickCleanEnvironmentButton();
       await testingPage.clickEventsLink();
 
+      const responsePromise = page.waitForResponse(
+        (response) =>
+          response.url().includes('/api/eventtypes') &&
+          response.status() === 200,
+      );
+
       eventsPage = new EventsPage(page);
       await eventsPage.isEventsPage();
       await eventsPage.waitToLoad();
+
+      const response = await responsePromise;
+      eventTypes = await response.json();
 
       eventModal = await eventsPage.clickNewEventButton();
       await eventModal.waitForModalToShow();
@@ -89,9 +101,9 @@ test.describe('Invites (Sweet Xv)', () => {
         sweetXvEventMock.nameOfEvent,
         sweetXvEventMock.dateOfEvent,
         sweetXvEventMock.maxDateOfConfirmation,
-        sweetXvEventMock.typeOfEvent,
+        eventTypes.find((s) => s.name === EventType.Xv)?.id ?? '',
         sweetXvEventMock.nameOfCelebrated,
-        sweetXvEventMock.assignedUser
+        sweetXvEventMock.assignedUser,
       );
       eventId = await eventModal.clickConfirmButtonAndReturnId();
       await eventsPage.waitToLoad();
@@ -119,7 +131,7 @@ test.describe('Invites (Sweet Xv)', () => {
         sweetXvSettingMockCopy.receptionTime,
         sweetXvSettingMockCopy.receptionPlace,
         sweetXvSettingMockCopy.receptionAddress,
-        sweetXvSettingMockCopy.dressCodeColor
+        sweetXvSettingMockCopy.dressCodeColor,
       );
 
       await settingsPage.clickSaveChanges();
@@ -166,7 +178,7 @@ test.describe('Invites (Sweet Xv)', () => {
         confirmedInviteMock.inviteGroup,
         confirmedInviteMock.entriesNumber.toString(),
         confirmedInviteMock.contactNumber,
-        confirmedInviteMock.kidsAllowed
+        confirmedInviteMock.kidsAllowed,
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
@@ -181,7 +193,7 @@ test.describe('Invites (Sweet Xv)', () => {
         notConfirmedInviteMock.inviteGroup,
         notConfirmedInviteMock.entriesNumber.toString(),
         notConfirmedInviteMock.contactNumber,
-        notConfirmedInviteMock.kidsAllowed
+        notConfirmedInviteMock.kidsAllowed,
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
@@ -196,7 +208,7 @@ test.describe('Invites (Sweet Xv)', () => {
         partialConfirmedInviteMock.inviteGroup,
         partialConfirmedInviteMock.entriesNumber.toString(),
         partialConfirmedInviteMock.contactNumber,
-        partialConfirmedInviteMock.kidsAllowed
+        partialConfirmedInviteMock.kidsAllowed,
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
@@ -211,7 +223,7 @@ test.describe('Invites (Sweet Xv)', () => {
         pendingInviteMock.inviteGroup,
         pendingInviteMock.entriesNumber.toString(),
         pendingInviteMock.contactNumber,
-        pendingInviteMock.kidsAllowed
+        pendingInviteMock.kidsAllowed,
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
@@ -222,12 +234,12 @@ test.describe('Invites (Sweet Xv)', () => {
       // Store confirmed invite message link
       await eventDetailsPage.clickCopyButton(
         groupMock.inviteGroup,
-        confirmedInviteMock.family
+        confirmedInviteMock.family,
       );
 
       // Get clipboard content after the button has been clicked
       let handle = await page.evaluateHandle(() =>
-        navigator.clipboard.readText()
+        navigator.clipboard.readText(),
       );
       let clipboardContent = await handle.jsonValue();
       confirmedMessageLink = clipboardContent;
@@ -235,7 +247,7 @@ test.describe('Invites (Sweet Xv)', () => {
       // Store not confirmed invite message link
       await eventDetailsPage.clickCopyButton(
         groupMock.inviteGroup,
-        notConfirmedInviteMock.family
+        notConfirmedInviteMock.family,
       );
 
       // Get clipboard content after the button has been clicked
@@ -246,7 +258,7 @@ test.describe('Invites (Sweet Xv)', () => {
       // Store partial confirmed invite message link
       await eventDetailsPage.clickCopyButton(
         groupMock.inviteGroup,
-        partialConfirmedInviteMock.family
+        partialConfirmedInviteMock.family,
       );
 
       // Get clipboard content after the button has been clicked
@@ -266,7 +278,7 @@ test.describe('Invites (Sweet Xv)', () => {
     // Check if the pending invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(1);
     expect(await eventCardStatistics.locator('p').textContent()).toContain(
-      '34'
+      '34',
     );
 
     // Check if the cancelled invites statistics are correct
@@ -276,7 +288,7 @@ test.describe('Invites (Sweet Xv)', () => {
     // Check if the total invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(3);
     expect(await eventCardStatistics.locator('p').textContent()).toContain(
-      '34'
+      '34',
     );
   });
 
@@ -306,7 +318,7 @@ test.describe('Invites (Sweet Xv)', () => {
       }).toUpperCase()}, ${getFormattedDate(dateOfEvent, {
         day: 'numeric',
         month: 'long',
-      }).toUpperCase()}`
+      }).toUpperCase()}`,
     );
 
     expect(await invitePage.countdown.isVisible(), {
@@ -392,7 +404,7 @@ test.describe('Invites (Sweet Xv)', () => {
     await invitePage.fillConfirmationForm(
       true,
       confirmedInviteMock.entriesNumber.toString(),
-      'I will attend'
+      'I will attend',
     );
     await invitePage.sendConfirmation();
     await invitePage.waitToLoad();
@@ -459,7 +471,7 @@ test.describe('Invites (Sweet Xv)', () => {
     // Check if the confirmed invites statistics are correct
     let eventCardStatistics = await eventDetailsPage.getEventCardStatistic(0);
     expect(await eventCardStatistics.locator('p').textContent()).toContain(
-      '15'
+      '15',
     );
 
     // Check if the pending invites statistics are correct
@@ -469,13 +481,13 @@ test.describe('Invites (Sweet Xv)', () => {
     // Check if the cancelled invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(2);
     expect(await eventCardStatistics.locator('p').textContent()).toContain(
-      '15'
+      '15',
     );
 
     // Check if the total invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(3);
     expect(await eventCardStatistics.locator('p').textContent()).toContain(
-      '34'
+      '34',
     );
   });
 });
@@ -488,6 +500,8 @@ test.describe('Invites (Save The Date)', () => {
   let eventModal: EventModal;
   let eventDetailsPage: EventDetailsPage;
   let environmentCleaned = false;
+
+  let eventTypes: IEventType[];
 
   test.beforeEach(async ({ page, context }) => {
     // Grant clipboard permissions to browser context
@@ -511,9 +525,19 @@ test.describe('Invites (Save The Date)', () => {
       await testingPage.clickCleanEnvironmentButton();
 
       await testingPage.clickEventsLink();
+
+      const responsePromise = page.waitForResponse(
+        (response) =>
+          response.url().includes('/api/eventtypes') &&
+          response.status() === 200,
+      );
+
       eventsPage = new EventsPage(page);
       await eventsPage.isEventsPage();
       await eventsPage.waitToLoad();
+
+      const response = await responsePromise;
+      eventTypes = await response.json();
 
       eventModal = await eventsPage.clickNewEventButton();
       await eventModal.waitForModalToShow();
@@ -523,9 +547,9 @@ test.describe('Invites (Save The Date)', () => {
         saveTheDateEventMock.nameOfEvent,
         saveTheDateEventMock.dateOfEvent,
         saveTheDateEventMock.maxDateOfConfirmation,
-        saveTheDateEventMock.typeOfEvent,
+        eventTypes.find((s) => s.name === EventType.SaveTheDate)?.id ?? '',
         saveTheDateEventMock.nameOfCelebrated,
-        saveTheDateEventMock.assignedUser
+        saveTheDateEventMock.assignedUser,
       );
       eventId = await eventModal.clickConfirmButtonAndReturnId();
       await eventsPage.waitToLoad();
@@ -545,7 +569,7 @@ test.describe('Invites (Save The Date)', () => {
         saveTheDateSettingMock.receptionPlace,
         saveTheDateSettingMock.copyMessage,
         saveTheDateSettingMock.hotelName,
-        saveTheDateSettingMock.hotelInformation
+        saveTheDateSettingMock.hotelInformation,
       );
 
       await settingsPage.clickSaveChanges();
@@ -591,7 +615,7 @@ test.describe('Invites (Save The Date)', () => {
         confirmedInviteMock.inviteGroup,
         confirmedInviteMock.entriesNumber.toString(),
         confirmedInviteMock.contactNumber,
-        confirmedInviteMock.kidsAllowed
+        confirmedInviteMock.kidsAllowed,
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
@@ -606,7 +630,7 @@ test.describe('Invites (Save The Date)', () => {
         notConfirmedInviteMock.inviteGroup,
         notConfirmedInviteMock.entriesNumber.toString(),
         notConfirmedInviteMock.contactNumber,
-        notConfirmedInviteMock.kidsAllowed
+        notConfirmedInviteMock.kidsAllowed,
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
@@ -621,7 +645,7 @@ test.describe('Invites (Save The Date)', () => {
         pendingInviteMock.inviteGroup,
         pendingInviteMock.entriesNumber.toString(),
         pendingInviteMock.contactNumber,
-        pendingInviteMock.kidsAllowed
+        pendingInviteMock.kidsAllowed,
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
@@ -632,12 +656,12 @@ test.describe('Invites (Save The Date)', () => {
       // Store confirmed invite message link
       await eventDetailsPage.clickCopyButton(
         groupMock.inviteGroup,
-        confirmedInviteMock.family
+        confirmedInviteMock.family,
       );
 
       // Get clipboard content after the button has been clicked
       let handle = await page.evaluateHandle(() =>
-        navigator.clipboard.readText()
+        navigator.clipboard.readText(),
       );
       let clipboardContent = await handle.jsonValue();
       needsAccomodationMessageLink = clipboardContent;
@@ -645,7 +669,7 @@ test.describe('Invites (Save The Date)', () => {
       // Store not confirmed invite message link
       await eventDetailsPage.clickCopyButton(
         groupMock.inviteGroup,
-        notConfirmedInviteMock.family
+        notConfirmedInviteMock.family,
       );
 
       // Get clipboard content after the button has been clicked
@@ -706,7 +730,7 @@ test.describe('Invites (Save The Date)', () => {
       getFormattedDate(dateOfEvent, {
         month: 'long',
         year: 'numeric',
-      }).toUpperCase()
+      }).toUpperCase(),
     );
 
     expect(await invitePage.receptionPlace.textContent(), {
@@ -718,7 +742,7 @@ test.describe('Invites (Save The Date)', () => {
     }).toBe(
       getFormattedDate(dateOfEvent, {
         day: 'numeric',
-      }).toUpperCase()
+      }).toUpperCase(),
     );
 
     await invitePage.fillAccomodationForm(true);
@@ -794,6 +818,8 @@ test.describe('Invites (Wedding)', () => {
   let eventDetailsPage: EventDetailsPage;
   let environmentCleaned = false;
 
+  let eventTypes: IEventType[];
+
   test.beforeEach(async ({ page, context }, testInfo) => {
     testInfo.setTimeout(60000);
     // Grant clipboard permissions to browser context
@@ -818,9 +844,19 @@ test.describe('Invites (Wedding)', () => {
       await testingPage.clickCleanEnvironmentButton();
 
       await testingPage.clickEventsLink();
+
+      const responsePromise = page.waitForResponse(
+        (response) =>
+          response.url().includes('/api/eventtypes') &&
+          response.status() === 200,
+      );
+
       eventsPage = new EventsPage(page);
       await eventsPage.isEventsPage();
       await eventsPage.waitToLoad();
+
+      const response = await responsePromise;
+      eventTypes = await response.json();
 
       eventModal = await eventsPage.clickNewEventButton();
       await eventModal.waitForModalToShow();
@@ -830,9 +866,9 @@ test.describe('Invites (Wedding)', () => {
         saveTheDateEventMock.nameOfEvent,
         saveTheDateEventMock.dateOfEvent,
         saveTheDateEventMock.maxDateOfConfirmation,
-        saveTheDateEventMock.typeOfEvent,
+        eventTypes.find((s) => s.name === EventType.SaveTheDate)?.id ?? '',
         saveTheDateEventMock.nameOfCelebrated,
-        saveTheDateEventMock.assignedUser
+        saveTheDateEventMock.assignedUser,
       );
 
       eventId = await eventModal.clickConfirmButtonAndReturnId();
@@ -853,7 +889,7 @@ test.describe('Invites (Wedding)', () => {
         saveTheDateSettingMock.receptionPlace,
         saveTheDateSettingMock.copyMessage,
         saveTheDateSettingMock.hotelName,
-        saveTheDateSettingMock.hotelInformation
+        saveTheDateSettingMock.hotelInformation,
       );
 
       await saveTheDateSettings.clickSaveChanges();
@@ -867,7 +903,9 @@ test.describe('Invites (Wedding)', () => {
       await eventModal.waitForModalToShow();
 
       // Switch to wedding event
-      await eventModal.setTypeOfEvent(EventType.Wedding);
+      await eventModal.setEventTypeId(
+        eventTypes.find((s) => s.name === EventType.Wedding)?.id ?? '',
+      );
       await eventModal.clickConfirmButton();
       await eventsPage.waitToLoad();
       await eventsPage.waitForToast();
@@ -883,7 +921,7 @@ test.describe('Invites (Wedding)', () => {
         weddingSettingMock.weddingSecondaryColor,
         weddingSettingMock.copyMessage,
         weddingSettingMock.groomParents,
-        weddingSettingMock.brideParents
+        weddingSettingMock.brideParents,
       );
 
       const dateOfMass = weddingSettingMock.massTime.split(' ');
@@ -910,22 +948,22 @@ test.describe('Invites (Wedding)', () => {
         weddingSettingMock.civilPlace,
         weddingSettingMock.venueUrl,
         venueTime,
-        weddingSettingMock.venuePlace
+        weddingSettingMock.venuePlace,
       );
 
       await weddingSettings.fillDressCodeSection(
-        weddingSettingMock.dressCodeColor
+        weddingSettingMock.dressCodeColor,
       );
 
       await weddingSettings.fillGiftsSection(
         weddingSettingMock.cardNumber,
-        weddingSettingMock.clabeBank
+        weddingSettingMock.clabeBank,
       );
 
       await weddingSettings.fillAccomodationSection(
         weddingSettingMock.hotelUrl,
         weddingSettingMock.hotelPhone,
-        weddingSettingMock.hotelAddress
+        weddingSettingMock.hotelAddress,
       );
 
       await weddingSettings.clickSaveChanges();
@@ -971,7 +1009,7 @@ test.describe('Invites (Wedding)', () => {
         confirmedInviteMock.inviteGroup,
         confirmedInviteMock.entriesNumber.toString(),
         confirmedInviteMock.contactNumber,
-        confirmedInviteMock.kidsAllowed
+        confirmedInviteMock.kidsAllowed,
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
@@ -986,7 +1024,7 @@ test.describe('Invites (Wedding)', () => {
         notConfirmedInviteMock.inviteGroup,
         notConfirmedInviteMock.entriesNumber.toString(),
         notConfirmedInviteMock.contactNumber,
-        notConfirmedInviteMock.kidsAllowed
+        notConfirmedInviteMock.kidsAllowed,
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
@@ -1001,7 +1039,7 @@ test.describe('Invites (Wedding)', () => {
         partialConfirmedInviteMock.inviteGroup,
         partialConfirmedInviteMock.entriesNumber.toString(),
         partialConfirmedInviteMock.contactNumber,
-        partialConfirmedInviteMock.kidsAllowed
+        partialConfirmedInviteMock.kidsAllowed,
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
@@ -1016,7 +1054,7 @@ test.describe('Invites (Wedding)', () => {
         pendingInviteMock.inviteGroup,
         pendingInviteMock.entriesNumber.toString(),
         pendingInviteMock.contactNumber,
-        pendingInviteMock.kidsAllowed
+        pendingInviteMock.kidsAllowed,
       );
       await invitesModal.clickConfirmButton();
       await eventDetailsPage.waitToLoad();
@@ -1027,12 +1065,12 @@ test.describe('Invites (Wedding)', () => {
       // Store confirmed invite message link
       await eventDetailsPage.clickCopyButton(
         groupMock.inviteGroup,
-        confirmedInviteMock.family
+        confirmedInviteMock.family,
       );
 
       // Get clipboard content after the button has been clicked
       let handle = await page.evaluateHandle(() =>
-        navigator.clipboard.readText()
+        navigator.clipboard.readText(),
       );
       let clipboardContent = await handle.jsonValue();
       confirmedMessageLink = clipboardContent;
@@ -1040,7 +1078,7 @@ test.describe('Invites (Wedding)', () => {
       // Store not confirmed invite message link
       await eventDetailsPage.clickCopyButton(
         groupMock.inviteGroup,
-        notConfirmedInviteMock.family
+        notConfirmedInviteMock.family,
       );
 
       // Get clipboard content after the button has been clicked
@@ -1051,7 +1089,7 @@ test.describe('Invites (Wedding)', () => {
       // Store partial confirmed invite message link
       await eventDetailsPage.clickCopyButton(
         groupMock.inviteGroup,
-        partialConfirmedInviteMock.family
+        partialConfirmedInviteMock.family,
       );
 
       // Get clipboard content after the button has been clicked
@@ -1097,13 +1135,13 @@ test.describe('Invites (Wedding)', () => {
     expect(await invitePage.nameOfCelebrated.textContent(), {
       message: 'Name of celebrated should containt the bride name',
     }).toContain(
-      saveTheDateEventMock.nameOfCelebrated.split(';')[0].split(' ')[0]
+      saveTheDateEventMock.nameOfCelebrated.split(';')[0].split(' ')[0],
     );
 
     expect(await invitePage.nameOfCelebrated.textContent(), {
       message: 'Name of celebrated should containt the groom name',
     }).toContain(
-      saveTheDateEventMock.nameOfCelebrated.split(';')[1].split(' ')[0]
+      saveTheDateEventMock.nameOfCelebrated.split(';')[1].split(' ')[0],
     );
 
     const dateOfEvent = saveTheDateEventMock.dateOfEvent.concat('T00:00:00');
@@ -1115,7 +1153,7 @@ test.describe('Invites (Wedding)', () => {
       }).toUpperCase()}, ${getFormattedDate(dateOfEvent, {
         day: 'numeric',
         month: 'long',
-      }).toUpperCase()}`
+      }).toUpperCase()}`,
     );
 
     expect(await invitePage.countdown.isVisible(), {
@@ -1224,7 +1262,7 @@ test.describe('Invites (Wedding)', () => {
     await invitePage.fillConfirmationForm(
       true,
       confirmedInviteMock.entriesNumber.toString(),
-      'I will attend'
+      'I will attend',
     );
     await invitePage.sendConfirmation();
     await invitePage.waitToLoad();
@@ -1291,7 +1329,7 @@ test.describe('Invites (Wedding)', () => {
     // Check if the confirmed invites statistics are correct
     let eventCardStatistics = await eventDetailsPage.getEventCardStatistic(0);
     expect(await eventCardStatistics.locator('p').textContent()).toContain(
-      '15'
+      '15',
     );
 
     // Check if the pending invites statistics are correct
@@ -1301,13 +1339,13 @@ test.describe('Invites (Wedding)', () => {
     // Check if the cancelled invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(2);
     expect(await eventCardStatistics.locator('p').textContent()).toContain(
-      '15'
+      '15',
     );
 
     // Check if the total invites statistics are correct
     eventCardStatistics = await eventDetailsPage.getEventCardStatistic(3);
     expect(await eventCardStatistics.locator('p').textContent()).toContain(
-      '34'
+      '34',
     );
   });
 });

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
+import { InviteGroupsService } from 'src/app/core/services/invite-groups.service';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   fullEventsMock,
@@ -29,7 +29,7 @@ describe('Invite Groups Service', () => {
     });
 
     inviteGroupsServiceSpy = TestBed.inject(
-      InviteGroupsService
+      InviteGroupsService,
     ) as jasmine.SpyObj<InviteGroupsService>;
   });
 
@@ -42,7 +42,7 @@ describe('Invite Groups Service', () => {
 
   it('should call getAllInviteGroups', () => {
     inviteGroupsServiceSpy.getAllInviteGroups.and.returnValue(
-      of([fullInvitesGroupsMockCopy])
+      of([fullInvitesGroupsMockCopy]),
     );
 
     inviteGroupsServiceSpy
@@ -60,7 +60,7 @@ describe('Invite Groups Service', () => {
 
   it('should call createInviteGroup', () => {
     inviteGroupsServiceSpy.createInviteGroup.and.returnValue(
-      of(messageResponseMockCopy)
+      of(messageResponseMockCopy),
     );
 
     inviteGroupsServiceSpy
@@ -76,13 +76,13 @@ describe('Invite Groups Service', () => {
 
   it('should call updateInviteGroup', () => {
     inviteGroupsServiceSpy.updateInviteGroup.and.returnValue(
-      of(messageResponseMockCopy)
+      of(messageResponseMockCopy),
     );
 
     inviteGroupsServiceSpy
       .updateInviteGroup(
         fullInvitesGroupsMockCopy,
-        fullInvitesGroupsMockCopy.id
+        fullInvitesGroupsMockCopy.id,
       )
       .subscribe((response) => {
         expect(response).toEqual(messageResponseMockCopy);
@@ -92,7 +92,7 @@ describe('Invite Groups Service', () => {
       .withContext('Expected updateInviteGroup to have been called')
       .toHaveBeenCalledOnceWith(
         fullInvitesGroupsMockCopy,
-        fullInvitesGroupsMockCopy.id
+        fullInvitesGroupsMockCopy.id,
       );
   });
 
@@ -102,7 +102,7 @@ describe('Invite Groups Service', () => {
     inviteGroupsServiceSpy
       .checkInviteGroup(
         fullInvitesGroupsMockCopy.id,
-        fullInvitesGroupsMockCopy.inviteGroup
+        fullInvitesGroupsMockCopy.inviteGroup,
       )
       .subscribe((response) => {
         expect(response).toBeTrue();
@@ -112,7 +112,7 @@ describe('Invite Groups Service', () => {
       .withContext('Expected checkInviteGroup to have been called')
       .toHaveBeenCalledOnceWith(
         fullInvitesGroupsMockCopy.id,
-        fullInvitesGroupsMockCopy.inviteGroup
+        fullInvitesGroupsMockCopy.inviteGroup,
       );
   });
 });

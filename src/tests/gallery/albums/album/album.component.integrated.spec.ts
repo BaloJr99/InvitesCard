@@ -3,7 +3,7 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
-import { FileReaderService } from 'src/app/core/services/fileReader.service';
+import { FileReaderService } from 'src/app/core/services/file-reader.service';
 import { GalleryService } from 'src/app/core/services/gallery.service';
 import { AlbumComponent } from 'src/app/gallery/albums/album/album.component';
 import { albumMock } from 'src/tests/mocks/mocks';
@@ -55,11 +55,11 @@ describe('AlbumComponent (Integrated Test)', () => {
     }).compileComponents();
 
     galleryServiceSpy = TestBed.inject(
-      GalleryService
+      GalleryService,
     ) as jasmine.SpyObj<GalleryService>;
 
     fileReaderServiceSpy = TestBed.inject(
-      FileReaderService
+      FileReaderService,
     ) as jasmine.SpyObj<FileReaderService>;
 
     galleryServiceSpy.getAlbumImages.and.returnValue(of([]));

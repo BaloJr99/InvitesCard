@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
-import { EventType, Roles } from 'src/app/core/models/enum';
+import { Roles } from 'src/app/core/models/enum';
 import { IDashboardEvent, IEventAction } from 'src/app/core/models/events';
 import { EventsService } from 'src/app/core/services/events.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
@@ -27,7 +27,7 @@ export class EventsComponent {
     maxDateOfConfirmation: '',
     nameOfCelebrated: '',
     userId: '',
-    typeOfEvent: EventType.None,
+    eventTypeId: '',
   };
 
   private events = new BehaviorSubject<IDashboardEvent[]>([]);
@@ -53,7 +53,7 @@ export class EventsComponent {
         });
         this.events.next(formattedEvents);
         return events;
-      })
+      }),
     ),
     this.events$,
   ]).pipe(
@@ -65,7 +65,7 @@ export class EventsComponent {
           ? userInformation.roles.some((r) => r.name == Roles.Admin)
           : false,
       };
-    })
+    }),
   );
 
   updateEvents(eventAction: IEventAction) {
@@ -74,13 +74,13 @@ export class EventsComponent {
       eventsCopy.push(eventAction.event);
     } else {
       const eventIndex = eventsCopy.findIndex(
-        (event) => event.id === eventAction.event.id
+        (event) => event.id === eventAction.event.id,
       );
       eventsCopy[eventIndex] = eventAction.event;
     }
 
     eventsCopy.sort((a, b) =>
-      a.nameOfEvent.toLowerCase().localeCompare(b.nameOfEvent.toLowerCase())
+      a.nameOfEvent.toLowerCase().localeCompare(b.nameOfEvent.toLowerCase()),
     );
 
     this.eventAction = {
@@ -108,7 +108,7 @@ export class EventsComponent {
               maxDateOfConfirmation: toLocalDate(event.maxDateOfConfirmation),
               userId: event.userId,
             };
-          })
+          }),
         )
         .subscribe({
           next: (event) => {

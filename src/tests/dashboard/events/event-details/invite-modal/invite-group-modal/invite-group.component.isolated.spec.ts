@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ToastrService } from 'ngx-toastr';
-import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
+import { InviteGroupsService } from 'src/app/core/services/invite-groups.service';
 import { InviteGroupFormComponent } from 'src/app/dashboard/events/event-details/invite-modal/invite-group-form/invite-group-form.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { fullInvitesGroupsMock } from 'src/tests/mocks/mocks';
@@ -9,12 +9,14 @@ const fullInvitesGroupsMockCopy = deepCopy(fullInvitesGroupsMock);
 
 describe('Invite Group Form Component (Isolated Test)', () => {
   let component: InviteGroupFormComponent;
-  const inviteGroupServiceSpy = jasmine.createSpyObj('InviteGroupsService', ['']);
+  const inviteGroupServiceSpy = jasmine.createSpyObj('InviteGroupsService', [
+    '',
+  ]);
   const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
   const updateForm = (inviteGroup: string) => {
     component.createInviteGroupForm.controls['inviteGroup'].setValue(
-      inviteGroup
+      inviteGroup,
     );
   };
 
@@ -25,7 +27,9 @@ describe('Invite Group Form Component (Isolated Test)', () => {
         { provide: ToastrService, useValue: toastrSpy },
       ],
     });
-    component = TestBed.createComponent(InviteGroupFormComponent).componentInstance;
+    component = TestBed.createComponent(
+      InviteGroupFormComponent,
+    ).componentInstance;
   });
 
   it('should create', () => {

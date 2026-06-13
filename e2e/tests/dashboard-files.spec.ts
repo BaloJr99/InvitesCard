@@ -5,11 +5,13 @@ import { DashboardPage } from 'e2e/pages/dashboard/dashboard-page';
 import { EventsPage } from 'e2e/pages/dashboard/events/events-page';
 import { FilesPage } from 'e2e/pages/dashboard/files/files-page';
 import { TestingPage } from 'e2e/pages/dashboard/testing/testing-page';
-import { ImageUsage } from 'src/app/core/models/enum';
+import { EventType, ImageUsage } from 'src/app/core/models/enum';
+import { IEventType } from 'src/app/core/models/event-types';
 
 test.describe('Dashboard Files (Admin)', () => {
   let filesPage: FilesPage;
   let environmentCleaned = false;
+  let eventTypes: IEventType[];
 
   // Login as admin before each test
   test.beforeEach(async ({ page }) => {
@@ -26,8 +28,18 @@ test.describe('Dashboard Files (Admin)', () => {
       await testingPage.clickCleanEnvironmentButton();
       await testingPage.clickEventsLink();
 
+      const responsePromise = page.waitForResponse(
+        (response) =>
+          response.url().includes('/api/eventtypes') &&
+          response.status() === 200,
+      );
+
       const eventsPage = new EventsPage(page);
       await eventsPage.waitToLoad();
+
+      const response = await responsePromise;
+      eventTypes = await response.json();
+
       const eventModal = await eventsPage.clickNewEventButton();
       await eventModal.waitForModalToShow();
 
@@ -35,9 +47,9 @@ test.describe('Dashboard Files (Admin)', () => {
         sweetXvEventMock.nameOfEvent,
         sweetXvEventMock.dateOfEvent,
         sweetXvEventMock.maxDateOfConfirmation,
-        sweetXvEventMock.typeOfEvent,
+        eventTypes.find((s) => s.name === EventType.Xv)?.id ?? '',
         sweetXvEventMock.nameOfCelebrated,
-        sweetXvEventMock.assignedUser
+        sweetXvEventMock.assignedUser,
       );
 
       await eventModal.clickConfirmButton();
@@ -132,6 +144,7 @@ test.describe('Dashboard Files (Admin)', () => {
 test.describe('Dashboard Files (invitesAdmin)', () => {
   let filesPage: FilesPage;
   let environmentCleaned = false;
+  let eventTypes: IEventType[];
 
   // Login as admin before each test
   test.beforeEach(async ({ page }) => {
@@ -148,8 +161,18 @@ test.describe('Dashboard Files (invitesAdmin)', () => {
       await testingPage.clickCleanEnvironmentButton();
       await testingPage.clickEventsLink();
 
+      const responsePromise = page.waitForResponse(
+        (response) =>
+          response.url().includes('/api/eventtypes') &&
+          response.status() === 200,
+      );
+
       const eventsPage = new EventsPage(page);
       await eventsPage.waitToLoad();
+
+      const response = await responsePromise;
+      eventTypes = await response.json();
+
       const eventModal = await eventsPage.clickNewEventButton();
       await eventModal.waitForModalToShow();
 
@@ -157,9 +180,9 @@ test.describe('Dashboard Files (invitesAdmin)', () => {
         sweetXvEventMock.nameOfEvent,
         sweetXvEventMock.dateOfEvent,
         sweetXvEventMock.maxDateOfConfirmation,
-        sweetXvEventMock.typeOfEvent,
+        eventTypes.find((s) => s.name === EventType.Xv)?.id ?? '',
         sweetXvEventMock.nameOfCelebrated,
-        sweetXvEventMock.assignedUser
+        sweetXvEventMock.assignedUser,
       );
 
       await eventModal.clickConfirmButton();
@@ -171,7 +194,7 @@ test.describe('Dashboard Files (invitesAdmin)', () => {
     } else {
       const dashboardPage = (await loginPage.login(
         invitesAdminUser.username,
-        invitesAdminUser.password
+        invitesAdminUser.password,
       )) as DashboardPage;
       await dashboardPage.waitToLoad();
       await dashboardPage.clickFilesLink();

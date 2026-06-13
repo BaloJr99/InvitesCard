@@ -7,7 +7,7 @@ import { LoaderService } from '../services/loader.service';
 import { EventType } from '../models/enum';
 
 export const invitesResolver: ResolveFn<IEventTypeResolved> = (
-  route: ActivatedRouteSnapshot
+  route: ActivatedRouteSnapshot,
 ): Observable<IEventTypeResolved> => {
   const invitesService = inject(InvitesService);
   const router = inject(Router);
@@ -20,15 +20,14 @@ export const invitesResolver: ResolveFn<IEventTypeResolved> = (
 
   const inviteFound = invitesService.getInviteEventType(id).pipe(
     map((eventType) => ({
-      eventType:
-        eventType === EventType.Wedding && overrideEventType
-          ? overrideEventType
-          : eventType,
+      eventType: (eventType === EventType.Wedding && overrideEventType
+        ? overrideEventType
+        : eventType) as EventType,
     })),
     catchError(() => {
       router.navigate(['/error/page-not-found']);
       return EMPTY;
-    })
+    }),
   );
 
   return inviteFound;

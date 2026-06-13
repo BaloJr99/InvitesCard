@@ -51,7 +51,7 @@ import {
   IUpdateImage,
   IUploadImage,
 } from 'src/app/core/models/images';
-import { IInviteGroups } from 'src/app/core/models/inviteGroups';
+import { IInviteGroups } from 'src/app/core/models/invite-groups';
 import { ILog } from 'src/app/core/models/logs';
 import { IRole } from 'src/app/core/models/roles';
 import {
@@ -65,6 +65,7 @@ import {
   IAlbumImage,
   IFullAlbumImage,
 } from 'src/app/core/models/gallery';
+import { IEventType } from 'src/app/core/models/event-types';
 
 export const roleMock: IRole = {
   id: '674a68009dc087f77323d40d',
@@ -188,7 +189,7 @@ export const fullEventsMock: IFullEvent = {
   maxDateOfConfirmation: '2025-02-14T06:00:00.000Z',
   nameOfCelebrated: 'Test',
   nameOfEvent: 'Test Event',
-  typeOfEvent: EventType.None,
+  eventTypeId: EventType.None,
   userId: fullUserMock.id,
 };
 
@@ -220,7 +221,7 @@ export const dropdownEventsMock: IDropdownEvent[] = [
 
 export const eventInformationMock: IEventSettings = {
   settings: '',
-  typeOfEvent: fullEventsMock.typeOfEvent,
+  typeOfEvent: EventType.None,
 };
 
 export const fullInvitesGroupsMock: IInviteGroups = {
@@ -337,7 +338,6 @@ export const sweetXvUserInviteMock: IUserInvite = {
   kidsAllowed: confirmedInviteMock.kidsAllowed,
   dateOfEvent: fullEventsMock.dateOfEvent,
   nameOfCelebrated: fullEventsMock.nameOfCelebrated,
-  typeOfEvent: fullEventsMock.typeOfEvent,
 };
 
 export const confirmationInviteMock: IConfirmation = {
@@ -569,13 +569,13 @@ export const validFileMock: File = new File(
     `Familia,Numero de pases,Telefóno,Niños permitidos,Grupo\n${upsertInviteMock.family},${upsertInviteMock.entriesNumber},${upsertInviteMock.phoneNumber},${upsertInviteMock.kidsAllowed},${upsertInviteMock.inviteGroupId}`,
   ],
   'test-file.csv',
-  { type: 'text/plain' }
+  { type: 'text/plain' },
 );
 
 export const invalidFileMock: File = new File(
   [`Familia,Numero de pases,Telefóno,Niños permitidos,Grupo`],
   'test-file.csv',
-  { type: 'text/plain' }
+  { type: 'text/plain' },
 );
 
 export const tableDataMock: ITable = {
@@ -654,7 +654,6 @@ export const saveTheDateUserInviteMock: ISaveTheDateUserInvite = {
   nameOfCelebrated: 'Braulio;Brisa',
   maxDateOfConfirmation: fullEventsMock.maxDateOfConfirmation,
   needsAccomodation: newInviteMock.needsAccomodation,
-  typeOfEvent: fullEventsMock.typeOfEvent,
 };
 
 export const weddingUserInviteMock: IWeddingUserInvite = {
@@ -664,7 +663,7 @@ export const weddingUserInviteMock: IWeddingUserInvite = {
   family: newInviteMock.family,
   nameOfCelebrated: 'Braulio;Brisa',
   maxDateOfConfirmation: fullEventsMock.maxDateOfConfirmation,
-  typeOfEvent: fullEventsMock.typeOfEvent,
+  typeOfEvent: EventType.Wedding,
   confirmation: confirmedInviteMock.confirmation,
   entriesNumber: confirmedInviteMock.entriesNumber,
   kidsAllowed: confirmedInviteMock.kidsAllowed,
@@ -870,3 +869,9 @@ export const fullAlbumImageMock: IFullAlbumImage = {
   ...albumImagesMock[0],
   image: 'base64',
 };
+
+export const eventTypesMock: IEventType[] = [
+  { id: '1', name: EventType.Wedding },
+  { id: '2', name: EventType.Xv },
+  { id: '3', name: EventType.SaveTheDate },
+];

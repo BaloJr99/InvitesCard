@@ -3,7 +3,7 @@ import { NavigationStart, Router, Scroll, RouterModule } from '@angular/router';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { INotification } from 'src/app/core/models/common';
 import { Roles } from 'src/app/core/models/enum';
-import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
+import { CommonInvitesService } from 'src/app/core/services/common-invites.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { CommonModule } from '@angular/common';
@@ -35,7 +35,7 @@ export class NavbarComponent implements OnInit {
 
       const numberOfNotifications = notifications.reduce(
         (sum, { isMessageRead }) => sum + (isMessageRead ? 0 : 1),
-        0
+        0,
       );
 
       return {
@@ -48,7 +48,7 @@ export class NavbarComponent implements OnInit {
         numberOfNotifications,
         notifications,
       };
-    })
+    }),
   );
 
   ngOnInit(): void {
@@ -103,7 +103,7 @@ export class NavbarComponent implements OnInit {
   maskAsRead(id: string): void {
     const oldNotifications = this.notifications.value;
     const notificationIndex = oldNotifications.findIndex(
-      (notification) => notification.id === id
+      (notification) => notification.id === id,
     );
 
     this.invitesService.readMessage(id).subscribe({

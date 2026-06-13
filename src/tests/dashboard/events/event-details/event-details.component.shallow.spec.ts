@@ -3,9 +3,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
-import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
+import { CommonInvitesService } from 'src/app/core/services/common-invites.service';
 import { EventsService } from 'src/app/core/services/events.service';
-import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
+import { InviteGroupsService } from 'src/app/core/services/invite-groups.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { EventDetailsComponent } from 'src/app/dashboard/events/event-details/event-details.component';
 import { deepCopy } from 'src/app/shared/utils/tools';
@@ -71,20 +71,20 @@ describe('Event Details Component (Shallow Test)', () => {
     }).compileComponents();
 
     eventsServiceSpy = TestBed.inject(
-      EventsService
+      EventsService,
     ) as jasmine.SpyObj<EventsService>;
 
     inviteGroupsServiceSpy = TestBed.inject(
-      InviteGroupsService
+      InviteGroupsService,
     ) as jasmine.SpyObj<InviteGroupsService>;
 
     fixture = TestBed.createComponent(EventDetailsComponent);
     inviteGroupsServiceSpy.getAllInviteGroups.and.returnValue(
-      of([fullInvitesGroupsMockCopy])
+      of([fullInvitesGroupsMockCopy]),
     );
     eventsServiceSpy.getEventById.and.returnValue(of(fullEventsMockCopy));
     eventsServiceSpy.getEventSettings.and.returnValue(
-      of(eventInformationMockCopy)
+      of(eventInformationMockCopy),
     );
 
     fixture.detectChanges();

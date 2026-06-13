@@ -25,13 +25,13 @@
     </div>
     @if (!showSelectEvent()) {
       @switch (eventSettingAction.eventType) {
-        @case ('X') {
+        @case (EventTypes.Xv) {
           <app-sweet-xv-settings [eventSettingActionValue]="eventSettingAction"></app-sweet-xv-settings>
         }
-        @case ('S') {
+        @case (EventTypes.SaveTheDate) {
           <app-save-the-date-settings [eventSettingActionValue]="eventSettingAction"></app-save-the-date-settings>
         }
-        @case ('W') {
+        @case (EventTypes.Wedding) {
           <app-wedding-settings [eventSettingAction]="eventSettingAction"></app-wedding-settings>
         }
       }

@@ -4,8 +4,8 @@ import { ToastrService } from 'ngx-toastr';
 import {
   IInviteGroups,
   IInviteGroupsAction,
-} from 'src/app/core/models/inviteGroups';
-import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
+} from 'src/app/core/models/invite-groups';
+import { InviteGroupsService } from 'src/app/core/services/invite-groups.service';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { controlIsDuplicated } from 'src/app/shared/utils/validators/controlIsDuplicated';
 import { map, Observable, of } from 'rxjs';
@@ -50,7 +50,7 @@ export class InviteGroupFormComponent {
       eventId: '',
       controlIsValid: true,
     },
-    { validators: controlIsDuplicated }
+    { validators: controlIsDuplicated },
   );
 
   toggleIsCreatingNewFormGroup(): void {
@@ -60,7 +60,7 @@ export class InviteGroupFormComponent {
   saveInviteGroup(): void {
     if (this.createInviteGroupForm.valid && this.createInviteGroupForm.dirty) {
       this.inviteGroupDuplicated(
-        this.createInviteGroupForm.controls['inviteGroup'].value as string
+        this.createInviteGroupForm.controls['inviteGroup'].value as string,
       ).subscribe({
         next: (isDuplicated: boolean) => {
           if (!isDuplicated) {
@@ -98,7 +98,7 @@ export class InviteGroupFormComponent {
     this.inviteGroupsService
       .updateInviteGroup(
         this.createInviteGroupForm.value as IInviteGroups,
-        this.createInviteGroupForm.controls['id'].value as string
+        this.createInviteGroupForm.controls['id'].value as string,
       )
       .subscribe({
         next: (response: IMessageResponse) => {
@@ -128,7 +128,7 @@ export class InviteGroupFormComponent {
             });
             this.createInviteGroupForm.updateValueAndValidity();
             return response;
-          })
+          }),
         );
     }
   }

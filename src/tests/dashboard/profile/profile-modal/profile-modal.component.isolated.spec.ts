@@ -2,7 +2,7 @@ import { EventEmitter } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { FileReaderService } from 'src/app/core/services/fileReader.service';
+import { FileReaderService } from 'src/app/core/services/file-reader.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { ProfileModalComponent } from 'src/app/dashboard/profile/profile-modal/profile-modal.component';
 
@@ -21,7 +21,9 @@ describe('Profile Modal Component (Isolated Test)', () => {
         { provide: FileReaderService, useValue: fileReaderSpy },
       ],
     });
-    component = TestBed.createComponent(ProfileModalComponent).componentInstance;
+    component = TestBed.createComponent(
+      ProfileModalComponent,
+    ).componentInstance;
   });
 
   it('should create', () => {
@@ -31,7 +33,7 @@ describe('Profile Modal Component (Isolated Test)', () => {
   it('should render the initial values', () => {
     expect(component.updateProfilePhoto)
       .withContext(
-        'should have updateProfilePhoto to be an instance of EventEmitter'
+        'should have updateProfilePhoto to be an instance of EventEmitter',
       )
       .toBeInstanceOf(EventEmitter);
 

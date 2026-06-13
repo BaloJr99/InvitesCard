@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { IUpsertInvite } from './invites';
-import { IInviteGroups } from './inviteGroups';
+import { IInviteGroups } from './invite-groups';
 import { ButtonAction, CommonModalType, SelectAction } from './enum';
 
 export interface IError {

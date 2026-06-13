@@ -5,7 +5,7 @@ export class EventModal extends BaseModal {
   readonly eventNameInput: Locator;
   readonly eventDateInput: Locator;
   readonly confirmationDeadlineInput: Locator;
-  readonly typeOfEventInput: Locator;
+  readonly eventTypeIdInput: Locator;
   readonly nameOfCelebratedInput: Locator;
   readonly assignedUserInput: Locator;
 
@@ -15,9 +15,9 @@ export class EventModal extends BaseModal {
     this.eventNameInput = this.modalLocator.locator('#nameOfEvent');
     this.eventDateInput = this.modalLocator.locator('#dateOfEvent');
     this.confirmationDeadlineInput = this.modalLocator.locator(
-      '#maxDateOfConfirmation'
+      '#maxDateOfConfirmation',
     );
-    this.typeOfEventInput = this.modalLocator.locator('#typeOfEvent');
+    this.eventTypeIdInput = this.modalLocator.locator('#eventTypeId');
     this.nameOfCelebratedInput = this.modalLocator.locator('#nameOfCelebrated');
     this.assignedUserInput = this.modalLocator.locator('#userId');
   }
@@ -26,14 +26,14 @@ export class EventModal extends BaseModal {
     name: string,
     date: string,
     confirmationDeadline: string,
-    typeOfEvent: string,
+    eventTypeId: string,
     nameOfCelebrated: string,
-    assignedUser: string
+    assignedUser: string,
   ) {
     await this.eventNameInput.fill(name);
     await this.eventDateInput.fill(date);
     await this.confirmationDeadlineInput.fill(confirmationDeadline);
-    await this.typeOfEventInput.selectOption({ value: typeOfEvent });
+    await this.eventTypeIdInput.selectOption({ value: eventTypeId });
     await this.nameOfCelebratedInput.fill(nameOfCelebrated);
     await this.assignedUserInput.selectOption({ label: assignedUser });
   }
@@ -50,8 +50,8 @@ export class EventModal extends BaseModal {
     await this.confirmationDeadlineInput.fill(date);
   }
 
-  async setTypeOfEvent(type: string) {
-    await this.typeOfEventInput.selectOption({ value: type });
+  async setEventTypeId(type: string) {
+    await this.eventTypeIdInput.selectOption({ value: type });
   }
 
   async setNameOfCelebrated(name: string) {

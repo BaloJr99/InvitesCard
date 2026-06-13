@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { CommonModalType } from 'src/app/core/models/enum';
-import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { CommonModalService } from 'src/app/core/services/common-modal.service';
 import { CommonModalComponent } from 'src/app/shared/components/common-modal/common-modal.component';
 import { commonModalMock } from 'src/tests/mocks/mocks';
 

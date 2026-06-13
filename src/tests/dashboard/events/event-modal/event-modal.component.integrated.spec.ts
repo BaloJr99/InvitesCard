@@ -4,7 +4,8 @@ import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { CommonModalResponse, EventType } from 'src/app/core/models/enum';
-import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { CommonModalService } from 'src/app/core/services/common-modal.service';
+import { EventTypesService } from 'src/app/core/services/event-types.service';
 import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { EventModalComponent } from 'src/app/dashboard/events/event-modal/event-modal.component';
@@ -12,6 +13,7 @@ import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe'
 import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
 import {
+  eventTypesMock,
   fullEventsMock,
   messageResponseMock,
   userDropdownDataMock,
@@ -26,7 +28,7 @@ describe('Event Modal Component (Integrated Test)', () => {
     ...fullEventsMockCopy,
     dateOfEvent: toLocalDate(fullEventsMockCopy.dateOfEvent).substring(0, 10),
     maxDateOfConfirmation: toLocalDate(
-      fullEventsMockCopy.maxDateOfConfirmation
+      fullEventsMockCopy.maxDateOfConfirmation,
     ).substring(0, 10),
   };
 
@@ -34,24 +36,25 @@ describe('Event Modal Component (Integrated Test)', () => {
   let eventsServiceSpy: jasmine.SpyObj<EventsService>;
   let commonModalServiceSpy: jasmine.SpyObj<CommonModalService>;
   let usersServiceSpy: jasmine.SpyObj<UsersService>;
+  let eventTypesServiceSpy: jasmine.SpyObj<EventTypesService>;
 
   const updateFormUsingEvent = (
     nameOfEvent: string,
     dateOfEvent: string,
     maxDateOfConfirmation: string,
     nameOfCelebrated: string,
-    typeOfEvent: EventType,
-    userId: string
+    eventTypeId: string,
+    userId: string,
   ) => {
     const nameOfEventInput = fixture.debugElement.query(By.css('#nameOfEvent'));
     const dateOfEventInput = fixture.debugElement.query(By.css('#dateOfEvent'));
     const maxDateOfConfirmationInput = fixture.debugElement.query(
-      By.css('#maxDateOfConfirmation')
+      By.css('#maxDateOfConfirmation'),
     );
     const nameOfCelebratedInput = fixture.debugElement.query(
-      By.css('#nameOfCelebrated')
+      By.css('#nameOfCelebrated'),
     );
-    const typeOfEventInput = fixture.debugElement.query(By.css('#typeOfEvent'));
+    const eventTypeIdInput = fixture.debugElement.query(By.css('#eventTypeId'));
     const userIdInput = fixture.debugElement.query(By.css('#userId'));
 
     nameOfEventInput.nativeElement.value = nameOfEvent;
@@ -66,8 +69,8 @@ describe('Event Modal Component (Integrated Test)', () => {
     nameOfCelebratedInput.nativeElement.value = nameOfCelebrated;
     nameOfCelebratedInput.nativeElement.dispatchEvent(new Event('input'));
 
-    typeOfEventInput.nativeElement.value = typeOfEvent;
-    typeOfEventInput.nativeElement.dispatchEvent(new Event('change'));
+    eventTypeIdInput.nativeElement.value = eventTypeId;
+    eventTypeIdInput.nativeElement.dispatchEvent(new Event('change'));
 
     userIdInput.nativeElement.value = userId;
     userIdInput.nativeElement.dispatchEvent(new Event('change'));
@@ -83,6 +86,9 @@ describe('Event Modal Component (Integrated Test)', () => {
     ]);
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
     const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['open']);
+    const eventTypesSpy = jasmine.createSpyObj('EventTypesService', [
+      'getEventTypes',
+    ]);
 
     await TestBed.configureTestingModule({
       imports: [
@@ -96,22 +102,29 @@ describe('Event Modal Component (Integrated Test)', () => {
         { provide: UsersService, useValue: usersSpy },
         { provide: ToastrService, useValue: toastrSpy },
         { provide: CommonModalService, useValue: commonModalSpy },
+        { provide: EventTypesService, useValue: eventTypesSpy },
       ],
     }).compileComponents();
 
     eventsServiceSpy = TestBed.inject(
-      EventsService
+      EventsService,
     ) as jasmine.SpyObj<EventsService>;
     commonModalServiceSpy = TestBed.inject(
-      CommonModalService
+      CommonModalService,
     ) as jasmine.SpyObj<CommonModalService>;
     usersServiceSpy = TestBed.inject(
-      UsersService
+      UsersService,
     ) as jasmine.SpyObj<UsersService>;
+    eventTypesServiceSpy = TestBed.inject(
+      EventTypesService,
+    ) as jasmine.SpyObj<EventTypesService>;
 
     usersServiceSpy.getUsersDropdownData.and.returnValue(
-      of([userDropdownDataMockCopy])
+      of([userDropdownDataMockCopy]),
     );
+
+    eventTypesServiceSpy.getEventTypes.and.returnValue(of(eventTypesMock));
+
     fixture = TestBed.createComponent(EventModalComponent);
     fixture.detectChanges();
   });
@@ -125,8 +138,8 @@ describe('Event Modal Component (Integrated Test)', () => {
       fullEventsMockCopy.dateOfEvent,
       fullEventsMockCopy.maxDateOfConfirmation,
       fullEventsMockCopy.nameOfCelebrated,
-      EventType.Xv,
-      fullEventsMockCopy.userId
+      eventTypesMock[1].id,
+      fullEventsMockCopy.userId,
     );
     fixture.detectChanges();
 
@@ -138,7 +151,7 @@ describe('Event Modal Component (Integrated Test)', () => {
 
     expect(eventsServiceSpy.createEvent)
       .withContext(
-        "CreateEvent method from EventsService should've been called"
+        "CreateEvent method from EventsService should've been called",
       )
       .toHaveBeenCalled();
 
@@ -160,8 +173,8 @@ describe('Event Modal Component (Integrated Test)', () => {
       fullEventsMockCopy.dateOfEvent,
       fullEventsMockCopy.maxDateOfConfirmation,
       fullEventsMockCopy.nameOfCelebrated,
-      EventType.Xv,
-      fullEventsMockCopy.userId
+      eventTypesMock[1].id,
+      fullEventsMockCopy.userId,
     );
 
     fixture.detectChanges();
@@ -174,7 +187,7 @@ describe('Event Modal Component (Integrated Test)', () => {
 
     expect(eventsServiceSpy.updateEvent)
       .withContext(
-        "UpdateEvent method from EventsService should've been called"
+        "UpdateEvent method from EventsService should've been called",
       )
       .toHaveBeenCalled();
 
@@ -197,8 +210,8 @@ describe('Event Modal Component (Integrated Test)', () => {
       fullEventsMockCopy.dateOfEvent,
       fullEventsMockCopy.maxDateOfConfirmation,
       fullEventsMockCopy.nameOfCelebrated,
-      EventType.SaveTheDate,
-      fullEventsMockCopy.userId
+      eventTypesMock[2].id,
+      fullEventsMockCopy.userId,
     );
 
     fixture.detectChanges();
@@ -211,13 +224,13 @@ describe('Event Modal Component (Integrated Test)', () => {
 
     expect(commonModalServiceSpy.open)
       .withContext(
-        'Open method from CommonModalService should have been called'
+        'Open method from CommonModalService should have been called',
       )
       .toHaveBeenCalled();
 
     expect(eventsServiceSpy.updateEvent)
       .withContext(
-        "UpdateEvent method from EventsService should've been called"
+        "UpdateEvent method from EventsService should've been called",
       )
       .toHaveBeenCalled();
 
@@ -238,8 +251,8 @@ describe('Event Modal Component (Integrated Test)', () => {
       fullEventsMockCopy.dateOfEvent,
       fullEventsMockCopy.maxDateOfConfirmation,
       fullEventsMockCopy.nameOfCelebrated,
-      EventType.SaveTheDate,
-      fullEventsMockCopy.userId
+      eventTypesMock[2].id,
+      fullEventsMockCopy.userId,
     );
 
     fixture.detectChanges();
@@ -252,13 +265,13 @@ describe('Event Modal Component (Integrated Test)', () => {
 
     expect(commonModalServiceSpy.open)
       .withContext(
-        'Open method from CommonModalService should have been called'
+        'Open method from CommonModalService should have been called',
       )
       .toHaveBeenCalled();
 
     expect(eventsServiceSpy.updateEvent)
       .withContext(
-        "UpdateEvent method from EventsService shouldn't have been called"
+        "UpdateEvent method from EventsService shouldn't have been called",
       )
       .not.toHaveBeenCalled();
   });

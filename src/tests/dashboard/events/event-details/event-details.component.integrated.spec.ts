@@ -5,10 +5,10 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { EventType } from 'src/app/core/models/enum';
-import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
+import { CommonInvitesService } from 'src/app/core/services/common-invites.service';
 import { EventsService } from 'src/app/core/services/events.service';
-import { FileReaderService } from 'src/app/core/services/fileReader.service';
-import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
+import { FileReaderService } from 'src/app/core/services/file-reader.service';
+import { InviteGroupsService } from 'src/app/core/services/invite-groups.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { EventCardComponent } from 'src/app/dashboard/events/event-details/event-card/event-card.component';
 import { EventDetailsComponent } from 'src/app/dashboard/events/event-details/event-details.component';
@@ -108,22 +108,22 @@ describe('Event Details Component (Integrated Test)', () => {
     }).compileComponents();
 
     inviteGroupsServiceSpy = TestBed.inject(
-      InviteGroupsService
+      InviteGroupsService,
     ) as jasmine.SpyObj<InviteGroupsService>;
 
     eventsServiceSpy = TestBed.inject(
-      EventsService
+      EventsService,
     ) as jasmine.SpyObj<EventsService>;
 
     inviteGroupsServiceSpy.getAllInviteGroups.and.returnValue(
-      of([fullInvitesGroupsMockCopy])
+      of([fullInvitesGroupsMockCopy]),
     );
     eventsServiceSpy.getEventById.and.returnValue(of(fullEventsMockCopy));
     eventsServiceSpy.getEventSettings.and.returnValue(
       of({
         ...eventInformationMockCopy,
         typeOfEvent: EventType.Xv,
-      })
+      }),
     );
 
     fixture = TestBed.createComponent(EventDetailsComponent);
@@ -177,7 +177,7 @@ describe('Event Details Component (Integrated Test)', () => {
 
   it('should filter by needsAccomodation', () => {
     const filterInput = fixture.debugElement.query(
-      By.css('#filterByNeedsAccomodation')
+      By.css('#filterByNeedsAccomodation'),
     );
     filterInput.nativeElement.value = 'true';
     const searchButton = fixture.debugElement.query(By.css('#searchInvites'));
@@ -201,7 +201,7 @@ describe('Event Details Component (Integrated Test)', () => {
 
   it('should filter by inviteViewed', () => {
     const filterInput = fixture.debugElement.query(
-      By.css('#filterByInviteViewed')
+      By.css('#filterByInviteViewed'),
     );
     filterInput.nativeElement.value = 'true';
     const searchButton = fixture.debugElement.query(By.css('#searchInvites'));
@@ -305,7 +305,7 @@ describe('Event Details Component (Integrated Test)', () => {
     expect(
       fixture.componentInstance.selectedIds[
         fullInvitesGroupsMockCopy.inviteGroup
-      ]
+      ],
     )
       .withContext('Record should be marked for deletion')
       .toContain(newInviteMockCopy.id);

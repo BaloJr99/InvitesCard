@@ -8,7 +8,7 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, combineLatest, tap } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
-import { FileReaderService } from 'src/app/core/services/fileReader.service';
+import { FileReaderService } from 'src/app/core/services/file-reader.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { CommonModule } from '@angular/common';
 
@@ -54,7 +54,7 @@ export class ProfileModalComponent {
       } else {
         $('#profileModal').modal('hide');
       }
-    })
+    }),
   );
 
   clearForm(): void {
@@ -64,10 +64,10 @@ export class ProfileModalComponent {
     });
 
     const container = document.getElementById(
-      'image-container'
+      'image-container',
     ) as HTMLImageElement;
     const profilePhoto = document.getElementById(
-      'profile-photo'
+      'profile-photo',
     ) as HTMLImageElement;
 
     profilePhoto.src = '';
@@ -76,10 +76,10 @@ export class ProfileModalComponent {
 
   onPhotoChange(event: Event): void {
     const container = document.getElementById(
-      'image-container'
+      'image-container',
     ) as HTMLImageElement;
     const profilePhoto = document.getElementById(
-      'profile-photo'
+      'profile-photo',
     ) as HTMLImageElement;
 
     container.style.display = 'none';
@@ -100,7 +100,7 @@ export class ProfileModalComponent {
           photoFiles: '',
         });
         this.toastr.error(
-          $localize`El tamaño limite es de 2MB: ${errorFiles.toString()}`
+          $localize`El tamaño limite es de 2MB: ${errorFiles.toString()}`,
         );
       } else {
         this.profilePhotoForm.patchValue({

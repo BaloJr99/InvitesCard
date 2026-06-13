@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
-import { FileReaderService } from 'src/app/core/services/fileReader.service';
+import { FileReaderService } from 'src/app/core/services/file-reader.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { ProfileModalComponent } from 'src/app/dashboard/profile/profile-modal/profile-modal.component';
 
@@ -85,7 +85,7 @@ describe('Profile Modal Component (Shallow Test)', () => {
     uploadFile(new File([''], 'filename', { type: 'image/png' }));
 
     const imageContainer = fixture.debugElement.query(
-      By.css('#image-container')
+      By.css('#image-container'),
     );
 
     expect(imageContainer.styles['display'])

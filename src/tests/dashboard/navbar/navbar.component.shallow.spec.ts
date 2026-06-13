@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
-import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
+import { CommonInvitesService } from 'src/app/core/services/common-invites.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { NavbarComponent } from 'src/app/dashboard/navbar/navbar.component';
@@ -49,7 +49,7 @@ describe('Navbar Component (Shallow Test)', () => {
 
   it('should have a navbarWithSearchAndForm, with the account button and toggler menu', () => {
     const navbarWithSearchAndForm = fixture.nativeElement.querySelector(
-      '.navbarWithSearchAndForm'
+      '.navbarWithSearchAndForm',
     );
     expect(navbarWithSearchAndForm)
       .withContext('You should have a navbarWithSearchAndForm class')
@@ -96,7 +96,7 @@ describe('Navbar Component (Shallow Test)', () => {
 
     const textToMatch = ['Mi perfil', 'Cerrar sesión'];
     menuItems.map(
-      (item, index) => item.nativeElement.textContent === textToMatch[index]
+      (item, index) => item.nativeElement.textContent === textToMatch[index],
     );
   });
 
@@ -105,7 +105,7 @@ describe('Navbar Component (Shallow Test)', () => {
     fixture.detectChanges();
 
     const notificationMessages = fixture.debugElement.query(
-      By.css('.base-menu.notificationMessages')
+      By.css('.base-menu.notificationMessages'),
     );
 
     expect(notificationMessages)
@@ -120,7 +120,7 @@ describe('Navbar Component (Shallow Test)', () => {
 
     const now = new Date();
     const dateOfNotification = new Date(
-      notificationsMockCopy[0].dateOfConfirmation
+      notificationsMockCopy[0].dateOfConfirmation,
     );
 
     const diff = now.getTime() - dateOfNotification.getTime();

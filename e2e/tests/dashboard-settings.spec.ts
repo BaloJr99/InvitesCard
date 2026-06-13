@@ -12,6 +12,7 @@ import { SweetXvSettingsPage } from 'e2e/pages/dashboard/settings/sweet-xv-setti
 import { WeddingSettingsPage } from 'e2e/pages/dashboard/settings/wedding-settings-page';
 import { TestingPage } from 'e2e/pages/dashboard/testing/testing-page';
 import { EventType } from 'src/app/core/models/enum';
+import { IEventType } from 'src/app/core/models/event-types';
 import { toLocalDate } from 'src/app/shared/utils/tools';
 import {
   saveTheDateSettingMock,
@@ -22,6 +23,7 @@ import {
 test.describe('Dashboard settings (Sweet Xv)', () => {
   let environmentCleaned = false;
   let settingsPage: SweetXvSettingsPage;
+  let eventTypes: IEventType[];
 
   // Login as admin before each test
   test.beforeEach(async ({ page }) => {
@@ -38,8 +40,17 @@ test.describe('Dashboard settings (Sweet Xv)', () => {
       await testingPage.clickCleanEnvironmentButton();
       await testingPage.clickEventsLink();
 
+      const responsePromise = page.waitForResponse(
+        (response) =>
+          response.url().includes('/api/eventtypes') &&
+          response.status() === 200,
+      );
+
       const eventsPage = new EventsPage(page);
       await eventsPage.waitToLoad();
+
+      const response = await responsePromise;
+      eventTypes = await response.json();
 
       const eventModal = await eventsPage.clickNewEventButton();
       await eventModal.waitForModalToShow();
@@ -48,9 +59,9 @@ test.describe('Dashboard settings (Sweet Xv)', () => {
         sweetXvEventMock.nameOfEvent,
         sweetXvEventMock.dateOfEvent,
         sweetXvEventMock.maxDateOfConfirmation,
-        sweetXvEventMock.typeOfEvent,
+        eventTypes.find((s) => s.name === EventType.Xv)?.id ?? '',
         sweetXvEventMock.nameOfCelebrated,
-        sweetXvEventMock.assignedUser
+        sweetXvEventMock.assignedUser,
       );
 
       await eventModal.clickConfirmButton();
@@ -89,7 +100,7 @@ test.describe('Dashboard settings (Sweet Xv)', () => {
 
     const dateOfReception = sweetXvSettingMock.receptionTime.split(' ');
     const receptionTime = toLocalDate(
-      `${dateOfReception[0]}T${dateOfReception[1]}.000Z`
+      `${dateOfReception[0]}T${dateOfReception[1]}.000Z`,
     )
       .split('T')[1]
       .substring(0, 5);
@@ -108,7 +119,7 @@ test.describe('Dashboard settings (Sweet Xv)', () => {
       receptionTime,
       sweetXvSettingMock.receptionPlace,
       sweetXvSettingMock.receptionAddress,
-      sweetXvSettingMock.dressCodeColor
+      sweetXvSettingMock.dressCodeColor,
     );
 
     await settingsPage.clickSaveChanges();
@@ -120,6 +131,7 @@ test.describe('Dashboard settings (Sweet Xv)', () => {
 test.describe('Dashboard settings (Save the date)', () => {
   let environmentCleaned = false;
   let settingsPage: SaveTheDateSettingsPage;
+  let eventTypes: IEventType[];
 
   // Login as admin before each test
   test.beforeEach(async ({ page }) => {
@@ -135,8 +147,18 @@ test.describe('Dashboard settings (Save the date)', () => {
       await testingPage.clickCleanEnvironmentButton();
       await testingPage.clickEventsLink();
 
+      const responsePromise = page.waitForResponse(
+        (response) =>
+          response.url().includes('/api/eventtypes') &&
+          response.status() === 200,
+      );
+
       const eventsPage = new EventsPage(page);
       await eventsPage.waitToLoad();
+
+      const response = await responsePromise;
+      eventTypes = await response.json();
+
       const eventModal = await eventsPage.clickNewEventButton();
       await eventModal.waitForModalToShow();
 
@@ -144,9 +166,9 @@ test.describe('Dashboard settings (Save the date)', () => {
         saveTheDateEventMock.nameOfEvent,
         saveTheDateEventMock.dateOfEvent,
         saveTheDateEventMock.maxDateOfConfirmation,
-        saveTheDateEventMock.typeOfEvent,
+        eventTypes.find((s) => s.name === EventType.SaveTheDate)?.id ?? '',
         saveTheDateEventMock.nameOfCelebrated,
-        saveTheDateEventMock.assignedUser
+        saveTheDateEventMock.assignedUser,
       );
 
       await eventModal.clickConfirmButton();
@@ -158,7 +180,7 @@ test.describe('Dashboard settings (Save the date)', () => {
     } else {
       const dashboardPage = (await loginPage.login(
         invitesAdminUser.username,
-        invitesAdminUser.password
+        invitesAdminUser.password,
       )) as DashboardPage;
       await dashboardPage.waitToLoad();
       await dashboardPage.clickSettingsLink();
@@ -189,7 +211,7 @@ test.describe('Dashboard settings (Save the date)', () => {
       saveTheDateSettingMock.receptionPlace,
       saveTheDateSettingMock.copyMessage,
       saveTheDateSettingMock.hotelName,
-      saveTheDateSettingMock.hotelInformation
+      saveTheDateSettingMock.hotelInformation,
     );
 
     await settingsPage.clickSaveChanges();
@@ -201,6 +223,7 @@ test.describe('Dashboard settings (Save the date)', () => {
 test.describe('Dashboard settings (Wedding)', () => {
   let environmentCleaned = false;
   let settingsPage: WeddingSettingsPage;
+  let eventTypes: IEventType[];
 
   // Login as admin before each test
   test.beforeEach(async ({ page }) => {
@@ -216,8 +239,18 @@ test.describe('Dashboard settings (Wedding)', () => {
       await testingPage.clickCleanEnvironmentButton();
       await testingPage.clickEventsLink();
 
+      const responsePromise = page.waitForResponse(
+        (response) =>
+          response.url().includes('/api/eventtypes') &&
+          response.status() === 200,
+      );
+
       let eventsPage = new EventsPage(page);
       await eventsPage.waitToLoad();
+
+      const response = await responsePromise;
+      eventTypes = await response.json();
+
       let eventModal = await eventsPage.clickNewEventButton();
       await eventModal.waitForModalToShow();
 
@@ -225,9 +258,9 @@ test.describe('Dashboard settings (Wedding)', () => {
         saveTheDateEventMock.nameOfEvent,
         saveTheDateEventMock.dateOfEvent,
         saveTheDateEventMock.maxDateOfConfirmation,
-        saveTheDateEventMock.typeOfEvent,
+        eventTypes.find((s) => s.name === EventType.SaveTheDate)?.id ?? '',
         saveTheDateEventMock.nameOfCelebrated,
-        saveTheDateEventMock.assignedUser
+        saveTheDateEventMock.assignedUser,
       );
 
       await eventModal.clickConfirmButton();
@@ -246,7 +279,7 @@ test.describe('Dashboard settings (Wedding)', () => {
         saveTheDateSettingMock.receptionPlace,
         saveTheDateSettingMock.copyMessage,
         saveTheDateSettingMock.hotelName,
-        saveTheDateSettingMock.hotelInformation
+        saveTheDateSettingMock.hotelInformation,
       );
 
       await saveTheDateSettings.clickSaveChanges();
@@ -260,7 +293,9 @@ test.describe('Dashboard settings (Wedding)', () => {
       eventModal = await eventsPage.clickEditEventButton(0);
       await eventModal.waitForModalToShow();
 
-      await eventModal.setTypeOfEvent(EventType.Wedding);
+      await eventModal.setEventTypeId(
+        eventTypes.find((s) => s.name === EventType.Wedding)?.id ?? '',
+      );
       await eventModal.clickConfirmButton();
       await eventsPage.waitToLoad();
       await eventsPage.waitForToast();
@@ -271,7 +306,7 @@ test.describe('Dashboard settings (Wedding)', () => {
     } else {
       const dashboardPage = (await loginPage.login(
         invitesAdminUser.username,
-        invitesAdminUser.password
+        invitesAdminUser.password,
       )) as DashboardPage;
       await dashboardPage.waitToLoad();
       await dashboardPage.clickSettingsLink();
@@ -353,7 +388,7 @@ test.describe('Dashboard settings (Wedding)', () => {
       weddingSettingMock.weddingSecondaryColor,
       weddingSettingMock.copyMessage,
       weddingSettingMock.groomParents,
-      weddingSettingMock.brideParents
+      weddingSettingMock.brideParents,
     );
 
     const dateOfMass = weddingSettingMock.massTime.split(' ');
@@ -380,20 +415,20 @@ test.describe('Dashboard settings (Wedding)', () => {
       weddingSettingMock.civilPlace,
       weddingSettingMock.venueUrl,
       venueTime,
-      weddingSettingMock.venuePlace
+      weddingSettingMock.venuePlace,
     );
 
     await settingsPage.fillDressCodeSection(weddingSettingMock.dressCodeColor);
 
     await settingsPage.fillGiftsSection(
       weddingSettingMock.cardNumber,
-      weddingSettingMock.clabeBank
+      weddingSettingMock.clabeBank,
     );
 
     await settingsPage.fillAccomodationSection(
       weddingSettingMock.hotelUrl,
       weddingSettingMock.hotelPhone,
-      weddingSettingMock.hotelAddress
+      weddingSettingMock.hotelAddress,
     );
 
     await settingsPage.clickSaveChanges();

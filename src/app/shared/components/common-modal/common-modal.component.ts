@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { ICommonModal } from 'src/app/core/models/common';
 import { CommonModalType } from 'src/app/core/models/enum';
-import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { CommonModalService } from 'src/app/core/services/common-modal.service';
 import { NgClass } from '@angular/common';
 
 @Component({
@@ -38,7 +38,7 @@ export class CommonModalComponent {
 
   actionButton1 = '';
   actionButton2 = '';
-  
+
   confirmAction(): void {
     this.confirmModal.emit();
   }

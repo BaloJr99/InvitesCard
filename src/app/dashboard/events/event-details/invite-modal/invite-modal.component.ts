@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import {
   IInviteGroups,
   IInviteGroupsAction,
-} from 'src/app/core/models/inviteGroups';
+} from 'src/app/core/models/invite-groups';
 import { IMessageResponse } from 'src/app/core/models/common';
 import {
   IUpsertInvite,
@@ -136,7 +136,7 @@ export class InviteModalComponent {
         inviteGroups,
         typeOfEvent,
       };
-    })
+    }),
   );
 
   saveInvite() {
@@ -174,7 +174,7 @@ export class InviteModalComponent {
     this.invitesService
       .updateInvite(
         this.formatInvite(),
-        this.createInviteForm.controls['id'].value
+        this.createInviteForm.controls['id'].value,
       )
       .subscribe({
         next: (response: IMessageResponse) => {
@@ -205,7 +205,7 @@ export class InviteModalComponent {
     return {
       ...this.createInviteForm.value,
       entriesNumber: parseInt(
-        this.createInviteForm.controls['entriesNumber'].value
+        this.createInviteForm.controls['entriesNumber'].value,
       ),
     } as IUpsertInvite;
   }
@@ -217,7 +217,7 @@ export class InviteModalComponent {
         ...(this.inviteGroups.value.find(
           (famGroup) =>
             famGroup.id ===
-            this.createInviteForm.controls['inviteGroupId'].value
+            this.createInviteForm.controls['inviteGroupId'].value,
         ) as IInviteGroups),
         eventId,
       };

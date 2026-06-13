@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
+import { CommonInvitesService } from 'src/app/core/services/common-invites.service';
 import { SocketService } from 'src/app/core/services/socket.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { DashboardComponent } from 'src/app/dashboard/dashboard.component';

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { CommonModalService } from 'src/app/core/services/common-modal.service';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { commonModalMock } from 'src/tests/mocks/mocks';
 
@@ -21,7 +21,7 @@ describe('CommonModalService', () => {
     });
 
     commonModalServiceSpy = TestBed.inject(
-      CommonModalService
+      CommonModalService,
     ) as jasmine.SpyObj<CommonModalService>;
   });
 

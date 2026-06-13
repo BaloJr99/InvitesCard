@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
 import { ICommonModal } from 'src/app/core/models/common';
-import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { CommonModalService } from 'src/app/core/services/common-modal.service';
 import { CommonModalComponent } from 'src/app/shared/components/common-modal/common-modal.component';
 
 describe('Common Modal Component (Shallow Test)', () => {

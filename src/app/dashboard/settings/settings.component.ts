@@ -33,6 +33,8 @@ export class SettingsComponent {
     eventType: EventType.None,
   };
 
+  protected readonly EventTypes = EventType;
+
   vm$ = this.eventsService.getDropdownEvents().pipe(
     map((events) => {
       this.events.next(events);

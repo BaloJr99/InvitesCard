@@ -1,4 +1,10 @@
-import { Component, ElementRef, HostListener, LOCALE_ID, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  LOCALE_ID,
+  inject,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, map, mergeMap, switchMap } from 'rxjs';
 import {
@@ -11,7 +17,7 @@ import {
   ICalendarDays,
   ISaveTheDateUserInvite,
 } from 'src/app/core/models/invites';
-import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { CommonModalService } from 'src/app/core/services/common-modal.service';
 import { FilesService } from 'src/app/core/services/files.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
@@ -64,8 +70,8 @@ export class SaveTheDateComponent {
             eventSettings,
             downloadedFiles,
           };
-        })
-      )
+        }),
+      ),
     ),
     map(({ invite, eventSettings, downloadedFiles }) => {
       const userInvite = {
@@ -82,7 +88,7 @@ export class SaveTheDateComponent {
 
       userInvite.maxDateOfConfirmation = userInvite.maxDateOfConfirmation.slice(
         0,
-        userInvite.maxDateOfConfirmation.length - 1
+        userInvite.maxDateOfConfirmation.length - 1,
       );
 
       const deadlineMet =
@@ -118,7 +124,7 @@ export class SaveTheDateComponent {
           ? image.imageUsage === ImageUsage.Desktop ||
             image.imageUsage === ImageUsage.Both
           : image.imageUsage === ImageUsage.Phone ||
-            image.imageUsage === ImageUsage.Both
+            image.imageUsage === ImageUsage.Both,
       );
 
       if (this.downloadImages.length > 0) {
@@ -129,12 +135,12 @@ export class SaveTheDateComponent {
 
       this.elRef.nativeElement.style.setProperty(
         '--custom-primary-color',
-        parsedEventSettings.primaryColor
+        parsedEventSettings.primaryColor,
       );
 
       this.elRef.nativeElement.style.setProperty(
         '--custom-secondary-color',
-        parsedEventSettings.secondaryColor
+        parsedEventSettings.secondaryColor,
       );
 
       return {
@@ -144,7 +150,7 @@ export class SaveTheDateComponent {
         dateDictionary,
         deadlineMet,
       };
-    })
+    }),
   );
 
   updateBackground() {
@@ -156,17 +162,17 @@ export class SaveTheDateComponent {
       }
 
       const nextBackgroundImage: HTMLElement = document.querySelector(
-        `.backgroundImage${this.counter}`
+        `.backgroundImage${this.counter}`,
       ) as HTMLElement;
       let oldBackgroundImage: HTMLElement;
 
       if (this.counter == 0) {
         oldBackgroundImage = document.querySelector(
-          `.backgroundImage${this.downloadImages.length - 1}`
+          `.backgroundImage${this.downloadImages.length - 1}`,
         ) as HTMLElement;
       } else {
         oldBackgroundImage = document.querySelector(
-          `.backgroundImage${this.counter - 1}`
+          `.backgroundImage${this.counter - 1}`,
         ) as HTMLElement;
       }
 
@@ -189,14 +195,14 @@ export class SaveTheDateComponent {
     const lastdate = new Date(
       date.getFullYear(),
       date.getMonth() + 1,
-      0
+      0,
     ).getDate();
 
     // Get the day of the last date of the month
     const dayend = new Date(
       date.getFullYear(),
       date.getMonth(),
-      lastdate
+      lastdate,
     ).getDay();
 
     let daysOfWeek: ICalendarDays[] = [];

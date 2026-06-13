@@ -16,7 +16,7 @@ import {
 } from 'rxjs';
 import { IMessageResponse } from 'src/app/core/models/common';
 import { IAlbumImage, IAlbumResolved } from 'src/app/core/models/gallery';
-import { FileReaderService } from 'src/app/core/services/fileReader.service';
+import { FileReaderService } from 'src/app/core/services/file-reader.service';
 import { GalleryService } from 'src/app/core/services/gallery.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 
@@ -77,11 +77,11 @@ export class AlbumComponent {
                 isActive: albumImagesResolved.isActive,
                 nameOfEvent: albumImagesResolved.nameOfEvent,
               };
-            })
-          )
-        )
-      )
-    )
+            }),
+          ),
+        ),
+      ),
+    ),
   );
 
   onPhotosChange(event: Event): void {
@@ -100,7 +100,7 @@ export class AlbumComponent {
       let uploadedFiles = 0;
 
       Array.from(
-        this.saveFilesForm.controls['photoFilesSource'].value as FileList
+        this.saveFilesForm.controls['photoFilesSource'].value as FileList,
       ).forEach((file) => {
         const base64 = this.fileReaderService.getBase64(file).pipe(take(1));
         filesObservable.push(base64);
@@ -121,15 +121,15 @@ export class AlbumComponent {
                   tap(() => {
                     uploadedFiles++;
                     let progress = Math.ceil(
-                      (uploadedFiles / totalFiles) * 100
+                      (uploadedFiles / totalFiles) * 100,
                     );
                     progress = progress > 100 ? 100 : progress;
                     this.uploadProgress.next(`${progress}%`);
                   }),
                   catchError(() => {
                     return EMPTY;
-                  })
-                )
+                  }),
+                ),
             );
           });
 

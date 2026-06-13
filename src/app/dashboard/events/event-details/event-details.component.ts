@@ -1,7 +1,7 @@
 import { Component, LOCALE_ID, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, combineLatest, map, mergeMap } from 'rxjs';
-import { InviteGroupsService } from 'src/app/core/services/inviteGroups.service';
+import { InviteGroupsService } from 'src/app/core/services/invite-groups.service';
 import { SocketService } from 'src/app/core/services/socket.service';
 import {
   IEventResolved,
@@ -12,7 +12,7 @@ import {
 import {
   IInviteGroups,
   IInviteGroupsAction,
-} from 'src/app/core/models/inviteGroups';
+} from 'src/app/core/models/invite-groups';
 import {
   IBulkResults,
   IEmitAction,
@@ -22,7 +22,7 @@ import {
   ITable,
   ITableHeaders,
 } from 'src/app/core/models/common';
-import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
+import { CommonInvitesService } from 'src/app/core/services/common-invites.service';
 import {
   IConfirmation,
   IFullInvite,
@@ -38,7 +38,7 @@ import {
   EventType,
   SelectAction,
 } from 'src/app/core/models/enum';
-import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { CommonModalService } from 'src/app/core/services/common-modal.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { ToastrService } from 'ngx-toastr';
 import { EventCardComponent } from './event-card/event-card.component';
@@ -96,7 +96,7 @@ export class EventDetailsComponent implements OnInit {
   inviteFilters$ = this.inviteFilters.asObservable();
 
   private eventResolved = new BehaviorSubject<IEventResolved>(
-    {} as IEventResolved
+    {} as IEventResolved,
   );
   eventResolved$ = this.eventResolved.asObservable();
   private originalInvites = new BehaviorSubject<IFullInvite[]>([]);
@@ -139,9 +139,9 @@ export class EventDetailsComponent implements OnInit {
             isDeadlineMet: eventResolved.isDeadlineMet,
             eventSettings,
           };
-        })
-      )
-    )
+        }),
+      ),
+    ),
   );
 
   vm$ = combineLatest([
@@ -158,12 +158,12 @@ export class EventDetailsComponent implements OnInit {
         const newOriginalInvites: IFullInvite[] = [];
 
         const readNotifications = commonNotification.filter(
-          (n) => n.isMessageRead
+          (n) => n.isMessageRead,
         );
 
         readNotifications.forEach((notification) => {
           const originalInvite = originalInvites.find(
-            (invite) => invite.id === notification.id
+            (invite) => invite.id === notification.id,
           );
 
           if (originalInvite && originalInvite.isMessageRead === false) {
@@ -186,20 +186,20 @@ export class EventDetailsComponent implements OnInit {
             (inviteFilters.filterByInviteViewed === undefined
               ? true
               : inviteFilters.filterByInviteViewed
-              ? invite.inviteViewed
-              : !invite.inviteViewed) &&
+                ? invite.inviteViewed
+                : !invite.inviteViewed) &&
             (inviteFilters.filterByAnswered === undefined
               ? true
               : inviteFilters.filterByAnswered
-              ? invite.confirmation !== null &&
-                invite.confirmation !== undefined
-              : invite.confirmation === null ||
-                invite.confirmation === undefined) &&
+                ? invite.confirmation !== null &&
+                  invite.confirmation !== undefined
+                : invite.confirmation === null ||
+                  invite.confirmation === undefined) &&
             (inviteFilters.filterByNeedsAccomodation === undefined
               ? true
               : inviteFilters.filterByNeedsAccomodation
-              ? invite.needsAccomodation
-              : invite.needsAccomodation == false) &&
+                ? invite.needsAccomodation
+                : invite.needsAccomodation == false) &&
             (inviteFilters.filterByLastViewedStartDate === ''
               ? true
               : new Date(invite.lastViewedDate as string) >=
@@ -207,7 +207,7 @@ export class EventDetailsComponent implements OnInit {
             (inviteFilters.filterByLastViewedEndDate === ''
               ? true
               : new Date(invite.lastViewedDate as string) <=
-                new Date(inviteFilters.filterByLastViewedEndDate))
+                new Date(inviteFilters.filterByLastViewedEndDate)),
         );
 
         if (
@@ -234,7 +234,7 @@ export class EventDetailsComponent implements OnInit {
               name: $localize`Total de Pases`,
               value: 0,
               color: '#54A6FF',
-            }
+            },
           );
 
           this.filteredInvites.forEach((value) => {
@@ -258,14 +258,14 @@ export class EventDetailsComponent implements OnInit {
                 family: value.family,
                 message: value.message,
                 date: new Date(
-                  value.dateOfConfirmation as string
+                  value.dateOfConfirmation as string,
                 ).toLocaleDateString(this.localeValue, {
                   day: 'numeric',
                   month: 'long',
                   year: 'numeric',
                 }),
                 time: new Date(
-                  value.dateOfConfirmation as string
+                  value.dateOfConfirmation as string,
                 ).toLocaleTimeString(this.localeValue, {
                   hour: '2-digit',
                   minute: '2-digit',
@@ -289,7 +289,7 @@ export class EventDetailsComponent implements OnInit {
 
           this.commonInvitesService.updateNotifications(
             notifications,
-            messages
+            messages,
           );
           this.groupEntries(this.filteredInvites);
         } else if (
@@ -315,7 +315,7 @@ export class EventDetailsComponent implements OnInit {
               name: $localize`Total de Invitaciones`,
               value: 0,
               color: '#54A6FF',
-            }
+            },
           );
 
           this.filteredInvites.forEach((value) => {
@@ -335,7 +335,7 @@ export class EventDetailsComponent implements OnInit {
           return this.getTableConfiguration(
             this.invitesGrouped[key],
             index,
-            key
+            key,
           );
         });
 
@@ -344,8 +344,8 @@ export class EventDetailsComponent implements OnInit {
           statistics,
           typeOfEvent: eventDetails.eventSettings.typeOfEvent,
         };
-      }
-    )
+      },
+    ),
   );
 
   ngOnInit(): void {
@@ -361,14 +361,14 @@ export class EventDetailsComponent implements OnInit {
         dateOfConfirmation: `${
           (confirmation.dateOfConfirmation as string).split(' ')[0]
         }T${(confirmation.dateOfConfirmation as string).split(' ')[1]}`.concat(
-          '.000Z'
+          '.000Z',
         ),
       };
 
       const originalInvitesCopy = this.originalInvites.value;
       // Find the invite and update the confirmation
       const indexOfInvite = originalInvitesCopy.findIndex(
-        (invite) => invite.id === confirmation.id
+        (invite) => invite.id === confirmation.id,
       );
       originalInvitesCopy[indexOfInvite] = {
         ...originalInvitesCopy[indexOfInvite],
@@ -389,7 +389,7 @@ export class EventDetailsComponent implements OnInit {
     this.inviteGroups.forEach((inviteGroup) => {
       if (invites.some((invite) => invite.inviteGroupId === inviteGroup.id)) {
         this.invitesGrouped[inviteGroup.inviteGroup] = invites.filter(
-          (invite) => invite.inviteGroupId === inviteGroup.id
+          (invite) => invite.inviteGroupId === inviteGroup.id,
         );
       }
     });
@@ -398,7 +398,7 @@ export class EventDetailsComponent implements OnInit {
   removeInvites(invitesIds: string[]): void {
     let originalInvitesCopy = this.originalInvites.value;
     originalInvitesCopy = originalInvitesCopy.filter(
-      (invite) => !invitesIds.includes(invite.id)
+      (invite) => !invitesIds.includes(invite.id),
     );
 
     this.originalInvites.next(originalInvitesCopy);
@@ -427,7 +427,7 @@ export class EventDetailsComponent implements OnInit {
       });
     } else {
       const indexOfInvite = this.originalInvites.value.findIndex(
-        (invite) => invite.id === inviteAction.invite.id
+        (invite) => invite.id === inviteAction.invite.id,
       );
       const originalInvite = originalInvitesCopy[indexOfInvite];
 
@@ -452,12 +452,12 @@ export class EventDetailsComponent implements OnInit {
       this.inviteGroups.push(inviteGroupsAction.inviteGroup);
     } else {
       const indexOfInviteGroup = this.inviteGroups.findIndex(
-        (inviteGroup) => inviteGroup.id === inviteGroupsAction.inviteGroup.id
+        (inviteGroup) => inviteGroup.id === inviteGroupsAction.inviteGroup.id,
       );
       this.inviteGroups[indexOfInviteGroup] = inviteGroupsAction.inviteGroup;
     }
     this.inviteGroups.sort((a, b) =>
-      a.inviteGroup.toLowerCase().localeCompare(b.inviteGroup.toLowerCase())
+      a.inviteGroup.toLowerCase().localeCompare(b.inviteGroup.toLowerCase()),
     );
   }
 
@@ -465,7 +465,7 @@ export class EventDetailsComponent implements OnInit {
     bulkResults.inviteGroupsGenerated.forEach((inviteGroup) => {
       this.inviteGroups.push(inviteGroup);
       this.inviteGroups.sort((a, b) =>
-        a.inviteGroup.toLowerCase().localeCompare(b.inviteGroup.toLowerCase())
+        a.inviteGroup.toLowerCase().localeCompare(b.inviteGroup.toLowerCase()),
       );
     });
 
@@ -489,22 +489,22 @@ export class EventDetailsComponent implements OnInit {
 
   filter() {
     const familyFilter = document.getElementById(
-      'filterByFamily'
+      'filterByFamily',
     ) as HTMLInputElement;
     const inviteViewedFilter = document.getElementById(
-      'filterByInviteViewed'
+      'filterByInviteViewed',
     ) as HTMLSelectElement;
     const answeredFilter = document.getElementById(
-      'filterByAnswered'
+      'filterByAnswered',
     ) as HTMLSelectElement;
     const needsAccomodationFilter = document.getElementById(
-      'filterByNeedsAccomodation'
+      'filterByNeedsAccomodation',
     ) as HTMLSelectElement;
     const lastViewedStartDateFilter = document.getElementById(
-      'filterByLastViewedStartDate'
+      'filterByLastViewedStartDate',
     ) as HTMLInputElement;
     const lastViewedEndDateFilter = document.getElementById(
-      'filterByLastViewedEndDate'
+      'filterByLastViewedEndDate',
     ) as HTMLInputElement;
 
     const familyFilterValue = familyFilter.value.trim().toLocaleLowerCase();
@@ -515,7 +515,7 @@ export class EventDetailsComponent implements OnInit {
     if (lastViewedStartDateFilterValue !== '') {
       // Set time to 00:00:00
       lastViewedStartDateFilterValue = dateToUTCDate(
-        lastViewedStartDateFilter.value
+        lastViewedStartDateFilter.value,
       );
     }
 
@@ -527,8 +527,8 @@ export class EventDetailsComponent implements OnInit {
           23,
           59,
           59,
-          999
-        )
+          999,
+        ),
       ).toISOString();
     }
 
@@ -553,22 +553,22 @@ export class EventDetailsComponent implements OnInit {
 
   clearFilter() {
     const familyFilter = document.getElementById(
-      'filterByFamily'
+      'filterByFamily',
     ) as HTMLInputElement;
     const inviteViewedFilter = document.getElementById(
-      'filterByInviteViewed'
+      'filterByInviteViewed',
     ) as HTMLSelectElement;
     const answeredFilter = document.getElementById(
-      'filterByAnswered'
+      'filterByAnswered',
     ) as HTMLSelectElement;
     const needsAccomodationFilter = document.getElementById(
-      'filterByNeedsAccomodation'
+      'filterByNeedsAccomodation',
     ) as HTMLSelectElement;
     const lastViewedStartDateFilter = document.getElementById(
-      'filterByLastViewedStartDate'
+      'filterByLastViewedStartDate',
     ) as HTMLInputElement;
     const lastViewedEndDateFilter = document.getElementById(
-      'filterByLastViewedEndDate'
+      'filterByLastViewedEndDate',
     ) as HTMLInputElement;
 
     familyFilter.value = '';
@@ -614,7 +614,7 @@ export class EventDetailsComponent implements OnInit {
   getTableConfiguration(
     invitesGroup: IFullInvite[],
     tableIndex: number,
-    groupIndex: string
+    groupIndex: string,
   ): ITable {
     const headers = this.getHeaders();
     const isDeadlineMet = this.eventResolved.value.isDeadlineMet;
@@ -702,7 +702,7 @@ export class EventDetailsComponent implements OnInit {
   getInviteRow(
     invite: IFullInvite,
     headers: ITableHeaders[],
-    groupIndex: string
+    groupIndex: string,
   ): { [key: string]: string } {
     const row: { [key: string]: string } = {};
     const inviteNeedsAccomodation = !!invite.needsAccomodation;
@@ -727,9 +727,9 @@ export class EventDetailsComponent implements OnInit {
                   day: 'numeric',
                   month: 'long',
                   year: 'numeric',
-                }
+                },
               )} <br> ${new Date(
-                invite.lastViewedDate as string
+                invite.lastViewedDate as string,
               ).toLocaleString(this.localeValue, {
                 hour: '2-digit',
                 minute: '2-digit',
@@ -777,7 +777,7 @@ export class EventDetailsComponent implements OnInit {
     const url = `${window.location.origin}/invites/${id}`;
 
     const inviteFound = this.originalInvites.value.find(
-      (f) => f.id === id
+      (f) => f.id === id,
     ) as IFullInvite;
 
     const settings = JSON.parse(this.copyEventSettings.settings);
@@ -802,12 +802,12 @@ export class EventDetailsComponent implements OnInit {
         message = message.replace(
           '[max_deadline]',
           new Date(
-            this.eventInformation.maxDateOfConfirmation
+            this.eventInformation.maxDateOfConfirmation,
           ).toLocaleDateString(this.localeValue, {
             day: 'numeric',
             month: 'long',
             year: 'numeric',
-          })
+          }),
         );
       }
 
@@ -818,7 +818,7 @@ export class EventDetailsComponent implements OnInit {
   openInviteModal(id: string): void {
     if (id !== '') {
       const inviteToEdit = this.originalInvites.value.find(
-        (invite) => invite.id === id
+        (invite) => invite.id === id,
       ) as IFullInvite;
 
       this.inviteAction = {
@@ -850,7 +850,7 @@ export class EventDetailsComponent implements OnInit {
 
   showModal(id: string): void {
     const inviteFound = this.originalInvites.value.find(
-      (original) => original.id === id
+      (original) => original.id === id,
     ) as IFullInvite;
 
     this.commonModalService
@@ -874,7 +874,7 @@ export class EventDetailsComponent implements OnInit {
   selectAll(groupIndex: string, tableIndex: number, checked: boolean): void {
     if (checked) {
       this.selectedIds[groupIndex] = this.invitesGrouped[groupIndex].map(
-        (invite) => invite.id
+        (invite) => invite.id,
       );
     } else {
       this.selectedIds[groupIndex] = [];
@@ -883,7 +883,7 @@ export class EventDetailsComponent implements OnInit {
     this.tables[tableIndex] = this.getTableConfiguration(
       this.invitesGrouped[groupIndex],
       tableIndex,
-      groupIndex
+      groupIndex,
     );
   }
 
@@ -891,11 +891,11 @@ export class EventDetailsComponent implements OnInit {
     groupIndex: string,
     tableIndex: number,
     checked: boolean,
-    inviteId: string
+    inviteId: string,
   ): void {
     if (checked) {
       const inviteFound = this.invitesGrouped[groupIndex].find(
-        (invite) => invite.id === inviteId
+        (invite) => invite.id === inviteId,
       ) as IFullInvite;
 
       if (!this.selectedIds[groupIndex]) {
@@ -915,7 +915,7 @@ export class EventDetailsComponent implements OnInit {
     this.tables[tableIndex] = this.getTableConfiguration(
       this.invitesGrouped[groupIndex],
       tableIndex,
-      groupIndex
+      groupIndex,
     );
   }
 
@@ -924,7 +924,7 @@ export class EventDetailsComponent implements OnInit {
       return false;
     }
     return this.invitesGrouped[groupIndex].some((invite) =>
-      this.selectedIds[groupIndex].includes(invite.id)
+      this.selectedIds[groupIndex].includes(invite.id),
     );
   }
 
@@ -941,7 +941,7 @@ export class EventDetailsComponent implements OnInit {
 
   findTableConfiguration(groupIndex: string): ITable {
     return this.tables.find(
-      (table) => table.tableId === groupIndex.replaceAll(' ', '')
+      (table) => table.tableId === groupIndex.replaceAll(' ', ''),
     ) as ITable;
   }
 
@@ -962,11 +962,11 @@ export class EventDetailsComponent implements OnInit {
   }
 
   updateOverwroteInvite(
-    overridedInviteConfirmation: IOverwriteConfirmation
+    overridedInviteConfirmation: IOverwriteConfirmation,
   ): void {
     const originalInvitesCopy = this.originalInvites.value;
     const indexOfInvite = originalInvitesCopy.findIndex(
-      (f) => f.id === overridedInviteConfirmation.id
+      (f) => f.id === overridedInviteConfirmation.id,
     );
 
     originalInvitesCopy[indexOfInvite] = {

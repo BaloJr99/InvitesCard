@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { IErrorInvite, IBulkInvite } from 'src/app/core/models/invites';
-import { IInviteGroups } from 'src/app/core/models/inviteGroups';
+import { IInviteGroups } from 'src/app/core/models/invite-groups';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { IBulkMessageResponse, IBulkResults } from 'src/app/core/models/common';
-import { FileReaderService } from 'src/app/core/services/fileReader.service';
+import { FileReaderService } from 'src/app/core/services/file-reader.service';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
@@ -65,7 +65,7 @@ export class InvitesImportModalComponent {
         $('#invitesImportModal').modal('hide');
       }
       return { eventId, inviteGroups };
-    })
+    }),
   );
 
   onFileChange = async (event: Event) => {
@@ -147,7 +147,7 @@ export class InvitesImportModalComponent {
         });
       } else {
         const inviteGroupFound = this.inviteGroups.value.find(
-          (f) => f.inviteGroup.toLowerCase() === columns[4].toLowerCase()
+          (f) => f.inviteGroup.toLowerCase() === columns[4].toLowerCase(),
         );
         this.invites.push({
           family: columns[0],

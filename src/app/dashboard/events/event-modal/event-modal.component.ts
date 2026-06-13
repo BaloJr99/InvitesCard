@@ -10,7 +10,7 @@ import { IEventAction, IFullEvent } from 'src/app/core/models/events';
 import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { IMessageResponse } from 'src/app/core/models/common';
-import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { CommonModalService } from 'src/app/core/services/common-modal.service';
 import {
   CommonModalResponse,
   CommonModalType,
@@ -21,6 +21,7 @@ import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { ValidationPipe } from '../../../shared/pipes/validation.pipe';
 import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe';
 import { CommonModule } from '@angular/common';
+import { EventTypesService } from 'src/app/core/services/event-types.service';
 
 @Component({
   selector: 'app-event-modal',
@@ -39,6 +40,7 @@ export class EventModalComponent {
   private fb = inject(FormBuilder);
   private toastr = inject(ToastrService);
   private commonModalService = inject(CommonModalService);
+  private eventTypesService = inject(EventTypesService);
 
   private baseEvent = {
     id: '',
@@ -46,7 +48,7 @@ export class EventModalComponent {
     dateOfEvent: '',
     maxDateOfConfirmation: '',
     nameOfCelebrated: '',
-    typeOfEvent: '',
+    eventTypeId: '',
     userId: '',
   };
 
@@ -70,13 +72,15 @@ export class EventModalComponent {
   @Output() updateEvents: EventEmitter<IEventAction> = new EventEmitter();
   @Output() closeModal: EventEmitter<void> = new EventEmitter();
 
+  private dictionaryEventTypes: Record<string, EventType> = {};
+
   createEventForm: FormGroup = this.fb.group({
     id: [''],
     nameOfEvent: ['', Validators.required],
     dateOfEvent: ['', Validators.required],
     maxDateOfConfirmation: ['', Validators.required],
     nameOfCelebrated: ['', Validators.required],
-    typeOfEvent: ['', Validators.required],
+    eventTypeId: ['', Validators.required],
     userId: ['', Validators.required],
   });
 
@@ -86,9 +90,18 @@ export class EventModalComponent {
   vm$ = combineLatest([
     this.showModal$,
     this.usersService.getUsersDropdownData(),
+    this.eventTypesService.getEventTypes(),
     this.eventAction$,
   ]).pipe(
-    map(([showModal, users, eventAction]) => {
+    map(([showModal, users, eventTypes, eventAction]) => {
+      this.dictionaryEventTypes = eventTypes.reduce<Record<string, EventType>>(
+        (dict, eventType) => {
+          dict[eventType.id] = eventType.name as EventType;
+          return dict;
+        },
+        {},
+      );
+
       this.createEventForm.patchValue({
         ...eventAction.event,
         dateOfEvent: eventAction.event.dateOfEvent.split('T')[0],
@@ -97,7 +110,9 @@ export class EventModalComponent {
       });
 
       if (!eventAction.isNew) {
-        this.originalEventType = eventAction.event.typeOfEvent;
+        // Guardamos el tipo de evento original para validar cambios posteriores
+        this.originalEventType =
+          this.dictionaryEventTypes[eventAction.event.eventTypeId];
       }
 
       if (showModal) {
@@ -118,8 +133,9 @@ export class EventModalComponent {
 
       return {
         users,
+        eventTypes,
       };
-    })
+    }),
   );
 
   saveEvent() {
@@ -129,14 +145,15 @@ export class EventModalComponent {
         this.originalEventType
       ) {
         const weddingEventTypes = [EventType.Wedding, EventType.SaveTheDate];
+        const currentEventType =
+          this.dictionaryEventTypes[
+            this.createEventForm.controls['eventTypeId'].value
+          ];
         if (
           (weddingEventTypes.includes(this.originalEventType) &&
-            this.createEventForm.controls['typeOfEvent'].value ===
-              EventType.Xv) ||
+            currentEventType === EventType.Xv) ||
           (this.originalEventType === EventType.Xv &&
-            weddingEventTypes.includes(
-              this.createEventForm.controls['typeOfEvent'].value
-            ))
+            weddingEventTypes.includes(currentEventType))
         ) {
           this.commonModalService
             .open({
@@ -148,8 +165,15 @@ export class EventModalComponent {
               if (response === CommonModalResponse.Confirm) {
                 this.updateEvent(true);
               } else {
-                this.createEventForm.controls['typeOfEvent'].setValue(
-                  this.originalEventType
+                // Let's find the original event type id based on the original event type name
+                const originalEventTypeId = Object.keys(
+                  this.dictionaryEventTypes,
+                ).find(
+                  (key) =>
+                    this.dictionaryEventTypes[key] === this.originalEventType,
+                );
+                this.createEventForm.controls['eventTypeId'].setValue(
+                  originalEventTypeId,
                 );
               }
             });
@@ -157,8 +181,7 @@ export class EventModalComponent {
           this.updateEvent(
             false,
             this.originalEventType === EventType.SaveTheDate &&
-              this.createEventForm.controls['typeOfEvent'].value ===
-                EventType.Wedding
+              currentEventType === EventType.Wedding,
           );
         }
       } else {
@@ -202,7 +225,7 @@ export class EventModalComponent {
         this.formatEvent(this.createEventForm.value),
         this.createEventForm.controls['id'].value,
         override,
-        overrideViewed
+        overrideViewed,
       )
       .subscribe({
         next: (response: IMessageResponse) => {

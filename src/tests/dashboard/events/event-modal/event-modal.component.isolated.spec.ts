@@ -2,7 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { EventType } from 'src/app/core/models/enum';
-import { CommonModalService } from 'src/app/core/services/commonModal.service';
+import { CommonModalService } from 'src/app/core/services/common-modal.service';
+import { EventTypesService } from 'src/app/core/services/event-types.service';
 import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { EventModalComponent } from 'src/app/dashboard/events/event-modal/event-modal.component';
@@ -16,10 +17,10 @@ describe('Event Modal Component (Isolated Test)', () => {
     ...fullEventsMockCopy,
     dateOfEvent: toLocalDate(fullEventsMockCopy.dateOfEvent).substring(0, 10),
     maxDateOfConfirmation: toLocalDate(
-      fullEventsMockCopy.maxDateOfConfirmation
+      fullEventsMockCopy.maxDateOfConfirmation,
     ).substring(0, 10),
   };
-  
+
   let component: EventModalComponent;
   const eventsSpy = jasmine.createSpyObj('EventsService', ['']);
   const usersSpy = jasmine.createSpyObj('UsersService', [
@@ -27,24 +28,25 @@ describe('Event Modal Component (Isolated Test)', () => {
   ]);
   const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
   const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['']);
+  const eventTypesSpy = jasmine.createSpyObj('EventTypesService', ['getEventTypes']);
 
   const updateForm = (
     nameOfEvent: string,
     dateOfEvent: string,
     maxDateOfConfirmation: string,
     nameOfCelebrated: string,
-    typeOfEvent: EventType,
-    userId: string
+    eventTypeId: EventType,
+    userId: string,
   ) => {
     component.createEventForm.controls['nameOfEvent'].setValue(nameOfEvent);
     component.createEventForm.controls['dateOfEvent'].setValue(dateOfEvent);
     component.createEventForm.controls['maxDateOfConfirmation'].setValue(
-      maxDateOfConfirmation
+      maxDateOfConfirmation,
     );
     component.createEventForm.controls['nameOfCelebrated'].setValue(
-      nameOfCelebrated
+      nameOfCelebrated,
     );
-    component.createEventForm.controls['typeOfEvent'].setValue(typeOfEvent);
+    component.createEventForm.controls['eventTypeId'].setValue(eventTypeId);
     component.createEventForm.controls['userId'].setValue(userId);
   };
 
@@ -56,11 +58,11 @@ describe('Event Modal Component (Isolated Test)', () => {
         { provide: UsersService, useValue: usersSpy },
         { provide: ToastrService, useValue: toastrSpy },
         { provide: CommonModalService, useValue: commonModalSpy },
+        { provide: EventTypesService, useValue: eventTypesSpy },
       ],
     });
 
     component = TestBed.createComponent(EventModalComponent).componentInstance;
-    
   });
 
   it('should create', () => {
@@ -97,7 +99,7 @@ describe('Event Modal Component (Isolated Test)', () => {
       fullEventsMockCopy.maxDateOfConfirmation,
       fullEventsMockCopy.nameOfCelebrated,
       EventType.Xv,
-      fullEventsMockCopy.userId
+      fullEventsMockCopy.userId,
     );
 
     expect(component.createEventForm.valid)
@@ -151,14 +153,14 @@ describe('Event Modal Component (Isolated Test)', () => {
       .toBeTruthy();
   });
 
-  it('should have typeOfEvent in the createEventForm', () => {
-    const typeOfEvent = component.createEventForm.controls['typeOfEvent'];
-    expect(typeOfEvent.valid)
-      .withContext('typeOfEvent should be invalid')
+  it('should have eventTypeId in the createEventForm', () => {
+    const eventTypeId = component.createEventForm.controls['eventTypeId'];
+    expect(eventTypeId.valid)
+      .withContext('eventTypeId should be invalid')
       .toBeFalsy();
 
-    expect(typeOfEvent.errors?.['required'])
-      .withContext('typeOfEvent should be required')
+    expect(eventTypeId.errors?.['required'])
+      .withContext('eventTypeId should be required')
       .toBeTruthy();
   });
 

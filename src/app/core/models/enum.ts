@@ -18,10 +18,10 @@ export const enum RoleActionEvent {
   None = 'none',
 }
 
-export const enum EventType {
-  Xv = 'X',
-  Wedding = 'W',
-  SaveTheDate = 'S',
+export enum EventType {
+  Xv = 'XV',
+  Wedding = 'Wedding',
+  SaveTheDate = 'Save the date',
   None = '',
 }
 

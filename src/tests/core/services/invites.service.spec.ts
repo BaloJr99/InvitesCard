@@ -47,7 +47,7 @@ describe('Invites Service', () => {
     });
 
     invitesServiceSpy = TestBed.inject(
-      InvitesService
+      InvitesService,
     ) as jasmine.SpyObj<InvitesService>;
   });
 
@@ -60,7 +60,7 @@ describe('Invites Service', () => {
 
   it('should call getAllInvites', () => {
     invitesServiceSpy.getAllInvites.and.returnValue(
-      of([dashboardInvitesMockCopy])
+      of([dashboardInvitesMockCopy]),
     );
 
     invitesServiceSpy.getAllInvites().subscribe((response) => {
@@ -130,14 +130,14 @@ describe('Invites Service', () => {
 
   it('should call sendConfirmation', () => {
     invitesServiceSpy.sendConfirmation.and.returnValue(
-      of(messageResponseMockCopy)
+      of(messageResponseMockCopy),
     );
 
     invitesServiceSpy
       .sendConfirmation(
         confirmationInviteMockCopy,
         confirmationInviteMockCopy.id,
-        fullEventsMockCopy.typeOfEvent
+        fullEventsMockCopy.eventTypeId,
       )
       .subscribe((response) => {
         expect(response).toBe(messageResponseMockCopy);
@@ -148,7 +148,7 @@ describe('Invites Service', () => {
       .toHaveBeenCalledOnceWith(
         confirmationInviteMockCopy,
         confirmationInviteMockCopy.id,
-        fullEventsMockCopy.typeOfEvent
+        fullEventsMockCopy.eventTypeId,
       );
   });
 
@@ -168,7 +168,7 @@ describe('Invites Service', () => {
 
   it('should call bulkInvites', () => {
     invitesServiceSpy.bulkInvites.and.returnValue(
-      of(bulkMessageResponseMockCopy)
+      of(bulkMessageResponseMockCopy),
     );
 
     invitesServiceSpy
@@ -184,7 +184,7 @@ describe('Invites Service', () => {
 
   it('should call bulkDeleteInvites', () => {
     invitesServiceSpy.bulkDeleteInvites.and.returnValue(
-      of(messageResponseMockCopy)
+      of(messageResponseMockCopy),
     );
 
     invitesServiceSpy
@@ -200,13 +200,13 @@ describe('Invites Service', () => {
 
   it('should call getInviteEventType', () => {
     invitesServiceSpy.getInviteEventType.and.returnValue(
-      of(fullEventsMockCopy.typeOfEvent)
+      of(fullEventsMockCopy.eventTypeId),
     );
 
     invitesServiceSpy
       .getInviteEventType(newInviteMockCopy.eventId)
       .subscribe((response) => {
-        expect(response).toBe(fullEventsMockCopy.typeOfEvent);
+        expect(response).toBe(fullEventsMockCopy.eventTypeId);
       });
 
     expect(invitesServiceSpy.getInviteEventType)

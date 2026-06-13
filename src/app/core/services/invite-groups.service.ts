@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { IInviteGroups } from '../models/inviteGroups';
+import { IInviteGroups } from '../models/invite-groups';
 import { IMessageResponse } from '../models/common';
 
 @Injectable({
@@ -21,23 +21,23 @@ export class InviteGroupsService {
   createInviteGroup(inviteGroup: IInviteGroups): Observable<IMessageResponse> {
     return this.http.post<IMessageResponse>(
       `${this.invitesBaseUrl}`,
-      inviteGroup
+      inviteGroup,
     );
   }
 
   updateInviteGroup(
     inviteGroup: IInviteGroups,
-    id: string
+    id: string,
   ): Observable<IMessageResponse> {
     return this.http.put<IMessageResponse>(
       `${this.invitesBaseUrl}/${id}`,
-      inviteGroup
+      inviteGroup,
     );
   }
 
   checkInviteGroup(eventId: string, inviteGroup: string): Observable<boolean> {
     return this.http.get<boolean>(
-      `${this.invitesBaseUrl}/check-invite-group/${eventId}/${inviteGroup}`
+      `${this.invitesBaseUrl}/check-invite-group/${eventId}/${inviteGroup}`,
     );
   }
 }

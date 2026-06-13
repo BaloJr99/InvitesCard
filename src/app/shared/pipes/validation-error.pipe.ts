@@ -46,7 +46,7 @@ const ERROR_MESSAGES: Record<string, Record<string, string>> = {
   nameOfCelebrated: {
     required: $localize`El nombre del festejado es requerido`,
   },
-  typeOfEvent: {
+  eventTypeId: {
     required: $localize`El tipo de evento es requerido`,
   },
   userId: {

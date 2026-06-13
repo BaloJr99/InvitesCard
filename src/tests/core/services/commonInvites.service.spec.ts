@@ -1,5 +1,5 @@
 import { fakeAsync, TestBed } from '@angular/core/testing';
-import { CommonInvitesService } from 'src/app/core/services/commonInvites.service';
+import { CommonInvitesService } from 'src/app/core/services/common-invites.service';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { messagesMock, notificationsMock } from 'src/tests/mocks/mocks';
 
@@ -21,7 +21,7 @@ describe('CommonInvitesService', () => {
     });
 
     commonInvitesServiceSpy = TestBed.inject(
-      CommonInvitesService
+      CommonInvitesService,
     ) as jasmine.SpyObj<CommonInvitesService>;
   });
 
@@ -35,7 +35,7 @@ describe('CommonInvitesService', () => {
   it('should call updateNotifications', fakeAsync(() => {
     commonInvitesServiceSpy.updateNotifications(
       notificationsMockCopy,
-      messagesMockCopy
+      messagesMockCopy,
     );
 
     expect(commonInvitesServiceSpy.updateNotifications)

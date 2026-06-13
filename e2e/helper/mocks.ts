@@ -1,9 +1,8 @@
-import { EventType } from 'src/app/core/models/enum';
 import { IUserProfile } from 'src/app/core/models/users';
 
 const generateEventDate = (
   oldDate: boolean = false,
-  isDeadline: boolean = false
+  isDeadline: boolean = false,
 ) => {
   const date = new Date();
   if (oldDate) {
@@ -39,7 +38,6 @@ export const sweetXvEventMock = {
   nameOfEvent: 'Sweet XV',
   dateOfEvent: generateEventDate(),
   maxDateOfConfirmation: generateEventDate(),
-  typeOfEvent: EventType.Xv,
   nameOfCelebrated: 'Test name',
   assignedUser: 'playwright-invites',
 };
@@ -48,7 +46,6 @@ export const saveTheDateEventMock = {
   nameOfEvent: 'Save the date',
   dateOfEvent: generateEventDate(),
   maxDateOfConfirmation: generateEventDate(),
-  typeOfEvent: EventType.SaveTheDate,
   nameOfCelebrated: 'Test bride;Test groom',
   assignedUser: 'playwright-invites',
 };

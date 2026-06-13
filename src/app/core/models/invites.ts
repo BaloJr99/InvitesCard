@@ -1,3 +1,5 @@
+import { EventType } from "./enum";
+
 export interface IFullInvite {
   id: string;
   family: string;
@@ -73,7 +75,6 @@ export type IUserInvite = Pick<
   dateOfEvent: string;
   maxDateOfConfirmation: string;
   nameOfCelebrated: string;
-  typeOfEvent: string;
 };
 
 export type ISaveTheDateUserInvite = Pick<
@@ -83,7 +84,6 @@ export type ISaveTheDateUserInvite = Pick<
   dateOfEvent: string;
   maxDateOfConfirmation: string;
   nameOfCelebrated: string;
-  typeOfEvent: string;
 };
 
 export type IWeddingUserInvite = Pick<
@@ -111,7 +111,7 @@ export interface IInviteAction {
 }
 
 export interface IEventTypeResolved {
-  eventType: string;
+  eventType: EventType;
   error?: string;
 }
 

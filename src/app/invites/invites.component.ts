@@ -10,14 +10,11 @@ import { WeddingComponent } from './wedding/wedding.component';
 @Component({
   selector: 'app-invites',
   templateUrl: './invites.component.html',
-  imports: [
-    SweetXvComponent,
-    SaveTheDateComponent,
-    WeddingComponent
-],
+  imports: [SweetXvComponent, SaveTheDateComponent, WeddingComponent],
 })
 export class InvitesComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  eventType = EventType;
 
   inviteResolved: IEventTypeResolved = {
     eventType: EventType.None,
