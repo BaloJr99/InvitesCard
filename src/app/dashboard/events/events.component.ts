@@ -28,6 +28,7 @@ export class EventsComponent {
     nameOfCelebrated: '',
     userId: '',
     eventTypeId: '',
+    designId: '',
   };
 
   private events = new BehaviorSubject<IDashboardEvent[]>([]);

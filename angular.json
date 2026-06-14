@@ -23,6 +23,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "i18nMissingTranslation": "error",
             "localize": false,
             "allowedCommonJsDependencies": ["moment"],
             "outputPath": {

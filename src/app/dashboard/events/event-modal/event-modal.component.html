@@ -56,6 +56,7 @@
                     <select id="eventTypeId"
                       class="form-control"
                       formControlName="eventTypeId"
+                      (change)="filterDesigns($event)"
                       [ngClass]="{'is-invalid': createEventForm.get('eventTypeId') | validation }">
                       <option value="" i18n>Seleccione...</option>
                       @for (eventType of vm.eventTypes; track eventType) {
@@ -67,6 +68,25 @@
                     @if (createEventForm.get('eventTypeId') | validation) {
                       <span class="invalid-feedback d-block" role="alert">
                         {{ createEventForm.get('eventTypeId')?.errors | validationError: 'eventTypeId' }}
+                      </span>
+                    }
+                  </div>
+                  <div class="mb-3">
+                    <label for="designId" class="form-label" i18n>Elige un diseño</label>
+                    <select id="designId"
+                      class="form-control"
+                      formControlName="designId"
+                      [ngClass]="{'is-invalid': createEventForm.get('designId') | validation }">
+                      <option value="" i18n>Seleccione...</option>
+                      @for (design of vm.filteredDesigns; track design) {
+                        <option [value]="design.id">
+                          {{ design.name }}
+                        </option>
+                      }
+                    </select>
+                    @if (createEventForm.get('designId') | validation) {
+                      <span class="invalid-feedback d-block" role="alert">
+                        {{ createEventForm.get('designId')?.errors | validationError: 'designId' }}
                       </span>
                     }
                   </div>

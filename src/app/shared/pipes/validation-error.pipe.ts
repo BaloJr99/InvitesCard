@@ -49,6 +49,9 @@ const ERROR_MESSAGES: Record<string, Record<string, string>> = {
   eventTypeId: {
     required: $localize`El tipo de evento es requerido`,
   },
+  designId: {
+    required: $localize`El diseño es requerido`
+  },
   userId: {
     required: $localize`El usuario es requerido`,
   },

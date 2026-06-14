@@ -3,7 +3,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
-import { EventType } from 'src/app/core/models/enum';
+import { DesignType, EventType } from 'src/app/core/models/enum';
+import { DesignsService } from 'src/app/core/services/design.service';
 import { EventTypesService } from 'src/app/core/services/event-types.service';
 import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
@@ -12,6 +13,7 @@ import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe'
 import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
 import {
+  designsMock,
   eventTypesMock,
   fullEventsMock,
   userDropdownDataMock,
@@ -24,6 +26,7 @@ describe('Event Modal Component (Shallow Test)', () => {
   let fixture: ComponentFixture<EventModalComponent>;
   let usersServiceSpy: jasmine.SpyObj<UsersService>;
   let eventTypesServiceSpy: jasmine.SpyObj<EventTypesService>;
+  let designsServiceSpy: jasmine.SpyObj<DesignsService>;
 
   fullEventsMockCopy = {
     ...fullEventsMockCopy,
@@ -39,6 +42,7 @@ describe('Event Modal Component (Shallow Test)', () => {
     maxDateOfConfirmation: string,
     nameOfCelebrated: string,
     eventTypeId: string,
+    designId: string,
     userId: string,
   ) => {
     const nameOfEventInput = fixture.debugElement.query(By.css('#nameOfEvent'));
@@ -50,6 +54,7 @@ describe('Event Modal Component (Shallow Test)', () => {
       By.css('#nameOfCelebrated'),
     );
     const eventTypeIdInput = fixture.debugElement.query(By.css('#eventTypeId'));
+    const designIdInput = fixture.debugElement.query(By.css('#designId'));
     const userIdInput = fixture.debugElement.query(By.css('#userId'));
 
     nameOfEventInput.nativeElement.value = nameOfEvent;
@@ -67,6 +72,11 @@ describe('Event Modal Component (Shallow Test)', () => {
     eventTypeIdInput.nativeElement.value = eventTypeId;
     eventTypeIdInput.nativeElement.dispatchEvent(new Event('change'));
 
+    fixture.detectChanges();
+
+    designIdInput.nativeElement.value = designId;
+    designIdInput.nativeElement.dispatchEvent(new Event('change'));
+
     userIdInput.nativeElement.value = userId;
     userIdInput.nativeElement.dispatchEvent(new Event('change'));
   };
@@ -80,6 +90,7 @@ describe('Event Modal Component (Shallow Test)', () => {
     const eventTypesSpy = jasmine.createSpyObj('EventTypesService', [
       'getEventTypes',
     ]);
+    const designsSpy = jasmine.createSpyObj('DesignsService', ['getDesigns']);
 
     await TestBed.configureTestingModule({
       imports: [
@@ -93,6 +104,7 @@ describe('Event Modal Component (Shallow Test)', () => {
         { provide: UsersService, useValue: usersSpy },
         { provide: ToastrService, useValue: toastrSpy },
         { provide: EventTypesService, useValue: eventTypesSpy },
+        { provide: DesignsService, useValue: designsSpy },
       ],
     }).compileComponents();
 
@@ -104,13 +116,20 @@ describe('Event Modal Component (Shallow Test)', () => {
       EventTypesService,
     ) as jasmine.SpyObj<EventTypesService>;
 
+    designsServiceSpy = TestBed.inject(
+      DesignsService,
+    ) as jasmine.SpyObj<DesignsService>;
+
     usersServiceSpy.getUsersDropdownData.and.returnValue(
       of([userDropdownDataMockCopy]),
     );
 
     eventTypesServiceSpy.getEventTypes.and.returnValue(of(eventTypesMock));
+    designsServiceSpy.getDesigns.and.returnValue(of(designsMock));
 
     fixture = TestBed.createComponent(EventModalComponent);
+
+    fixture.componentRef.setInput('showModalValue', true);
     fixture.detectChanges();
   });
 
@@ -124,6 +143,7 @@ describe('Event Modal Component (Shallow Test)', () => {
       By.css('#nameOfCelebrated'),
     );
     const eventTypeIdInput = fixture.debugElement.query(By.css('#eventTypeId'));
+    const designIdInput = fixture.debugElement.query(By.css('#designId'));
     const userIdInput = fixture.debugElement.query(By.css('#userId'));
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));
@@ -150,6 +170,10 @@ describe('Event Modal Component (Shallow Test)', () => {
       .withContext("eventTypeId input shouldn't be null")
       .not.toBeNull();
 
+    expect(designIdInput)
+      .withContext("designId input shouldn't be null")
+      .not.toBeNull();
+
     expect(userIdInput)
       .withContext("user id input shouldn't be null")
       .not.toBeNull();
@@ -170,8 +194,10 @@ describe('Event Modal Component (Shallow Test)', () => {
       fullEventsMockCopy.maxDateOfConfirmation,
       fullEventsMockCopy.nameOfCelebrated,
       fullEventsMockCopy.eventTypeId,
+      fullEventsMockCopy.designId,
       fullEventsMockCopy.userId,
     );
+
     expect(
       fixture.componentInstance.createEventForm.controls['nameOfEvent'].value,
     )
@@ -209,6 +235,10 @@ describe('Event Modal Component (Shallow Test)', () => {
       .withContext('EventTypeId control should be filled when input changes')
       .toBe(fullEventsMockCopy.eventTypeId);
 
+    expect(fixture.componentInstance.createEventForm.controls['designId'].value)
+      .withContext('designId control should be filled when input changes')
+      .toBe(fullEventsMockCopy.designId);
+
     expect(fixture.componentInstance.createEventForm.controls['userId'].value)
       .withContext('UserId control should be filled when input changes')
       .toBe(fullEventsMockCopy.userId);
@@ -229,7 +259,7 @@ describe('Event Modal Component (Shallow Test)', () => {
   });
 
   it('Display error messages when fields are blank', () => {
-    updateFormUsingEvent('', '', '', '', EventType.None, '');
+    updateFormUsingEvent('', '', '', '', EventType.None, DesignType.None, '');
     fixture.detectChanges();
 
     const errorSpans = fixture.debugElement.queryAll(
@@ -240,8 +270,9 @@ describe('Event Modal Component (Shallow Test)', () => {
     const dateOfEventErrorSpan = errorSpans[1];
     const maxDateOfConfirmationErrorSpan = errorSpans[2];
     const eventTypesIdErrorSpan = errorSpans[3];
-    const nameOfCelebratedErrorSpan = errorSpans[4];
-    const userIdErrorSpan = errorSpans[5];
+    const designIdErrorSpan = errorSpans[4];
+    const nameOfCelebratedErrorSpan = errorSpans[5];
+    const userIdErrorSpan = errorSpans[6];
 
     expect(nameOfEventErrorSpan.nativeElement.innerHTML)
       .withContext('NameOfEvent span for error should be filled')
@@ -259,6 +290,10 @@ describe('Event Modal Component (Shallow Test)', () => {
       .withContext('EventTypeId span for error should be filled')
       .toContain('El tipo de evento es requerido');
 
+    expect(designIdErrorSpan.nativeElement.innerHTML)
+      .withContext('DesignId span for error should be filled')
+      .toContain('El diseño es requerido');
+
     expect(nameOfCelebratedErrorSpan.nativeElement.innerHTML)
       .withContext('NameOfCelebrated span for error should be filled')
       .toContain('El nombre del festejado es requerido');
@@ -275,8 +310,10 @@ describe('Event Modal Component (Shallow Test)', () => {
       fullEventsMockCopy.dateOfEvent,
       fullEventsMockCopy.dateOfEvent,
       eventTypesMock[1].id,
+      designsMock[1].id,
       fullEventsMockCopy.userId,
     );
+
     fixture.detectChanges();
 
     const errorSpans = fixture.debugElement.queryAll(

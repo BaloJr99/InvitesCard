@@ -25,6 +25,11 @@ export enum EventType {
   None = '',
 }
 
+export enum DesignType {
+  Classic = 'Classic',
+  None = ''
+}
+
 export const enum CommonModalType {
   Confirm = 'C',
   YesNo = 'YN',

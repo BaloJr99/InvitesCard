@@ -22,6 +22,7 @@ import { TestingPage } from 'e2e/pages/dashboard/testing/testing-page';
 import { SaveTheDatePage } from 'e2e/pages/invites/save-the-date-page';
 import { SweetXvPage } from 'e2e/pages/invites/sweet-xv-page';
 import { WeddingPage } from 'e2e/pages/invites/wedding-page';
+import { IDesign } from 'src/app/core/models/designs';
 import { EventType, ImageUsage } from 'src/app/core/models/enum';
 import { IEventType } from 'src/app/core/models/event-types';
 import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
@@ -59,6 +60,7 @@ test.describe('Invites (Sweet Xv)', () => {
   let environmentCleaned = false;
 
   let eventTypes: IEventType[];
+  let designs: IDesign[];
 
   test.beforeEach(async ({ page, context }) => {
     // Grant clipboard permissions to browser context
@@ -80,28 +82,41 @@ test.describe('Invites (Sweet Xv)', () => {
       await testingPage.clickCleanEnvironmentButton();
       await testingPage.clickEventsLink();
 
-      const responsePromise = page.waitForResponse(
+      const eventTypesResponsePromise = page.waitForResponse(
         (response) =>
           response.url().includes('/api/eventtypes') &&
           response.status() === 200,
+      );
+
+      const designsResponsePromise = page.waitForResponse(
+        (response) =>
+          response.url().includes('/api/designs') && response.status() === 200,
       );
 
       eventsPage = new EventsPage(page);
       await eventsPage.isEventsPage();
       await eventsPage.waitToLoad();
 
-      const response = await responsePromise;
-      eventTypes = await response.json();
+      eventTypes = await (await eventTypesResponsePromise).json();
+      designs = await (await designsResponsePromise).json();
 
       eventModal = await eventsPage.clickNewEventButton();
       await eventModal.waitForModalToShow();
+
+      const eventType = eventTypes.find(
+        (s) => s.name === EventType.Xv,
+      ) as IEventType;
+      const design = designs.find(
+        (d) => d.eventTypeId === eventType.id,
+      ) as IDesign;
 
       // Create event
       await eventModal.fillEventForm(
         sweetXvEventMock.nameOfEvent,
         sweetXvEventMock.dateOfEvent,
         sweetXvEventMock.maxDateOfConfirmation,
-        eventTypes.find((s) => s.name === EventType.Xv)?.id ?? '',
+        eventType.id,
+        design.id,
         sweetXvEventMock.nameOfCelebrated,
         sweetXvEventMock.assignedUser,
       );
@@ -502,6 +517,7 @@ test.describe('Invites (Save The Date)', () => {
   let environmentCleaned = false;
 
   let eventTypes: IEventType[];
+  let designs: IDesign[];
 
   test.beforeEach(async ({ page, context }) => {
     // Grant clipboard permissions to browser context
@@ -526,28 +542,41 @@ test.describe('Invites (Save The Date)', () => {
 
       await testingPage.clickEventsLink();
 
-      const responsePromise = page.waitForResponse(
+      const eventTypesResponsePromise = page.waitForResponse(
         (response) =>
           response.url().includes('/api/eventtypes') &&
           response.status() === 200,
+      );
+
+      const designsResponsePromise = page.waitForResponse(
+        (response) =>
+          response.url().includes('/api/designs') && response.status() === 200,
       );
 
       eventsPage = new EventsPage(page);
       await eventsPage.isEventsPage();
       await eventsPage.waitToLoad();
 
-      const response = await responsePromise;
-      eventTypes = await response.json();
+      eventTypes = await (await eventTypesResponsePromise).json();
+      designs = await (await designsResponsePromise).json();
 
       eventModal = await eventsPage.clickNewEventButton();
       await eventModal.waitForModalToShow();
+
+      const eventType = eventTypes.find(
+        (s) => s.name === EventType.SaveTheDate,
+      ) as IEventType;
+      const design = designs.find(
+        (d) => d.eventTypeId === eventType.id,
+      ) as IDesign;
 
       // Create event
       await eventModal.fillEventForm(
         saveTheDateEventMock.nameOfEvent,
         saveTheDateEventMock.dateOfEvent,
         saveTheDateEventMock.maxDateOfConfirmation,
-        eventTypes.find((s) => s.name === EventType.SaveTheDate)?.id ?? '',
+        eventType.id,
+        design.id,
         saveTheDateEventMock.nameOfCelebrated,
         saveTheDateEventMock.assignedUser,
       );
@@ -819,6 +848,7 @@ test.describe('Invites (Wedding)', () => {
   let environmentCleaned = false;
 
   let eventTypes: IEventType[];
+  let designs: IDesign[];
 
   test.beforeEach(async ({ page, context }, testInfo) => {
     testInfo.setTimeout(60000);
@@ -845,28 +875,41 @@ test.describe('Invites (Wedding)', () => {
 
       await testingPage.clickEventsLink();
 
-      const responsePromise = page.waitForResponse(
+      const eventTypesResponsePromise = page.waitForResponse(
         (response) =>
           response.url().includes('/api/eventtypes') &&
           response.status() === 200,
+      );
+
+      const designsResponsePromise = page.waitForResponse(
+        (response) =>
+          response.url().includes('/api/designs') && response.status() === 200,
       );
 
       eventsPage = new EventsPage(page);
       await eventsPage.isEventsPage();
       await eventsPage.waitToLoad();
 
-      const response = await responsePromise;
-      eventTypes = await response.json();
+      eventTypes = await (await eventTypesResponsePromise).json();
+      designs = await (await designsResponsePromise).json();
 
       eventModal = await eventsPage.clickNewEventButton();
       await eventModal.waitForModalToShow();
+
+      let eventType = eventTypes.find(
+        (s) => s.name === EventType.SaveTheDate,
+      ) as IEventType;
+      let design = designs.find(
+        (d) => d.eventTypeId === eventType.id,
+      ) as IDesign;
 
       // Create event
       await eventModal.fillEventForm(
         saveTheDateEventMock.nameOfEvent,
         saveTheDateEventMock.dateOfEvent,
         saveTheDateEventMock.maxDateOfConfirmation,
-        eventTypes.find((s) => s.name === EventType.SaveTheDate)?.id ?? '',
+        eventType.id,
+        design.id,
         saveTheDateEventMock.nameOfCelebrated,
         saveTheDateEventMock.assignedUser,
       );
@@ -902,10 +945,15 @@ test.describe('Invites (Wedding)', () => {
       eventModal = await eventsPage.clickEditEventButton(0);
       await eventModal.waitForModalToShow();
 
+      eventType = eventTypes.find(
+        (s) => s.name === EventType.Wedding,
+      ) as IEventType;
+      design = designs.find((d) => d.eventTypeId === eventType.id) as IDesign;
+
       // Switch to wedding event
-      await eventModal.setEventTypeId(
-        eventTypes.find((s) => s.name === EventType.Wedding)?.id ?? '',
-      );
+      await eventModal.setEventTypeId(eventType.id);
+      await eventModal.setDesignId(design.id);
+
       await eventModal.clickConfirmButton();
       await eventsPage.waitToLoad();
       await eventsPage.waitForToast();

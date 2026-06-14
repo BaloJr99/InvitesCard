@@ -9,6 +9,7 @@ export interface IFullEvent {
   maxDateOfConfirmation: string;
   nameOfCelebrated: string;
   eventTypeId: string;
+  designId: string;
   userId: string;
 }
 

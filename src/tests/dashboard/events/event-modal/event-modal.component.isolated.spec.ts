@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { EventType } from 'src/app/core/models/enum';
+import { DesignType, EventType } from 'src/app/core/models/enum';
 import { CommonModalService } from 'src/app/core/services/common-modal.service';
+import { DesignsService } from 'src/app/core/services/design.service';
 import { EventTypesService } from 'src/app/core/services/event-types.service';
 import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
@@ -28,7 +29,10 @@ describe('Event Modal Component (Isolated Test)', () => {
   ]);
   const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
   const commonModalSpy = jasmine.createSpyObj('CommonModalService', ['']);
-  const eventTypesSpy = jasmine.createSpyObj('EventTypesService', ['getEventTypes']);
+  const eventTypesSpy = jasmine.createSpyObj('EventTypesService', [
+    'getEventTypes',
+  ]);
+  const designsSpy = jasmine.createSpyObj('DesignsService', ['getDesigns']);
 
   const updateForm = (
     nameOfEvent: string,
@@ -36,6 +40,7 @@ describe('Event Modal Component (Isolated Test)', () => {
     maxDateOfConfirmation: string,
     nameOfCelebrated: string,
     eventTypeId: EventType,
+    designId: string,
     userId: string,
   ) => {
     component.createEventForm.controls['nameOfEvent'].setValue(nameOfEvent);
@@ -47,6 +52,7 @@ describe('Event Modal Component (Isolated Test)', () => {
       nameOfCelebrated,
     );
     component.createEventForm.controls['eventTypeId'].setValue(eventTypeId);
+    component.createEventForm.controls['designId'].setValue(designId);
     component.createEventForm.controls['userId'].setValue(userId);
   };
 
@@ -59,6 +65,7 @@ describe('Event Modal Component (Isolated Test)', () => {
         { provide: ToastrService, useValue: toastrSpy },
         { provide: CommonModalService, useValue: commonModalSpy },
         { provide: EventTypesService, useValue: eventTypesSpy },
+        { provide: DesignsService, useValue: designsSpy },
       ],
     });
 
@@ -76,9 +83,9 @@ describe('Event Modal Component (Isolated Test)', () => {
       .withContext('should have createEventForm to be defined')
       .toBeDefined();
 
-    expect(component.originalEventType)
+    expect(component.originalEventTypeId)
       .withContext('should have originalEventType to be undefined')
-      .toBeUndefined();
+      .toBe('');
 
     expect(component.userEmptyMessage)
       .withContext('should have userEmptyMessage to be an empty string')
@@ -86,7 +93,7 @@ describe('Event Modal Component (Isolated Test)', () => {
   });
 
   it('form value should be invalid if one input is invalid', () => {
-    updateForm('', '', '', '', EventType.None, '');
+    updateForm('', '', '', '', EventType.None, DesignType.None, '');
     expect(component.createEventForm.invalid)
       .withContext('Form should be invalid when any field is not valid')
       .toBeTrue();
@@ -99,6 +106,7 @@ describe('Event Modal Component (Isolated Test)', () => {
       fullEventsMockCopy.maxDateOfConfirmation,
       fullEventsMockCopy.nameOfCelebrated,
       EventType.Xv,
+      DesignType.Classic,
       fullEventsMockCopy.userId,
     );
 
@@ -161,6 +169,17 @@ describe('Event Modal Component (Isolated Test)', () => {
 
     expect(eventTypeId.errors?.['required'])
       .withContext('eventTypeId should be required')
+      .toBeTruthy();
+  });
+
+  it('should have designId in the createEventForm', () => {
+    const designId = component.createEventForm.controls['designId'];
+    expect(designId.valid)
+      .withContext('designId should be invalid')
+      .toBeFalsy();
+
+    expect(designId.errors?.['required'])
+      .withContext('designId should be required')
       .toBeTruthy();
   });
 

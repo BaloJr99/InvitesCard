@@ -12,6 +12,7 @@ import { DashboardPage } from 'e2e/pages/dashboard/dashboard-page';
 import { EventModal } from 'e2e/pages/dashboard/events/event-modal';
 import { EventsPage } from 'e2e/pages/dashboard/events/events-page';
 import { TestingPage } from 'e2e/pages/dashboard/testing/testing-page';
+import { IDesign } from 'src/app/core/models/designs';
 import { EventType } from 'src/app/core/models/enum';
 import { IEventType } from 'src/app/core/models/event-types';
 import { saveTheDateUserInviteMock } from 'src/tests/mocks/mocks';
@@ -23,6 +24,7 @@ test.describe('Dashboard Events (Admin)', () => {
   let eventModal: EventModal;
   let environmentCleaned = false;
   let eventTypes: IEventType[];
+  let designs: IDesign[];
 
   // Login as admin before each test
   test.beforeEach(async ({ page, context }) => {
@@ -46,16 +48,21 @@ test.describe('Dashboard Events (Admin)', () => {
       await dashboardPage.clickEventsLink();
     }
 
-    const responsePromise = page.waitForResponse(
+    const eventTypesResponsePromise = page.waitForResponse(
       (response) =>
         response.url().includes('/api/eventtypes') && response.status() === 200,
+    );
+
+    const designsResponsePromise = page.waitForResponse(
+      (response) =>
+        response.url().includes('/api/designs') && response.status() === 200,
     );
 
     eventsPage = new EventsPage(page);
     await eventsPage.waitToLoad();
 
-    const response = await responsePromise;
-    eventTypes = await response.json();
+    eventTypes = await (await eventTypesResponsePromise).json();
+    designs = await (await designsResponsePromise).json();
   });
 
   test('should be able to see new event button', async () => {
@@ -76,10 +83,11 @@ test.describe('Dashboard Events (Admin)', () => {
       'The confirmation deadline date is required',
     );
     expect(validationErrors[3]).toContain('The type of event is required');
-    expect(validationErrors[4]).toContain(
+    expect(validationErrors[4]).toContain('The design type is required');
+    expect(validationErrors[5]).toContain(
       'The name of the celebrated is required',
     );
-    expect(validationErrors[5]).toContain('The username is required');
+    expect(validationErrors[6]).toContain('The username is required');
   });
 
   test('should be able to create an event', async () => {
@@ -90,11 +98,19 @@ test.describe('Dashboard Events (Admin)', () => {
     eventModal = await eventsPage.clickNewEventButton();
     await eventModal.waitForModalToShow();
 
+    const eventType = eventTypes.find(
+      (s) => s.name === EventType.Xv,
+    ) as IEventType;
+    const design = designs.find(
+      (d) => d.eventTypeId === eventType.id,
+    ) as IDesign;
+
     await eventModal.fillEventForm(
       sweetXvEventMock.nameOfEvent,
       sweetXvEventMock.dateOfEvent,
       sweetXvEventMock.maxDateOfConfirmation,
-      eventTypes.find((s) => s.name === EventType.Xv)?.id ?? '',
+      eventType.id,
+      design.id,
       sweetXvEventMock.nameOfCelebrated,
       sweetXvEventMock.assignedUser,
     );
@@ -441,9 +457,16 @@ test.describe('Dashboard Events (Admin)', () => {
     eventModal = await eventsPage.clickEditEventButton(0);
     await eventModal.waitForModalToShow();
 
-    await eventModal.setEventTypeId(
-      eventTypes.find((s) => s.name === EventType.Wedding)?.id ?? '',
-    );
+    const eventType = eventTypes.find(
+      (s) => s.name === EventType.Wedding,
+    ) as IEventType;
+    const design = designs.find(
+      (d) => d.eventTypeId === eventType.id,
+    ) as IDesign;
+
+    await eventModal.setEventTypeId(eventType.id);
+    await eventModal.setDesignId(design.id);
+
     await eventModal.setNameOfCelebrated(
       saveTheDateUserInviteMock.nameOfCelebrated,
     );
@@ -474,9 +497,16 @@ test.describe('Dashboard Events (Admin)', () => {
     eventModal = await eventsPage.clickEditEventButton(0);
     await eventModal.waitForModalToShow();
 
-    await eventModal.setEventTypeId(
-      eventTypes.find((s) => s.name === EventType.SaveTheDate)?.id ?? '',
-    );
+    const eventType = eventTypes.find(
+      (s) => s.name === EventType.SaveTheDate,
+    ) as IEventType;
+    const design = designs.find(
+      (d) => d.eventTypeId === eventType.id,
+    ) as IDesign;
+
+    await eventModal.setEventTypeId(eventType.id);
+    await eventModal.setDesignId(design.id);
+
     await eventModal.clickConfirmButton();
     await eventsPage.waitToLoad();
     await eventsPage.waitForToast();
@@ -573,6 +603,7 @@ test.describe('Dashboard Events (Invites Admin)', () => {
   let eventModal: EventModal;
   let environmentCleaned = false;
   let eventTypes: IEventType[];
+  let designs: IDesign[];
 
   // Login as admin before each test
   test.beforeEach(async ({ page, context }) => {
@@ -620,25 +651,38 @@ test.describe('Dashboard Events (Invites Admin)', () => {
 
     await dashboardPage.clickEventsLink();
 
-    const responsePromise = page.waitForResponse(
+    const eventTypesResponsePromise = page.waitForResponse(
       (response) =>
         response.url().includes('/api/eventtypes') && response.status() === 200,
+    );
+
+    const designsResponsePromise = page.waitForResponse(
+      (response) =>
+        response.url().includes('/api/designs') && response.status() === 200,
     );
 
     eventsPage = new EventsPage(page);
     await eventsPage.waitToLoad();
 
-    const response = await responsePromise;
-    eventTypes = await response.json();
+    eventTypes = await (await eventTypesResponsePromise).json();
+    designs = await (await designsResponsePromise).json();
 
     eventModal = await eventsPage.clickNewEventButton();
     await eventModal.waitForModalToShow();
+
+    const eventType = eventTypes.find(
+      (s) => s.name === EventType.Xv,
+    ) as IEventType;
+    const design = designs.find(
+      (d) => d.eventTypeId === eventType.id,
+    ) as IDesign;
 
     await eventModal.fillEventForm(
       sweetXvEventMock.nameOfEvent,
       sweetXvEventMock.dateOfEvent,
       sweetXvEventMock.maxDateOfConfirmation,
-      eventTypes.find((s) => s.name === EventType.Xv)?.id ?? '',
+      eventType.id,
+      design.id,
       sweetXvEventMock.nameOfCelebrated,
       invitesAdminUser.username,
     );

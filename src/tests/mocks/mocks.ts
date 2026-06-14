@@ -12,6 +12,7 @@ import {
 import {
   ButtonAction,
   CommonModalType,
+  DesignType,
   EventType,
   ImageUsage,
 } from 'src/app/core/models/enum';
@@ -66,7 +67,19 @@ import {
   IFullAlbumImage,
 } from 'src/app/core/models/gallery';
 import { IEventType } from 'src/app/core/models/event-types';
+import { IDesign } from 'src/app/core/models/designs';
 
+export const eventTypesMock: IEventType[] = [
+  { id: '1', name: EventType.Wedding },
+  { id: '2', name: EventType.Xv },
+  { id: '3', name: EventType.SaveTheDate },
+];
+
+export const designsMock: IDesign[] = [
+  { id: '1', name: DesignType.Classic, eventTypeId: '1' },
+  { id: '2', name: DesignType.Classic, eventTypeId: '2' },
+  { id: '3', name: DesignType.Classic, eventTypeId: '3' },
+];
 export const roleMock: IRole = {
   id: '674a68009dc087f77323d40d',
   isActive: true,
@@ -189,7 +202,8 @@ export const fullEventsMock: IFullEvent = {
   maxDateOfConfirmation: '2025-02-14T06:00:00.000Z',
   nameOfCelebrated: 'Test',
   nameOfEvent: 'Test Event',
-  eventTypeId: EventType.None,
+  eventTypeId: eventTypesMock[1].id,
+  designId: designsMock[1].id,
   userId: fullUserMock.id,
 };
 
@@ -869,9 +883,3 @@ export const fullAlbumImageMock: IFullAlbumImage = {
   ...albumImagesMock[0],
   image: 'base64',
 };
-
-export const eventTypesMock: IEventType[] = [
-  { id: '1', name: EventType.Wedding },
-  { id: '2', name: EventType.Xv },
-  { id: '3', name: EventType.SaveTheDate },
-];

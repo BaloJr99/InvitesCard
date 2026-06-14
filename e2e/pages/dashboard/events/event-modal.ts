@@ -6,6 +6,7 @@ export class EventModal extends BaseModal {
   readonly eventDateInput: Locator;
   readonly confirmationDeadlineInput: Locator;
   readonly eventTypeIdInput: Locator;
+  readonly designIdInput: Locator;
   readonly nameOfCelebratedInput: Locator;
   readonly assignedUserInput: Locator;
 
@@ -18,6 +19,7 @@ export class EventModal extends BaseModal {
       '#maxDateOfConfirmation',
     );
     this.eventTypeIdInput = this.modalLocator.locator('#eventTypeId');
+    this.designIdInput = this.modalLocator.locator('#designId');
     this.nameOfCelebratedInput = this.modalLocator.locator('#nameOfCelebrated');
     this.assignedUserInput = this.modalLocator.locator('#userId');
   }
@@ -27,6 +29,7 @@ export class EventModal extends BaseModal {
     date: string,
     confirmationDeadline: string,
     eventTypeId: string,
+    designId: string,
     nameOfCelebrated: string,
     assignedUser: string,
   ) {
@@ -34,6 +37,7 @@ export class EventModal extends BaseModal {
     await this.eventDateInput.fill(date);
     await this.confirmationDeadlineInput.fill(confirmationDeadline);
     await this.eventTypeIdInput.selectOption({ value: eventTypeId });
+    await this.designIdInput.selectOption({ value: designId });
     await this.nameOfCelebratedInput.fill(nameOfCelebrated);
     await this.assignedUserInput.selectOption({ label: assignedUser });
   }
@@ -52,6 +56,10 @@ export class EventModal extends BaseModal {
 
   async setEventTypeId(type: string) {
     await this.eventTypeIdInput.selectOption({ value: type });
+  }
+
+  async setDesignId(type: string) {
+    await this.designIdInput.selectOption({ value: type });
   }
 
   async setNameOfCelebrated(name: string) {

@@ -5,6 +5,7 @@ import { DashboardPage } from 'e2e/pages/dashboard/dashboard-page';
 import { EventsPage } from 'e2e/pages/dashboard/events/events-page';
 import { FilesPage } from 'e2e/pages/dashboard/files/files-page';
 import { TestingPage } from 'e2e/pages/dashboard/testing/testing-page';
+import { IDesign } from 'src/app/core/models/designs';
 import { EventType, ImageUsage } from 'src/app/core/models/enum';
 import { IEventType } from 'src/app/core/models/event-types';
 
@@ -12,6 +13,7 @@ test.describe('Dashboard Files (Admin)', () => {
   let filesPage: FilesPage;
   let environmentCleaned = false;
   let eventTypes: IEventType[];
+  let designs: IDesign[];
 
   // Login as admin before each test
   test.beforeEach(async ({ page }) => {
@@ -28,26 +30,39 @@ test.describe('Dashboard Files (Admin)', () => {
       await testingPage.clickCleanEnvironmentButton();
       await testingPage.clickEventsLink();
 
-      const responsePromise = page.waitForResponse(
+      const eventTypesResponsePromise = page.waitForResponse(
         (response) =>
           response.url().includes('/api/eventtypes') &&
           response.status() === 200,
       );
 
+      const designsResponsePromise = page.waitForResponse(
+        (response) =>
+          response.url().includes('/api/designs') && response.status() === 200,
+      );
+
       const eventsPage = new EventsPage(page);
       await eventsPage.waitToLoad();
 
-      const response = await responsePromise;
-      eventTypes = await response.json();
+      eventTypes = await (await eventTypesResponsePromise).json();
+      designs = await (await designsResponsePromise).json();
 
       const eventModal = await eventsPage.clickNewEventButton();
       await eventModal.waitForModalToShow();
+
+      const eventType = eventTypes.find(
+        (s) => s.name === EventType.Xv,
+      ) as IEventType;
+      const design = designs.find(
+        (d) => d.eventTypeId === eventType.id,
+      ) as IDesign;
 
       await eventModal.fillEventForm(
         sweetXvEventMock.nameOfEvent,
         sweetXvEventMock.dateOfEvent,
         sweetXvEventMock.maxDateOfConfirmation,
-        eventTypes.find((s) => s.name === EventType.Xv)?.id ?? '',
+        eventType.id,
+        design.id,
         sweetXvEventMock.nameOfCelebrated,
         sweetXvEventMock.assignedUser,
       );
@@ -145,6 +160,7 @@ test.describe('Dashboard Files (invitesAdmin)', () => {
   let filesPage: FilesPage;
   let environmentCleaned = false;
   let eventTypes: IEventType[];
+  let designs: IDesign[];
 
   // Login as admin before each test
   test.beforeEach(async ({ page }) => {
@@ -161,26 +177,39 @@ test.describe('Dashboard Files (invitesAdmin)', () => {
       await testingPage.clickCleanEnvironmentButton();
       await testingPage.clickEventsLink();
 
-      const responsePromise = page.waitForResponse(
+      const eventTypesResponsePromise = page.waitForResponse(
         (response) =>
           response.url().includes('/api/eventtypes') &&
           response.status() === 200,
       );
 
+      const designsResponsePromise = page.waitForResponse(
+        (response) =>
+          response.url().includes('/api/designs') && response.status() === 200,
+      );
+
       const eventsPage = new EventsPage(page);
       await eventsPage.waitToLoad();
 
-      const response = await responsePromise;
-      eventTypes = await response.json();
+      eventTypes = await (await eventTypesResponsePromise).json();
+      designs = await (await designsResponsePromise).json();
 
       const eventModal = await eventsPage.clickNewEventButton();
       await eventModal.waitForModalToShow();
+
+      const eventType = eventTypes.find(
+        (s) => s.name === EventType.Xv,
+      ) as IEventType;
+      const design = designs.find(
+        (d) => d.eventTypeId === eventType.id,
+      ) as IDesign;
 
       await eventModal.fillEventForm(
         sweetXvEventMock.nameOfEvent,
         sweetXvEventMock.dateOfEvent,
         sweetXvEventMock.maxDateOfConfirmation,
-        eventTypes.find((s) => s.name === EventType.Xv)?.id ?? '',
+        eventType.id,
+        design.id,
         sweetXvEventMock.nameOfCelebrated,
         sweetXvEventMock.assignedUser,
       );

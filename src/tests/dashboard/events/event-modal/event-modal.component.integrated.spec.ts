@@ -3,8 +3,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
-import { CommonModalResponse, EventType } from 'src/app/core/models/enum';
+import { CommonModalResponse } from 'src/app/core/models/enum';
 import { CommonModalService } from 'src/app/core/services/common-modal.service';
+import { DesignsService } from 'src/app/core/services/design.service';
 import { EventTypesService } from 'src/app/core/services/event-types.service';
 import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
@@ -13,6 +14,7 @@ import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe'
 import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
 import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
 import {
+  designsMock,
   eventTypesMock,
   fullEventsMock,
   messageResponseMock,
@@ -37,6 +39,7 @@ describe('Event Modal Component (Integrated Test)', () => {
   let commonModalServiceSpy: jasmine.SpyObj<CommonModalService>;
   let usersServiceSpy: jasmine.SpyObj<UsersService>;
   let eventTypesServiceSpy: jasmine.SpyObj<EventTypesService>;
+  let designsServiceSpy: jasmine.SpyObj<DesignsService>;
 
   const updateFormUsingEvent = (
     nameOfEvent: string,
@@ -44,6 +47,7 @@ describe('Event Modal Component (Integrated Test)', () => {
     maxDateOfConfirmation: string,
     nameOfCelebrated: string,
     eventTypeId: string,
+    designId: string,
     userId: string,
   ) => {
     const nameOfEventInput = fixture.debugElement.query(By.css('#nameOfEvent'));
@@ -55,6 +59,7 @@ describe('Event Modal Component (Integrated Test)', () => {
       By.css('#nameOfCelebrated'),
     );
     const eventTypeIdInput = fixture.debugElement.query(By.css('#eventTypeId'));
+    const designIdInput = fixture.debugElement.query(By.css('#designId'));
     const userIdInput = fixture.debugElement.query(By.css('#userId'));
 
     nameOfEventInput.nativeElement.value = nameOfEvent;
@@ -71,6 +76,11 @@ describe('Event Modal Component (Integrated Test)', () => {
 
     eventTypeIdInput.nativeElement.value = eventTypeId;
     eventTypeIdInput.nativeElement.dispatchEvent(new Event('change'));
+    
+    fixture.detectChanges();
+
+    designIdInput.nativeElement.value = designId;
+    designIdInput.nativeElement.dispatchEvent(new Event('change'));
 
     userIdInput.nativeElement.value = userId;
     userIdInput.nativeElement.dispatchEvent(new Event('change'));
@@ -89,6 +99,7 @@ describe('Event Modal Component (Integrated Test)', () => {
     const eventTypesSpy = jasmine.createSpyObj('EventTypesService', [
       'getEventTypes',
     ]);
+    const designsSpy = jasmine.createSpyObj('DesignsService', ['getDesigns']);
 
     await TestBed.configureTestingModule({
       imports: [
@@ -103,6 +114,7 @@ describe('Event Modal Component (Integrated Test)', () => {
         { provide: ToastrService, useValue: toastrSpy },
         { provide: CommonModalService, useValue: commonModalSpy },
         { provide: EventTypesService, useValue: eventTypesSpy },
+        { provide: DesignsService, useValue: designsSpy },
       ],
     }).compileComponents();
 
@@ -118,14 +130,20 @@ describe('Event Modal Component (Integrated Test)', () => {
     eventTypesServiceSpy = TestBed.inject(
       EventTypesService,
     ) as jasmine.SpyObj<EventTypesService>;
+    designsServiceSpy = TestBed.inject(
+      DesignsService,
+    ) as jasmine.SpyObj<DesignsService>;
 
     usersServiceSpy.getUsersDropdownData.and.returnValue(
       of([userDropdownDataMockCopy]),
     );
 
     eventTypesServiceSpy.getEventTypes.and.returnValue(of(eventTypesMock));
+    designsServiceSpy.getDesigns.and.returnValue(of(designsMock));
 
     fixture = TestBed.createComponent(EventModalComponent);
+
+    fixture.componentRef.setInput('showModalValue', true);
     fixture.detectChanges();
   });
 
@@ -139,8 +157,10 @@ describe('Event Modal Component (Integrated Test)', () => {
       fullEventsMockCopy.maxDateOfConfirmation,
       fullEventsMockCopy.nameOfCelebrated,
       eventTypesMock[1].id,
+      designsMock[1].id,
       fullEventsMockCopy.userId,
     );
+
     fixture.detectChanges();
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));
@@ -163,7 +183,7 @@ describe('Event Modal Component (Integrated Test)', () => {
   it('updating event should call updateEvent', () => {
     eventsServiceSpy.updateEvent.and.returnValue(of(messageResponseMockCopy));
     spyOn(fixture.componentInstance.updateEvents, 'emit');
-    fixture.componentInstance.originalEventType = EventType.Xv;
+    fixture.componentInstance.originalEventTypeId = eventTypesMock[1].id;
     fixture.componentInstance.createEventForm.patchValue({
       id: fullEventsMockCopy.id,
     });
@@ -174,6 +194,7 @@ describe('Event Modal Component (Integrated Test)', () => {
       fullEventsMockCopy.maxDateOfConfirmation,
       fullEventsMockCopy.nameOfCelebrated,
       eventTypesMock[1].id,
+      designsMock[1].id,
       fullEventsMockCopy.userId,
     );
 
@@ -200,7 +221,7 @@ describe('Event Modal Component (Integrated Test)', () => {
     commonModalServiceSpy.open.and.returnValue(of(CommonModalResponse.Confirm));
     eventsServiceSpy.updateEvent.and.returnValue(of(messageResponseMockCopy));
     spyOn(fixture.componentInstance.updateEvents, 'emit');
-    fixture.componentInstance.originalEventType = EventType.Xv;
+    fixture.componentInstance.originalEventTypeId = eventTypesMock[1].id;
     fixture.componentInstance.createEventForm.patchValue({
       id: fullEventsMockCopy.id,
     });
@@ -211,6 +232,7 @@ describe('Event Modal Component (Integrated Test)', () => {
       fullEventsMockCopy.maxDateOfConfirmation,
       fullEventsMockCopy.nameOfCelebrated,
       eventTypesMock[2].id,
+      designsMock[2].id,
       fullEventsMockCopy.userId,
     );
 
@@ -241,7 +263,7 @@ describe('Event Modal Component (Integrated Test)', () => {
 
   it("updating type of event with one incompatible should call open modal but if we cancel it shouldn't call update", () => {
     commonModalServiceSpy.open.and.returnValue(of(CommonModalResponse.Cancel));
-    fixture.componentInstance.originalEventType = EventType.Xv;
+    fixture.componentInstance.originalEventTypeId = eventTypesMock[1].id;
     fixture.componentInstance.createEventForm.patchValue({
       id: fullEventsMockCopy.id,
     });
@@ -252,6 +274,7 @@ describe('Event Modal Component (Integrated Test)', () => {
       fullEventsMockCopy.maxDateOfConfirmation,
       fullEventsMockCopy.nameOfCelebrated,
       eventTypesMock[2].id,
+      designsMock[2].id,
       fullEventsMockCopy.userId,
     );
 
