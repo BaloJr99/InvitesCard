@@ -17,7 +17,10 @@ export class InvitesComponent implements OnInit {
   eventType = EventType;
 
   inviteResolved: IEventTypeResolved = {
-    eventType: EventType.None,
+    eventInformation: {
+      designName: '',
+      typeOfEvent: '',
+    },
   };
 
   ngOnInit(): void {

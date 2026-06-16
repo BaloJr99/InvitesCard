@@ -1,5 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
+import { DesignType, EventType } from 'src/app/core/models/enum';
+import { IInviteEventInformation } from 'src/app/core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import {
@@ -39,7 +41,7 @@ describe('Invites Service', () => {
       'readMessage',
       'bulkInvites',
       'bulkDeleteInvites',
-      'getInviteEventType',
+      'getInviteEventInformation',
     ]);
 
     TestBed.configureTestingModule({
@@ -198,19 +200,25 @@ describe('Invites Service', () => {
       .toHaveBeenCalledOnceWith([newInviteMockCopy.id]);
   });
 
-  it('should call getInviteEventType', () => {
-    invitesServiceSpy.getInviteEventType.and.returnValue(
-      of(fullEventsMockCopy.eventTypeId),
+  it('should call getInviteEventInformation', () => {
+    invitesServiceSpy.getInviteEventInformation.and.returnValue(
+      of({
+        designName: DesignType.Classic,
+        typeOfEvent: EventType.Xv,
+      } as IInviteEventInformation),
     );
 
     invitesServiceSpy
-      .getInviteEventType(newInviteMockCopy.eventId)
+      .getInviteEventInformation(newInviteMockCopy.eventId)
       .subscribe((response) => {
-        expect(response).toBe(fullEventsMockCopy.eventTypeId);
+        expect(response).toEqual({
+          designName: DesignType.Classic,
+          typeOfEvent: EventType.Xv,
+        } as IInviteEventInformation);
       });
 
-    expect(invitesServiceSpy.getInviteEventType)
-      .withContext('Expected getInviteEventType to have been called')
+    expect(invitesServiceSpy.getInviteEventInformation)
+      .withContext('Expected getInviteEventInformation to have been called')
       .toHaveBeenCalledOnceWith(newInviteMockCopy.eventId);
   });
 });

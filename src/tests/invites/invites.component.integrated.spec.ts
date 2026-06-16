@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { EventType } from 'src/app/core/models/enum';
+import { DesignType, EventType } from 'src/app/core/models/enum';
 import { FilesService } from 'src/app/core/services/files.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
@@ -11,6 +11,10 @@ import { SweetXvComponent } from 'src/app/invites/sweet-xv/sweet-xv.component';
 import { newInviteMock } from '../mocks/mocks';
 import { of } from 'rxjs';
 import { deepCopy } from 'src/app/shared/utils/tools';
+import {
+  IEventTypeResolved,
+  IInviteEventInformation,
+} from 'src/app/core/models/invites';
 
 const newInviteMockCopy = deepCopy(newInviteMock);
 
@@ -29,7 +33,14 @@ describe('Invites Component (Integrated Test)', () => {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
-              data: { invite: { eventType: EventType.Xv } },
+              data: {
+                invite: {
+                  eventInformation: {
+                    designName: DesignType.Classic,
+                    typeOfEvent: EventType.Xv,
+                  } as IInviteEventInformation,
+                },
+              },
             },
             params: of({ id: newInviteMockCopy.id }),
           },
@@ -46,7 +57,7 @@ describe('Invites Component (Integrated Test)', () => {
 
   it('should have render the app-sweet-xv if the eventType is X', () => {
     const appSweetXV = fixture.debugElement.query(
-      By.directive(SweetXvComponent)
+      By.directive(SweetXvComponent),
     );
 
     expect(appSweetXV)
@@ -56,12 +67,15 @@ describe('Invites Component (Integrated Test)', () => {
 
   it('should have render the app-save-the-date if the eventType is S', () => {
     fixture.componentInstance.inviteResolved = {
-      eventType: EventType.SaveTheDate,
-    };
+      eventInformation: {
+        designName: DesignType.None,
+        typeOfEvent: EventType.SaveTheDate,
+      },
+    } as IEventTypeResolved;
     fixture.detectChanges();
 
     const appSaveTheDate = fixture.debugElement.query(
-      By.directive(SaveTheDateComponent)
+      By.directive(SaveTheDateComponent),
     );
 
     expect(appSaveTheDate)

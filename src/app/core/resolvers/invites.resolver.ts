@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
 import { EMPTY, Observable, catchError, map } from 'rxjs';
-import { IEventTypeResolved } from '../models/invites';
+import { IEventTypeResolved, IInviteEventInformation } from '../models/invites';
 import { InvitesService } from '../services/invites.service';
 import { LoaderService } from '../services/loader.service';
 import { EventType } from '../models/enum';
@@ -18,12 +18,20 @@ export const invitesResolver: ResolveFn<IEventTypeResolved> = (
   const id = route.paramMap.get('id') ?? '';
   const overrideEventType = route.queryParamMap.get('eventType') ?? '';
 
-  const inviteFound = invitesService.getInviteEventType(id).pipe(
-    map((eventType) => ({
-      eventType: (eventType === EventType.Wedding && overrideEventType
-        ? overrideEventType
-        : eventType) as EventType,
-    })),
+  const inviteFound = invitesService.getInviteEventInformation(id).pipe(
+    map(
+      (eventInformation) =>
+        ({
+          eventInformation: {
+            ...eventInformation,
+            typeOfEvent:
+              eventInformation.typeOfEvent === EventType.Wedding &&
+              overrideEventType
+                ? overrideEventType
+                : eventInformation.typeOfEvent,
+          } as IInviteEventInformation,
+        }) as IEventTypeResolved,
+    ),
     catchError(() => {
       router.navigate(['/error/page-not-found']);
       return EMPTY;

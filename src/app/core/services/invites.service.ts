@@ -6,6 +6,7 @@ import {
   IBulkInvite,
   IConfirmation,
   IDashboardInvite,
+  IInviteEventInformation,
   IOverwriteConfirmation,
   ISaveTheDateConfirmation,
   ISaveTheDateUserInvite,
@@ -29,7 +30,7 @@ export class InvitesService {
 
   getInvite(id: string): Observable<IUserInvite | ISaveTheDateUserInvite> {
     return this.http.get<IUserInvite | ISaveTheDateUserInvite>(
-      `${this.invitesBaseUrl}/invite/${id}`
+      `${this.invitesBaseUrl}/invite/${id}`,
     );
   }
 
@@ -39,11 +40,11 @@ export class InvitesService {
 
   updateInvite(
     invite: IUpsertInvite,
-    id: string
+    id: string,
   ): Observable<IMessageResponse> {
     return this.http.put<IMessageResponse>(
       `${this.invitesBaseUrl}/${id}`,
-      invite
+      invite,
     );
   }
 
@@ -54,25 +55,25 @@ export class InvitesService {
   sendConfirmation(
     invite: IConfirmation | ISaveTheDateConfirmation,
     id: string,
-    eventType: string
+    eventType: string,
   ): Observable<IMessageResponse> {
     return this.http.patch<IMessageResponse>(
       `${this.invitesBaseUrl}/${id}/${eventType}`,
-      invite
+      invite,
     );
   }
 
   readMessage(id: string): Observable<IMessageResponse> {
     return this.http.patch<IMessageResponse>(
       `${this.invitesBaseUrl}/messages/${id}`,
-      null
+      null,
     );
   }
 
   bulkInvites(invites: IBulkInvite[]): Observable<IBulkMessageResponse> {
     return this.http.post<IBulkMessageResponse>(
       `${this.invitesBaseUrl}/bulkInvites`,
-      invites
+      invites,
     );
   }
 
@@ -81,28 +82,30 @@ export class InvitesService {
       `${this.invitesBaseUrl}/bulkInvites`,
       {
         body: invitesIds,
-      }
+      },
     );
   }
 
-  getInviteEventType(id: string): Observable<string> {
-    return this.http.get<string>(`${this.invitesBaseUrl}/invite/${id}/event`);
+  getInviteEventInformation(id: string): Observable<IInviteEventInformation> {
+    return this.http.get<IInviteEventInformation>(
+      `${this.invitesBaseUrl}/invite/${id}/event`,
+    );
   }
 
   cancelInvites(id: string): Observable<IMessageResponse> {
     return this.http.patch<IMessageResponse>(
       `${this.invitesBaseUrl}/cancel/${id}`,
-      null
+      null,
     );
   }
 
   overwriteConfirmation(
     overwriteConfirmation: IOverwriteConfirmation,
-    id: string
+    id: string,
   ): Observable<IMessageResponse> {
     return this.http.patch<IMessageResponse>(
       `${this.invitesBaseUrl}/overwrite/${id}`,
-      overwriteConfirmation
+      overwriteConfirmation,
     );
   }
 }

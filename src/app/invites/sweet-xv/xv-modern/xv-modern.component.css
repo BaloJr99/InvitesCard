@@ -1,0 +1,344 @@
+:host {
+  --custom-primary-color: #000000;
+  --custom-secondary-color: #ffffff;
+}
+
+.full-invite {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-top: 60px;
+}
+
+.invite-fixed-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  background-color: white;
+}
+
+.invite-fixed-menu nav {
+  padding: 12px 20px;
+}
+
+.invite-fixed-menu ul {
+  display: inline-flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 18px;
+}
+
+.invite-fixed-menu li button,
+.invite-fixed-menu .nav-button {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.65);
+  padding: 8px 16px;
+  border-radius: 999px;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.invite-fixed-menu li button:hover,
+.invite-fixed-menu li button:focus-visible {
+  background: rgba(0, 0, 0, 0.08);
+  outline: none;
+}
+
+.invite-fixed-menu li.active button {
+  color: var(--custom-primary-color);
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.invite-fixed-menu li button:focus-visible {
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.full-invite .invite-section:nth-child(even):not(:first-child) {
+  background-color: var(--custom-secondary-color);
+}
+
+.container {
+  color: var(--custom-primary-color);
+}
+
+.container h2 {
+  color: var(--custom-primary-color);
+  font-family: "Allura";
+  font-size: 50px;
+}
+
+.info {
+  position: relative;
+  padding-bottom: 20px;
+  overflow-x: clip;
+}
+
+.invite-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.invite-section .container {
+  position: relative;
+  z-index: 2;
+}
+
+.decoration-image {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.decoration-image img {
+  display: block;
+  width: 260px;
+  max-width: 30vw;
+  height: auto;
+  opacity: 0.2;
+  transform-origin: center center;
+}
+
+.decoration-image.decoration-1 {
+  z-index: 1;
+}
+
+.decoration-image.decoration-2 {
+  z-index: 1;
+}
+
+.info .envelope-text {
+  position: relative;
+}
+
+.info .envelope-text h1 {
+  font-size: 5rem;
+  color: #383838;
+  font-family: "Imperial Script";
+  position: absolute;
+  left: 4rem;
+  right: 0;
+  bottom: 13rem;
+  background: #f6f5f1;
+  display: inline-block;
+  width: fit-content;
+  padding: 1rem;
+  margin: auto;
+}
+
+.info .envelope-text .date {
+  font-size: 1.5rem;
+  color: #383838;
+  font-family: "Merriweather";
+  letter-spacing: 2px;
+  position: absolute;
+  left: 4rem;
+  right: 0;
+  bottom: 145px;
+  background: #f6f5f1;
+  margin: auto;
+  width: fit-content;
+  padding: 1rem;
+}
+
+.info img {
+  max-width: 100%;
+  width: 1024px;
+}
+
+.info .container .header p {
+  font-family: "Allura";
+  font-size: 96px;
+  padding: 100px 0px;
+  color: #ffffff;
+}
+
+.pinkLetter {
+  color: var(--custom-primary-color) !important;
+}
+
+.ceremony {
+  padding: 100px 0px;
+}
+
+.ceremony p.pinkLetter {
+  font-family: "Raleway";
+  font-size: 24px;
+}
+
+.ceremony p:first-of-type {
+  color: #635959;
+  font-size: 20px;
+}
+
+.ceremony h3 {
+  color: #635959;
+  font-size: 4rem;
+  font-family: "Imperial Script";
+}
+
+.ceremony .col-md-6 p:not(p:first-of-type),
+.ceremony .col-sm-12 p:not(p:first-of-type) {
+  font-family: "Allura";
+  font-size: 36px;
+}
+
+.ceremony .row:not(.row:first-of-type) {
+  padding-top: 50px;
+}
+
+.ceremony .row:not(.row:first-of-type),
+.reception .row {
+  justify-content: center;
+  align-items: center;
+}
+
+.reception {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 0px;
+}
+
+.ceremony iframe,
+.reception iframe {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.reception h3,
+.reception p {
+  color: #635959;
+}
+
+.reception h3 {
+  font-size: 25px;
+}
+
+.reception p,
+.reception span {
+  font-size: 20px;
+}
+
+.gifts {
+  padding: 100px;
+}
+
+.gifts .col-md-6:first-of-type {
+  padding-left: 100px;
+}
+
+.gifts .col-md-6:nth-of-type(2) {
+  padding-right: 100px;
+}
+
+.gifts img {
+  margin-bottom: 20px;
+  width: 150px;
+}
+
+.gifts p {
+  font-size: 20px;
+}
+
+.gifts p:last-of-type {
+  font-size: 40px;
+  font-family: "Allura";
+}
+
+@media (min-width: 769px) and (max-width: 991px) {
+  .info .envelope-text h1 {
+    font-size: 3.5rem;
+    left: 4rem;
+    right: 0;
+    bottom: 9rem;
+    padding: 1rem;
+  }
+
+  .info .envelope-text .date {
+    font-size: 1rem;
+    bottom: 100px;
+  }
+}
+
+@media (min-width: 575px) and (max-width: 768px) {
+  .info .envelope-text h1 {
+    font-size: 3rem;
+    left: 4rem;
+    right: 0;
+    bottom: 7rem;
+    padding: 0.5rem;
+  }
+
+  .info .envelope-text .date {
+    font-size: 1rem;
+    bottom: 80px;
+    padding: 0.5rem;
+  }
+
+  .reception .row {
+    flex-direction: column-reverse;
+  }
+
+  .ceremony {
+    padding: 50px 0px;
+  }
+
+  .reception {
+    padding: 50px 0px;
+  }
+
+  .gifts .col-md-6:first-of-type {
+    padding-left: 0px;
+  }
+
+  .gifts .col-md-6:nth-of-type(2) {
+    padding-right: 0px;
+  }
+}
+
+@media (max-width: 575px) {
+  .info .envelope-text h1 {
+    font-size: 2rem;
+    left: 3rem;
+    right: 0;
+    bottom: 5rem;
+    padding: 0;
+  }
+
+  .info .envelope-text .date {
+    font-size: 0.7rem;
+    bottom: 55px;
+    padding: 0;
+  }
+
+  .reception .row {
+    flex-direction: column-reverse;
+  }
+
+  .ceremony {
+    padding: 25px 0px;
+  }
+
+  .reception {
+    padding: 25px 0px;
+  }
+
+  .gifts .col-md-6:first-of-type {
+    padding-left: 0px;
+  }
+
+  .gifts .col-md-6:nth-of-type(2) {
+    padding-right: 0px;
+  }
+}

@@ -2,27 +2,27 @@
   display: flex;
   justify-content: center;
   padding-top: 10px;
+  gap: 10px;
 }
 
-  .time .card {
-    width: 160px;
-    margin: 0px 5px;
-    background-color: #ffffff;
-  }
+.time .card {
+  width: 160px;
+  background-color: #ffffff;
+}
 
-    .time .card .card-title {
-      font-size: 36px;
-      margin: 0;
-    }
+.time .card .card-title {
+  font-size: 36px;
+  margin: 0;
+}
 
-    .time .card .card-text {
-      font-size: 18px;
-    }
+.time .card .card-text {
+  font-size: 18px;
+}
 
-      .time .card .card-title, 
-      .time .card .card-text {
-        color: #000000; 
-      }
+.time .card .card-title,
+.time .card .card-text {
+  color: #000000;
+}
 
 .fireworks img {
   position: fixed;
@@ -36,11 +36,11 @@
 
 @media (max-width: 575px) {
   .time .card .card-title {
-      font-size: 25px;
-      margin: 0;
+    font-size: 25px;
+    margin: 0;
   }
-  
+
   .time .card .card-text {
-      font-size: 11px;
+    font-size: 11px;
   }
 }

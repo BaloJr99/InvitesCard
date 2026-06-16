@@ -5,10 +5,10 @@ import { of } from 'rxjs';
 import { FilesService } from 'src/app/core/services/files.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
-import { SweetXvComponent } from 'src/app/invites/sweet-xv/sweet-xv.component';
+import { SweetXvClassicComponent } from 'src/app/invites/sweet-xv/xv-classic/xv-classic.component';
 
-describe('Sweet Xv Component (Isolated Test)', () => {
-  let component: SweetXvComponent;
+describe('Sweet Xv Classic Component (Isolated Test)', () => {
+  let component: SweetXvClassicComponent;
   const settingsSpy = jasmine.createSpyObj('SettingsService', ['']);
   const filesSpy = jasmine.createSpyObj('FilesService', ['']);
   const invitesSpy = jasmine.createSpyObj('InvitesService', ['']);
@@ -26,7 +26,9 @@ describe('Sweet Xv Component (Isolated Test)', () => {
         { provide: LOCALE_ID, useValue: 'en-US' },
       ],
     });
-    component = TestBed.createComponent(SweetXvComponent).componentInstance;
+    component = TestBed.createComponent(
+      SweetXvClassicComponent,
+    ).componentInstance;
   });
 
   it('should create', () => {

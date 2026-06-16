@@ -10,6 +10,8 @@ export const enum ImageUsage {
   Principal_Phone = 'M',
   Principal_Desktop = 'D',
   Gallery = 'G',
+  Decoration_1 = 'X',
+  Decoration_2 = 'Z',
 }
 
 export const enum RoleActionEvent {
@@ -27,7 +29,8 @@ export enum EventType {
 
 export enum DesignType {
   Classic = 'Classic',
-  None = ''
+  Modern = 'Modern',
+  None = '',
 }
 
 export const enum CommonModalType {

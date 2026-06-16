@@ -1,6 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { EventType } from 'src/app/core/models/enum';
+import { DesignType, EventType } from 'src/app/core/models/enum';
+import {
+  IEventTypeResolved,
+} from 'src/app/core/models/invites';
 import { InvitesComponent } from 'src/app/invites/invites.component';
 
 describe('Invites Component (Isolated Test)', () => {
@@ -28,7 +31,10 @@ describe('Invites Component (Isolated Test)', () => {
     expect(component.inviteResolved)
       .withContext('The inviteResolved should be undefined')
       .toEqual({
-        eventType: EventType.None,
-      });
+        eventInformation: {
+          designName: DesignType.None,
+          typeOfEvent: EventType.None,
+        },
+      } as IEventTypeResolved);
   });
 });

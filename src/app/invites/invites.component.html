@@ -1,6 +1,6 @@
-@switch (inviteResolved.eventType) {
+@switch (inviteResolved.eventInformation.typeOfEvent) {
   @case (eventType.Xv) {
-    <app-sweet-xv></app-sweet-xv>
+    <app-sweet-xv [designName]="inviteResolved.eventInformation.designName"></app-sweet-xv>
   }
   @case (eventType.SaveTheDate) {
     <app-save-the-date></app-save-the-date>

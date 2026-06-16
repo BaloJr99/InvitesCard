@@ -1,5 +1,3 @@
-import { EventType } from "./enum";
-
 export interface IFullInvite {
   id: string;
   family: string;
@@ -111,7 +109,7 @@ export interface IInviteAction {
 }
 
 export interface IEventTypeResolved {
-  eventType: EventType;
+  eventInformation: IInviteEventInformation;
   error?: string;
 }
 
@@ -160,3 +158,8 @@ export type IOverwriteConfirmation = Pick<
   IConfirmation,
   'entriesNumber' | 'entriesConfirmed' | 'id' | 'confirmation'
 >;
+
+export interface IInviteEventInformation {
+  typeOfEvent: string;
+  designName: string;
+}

@@ -26,7 +26,7 @@ const refreshTokenSubject: Subject<string | null> = new Subject<
 
 export function authInterceptor(
   req: HttpRequest<unknown>,
-  next: HttpHandlerFn
+  next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> {
   let authReq = req;
 
@@ -47,6 +47,15 @@ export function authInterceptor(
     catchError((error) => {
       if (
         error instanceof HttpErrorResponse &&
+        authReq.url.includes('auth/refreshToken') &&
+        error.status === 401
+      ) {
+        isRefreshing = false;
+        tokenStorageService.signOut();
+        router.navigate(['/auth/login']);
+        return throwError(() => new Error('Unauthorized'));
+      } else if (
+        error instanceof HttpErrorResponse &&
         !authReq.url.includes('auth/signin') &&
         error.status === 401
       ) {
@@ -65,10 +74,10 @@ export function authInterceptor(
                 req.clone({
                   headers: req.headers.set(
                     'Authorization',
-                    `Bearer ${token.access_token}`
+                    `Bearer ${token.access_token}`,
                   ),
                   withCredentials: true,
-                })
+                }),
               );
             }),
             catchError(() => {
@@ -79,7 +88,7 @@ export function authInterceptor(
             }),
             finalize(() => {
               isRefreshing = false;
-            })
+            }),
           );
         } else {
           return refreshTokenSubject.pipe(
@@ -91,14 +100,14 @@ export function authInterceptor(
                 req.clone({
                   headers: req.headers.set('Authorization', `Bearer ${token}`),
                   withCredentials: true,
-                })
+                }),
               );
-            })
+            }),
           );
         }
       }
 
       return throwError(() => error);
-    })
+    }),
   );
 }

@@ -7,7 +7,7 @@ import { InvitesService } from 'src/app/core/services/invites.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { ConfirmationComponent } from 'src/app/invites/shared/confirmation/confirmation.component';
 import { CountdownComponent } from 'src/app/invites/shared/countdown/countdown.component';
-import { SweetXvComponent } from 'src/app/invites/sweet-xv/sweet-xv.component';
+import { SweetXvClassicComponent } from 'src/app/invites/sweet-xv/xv-classic/xv-classic.component';
 import { SafePipe } from 'src/app/shared/pipes/safe.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import {
@@ -18,8 +18,8 @@ import {
 const sweetXvBaseSettingMockCopy = deepCopy(sweetXvBaseSettingMock);
 const sweetXvUserInviteMockCopy = deepCopy(sweetXvUserInviteMock);
 
-describe('Sweet Xv Component (Integrated Test)', () => {
-  let fixture: ComponentFixture<SweetXvComponent>;
+describe('Sweet Xv Classic Component (Integrated Test)', () => {
+  let fixture: ComponentFixture<SweetXvClassicComponent>;
   let invitesServiceSpy: jasmine.SpyObj<InvitesService>;
   let filesServiceSpy: jasmine.SpyObj<FilesService>;
   let settingsServiceSpy: jasmine.SpyObj<SettingsService>;
@@ -36,7 +36,7 @@ describe('Sweet Xv Component (Integrated Test)', () => {
         CountdownComponent,
         ConfirmationComponent,
         SafePipe,
-        SweetXvComponent,
+        SweetXvClassicComponent,
       ],
       providers: [
         {
@@ -52,36 +52,36 @@ describe('Sweet Xv Component (Integrated Test)', () => {
     }).compileComponents();
 
     invitesServiceSpy = TestBed.inject(
-      InvitesService
+      InvitesService,
     ) as jasmine.SpyObj<InvitesService>;
     filesServiceSpy = TestBed.inject(
-      FilesService
+      FilesService,
     ) as jasmine.SpyObj<FilesService>;
     settingsServiceSpy = TestBed.inject(
-      SettingsService
+      SettingsService,
     ) as jasmine.SpyObj<SettingsService>;
 
     invitesServiceSpy.getInvite.and.returnValue(of(sweetXvUserInviteMockCopy));
     settingsServiceSpy.getEventSettings.and.returnValue(
-      of(sweetXvBaseSettingMockCopy)
+      of(sweetXvBaseSettingMockCopy),
     );
     filesServiceSpy.getFilesByEvent.and.returnValue(
       of({
         eventImages: [],
         eventAudios: [],
-      })
+      }),
     );
 
-    fixture = TestBed.createComponent(SweetXvComponent);
+    fixture = TestBed.createComponent(SweetXvClassicComponent);
     fixture.detectChanges();
   });
 
   it('should have the invitesConfirmation with the app-confirmation component', () => {
     const invitesConfirmationSection = fixture.debugElement.query(
-      By.css('.invitesConfirmation')
+      By.css('.invitesConfirmation'),
     );
     const confirmation = invitesConfirmationSection.query(
-      By.css('app-confirmation')
+      By.css('app-confirmation'),
     );
 
     expect(invitesConfirmationSection)

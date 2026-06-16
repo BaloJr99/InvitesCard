@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 import { FilesService } from 'src/app/core/services/files.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
-import { SweetXvComponent } from 'src/app/invites/sweet-xv/sweet-xv.component';
+import { SweetXvClassicComponent } from 'src/app/invites/sweet-xv/xv-classic/xv-classic.component';
 import { SafePipe } from 'src/app/shared/pipes/safe.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import {
@@ -20,7 +20,7 @@ const sweetXvSettingMockCopy = deepCopy(sweetXvSettingMock);
 const sweetXvUserInviteMockCopy = deepCopy(sweetXvUserInviteMock);
 
 describe('Sweet Xv Component (Shallow Test)', () => {
-  let fixture: ComponentFixture<SweetXvComponent>;
+  let fixture: ComponentFixture<SweetXvClassicComponent>;
   let invitesServiceSpy: jasmine.SpyObj<InvitesService>;
   let filesServiceSpy: jasmine.SpyObj<FilesService>;
   let settingsServiceSpy: jasmine.SpyObj<SettingsService>;
@@ -33,7 +33,7 @@ describe('Sweet Xv Component (Shallow Test)', () => {
     const invitesSpy = jasmine.createSpyObj('InvitesService', ['getInvite']);
 
     await TestBed.configureTestingModule({
-      imports: [SafePipe, SweetXvComponent],
+      imports: [SafePipe, SweetXvClassicComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
@@ -70,7 +70,7 @@ describe('Sweet Xv Component (Shallow Test)', () => {
       })
     );
 
-    fixture = TestBed.createComponent(SweetXvComponent);
+    fixture = TestBed.createComponent(SweetXvClassicComponent);
     fixture.detectChanges();
   });
 
