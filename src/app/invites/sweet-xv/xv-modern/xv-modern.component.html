@@ -46,14 +46,12 @@
     </div>
     <div id="envelope" class="info invite-section">
       <div class="envelope-container">
-        @for (
-          downloadImage of downloadImages;
-          track downloadImage;
-          let i = $index
-        ) {
-          @if (i === 0) {
-            <img src="{{ downloadImage.fileUrl }}" alt="Sobre" i18n-alt />
-          }
+        @if (vm.backgroundImage) {
+          <img
+            src="{{ vm.backgroundImage.fileUrl }}"
+            alt="Fondo principal"
+            i18n-alt
+          />
         }
         <div class="envelope-text">
           <h1 i18n>Están invitados</h1>
@@ -74,40 +72,48 @@
           class="ceremony invite-section"
           [ngStyle]="{ order: getSectionOrder('ceremonyInfo') }"
         >
-          @if (vm.sectionDecorationStyles["ceremonyInfo"]?.decoration1) {
-            <div
-              class="decoration-image decoration-1"
-              [ngStyle]="
-                vm.sectionDecorationStyles['ceremonyInfo']?.decoration1?.style
-              "
-            >
-              <img
-                [src]="
-                  vm.sectionDecorationStyles['ceremonyInfo']?.decoration1
-                    ?.fileUrl
+          @if (vm.sectionBackgroundImage) {
+            <img
+              class="section-background"
+              src="{{ vm.sectionBackgroundImage.fileUrl }}"
+              alt="Fondo de sección"
+            />
+          } @else {
+            @if (vm.sectionDecorationStyles["ceremonyInfo"]?.decoration1) {
+              <div
+                class="decoration-image decoration-1"
+                [ngStyle]="
+                  vm.sectionDecorationStyles['ceremonyInfo']?.decoration1?.style
                 "
-                alt="Artículo decorativo"
-                i18n-alt
-              />
-            </div>
-          }
+              >
+                <img
+                  [src]="
+                    vm.sectionDecorationStyles['ceremonyInfo']?.decoration1
+                      ?.fileUrl
+                  "
+                  alt="Artículo decorativo"
+                  i18n-alt
+                />
+              </div>
+            }
 
-          @if (vm.sectionDecorationStyles["ceremonyInfo"]?.decoration2) {
-            <div
-              class="decoration-image decoration-2"
-              [ngStyle]="
-                vm.sectionDecorationStyles['ceremonyInfo']?.decoration2?.style
-              "
-            >
-              <img
-                [src]="
-                  vm.sectionDecorationStyles['ceremonyInfo']?.decoration2
-                    ?.fileUrl
+            @if (vm.sectionDecorationStyles["ceremonyInfo"]?.decoration2) {
+              <div
+                class="decoration-image decoration-2"
+                [ngStyle]="
+                  vm.sectionDecorationStyles['ceremonyInfo']?.decoration2?.style
                 "
-                alt="Artículo decorativo"
-                i18n-alt
-              />
-            </div>
+              >
+                <img
+                  [src]="
+                    vm.sectionDecorationStyles['ceremonyInfo']?.decoration2
+                      ?.fileUrl
+                  "
+                  alt="Artículo decorativo"
+                  i18n-alt
+                />
+              </div>
+            }
           }
           <div class="container">
             <h2 i18n>Ceremonia</h2>
@@ -186,6 +192,7 @@
           class="reception invite-section"
           [ngStyle]="{ order: getSectionOrder('receptionInfo') }"
         >
+          <!-- @if () -->
           @if (vm.sectionDecorationStyles["receptionInfo"]?.decoration1) {
             <div
               class="decoration-image decoration-1"

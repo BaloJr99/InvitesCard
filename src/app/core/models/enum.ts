@@ -10,6 +10,7 @@ export const enum ImageUsage {
   Principal_Phone = 'M',
   Principal_Desktop = 'D',
   Gallery = 'G',
+  SectionBackground = 'Y',
   Decoration_1 = 'X',
   Decoration_2 = 'Z',
 }

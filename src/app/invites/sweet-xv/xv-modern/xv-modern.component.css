@@ -94,6 +94,14 @@
   z-index: 2;
 }
 
+.invite-section .section-background {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  opacity: 0.4;
+}
+
 .decoration-image {
   position: absolute;
   z-index: 1;

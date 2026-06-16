@@ -14,7 +14,6 @@ import { CountdownComponent } from '../../shared/countdown/countdown.component';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { FilesService } from 'src/app/core/services/files.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
-import { IDownloadImage } from 'src/app/core/models/images';
 import { IInviteSection, IUserInvite } from 'src/app/core/models/invites';
 import { toLocalDate } from 'src/app/shared/utils/tools';
 import {
@@ -43,7 +42,6 @@ export class SweetXvModernComponent {
   counter = 0;
   selectedSection = 'envelope';
 
-  downloadImages: IDownloadImage[] = [];
   audio = new Audio();
   playAudio = false;
   sections: IInviteSection[] = [];
@@ -125,26 +123,34 @@ export class SweetXvModernComponent {
           ? downloadedFiles.eventAudios[0]
           : undefined;
 
-      if (downloadAudio) this.audio = new Audio(downloadAudio.fileUrl);
+      if (downloadAudio) {
+        this.audio = new Audio(downloadAudio.fileUrl);
+        this.commonModalService
+          .open({
+            modalTitle: $localize`Nuestra canción`,
+            modalBody: $localize`¿Desea reproducir el audio?`,
+            modalType: CommonModalType.YesNo,
+          })
+          .subscribe((response) => {
+            if (response === CommonModalResponse.Confirm) {
+              this.reproduceAudio();
+            }
+          });
+      }
 
-      this.commonModalService
-        .open({
-          modalTitle: $localize`Nuestra canción`,
-          modalBody: $localize`¿Desea reproducir el audio?`,
-          modalType: CommonModalType.YesNo,
-        })
-        .subscribe((response) => {
-          if (response === CommonModalResponse.Confirm) {
-            this.reproduceAudio();
-          }
-        });
-
-      this.downloadImages = downloadedFiles.eventImages.filter((image) =>
+      const backgroundImage = downloadedFiles.eventImages.find((image) =>
         window.innerWidth > 575
           ? image.imageUsage === ImageUsage.Desktop ||
             image.imageUsage === ImageUsage.Both
           : image.imageUsage === ImageUsage.Phone ||
             image.imageUsage === ImageUsage.Both,
+      );
+
+      const sectionBackgroundImage = downloadedFiles.eventImages.find(
+        (image) =>
+          window.innerWidth > 575
+            ? undefined
+            : image.imageUsage === ImageUsage.SectionBackground,
       );
 
       const decoration1 = downloadedFiles.eventImages.filter(
@@ -206,6 +212,8 @@ export class SweetXvModernComponent {
         userInvite,
         deadlineMet,
         sectionDecorationStyles,
+        backgroundImage,
+        sectionBackgroundImage,
       };
     }),
   );
