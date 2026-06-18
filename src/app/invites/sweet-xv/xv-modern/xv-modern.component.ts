@@ -100,7 +100,7 @@ export class SweetXvModernComponent {
         this.audio = new Audio(downloadAudio.fileUrl);
         this.commonModalService
           .open({
-            modalTitle: $localize`Nuestra canción`,
+            modalTitle: '',
             modalBody: $localize`¿Desea reproducir el audio?`,
             modalType: CommonModalType.YesNo,
           })
