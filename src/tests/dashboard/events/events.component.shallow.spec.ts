@@ -9,7 +9,6 @@ import { IDashboardEvent } from 'src/app/core/models/events';
 import { EventsService } from 'src/app/core/services/events.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { EventsComponent } from 'src/app/dashboard/events/events.component';
-import { DateFormatPipe } from 'src/app/shared/pipes/date-format.pipe';
 import { deepCopy } from 'src/app/shared/utils/tools';
 import { dashboardEventsMock, userMock } from 'src/tests/mocks/mocks';
 
@@ -29,7 +28,7 @@ describe('Events Component (Shallow Test)', () => {
     ]);
 
     await TestBed.configureTestingModule({
-      imports: [DateFormatPipe, EventsComponent],
+      imports: [EventsComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: EventsService, useValue: eventsSpy },

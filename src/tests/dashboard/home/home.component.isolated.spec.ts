@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { EventsService } from 'src/app/core/services/events.service';
@@ -21,6 +22,7 @@ describe('Home Component (Isolated Test)', () => {
       providers: [
         { provide: InvitesService, useValue: invitesSpy },
         { provide: EventsService, useValue: eventsSpy },
+        DatePipe,
       ],
     });
     component = TestBed.createComponent(HomeComponent).componentInstance;

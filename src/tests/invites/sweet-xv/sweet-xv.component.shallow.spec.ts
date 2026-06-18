@@ -153,7 +153,7 @@ describe('Sweet Xv Component (Shallow Test)', () => {
       .toContain(sweetXvSettingMockCopy.secondSectionSentences.split(';')[0]);
     expect(ceremonyDate.nativeElement.textContent)
       .withContext('Ceremony date should exist')
-      .toContain('Friday  February 28, 2025  17:00 horas');
+      .toContain('Friday  February 28, 2025  5:00 PM horas');
     expect(ceremonyAddress.nativeElement.textContent)
       .withContext('Ceremony address should exist')
       .toContain(sweetXvSettingMockCopy.massAddress);
@@ -176,7 +176,7 @@ describe('Sweet Xv Component (Shallow Test)', () => {
       .toContain(sweetXvSettingMockCopy.receptionAddress);
     expect(receptionTime.nativeElement.textContent)
       .withContext('Reception time should exist')
-      .toContain('18:00 horas');
+      .toContain('6:00 PM horas');
   });
 
   it('should have the dressCode section', () => {

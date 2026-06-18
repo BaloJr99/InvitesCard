@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
@@ -41,6 +42,7 @@ describe('HomeComponent (Shallow Test)', () => {
       providers: [
         { provide: InvitesService, useValue: invitesSpy },
         { provide: EventsService, useValue: eventsSpy },
+        DatePipe,
         provideRouter([]),
       ],
     }).compileComponents();

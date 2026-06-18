@@ -76,6 +76,7 @@ export class SaveTheDateComponent {
     map(({ invite, eventSettings, downloadedFiles }) => {
       const userInvite = {
         ...invite,
+        maxDateOfConfirmation: toLocalDate(invite.maxDateOfConfirmation),
         dateOfEvent: toLocalDate(invite.dateOfEvent),
       } as ISaveTheDateUserInvite;
 
@@ -85,11 +86,6 @@ export class SaveTheDateComponent {
         month: 'long',
         year: 'numeric',
       }).format(new Date(userInvite.dateOfEvent));
-
-      userInvite.maxDateOfConfirmation = userInvite.maxDateOfConfirmation.slice(
-        0,
-        userInvite.maxDateOfConfirmation.length - 1,
-      );
 
       const deadlineMet =
         new Date().getTime() >

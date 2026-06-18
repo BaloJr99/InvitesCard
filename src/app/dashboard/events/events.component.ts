@@ -4,17 +4,16 @@ import { Roles } from 'src/app/core/models/enum';
 import { IDashboardEvent, IEventAction } from 'src/app/core/models/events';
 import { EventsService } from 'src/app/core/services/events.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
-import { toLocalDate } from 'src/app/shared/utils/tools';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { EventModalComponent } from './event-modal/event-modal.component';
-import { DateFormatPipe } from '../../shared/pipes/date-format.pipe';
+import { toLocalDate } from 'src/app/shared/utils/tools';
 
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.css'],
-  imports: [CommonModule, EventModalComponent, DateFormatPipe, RouterModule],
+  imports: [CommonModule, EventModalComponent, RouterModule],
 })
 export class EventsComponent {
   private eventsService = inject(EventsService);
@@ -105,8 +104,8 @@ export class EventsComponent {
           map((event) => {
             return {
               ...event,
-              dateOfEvent: toLocalDate(event.dateOfEvent),
-              maxDateOfConfirmation: toLocalDate(event.maxDateOfConfirmation),
+              dateOfEvent: event.dateOfEvent,
+              maxDateOfConfirmation: event.maxDateOfConfirmation,
               userId: event.userId,
             };
           }),

@@ -10,7 +10,6 @@ import { of } from 'rxjs';
 import { EventsService } from 'src/app/core/services/events.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { EventsComponent } from 'src/app/dashboard/events/events.component';
-import { DateFormatPipe } from 'src/app/shared/pipes/date-format.pipe';
 import { dashboardEventsMock } from 'src/tests/mocks/mocks';
 import { By } from '@angular/platform-browser';
 import { deepCopy } from 'src/app/shared/utils/tools';
@@ -32,7 +31,7 @@ describe('Events Component (Integrated Test)', () => {
     const toastrSpy = jasmine.createSpyObj('ToastrService', ['']);
 
     await TestBed.configureTestingModule({
-      imports: [DateFormatPipe, RouterLink, EventsComponent],
+      imports: [RouterLink, EventsComponent],
       providers: [
         { provide: EventsService, useValue: eventsSpy },
         { provide: TokenStorageService, useValue: tokenSpy },
@@ -42,11 +41,11 @@ describe('Events Component (Integrated Test)', () => {
     }).compileComponents();
 
     eventsServiceSpy = TestBed.inject(
-      EventsService
+      EventsService,
     ) as jasmine.SpyObj<EventsService>;
 
     tokenStorageServiceSpy = TestBed.inject(
-      TokenStorageService
+      TokenStorageService,
     ) as jasmine.SpyObj<TokenStorageService>;
 
     router = TestBed.inject(Router);
@@ -72,23 +71,23 @@ describe('Events Component (Integrated Test)', () => {
     const routerLinks = linkDes.map((de) => de.injector.get(RouterLink));
 
     expect(routerLinks[1].href).toBe(
-      `/dashboard/events/${dashboardEventsMockCopy[0].id}`
+      `/dashboard/events/${dashboardEventsMockCopy[0].id}`,
     );
     expect(routerLinks[2].href).toBe(
       `/dashboard/events/gallery/${dashboardEventsMockCopy[0].nameOfEvent.replaceAll(
         ' ',
-        '%20'
-      )}`
+        '%20',
+      )}`,
     );
 
     expect(routerLinks[3].href).toBe(
-      `/dashboard/events/${dashboardEventsMockCopy[1].id}`
+      `/dashboard/events/${dashboardEventsMockCopy[1].id}`,
     );
     expect(routerLinks[4].href).toBe(
       `/dashboard/events/gallery/${dashboardEventsMockCopy[1].nameOfEvent.replaceAll(
         ' ',
-        '%20'
-      )}`
+        '%20',
+      )}`,
     );
   });
 

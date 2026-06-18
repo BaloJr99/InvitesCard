@@ -26,7 +26,7 @@
                 </button>
               }
               <h3 class="card-title" [ngStyle]="{ 'padding-right': vm.isAdmin ? '50px' : '0px' }">{{ event.nameOfEvent }}</h3>
-              <p class="card-text" i18n>Fecha del evento: <br> {{ event.dateOfEvent | dateFormat }}</p>
+              <p class="card-text" i18n>Fecha del evento: <br> {{ event.dateOfEvent | date: 'longDate' }}</p>
               <a routerLink="/dashboard/events/{{event.id}}" class="view-event btn btn-dark" i18n>
               IR A LAS INVITACIONES <i class="fa-solid fa-envelope ms-2" aria-hidden="true"></i>
             </a>

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
@@ -31,6 +32,7 @@ describe('HomeComponent (Integrated Test)', () => {
       providers: [
         { provide: InvitesService, useValue: invitesSpy },
         { provide: EventsService, useValue: eventsSpy },
+        DatePipe,
         provideRouter([]),
       ],
     }).compileComponents();

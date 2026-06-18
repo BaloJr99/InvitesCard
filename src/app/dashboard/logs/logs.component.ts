@@ -5,10 +5,10 @@ import { IEmitAction, ITable, ITableHeaders } from 'src/app/core/models/common';
 import { ButtonAction } from 'src/app/core/models/enum';
 import { ILog } from 'src/app/core/models/logs';
 import { LoggerService } from 'src/app/core/services/logger.service';
-import { toLocalDate } from 'src/app/shared/utils/tools';
 import { TableComponent } from '../../shared/components/table/table.component';
 import { LogsModalComponent } from './logs-modal/logs-modal.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { DatePipe } from '@angular/common';
 Chart.register(...registerables);
 
 @Component({
@@ -19,6 +19,7 @@ Chart.register(...registerables);
 })
 export class LogsComponent {
   private loggerService = inject(LoggerService);
+  private datePipe = inject(DatePipe);
 
   private logs = new BehaviorSubject<ILog[]>([]);
   logs$ = this.logs.asObservable();
@@ -31,7 +32,7 @@ export class LogsComponent {
       const formattedLogs = logs.map((log) => {
         return {
           ...log,
-          dateOfError: toLocalDate(log.dateOfError),
+          dateOfError: log.dateOfError,
         } as ILog;
       });
       this.logs.next(formattedLogs);
@@ -39,20 +40,30 @@ export class LogsComponent {
       return {
         table: this.getTableConfiguration(formattedLogs),
       };
-    })
+    }),
   );
 
   history$ = this.logs$.pipe(
     map((logs) => {
       return this.RenderChart(logs);
-    })
+    }),
   );
 
   RenderChart(logs: ILog[]) {
     const numberOfErrorsLast31Days = logs.length;
-    const numberOfErrorsToday = logs.filter(
-      (log) => new Date().getDay() === new Date(log.dateOfError).getDay()
-    ).length;
+
+    const numberOfErrorsToday = logs.filter((log) => {
+      const todayMorning = new Date();
+      todayMorning.setHours(0, 0, 0, 0);
+
+      const todayNight = new Date();
+      todayNight.setHours(23, 59, 59, 999);
+
+      return (
+        new Date(log.dateOfError) >= todayMorning &&
+        new Date(log.dateOfError) <= todayNight
+      );
+    }).length;
 
     const groupedByDate: { [key: string]: number } = {};
 
@@ -64,21 +75,15 @@ export class LogsComponent {
     for (let i = 0; i <= 31; i++) {
       const date = new Date();
       date.setDate(startDate.getDate() - i);
-      validDates.push(date.toLocaleDateString());
+      validDates.push(this.datePipe.transform(date, 'shortDate') as string);
     }
 
     validDates.forEach((date) => {
       groupedByDate[date] = logs.filter((log) => {
         randomColors.push(
-          `rgb(${this.randomNum()}, ${this.randomNum()}, ${this.randomNum()})`
+          `rgb(${this.randomNum()}, ${this.randomNum()}, ${this.randomNum()})`,
         );
-        const errorDate = toLocalDate(log.dateOfError);
-
-        if (errorDate === date) {
-          return true;
-        }
-
-        return false;
+        return this.datePipe.transform(log.dateOfError, 'shortDate') === date;
       }).length;
     });
 
@@ -141,7 +146,7 @@ export class LogsComponent {
     if (action.action === ButtonAction.View) {
       const logId = data[$localize`Acciones`];
       this.logSelected = this.logs.value.find(
-        (log) => log.id === logId
+        (log) => log.id === logId,
       ) as ILog;
       this.showLogModal = true;
     }
@@ -198,7 +203,10 @@ export class LogsComponent {
     headers.forEach(({ text }) => {
       switch (text) {
         case $localize`Fecha del error`:
-          row[text] = log.dateOfError;
+          row[text] = this.datePipe.transform(
+            log.dateOfError,
+            'short',
+          ) as string;
           break;
         case $localize`Error`:
           row[text] = log.customError;

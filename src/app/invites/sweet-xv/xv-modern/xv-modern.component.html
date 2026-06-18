@@ -158,13 +158,18 @@
                   vm.dayOfTheWeek.slice(1)
               }}
               <br />
-              {{ vm.longDate }} <br />
-              <i
-                class="fa-regular fa-clock"
-                style="color: var(--custom-primary-color)"
-                aria-hidden="true"
-              ></i>
-              <span i18n>{{ vm.parsedEventSettings.massTime }} horas</span>
+              {{ vm.userInvite.dateOfEvent | date: "longDate" }} <br />
+              <span i18n
+                ><i
+                  class="fa-regular fa-clock"
+                  style="color: var(--custom-primary-color)"
+                  aria-hidden="true"
+                ></i>
+                {{
+                  vm.parsedEventSettings.massTime | date: "shortTime"
+                }}
+                horas</span
+              >
             </p>
             <div class="row">
               <div class="col-sm-12 col-md-6">
@@ -252,7 +257,10 @@
                     style="color: var(--custom-primary-color)"
                     aria-hidden="true"
                   ></i>
-                  {{ vm.parsedEventSettings.receptionTime }} horas</span
+                  {{
+                    vm.parsedEventSettings.receptionTime | date: "shortTime"
+                  }}
+                  horas</span
                 >
               </div>
             </div>

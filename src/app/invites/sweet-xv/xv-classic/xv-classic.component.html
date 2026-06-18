@@ -66,7 +66,7 @@
           </div>
           <p class="pt-5" i18n>{{vm.parsedEventSettings.secondSectionSentences}} <br><br>¡Mis XV Años! </p>
           <br>
-          <p class="pinkLetter" i18n>{{ vm.dayOfTheWeek.substring(0, 1).toUpperCase() + vm.dayOfTheWeek.slice(1) }} <br> {{ vm.longDate }} <br> <i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{ vm.parsedEventSettings.massTime }} horas</p>
+          <p class="pinkLetter" i18n>{{ vm.dayOfTheWeek.substring(0, 1).toUpperCase() + vm.dayOfTheWeek.slice(1) }} <br> {{ vm.userInvite.dateOfEvent | date: 'longDate' }} <br> <i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{ vm.parsedEventSettings.massTime | date: 'shortTime' }} horas</p>
           <div class="row">
             <div class="col-sm-12 col-md-6">
               <p>{{vm.parsedEventSettings.massAddress}}</p>
@@ -89,7 +89,7 @@
               <h2 i18n>Recepción</h2>
               <h3>{{vm.parsedEventSettings.receptionPlace}}</h3>
               <p>{{vm.parsedEventSettings.receptionAddress}}</p>
-              <span i18n><i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{vm.parsedEventSettings.receptionTime}} horas</span>
+              <span i18n><i class="fa-regular fa-clock" style="color: var(--custom-primary-color);" aria-hidden="true"></i> {{vm.parsedEventSettings.receptionTime | date: 'shortTime'}} horas</span>
             </div>
           </div>
         </div>

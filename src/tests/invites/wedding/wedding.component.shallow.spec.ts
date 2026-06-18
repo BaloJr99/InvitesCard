@@ -8,7 +8,7 @@ import { InvitesService } from 'src/app/core/services/invites.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { WeddingComponent } from 'src/app/invites/wedding/wedding.component';
 import { SafePipe } from 'src/app/shared/pipes/safe.pipe';
-import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   weddingBaseSettingMock,
   weddingSettingMock,
@@ -50,26 +50,26 @@ describe('Wedding Component (Shallow Test)', () => {
     }).compileComponents();
 
     invitesServiceSpy = TestBed.inject(
-      InvitesService
+      InvitesService,
     ) as jasmine.SpyObj<InvitesService>;
     filesServiceSpy = TestBed.inject(
-      FilesService
+      FilesService,
     ) as jasmine.SpyObj<FilesService>;
     settingsServiceSpy = TestBed.inject(
-      SettingsService
+      SettingsService,
     ) as jasmine.SpyObj<SettingsService>;
 
     invitesServiceSpy.getInvite.and.returnValue(of(weddingUserInviteMockCopy));
     settingsServiceSpy.getEventSettings.and.returnValue(
       of({
         ...weddingBaseSettingMockCopy,
-      })
+      }),
     );
     filesServiceSpy.getFilesByEvent.and.returnValue(
       of({
         eventImages: [],
         eventAudios: [],
-      })
+      }),
     );
 
     fixture = TestBed.createComponent(WeddingComponent);
@@ -96,7 +96,7 @@ describe('Wedding Component (Shallow Test)', () => {
       .toContain(
         `${weddingUserInviteMockCopy.nameOfCelebrated.split(';')[0]} & ${
           weddingUserInviteMockCopy.nameOfCelebrated.split(';')[1]
-        }`
+        }`,
       );
     expect(dateOfEvent.nativeElement.textContent)
       .withContext('Date of event should exist')
@@ -153,43 +153,19 @@ describe('Wedding Component (Shallow Test)', () => {
       .toBeTruthy();
     expect(massTime.nativeElement.textContent)
       .withContext('Mass time should exist')
-      .toContain(
-        toLocalDate(
-          `${weddingSettingMockCopy.massTime.split(' ')[0]}T${
-            weddingSettingMockCopy.massTime.split(' ')[1]
-          }.000Z`
-        )
-          .split('T')[1]
-          .substring(0, 5)
-      );
+      .toContain('6:30 PM HORAS');
     expect(massAddress.nativeElement.textContent)
       .withContext('Mass address should exist')
       .toContain(weddingSettingMockCopy.massPlace);
     expect(civilTime.nativeElement.textContent)
       .withContext('Civil time should exist')
-      .toContain(
-        toLocalDate(
-          `${weddingSettingMockCopy.civilTime.split(' ')[0]}T${
-            weddingSettingMockCopy.civilTime.split(' ')[1]
-          }.000Z`
-        )
-          .split('T')[1]
-          .substring(0, 5)
-      );
+      .toContain('9:00 PM HORAS');
     expect(civilAddress.nativeElement.textContent)
       .withContext('Civil address should exist')
       .toContain(weddingSettingMockCopy.civilPlace);
     expect(venueTime.nativeElement.textContent)
       .withContext('Venue time should exist')
-      .toContain(
-        toLocalDate(
-          `${weddingSettingMockCopy.venueTime.split(' ')[0]}T${
-            weddingSettingMockCopy.venueTime.split(' ')[1]
-          }.000Z`
-        )
-          .split('T')[1]
-          .substring(0, 5)
-      );
+      .toContain('10:00 PM HORAS');
     expect(venueAddress.nativeElement.textContent)
       .withContext('Venue address should exist')
       .toContain(weddingSettingMockCopy.venuePlace);
@@ -225,7 +201,7 @@ describe('Wedding Component (Shallow Test)', () => {
 
   it('should have the confirmation section', () => {
     const confirmationSection = fixture.debugElement.query(
-      By.css('.invitesConfirmation')
+      By.css('.invitesConfirmation'),
     );
 
     expect(confirmationSection)
@@ -235,7 +211,7 @@ describe('Wedding Component (Shallow Test)', () => {
 
   it('should have the accomodation section', () => {
     const accomodationSection = fixture.debugElement.query(
-      By.css('.accomodations')
+      By.css('.accomodations'),
     );
     const paragraphs = accomodationSection.queryAll(By.css('p'));
     const hotelName = accomodationSection.query(By.css('h3'));

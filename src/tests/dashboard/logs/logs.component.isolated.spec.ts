@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
@@ -12,7 +13,9 @@ const logMockCopy = deepCopy(logMock);
 describe('Logs Component (Isolated Test)', () => {
   let component: LogsComponent;
   const loggerSpy = jasmine.createSpyObj('LoggerService', ['getLogs']);
-  const activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', ['snapshot']);
+  const activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', [
+    'snapshot',
+  ]);
 
   beforeEach(() => {
     loggerSpy.getLogs.and.returnValue(of([logMockCopy]));
@@ -21,6 +24,7 @@ describe('Logs Component (Isolated Test)', () => {
       providers: [
         { provide: LoggerService, useValue: loggerSpy },
         { provide: ActivatedRoute, useValue: activatedRouteSpy },
+        DatePipe,
       ],
     });
 

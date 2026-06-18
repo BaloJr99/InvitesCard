@@ -10,83 +10,83 @@
             class="form-control"
             formControlName="primaryColor"
             [ngClass]="{'is-invalid': createEventSettingsForm.get('primaryColor') | validation }">
-            @if (createEventSettingsForm.get('primaryColor') | validation) {
-              <span class="invalid-feedback d-block" role="alert">
-                {{ createEventSettingsForm.get('primaryColor')?.errors | validationError: 'primaryColor' }}
-              </span>
-            }
-          </div>
-          <div class="form-group col-6 col-md-2">
-            <label for="secondaryColor" class="form-label" i18n>Color Secundario</label>
-            <input id="secondaryColor"
-              type="color"
-              class="form-control"
-              formControlName="secondaryColor"
-              [ngClass]="{'is-invalid': createEventSettingsForm.get('secondaryColor') | validation }">
-              @if (createEventSettingsForm.get('secondaryColor') | validation) {
-                <span class="invalid-feedback d-block" role="alert">
-                  {{ createEventSettingsForm.get('secondaryColor')?.errors | validationError: 'secondaryColor' }}
-                </span>
-              }
-            </div>
-            <div class="form-group col-12 col-md-8">
-              <label for="receptionPlace" class="form-label" i18n>Lugar del evento</label>
-              <input id="receptionPlace"
-                type="text"
-                class="form-control"
-                formControlName="receptionPlace"
-                [ngClass]="{'is-invalid': createEventSettingsForm.get('receptionPlace') | validation }">
-                @if (createEventSettingsForm.get('receptionPlace') | validation) {
-                  <span class="invalid-feedback d-block" role="alert">
-                    {{ createEventSettingsForm.get('receptionPlace')?.errors | validationError: 'receptionPlace' }}
-                  </span>
-                }
-              </div>
-              <div class="form-group col-12 col-md-12">
-                <label for="copyMessage" class="form-label" i18n>Mensaje para copiar</label>
-                <textarea id="copyMessage"
-                  class="form-control"
-                  rows="3"
-                  formControlName="copyMessage"
-                  [ngClass]="{'is-invalid': createEventSettingsForm.get('copyMessage') | validation }">
-                </textarea>
-                @if (createEventSettingsForm.get('copyMessage') | validation) {
-                  <span class="invalid-feedback d-block" role="alert">
-                    {{ createEventSettingsForm.get('copyMessage')?.errors | validationError: 'copyMessage' }}
-                  </span>
-                }
-              </div>
-              <div class="form-group col-12 col-md-4">
-                <label for="hotelName" class="form-label" i18n>Nombre del Hotel</label>
-                <input id="hotelName"
-                  type="text"
-                  class="form-control"
-                  formControlName="hotelName"
-                  [ngClass]="{'is-invalid': createEventSettingsForm.get('hotelName') | validation }">
-                  @if (createEventSettingsForm.get('hotelName') | validation) {
-                    <span class="invalid-feedback d-block" role="alert">
-                      {{ createEventSettingsForm.get('hotelName')?.errors | validationError: 'hotelName' }}
-                    </span>
-                  }
-                </div>
-                <div class="form-group col-12 col-md-8">
-                  <label for="hotelInformation" class="form-label" i18n>Url con información</label>
-                  <input id="hotelInformation"
-                    type="url"
-                    class="form-control"
-                    formControlName="hotelInformation"
-                    [ngClass]="{'is-invalid': createEventSettingsForm.get('hotelInformation') | validation }">
-                    @if (createEventSettingsForm.get('hotelInformation') | validation) {
-                      <span class="invalid-feedback d-block" role="alert">
-                        {{ createEventSettingsForm.get('hotelInformation')?.errors | validationError: 'hotelInformation' }}
-                      </span>
-                    }
-                  </div>
-                </form>
-              </div>
-              <div class="footer">
-                <button id="cancel-changes" class="btn btn-dark" (click)="cancelChanges()" i18n>Cancelar Cambios</button>
-                <button id="save-changes" class="btn btn-dark" (click)="saveChanges()" i18n>Guardar Cambios</button>
-              </div>
-            </div>
+          @if (createEventSettingsForm.get('primaryColor') | validation) {
+            <span class="invalid-feedback d-block" role="alert">
+              {{ createEventSettingsForm.get('primaryColor')?.errors | validationError: 'primaryColor' }}
+            </span>
           }
+        </div>
+        <div class="form-group col-6 col-md-2">
+          <label for="secondaryColor" class="form-label" i18n>Color Secundario</label>
+          <input id="secondaryColor"
+            type="color"
+            class="form-control"
+            formControlName="secondaryColor"
+            [ngClass]="{'is-invalid': createEventSettingsForm.get('secondaryColor') | validation }">
+          @if (createEventSettingsForm.get('secondaryColor') | validation) {
+            <span class="invalid-feedback d-block" role="alert">
+              {{ createEventSettingsForm.get('secondaryColor')?.errors | validationError: 'secondaryColor' }}
+            </span>
+          }
+        </div>
+        <div class="form-group col-12 col-md-8">
+          <label for="receptionPlace" class="form-label" i18n>Lugar del evento</label>
+          <input id="receptionPlace"
+            type="text"
+            class="form-control"
+            formControlName="receptionPlace"
+            [ngClass]="{'is-invalid': createEventSettingsForm.get('receptionPlace') | validation }">
+          @if (createEventSettingsForm.get('receptionPlace') | validation) {
+            <span class="invalid-feedback d-block" role="alert">
+              {{ createEventSettingsForm.get('receptionPlace')?.errors | validationError: 'receptionPlace' }}
+            </span>
+          }
+        </div>
+        <div class="form-group col-12 col-md-12">
+          <label for="copyMessage" class="form-label" i18n>Mensaje para copiar</label>
+          <textarea id="copyMessage"
+            class="form-control"
+            rows="3"
+            formControlName="copyMessage"
+            [ngClass]="{'is-invalid': createEventSettingsForm.get('copyMessage') | validation }">
+          </textarea>
+          @if (createEventSettingsForm.get('copyMessage') | validation) {
+            <span class="invalid-feedback d-block" role="alert">
+              {{ createEventSettingsForm.get('copyMessage')?.errors | validationError: 'copyMessage' }}
+            </span>
+          }
+        </div>
+        <div class="form-group col-12 col-md-4">
+          <label for="hotelName" class="form-label" i18n>Nombre del Hotel</label>
+          <input id="hotelName"
+            type="text"
+            class="form-control"
+            formControlName="hotelName"
+            [ngClass]="{'is-invalid': createEventSettingsForm.get('hotelName') | validation }">
+          @if (createEventSettingsForm.get('hotelName') | validation) {
+            <span class="invalid-feedback d-block" role="alert">
+              {{ createEventSettingsForm.get('hotelName')?.errors | validationError: 'hotelName' }}
+            </span>
+          }
+        </div>
+        <div class="form-group col-12 col-md-8">
+          <label for="hotelInformation" class="form-label" i18n>Url con información</label>
+          <input id="hotelInformation"
+            type="url"
+            class="form-control"
+            formControlName="hotelInformation"
+            [ngClass]="{'is-invalid': createEventSettingsForm.get('hotelInformation') | validation }">
+          @if (createEventSettingsForm.get('hotelInformation') | validation) {
+            <span class="invalid-feedback d-block" role="alert">
+              {{ createEventSettingsForm.get('hotelInformation')?.errors | validationError: 'hotelInformation' }}
+            </span>
+          }
+        </div>
+      </form>
+    </div>
+    <div class="footer">
+      <button id="cancel-changes" class="btn btn-dark" (click)="cancelChanges()" i18n>Cancelar Cambios</button>
+      <button id="save-changes" class="btn btn-dark" (click)="saveChanges()" i18n>Guardar Cambios</button>
+    </div>
+  </div>
+}

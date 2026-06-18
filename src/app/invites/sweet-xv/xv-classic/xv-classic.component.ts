@@ -16,8 +16,8 @@ import { FilesService } from 'src/app/core/services/files.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { IDownloadImage } from 'src/app/core/models/images';
 import { IInviteSection, IUserInvite } from 'src/app/core/models/invites';
-import { toLocalDate } from 'src/app/shared/utils/tools';
 import { ImageUsage } from 'src/app/core/models/enum';
+import { toLocalDate } from 'src/app/shared/utils/tools';
 
 @Component({
   selector: 'app-xv-classic',
@@ -59,6 +59,7 @@ export class SweetXvClassicComponent {
     map(({ invite, eventSettings, downloadedFiles }) => {
       const userInvite = {
         ...invite,
+        dateOfEvent: toLocalDate(invite.dateOfEvent),
         maxDateOfConfirmation: toLocalDate(invite.maxDateOfConfirmation),
       } as IUserInvite;
 
@@ -75,12 +76,6 @@ export class SweetXvClassicComponent {
         month: 'long',
       }).format(new Date(userInvite.dateOfEvent));
 
-      const longDate = new Intl.DateTimeFormat(this.localeValue, {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      }).format(new Date(userInvite.dateOfEvent));
-
       const eventSettingsParsed = JSON.parse(eventSettings.settings);
       this.sections = eventSettingsParsed.sections;
 
@@ -88,28 +83,6 @@ export class SweetXvClassicComponent {
         ...JSON.parse(eventSettings.settings),
         eventId: eventSettings.eventId,
       };
-
-      if (parsedEventSettings.massTime) {
-        const dateOfMassTime = parsedEventSettings.massTime.split(' ')[0];
-        const timeOfMassTime = parsedEventSettings.massTime.split(' ')[1];
-        parsedEventSettings.massTime = toLocalDate(
-          `${dateOfMassTime}T${timeOfMassTime}.000Z`,
-        )
-          .split('T')[1]
-          .substring(0, 5);
-      }
-
-      if (parsedEventSettings.receptionTime) {
-        const dateOfReceptionTime =
-          parsedEventSettings.receptionTime.split(' ')[0];
-        const timeOfReceptionTime =
-          parsedEventSettings.receptionTime.split(' ')[1];
-        parsedEventSettings.receptionTime = toLocalDate(
-          `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`,
-        )
-          .split('T')[1]
-          .substring(0, 5);
-      }
 
       this.downloadImages = downloadedFiles.eventImages.filter((image) =>
         window.innerWidth > 575
@@ -137,7 +110,6 @@ export class SweetXvClassicComponent {
       return {
         dayOfTheWeek,
         shortDate,
-        longDate,
         parsedEventSettings,
         userInvite,
         deadlineMet,

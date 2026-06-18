@@ -14,7 +14,6 @@ import { TestingPage } from 'e2e/pages/dashboard/testing/testing-page';
 import { IDesign } from 'src/app/core/models/designs';
 import { EventType } from 'src/app/core/models/enum';
 import { IEventType } from 'src/app/core/models/event-types';
-import { toLocalDate } from 'src/app/shared/utils/tools';
 import {
   saveTheDateSettingMock,
   sweetXvSettingMock,
@@ -108,18 +107,6 @@ test.describe('Dashboard settings (Sweet Xv)', () => {
   test('should be able to fill the form and save the settings', async () => {
     await settingsPage.selectEvent(sweetXvEventMock.nameOfEvent);
 
-    const dateOfMass = sweetXvSettingMock.massTime.split(' ');
-    const massTime = toLocalDate(`${dateOfMass[0]}T${dateOfMass[1]}.000Z`)
-      .split('T')[1]
-      .substring(0, 5);
-
-    const dateOfReception = sweetXvSettingMock.receptionTime.split(' ');
-    const receptionTime = toLocalDate(
-      `${dateOfReception[0]}T${dateOfReception[1]}.000Z`,
-    )
-      .split('T')[1]
-      .substring(0, 5);
-
     await settingsPage.fillSweetXvSettings(
       sweetXvSettingMock.primaryColor,
       sweetXvSettingMock.secondaryColor,
@@ -128,10 +115,10 @@ test.describe('Dashboard settings (Sweet Xv)', () => {
       sweetXvSettingMock.firstSectionSentences,
       sweetXvSettingMock.secondSectionSentences,
       sweetXvSettingMock.massUrl,
-      massTime,
+      '17:00',
       sweetXvSettingMock.massAddress,
       sweetXvSettingMock.receptionUrl,
-      receptionTime,
+      '18:00',
       sweetXvSettingMock.receptionPlace,
       sweetXvSettingMock.receptionAddress,
       sweetXvSettingMock.dressCodeColor,
@@ -441,30 +428,15 @@ test.describe('Dashboard settings (Wedding)', () => {
       weddingSettingMock.brideParents,
     );
 
-    const dateOfMass = weddingSettingMock.massTime.split(' ');
-    const massTime = toLocalDate(`${dateOfMass[0]}T${dateOfMass[1]}.000Z`)
-      .split('T')[1]
-      .substring(0, 5);
-
-    const dateOfCivil = weddingSettingMock.civilTime.split(' ');
-    const civilTime = toLocalDate(`${dateOfCivil[0]}T${dateOfCivil[1]}.000Z`)
-      .split('T')[1]
-      .substring(0, 5);
-
-    const dateOfVenue = weddingSettingMock.venueTime.split(' ');
-    const venueTime = toLocalDate(`${dateOfVenue[0]}T${dateOfVenue[1]}.000Z`)
-      .split('T')[1]
-      .substring(0, 5);
-
     await settingsPage.fillItinerarySection(
       weddingSettingMock.massUrl,
-      massTime,
+      '18:30',
       weddingSettingMock.massPlace,
       weddingSettingMock.civilUrl,
-      civilTime,
+      '21:00',
       weddingSettingMock.civilPlace,
       weddingSettingMock.venueUrl,
-      venueTime,
+      '22:00',
       weddingSettingMock.venuePlace,
     );
 

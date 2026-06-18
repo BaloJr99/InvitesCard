@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -28,6 +29,7 @@ describe('AlbumModalComponent (Shallow Test)', () => {
           useValue: toastrSpy,
         },
         provideHttpClient(),
+        DatePipe,
       ],
     }).compileComponents();
 

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -20,6 +21,7 @@ describe('AlbumsComponent (Isolated Test)', () => {
         { provide: ActivatedRoute, useValue: activatedRouteSpy },
         { provide: GalleryService, useValue: gallerySpy },
         { provide: ToastrService, useValue: toastrServiceSpy },
+        DatePipe,
       ],
     });
     component = TestBed.createComponent(AlbumsComponent).componentInstance;

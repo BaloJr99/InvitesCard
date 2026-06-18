@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
@@ -7,7 +8,7 @@ import { LogsModalComponent } from 'src/app/dashboard/logs/logs-modal/logs-modal
 import { LogsComponent } from 'src/app/dashboard/logs/logs.component';
 import { FilterComponent } from 'src/app/shared/components/table/filter/filter.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
-import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import { logMock } from 'src/tests/mocks/mocks';
 
 const logMockCopy = deepCopy(logMock);
@@ -28,12 +29,13 @@ describe('Logs Component (Integrated Test)', () => {
       ],
       providers: [
         { provide: LoggerService, useValue: loggerSpy },
+        DatePipe,
         provideRouter([]),
       ],
     }).compileComponents();
 
     loggerServiceSpy = TestBed.inject(
-      LoggerService
+      LoggerService,
     ) as jasmine.SpyObj<LoggerService>;
 
     loggerServiceSpy.getLogs.and.returnValue(of([logMockCopy]));
@@ -65,7 +67,7 @@ describe('Logs Component (Integrated Test)', () => {
 
     expect(cells[0].nativeElement.innerHTML)
       .withContext('date should match')
-      .toBe(toLocalDate(logMockCopy.dateOfError));
+      .toBe(new DatePipe('es-MX').transform(logMockCopy.dateOfError, 'short'));
 
     expect(cells[1].nativeElement.innerHTML)
       .withContext('custom error should match')

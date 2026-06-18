@@ -9,7 +9,7 @@ import { SettingsService } from 'src/app/core/services/settings.service';
 import { SweetXvSettingsComponent } from 'src/app/dashboard/settings/sweet-xv-settings/sweet-xv-settings.component';
 import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
 import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
-import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   fullEventsMock,
   messageResponseMock,
@@ -179,22 +179,6 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
       of(messageResponseMockCopy)
     );
 
-    const dateOfReceptionTime =
-      sweetXvSettingMockCopy.receptionTime.split(' ')[0];
-    const timeOfReceptionTime =
-      sweetXvSettingMockCopy.receptionTime.split(' ')[1];
-    const receptionTime = toLocalDate(
-      `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`
-    )
-      .split('T')[1]
-      .substring(0, 5);
-
-    const dateOfMassTime = sweetXvSettingMockCopy.massTime.split(' ')[0];
-    const timeOfMassTime = sweetXvSettingMockCopy.massTime.split(' ')[1];
-    const massTime = toLocalDate(`${dateOfMassTime}T${timeOfMassTime}.000Z`)
-      .split('T')[1]
-      .substring(0, 5);
-
     updateFormUsingEvent(
       sweetXvSettingMockCopy.primaryColor,
       sweetXvSettingMockCopy.secondaryColor,
@@ -203,10 +187,10 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
       sweetXvSettingMockCopy.firstSectionSentences,
       sweetXvSettingMockCopy.secondSectionSentences,
       sweetXvSettingMockCopy.massUrl,
-      massTime,
+      '17:00',
       sweetXvSettingMockCopy.massAddress,
       sweetXvSettingMockCopy.receptionUrl,
-      receptionTime,
+      '18:00',
       sweetXvSettingMockCopy.receptionPlace,
       sweetXvSettingMockCopy.receptionAddress,
       sweetXvSettingMockCopy.dressCodeColor
@@ -228,23 +212,6 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
       of(messageResponseMockCopy)
     );
 
-    const dateOfReception = sweetXvSettingMockCopy.receptionTime.split(' ');
-
-    const dateOfReceptionTime = dateOfReception[0];
-    const timeOfReceptionTime = dateOfReception[1];
-    const receptionTime = toLocalDate(
-      `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`
-    )
-      .split('T')[1]
-      .substring(0, 5);
-
-    const dateOfMass = sweetXvSettingMockCopy.massTime.split(' ');
-    const dateOfMassTime = dateOfMass[0];
-    const timeOfMassTime = dateOfMass[1];
-    const massTime = toLocalDate(`${dateOfMassTime}T${timeOfMassTime}.000Z`)
-      .split('T')[1]
-      .substring(0, 5);
-
     fixture.componentRef.setInput('eventSettingActionValue', {
       eventId: fullEventsMockCopy.id,
       eventType: EventType.SaveTheDate,
@@ -259,10 +226,10 @@ describe('Sweet Xv Settings (Integrated Test)', () => {
       sweetXvSettingMockCopy.firstSectionSentences,
       sweetXvSettingMockCopy.secondSectionSentences,
       sweetXvSettingMockCopy.massUrl,
-      massTime,
+      '17:00',
       sweetXvSettingMockCopy.massAddress,
       sweetXvSettingMockCopy.receptionUrl,
-      receptionTime,
+      '18:00',
       sweetXvSettingMockCopy.receptionPlace,
       sweetXvSettingMockCopy.receptionAddress,
       sweetXvSettingMockCopy.dressCodeColor

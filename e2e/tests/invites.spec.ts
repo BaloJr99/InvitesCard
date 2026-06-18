@@ -25,31 +25,17 @@ import { WeddingPage } from 'e2e/pages/invites/wedding-page';
 import { IDesign } from 'src/app/core/models/designs';
 import { EventType, ImageUsage } from 'src/app/core/models/enum';
 import { IEventType } from 'src/app/core/models/event-types';
-import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   saveTheDateSettingMock,
   sweetXvSettingMock,
   weddingSettingMock,
 } from 'src/tests/mocks/mocks';
 
-let sweetXvSettingMockCopy = deepCopy(sweetXvSettingMock);
+const sweetXvSettingMockCopy = deepCopy(sweetXvSettingMock);
 let eventId = '';
 
 test.describe('Invites (Sweet Xv)', () => {
-  sweetXvSettingMockCopy = {
-    ...sweetXvSettingMockCopy,
-    massTime: toLocalDate(
-      sweetXvSettingMockCopy.massTime.replace(' ', 'T').concat('.000Z'),
-    )
-      .split('T')[1]
-      .substring(0, 5),
-    receptionTime: toLocalDate(
-      sweetXvSettingMockCopy.receptionTime.replace(' ', 'T').concat('.000Z'),
-    )
-      .split('T')[1]
-      .substring(0, 5),
-  };
-
   let confirmedMessageLink: string;
   let notConfirmedMessageLink: string;
   let partialMessageLink: string;
@@ -140,10 +126,10 @@ test.describe('Invites (Sweet Xv)', () => {
         sweetXvSettingMockCopy.firstSectionSentences,
         sweetXvSettingMockCopy.secondSectionSentences,
         sweetXvSettingMockCopy.massUrl,
-        sweetXvSettingMockCopy.massTime,
+        '17:00',
         sweetXvSettingMockCopy.massAddress,
         sweetXvSettingMockCopy.receptionUrl,
-        sweetXvSettingMockCopy.receptionTime,
+        '18:00',
         sweetXvSettingMockCopy.receptionPlace,
         sweetXvSettingMockCopy.receptionAddress,
         sweetXvSettingMockCopy.dressCodeColor,
@@ -382,7 +368,7 @@ test.describe('Invites (Sweet Xv)', () => {
 
     expect(await invitePage.massTime.textContent(), {
       message: 'Mass time should be correct',
-    }).toContain(sweetXvSettingMockCopy.massTime);
+    }).toContain('5:00 PM hours');
 
     expect(await invitePage.massAddress.textContent(), {
       message: 'Mass address should be correct',
@@ -406,7 +392,7 @@ test.describe('Invites (Sweet Xv)', () => {
 
     expect(await invitePage.receptionTime.textContent(), {
       message: 'Reception time should be correct',
-    }).toContain(sweetXvSettingMockCopy.receptionTime);
+    }).toContain('6:00 PM hours');
 
     expect(await invitePage.dressCodeColor.textContent(), {
       message: 'Dress code color should be correct',
@@ -972,30 +958,15 @@ test.describe('Invites (Wedding)', () => {
         weddingSettingMock.brideParents,
       );
 
-      const dateOfMass = weddingSettingMock.massTime.split(' ');
-      const massTime = toLocalDate(`${dateOfMass[0]}T${dateOfMass[1]}.000Z`)
-        .split('T')[1]
-        .substring(0, 5);
-
-      const dateOfCivil = weddingSettingMock.civilTime.split(' ');
-      const civilTime = toLocalDate(`${dateOfCivil[0]}T${dateOfCivil[1]}.000Z`)
-        .split('T')[1]
-        .substring(0, 5);
-
-      const dateOfVenue = weddingSettingMock.venueTime.split(' ');
-      const venueTime = toLocalDate(`${dateOfVenue[0]}T${dateOfVenue[1]}.000Z`)
-        .split('T')[1]
-        .substring(0, 5);
-
       await weddingSettings.fillItinerarySection(
         weddingSettingMock.massUrl,
-        massTime,
+        '18:30',
         weddingSettingMock.massPlace,
         weddingSettingMock.civilUrl,
-        civilTime,
+        '21:00',
         weddingSettingMock.civilPlace,
         weddingSettingMock.venueUrl,
-        venueTime,
+        '22:00',
         weddingSettingMock.venuePlace,
       );
 
@@ -1232,14 +1203,9 @@ test.describe('Invites (Wedding)', () => {
       message: 'No kids should not be visible',
     }).toBe(false);
 
-    const dateOfMass = weddingSettingMock.massTime.split(' ');
-    const massTime = toLocalDate(`${dateOfMass[0]}T${dateOfMass[1]}.000Z`)
-      .split('T')[1]
-      .substring(0, 5);
-
     expect(await invitePage.massTime.textContent(), {
       message: 'Mass time should be correct',
-    }).toContain(massTime);
+    }).toContain('6:30 PM HOURS');
 
     expect(await invitePage.massAddress.textContent(), {
       message: 'Mass address should be correct',
@@ -1249,14 +1215,9 @@ test.describe('Invites (Wedding)', () => {
       message: 'Mass url should be visible',
     }).toBe(weddingSettingMock.massUrl);
 
-    const dateOfCivil = weddingSettingMock.civilTime.split(' ');
-    const civilTime = toLocalDate(`${dateOfCivil[0]}T${dateOfCivil[1]}.000Z`)
-      .split('T')[1]
-      .substring(0, 5);
-
     expect(await invitePage.civilTime.textContent(), {
       message: 'Civil time should be correct',
-    }).toContain(civilTime);
+    }).toContain('9:00 PM HOURS');
 
     expect(await invitePage.civilPlace.textContent(), {
       message: 'Civil place should be correct',
@@ -1266,14 +1227,9 @@ test.describe('Invites (Wedding)', () => {
       message: 'Civil iframe should be visible',
     }).toBe(weddingSettingMock.civilUrl);
 
-    const dateOfVenue = weddingSettingMock.venueTime.split(' ');
-    const venueTime = toLocalDate(`${dateOfVenue[0]}T${dateOfVenue[1]}.000Z`)
-      .split('T')[1]
-      .substring(0, 5);
-
     expect(await invitePage.venueTime.textContent(), {
       message: 'Venue time should be correct',
-    }).toContain(venueTime);
+    }).toContain('10:00 PM HOURS');
 
     expect(await invitePage.venuePlace.textContent(), {
       message: 'Venue place should be correct',

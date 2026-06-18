@@ -9,13 +9,14 @@ import {
   IUploadAlbumImage,
   IUpsertAlbum,
 } from '../models/gallery';
-import { toLocalDate } from 'src/app/shared/utils/tools';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GalleryService {
   private http = inject(HttpClient);
+  private datePipe = inject(DatePipe);
 
   private baseUrl = environment.apiUrl;
   private invitesBaseUrl = this.baseUrl + '/gallery';
@@ -32,12 +33,13 @@ export class GalleryService {
             newAlbum.thumbnail = cloudinaryUrl;
           }
 
-          newAlbum.dateOfAlbum = new Date(
-            toLocalDate(newAlbum.dateOfAlbum)
-          ).toLocaleDateString();
+          newAlbum.dateOfAlbum = this.datePipe.transform(
+            newAlbum.dateOfAlbum,
+            'shortDate',
+          ) as string;
           return newAlbum;
         });
-      })
+      }),
     );
   }
 
@@ -55,7 +57,7 @@ export class GalleryService {
               fileUrl: cloudinaryUrl,
             } as IAlbumImage;
           });
-        })
+        }),
       );
   }
 
@@ -66,13 +68,13 @@ export class GalleryService {
   updateAlbum(album: IUpsertAlbum, id: string): Observable<IMessageResponse> {
     return this.http.put<IMessageResponse>(
       `${this.invitesBaseUrl}/${id}`,
-      album
+      album,
     );
   }
 
   checkAlbum(eventId: string, nameOfAlbum: string): Observable<boolean> {
     return this.http.get<boolean>(
-      `${this.invitesBaseUrl}/check-album/${eventId}/${nameOfAlbum}`
+      `${this.invitesBaseUrl}/check-album/${eventId}/${nameOfAlbum}`,
     );
   }
 
@@ -83,7 +85,7 @@ export class GalleryService {
   uploadImages(images: IUploadAlbumImage): Observable<IMessageResponse> {
     return this.http.post<IMessageResponse>(
       `${this.invitesBaseUrl}/images`,
-      images
+      images,
     );
   }
 }

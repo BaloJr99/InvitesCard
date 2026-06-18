@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { IEventAction, IFullEvent } from 'src/app/core/models/events';
+import { IEventAction } from 'src/app/core/models/events';
 import { EventsService } from 'src/app/core/services/events.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { IMessageResponse } from 'src/app/core/models/common';
@@ -16,13 +16,13 @@ import {
   CommonModalType,
   EventType,
 } from 'src/app/core/models/enum';
-import { dateToUTCDate } from 'src/app/shared/utils/tools';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { ValidationPipe } from '../../../shared/pipes/validation.pipe';
 import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe';
 import { CommonModule } from '@angular/common';
 import { EventTypesService } from 'src/app/core/services/event-types.service';
 import { DesignsService } from 'src/app/core/services/design.service';
+import { toLocalDate } from 'src/app/shared/utils/tools';
 
 @Component({
   selector: 'app-event-modal',
@@ -215,36 +215,30 @@ export class EventModalComponent {
   }
 
   createEvent() {
-    this.eventsService
-      .createEvent(this.formatEvent(this.createEventForm.value))
-      .subscribe({
-        next: (response: IMessageResponse) => {
-          this.updateEvents.emit({
-            event: {
-              ...this.createEventForm.value,
-              dateOfEvent: `${this.createEventForm.value.dateOfEvent}T00:00:00`,
-              maxDateOfConfirmation: `${this.createEventForm.value.maxDateOfConfirmation}T00:00:00`,
-              id: response.id,
-            },
-            isNew: true,
-          });
-          this.toastr.success(response.message);
-        },
-      });
-  }
-
-  formatEvent(event: IFullEvent): IFullEvent {
-    return {
-      ...event,
-      dateOfEvent: dateToUTCDate(event.dateOfEvent),
-      maxDateOfConfirmation: dateToUTCDate(event.maxDateOfConfirmation),
-    };
+    this.eventsService.createEvent(this.createEventForm.value).subscribe({
+      next: (response: IMessageResponse) => {
+        this.updateEvents.emit({
+          event: {
+            ...this.createEventForm.value,
+            dateOfEvent: toLocalDate(
+              `${this.createEventForm.value.dateOfEvent}T00:00:00Z`,
+            ),
+            maxDateOfConfirmation: toLocalDate(
+              `${this.createEventForm.value.maxDateOfConfirmation}T00:00:00Z`,
+            ),
+            id: response.id,
+          },
+          isNew: true,
+        });
+        this.toastr.success(response.message);
+      },
+    });
   }
 
   updateEvent(override: boolean = false, overrideViewed: boolean = false) {
     this.eventsService
       .updateEvent(
-        this.formatEvent(this.createEventForm.value),
+        this.createEventForm.value,
         this.createEventForm.controls['id'].value,
         override,
         overrideViewed,

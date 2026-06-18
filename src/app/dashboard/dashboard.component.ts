@@ -4,7 +4,6 @@ import { TokenStorageService } from '../core/services/token-storage.service';
 import { SocketService } from '../core/services/socket.service';
 import { IMessage } from '../core/models/common';
 import { CommonInvitesService } from '../core/services/common-invites.service';
-import { toLocalDate } from '../shared/utils/tools';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -48,8 +47,8 @@ export class DashboardComponent implements OnInit {
 
       const sortedNotifications = notifications.sort(
         (a, b) =>
-          new Date(toLocalDate(b.dateOfConfirmation)).getTime() -
-          new Date(toLocalDate(a.dateOfConfirmation)).getTime(),
+          new Date(b.dateOfConfirmation).getTime() -
+          new Date(a.dateOfConfirmation).getTime(),
       );
 
       return {

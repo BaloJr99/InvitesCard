@@ -1,4 +1,10 @@
-import { Component, ElementRef, LOCALE_ID, ViewEncapsulation, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  LOCALE_ID,
+  ViewEncapsulation,
+  inject,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, map, mergeMap, switchMap } from 'rxjs';
 import { IDownloadImage } from '../../core/models/images';
@@ -7,10 +13,10 @@ import { FilesService } from '../../core/services/files.service';
 import { ImageUsage } from '../../core/models/enum';
 import { IInviteSection, IUserInvite } from '../../core/models/invites';
 import { InvitesService } from 'src/app/core/services/invites.service';
-import { toLocalDate } from 'src/app/shared/utils/tools';
 import { CommonModule } from '@angular/common';
 import { CountdownComponent } from '../shared/countdown/countdown.component';
 import { ConfirmationComponent } from '../shared/confirmation/confirmation.component';
+import { toLocalDate } from 'src/app/shared/utils/tools';
 
 @Component({
   selector: 'app-wedding',
@@ -48,8 +54,8 @@ export class WeddingComponent {
             eventSettings,
             downloadedFiles,
           };
-        })
-      )
+        }),
+      ),
     ),
     map(({ invite, eventSettings, downloadedFiles }) => {
       const userInvite = {
@@ -63,12 +69,12 @@ export class WeddingComponent {
 
       const dayOfTheWeek = new Intl.DateTimeFormat(this.localeValue, {
         weekday: 'long',
-      }).format(new Date(invite.dateOfEvent));
+      }).format(new Date(userInvite.dateOfEvent));
 
       const shortDate = new Intl.DateTimeFormat(this.localeValue, {
         day: 'numeric',
         month: 'long',
-      }).format(new Date(invite.dateOfEvent));
+      }).format(new Date(userInvite.dateOfEvent));
 
       const fullEventSettings = JSON.parse(eventSettings.settings);
       this.sections = fullEventSettings.sections;
@@ -77,36 +83,6 @@ export class WeddingComponent {
         ...JSON.parse(eventSettings.settings),
         eventId: eventSettings.eventId,
       };
-
-      if (parsedEventSettings.massTime) {
-        const dateOfMassTime = parsedEventSettings.massTime.split(' ')[0];
-        const timeOfMassTime = parsedEventSettings.massTime.split(' ')[1];
-        parsedEventSettings.massTime = toLocalDate(
-          `${dateOfMassTime}T${timeOfMassTime}.000Z`
-        )
-          .split('T')[1]
-          .substring(0, 5);
-      }
-
-      if (parsedEventSettings.venueTime) {
-        const dateOfVenueTime = parsedEventSettings.venueTime.split(' ')[0];
-        const timeOfVenueTime = parsedEventSettings.venueTime.split(' ')[1];
-        parsedEventSettings.venueTime = toLocalDate(
-          `${dateOfVenueTime}T${timeOfVenueTime}.000Z`
-        )
-          .split('T')[1]
-          .substring(0, 5);
-      }
-
-      if (parsedEventSettings.civilTime) {
-        const dateOfCivilTime = parsedEventSettings.civilTime.split(' ')[0];
-        const timeOfCivilTime = parsedEventSettings.civilTime.split(' ')[1];
-        parsedEventSettings.civilTime = toLocalDate(
-          `${dateOfCivilTime}T${timeOfCivilTime}.000Z`
-        )
-          .split('T')[1]
-          .substring(0, 5);
-      }
 
       const downloadAudio =
         downloadedFiles.eventAudios.length > 0
@@ -121,31 +97,31 @@ export class WeddingComponent {
       const mainImage =
         window.innerWidth > 575
           ? (downloadedFiles.eventImages.find(
-              (image) => image.imageUsage === ImageUsage.Principal_Desktop
+              (image) => image.imageUsage === ImageUsage.Principal_Desktop,
             ) as IDownloadImage)
           : (downloadedFiles.eventImages.find(
-              (image) => image.imageUsage === ImageUsage.Principal_Phone
+              (image) => image.imageUsage === ImageUsage.Principal_Phone,
             ) as IDownloadImage);
 
       const gallery = downloadedFiles.eventImages.filter(
-        (image) => image.imageUsage === ImageUsage.Gallery
+        (image) => image.imageUsage === ImageUsage.Gallery,
       );
 
       this.elRef.nativeElement.style.setProperty(
         '--custom-primary-color',
-        parsedEventSettings.weddingPrimaryColor
+        parsedEventSettings.weddingPrimaryColor,
       );
       this.elRef.nativeElement.style.setProperty(
         '--custom-secondary-color',
-        parsedEventSettings.weddingSecondaryColor
+        parsedEventSettings.weddingSecondaryColor,
       );
       this.elRef.nativeElement.style.setProperty(
         '--custom-light-primary-color',
-        `${parsedEventSettings.weddingPrimaryColor}80`
+        `${parsedEventSettings.weddingPrimaryColor}80`,
       );
       this.elRef.nativeElement.style.setProperty(
         '--custom-light-secondary-color',
-        `${parsedEventSettings.weddingSecondaryColor}80`
+        `${parsedEventSettings.weddingSecondaryColor}80`,
       );
 
       return {
@@ -157,7 +133,7 @@ export class WeddingComponent {
         mainImage,
         gallery,
       };
-    })
+    }),
   );
 
   goToForm(): void {
@@ -171,7 +147,7 @@ export class WeddingComponent {
   sectionEnabled(sectionId: string): boolean {
     if (this.sections && this.sections.length > 0) {
       const sectionFound = this.sections.find(
-        (s) => s.sectionId === sectionId
+        (s) => s.sectionId === sectionId,
       ) as IInviteSection;
       if (sectionFound) {
         return sectionFound.selected;
@@ -184,7 +160,7 @@ export class WeddingComponent {
   getSectionOrder(sectionId: string) {
     if (this.sections && this.sections.length > 0) {
       const sectionFound = this.sections.find(
-        (s) => s.sectionId === sectionId
+        (s) => s.sectionId === sectionId,
       ) as IInviteSection;
       return sectionFound.order;
     }

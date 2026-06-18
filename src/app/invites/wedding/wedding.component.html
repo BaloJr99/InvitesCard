@@ -315,7 +315,7 @@
                                           <div class="box">
                                             <h3 class="box-header" i18n>Ceremonia<br>Religiosa</h3>
                                             <div class="box-body">
-                                              <p><strong>{{ vm.parsedEventSettings.massTime }} <span i18n>HORAS</span></strong></p>
+                                              <p><strong>{{ vm.parsedEventSettings.massTime | date: 'shortTime' }} <span i18n>HORAS</span></strong></p>
                                               <p>{{ vm.parsedEventSettings.massPlace }}</p>
                                             </div>
                                             <div class="box-footer">
@@ -325,7 +325,7 @@
                                           <div class="box">
                                             <h3 class="box-header" i18n>Ceremonia<br>Civil</h3>
                                             <div class="box-body">
-                                              <p><strong>{{ vm.parsedEventSettings.civilTime }} <span i18n>HORAS</span></strong></p>
+                                              <p><strong>{{ vm.parsedEventSettings.civilTime | date: 'shortTime' }} <span i18n>HORAS</span></strong></p>
                                               <p>{{ vm.parsedEventSettings.civilPlace }}</p>
                                             </div>
                                             <div class="box-footer">
@@ -335,7 +335,7 @@
                                           <div class="box">
                                             <h3 class="box-header" i18n>Recepción</h3>
                                             <div class="box-body">
-                                              <p><strong>{{ vm.parsedEventSettings.venueTime }} <span i18n>HORAS</span></strong></p>
+                                              <p><strong>{{ vm.parsedEventSettings.venueTime | date: 'shortTime' }} <span i18n>HORAS</span></strong></p>
                                               <p>{{ vm.parsedEventSettings.venuePlace }}</p>
                                             </div>
                                             <div class="box-footer">

@@ -9,7 +9,7 @@ import {
 } from 'src/app/core/models/gallery';
 import { GalleryService } from 'src/app/core/services/gallery.service';
 import { AlbumModalComponent } from './album-modal/album-modal.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-albums',
@@ -20,6 +20,7 @@ import { CommonModule } from '@angular/common';
 export class AlbumsComponent {
   private galleryService = inject(GalleryService);
   private route = inject(ActivatedRoute);
+  private datePipe = inject(DatePipe);
 
   albumsResolved = {} as IAlbumResolved;
 
@@ -41,7 +42,7 @@ export class AlbumsComponent {
   private albums = new BehaviorSubject<IAlbum[]>([]);
   albums$ = this.albums.asObservable().pipe(
     // Filter out the inactive albums
-    map((albums) => albums.filter((album) => album.isActive))
+    map((albums) => albums.filter((album) => album.isActive)),
   );
 
   vm$ = this.route.data.pipe(
@@ -67,9 +68,9 @@ export class AlbumsComponent {
             isActive: albumsResolved.isActive,
             nameOfAlbum: albumsResolved.nameOfAlbum,
           };
-        })
-      )
-    )
+        }),
+      ),
+    ),
   );
 
   createNewAlbum() {
@@ -103,7 +104,10 @@ export class AlbumsComponent {
         ...this.albums.value,
         {
           ...albumAction.album,
-          dateOfAlbum: new Date().toLocaleDateString(),
+          dateOfAlbum: this.datePipe.transform(
+            new Date(),
+            'shortDate',
+          ) as string,
           isActive: true,
         },
       ]);
@@ -111,7 +115,7 @@ export class AlbumsComponent {
       const oldAlbums = this.albums.value;
 
       const albumIndex = oldAlbums.findIndex(
-        (album) => album.id === albumAction.album.id
+        (album) => album.id === albumAction.album.id,
       );
 
       oldAlbums[albumIndex] = {

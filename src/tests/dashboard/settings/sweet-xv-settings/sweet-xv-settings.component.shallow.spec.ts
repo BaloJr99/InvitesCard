@@ -10,7 +10,7 @@ import { SettingsService } from 'src/app/core/services/settings.service';
 import { SweetXvSettingsComponent } from 'src/app/dashboard/settings/sweet-xv-settings/sweet-xv-settings.component';
 import { ValidationErrorPipe } from 'src/app/shared/pipes/validation-error.pipe';
 import { ValidationPipe } from 'src/app/shared/pipes/validation.pipe';
-import { deepCopy, toLocalDate } from 'src/app/shared/utils/tools';
+import { deepCopy } from 'src/app/shared/utils/tools';
 import {
   fullEventsMock,
   sweetXvBaseSettingMock,
@@ -40,39 +40,39 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
     receptionTime: string,
     receptionPlace: string,
     receptionAddress: string,
-    dressCodeColor: string
+    dressCodeColor: string,
   ) => {
     const primaryColorInput = fixture.debugElement.query(
-      By.css('#primaryColor')
+      By.css('#primaryColor'),
     );
     const secondaryColorInput = fixture.debugElement.query(
-      By.css('#secondaryColor')
+      By.css('#secondaryColor'),
     );
     const parentsInput = fixture.debugElement.query(By.css('#parents'));
     const godParentsInput = fixture.debugElement.query(By.css('#godParents'));
     const firstSectionSentencesInput = fixture.debugElement.query(
-      By.css('#firstSectionSentences')
+      By.css('#firstSectionSentences'),
     );
     const secondSectionSentencesInput = fixture.debugElement.query(
-      By.css('#secondSectionSentences')
+      By.css('#secondSectionSentences'),
     );
     const massUrlInput = fixture.debugElement.query(By.css('#massUrl'));
     const massTimeInput = fixture.debugElement.query(By.css('#massTime'));
     const massAddressInput = fixture.debugElement.query(By.css('#massAddress'));
     const receptionUrlInput = fixture.debugElement.query(
-      By.css('#receptionUrl')
+      By.css('#receptionUrl'),
     );
     const receptionTimeInput = fixture.debugElement.query(
-      By.css('#receptionTime')
+      By.css('#receptionTime'),
     );
     const receptionPlaceInput = fixture.debugElement.query(
-      By.css('#receptionPlace')
+      By.css('#receptionPlace'),
     );
     const receptionAddressInput = fixture.debugElement.query(
-      By.css('#receptionAddress')
+      By.css('#receptionAddress'),
     );
     const dressCodeColorInput = fixture.debugElement.query(
-      By.css('#dressCodeColor')
+      By.css('#dressCodeColor'),
     );
 
     primaryColorInput.nativeElement.value = primaryColor;
@@ -122,7 +122,7 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
 
   const clickSection = (section: string, show: boolean) => {
     const sectionElement = fixture.debugElement.query(
-      By.css(`#input-${section}`)
+      By.css(`#input-${section}`),
     );
     if (show && !sectionElement.nativeElement.checked) {
       sectionElement.nativeElement.click();
@@ -158,15 +158,15 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
     }).compileComponents();
 
     settingsServiceSpy = TestBed.inject(
-      SettingsService
+      SettingsService,
     ) as jasmine.SpyObj<SettingsService>;
 
     eventsServiceSpy = TestBed.inject(
-      EventsService
+      EventsService,
     ) as jasmine.SpyObj<EventsService>;
 
     settingsServiceSpy.getEventSettings.and.returnValue(
-      of(sweetXvBaseSettingMockCopy)
+      of(sweetXvBaseSettingMockCopy),
     );
     eventsServiceSpy.getEventById.and.returnValue(of(fullEventsMockCopy));
     fixture = TestBed.createComponent(SweetXvSettingsComponent);
@@ -180,36 +180,36 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
 
   it('created a form with all the sections inputs, save button, cancel button', () => {
     const primaryColorInput = fixture.debugElement.query(
-      By.css('#primaryColor')
+      By.css('#primaryColor'),
     );
     const secondaryColorInput = fixture.debugElement.query(
-      By.css('#secondaryColor')
+      By.css('#secondaryColor'),
     );
     const parentsInput = fixture.debugElement.query(By.css('#parents'));
     const godParentsInput = fixture.debugElement.query(By.css('#godParents'));
     const firstSectionSentencesInput = fixture.debugElement.query(
-      By.css('#firstSectionSentences')
+      By.css('#firstSectionSentences'),
     );
     const secondSectionSentencesInput = fixture.debugElement.query(
-      By.css('#secondSectionSentences')
+      By.css('#secondSectionSentences'),
     );
     const massUrlInput = fixture.debugElement.query(By.css('#massUrl'));
     const massTimeInput = fixture.debugElement.query(By.css('#massTime'));
     const massAddressInput = fixture.debugElement.query(By.css('#massAddress'));
     const receptionUrlInput = fixture.debugElement.query(
-      By.css('#receptionUrl')
+      By.css('#receptionUrl'),
     );
     const receptionTimeInput = fixture.debugElement.query(
-      By.css('#receptionTime')
+      By.css('#receptionTime'),
     );
     const receptionPlaceInput = fixture.debugElement.query(
-      By.css('#receptionPlace')
+      By.css('#receptionPlace'),
     );
     const receptionAddressInput = fixture.debugElement.query(
-      By.css('#receptionAddress')
+      By.css('#receptionAddress'),
     );
     const dressCodeColorInput = fixture.debugElement.query(
-      By.css('#dressCodeColor')
+      By.css('#dressCodeColor'),
     );
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));
@@ -275,22 +275,6 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
   });
 
   it('Expect form controls to be filled when user fills inputs', () => {
-    const dateOfReceptionTime =
-      sweetXvSettingMockCopy.receptionTime.split(' ')[0];
-    const timeOfReceptionTime =
-      sweetXvSettingMockCopy.receptionTime.split(' ')[1];
-    const receptionTime = toLocalDate(
-      `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`
-    )
-      .split('T')[1]
-      .substring(0, 5);
-
-    const dateOfMassTime = sweetXvSettingMockCopy.massTime.split(' ')[0];
-    const timeOfMassTime = sweetXvSettingMockCopy.massTime.split(' ')[1];
-    const massTime = toLocalDate(`${dateOfMassTime}T${timeOfMassTime}.000Z`)
-      .split('T')[1]
-      .substring(0, 5);
-
     updateFormUsingEvent(
       sweetXvSettingMockCopy.primaryColor,
       sweetXvSettingMockCopy.secondaryColor,
@@ -299,13 +283,13 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
       sweetXvSettingMockCopy.firstSectionSentences,
       sweetXvSettingMockCopy.secondSectionSentences,
       sweetXvSettingMockCopy.massUrl,
-      massTime,
+      '17:00',
       sweetXvSettingMockCopy.massAddress,
       sweetXvSettingMockCopy.receptionUrl,
-      receptionTime,
+      '18:00',
       sweetXvSettingMockCopy.receptionPlace,
       sweetXvSettingMockCopy.receptionAddress,
-      sweetXvSettingMockCopy.dressCodeColor
+      sweetXvSettingMockCopy.dressCodeColor,
     );
 
     const controls = fixture.componentInstance.createEventSettingsForm.controls;
@@ -324,12 +308,12 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
       .toBe(sweetXvSettingMockCopy.godParents);
     expect(controls['firstSectionSentences'].value)
       .withContext(
-        'firstSectionSentences control should be filled when input changes'
+        'firstSectionSentences control should be filled when input changes',
       )
       .toBe(sweetXvSettingMockCopy.firstSectionSentences);
     expect(controls['secondSectionSentences'].value)
       .withContext(
-        'secondSectionSentences control should be filled when input changes'
+        'secondSectionSentences control should be filled when input changes',
       )
       .toBe(sweetXvSettingMockCopy.secondSectionSentences);
     expect(controls['massUrl'].value)
@@ -337,7 +321,7 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
       .toBe(sweetXvSettingMockCopy.massUrl);
     expect(controls['massTime'].value)
       .withContext('massTime control should be filled when input changes')
-      .toBe(massTime);
+      .toBe('17:00');
     expect(controls['massAddress'].value)
       .withContext('massAddress control should be filled when input changes')
       .toBe(sweetXvSettingMockCopy.massAddress);
@@ -346,13 +330,13 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
       .toBe(sweetXvSettingMockCopy.receptionUrl);
     expect(controls['receptionTime'].value)
       .withContext('receptionTime control should be filled when input changes')
-      .toBe(receptionTime);
+      .toBe('18:00');
     expect(controls['receptionPlace'].value)
       .withContext('receptionPlace control should be filled when input changes')
       .toBe(sweetXvSettingMockCopy.receptionPlace);
     expect(controls['receptionAddress'].value)
       .withContext(
-        'receptionAddress control should be filled when input changes'
+        'receptionAddress control should be filled when input changes',
       )
       .toBe(sweetXvSettingMockCopy.receptionAddress);
     expect(controls['dressCodeColor'].value)
@@ -386,7 +370,7 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
       '',
       '',
       '',
-      ''
+      '',
     );
 
     const saveButton = fixture.debugElement.queryAll(By.css('button'))[1];
@@ -397,21 +381,6 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
   });
 
   it('Should be able to save when fields are filled', () => {
-    const dateOfReceptionTime =
-      sweetXvSettingMockCopy.receptionTime.split(' ')[0];
-    const timeOfReceptionTime =
-      sweetXvSettingMockCopy.receptionTime.split(' ')[1];
-    const receptionTime = toLocalDate(
-      `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`
-    )
-      .split('T')[1]
-      .substring(0, 5);
-
-    const dateOfMassTime = sweetXvSettingMockCopy.massTime.split(' ')[0];
-    const timeOfMassTime = sweetXvSettingMockCopy.massTime.split(' ')[1];
-    const massTime = toLocalDate(`${dateOfMassTime}T${timeOfMassTime}.000Z`)
-      .split('T')[1]
-      .substring(0, 5);
     updateFormUsingEvent(
       sweetXvSettingMockCopy.primaryColor,
       sweetXvSettingMockCopy.secondaryColor,
@@ -420,13 +389,13 @@ describe('Sweet Xv Settings Component (Shallow test)', () => {
       sweetXvSettingMockCopy.firstSectionSentences,
       sweetXvSettingMockCopy.secondSectionSentences,
       sweetXvSettingMockCopy.massUrl,
-      massTime,
+      '17:00',
       sweetXvSettingMockCopy.massAddress,
       sweetXvSettingMockCopy.receptionUrl,
-      receptionTime,
+      '18:00',
       sweetXvSettingMockCopy.receptionPlace,
       sweetXvSettingMockCopy.receptionAddress,
-      sweetXvSettingMockCopy.dressCodeColor
+      sweetXvSettingMockCopy.dressCodeColor,
     );
 
     const saveButton = fixture.debugElement.queryAll(By.css('button'))[1];

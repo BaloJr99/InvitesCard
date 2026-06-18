@@ -6,8 +6,8 @@ import { IDashboardInvite } from 'src/app/core/models/invites';
 import { EventsService } from 'src/app/core/services/events.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { createStatistics } from 'src/app/shared/utils/statistics/statistics';
-import { toLocalDate } from 'src/app/shared/utils/tools';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { DatePipe } from '@angular/common';
 Chart.register(...registerables);
 
 @Component({
@@ -19,6 +19,7 @@ Chart.register(...registerables);
 export class HomeComponent {
   private invitesService = inject(InvitesService);
   private eventsService = inject(EventsService);
+  private datePipe = inject(DatePipe);
 
   private eventSelected = new BehaviorSubject<string>('');
   eventSelected$ = this.eventSelected.asObservable();
@@ -30,7 +31,7 @@ export class HomeComponent {
   history$ = this.invites$.pipe(
     map((invites) => {
       return this.RenderChart(invites);
-    })
+    }),
   );
 
   vm$ = combineLatest([
@@ -40,29 +41,29 @@ export class HomeComponent {
           return {
             ...invite,
             dateOfConfirmation: invite.dateOfConfirmation
-              ? toLocalDate(invite.dateOfConfirmation)
+              ? invite.dateOfConfirmation
               : null,
           } as IDashboardInvite;
         });
-      })
+      }),
     ),
     this.eventsService.getDropdownEvents(),
     this.eventSelected$,
   ]).pipe(
     map(([invites, events, eventSelected]) => {
       events = events.filter(
-        (event) => event.typeOfEvent !== EventType.SaveTheDate
+        (event) => event.typeOfEvent !== EventType.SaveTheDate,
       );
 
       const invitesByEvent = invites.filter((invite) =>
-        eventSelected === '' ? true : invite.eventId === eventSelected
+        eventSelected === '' ? true : invite.eventId === eventSelected,
       );
 
       this.invites.next(invitesByEvent);
       return {
         events,
       };
-    })
+    }),
   );
 
   filterInvites(event: Event) {
@@ -74,7 +75,7 @@ export class HomeComponent {
     const statistics = createStatistics(invites);
 
     let percentaje = Math.trunc(
-      (statistics[0].value / statistics[3].value) * 100
+      (statistics[0].value / statistics[3].value) * 100,
     );
 
     const percentajeOfConfirmation = (
@@ -88,46 +89,32 @@ export class HomeComponent {
     ).toString();
 
     const todayMinus31Days = new Date();
+    todayMinus31Days.setHours(0, 0, 0, 0);
     todayMinus31Days.setDate(todayMinus31Days.getDate() - 31);
 
     const groupedByDate: { [key: string]: number } = {};
     const randomColors: string[] = [];
 
-    const validInvites = invites.filter((invite) => {
-      if (
-        invite.dateOfConfirmation != null &&
-        new Date(invite.dateOfConfirmation).getTime() >=
-          todayMinus31Days.getTime()
-      ) {
-        return true;
-      }
-      return false;
-    });
+    const validDates: string[] = [];
+    const startDate = new Date();
 
-    const uniqueValidDates = [
-      ...new Set(
-        validInvites.reduce((result: string[], invite) => {
-          if (invite.dateOfConfirmation) {
-            result.push(invite.dateOfConfirmation.substring(0, 10));
-          }
-          return result;
-        }, [])
-      ),
-    ];
+    for (let i = 0; i <= 31; i++) {
+      const date = new Date();
+      date.setDate(startDate.getDate() - i);
+      validDates.push(this.datePipe.transform(date, 'shortDate') as string);
+    }
 
-    uniqueValidDates.forEach((date) => {
-      groupedByDate[date] = validInvites.filter((invite) => {
+    validDates.forEach((date) => {
+      groupedByDate[date] = invites.filter((invite) => {
         randomColors.push(
-          `rgb(${this.randomNum()}, ${this.randomNum()}, ${this.randomNum()})`
+          `rgb(${this.randomNum()}, ${this.randomNum()}, ${this.randomNum()})`,
         );
-        if (invite.dateOfConfirmation) {
-          const inviteDate = invite.dateOfConfirmation.substring(0, 10);
 
-          if (inviteDate === date) {
-            return true;
-          }
-        }
-        return false;
+        return (
+          invite.dateOfConfirmation &&
+          this.datePipe.transform(invite.dateOfConfirmation, 'shortDate') ===
+            date
+        );
       }).length;
     });
 

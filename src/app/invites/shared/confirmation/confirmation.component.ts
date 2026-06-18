@@ -12,7 +12,6 @@ import { SocketService } from 'src/app/core/services/socket.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { ActivatedRoute } from '@angular/router';
 import { EventType } from 'src/app/core/models/enum';
-import { dateTimeToUTCDate } from 'src/app/shared/utils/tools';
 import { CommonModule } from '@angular/common';
 import { ValidationPipe } from '../../../shared/pipes/validation.pipe';
 import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe';
@@ -54,7 +53,7 @@ export class ConfirmationComponent {
     map(([invite, blockConfirmationForm]) => {
       const numberOfEntries = Array.from(
         { length: invite.entriesNumber },
-        (k, j) => j + 1
+        (k, j) => j + 1,
       )
         .sort((a, b) => b - a)
         .map((entry) => entry.toString());
@@ -62,7 +61,7 @@ export class ConfirmationComponent {
       if (blockConfirmationForm) this.confirmationForm.disable();
 
       return { invite, blockConfirmationForm, numberOfEntries };
-    })
+    }),
   );
 
   confirmationForm: FormGroup = this.fb.group({
@@ -76,7 +75,7 @@ export class ConfirmationComponent {
       const assist =
         this.confirmationForm.controls['confirmation'].value === 'true';
       const entriesConfirmed = parseInt(
-        this.confirmationForm.controls['entriesConfirmed'].value
+        this.confirmationForm.controls['entriesConfirmed'].value,
       );
       this.confirmationForm.patchValue({
         confirmation: assist,
@@ -85,7 +84,9 @@ export class ConfirmationComponent {
 
       this.confirmationForm.addControl(
         'dateOfConfirmation',
-        new FormControl(dateTimeToUTCDate(new Date().toString()))
+        new FormControl(
+          new Date().toISOString().substring(0, 19).replace('T', ' ').replace('Z', ''),
+        ),
       );
       this.addnewInvite();
     } else {
@@ -98,7 +99,7 @@ export class ConfirmationComponent {
       .sendConfirmation(
         this.confirmationForm.value as IConfirmation,
         this.invite.value.id,
-        EventType.Xv
+        EventType.Xv,
       )
       .subscribe({
         next: () => {
@@ -119,7 +120,7 @@ export class ConfirmationComponent {
 
   enableControls(): void {
     const select = document.getElementById(
-      'entriesConfirmed'
+      'entriesConfirmed',
     ) as HTMLSelectElement;
     select.removeAttribute('disabled');
 
@@ -135,7 +136,7 @@ export class ConfirmationComponent {
 
   disableControls(): void {
     const select = document.getElementById(
-      'entriesConfirmed'
+      'entriesConfirmed',
     ) as HTMLSelectElement;
     select.setAttribute('disabled', '');
     this.confirmationForm.patchValue({

@@ -17,7 +17,6 @@ import {
 import { ISettingAction, IWeddingSetting } from 'src/app/core/models/settings';
 import { EventsService } from 'src/app/core/services/events.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
-import { dateTimeToUTCDate, toLocalDate } from 'src/app/shared/utils/tools';
 import { CommonModule } from '@angular/common';
 import { ValidationPipe } from '../../../shared/pipes/validation.pipe';
 import { ValidationErrorPipe } from '../../../shared/pipes/validation-error.pipe';
@@ -134,12 +133,12 @@ export class WeddingSettingsComponent {
                   isNew: true,
                 };
               }
-            })
+            }),
           ),
         this.eventsService.getEventById(this.weddingSettingsAction.eventId),
       ]).pipe(
         tap(([eventSettings, eventInfo]) => {
-          this.eventDate = toLocalDate(eventInfo.dateOfEvent).split('T')[0];
+          this.eventDate = eventInfo.dateOfEvent.split('T')[0];
           const parsedSettings = JSON.parse(eventSettings.settings);
 
           this.createEventSettingsForm.patchValue({
@@ -153,7 +152,7 @@ export class WeddingSettingsComponent {
             sections = parsedSettings.sections.map(
               (section: IInviteSection) => {
                 const baseSection = this.baseSections.find(
-                  (s) => s.sectionId === section.sectionId
+                  (s) => s.sectionId === section.sectionId,
                 ) as IInviteSection;
 
                 return {
@@ -161,7 +160,7 @@ export class WeddingSettingsComponent {
                   selected: section.selected,
                   order: section.order,
                 };
-              }
+              },
             ) as IInviteSection[];
 
             // Add any missing section from the baseSections
@@ -176,30 +175,21 @@ export class WeddingSettingsComponent {
             sections = this.updateSections(sections);
 
             if (parsedSettings.massTime) {
-              const dateOfMassTime = parsedSettings.massTime.split(' ')[0];
-              const timeOfMassTime = parsedSettings.massTime.split(' ')[1];
-
-              parsedSettings.massTime = toLocalDate(
-                `${dateOfMassTime}T${timeOfMassTime}.000Z`
-              ).split('T')[1];
+              parsedSettings.massTime = (
+                parsedSettings.massTime.split('T')[1] as string
+              ).substring(0, 5);
             }
 
             if (parsedSettings.venueTime) {
-              const dateOfVenueTime = parsedSettings.venueTime.split(' ')[0];
-              const timeOfVenueTime = parsedSettings.venueTime.split(' ')[1];
-
-              parsedSettings.venueTime = toLocalDate(
-                `${dateOfVenueTime}T${timeOfVenueTime}.000Z`
-              ).split('T')[1];
+              parsedSettings.venueTime = (
+                parsedSettings.venueTime.split('T')[1] as string
+              ).substring(0, 5);
             }
 
             if (parsedSettings.civilTime) {
-              const dateOfCivilTime = parsedSettings.civilTime.split(' ')[0];
-              const timeOfCivilTime = parsedSettings.civilTime.split(' ')[1];
-
-              parsedSettings.civilTime = toLocalDate(
-                `${dateOfCivilTime}T${timeOfCivilTime}.000Z`
-              ).split('T')[1];
+              parsedSettings.civilTime = (
+                parsedSettings.civilTime.split('T')[1] as string
+              ).substring(0, 5);
             }
           }
 
@@ -208,9 +198,9 @@ export class WeddingSettingsComponent {
           });
 
           this.sectionsConfig.next(sections);
-        })
-      )
-    )
+        }),
+      ),
+    ),
   );
 
   constructor() {
@@ -328,7 +318,7 @@ export class WeddingSettingsComponent {
     this.settingsService
       .createEventSettings(
         this.formatEventSetting(),
-        this.weddingSettingsAction.eventType
+        this.weddingSettingsAction.eventType,
       )
       .subscribe({
         next: (response: IMessageResponse) => {
@@ -342,7 +332,7 @@ export class WeddingSettingsComponent {
       .updateEventSettings(
         this.formatEventSetting(),
         this.weddingSettingsAction.eventId,
-        this.weddingSettingsAction.eventType
+        this.weddingSettingsAction.eventType,
       )
       .subscribe({
         next: (response: IMessageResponse) => {
@@ -353,22 +343,22 @@ export class WeddingSettingsComponent {
 
   formatEventSetting(): IWeddingSetting {
     const sectionsDisplayed = this.sectionsConfig.value.filter(
-      (s) => s.selected
+      (s) => s.selected,
     );
     const formValue = this.createEventSettingsForm.value;
 
     if (sectionsDisplayed.some((s) => s.sectionId === 'itineraryInfo')) {
-      formValue['venueTime'] = dateTimeToUTCDate(
-        `${this.eventDate}T${formValue['venueTime']}`
-      );
+      formValue['venueTime'] = new Date(
+        `${this.eventDate}T${formValue['venueTime']}`,
+      ).toISOString();
 
-      formValue['massTime'] = dateTimeToUTCDate(
-        `${this.eventDate}T${formValue['massTime']}`
-      );
+      formValue['massTime'] = new Date(
+        `${this.eventDate}T${formValue['massTime']}`,
+      ).toISOString();
 
-      formValue['civilTime'] = dateTimeToUTCDate(
-        `${this.eventDate}T${formValue['civilTime']}`
-      );
+      formValue['civilTime'] = new Date(
+        `${this.eventDate}T${formValue['civilTime']}`,
+      ).toISOString();
     }
 
     return {
@@ -395,7 +385,7 @@ export class WeddingSettingsComponent {
     const oldSections = this.sectionsConfig.value;
 
     const sectionIndex = oldSections.findIndex(
-      (section) => section.sectionId === sectionId
+      (section) => section.sectionId === sectionId,
     );
 
     oldSections[sectionIndex].selected = target.checked;
@@ -407,16 +397,16 @@ export class WeddingSettingsComponent {
             control,
             new FormControl(
               '',
-              this.sectionsControls[sectionId].validators[control][1]
-            )
+              this.sectionsControls[sectionId].validators[control][1],
+            ),
           );
-        }
+        },
       );
     } else {
       Object.keys(this.sectionsControls[sectionId].validators).forEach(
         (control) => {
           this.createEventSettingsForm.removeControl(control);
-        }
+        },
       );
     }
     this.createEventSettingsForm.updateValueAndValidity();
@@ -427,7 +417,7 @@ export class WeddingSettingsComponent {
   updateSections(sections: IInviteSection[]) {
     // Create a copy to avoid reference issues
     const sectionsCopy = JSON.parse(
-      JSON.stringify(sections)
+      JSON.stringify(sections),
     ) as IInviteSection[];
 
     // Order the sections by order property
@@ -442,10 +432,10 @@ export class WeddingSettingsComponent {
               control,
               new FormControl(
                 '',
-                this.sectionsControls[section].validators[control][1]
-              )
+                this.sectionsControls[section].validators[control][1],
+              ),
             );
-          }
+          },
         );
       }
     });
@@ -463,7 +453,7 @@ export class WeddingSettingsComponent {
     target.classList.remove('dragging');
 
     const listIndexIds = Array.from(
-      document.querySelectorAll('.available-sections ul li input')
+      document.querySelectorAll('.available-sections ul li input'),
     ).map((li) => li.id.split('-')[1]);
     const sections = this.sectionsConfig.value.map((section) => {
       section.order = listIndexIds.indexOf(section.sectionId);
@@ -478,7 +468,7 @@ export class WeddingSettingsComponent {
   dragOver(event: DragEvent) {
     event.preventDefault();
     const container = document.querySelector(
-      '.available-sections ul'
+      '.available-sections ul',
     ) as HTMLUListElement;
 
     const afterElement = this.getDragAfterElement(container, event.clientY);
@@ -510,7 +500,7 @@ export class WeddingSettingsComponent {
           return closest;
         }
       },
-      { offset: Number.NEGATIVE_INFINITY }
+      { offset: Number.NEGATIVE_INFINITY },
     );
 
     return element;

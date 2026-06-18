@@ -15,13 +15,13 @@ import { SettingsService } from 'src/app/core/services/settings.service';
 import { FilesService } from 'src/app/core/services/files.service';
 import { InvitesService } from 'src/app/core/services/invites.service';
 import { IInviteSection, IUserInvite } from 'src/app/core/models/invites';
-import { toLocalDate } from 'src/app/shared/utils/tools';
 import {
   CommonModalResponse,
   CommonModalType,
   ImageUsage,
 } from 'src/app/core/models/enum';
 import { CommonModalService } from 'src/app/core/services/common-modal.service';
+import { toLocalDate } from 'src/app/shared/utils/tools';
 
 @Component({
   selector: 'app-xv-modern',
@@ -66,6 +66,7 @@ export class SweetXvModernComponent {
     map(({ invite, eventSettings, downloadedFiles }) => {
       const userInvite = {
         ...invite,
+        dateOfEvent: toLocalDate(invite.dateOfEvent),
         maxDateOfConfirmation: toLocalDate(invite.maxDateOfConfirmation),
       } as IUserInvite;
 
@@ -82,12 +83,6 @@ export class SweetXvModernComponent {
         month: 'long',
       }).format(new Date(userInvite.dateOfEvent));
 
-      const longDate = new Intl.DateTimeFormat(this.localeValue, {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      }).format(new Date(userInvite.dateOfEvent));
-
       const eventSettingsParsed = JSON.parse(eventSettings.settings);
       this.sections = eventSettingsParsed.sections;
 
@@ -95,28 +90,6 @@ export class SweetXvModernComponent {
         ...JSON.parse(eventSettings.settings),
         eventId: eventSettings.eventId,
       };
-
-      if (parsedEventSettings.massTime) {
-        const dateOfMassTime = parsedEventSettings.massTime.split(' ')[0];
-        const timeOfMassTime = parsedEventSettings.massTime.split(' ')[1];
-        parsedEventSettings.massTime = toLocalDate(
-          `${dateOfMassTime}T${timeOfMassTime}.000Z`,
-        )
-          .split('T')[1]
-          .substring(0, 5);
-      }
-
-      if (parsedEventSettings.receptionTime) {
-        const dateOfReceptionTime =
-          parsedEventSettings.receptionTime.split(' ')[0];
-        const timeOfReceptionTime =
-          parsedEventSettings.receptionTime.split(' ')[1];
-        parsedEventSettings.receptionTime = toLocalDate(
-          `${dateOfReceptionTime}T${timeOfReceptionTime}.000Z`,
-        )
-          .split('T')[1]
-          .substring(0, 5);
-      }
 
       const downloadAudio =
         downloadedFiles.eventAudios.length > 0
@@ -207,7 +180,6 @@ export class SweetXvModernComponent {
       return {
         dayOfTheWeek,
         shortDate,
-        longDate,
         parsedEventSettings,
         userInvite,
         deadlineMet,

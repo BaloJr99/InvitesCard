@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -41,6 +42,7 @@ describe('AlbumsComponent (Shallow Test)', () => {
           useValue: gallerySpy,
         },
         provideHttpClient(),
+        DatePipe,
       ],
     }).compileComponents();
 
