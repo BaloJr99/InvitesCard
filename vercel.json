@@ -1,7 +1,7 @@
 {
   "redirects": [
     {
-      "source": "/:path((?!es-MX|en-US)($|/.*))",
+      "source": "/:path((?!es-MX|en-US)(?:.*))",
       "has": [
         {
           "type": "header",
@@ -13,18 +13,18 @@
       "destination": "/es-MX/:path*"
     },
     {
-      "source": "/:path((?!es-MX|en-US)($|/.*))",
+      "source": "/:path((?!es-MX|en-US)(?:.*))",
       "permanent": false,
       "destination": "/en-US/:path*"
     }
   ],
   "rewrites": [
     {
-      "source": "/es-MX/:path*([^.]*)",
+      "source": "/es-MX/:path*([^\\.]*)",
       "destination": "/es-MX/index.html"
     },
     {
-      "source": "/en-US/:path*([^.]*)",
+      "source": "/en-US/:path*([^\\.]*)",
       "destination": "/en-US/index.html"
     }
   ]
