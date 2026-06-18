@@ -1,33 +1,35 @@
 {
   "redirects": [
     {
-      "source": "/:path((?!es-MX|en-US|static|_next|favicon.ico).*)",
+      "source": "/:path((?!es-MX|en-US/).*)",
       "has": [
         {
           "type": "header",
           "key": "Accept-Language",
-          "value": "(^es-MX|^es.*MX.*)"
+          "value": "(^es-MX.*)"
         }
       ],
-      "permanent": false,
       "destination": "/es-MX/:path*"
-    },
-    {
-      "source": "/:path((?!es-MX|en-US|static|_next|favicon.ico).*)",
+    },{
+      "source": "/:path((?!es-MX|en-US/).*)",
       "has": [
         {
           "type": "header",
           "key": "Accept-Language",
-          "value": "(^en-US|^en.*US.*)"
+          "value": "(^(?!es-MX.*).*)"
         }
       ],
-      "permanent": false,
       "destination": "/en-US/:path*"
+    }
+  ],
+  "rewrites": [
+    { 
+      "source": "/es-MX/(.*)", 
+      "destination": "/es-MX/" 
     },
-    {
-      "source": "/:path((?!es-MX|en-US|static|_next|favicon.ico).*)",
-      "permanent": false,
-      "destination": "/en-US/:path*"
+    { 
+      "source": "/en-US/(.*)",
+      "destination": "/en-US/" 
     }
   ]
 }
