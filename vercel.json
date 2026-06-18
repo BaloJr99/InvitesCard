@@ -6,17 +6,17 @@
         {
           "type": "header",
           "key": "Accept-Language",
-          "value": "(^es-MX.*|es.*)"
+          "value": "(^es.*)"
         }
       ],
-      "destination": "/es-MX/:path*"
+      "destination": "/es/:path*"
     },{
       "source": "/:path((?!es-MX|en-US/).*)",
       "has": [
         {
           "type": "header",
           "key": "Accept-Language",
-          "value": "(^(?!es-MX.*|es.*).*)"
+          "value": "(^(?!es.*).*)"
         }
       ],
       "destination": "/en-US/:path*"
