@@ -6,7 +6,7 @@
         {
           "type": "header",
           "key": "Accept-Language",
-          "value": "(^es-MX.*)"
+          "value": "(^es-MX.*|es.*)"
         }
       ],
       "destination": "/es-MX/:path*"
@@ -16,7 +16,7 @@
         {
           "type": "header",
           "key": "Accept-Language",
-          "value": "(^(?!es-MX.*).*)"
+          "value": "(^(?!es-MX.*|es.*).*)"
         }
       ],
       "destination": "/en-US/:path*"
