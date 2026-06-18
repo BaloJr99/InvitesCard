@@ -6,7 +6,7 @@
         {
           "type": "header",
           "key": "Accept-Language",
-          "value": "(^es)"
+          "value": "(^es|\\bes\\b|\\bes-)"
         }
       ],
       "permanent": false,
