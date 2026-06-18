@@ -1,35 +1,33 @@
 {
   "redirects": [
     {
-      "source": "/:path((?!es|en/).*)",
+      "source": "/:path((?!es-MX|en-US|static|_next|favicon.ico).*)",
       "has": [
         {
           "type": "header",
           "key": "Accept-Language",
-          "value": "(^es.*)"
+          "value": "(^es-MX|^es.*MX.*)"
         }
       ],
-      "destination": "/es/:path*"
-    },{
-      "source": "/:path((?!es|en/).*)",
-      "has": [
-        {
-          "type": "header",
-          "key": "Accept-Language",
-          "value": "(^(?!es.*).*)"
-        }
-      ],
-      "destination": "/en/:path*"
-    }
-  ],
-  "rewrites": [
-    { 
-      "source": "/es/(.*)", 
-      "destination": "/es/" 
+      "permanent": false,
+      "destination": "/es-MX/:path*"
     },
-    { 
-      "source": "/en/(.*)",
-      "destination": "/en/" 
+    {
+      "source": "/:path((?!es-MX|en-US|static|_next|favicon.ico).*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept-Language",
+          "value": "(^en-US|^en.*US.*)"
+        }
+      ],
+      "permanent": false,
+      "destination": "/en-US/:path*"
+    },
+    {
+      "source": "/:path((?!es-MX|en-US|static|_next|favicon.ico).*)",
+      "permanent": false,
+      "destination": "/en-US/:path*"
     }
   ]
 }

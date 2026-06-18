@@ -6,11 +6,11 @@
     "invites": {
       "i18n": {
         "sourceLocale": {
-          "code": "es"
+          "code": "es-MX"
         },
         "locales": {
-          "en": {
-            "translation": "src/locale/messages.en.json"
+          "en-US": {
+            "translation": "src/locale/messages.en-US.json"
           }
         }
       },
@@ -73,8 +73,11 @@
                 }
               ]
             },
-            "en": {
-              "localize": ["en"]
+            "en-US": {
+              "localize": ["en-US"]
+            },
+            "es-MX": {
+              "localize": ["es-MX"]
             }
           },
           "defaultConfiguration": "production"
@@ -88,8 +91,11 @@
             "development": {
               "buildTarget": "invites:build:development"
             },
-            "en": {
-              "buildTarget": "invites:build:development,en"
+            "en-US": {
+              "buildTarget": "invites:build:development,en-US"
+            },
+            "es-MX": {
+              "buildTarget": "invites:build:development,es-MX"
             }
           },
           "defaultConfiguration": "development"
