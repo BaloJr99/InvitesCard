@@ -11,6 +11,7 @@ export class SweetXvSettingsPage extends SettingsPage {
   readonly massUrlAddressInput: Locator;
   readonly massTimeInput: Locator;
   readonly massAddressInput: Locator;
+  readonly massPlaceInput: Locator;
   readonly receptionUrlAddressInput: Locator;
   readonly receptionTimeInput: Locator;
   readonly receptionPlaceInput: Locator;
@@ -30,6 +31,7 @@ export class SweetXvSettingsPage extends SettingsPage {
     this.massUrlAddressInput = page.locator('#massUrl');
     this.massTimeInput = page.locator('#massTime');
     this.massAddressInput = page.locator('#massAddress');
+    this.massPlaceInput = page.locator('#massPlace');
     this.receptionUrlAddressInput = page.locator('#receptionUrl');
     this.receptionTimeInput = page.locator('#receptionTime');
     this.receptionPlaceInput = page.locator('#receptionPlace');
@@ -47,11 +49,12 @@ export class SweetXvSettingsPage extends SettingsPage {
     massUrlAddress: string,
     massTime: string,
     massAddress: string,
+    massPlace: string,
     receptionUrlAddress: string,
     receptionTime: string,
     receptionPlace: string,
     receptionAddress: string,
-    dressCode: string
+    dressCode: string,
   ) {
     await this.primaryColorInput.fill(primaryColor);
     await this.secondaryColorInput.fill(secondaryColor);
@@ -62,6 +65,7 @@ export class SweetXvSettingsPage extends SettingsPage {
     await this.massUrlAddressInput.fill(massUrlAddress);
     await this.massTimeInput.fill(massTime);
     await this.massAddressInput.fill(massAddress);
+    await this.massPlaceInput.fill(massPlace);
     await this.receptionUrlAddressInput.fill(receptionUrlAddress);
     await this.receptionTimeInput.fill(receptionTime);
     await this.receptionPlaceInput.fill(receptionPlace);

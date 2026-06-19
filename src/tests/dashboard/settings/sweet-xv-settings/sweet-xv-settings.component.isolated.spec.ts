@@ -36,6 +36,7 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
     massUrl: string,
     massTime: string,
     massAddress: string,
+    massPlace: string,
     receptionUrl: string,
     receptionTime: string,
     receptionPlace: string,
@@ -61,6 +62,7 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
     ].setValue(secondSectionSentences);
     component.createEventSettingsForm.controls['massUrl'].setValue(massUrl);
     component.createEventSettingsForm.controls['massTime'].setValue(massTime);
+    component.createEventSettingsForm.controls['massPlace'].setValue(massPlace);
     component.createEventSettingsForm.controls['massAddress'].setValue(
       massAddress
     );
@@ -111,6 +113,7 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
             secondSectionSentences: ['', Validators.required],
             massUrl: ['', Validators.required],
             massTime: ['', Validators.required],
+            massPlace: ['', Validators.required],
             massAddress: ['', Validators.required],
           },
         },
@@ -184,7 +187,7 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
 
   it('form value should be invalid if one input is invalid', () => {
     component.updateSections(showGiftsSectionCopy);
-    updateForm('', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+    updateForm('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
     expect(component.createEventSettingsForm.invalid)
       .withContext('Form should be invalid when fields are empty')
       .toBeTrue();
@@ -203,6 +206,7 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
       sweetXvSettingMockCopy.massUrl,
       sweetXvSettingMockCopy.massTime,
       sweetXvSettingMockCopy.massAddress,
+      sweetXvSettingMockCopy.massPlace,
       sweetXvSettingMockCopy.receptionUrl,
       sweetXvSettingMockCopy.receptionTime,
       sweetXvSettingMockCopy.receptionPlace,
@@ -266,6 +270,7 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
     const massUrl = controls['massUrl'];
     const massTime = controls['massTime'];
     const massAddress = controls['massAddress'];
+    const massPlace = controls['massPlace'];
 
     expect(eventId.valid).withContext('EventId should be invalid').toBeFalsy();
     expect(eventId.errors?.['required'])
@@ -331,9 +336,16 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
       .withContext('MassAddress should be required')
       .toBeTruthy();
 
+    expect(massPlace.valid)
+      .withContext('MassPlace should be invalid')
+      .toBeFalsy();
+    expect(massPlace.errors?.['required'])
+      .withContext('MassPlace should be required')
+      .toBeTruthy();
+
     expect(Object.keys(controls).length)
-      .withContext('The form should have 10 controls')
-      .toBe(10);
+      .withContext('The form should have 11 controls')
+      .toBe(11);
   });
 
   it('should have the controls for the reception section in the createEventSettingsForm', () => {
@@ -349,6 +361,7 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
     const massUrl = controls['massUrl'];
     const massTime = controls['massTime'];
     const massAddress = controls['massAddress'];
+    const massPlace = controls['massPlace'];
     const receptionUrl = controls['receptionUrl'];
     const receptionTime = controls['receptionTime'];
     const receptionPlace = controls['receptionPlace'];
@@ -418,6 +431,13 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
       .withContext('MassAddress should be required')
       .toBeTruthy();
 
+    expect(massPlace.valid)
+      .withContext('massPlace should be invalid')
+      .toBeFalsy();
+    expect(massPlace.errors?.['required'])
+      .withContext('massPlace should be required')
+      .toBeTruthy();
+
     expect(receptionUrl.valid)
       .withContext('ReceptionUrl should be invalid')
       .toBeFalsy();
@@ -447,8 +467,8 @@ describe('Sweet Xv Settings Component (Isolated Test)', () => {
       .toBeTruthy();
 
     expect(Object.keys(controls).length)
-      .withContext('The form should have 14 controls')
-      .toBe(14);
+      .withContext('The form should have 15 controls')
+      .toBe(15);
   });
 
   it('should have the controls for the dressCode section in the createEventSettingsForm', () => {

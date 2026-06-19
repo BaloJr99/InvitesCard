@@ -34,45 +34,45 @@
             <span>{{vm.parsedEventSettings.receptionPlace}}</span>
           </p>
           <hr>
-            <table>
-              <thead>
+          <table>
+            <thead>
+              <tr>
+                <th i18n>DO</th>
+                <th i18n>LU</th>
+                <th i18n>MA</th>
+                <th i18n>MI</th>
+                <th i18n>JU</th>
+                <th i18n>VI</th>
+                <th i18n>SA</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (week of vm.dateDictionary; track week) {
                 <tr>
-                  <th i18n>DO</th>
-                  <th i18n>LU</th>
-                  <th i18n>MA</th>
-                  <th i18n>MI</th>
-                  <th i18n>JU</th>
-                  <th i18n>VI</th>
-                  <th i18n>SA</th>
+                  @for (dayOfTheWeek of week.days; track dayOfTheWeek) {
+                    <td [ngClass]="{'dateOfEvent': dayOfTheWeek.isDateOfEvent}">
+                      @if (dayOfTheWeek.isDateOfEvent) {
+                        <i class="fa-solid fa-heart"></i>
+                      }
+                      @if (dayOfTheWeek.show) {
+                        <span>{{dayOfTheWeek.day}}</span>
+                      }
+                    </td>
+                  }
                 </tr>
-              </thead>
-              <tbody>
-                @for (week of vm.dateDictionary; track week) {
-                  <tr>
-                    @for (dayOfTheWeek of week.days; track dayOfTheWeek) {
-                      <td [ngClass]="{'dateOfEvent': dayOfTheWeek.isDateOfEvent}">
-                        @if (dayOfTheWeek.isDateOfEvent) {
-                          <i class="fa-solid fa-heart"></i>
-                        }
-                        @if (dayOfTheWeek.show) {
-                          <span>{{dayOfTheWeek.day}}</span>
-                        }
-                      </td>
-                    }
-                  </tr>
-                }
-              </tbody>
-            </table>
-            <hr>
-              <p class="phrase" i18n>
-          Dos corazones, una vida. <br> ¿Nos acompañas?
-        </p>
-              <p class="banner" i18n><strong>Próximamente: </strong>Invitación oficial.</p>
-            </div>
-            <div class="invitesConfirmation invite-section">
-              <app-accomodation [inviteValue]="vm.userInvite" [inviteSettingsValue]="vm.parsedEventSettings" [deadlineMetValue]="vm.deadlineMet"></app-accomodation>
-            </div>
-          </div>
+              }
+            </tbody>
+          </table>
+          <hr>
+          <p class="phrase" i18n>
+            Dos corazones, una vida. <br> ¿Nos acompañas?
+          </p>
+          <p class="banner" i18n><strong>Próximamente: </strong>Invitación oficial.</p>
         </div>
-      </main>
-    }
+        <div class="invitesConfirmation invite-section">
+          <app-accomodation [inviteValue]="vm.userInvite" [inviteSettingsValue]="vm.parsedEventSettings" [deadlineMetValue]="vm.deadlineMet"></app-accomodation>
+        </div>
+      </div>
+    </div>
+  </main>
+}

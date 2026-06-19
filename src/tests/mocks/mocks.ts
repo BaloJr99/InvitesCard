@@ -498,6 +498,7 @@ export const sweetXvSettingMock: ISweetXvSetting = {
   massAddress: 'Test Address',
   massTime: '2025-02-28T23:00:00Z',
   massUrl: 'https://fakepath/Test',
+  massPlace: 'Test Place',
   receptionAddress: 'Test Address',
   receptionPlace: 'Test Place',
   receptionTime: '2025-03-01T00:00:00Z',

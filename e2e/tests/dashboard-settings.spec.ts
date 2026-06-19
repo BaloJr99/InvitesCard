@@ -117,6 +117,7 @@ test.describe('Dashboard settings (Sweet Xv)', () => {
       sweetXvSettingMock.massUrl,
       '17:00',
       sweetXvSettingMock.massAddress,
+      sweetXvSettingMock.massPlace,
       sweetXvSettingMock.receptionUrl,
       '18:00',
       sweetXvSettingMock.receptionPlace,

@@ -20,30 +20,30 @@
       </div>
       <div class="messages-container">
         <div class="card" [style.display]="vm.messagesGrouped.length === 0 ? 'block' : 'none'" i18n>
-        No hay mensajes
-      </div>
+          No hay mensajes
+        </div>
         @for (group of vm.messagesGrouped; track group) {
           <div class="message">
             <span class="message-date">
               <hr>
-                {{ group.key }}
-                <hr>
-                </span>
-                @for (message of group.value; track message) {
-                  <div class="card text-start ps-2">
-                    <p class="text-start mb-0">
-                      <span class="message-time">{{message.time}}</span>
-                      {{ message.family }}:
-                    </p>
-                    <span class="chat-message">{{ message.message }}</span>
-                  </div>
-                }
+              {{ group.key }}
+              <hr>
+            </span>
+            @for (message of group.value; track message) {
+              <div class="card text-start ps-2">
+                <p class="text-start mb-0">
+                  <span class="message-time">{{message.time}}</span>
+                  {{ message.family }}:
+                </p>
+                <span class="chat-message">{{ message.message }}</span>
               </div>
             }
           </div>
-        </div>
-        @if (vm.route.includes('/dashboard/events/')) {
-          <button class="btn btn-dark messages" (click)="toggleMessages()" title="Toogle Messages"><i class="fa-regular fa-comment" aria-hidden="true"></i></button>
         }
       </div>
+    </div>
+    @if (vm.route.includes('/dashboard/events/')) {
+      <button class="btn btn-dark messages" (click)="toggleMessages()" title="Toogle Messages"><i class="fa-regular fa-comment" aria-hidden="true"></i></button>
     }
+  </div>
+}

@@ -9,20 +9,20 @@
         [ngClass]="{'is-invalid': (createInviteGroupForm.get('inviteGroup') | validation) || createInviteGroupForm.errors?.['controlIsDuplicated'] }"
         (keyup)="removeValidation()">
         <i class="fa-solid" aria-hidden="true" [ngClass]="createInviteGroupForm.get('controlIsValid')?.value ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
-        @if (createInviteGroupForm.get('inviteGroup') | validation) {
-          <span class="invalid-feedback d-block" role="alert">
-            {{ createInviteGroupForm.get('inviteGroup')?.errors | validationError: 'inviteGroup' }}
-          </span>
-        }
-        @if (!createInviteGroupForm.get('controlIsValid')?.value) {
-          <span class="invalid-feedback d-block" role="alert">
-            {{ null | validationError: 'custom': 'controlIsDuplicated' }}
-          </span>
-        }
-      </div>
+      @if (createInviteGroupForm.get('inviteGroup') | validation) {
+        <span class="invalid-feedback d-block" role="alert">
+          {{ createInviteGroupForm.get('inviteGroup')?.errors | validationError: 'inviteGroup' }}
+        </span>
+      }
+      @if (!createInviteGroupForm.get('controlIsValid')?.value) {
+        <span class="invalid-feedback d-block" role="alert">
+          {{ null | validationError: 'custom': 'controlIsDuplicated' }}
+        </span>
+      }
     </div>
-  </form>
-  <div class="modal-footer">
-    <button data-testid="cancel-button" type="button" class="btn btn-outline-dark" (click)="toggleIsCreatingNewFormGroup()" i18n>Cancelar</button>
-    <button data-testid="confirm-button" type="button" class="btn btn-dark" (click)="saveInviteGroup()" i18n>Guardar</button>
   </div>
+</form>
+<div class="modal-footer">
+  <button data-testid="cancel-button" type="button" class="btn btn-outline-dark" (click)="toggleIsCreatingNewFormGroup()" i18n>Cancelar</button>
+  <button data-testid="confirm-button" type="button" class="btn btn-dark" (click)="saveInviteGroup()" i18n>Guardar</button>
+</div>

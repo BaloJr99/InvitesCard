@@ -18,6 +18,7 @@ export interface ISweetXvSetting {
   massUrl: string;
   massTime: string;
   massAddress: string;
+  massPlace: string;
   receptionUrl: string;
   receptionTime: string;
   receptionPlace: string;

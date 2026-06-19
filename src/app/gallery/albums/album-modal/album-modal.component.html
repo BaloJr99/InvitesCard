@@ -19,26 +19,26 @@
                   formControlName="nameOfAlbum"
                   [ngClass]="{'is-invalid': (createAlbumForm.get('nameOfAlbum') | validation) || createAlbumForm.errors?.['controlIsDuplicated'] }"
                   (keyup)="removeValidation()">
-                  <i class="fa-solid" aria-hidden="true" [ngClass]="createAlbumForm.get('controlIsValid')?.value ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
-                  @if (createAlbumForm.get('nameOfAlbum') | validation) {
-                    <span class="invalid-feedback d-block" role="alert">
-                      {{ createAlbumForm.get('nameOfAlbum')?.errors | validationError: 'nameOfAlbum' }}
-                    </span>
-                  }
-                  @if (!createAlbumForm.get('controlIsValid')?.value) {
-                    <span class="invalid-feedback d-block" role="alert">
-                      {{ null | validationError: 'custom': 'controlIsDuplicated' }}
-                    </span>
-                  }
-                </div>
+                <i class="fa-solid" aria-hidden="true" [ngClass]="createAlbumForm.get('controlIsValid')?.value ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
+                @if (createAlbumForm.get('nameOfAlbum') | validation) {
+                  <span class="invalid-feedback d-block" role="alert">
+                    {{ createAlbumForm.get('nameOfAlbum')?.errors | validationError: 'nameOfAlbum' }}
+                  </span>
+                }
+                @if (!createAlbumForm.get('controlIsValid')?.value) {
+                  <span class="invalid-feedback d-block" role="alert">
+                    {{ null | validationError: 'custom': 'controlIsDuplicated' }}
+                  </span>
+                }
               </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" data-testid="cancel-button" class="btn btn-outline-dark" data-bs-dismiss="modal" i18n>Cerrar</button>
-            <button type="button" data-testid="confirm-button" class="btn btn-dark" (click)="saveAlbum()" i18n>Guardar</button>
-          </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-testid="cancel-button" class="btn btn-outline-dark" data-bs-dismiss="modal" i18n>Cerrar</button>
+          <button type="button" data-testid="confirm-button" class="btn btn-dark" (click)="saveAlbum()" i18n>Guardar</button>
         </div>
       </div>
     </div>
-  }
+  </div>
+}

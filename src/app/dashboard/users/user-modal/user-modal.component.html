@@ -22,76 +22,76 @@
                   formControlName="username"
                   [ngClass]="{'is-invalid': (createUserForm.get('username') | validation) || createUserForm.errors?.['controlIsDuplicated'] }"
                   (keyup)="removeValidation()">
-                  <i class="fa-solid" aria-hidden="true" [ngClass]="createUserForm.get('controlIsValid')?.value ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
-                  @if (createUserForm.get('username') | validation) {
-                    <span class="invalid-feedback d-block" role="alert">
-                      {{ createUserForm.get('username')?.errors | validationError: 'username' }}
-                    </span>
-                  }
-                  @if (!createUserForm.get('controlIsValid')?.value) {
-                    <span class="invalid-feedback d-block" role="alert">
-                      {{ null | validationError: 'custom': 'controlIsDuplicated' }}
-                    </span>
-                  }
-                </div>
+                <i class="fa-solid" aria-hidden="true" [ngClass]="createUserForm.get('controlIsValid')?.value ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
+                @if (createUserForm.get('username') | validation) {
+                  <span class="invalid-feedback d-block" role="alert">
+                    {{ createUserForm.get('username')?.errors | validationError: 'username' }}
+                  </span>
+                }
+                @if (!createUserForm.get('controlIsValid')?.value) {
+                  <span class="invalid-feedback d-block" role="alert">
+                    {{ null | validationError: 'custom': 'controlIsDuplicated' }}
+                  </span>
+                }
               </div>
-              <div class="mb-3">
-                <label for="email" class="form-label" i18n>Correo electrónico</label>
-                <input id="email"
-                  type="email"
-                  class="form-control"
-                  formControlName="email"
-                  [ngClass]="{'is-invalid': createUserForm.get('email') | validation}">
-                  @if (createUserForm.get('email') | validation) {
-                    <span class="invalid-feedback d-block" role="alert">
-                      {{ createUserForm.get('email')?.errors | validationError: 'email' }}
-                    </span>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label" i18n>Correo electrónico</label>
+              <input id="email"
+                type="email"
+                class="form-control"
+                formControlName="email"
+                [ngClass]="{'is-invalid': createUserForm.get('email') | validation}">
+              @if (createUserForm.get('email') | validation) {
+                <span class="invalid-feedback d-block" role="alert">
+                  {{ createUserForm.get('email')?.errors | validationError: 'email' }}
+                </span>
+              }
+            </div>
+            <div class="mb-3">
+              <label for="roleFilter" class="form-label" i18n>Roles</label>
+              <div class="filteringBox">
+                <div class="roleActions">
+                  <select class="form-select"
+                    id="roleFilter"
+                    (change)="selectedRole($event)"
+                    [ngClass]="{'is-invalid': createUserForm.get('roles') | validation}">
+                    <option value="" i18n>Seleccionar un rol</option>
+                    @for (role of vm.filteredRoles; track role) {
+                      <option [value]="role.id">{{ role.name }}</option>
+                    }
+                  </select>
+                  @if (roleSelected) {
+                    <button type="button" class="btn btn-dark" (click)="roleAction(true)" title="Editar Rol" i18n-title><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></button>
+                  }
+                  @if (roleSelected) {
+                    <button type="button" class="btn btn-dark" (click)="addRole()" title="Añadir Rol" i18n-title><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
                   }
                 </div>
-                <div class="mb-3">
-                  <label for="roleFilter" class="form-label" i18n>Roles</label>
-                  <div class="filteringBox">
-                    <div class="roleActions">
-                      <select class="form-select"
-                        id="roleFilter"
-                        (change)="selectedRole($event)"
-                        [ngClass]="{'is-invalid': createUserForm.get('roles') | validation}">
-                        <option value="" i18n>Seleccionar un rol</option>
-                        @for (role of vm.filteredRoles; track role) {
-                          <option [value]="role.id">{{ role.name }}</option>
-                        }
-                      </select>
-                      @if (roleSelected) {
-                        <button type="button" class="btn btn-dark" (click)="roleAction(true)"><i class="fa-solid fa-pen-to-square"></i></button>
-                      }
-                      @if (roleSelected) {
-                        <button type="button" class="btn btn-dark" (click)="addRole()"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
-                      }
-                    </div>
-                    @if (createUserForm.get('roles') | validation) {
-                      <span class="invalid-feedback d-block" role="alert">
-                        {{ createUserForm.get('roles')?.errors | validationError: 'roles' }}
-                      </span>
-                    }
-                  </div>
-                  <div class="roles">
-                    @for (role of vm.userRoles; track role) {
-                      <span class="badge text-bg-secondary">{{ role.name }} <i class="fa-solid fa-xmark" (click)="deleteRole(role.id)" aria-hidden="true"></i></span>
-                    }
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <label for="userIsActive" class="form-check-label" i18n>
-                <input id="userIsActive" class="form-check-input" type="checkbox" formControlName="isActive" checked> Activo
-              </label>
-                </div>
-              </form>
+                @if (createUserForm.get('roles') | validation) {
+                  <span class="invalid-feedback d-block" role="alert">
+                    {{ createUserForm.get('roles')?.errors | validationError: 'roles' }}
+                  </span>
+                }
+              </div>
+              <div class="roles">
+                @for (role of vm.userRoles; track role) {
+                  <span class="badge text-bg-secondary">{{ role.name }} <i class="fa-solid fa-xmark" (click)="deleteRole(role.id)" aria-hidden="true"></i></span>
+                }
+              </div>
             </div>
-            <div class="modal-footer">
-              <button data-testid="cancel-button" type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" i18n>Cerrar</button>
-              <button data-testid="confirm-button" type="button" class="btn btn-dark" (click)="saveUser()" i18n>Guardar</button>
+            <div class="mb-3">
+              <label for="userIsActive" class="form-check-label" i18n>
+            <input id="userIsActive" class="form-check-input" type="checkbox" formControlName="isActive" checked> Activo
+          </label>
             </div>
-          </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button data-testid="cancel-button" type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" i18n>Cerrar</button>
+          <button data-testid="confirm-button" type="button" class="btn btn-dark" (click)="saveUser()" i18n>Guardar</button>
         </div>
       </div>
-    }
+    </div>
+  </div>
+}

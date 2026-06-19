@@ -189,7 +189,7 @@
   font-size: 20px;
 }
 
-.ceremony h3 {
+.ceremony h3.celebrated {
   color: #635959;
   font-size: 4rem;
   font-family: "Imperial Script";
@@ -262,6 +262,10 @@
 .gifts p:last-of-type {
   font-size: 40px;
   font-family: "Allura";
+}
+
+.gifts a {
+  color: inherit;
 }
 
 @media (min-width: 769px) and (max-width: 991px) {

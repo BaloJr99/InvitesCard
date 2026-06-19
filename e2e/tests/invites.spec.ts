@@ -128,6 +128,7 @@ test.describe('Invites (Sweet Xv)', () => {
         sweetXvSettingMockCopy.massUrl,
         '17:00',
         sweetXvSettingMockCopy.massAddress,
+        sweetXvSettingMock.massPlace,
         sweetXvSettingMockCopy.receptionUrl,
         '18:00',
         sweetXvSettingMockCopy.receptionPlace,

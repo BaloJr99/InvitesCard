@@ -19,31 +19,31 @@
                   formControlName="name"
                   [ngClass]="{'is-invalid': (createRoleForm.get('name') | validation) || createRoleForm.errors?.['controlIsDuplicated'] }"
                   (keyup)="removeValidation()">
-                  <i class="fa-solid" aria-hidden="true" [ngClass]="createRoleForm.get('controlIsValid')?.value ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
-                  @if (createRoleForm.get('name') | validation) {
-                    <span class="invalid-feedback d-block" role="alert">
-                      {{ createRoleForm.get('name')?.errors | validationError: 'name' }}
-                    </span>
-                  }
-                  @if (!createRoleForm.get('controlIsValid')?.value) {
-                    <span class="invalid-feedback d-block" role="alert">
-                      {{ null | validationError: 'custom': 'controlIsDuplicated' }}
-                    </span>
-                  }
-                </div>
+                <i class="fa-solid" aria-hidden="true" [ngClass]="createRoleForm.get('controlIsValid')?.value ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
+                @if (createRoleForm.get('name') | validation) {
+                  <span class="invalid-feedback d-block" role="alert">
+                    {{ createRoleForm.get('name')?.errors | validationError: 'name' }}
+                  </span>
+                }
+                @if (!createRoleForm.get('controlIsValid')?.value) {
+                  <span class="invalid-feedback d-block" role="alert">
+                    {{ null | validationError: 'custom': 'controlIsDuplicated' }}
+                  </span>
+                }
               </div>
-              <div class="mb-3">
-                <label for="roleIsActive" class="form-check-label" i18n>
-                <input id="roleIsActive" class="form-check-input" type="checkbox" formControlName="isActive" checked> Activo
-              </label>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button data-testid="cancel-button" type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" i18n>Cancelar</button>
-            <button data-testid="confirm-button" type="button" class="btn btn-dark" (click)="saveRole()" i18n>Guardar</button>
-          </div>
+            </div>
+            <div class="mb-3">
+              <label for="roleIsActive" class="form-check-label" i18n>
+              <input id="roleIsActive" class="form-check-input" type="checkbox" formControlName="isActive" checked> Activo
+            </label>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button data-testid="cancel-button" type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" i18n>Cancelar</button>
+          <button data-testid="confirm-button" type="button" class="btn btn-dark" (click)="saveRole()" i18n>Guardar</button>
         </div>
       </div>
     </div>
-  }
+  </div>
+}
